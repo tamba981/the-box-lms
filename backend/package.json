@@ -1,7 +1,6 @@
-{
+﻿{
   "name": "the-box-lms-backend",
   "version": "1.0.0",
-  "description": "Enterprise LMS Backend",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",

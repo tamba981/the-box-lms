@@ -1,4 +1,4 @@
-import express, { Application } from 'express'
+﻿import express, { Application } from 'express'
 import cors from 'cors'
 import helmet from 'helmet'
 import morgan from 'morgan'
@@ -11,7 +11,9 @@ dotenv.config()
 const app: Application = express()
 const PORT = process.env.PORT || 5000
 
-// Simple MongoDB connection
+// ============================================
+// MongoDB Connection
+// ============================================
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI!)
@@ -23,26 +25,12 @@ const connectDB = async () => {
 }
 connectDB()
 
-// Define allowed origins
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://127.0.0.1:3000',
-  'http://127.0.0.1:5500',
-  'http://localhost:5500',
-  'https://tamba981.github.io',
-  process.env.FRONTEND_URL || ''
-].filter(origin => origin && origin !== '')
-
-// Configure CORS
+// ============================================
+// CORS Configuration
+// ============================================
 app.use(cors({
   origin: function(origin, callback) {
-    if (!origin) return callback(null, true)
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      console.log(`CORS allowed origin: ${origin}`)
-      callback(null, true)
-    }
+    callback(null, true)
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -50,24 +38,15 @@ app.use(cors({
 }))
 
 app.options('*', cors())
-app.use(helmet({
-  crossOriginResourcePolicy: { policy: "cross-origin" }
-}))
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(morgan('combined'))
-
-// Simple rate limiter
-const rateLimiter = (req: any, res: any, next: any) => {
-  next()
-}
-app.use(rateLimiter)
 
 // ============================================
 // MODELS
 // ============================================
 
-// User Model
 const UserSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
@@ -82,20 +61,35 @@ const UserSchema = new mongoose.Schema({
 const User = mongoose.model('User', UserSchema)
 
 // ============================================
-// AUTH CONTROLLERS
+// HELPER FUNCTIONS
 // ============================================
-
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+
+const JWT_SECRET = process.env.JWT_ACCESS_SECRET || 'your-super-secret-key-min-32-chars-long'
+
+// ============================================
+// AUTH ROUTES
+// ============================================
 
 // Register
 app.post('/api/v1/auth/register', async (req: any, res: any) => {
   try {
     const { firstName, lastName, email, password, phone, role } = req.body
     
+    if (!firstName || !lastName || !email || !password) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Please provide all required fields' 
+      })
+    }
+    
     const existingUser = await User.findOne({ email })
     if (existingUser) {
-      return res.status(400).json({ success: false, message: 'User already exists' })
+      return res.status(400).json({ 
+        success: false, 
+        message: 'User already exists with this email' 
+      })
     }
     
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -109,9 +103,9 @@ app.post('/api/v1/auth/register', async (req: any, res: any) => {
       role: role || 'student'
     })
     
-    const accessToken = jwt.sign(
-      { id: user._id, role: user.role },
-      process.env.JWT_ACCESS_SECRET || 'secret123',
+    const token = jwt.sign(
+      { id: user._id, email: user.email, role: user.role },
+      JWT_SECRET,
       { expiresIn: '7d' }
     )
     
@@ -126,13 +120,16 @@ app.post('/api/v1/auth/register', async (req: any, res: any) => {
           email: user.email,
           role: user.role
         },
-        accessToken,
-        refreshToken: accessToken
+        accessToken: token,
+        refreshToken: token
       }
     })
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ success: false, message: 'Registration failed' })
+  } catch (error: any) {
+    console.error('Registration error:', error)
+    res.status(500).json({ 
+      success: false, 
+      message: 'Registration failed: ' + error.message 
+    })
   }
 })
 
@@ -141,19 +138,32 @@ app.post('/api/v1/auth/login', async (req: any, res: any) => {
   try {
     const { email, password } = req.body
     
+    if (!email || !password) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Please provide email and password' 
+      })
+    }
+    
     const user = await User.findOne({ email })
     if (!user) {
-      return res.status(401).json({ success: false, message: 'Invalid credentials' })
+      return res.status(401).json({ 
+        success: false, 
+        message: 'Invalid credentials' 
+      })
     }
     
     const isValidPassword = await bcrypt.compare(password, user.password)
     if (!isValidPassword) {
-      return res.status(401).json({ success: false, message: 'Invalid credentials' })
+      return res.status(401).json({ 
+        success: false, 
+        message: 'Invalid credentials' 
+      })
     }
     
-    const accessToken = jwt.sign(
-      { id: user._id, role: user.role },
-      process.env.JWT_ACCESS_SECRET || 'secret123',
+    const token = jwt.sign(
+      { id: user._id, email: user.email, role: user.role },
+      JWT_SECRET,
       { expiresIn: '7d' }
     )
     
@@ -168,13 +178,16 @@ app.post('/api/v1/auth/login', async (req: any, res: any) => {
           email: user.email,
           role: user.role
         },
-        accessToken,
-        refreshToken: accessToken
+        accessToken: token,
+        refreshToken: token
       }
     })
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ success: false, message: 'Login failed' })
+  } catch (error: any) {
+    console.error('Login error:', error)
+    res.status(500).json({ 
+      success: false, 
+      message: 'Login failed: ' + error.message 
+    })
   }
 })
 
@@ -182,21 +195,33 @@ app.post('/api/v1/auth/login', async (req: any, res: any) => {
 app.get('/api/v1/auth/me', async (req: any, res: any) => {
   try {
     const authHeader = req.headers.authorization
-    if (!authHeader) {
-      return res.status(401).json({ success: false, message: 'No token provided' })
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ 
+        success: false, 
+        message: 'No token provided' 
+      })
     }
     
     const token = authHeader.split(' ')[1]
-    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET || 'secret123')
+    const decoded = jwt.verify(token, JWT_SECRET)
     
     const user = await User.findById(decoded.id).select('-password')
     if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found' })
+      return res.status(404).json({ 
+        success: false, 
+        message: 'User not found' 
+      })
     }
     
-    res.json({ success: true, data: user })
-  } catch (error) {
-    res.status(401).json({ success: false, message: 'Invalid token' })
+    res.json({ 
+      success: true, 
+      data: user 
+    })
+  } catch (error: any) {
+    res.status(401).json({ 
+      success: false, 
+      message: 'Invalid or expired token' 
+    })
   }
 })
 
@@ -206,24 +231,26 @@ app.get('/health', (req: any, res: any) => {
     status: 'ok', 
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    cors: 'enabled'
+    mongodb: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
   })
 })
 
-// Root endpoint
 app.get('/', (req: any, res: any) => {
-  res.json({ message: 'THE BOX LMS API', version: '1.0.0' })
+  res.json({ 
+    message: 'THE BOX LMS API', 
+    version: '1.0.0'
+  })
 })
 
-// Error handling middleware
 app.use((err: any, req: any, res: any, next: any) => {
-  console.error(err)
-  res.status(500).json({ success: false, message: 'Internal server error' })
+  console.error('Server error:', err)
+  res.status(500).json({ 
+    success: false, 
+    message: 'Internal server error' 
+  })
 })
 
-// Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`)
-  console.log(`🔗 API: http://localhost:${PORT}/api/v1`)
   console.log(`✅ Health check: http://localhost:${PORT}/health`)
 })
