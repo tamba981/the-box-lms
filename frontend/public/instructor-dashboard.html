@@ -1,0 +1,1735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instructor Dashboard · Ubuntu Professional Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* ----- CSS Variables & Base ----- */
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #0f3b8c;
+            --primary-light: #3b82f6;
+            --primary-gradient: linear-gradient(135deg, #1a56db 0%, #0f3b8c 100%);
+            --gold: #d4a547;
+            --gold-light: #f0d080;
+            --silver: #c0c0c0;
+            --silver-light: #e8e8e8;
+            --secondary: #ffffff;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f0f5ff;
+            --border: #e5e7eb;
+            --dark-bg: #0a1628;
+            --dark-text: #e2e8f0;
+            --dark-card: rgba(30, 41, 59, 0.7);
+            --dark-border: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --glass-primary: rgba(255, 255, 255, 0.10);
+            --glass-border: rgba(255, 255, 255, 0.10);
+            --glass-border-hover: rgba(26, 86, 219, 0.30);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            --glass-shadow-hover: 0 12px 48px rgba(26, 86, 219, 0.10);
+            --glass-blur: 20px;
+            --shadow-glow: 0 0 30px rgba(26, 86, 219, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: linear-gradient(135deg, #1a3a6b 0%, #2a1a5e 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+            background-attachment: fixed;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode {
+            background: linear-gradient(135deg, #0a1628 0%, #1a0a3a 100%);
+            color: var(--dark-text);
+        }
+
+        /* ----- Premium Glassmorphism ----- */
+        .glass-premium {
+            background: var(--glass-primary);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-premium:hover {
+            transform: translateY(-4px);
+            border-color: var(--glass-border-hover);
+            box-shadow: var(--glass-shadow-hover);
+        }
+
+        body.dark-mode .glass-premium {
+            background: rgba(10, 22, 40, 0.5);
+            border-color: rgba(255, 255, 255, 0.04);
+        }
+
+        body.dark-mode .glass-premium:hover {
+            background: rgba(10, 22, 40, 0.7);
+            border-color: rgba(212, 165, 71, 0.25);
+        }
+
+        .glass-gradient {
+            background: linear-gradient(135deg, rgba(26, 86, 219, 0.10), rgba(212, 165, 71, 0.06));
+            backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+        }
+
+        /* ----- Header (frosted glass) ----- */
+        .header {
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode .header {
+            background: rgba(10, 22, 40, 0.70);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 24px;
+            max-width: 1600px;
+            margin: 0 auto;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            letter-spacing: -0.3px;
+        }
+        .logo span {
+            font-weight: 400;
+            font-size: 14px;
+            background: linear-gradient(135deg, var(--silver), var(--silver-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .instructor-badge {
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .header-search {
+            flex: 1;
+            max-width: 380px;
+            min-width: 140px;
+            position: relative;
+        }
+        .header-search input {
+            width: 100%;
+            padding: 10px 16px 10px 42px;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(6px);
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        body.dark-mode .header-search input {
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.04);
+            color: var(--dark-text);
+        }
+        .header-search input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 165, 71, 0.10);
+        }
+        .header-search i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.20);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 40px;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text);
+            position: relative;
+        }
+        body.dark-mode .btn-icon {
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.03);
+            color: var(--dark-text);
+        }
+        .btn-icon:hover {
+            background: var(--gold);
+            color: #0f172a;
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+        body.dark-mode .notification-badge {
+            border-color: var(--dark-bg);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.20);
+        }
+
+        .logout-btn {
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        body.dark-mode .logout-btn {
+            color: var(--dark-text);
+            border-color: rgba(255, 255, 255, 0.03);
+        }
+        .logout-btn:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+            transform: translateY(-2px);
+        }
+
+        /* ----- Sidebar (glass) ----- */
+        .sidebar {
+            width: 270px;
+            background: rgba(255, 255, 255, 0.60);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 20px 16px;
+            position: fixed;
+            height: calc(100vh - 66px);
+            overflow-y: auto;
+            transition: all 0.3s;
+            z-index: 50;
+        }
+
+        body.dark-mode .sidebar {
+            background: rgba(10, 22, 40, 0.60);
+            border-right: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-item {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 16px;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        body.dark-mode .sidebar-link {
+            color: var(--dark-text);
+        }
+
+        .sidebar-link:hover {
+            background: rgba(26, 86, 219, 0.06);
+        }
+
+        .sidebar-link.active {
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
+            box-shadow: 0 4px 20px rgba(212, 165, 71, 0.25);
+            transform: translateX(6px);
+        }
+
+        .sidebar-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .sidebar-footer {
+            margin-top: 28px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        body.dark-mode .sidebar-footer {
+            border-top-color: rgba(255, 255, 255, 0.03);
+        }
+        .sidebar-footer .sidebar-link {
+            font-size: 13px;
+        }
+
+        /* ----- Main Content ----- */
+        .main-content {
+            flex: 1;
+            margin-left: 270px;
+            padding: 28px 32px 40px;
+            transition: margin 0.3s;
+        }
+
+        /* ----- Stats Cards (with counter) ----- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            padding: 22px 20px;
+            cursor: default;
+        }
+
+        .stat-title {
+            color: var(--text-light);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 34px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .stat-change.up {
+            color: var(--success);
+        }
+        .stat-change.down {
+            color: var(--danger);
+        }
+
+        /* ----- Section Title ----- */
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .section-title span {
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* ----- Courses Grid ----- */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 28px;
+            margin-bottom: 40px;
+        }
+
+        .course-card {
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .course-image {
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .course-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            backdrop-filter: blur(8px);
+        }
+        .course-badge.published {
+            background: rgba(16, 185, 129, 0.85);
+            color: white;
+        }
+        .course-badge.draft {
+            background: rgba(245, 158, 11, 0.85);
+            color: white;
+        }
+        .course-badge.pending {
+            background: rgba(239, 68, 68, 0.85);
+            color: white;
+        }
+
+        .course-content {
+            padding: 20px 22px 22px;
+        }
+
+        .course-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .course-meta {
+            font-size: 13px;
+            color: var(--text-light);
+            margin: 6px 0 12px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
+            border: none;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(212, 165, 71, 0.30);
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .btn-outline {
+            border-color: rgba(255, 255, 255, 0.04);
+            color: var(--dark-text);
+        }
+        .btn-outline:hover {
+            background: var(--gold);
+            color: #0f172a;
+            border-color: var(--gold);
+        }
+
+        .btn-sm {
+            padding: 6px 16px;
+            font-size: 12px;
+        }
+
+        /* ----- Tables (glass) ----- */
+        .table-container {
+            padding: 0 0 0;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 16px 20px 12px;
+        }
+
+        .table-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .table-toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .table-toolbar input,
+        .table-toolbar select {
+            padding: 8px 14px;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            font-size: 13px;
+        }
+        body.dark-mode .table-toolbar input,
+        body.dark-mode .table-toolbar select {
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.04);
+            color: var(--dark-text);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        body.dark-mode .data-table th,
+        body.dark-mode .data-table td {
+            border-bottom-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .data-table th {
+            font-weight: 600;
+            color: var(--gold);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(26, 86, 219, 0.02);
+        }
+
+        .badge {
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .badge.active {
+            background: var(--success);
+            color: white;
+        }
+        .badge.pending {
+            background: var(--warning);
+            color: white;
+        }
+        .badge.completed {
+            background: var(--success);
+            color: white;
+        }
+        .badge.in-progress {
+            background: var(--info);
+            color: white;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            border: none;
+            padding: 6px 10px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 13px;
+            margin: 0 2px;
+        }
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+        .action-btn.edit {
+            color: var(--primary);
+        }
+        .action-btn.delete {
+            color: var(--danger);
+        }
+        .action-btn.view {
+            color: var(--success);
+        }
+        .action-btn.message {
+            color: var(--info);
+        }
+
+        /* ----- Chart Cards ----- */
+        .chart-card {
+            padding: 24px 22px;
+            margin-bottom: 24px;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+
+        canvas {
+            max-height: 260px;
+            width: 100% !important;
+        }
+
+        /* ----- Empty State ----- */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .empty-state i {
+            font-size: 56px;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        /* ----- Modal (glass) ----- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.30);
+            backdrop-filter: blur(8px);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border-radius: 28px;
+            max-width: 680px;
+            width: 92%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+        body.dark-mode .modal-content {
+            background: rgba(10, 22, 40, 0.85);
+            border-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            font-family: inherit;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group select,
+        body.dark-mode .form-group textarea {
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.04);
+            color: var(--dark-text);
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 165, 71, 0.08);
+        }
+
+        /* ----- Notifications Panel ----- */
+        .notifications-panel {
+            position: fixed;
+            top: 66px;
+            right: -420px;
+            width: 400px;
+            height: calc(100vh - 66px);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: 200;
+            transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+        body.dark-mode .notifications-panel {
+            background: rgba(10, 22, 40, 0.85);
+            border-left: 1px solid rgba(255, 255, 255, 0.02);
+        }
+        .notifications-panel.open {
+            right: 0;
+        }
+
+        .panel-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 18px;
+            position: sticky;
+            top: 0;
+            background: inherit;
+            backdrop-filter: inherit;
+            z-index: 2;
+        }
+
+        .notification-item {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            cursor: default;
+            transition: 0.2s;
+        }
+        .notification-item:hover {
+            background: rgba(26, 86, 219, 0.03);
+        }
+        .notification-item.unread {
+            border-left: 3px solid var(--gold);
+        }
+
+        /* ----- Loading ----- */
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(212, 165, 71, 0.10);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text);
+        }
+        body.dark-mode .mobile-menu-btn {
+            color: var(--dark-text);
+        }
+
+        /* ----- Responsive ----- */
+        @media (max-width: 992px) {
+            .courses-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 150;
+                width: 270px;
+                height: 100vh;
+                top: 0;
+                padding-top: 70px;
+                border-right: none;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 16px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .header-search {
+                display: none;
+            }
+            .header-content {
+                padding: 8px 16px;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .notifications-panel {
+                width: 100%;
+                right: -100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .header-right .user-name {
+                display: none;
+            }
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        @keyframes toastFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle sidebar">☰</button>
+                <a href="/" class="logo">Ubuntu <span>Professional</span></a>
+                <span class="instructor-badge">Instructor</span>
+            </div>
+
+            <div class="header-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="globalSearch" placeholder="Search courses, students..." />
+            </div>
+
+            <div class="header-right">
+                <span class="user-name" id="user-name" style="font-weight:600;">Instructor</span>
+                <button class="btn-icon" id="notifBtn" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notifCount">3</span>
+                </button>
+                <button class="btn-icon" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+                <div class="user-avatar" id="userAvatar">I</div>
+                <button class="logout-btn" id="logout-btn">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="dashboard" style="display:flex;">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-item"><a href="#" class="sidebar-link active" data-page="overview"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> My Courses</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="create-course"><i class="fas fa-plus-circle"></i> Create Course</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="students"><i class="fas fa-users"></i> My Students</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="assignments"><i class="fas fa-tasks"></i> Assignments</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="quizzes"><i class="fas fa-question-circle"></i> Quizzes</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="live-classes"><i class="fas fa-video"></i> Live Classes</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="earnings"><i class="fas fa-chart-line"></i> Earnings</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="messages"><i class="fas fa-envelope"></i> Messages</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="profile"><i class="fas fa-user"></i> Profile</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="sidebar-item"><a href="#" class="sidebar-link" data-page="analytics"><i class="fas fa-chart-pie"></i> Analytics</a></div>
+                <div class="sidebar-item"><a href="#" class="sidebar-link" data-page="settings"><i class="fas fa-cog"></i> Settings</a></div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <div style="text-align:center;padding:60px;">
+                <div class="loading-spinner"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== NOTIFICATIONS PANEL ===== -->
+    <div class="notifications-panel" id="notifPanel">
+        <div class="panel-header">
+            <span>Notifications</span>
+            <button id="closeNotif" style="background:none;border:none;font-size:26px;cursor:pointer;color:var(--text-light);">&times;</button>
+        </div>
+        <div id="notifList"></div>
+    </div>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="modalTitle">Modal</span>
+                <button id="closeModal" style="background:none;border:none;font-size:28px;cursor:pointer;color:var(--text-light);">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  MOCK DATA (preserved + extended)
+        // ============================================================
+        let instructorData = {
+            user: { id: 1, firstName: 'Sarah', lastName: 'Johnson', email: 'sarah@ubuntu.edu', role: 'instructor',
+                bio: 'Expert in ML and AI with 10+ years of experience' },
+            stats: {
+                totalStudents: 3421,
+                totalCourses: 4,
+                publishedCourses: 3,
+                totalRevenue: 28450,
+                monthlyRevenue: 5620,
+                averageRating: 4.8,
+                completionRate: 78
+            },
+            courses: [
+                { id: 1, title: 'Machine Learning Fundamentals', description: 'Learn core ML concepts with hands-on projects.',
+                    thumbnail: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=160&fit=crop',
+                    students: 1234, status: 'published', price: 0, rating: 4.8, createdAt: '2025-01-10' },
+                { id: 2, title: 'Advanced Machine Learning',
+                    description: 'Deep dive into neural networks, deep learning, and advanced ML.',
+                    thumbnail: 'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=400&h=160&fit=crop',
+                    students: 567, status: 'published', price: 49, rating: 4.9, createdAt: '2025-02-01' },
+                { id: 3, title: 'Python for Data Science',
+                    description: 'Master Python programming for data analysis and visualization.',
+                    thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=160&fit=crop',
+                    students: 890, status: 'draft', price: 0, rating: 0, createdAt: '2025-02-15' }
+            ],
+            students: [
+                { id: 1, name: 'John Doe', email: 'john@example.com', courseId: 1,
+                courseTitle: 'Machine Learning Fundamentals', progress: 75, enrolledAt: '2025-01-15',
+                    lastActive: '2025-02-10' },
+                { id: 2, name: 'Jane Smith', email: 'jane@example.com', courseId: 1,
+                    courseTitle: 'Machine Learning Fundamentals', progress: 45, enrolledAt: '2025-01-20',
+                    lastActive: '2025-02-12' },
+                { id: 3, name: 'Mike Johnson', email: 'mike@example.com', courseId: 2,
+                    courseTitle: 'Advanced Machine Learning', progress: 30, enrolledAt: '2025-02-01',
+                    lastActive: '2025-02-11' },
+                { id: 4, name: 'Sarah Williams', email: 'sarah@example.com', courseId: 2,
+                    courseTitle: 'Advanced Machine Learning', progress: 60, enrolledAt: '2025-02-05',
+                    lastActive: '2025-02-13' },
+                { id: 5, name: 'David Brown', email: 'david@example.com', courseId: 1,
+                    courseTitle: 'Machine Learning Fundamentals', progress: 90, enrolledAt: '2025-01-10',
+                    lastActive: '2025-02-14' }
+            ],
+            assignments: [
+                { id: 1, courseId: 1, title: 'Linear Regression Project', dueDate: '2025-02-20', submissions: 45,
+                    totalStudents: 1234, status: 'active' },
+                { id: 2, courseId: 1, title: 'Classification Assignment', dueDate: '2025-02-28', submissions: 23,
+                    totalStudents: 1234, status: 'active' },
+                { id: 3, courseId: 2, title: 'Neural Network Implementation', dueDate: '2025-03-05', submissions: 12,
+                    totalStudents: 567, status: 'active' }
+            ],
+            quizzes: [
+                { id: 1, courseId: 1, title: 'ML Basics Quiz', questions: 10, avgScore: 78, attempts: 890,
+                    status: 'published' },
+                { id: 2, courseId: 1, title: 'Algorithms Quiz', questions: 15, avgScore: 72, attempts: 756,
+                    status: 'published' },
+                { id: 3, courseId: 2, title: 'Neural Networks Quiz', questions: 12, avgScore: 68, attempts: 234,
+                    status: 'draft' }
+            ],
+            liveClasses: [
+                { id: 1, courseId: 1, title: 'Introduction to ML', date: '2025-02-18T15:00:00', attendees: 342,
+                    recording: null },
+                { id: 2, courseId: 1, title: 'Model Evaluation', date: '2025-02-20T15:00:00', attendees: null,
+                    recording: null },
+                { id: 3, courseId: 2, title: 'Neural Networks Overview', date: '2025-02-22T16:00:00', attendees: null,
+                    recording: 'https://example.com/recording1' }
+            ],
+            messages: [
+                { id: 1, from: 'John Doe', message: 'I have a question about the assignment',
+                    date: '2025-02-14T10:30:00', read: false },
+                { id: 2, from: 'Jane Smith', message: 'When is the next live session?', date: '2025-02-13T15:20:00',
+                    read: true }
+            ]
+        };
+
+        let state = {
+            currentPage: 'overview',
+            charts: {}
+        };
+
+        // ============================================================
+        //  AUTH (preserved)
+        // ============================================================
+        function checkAuth() {
+            const token = localStorage.getItem('accessToken');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!token) { window.location.href = '/'; return false; }
+            if (user.role !== 'instructor' && user.role !== 'admin') { window.location.href = '/'; return false; }
+            document.getElementById('user-name').textContent = instructorData.user.firstName || 'Instructor';
+            document.getElementById('userAvatar').textContent = (instructorData.user.firstName || 'I')[0].toUpperCase();
+            updateNotifBadge();
+            return true;
+        }
+
+        function updateNotifBadge() {
+            const unread = instructorData.messages.filter(m => !m.read).length;
+            document.getElementById('notifCount').textContent = unread + 3;
+        }
+
+        // ============================================================
+        //  UI HELPERS
+        // ============================================================
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const bgColor = type === 'error' ? '#ef4444' : type === 'success' ? '#10b981' : '#3b82f6';
+            toast.style.cssText = `
+                position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+                background: ${bgColor}; color: white; padding: 12px 28px; border-radius: 40px;
+                z-index: 2000; animation: toastFadeIn 0.3s ease; font-weight: 600; font-size: 14px;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.08); max-width: 90%; text-align: center;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300); }, 3200);
+        }
+
+        function openModal(title, bodyHTML) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = bodyHTML;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // ============================================================
+        //  ANIMATED COUNTER
+        // ============================================================
+        function animateCounter(el, target, duration = 2000) {
+            const start = 0;
+            const startTime = performance.now();
+
+            function update(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const current = Math.round(eased * target);
+                el.textContent = current.toLocaleString();
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            requestAnimationFrame(update);
+        }
+
+        function observeCounters() {
+            const counters = document.querySelectorAll('.stat-value[data-target]');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = parseInt(entry.target.dataset.target, 10);
+                        animateCounter(entry.target, target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            counters.forEach(el => observer.observe(el));
+        }
+
+        // ============================================================
+        //  RENDER FUNCTIONS (all pages)
+        // ============================================================
+        function renderOverview() {
+            const s = instructorData.stats;
+
+            setTimeout(() => {
+                const ctx = document.getElementById('revenueChart')?.getContext('2d');
+                if (ctx) {
+                    if (state.charts.revenue) state.charts.revenue.destroy();
+                    state.charts.revenue = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                            datasets: [{ label: 'Revenue ($)', data: [3200, 4500, 5600, 7800, 8900, 5620],
+                                borderColor: '#1a56db', backgroundColor: 'rgba(26,86,219,0.05)', fill: true,
+                                tension: 0.4 }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } } }
+                    });
+                }
+            }, 100);
+
+            return `
+                <div class="stats-grid">
+                    <div class="stat-card glass-premium"><div class="stat-title">📚 Total Students</div><div class="stat-value" data-target="${s.totalStudents}">0</div><div class="stat-change up">↑ 234 this month</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">📘 Published Courses</div><div class="stat-value" data-target="${s.publishedCourses}">0</div><div class="stat-change up">+1 new</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">💰 Total Revenue</div><div class="stat-value" data-target="${s.totalRevenue}">0</div><div class="stat-change up">↑ 23% from last month</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">⭐ Avg Rating</div><div class="stat-value" data-target="${s.averageRating * 10}">0</div><div class="stat-change up">★ 4.8/5</div></div>
+                </div>
+
+                <div class="chart-card glass-premium"><div class="chart-title">📊 Revenue Overview</div><canvas id="revenueChart"></canvas></div>
+
+                <div class="section-title"><span>📖 My Courses</span><button class="btn-primary btn-sm" onclick="loadPage('courses')">View All</button></div>
+                <div class="courses-grid">
+                    ${instructorData.courses.filter(c => c.status === 'published').map(c => `
+                        <div class="course-card glass-premium fade-in-up">
+                            <div class="course-image" style="background-image:url('${c.thumbnail}')"><span class="course-badge ${c.status}">${c.status}</span></div>
+                            <div class="course-content">
+                                <h3 class="course-title">${c.title}</h3>
+                                <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:var(--gold);"></i> ${c.rating}</div>
+                                <button class="btn-primary btn-sm" onclick="editCourse(${c.id})">Manage Course</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="table-container glass-premium">
+                    <div class="table-header"><h3>👥 Recent Student Activity</h3><button class="btn-primary btn-outline btn-sm" onclick="loadPage('students')">View All</button></div>
+                    <table class="data-table">
+                        <thead><tr><th>Student</th><th>Course</th><th>Progress</th><th>Last Active</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${instructorData.students.slice(0,5).map(s => `
+                                <tr>
+                                    <td>${s.name}</td><td>${s.courseTitle}</td>
+                                    <td><div style="width:100px;background:rgba(0,0,0,0.06);border-radius:4px;height:6px;"><div style="width:${s.progress}%;height:6px;background:var(--primary);border-radius:4px;"></div></div> ${s.progress}%</td>
+                                    <td>${s.lastActive}</td>
+                                    <td><button class="action-btn view" onclick="viewStudent(${s.id})"><i class="fas fa-eye"></i></button></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderCourses() {
+            return `
+                <div class="section-title"><span>📚 My Courses</span><button class="btn-primary" onclick="loadPage('create-course')">+ Create New Course</button></div>
+                <div class="courses-grid">
+                    ${instructorData.courses.map(c => `
+                        <div class="course-card glass-premium">
+                            <div class="course-image" style="background-image:url('${c.thumbnail}')"><span class="course-badge ${c.status}">${c.status}</span></div>
+                            <div class="course-content">
+                                <h3 class="course-title">${c.title}</h3>
+                                <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:var(--gold);"></i> ${c.rating || 'Not rated'}</div>
+                                <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+                                    <button class="btn-primary btn-sm" onclick="editCourse(${c.id})">Edit</button>
+                                    <button class="btn-primary btn-outline btn-sm" onclick="showToast('Loading analytics...','info')">Analytics</button>
+                                    ${c.status === 'draft' ? `<button class="btn-primary btn-sm" onclick="publishCourse(${c.id})">Publish</button>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderCreateCourse() {
+            return `
+                <div class="section-title">✏️ Create New Course</div>
+                <div class="glass-premium" style="padding:24px;">
+                    <div class="form-group"><label>Course Title</label><input type="text" id="courseTitle" placeholder="e.g., Advanced Python Programming" /></div>
+                    <div class="form-group"><label>Description</label><textarea id="courseDesc" rows="4" placeholder="Describe what students will learn..."></textarea></div>
+                    <div class="form-group"><label>Thumbnail URL</label><input type="text" id="courseThumb" placeholder="https://..." /></div>
+                    <div class="form-group"><label>Price ($)</label><input type="number" id="coursePrice" value="0" /></div>
+                    <div class="form-group"><label>Category</label><select id="courseCat"><option>Technology</option><option>Business</option><option>Design</option></select></div>
+                    <div class="form-group"><label>Level</label><select id="courseLevel"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div>
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                        <button class="btn-primary" onclick="saveCourse()">Save as Draft</button>
+                        <button class="btn-primary btn-outline" onclick="publishNewCourse()">Publish Now</button>
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-top:32px;">📂 Course Curriculum</div>
+                <div class="glass-premium" style="padding:24px;">
+                    <div id="modulesContainer">
+                        <div style="margin-bottom:16px;padding:16px;background:rgba(0,0,0,0.03);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
+                            <div><strong>Module 1: Introduction</strong> <span style="font-size:13px;color:var(--text-light);margin-left:12px;"><i class="fas fa-file-video"></i> 5 lessons</span></div>
+                            <button class="action-btn edit" onclick="showToast('Edit module coming soon','info')">Edit</button>
+                        </div>
+                        <div style="margin-bottom:16px;padding:16px;background:rgba(0,0,0,0.03);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
+                            <div><strong>Module 2: Core Concepts</strong> <span style="font-size:13px;color:var(--text-light);margin-left:12px;"><i class="fas fa-file-video"></i> 8 lessons</span></div>
+                            <button class="action-btn edit" onclick="showToast('Edit module coming soon','info')">Edit</button>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-outline" onclick="showToast('Add module coming soon','info')">+ Add Module</button>
+                </div>
+            `;
+        }
+
+        function renderStudents() {
+            return `
+                <div class="section-title"><span>👥 My Students (${instructorData.stats.totalStudents})</span></div>
+                <div class="table-container glass-premium">
+                    <div class="table-header">
+                        <div class="table-toolbar"><input type="text" id="searchStudent" placeholder="Search students..." oninput="filterStudents()" /></div>
+                        <button class="btn-primary btn-outline btn-sm" onclick="showToast('Exporting students...','info')">Export CSV</button>
+                    </div>
+                    <table class="data-table">
+                        <thead><tr><th>Name</th><th>Email</th><th>Course</th><th>Progress</th><th>Enrolled</th><th>Last Active</th><th>Actions</th></tr></thead>
+                        <tbody id="studentsBody">
+                            ${instructorData.students.map(s => `
+                                <tr class="student-row" data-name="${s.name.toLowerCase()}">
+                                    <td>${s.name}</td><td>${s.email}</td><td>${s.courseTitle}</td>
+                                    <td><div style="width:80px;background:rgba(0,0,0,0.06);border-radius:4px;height:6px;"><div style="width:${s.progress}%;height:6px;background:var(--primary);border-radius:4px;"></div></div> ${s.progress}%</td>
+                                    <td>${s.enrolledAt}</td><td>${s.lastActive}</td>
+                                    <td><button class="action-btn message" onclick="messageStudent(${s.id})"><i class="fas fa-envelope"></i></button></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderAssignments() {
+            return `
+                <div class="section-title"><span>📝 Assignments</span><button class="btn-primary" onclick="createAssignment()">+ New Assignment</button></div>
+                <div class="table-container glass-premium">
+                    <table class="data-table">
+                        <thead><tr><th>Title</th><th>Course</th><th>Due Date</th><th>Submissions</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${instructorData.assignments.map(a => `
+                                <tr>
+                                    <td>${a.title}</td><td>${instructorData.courses.find(c=>c.id===a.courseId)?.title}</td>
+                                    <td>${a.dueDate}</td><td>${a.submissions}/${a.totalStudents}</td>
+                                    <td><span class="badge active">Active</span></td>
+                                    <td><button class="action-btn view" onclick="showToast('Viewing submissions...','info')">View</button></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderQuizzes() {
+            return `
+                <div class="section-title"><span>❓ Quizzes</span><button class="btn-primary" onclick="createQuiz()">+ New Quiz</button></div>
+                <div class="table-container glass-premium">
+                    <table class="data-table">
+                        <thead><tr><th>Title</th><th>Course</th><th>Questions</th><th>Avg Score</th><th>Attempts</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${instructorData.quizzes.map(q => `
+                                <tr>
+                                    <td>${q.title}</td><td>${instructorData.courses.find(c=>c.id===q.courseId)?.title}</td>
+                                    <td>${q.questions}</td><td>${q.avgScore}%</td><td>${q.attempts}</td>
+                                    <td><span class="badge ${q.status==='published'?'active':'pending'}">${q.status}</span></td>
+                                    <td><button class="action-btn edit" onclick="showToast('Edit quiz coming soon','info')">Edit</button></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderLiveClasses() {
+            return `
+                <div class="section-title"><span>🎥 Live Classes</span><button class="btn-primary" onclick="scheduleLiveClass()">+ Schedule Class</button></div>
+                <div class="table-container glass-premium">
+                    <table class="data-table">
+                        <thead><tr><th>Title</th><th>Course</th><th>Date & Time</th><th>Attendees</th><th>Recording</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${instructorData.liveClasses.map(l => `
+                                <tr>
+                                    <td>${l.title}</td><td>${instructorData.courses.find(c=>c.id===l.courseId)?.title}</td>
+                                    <td>${new Date(l.date).toLocaleString()}</td>
+                                    <td>${l.attendees || 'Not started'}</td>
+                                    <td>${l.recording ? '<i class="fas fa-check-circle" style="color:var(--success);"></i>' : 'Pending'}</td>
+                                    <td><button class="action-btn edit" onclick="showToast('Manage live class','info')">Manage</button></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderEarnings() {
+            return `
+                <div class="stats-grid">
+                    <div class="stat-card glass-premium"><div class="stat-title">💰 Total Revenue</div><div class="stat-value">$${instructorData.stats.totalRevenue.toLocaleString()}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">📈 This Month</div><div class="stat-value">$${instructorData.stats.monthlyRevenue.toLocaleString()}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">📊 Next Payout</div><div class="stat-value">$${instructorData.stats.monthlyRevenue}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">✅ Completion Rate</div><div class="stat-value">${instructorData.stats.completionRate}%</div></div>
+                </div>
+                <div class="chart-card glass-premium"><div class="chart-title">Revenue Breakdown by Course</div><canvas id="earningsChart"></canvas></div>
+                <div class="table-container glass-premium">
+                    <h3 style="margin-bottom:16px;">Transaction History</h3>
+                    <table class="data-table">
+                        <thead><tr><th>Date</th><th>Course</th><th>Student</th><th>Amount</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td>2025-02-15</td><td>Advanced ML</td><td>John Doe</td><td>$49</td><td><span class="badge active">Completed</span></td></tr>
+                            <tr><td>2025-02-10</td><td>ML Fundamentals</td><td>Jane Smith</td><td>$75</td><td><span class="badge active">Completed</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderMessages() {
+            return `
+                <div class="section-title">💬 Messages</div>
+                <div class="table-container glass-premium">
+                    <table class="data-table">
+                        <thead><tr><th>From</th><th>Message</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${instructorData.messages.map(m => `
+                                <tr>
+                                    <td>${m.from}</td><td>${m.message}</td>
+                                    <td>${new Date(m.date).toLocaleString()}</td>
+                                    <td>${!m.read ? '<span class="badge pending">Unread</span>' : 'Read'}</td>
+                                    <td><button class="action-btn view" onclick="replyToMessage(${m.id})">Reply</button></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn-primary" onclick="composeMessage()">+ Compose New Message</button>
+            `;
+        }
+
+        function renderProfile() {
+            const u = instructorData.user;
+            return `
+                <div class="section-title">👤 Profile Settings</div>
+                <div class="glass-premium" style="padding:24px;max-width:600px;">
+                    <div class="form-group"><label>First Name</label><input type="text" id="pFirstName" value="${u.firstName}" /></div>
+                    <div class="form-group"><label>Last Name</label><input type="text" id="pLastName" value="${u.lastName}" /></div>
+                    <div class="form-group"><label>Email</label><input type="email" value="${u.email}" disabled /></div>
+                    <div class="form-group"><label>Bio</label><textarea id="pBio" rows="4">${u.bio}</textarea></div>
+                    <div class="form-group"><label>Expertise</label><select><option>Machine Learning</option><option>Data Science</option><option>Python</option></select></div>
+                    <button class="btn-primary" onclick="updateProfile()">Update Profile</button>
+                    <button class="btn-primary btn-outline" style="margin-left:12px;" onclick="showToast('Change password coming soon','info')">Change Password</button>
+                </div>
+            `;
+        }
+
+        // ============================================================
+        //  ACTION HANDLERS (preserved + enhanced)
+        // ============================================================
+        window.editCourse = (id) => {
+            const c = instructorData.courses.find(c => c.id === id);
+            if (!c) return;
+            openModal('Edit Course', `
+                <div class="form-group"><label>Title</label><input type="text" id="editTitle" value="${c.title}" /></div>
+                <div class="form-group"><label>Description</label><textarea id="editDesc" rows="4">${c.description}</textarea></div>
+                <div class="form-group"><label>Price ($)</label><input type="number" id="editPrice" value="${c.price}" /></div>
+                <div class="form-group"><label>Status</label><select id="editStatus"><option ${c.status==='published'?'selected':''}>published</option><option ${c.status==='draft'?'selected':''}>draft</option></select></div>
+                <button class="btn-primary" onclick="saveCourseChanges(${id})">Save Changes</button>
+            `);
+        };
+
+        window.saveCourseChanges = (id) => {
+            showToast('Course updated!', 'success');
+            closeModal();
+            loadPage('courses');
+        };
+
+        window.publishCourse = (id) => {
+            showToast('Course published!', 'success');
+            loadPage('courses');
+        };
+
+        window.saveCourse = () => {
+            showToast('Course saved as draft!', 'success');
+            loadPage('courses');
+        };
+
+        window.publishNewCourse = () => {
+            showToast('Course published!', 'success');
+            loadPage('courses');
+        };
+
+        window.viewStudent = (id) => {
+            const s = instructorData.students.find(s => s.id === id);
+            if (!s) return;
+            openModal('Student Details', `
+                <p><strong>Name:</strong> ${s.name}</p>
+                <p><strong>Email:</strong> ${s.email}</p>
+                <p><strong>Course:</strong> ${s.courseTitle}</p>
+                <p><strong>Progress:</strong> ${s.progress}%</p>
+                <p><strong>Enrolled:</strong> ${s.enrolledAt}</p>
+                <p><strong>Last Active:</strong> ${s.lastActive}</p>
+                <button class="btn-primary" onclick="messageStudent(${s.id})">Message Student</button>
+            `);
+        };
+
+        window.messageStudent = (id) => {
+            showToast('Opening messaging...', 'info');
+        };
+
+        window.createAssignment = () => {
+            openModal('Create Assignment', `
+                <div class="form-group"><label>Title</label><input type="text" id="assTitle" /></div>
+                <div class="form-group"><label>Course</label><select id="assCourse"><option>Machine Learning Fundamentals</option><option>Advanced Machine Learning</option></select></div>
+                <div class="form-group"><label>Due Date</label><input type="date" id="assDue" /></div>
+                <div class="form-group"><label>Description</label><textarea rows="4"></textarea></div>
+                <button class="btn-primary" onclick="saveAssignment()">Create</button>
+            `);
+        };
+
+        window.saveAssignment = () => {
+            showToast('Assignment created!', 'success');
+            closeModal();
+            loadPage('assignments');
+        };
+
+        window.createQuiz = () => {
+            showToast('Quiz builder coming soon!', 'info');
+        };
+
+        window.scheduleLiveClass = () => {
+            openModal('Schedule Live Class', `
+                <div class="form-group"><label>Title</label><input type="text" /></div>
+                <div class="form-group"><label>Course</label><select><option>Machine Learning Fundamentals</option><option>Advanced Machine Learning</option></select></div>
+                <div class="form-group"><label>Date & Time</label><input type="datetime-local" /></div>
+                <div class="form-group"><label>Duration (min)</label><input type="number" value="60" /></div>
+                <button class="btn-primary" onclick="saveLiveClass()">Schedule</button>
+            `);
+        };
+
+        window.saveLiveClass = () => {
+            showToast('Live class scheduled!', 'success');
+            closeModal();
+            loadPage('live-classes');
+        };
+
+        window.replyToMessage = (id) => {
+            const m = instructorData.messages.find(m => m.id === id);
+            if (!m) return;
+            openModal('Reply to Message', `
+                <p><strong>From:</strong> ${m.from}</p>
+                <p><strong>Message:</strong> ${m.message}</p>
+                <div class="form-group"><label>Your Reply</label><textarea rows="4"></textarea></div>
+                <button class="btn-primary" onclick="sendReply()">Send Reply</button>
+            `);
+        };
+
+        window.sendReply = () => {
+            showToast('Reply sent!', 'success');
+            closeModal();
+        };
+
+        window.composeMessage = () => {
+            openModal('New Message', `
+                <div class="form-group"><label>To</label><select><option>John Doe</option><option>Jane Smith</option></select></div>
+                <div class="form-group"><label>Subject</label><input type="text" /></div>
+                <div class="form-group"><label>Message</label><textarea rows="4"></textarea></div>
+                <button class="btn-primary" onclick="sendMessage()">Send</button>
+            `);
+        };
+
+        window.sendMessage = () => {
+            showToast('Message sent!', 'success');
+            closeModal();
+        };
+
+        window.updateProfile = () => {
+            showToast('Profile updated!', 'success');
+        };
+
+        window.filterStudents = () => {
+            const search = document.getElementById('searchStudent')?.value.toLowerCase() || '';
+            document.querySelectorAll('.student-row').forEach(row => {
+                const name = row.getAttribute('data-name') || '';
+                row.style.display = name.includes(search) ? '' : 'none';
+            });
+        };
+
+        // ============================================================
+        //  NOTIFICATIONS
+        // ============================================================
+        function loadNotifications() {
+            const container = document.getElementById('notifList');
+            const notifs = [
+                { title: 'New Student', message: 'John Doe enrolled in your course', time: '2 hours ago' },
+                { title: 'Assignment Submitted', message: '5 new submissions for ML Quiz', time: 'Yesterday' },
+                { title: 'Message from Admin', message: 'Your course has been approved', time: '2 days ago' }
+            ];
+            container.innerHTML = notifs.map(n => `
+                <div class="notification-item unread">
+                    <strong>${n.title}</strong>
+                    <p>${n.message}</p>
+                    <span style="font-size:12px;color:var(--text-light);">${n.time}</span>
+                </div>
+            `).join('');
+        }
+
+        // ============================================================
+        //  PAGE NAVIGATION
+        // ============================================================
+        async function loadPage(page) {
+            const content = document.getElementById('main-content');
+            content.innerHTML = '<div style="text-align:center;padding:60px;"><div class="loading-spinner"></div></div>';
+            state.currentPage = page;
+
+            setTimeout(() => {
+                let html = '';
+                switch (page) {
+                    case 'overview':
+                        html = renderOverview();
+                        break;
+                    case 'courses':
+                        html = renderCourses();
+                        break;
+                    case 'create-course':
+                        html = renderCreateCourse();
+                        break;
+                    case 'students':
+                        html = renderStudents();
+                        break;
+                    case 'assignments':
+                        html = renderAssignments();
+                        break;
+                    case 'quizzes':
+                        html = renderQuizzes();
+                        break;
+                    case 'live-classes':
+                        html = renderLiveClasses();
+                        break;
+                    case 'earnings':
+                        html = renderEarnings();
+                        break;
+                    case 'messages':
+                        html = renderMessages();
+                        break;
+                    case 'profile':
+                        html = renderProfile();
+                        break;
+                    default:
+                        html = renderOverview();
+                }
+                content.innerHTML = html;
+                observeCounters();
+
+                // Earnings chart
+                if (page === 'earnings') {
+                    setTimeout(() => {
+                        const ctx = document.getElementById('earningsChart')?.getContext('2d');
+                        if (ctx) {
+                            new Chart(ctx, {
+                                type: 'pie',
+                                data: { labels: ['ML Fundamentals', 'Advanced ML'],
+                                    datasets: [{ data: [12500, 15950], backgroundColor: ['#1a56db',
+                                            '#d4a547'] }] },
+                                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+                            });
+                        }
+                    }, 150);
+                }
+            }, 300);
+
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                link.classList.toggle('active', link.getAttribute('data-page') === page);
+            });
+        }
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        async function init() {
+            if (!checkAuth()) return;
+
+            await loadPage('overview');
+            loadNotifications();
+
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                localStorage.removeItem('user');
+                window.location.href = '/';
+            });
+
+            document.getElementById('notifBtn').addEventListener('click', () => {
+                document.getElementById('notifPanel').classList.toggle('open');
+                loadNotifications();
+            });
+            document.getElementById('closeNotif').addEventListener('click', () => {
+                document.getElementById('notifPanel').classList.remove('open');
+            });
+
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('modal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeModal();
+            });
+
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('open');
+            });
+
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    loadPage(page);
+                    if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+                });
+            });
+
+            const themeToggle = document.getElementById('theme-toggle');
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.textContent = '☀️';
+            }
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                themeToggle.textContent = isDark ? '☀️' : '🌙';
+            });
+
+            document.getElementById('globalSearch').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const val = e.target.value.trim();
+                    if (val) showToast(`Searching for "${val}"...`, 'info');
+                }
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>
