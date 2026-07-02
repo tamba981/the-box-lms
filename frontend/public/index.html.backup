@@ -1098,14 +1098,7 @@
       <nav class="nav-menu">
         <a href="/frontend/public/courses.html" class="mega-menu-trigger">Courses <i class="fas fa-chevron-down"></i></a>
         <a href="#">AI Tutor</a>
-        <div class="dropdown">
-    <a href="#">Dashboard <i class="fas fa-chevron-down"></i></a>
-    <div class="dropdown-content">
-        <a href="/frontend/Dashboard/student-dashboard.html">?? Student Dashboard</a>
-        <a href="/frontend/Dashboard/instructor-dashboard.html">????? Instructor Dashboard</a>
-        <a href="/frontend/Dashboard/admin-dashboard.html">?? Admin Dashboard</a>
-    </div>
-</div>   
+        <a href="/frontend/Dashboard/student-dashboard.html">Dashboard</a>   
         <div class="dropdown">
           <a href="#">Admission <i class="fas fa-chevron-down"></i></a>
           <div class="dropdown-content">
@@ -1899,4 +1892,3 @@
   </script>
 </body>
 </html>
-
