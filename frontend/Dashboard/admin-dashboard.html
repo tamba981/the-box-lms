@@ -3,23 +3,27 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard · THE BOX</title>
+    <title>Admin Dashboard · Ubuntu Professional Institute</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* ----- CSS Variables & Base ----- */
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
+            --primary: #1a56db;
+            --primary-dark: #0f3b8c;
             --primary-light: #3b82f6;
-            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            --primary-gradient: linear-gradient(135deg, #1a56db 0%, #0f3b8c 100%);
+            --gold: #d4a547;
+            --gold-light: #f0d080;
+            --silver: #c0c0c0;
+            --silver-light: #e8e8e8;
             --secondary: #ffffff;
             --text: #1f2937;
             --text-light: #6b7280;
-            --bg-light: #f8fafc;
+            --bg-light: #f0f5ff;
             --border: #e5e7eb;
-            --dark-bg: #0f172a;
+            --dark-bg: #0a1628;
             --dark-text: #e2e8f0;
             --dark-card: rgba(30, 41, 59, 0.7);
             --dark-border: #334155;
@@ -27,14 +31,14 @@
             --warning: #f59e0b;
             --danger: #ef4444;
             --info: #3b82f6;
-            --glass-bg: rgba(255, 255, 255, 0.65);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            --glass-bg: rgba(255, 255, 255, 0.10);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
             --glass-blur: 20px;
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08);
-            --shadow-glow: 0 0 30px rgba(37, 99, 235, 0.20);
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.06);
+            --shadow-glow: 0 0 30px rgba(26, 86, 219, 0.12);
         }
 
         * {
@@ -46,7 +50,7 @@
         body {
             font-family: 'Inter', sans-serif;
             color: var(--text);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a3a6b 0%, #2a1a5e 100%);
             min-height: 100vh;
             line-height: 1.6;
             background-attachment: fixed;
@@ -54,7 +58,7 @@
         }
 
         body.dark-mode {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            background: linear-gradient(135deg, #0a1628 0%, #1a0a3a 100%);
             color: var(--dark-text);
         }
 
@@ -70,28 +74,28 @@
         }
 
         .glass-hover:hover {
-            background: rgba(255, 255, 255, 0.75);
-            border-color: rgba(37, 99, 235, 0.30);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(212, 165, 71, 0.25);
             transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.12);
+            box-shadow: 0 12px 40px rgba(26, 86, 219, 0.08);
         }
 
         body.dark-mode .glass-premium {
-            background: var(--dark-card);
-            border-color: rgba(255, 255, 255, 0.05);
+            background: rgba(10, 22, 40, 0.5);
+            border-color: rgba(255, 255, 255, 0.03);
         }
 
         body.dark-mode .glass-hover:hover {
-            background: rgba(30, 41, 59, 0.85);
-            border-color: rgba(37, 99, 235, 0.25);
+            background: rgba(10, 22, 40, 0.7);
+            border-color: rgba(212, 165, 71, 0.20);
         }
 
         /* ----- Header (glass) ----- */
         .header {
-            background: rgba(255, 255, 255, 0.80);
+            background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -99,8 +103,8 @@
         }
 
         body.dark-mode .header {
-            background: rgba(15, 23, 42, 0.80);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(10, 22, 40, 0.75);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         }
 
         .header-content {
@@ -121,27 +125,35 @@
         }
 
         .logo {
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 800;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             text-decoration: none;
             white-space: nowrap;
+            letter-spacing: -0.3px;
+        }
+        .logo span {
+            font-weight: 400;
+            font-size: 14px;
+            background: linear-gradient(135deg, var(--silver), var(--silver-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .admin-badge {
-            background: var(--primary);
-            color: white;
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
             padding: 2px 14px;
             border-radius: 20px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             letter-spacing: 0.3px;
         }
 
-        /* Header search */
         .header-search {
             flex: 1;
             max-width: 420px;
@@ -153,20 +165,20 @@
             padding: 10px 16px 10px 42px;
             border-radius: 40px;
             border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.50);
+            background: rgba(255, 255, 255, 0.35);
             backdrop-filter: blur(6px);
             font-size: 14px;
             transition: 0.3s;
         }
         body.dark-mode .header-search input {
-            background: rgba(30, 41, 59, 0.40);
-            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.04);
             color: var(--dark-text);
         }
         .header-search input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 165, 71, 0.08);
         }
         .header-search i {
             position: absolute;
@@ -184,9 +196,9 @@
         }
 
         .btn-icon {
-            background: rgba(255, 255, 255, 0.30);
+            background: rgba(255, 255, 255, 0.20);
             backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.20);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 40px;
             width: 44px;
             height: 44px;
@@ -200,14 +212,14 @@
             position: relative;
         }
         body.dark-mode .btn-icon {
-            background: rgba(30, 41, 59, 0.40);
-            border-color: rgba(255, 255, 255, 0.05);
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.03);
             color: var(--dark-text);
         }
         .btn-icon:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+            background: var(--gold);
+            color: #0f172a;
+            border-color: var(--gold);
             transform: translateY(-2px);
         }
 
@@ -235,22 +247,22 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #0f172a;
             font-weight: 700;
             font-size: 16px;
             cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.30);
+            border: 2px solid rgba(255, 255, 255, 0.20);
         }
 
         .logout-btn {
             padding: 8px 18px;
-            background: rgba(255, 255, 255, 0.20);
+            background: rgba(255, 255, 255, 0.10);
             backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.20);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: var(--text);
             border-radius: 40px;
             cursor: pointer;
@@ -259,7 +271,7 @@
         }
         body.dark-mode .logout-btn {
             color: var(--dark-text);
-            border-color: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.03);
         }
         .logout-btn:hover {
             background: var(--danger);
@@ -271,10 +283,10 @@
         /* ----- Sidebar (glass) ----- */
         .sidebar {
             width: 280px;
-            background: rgba(255, 255, 255, 0.70);
+            background: rgba(255, 255, 255, 0.65);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border-right: 1px solid rgba(255, 255, 255, 0.15);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
             padding: 20px 16px;
             position: fixed;
             height: calc(100vh - 73px);
@@ -284,8 +296,8 @@
         }
 
         body.dark-mode .sidebar {
-            background: rgba(15, 23, 42, 0.70);
-            border-right: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(10, 22, 40, 0.65);
+            border-right: 1px solid rgba(255, 255, 255, 0.02);
         }
 
         .sidebar-menu {
@@ -313,13 +325,13 @@
         }
 
         .sidebar-link:hover {
-            background: rgba(37, 99, 235, 0.08);
+            background: rgba(26, 86, 219, 0.05);
         }
 
         .sidebar-link.active {
-            background: var(--primary-gradient);
-            color: white;
-            box-shadow: var(--shadow-glow);
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
+            box-shadow: 0 4px 20px rgba(212, 165, 71, 0.25);
             transform: translateX(6px);
         }
 
@@ -335,7 +347,7 @@
             border-top: 1px solid var(--border);
         }
         body.dark-mode .sidebar-footer {
-            border-top-color: rgba(255, 255, 255, 0.06);
+            border-top-color: rgba(255, 255, 255, 0.03);
         }
 
         .sidebar-footer .sidebar-link {
@@ -359,15 +371,15 @@
         }
         .quick-stat {
             padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.50);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             text-align: center;
         }
         body.dark-mode .quick-stat {
-            background: rgba(30, 41, 59, 0.30);
-            border-color: rgba(255, 255, 255, 0.04);
+            background: rgba(30, 41, 59, 0.20);
+            border-color: rgba(255, 255, 255, 0.02);
         }
         .quick-stat .label {
             font-size: 12px;
@@ -378,7 +390,7 @@
             font-size: 22px;
             font-weight: 700;
             margin-top: 2px;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--primary), var(--gold));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -408,7 +420,7 @@
         .stat-value {
             font-size: 34px;
             font-weight: 800;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--primary), var(--gold));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -485,14 +497,14 @@
             padding: 8px 14px;
             border-radius: 40px;
             border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.30);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(4px);
             font-size: 13px;
         }
         body.dark-mode .table-toolbar input,
         body.dark-mode .table-toolbar select {
-            background: rgba(30, 41, 59, 0.30);
-            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(30, 41, 59, 0.20);
+            border-color: rgba(255, 255, 255, 0.03);
             color: var(--dark-text);
         }
 
@@ -510,22 +522,22 @@
         }
         body.dark-mode .data-table th,
         body.dark-mode .data-table td {
-            border-bottom-color: rgba(255, 255, 255, 0.04);
+            border-bottom-color: rgba(255, 255, 255, 0.03);
         }
 
         .data-table th {
             font-weight: 600;
-            color: var(--primary);
+            color: var(--gold);
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
         }
 
         .data-table tr:hover td {
-            background: rgba(37, 99, 235, 0.03);
+            background: rgba(26, 86, 219, 0.02);
         }
         body.dark-mode .data-table tr:hover td {
-            background: rgba(37, 99, 235, 0.05);
+            background: rgba(26, 86, 219, 0.03);
         }
 
         .badge {
@@ -557,7 +569,7 @@
         }
 
         .action-btn {
-            background: rgba(255, 255, 255, 0.30);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(4px);
             border: none;
             padding: 6px 10px;
@@ -589,34 +601,34 @@
             align-items: center;
             gap: 8px;
             padding: 10px 22px;
-            background: var(--primary-gradient);
-            color: white;
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
             border: none;
             border-radius: 40px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
+            box-shadow: 0 4px 20px rgba(212, 165, 71, 0.30);
         }
 
         .btn-outline {
-            background: rgba(255, 255, 255, 0.20);
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(4px);
             border: 1px solid var(--border);
             color: var(--text);
         }
         body.dark-mode .btn-outline {
-            border-color: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.03);
             color: var(--dark-text);
         }
         .btn-outline:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+            background: var(--gold);
+            color: #0f172a;
+            border-color: var(--gold);
         }
 
         /* Modal (glass) */
@@ -627,7 +639,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.40);
+            background: rgba(0, 0, 0, 0.30);
             backdrop-filter: blur(8px);
             z-index: 300;
             align-items: center;
@@ -638,7 +650,7 @@
         }
 
         .modal-content {
-            background: rgba(255, 255, 255, 0.88);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border-radius: 28px;
@@ -646,12 +658,12 @@
             width: 92%;
             max-height: 85vh;
             overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.20);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: var(--shadow-lg);
         }
         body.dark-mode .modal-content {
-            background: rgba(15, 23, 42, 0.88);
-            border-color: rgba(255, 255, 255, 0.04);
+            background: rgba(10, 22, 40, 0.85);
+            border-color: rgba(255, 255, 255, 0.02);
         }
 
         .modal-header {
@@ -664,7 +676,7 @@
             font-size: 18px;
         }
         body.dark-mode .modal-header {
-            border-bottom-color: rgba(255, 255, 255, 0.04);
+            border-bottom-color: rgba(255, 255, 255, 0.03);
         }
 
         .modal-body {
@@ -687,7 +699,7 @@
             padding: 12px 16px;
             border: 1px solid var(--border);
             border-radius: 14px;
-            background: rgba(255, 255, 255, 0.30);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(4px);
             font-family: inherit;
             font-size: 14px;
@@ -696,15 +708,15 @@
         body.dark-mode .form-group input,
         body.dark-mode .form-group select,
         body.dark-mode .form-group textarea {
-            background: rgba(30, 41, 59, 0.30);
-            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(30, 41, 59, 0.20);
+            border-color: rgba(255, 255, 255, 0.03);
             color: var(--dark-text);
         }
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 165, 71, 0.06);
         }
 
         /* Loading Spinner */
@@ -712,8 +724,8 @@
             display: inline-block;
             width: 40px;
             height: 40px;
-            border: 3px solid rgba(37, 99, 235, 0.15);
-            border-top-color: var(--primary);
+            border: 3px solid rgba(212, 165, 71, 0.10);
+            border-top-color: var(--gold);
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
         }
@@ -735,17 +747,17 @@
             align-items: flex-start;
         }
         body.dark-mode .activity-item {
-            border-bottom-color: rgba(255, 255, 255, 0.04);
+            border-bottom-color: rgba(255, 255, 255, 0.03);
         }
         .activity-icon {
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: rgba(37, 99, 235, 0.10);
+            background: rgba(26, 86, 219, 0.06);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary);
+            color: var(--gold);
             flex-shrink: 0;
         }
         .activity-text {
@@ -827,7 +839,7 @@
         <div class="header-content">
             <div class="header-left">
                 <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle sidebar">☰</button>
-                <a href="/" class="logo">THE BOX</a>
+                <a href="/" class="logo">Ubuntu <span>Professional</span></a>
                 <span class="admin-badge">Admin</span>
             </div>
 
@@ -887,7 +899,7 @@
         </div>
     </div>
 
-    <!-- ===== NOTIFICATION PANEL (hidden by default) ===== -->
+    <!-- ===== NOTIFICATION PANEL ===== -->
     <div class="modal" id="notifModal">
         <div class="modal-content" style="max-width:460px;">
             <div class="modal-header">
@@ -910,7 +922,7 @@
         //  MOCK DATA (preserved + extended)
         // ============================================================
         let adminData = {
-            user: { firstName: 'Admin', lastName: 'User', email: 'admin@thebox.edu', role: 'admin' },
+            user: { firstName: 'Admin', lastName: 'User', email: 'admin@ubuntu.edu', role: 'admin' },
             stats: {
                 totalUsers: 15234,
                 totalStudents: 14892,
@@ -990,7 +1002,7 @@
                 position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
                 background: ${bgColor}; color: white; padding: 12px 28px; border-radius: 40px;
                 z-index: 2000; animation: fadeInUp 0.3s ease; font-weight: 600; font-size: 14px;
-                box-shadow: 0 8px 30px rgba(0,0,0,0.15); max-width: 90%; text-align: center;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.10); max-width: 90%; text-align: center;
             `;
             toast.textContent = message;
             document.body.appendChild(toast);
@@ -1037,8 +1049,8 @@
                 if (ctx1) {
                     if (state.charts.revenue) state.charts.revenue.destroy();
                     const grad = ctx1.createLinearGradient(0, 0, 0, 300);
-                    grad.addColorStop(0, 'rgba(37,99,235,0.3)');
-                    grad.addColorStop(1, 'rgba(37,99,235,0.0)');
+                    grad.addColorStop(0, 'rgba(26,86,219,0.25)');
+                    grad.addColorStop(1, 'rgba(26,86,219,0.0)');
                     state.charts.revenue = new Chart(ctx1, {
                         type: 'line',
                         data: {
@@ -1046,11 +1058,11 @@
                             datasets: [{
                                 label: 'Revenue ($)',
                                 data: [12500, 18900, 22400, 27800, 31200, 28450],
-                                borderColor: '#2563eb',
+                                borderColor: '#1a56db',
                                 backgroundColor: grad,
                                 fill: true,
                                 tension: 0.4,
-                                pointBackgroundColor: '#2563eb'
+                                pointBackgroundColor: '#1a56db'
                             }]
                         },
                         options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } } }
@@ -1068,9 +1080,9 @@
                             datasets: [{
                                 label: 'New Students',
                                 data: [450, 680, 890, 1200, 1450, 1320],
-                                backgroundColor: 'rgba(37,99,235,0.7)',
+                                backgroundColor: 'rgba(26,86,219,0.6)',
                                 borderRadius: 8,
-                                borderColor: '#2563eb',
+                                borderColor: '#1a56db',
                                 borderWidth: 1
                             }]
                         },
@@ -1138,7 +1150,7 @@
                             ${adminData.users.slice(0,5).map(user => `
                                 <tr>
                                     <td>${user.name}</td><td>${user.email}</td>
-                                    <td><span class="badge" style="background:var(--primary);color:white;">${user.role}</span></td>
+                                    <td><span class="badge" style="background:var(--gold);color:#0f172a;">${user.role}</span></td>
                                     <td><span class="badge ${user.status === 'active' ? 'active' : user.status === 'pending' ? 'pending' : 'inactive'}">${user.status}</span></td>
                                     <td>${user.joined}</td>
                                     <td><button class="action-btn edit" onclick="editUser(${user.id})"><i class="fas fa-edit"></i></button></td>
@@ -1196,7 +1208,7 @@
                             ${adminData.users.map(user => `
                                 <tr data-role="${user.role}" data-name="${user.name.toLowerCase()}">
                                     <td>${user.id}</td><td>${user.name}</td><td>${user.email}</td>
-                                    <td><span class="badge" style="background:var(--primary);color:white;">${user.role}</span></td>
+                                    <td><span class="badge" style="background:var(--gold);color:#0f172a;">${user.role}</span></td>
                                     <td><span class="badge ${user.status === 'active' ? 'active' : user.status === 'pending' ? 'pending' : 'inactive'}">${user.status}</span></td>
                                     <td>${user.courses || 0}</td><td>${user.joined}</td>
                                     <td>
@@ -1407,8 +1419,8 @@
                 </div>
                 <div class="table-container glass-premium">
                     <h3 style="margin-bottom:20px;">System Configuration</h3>
-                    <div class="form-group"><label>Site Name</label><input type="text" value="THE BOX - Building Opportunities" /></div>
-                    <div class="form-group"><label>Contact Email</label><input type="email" value="admin@thebox.edu" /></div>
+                    <div class="form-group"><label>Site Name</label><input type="text" value="Ubuntu Professional Institute" /></div>
+                    <div class="form-group"><label>Contact Email</label><input type="email" value="admin@ubuntu.edu" /></div>
                     <div class="form-group"><label>Default Language</label><select><option>English</option><option>Spanish</option><option>French</option></select></div>
                     <div class="form-group"><label>Maintenance Message</label><textarea rows="3" placeholder="We'll be back soon..."></textarea></div>
                     <button class="btn-primary" onclick="showToast('Settings saved!','success')">Save Changes</button>
@@ -1465,15 +1477,15 @@
                         if (ctx) new Chart(ctx, {
                             type: 'line',
                             data: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], datasets: [{ label: 'Revenue',
-                                    data: [12500, 18900, 22400, 27800, 31200, 28450], borderColor: '#2563eb',
-                                    backgroundColor: 'rgba(37,99,235,0.05)', fill: true, tension: 0.4 }] },
+                                    data: [12500, 18900, 22400, 27800, 31200, 28450], borderColor: '#1a56db',
+                                    backgroundColor: 'rgba(26,86,219,0.04)', fill: true, tension: 0.4 }] },
                             options: { responsive: true }
                         });
                         const ctx2 = document.getElementById('userGrowthChart')?.getContext('2d');
                         if (ctx2) new Chart(ctx2, {
                             type: 'bar',
                             data: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], datasets: [{ label: 'New Users',
-                                    data: [450, 680, 890, 1200, 1450, 1320], backgroundColor: '#2563eb',
+                                    data: [450, 680, 890, 1200, 1450, 1320], backgroundColor: '#1a56db',
                                     borderRadius: 8 }] },
                             options: { responsive: true }
                         });

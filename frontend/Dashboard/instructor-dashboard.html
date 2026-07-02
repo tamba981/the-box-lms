@@ -3,23 +3,27 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Instructor Dashboard · THE BOX</title>
+    <title>Instructor Dashboard · Ubuntu Professional Institute</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* ----- CSS Variables & Base ----- */
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
+            --primary: #1a56db;
+            --primary-dark: #0f3b8c;
             --primary-light: #3b82f6;
-            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            --primary-gradient: linear-gradient(135deg, #1a56db 0%, #0f3b8c 100%);
+            --gold: #d4a547;
+            --gold-light: #f0d080;
+            --silver: #c0c0c0;
+            --silver-light: #e8e8e8;
             --secondary: #ffffff;
             --text: #1f2937;
             --text-light: #6b7280;
-            --bg-light: #f8fafc;
+            --bg-light: #f0f5ff;
             --border: #e5e7eb;
-            --dark-bg: #0f172a;
+            --dark-bg: #0a1628;
             --dark-text: #e2e8f0;
             --dark-card: rgba(30, 41, 59, 0.7);
             --dark-border: #334155;
@@ -27,13 +31,13 @@
             --warning: #f59e0b;
             --danger: #ef4444;
             --info: #3b82f6;
-            --glass-primary: rgba(255, 255, 255, 0.12);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --glass-border-hover: rgba(37, 99, 235, 0.30);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-            --glass-shadow-hover: 0 12px 48px rgba(37, 99, 235, 0.12);
+            --glass-primary: rgba(255, 255, 255, 0.10);
+            --glass-border: rgba(255, 255, 255, 0.10);
+            --glass-border-hover: rgba(26, 86, 219, 0.30);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            --glass-shadow-hover: 0 12px 48px rgba(26, 86, 219, 0.10);
             --glass-blur: 20px;
-            --shadow-glow: 0 0 30px rgba(37, 99, 235, 0.15);
+            --shadow-glow: 0 0 30px rgba(26, 86, 219, 0.12);
         }
 
         * {
@@ -45,7 +49,7 @@
         body {
             font-family: 'Inter', sans-serif;
             color: var(--text);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a3a6b 0%, #2a1a5e 100%);
             min-height: 100vh;
             line-height: 1.6;
             background-attachment: fixed;
@@ -53,7 +57,7 @@
         }
 
         body.dark-mode {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            background: linear-gradient(135deg, #0a1628 0%, #1a0a3a 100%);
             color: var(--dark-text);
         }
 
@@ -75,17 +79,17 @@
         }
 
         body.dark-mode .glass-premium {
-            background: rgba(15, 23, 42, 0.6);
-            border-color: rgba(255, 255, 255, 0.05);
+            background: rgba(10, 22, 40, 0.5);
+            border-color: rgba(255, 255, 255, 0.04);
         }
 
         body.dark-mode .glass-premium:hover {
-            background: rgba(30, 41, 59, 0.8);
-            border-color: rgba(37, 99, 235, 0.25);
+            background: rgba(10, 22, 40, 0.7);
+            border-color: rgba(212, 165, 71, 0.25);
         }
 
         .glass-gradient {
-            background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(124, 58, 237, 0.08));
+            background: linear-gradient(135deg, rgba(26, 86, 219, 0.10), rgba(212, 165, 71, 0.06));
             backdrop-filter: blur(var(--glass-blur));
             border: 1px solid var(--glass-border);
             border-radius: 24px;
@@ -93,10 +97,10 @@
 
         /* ----- Header (frosted glass) ----- */
         .header {
-            background: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.70);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.10);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -104,7 +108,7 @@
         }
 
         body.dark-mode .header {
-            background: rgba(15, 23, 42, 0.75);
+            background: rgba(10, 22, 40, 0.70);
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         }
 
@@ -126,22 +130,31 @@
         }
 
         .logo {
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 800;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             text-decoration: none;
+            letter-spacing: -0.3px;
+        }
+        .logo span {
+            font-weight: 400;
+            font-size: 14px;
+            background: linear-gradient(135deg, var(--silver), var(--silver-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .instructor-badge {
-            background: var(--primary);
-            color: white;
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
             padding: 2px 14px;
             border-radius: 30px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .header-search {
@@ -155,20 +168,20 @@
             padding: 10px 16px 10px 42px;
             border-radius: 40px;
             border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.40);
+            background: rgba(255, 255, 255, 0.35);
             backdrop-filter: blur(6px);
             font-size: 14px;
             transition: 0.3s;
         }
         body.dark-mode .header-search input {
-            background: rgba(30, 41, 59, 0.30);
-            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.04);
             color: var(--dark-text);
         }
         .header-search input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 165, 71, 0.10);
         }
         .header-search i {
             position: absolute;
@@ -186,9 +199,9 @@
         }
 
         .btn-icon {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.20);
             backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 40px;
             width: 42px;
             height: 42px;
@@ -202,14 +215,14 @@
             position: relative;
         }
         body.dark-mode .btn-icon {
-            background: rgba(30, 41, 59, 0.30);
-            border-color: rgba(255, 255, 255, 0.04);
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.03);
             color: var(--dark-text);
         }
         .btn-icon:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+            background: var(--gold);
+            color: #0f172a;
+            border-color: var(--gold);
             transform: translateY(-2px);
         }
 
@@ -237,22 +250,22 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #0f172a;
             font-weight: 700;
             font-size: 16px;
             cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.20);
         }
 
         .logout-btn {
             padding: 8px 18px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.10);
             backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             color: var(--text);
             border-radius: 40px;
             cursor: pointer;
@@ -261,7 +274,7 @@
         }
         body.dark-mode .logout-btn {
             color: var(--dark-text);
-            border-color: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.03);
         }
         .logout-btn:hover {
             background: var(--danger);
@@ -273,10 +286,10 @@
         /* ----- Sidebar (glass) ----- */
         .sidebar {
             width: 270px;
-            background: rgba(255, 255, 255, 0.65);
+            background: rgba(255, 255, 255, 0.60);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
-            border-right: 1px solid rgba(255, 255, 255, 0.10);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
             padding: 20px 16px;
             position: fixed;
             height: calc(100vh - 66px);
@@ -286,8 +299,8 @@
         }
 
         body.dark-mode .sidebar {
-            background: rgba(15, 23, 42, 0.65);
-            border-right: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(10, 22, 40, 0.60);
+            border-right: 1px solid rgba(255, 255, 255, 0.02);
         }
 
         .sidebar-menu {
@@ -315,13 +328,13 @@
         }
 
         .sidebar-link:hover {
-            background: rgba(37, 99, 235, 0.08);
+            background: rgba(26, 86, 219, 0.06);
         }
 
         .sidebar-link.active {
-            background: var(--primary-gradient);
-            color: white;
-            box-shadow: var(--shadow-glow);
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
+            box-shadow: 0 4px 20px rgba(212, 165, 71, 0.25);
             transform: translateX(6px);
         }
 
@@ -337,7 +350,7 @@
             border-top: 1px solid var(--border);
         }
         body.dark-mode .sidebar-footer {
-            border-top-color: rgba(255, 255, 255, 0.04);
+            border-top-color: rgba(255, 255, 255, 0.03);
         }
         .sidebar-footer .sidebar-link {
             font-size: 13px;
@@ -374,7 +387,7 @@
         .stat-value {
             font-size: 34px;
             font-weight: 800;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--primary), var(--gold));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -405,6 +418,12 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
+        }
+        .section-title span {
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         /* ----- Courses Grid ----- */
@@ -476,35 +495,35 @@
             align-items: center;
             gap: 8px;
             padding: 10px 22px;
-            background: var(--primary-gradient);
-            color: white;
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
             border: none;
             border-radius: 40px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
+            box-shadow: 0 4px 20px rgba(212, 165, 71, 0.30);
         }
 
         .btn-outline {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(4px);
             border: 1px solid var(--border);
             color: var(--text);
         }
         body.dark-mode .btn-outline {
-            border-color: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.04);
             color: var(--dark-text);
         }
         .btn-outline:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+            background: var(--gold);
+            color: #0f172a;
+            border-color: var(--gold);
         }
 
         .btn-sm {
@@ -545,14 +564,14 @@
             padding: 8px 14px;
             border-radius: 40px;
             border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.20);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(4px);
             font-size: 13px;
         }
         body.dark-mode .table-toolbar input,
         body.dark-mode .table-toolbar select {
-            background: rgba(30, 41, 59, 0.30);
-            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.04);
             color: var(--dark-text);
         }
 
@@ -570,19 +589,19 @@
         }
         body.dark-mode .data-table th,
         body.dark-mode .data-table td {
-            border-bottom-color: rgba(255, 255, 255, 0.04);
+            border-bottom-color: rgba(255, 255, 255, 0.03);
         }
 
         .data-table th {
             font-weight: 600;
-            color: var(--primary);
+            color: var(--gold);
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
         }
 
         .data-table tr:hover td {
-            background: rgba(37, 99, 235, 0.03);
+            background: rgba(26, 86, 219, 0.02);
         }
 
         .badge {
@@ -610,7 +629,7 @@
         }
 
         .action-btn {
-            background: rgba(255, 255, 255, 0.20);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(4px);
             border: none;
             padding: 6px 10px;
@@ -657,14 +676,14 @@
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(8px);
             border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.03);
         }
         .empty-state i {
             font-size: 56px;
-            color: var(--primary);
+            color: var(--gold);
             margin-bottom: 16px;
         }
         .empty-state h3 {
@@ -680,7 +699,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.30);
             backdrop-filter: blur(8px);
             z-index: 300;
             align-items: center;
@@ -691,7 +710,7 @@
         }
 
         .modal-content {
-            background: rgba(255, 255, 255, 0.88);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(28px);
             -webkit-backdrop-filter: blur(28px);
             border-radius: 28px;
@@ -699,12 +718,12 @@
             width: 92%;
             max-height: 85vh;
             overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
         }
         body.dark-mode .modal-content {
-            background: rgba(15, 23, 42, 0.88);
-            border-color: rgba(255, 255, 255, 0.04);
+            background: rgba(10, 22, 40, 0.85);
+            border-color: rgba(255, 255, 255, 0.03);
         }
 
         .modal-header {
@@ -736,7 +755,7 @@
             padding: 12px 16px;
             border: 1px solid var(--border);
             border-radius: 14px;
-            background: rgba(255, 255, 255, 0.20);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(4px);
             font-family: inherit;
             font-size: 14px;
@@ -745,15 +764,15 @@
         body.dark-mode .form-group input,
         body.dark-mode .form-group select,
         body.dark-mode .form-group textarea {
-            background: rgba(30, 41, 59, 0.30);
-            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.04);
             color: var(--dark-text);
         }
         .form-group input:focus,
         .form-group select:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 165, 71, 0.08);
         }
 
         /* ----- Notifications Panel ----- */
@@ -763,17 +782,17 @@
             right: -420px;
             width: 400px;
             height: calc(100vh - 66px);
-            background: rgba(255, 255, 255, 0.88);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border-left: 1px solid rgba(255, 255, 255, 0.12);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
             z-index: 200;
             transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
         }
         body.dark-mode .notifications-panel {
-            background: rgba(15, 23, 42, 0.88);
-            border-left: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(10, 22, 40, 0.85);
+            border-left: 1px solid rgba(255, 255, 255, 0.02);
         }
         .notifications-panel.open {
             right: 0;
@@ -801,10 +820,10 @@
             transition: 0.2s;
         }
         .notification-item:hover {
-            background: rgba(37, 99, 235, 0.04);
+            background: rgba(26, 86, 219, 0.03);
         }
         .notification-item.unread {
-            border-left: 3px solid var(--primary);
+            border-left: 3px solid var(--gold);
         }
 
         /* ----- Loading ----- */
@@ -812,8 +831,8 @@
             display: inline-block;
             width: 40px;
             height: 40px;
-            border: 3px solid rgba(37, 99, 235, 0.12);
-            border-top-color: var(--primary);
+            border: 3px solid rgba(212, 165, 71, 0.10);
+            border-top-color: var(--gold);
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
         }
@@ -924,7 +943,7 @@
         <div class="header-content">
             <div class="header-left">
                 <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle sidebar">☰</button>
-                <a href="/" class="logo">THE BOX</a>
+                <a href="/" class="logo">Ubuntu <span>Professional</span></a>
                 <span class="instructor-badge">Instructor</span>
             </div>
 
@@ -1001,7 +1020,7 @@
         //  MOCK DATA (preserved + extended)
         // ============================================================
         let instructorData = {
-            user: { id: 1, firstName: 'Sarah', lastName: 'Johnson', email: 'sarah@thebox.edu', role: 'instructor',
+            user: { id: 1, firstName: 'Sarah', lastName: 'Johnson', email: 'sarah@ubuntu.edu', role: 'instructor',
                 bio: 'Expert in ML and AI with 10+ years of experience' },
             stats: {
                 totalStudents: 3421,
@@ -1108,7 +1127,7 @@
                 position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
                 background: ${bgColor}; color: white; padding: 12px 28px; border-radius: 40px;
                 z-index: 2000; animation: toastFadeIn 0.3s ease; font-weight: 600; font-size: 14px;
-                box-shadow: 0 8px 30px rgba(0,0,0,0.10); max-width: 90%; text-align: center;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.08); max-width: 90%; text-align: center;
             `;
             toast.textContent = message;
             document.body.appendChild(toast);
@@ -1173,7 +1192,7 @@
                         data: {
                             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
                             datasets: [{ label: 'Revenue ($)', data: [3200, 4500, 5600, 7800, 8900, 5620],
-                                borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.05)', fill: true,
+                                borderColor: '#1a56db', backgroundColor: 'rgba(26,86,219,0.05)', fill: true,
                                 tension: 0.4 }]
                         },
                         options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } } }
@@ -1198,7 +1217,7 @@
                             <div class="course-image" style="background-image:url('${c.thumbnail}')"><span class="course-badge ${c.status}">${c.status}</span></div>
                             <div class="course-content">
                                 <h3 class="course-title">${c.title}</h3>
-                                <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:#f59e0b;"></i> ${c.rating}</div>
+                                <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:var(--gold);"></i> ${c.rating}</div>
                                 <button class="btn-primary btn-sm" onclick="editCourse(${c.id})">Manage Course</button>
                             </div>
                         </div>
@@ -1233,7 +1252,7 @@
                             <div class="course-image" style="background-image:url('${c.thumbnail}')"><span class="course-badge ${c.status}">${c.status}</span></div>
                             <div class="course-content">
                                 <h3 class="course-title">${c.title}</h3>
-                                <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:#f59e0b;"></i> ${c.rating || 'Not rated'}</div>
+                                <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:var(--gold);"></i> ${c.rating || 'Not rated'}</div>
                                 <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
                                     <button class="btn-primary btn-sm" onclick="editCourse(${c.id})">Edit</button>
                                     <button class="btn-primary btn-outline btn-sm" onclick="showToast('Loading analytics...','info')">Analytics</button>
@@ -1634,8 +1653,8 @@
                             new Chart(ctx, {
                                 type: 'pie',
                                 data: { labels: ['ML Fundamentals', 'Advanced ML'],
-                                    datasets: [{ data: [12500, 15950], backgroundColor: ['#2563eb',
-                                            '#7c3aed'] }] },
+                                    datasets: [{ data: [12500, 15950], backgroundColor: ['#1a56db',
+                                            '#d4a547'] }] },
                                 options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
                             });
                         }

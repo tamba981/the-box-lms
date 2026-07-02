@@ -3,27 +3,31 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login or Sign Up · THE BOX</title>
+    <title>Login or Sign Up · Ubuntu Professional Institute</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         /* ----- CSS Variables & Base ----- */
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
+            --primary: #1a56db;
+            --primary-dark: #0f3b8c;
             --primary-light: #3b82f6;
-            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            --primary-gradient: linear-gradient(135deg, #1a56db 0%, #0f3b8c 100%);
+            --gold: #d4a547;
+            --gold-light: #f0d080;
+            --silver: #c0c0c0;
+            --silver-light: #e8e8e8;
             --secondary: #ffffff;
             --text: #1f2937;
             --text-light: #6b7280;
-            --bg-light: #f9fafb;
+            --bg-light: #f0f5ff;
             --border: #e5e7eb;
-            --dark-bg: #0f172a;
+            --dark-bg: #0a1628;
             --dark-text: #e2e8f0;
             --dark-card: #1e293b;
             --success: #10b981;
             --danger: #ef4444;
-            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-bg: rgba(255, 255, 255, 0.78);
             --glass-border: rgba(255, 255, 255, 0.2);
         }
 
@@ -35,7 +39,7 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a3a6b 0%, #2a1a5e 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -45,7 +49,7 @@
         }
 
         body.dark-mode {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            background: linear-gradient(135deg, #0a1628 0%, #1a0a3a 100%);
         }
 
         /* ----- Container (floating animation) ----- */
@@ -71,30 +75,45 @@
             margin-bottom: 28px;
         }
         .logo a {
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 800;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             text-decoration: none;
+            letter-spacing: -0.5px;
+            display: block;
+            line-height: 1.2;
+        }
+        .logo .sub {
+            font-size: 13px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 4px;
+            display: block;
+        }
+        body.dark-mode .logo .sub {
+            color: rgba(255, 255, 255, 0.5);
         }
 
         /* ----- Glassmorphism Card ----- */
         .auth-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
             padding: 36px 32px 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
             transition: background 0.3s, border 0.3s;
         }
 
         body.dark-mode .auth-card {
-            background: rgba(15, 23, 42, 0.82);
-            backdrop-filter: blur(20px);
+            background: rgba(10, 22, 40, 0.82);
+            backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.06);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
         }
@@ -124,11 +143,11 @@
         .auth-tab.active {
             background: var(--primary-gradient);
             color: white;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 12px rgba(26, 86, 219, 0.35);
         }
 
         .auth-tab:hover:not(.active) {
-            background: rgba(37, 99, 235, 0.06);
+            background: rgba(26, 86, 219, 0.06);
         }
 
         /* ----- Forms ----- */
@@ -147,6 +166,10 @@
             margin-bottom: 6px;
             font-weight: 500;
             font-size: 14px;
+            color: var(--text);
+        }
+        body.dark-mode .form-group label {
+            color: var(--dark-text);
         }
 
         .form-group input,
@@ -164,16 +187,16 @@
 
         body.dark-mode .form-group input,
         body.dark-mode .form-group .form-select {
-            background: rgba(30, 41, 59, 0.6);
-            border-color: rgba(255, 255, 255, 0.1);
+            background: rgba(30, 41, 59, 0.5);
+            border-color: rgba(255, 255, 255, 0.08);
             color: var(--dark-text);
         }
 
         .form-group input:focus,
         .form-group .form-select:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 165, 71, 0.15);
         }
 
         .form-row {
@@ -185,12 +208,12 @@
         .btn-submit {
             width: 100%;
             padding: 14px;
-            background: var(--primary-gradient);
-            color: white;
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
             border: none;
             border-radius: 12px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
             margin-top: 6px;
@@ -198,7 +221,7 @@
 
         .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+            box-shadow: 0 4px 20px rgba(212, 165, 71, 0.4);
         }
         .btn-submit:disabled {
             opacity: 0.7;
@@ -226,12 +249,16 @@
             cursor: pointer;
             font-weight: 400;
             font-size: 14px;
+            color: var(--text);
+        }
+        body.dark-mode .remember-me-wrap {
+            color: var(--dark-text);
         }
         .remember-me-wrap input {
             width: 18px;
             height: 18px;
             cursor: pointer;
-            accent-color: var(--primary);
+            accent-color: var(--gold);
         }
 
         /* ----- Divider "Or continue with email" ----- */
@@ -257,7 +284,7 @@
             position: relative;
         }
         body.dark-mode .divider-or span {
-            background: rgba(15, 23, 42, 0.82);
+            background: rgba(10, 22, 40, 0.82);
         }
 
         /* ----- Social Login Section (glass) ----- */
@@ -287,7 +314,7 @@
             padding: 14px 20px;
             border: 1px solid var(--border);
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.55);
+            background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             cursor: pointer;
@@ -299,8 +326,8 @@
         }
 
         body.dark-mode .social-btn {
-            background: rgba(30, 41, 59, 0.5);
-            border-color: rgba(255, 255, 255, 0.08);
+            background: rgba(30, 41, 59, 0.4);
+            border-color: rgba(255, 255, 255, 0.06);
             color: var(--dark-text);
         }
 
@@ -341,15 +368,15 @@
         .social-help-text {
             margin-top: 18px;
             padding: 16px 20px;
-            background: rgba(37, 99, 235, 0.05);
+            background: rgba(26, 86, 219, 0.05);
             border-radius: 12px;
-            border: 1px solid rgba(37, 99, 235, 0.10);
+            border: 1px solid rgba(26, 86, 219, 0.08);
             font-size: 13px;
             line-height: 1.5;
         }
         body.dark-mode .social-help-text {
-            background: rgba(37, 99, 235, 0.08);
-            border-color: rgba(37, 99, 235, 0.15);
+            background: rgba(26, 86, 219, 0.06);
+            border-color: rgba(26, 86, 219, 0.12);
         }
         .social-help-text span {
             font-weight: 600;
@@ -365,7 +392,7 @@
         .social-help-text a {
             display: inline-block;
             margin-top: 8px;
-            color: var(--primary);
+            color: var(--gold);
             text-decoration: none;
             font-weight: 500;
         }
@@ -398,7 +425,7 @@
             width: 18px;
             height: 18px;
             border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
+            border-top-color: var(--gold);
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
             margin-right: 8px;
@@ -414,9 +441,9 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
-            border: none;
+            border: 1px solid rgba(255, 255, 255, 0.15);
             width: 46px;
             height: 46px;
             border-radius: 50%;
@@ -424,18 +451,18 @@
             font-size: 22px;
             transition: all 0.3s;
             z-index: 10;
-            color: #1f2937;
+            color: #f1f5f9;
         }
         .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.3);
             transform: scale(1.06);
         }
         body.dark-mode .theme-toggle {
-            background: rgba(255, 255, 255, 0.10);
+            background: rgba(255, 255, 255, 0.08);
             color: #f1f5f9;
         }
         body.dark-mode .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         /* ----- CTA text (login/signup switch) ----- */
@@ -446,7 +473,7 @@
             color: var(--text-light);
         }
         .cta-switch a {
-            color: var(--primary);
+            color: var(--gold);
             font-weight: 600;
             text-decoration: none;
             cursor: pointer;
@@ -478,7 +505,7 @@
         .auth-tab:focus-visible,
         .btn-submit:focus-visible,
         .theme-toggle:focus-visible {
-            outline: 2px solid var(--primary);
+            outline: 2px solid var(--gold);
             outline-offset: 2px;
         }
     </style>
@@ -491,7 +518,7 @@
     <div class="auth-container">
         <!-- Logo -->
         <div class="logo">
-            <a href="/">THE BOX</a>
+            <a href="/">Ubuntu Professional<br /><span class="sub">Institute</span></a>
         </div>
 
         <!-- Glass Card -->
@@ -545,7 +572,7 @@
                     </div>
 
                     <div class="social-help-text">
-                        <i class="fas fa-info-circle" style="color:var(--primary);"></i>
+                        <i class="fas fa-info-circle" style="color:var(--gold);"></i>
                         <span>How does Google or LinkedIn sign‑in work?</span>
                         <p>You'll sign in on Google or LinkedIn, then return here. New users will choose their role (Job Seeker, Employer, Student, or University) and complete a short profile. Existing users go straight to their dashboard.</p>
                         <a href="#">Learn more →</a>
@@ -607,9 +634,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:400;">
-                            <input type="checkbox" id="signup-terms" required style="width:18px; height:18px; accent-color:var(--primary);" />
-                            I agree to the <a href="#" style="color:var(--primary);font-weight:500;">Terms of Service</a> and <a href="#" style="color:var(--primary);font-weight:500;">Privacy Policy</a>
+                        <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:400; color:var(--text);">
+                            <input type="checkbox" id="signup-terms" required style="width:18px; height:18px; accent-color:var(--gold);" />
+                            I agree to the <a href="#" style="color:var(--gold);font-weight:500;">Terms of Service</a> and <a href="#" style="color:var(--gold);font-weight:500;">Privacy Policy</a>
                         </label>
                     </div>
 
@@ -628,7 +655,7 @@
                         </button>
                     </div>
                     <div class="social-help-text">
-                        <i class="fas fa-info-circle" style="color:var(--primary);"></i>
+                        <i class="fas fa-info-circle" style="color:var(--gold);"></i>
                         <span>How does social sign‑up work?</span>
                         <p>You'll authenticate with Google or LinkedIn, then choose your role and complete a short profile. Your account will be created instantly.</p>
                         <a href="#">Learn more →</a>
@@ -646,7 +673,7 @@
 
     <script>
         // ============================================================
-        //  API CONFIG & HELPERS (preserved)
+        //  API CONFIG & HELPERS
         // ============================================================
         const API_BASE_URL = 'https://the-box-lms-production.up.railway.app/api/v1';
 
@@ -685,7 +712,7 @@
         }
 
         // ============================================================
-        //  THEME TOGGLE (preserved + enhanced)
+        //  THEME TOGGLE
         // ============================================================
         const themeToggle = document.getElementById('theme-toggle');
         if (localStorage.getItem('theme') === 'dark') {
@@ -700,7 +727,7 @@
         });
 
         // ============================================================
-        //  TAB SWITCHING (preserved)
+        //  TAB SWITCHING
         // ============================================================
         const tabs = document.querySelectorAll('.auth-tab');
         const loginContainer = document.getElementById('login-form-container');
@@ -720,7 +747,6 @@
             tab.addEventListener('click', () => setActiveTab(tab.dataset.tab));
         });
 
-        // Switch via CTA links
         document.getElementById('switch-to-signup')?.addEventListener('click', (e) => {
             e.preventDefault();
             setActiveTab('signup');
@@ -731,7 +757,7 @@
         });
 
         // ============================================================
-        //  REMEMBER ME (new)
+        //  REMEMBER ME
         // ============================================================
         const rememberMe = document.getElementById('remember-me');
         if (localStorage.getItem('rememberMe') === 'true') {
@@ -743,14 +769,11 @@
         });
 
         // ============================================================
-        //  SOCIAL LOGIN HANDLERS (new)
+        //  SOCIAL LOGIN HANDLERS
         // ============================================================
         async function handleSocialLogin(provider) {
             try {
                 showToast(`Redirecting to ${provider}...`, 'info');
-                // In production, uncomment and use proper OAuth endpoints:
-                // window.location.href = `${API_BASE_URL}/auth/${provider.toLowerCase()}`;
-                // For demo, we show a placeholder:
                 setTimeout(() => {
                     showToast(`${provider} login integration coming soon!`, 'info');
                 }, 600);
@@ -776,7 +799,7 @@
         document.getElementById('linkedin-signup-btn')?.addEventListener('click', () => handleSocialSignup('LinkedIn'));
 
         // ============================================================
-        //  LOGIN HANDLER (preserved, with remember-me integration)
+        //  LOGIN HANDLER
         // ============================================================
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -828,7 +851,7 @@
         });
 
         // ============================================================
-        //  SIGNUP HANDLER (preserved, with enhanced role)
+        //  SIGNUP HANDLER
         // ============================================================
         document.getElementById('signup-form').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -901,7 +924,7 @@
         });
 
         // ============================================================
-        //  EXTRA: fadeInUp keyframe for toast (injected)
+        //  TOAST ANIMATION STYLE
         // ============================================================
         if (!document.getElementById('toast-style')) {
             const style = document.createElement('style');
@@ -915,11 +938,7 @@
             document.head.appendChild(style);
         }
 
-        // ============================================================
-        //  Ensure dark-mode consistency for glass elements
-        // ============================================================
-        // (already handled by CSS variables & body.dark-mode)
-        console.log('THE BOX · Login/Signup page ready');
+        console.log('Ubuntu Professional Institute · Login/Signup page ready');
     </script>
 </body>
 </html>

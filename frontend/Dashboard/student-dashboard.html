@@ -3,22 +3,26 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Dashboard · THE BOX</title>
+    <title>Student Dashboard · Ubuntu Professional Institute</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         /* ----- CSS Variables & Base ----- */
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
+            --primary: #1a56db;
+            --primary-dark: #0f3b8c;
             --primary-light: #3b82f6;
-            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            --primary-gradient: linear-gradient(135deg, #1a56db 0%, #0f3b8c 100%);
+            --gold: #d4a547;
+            --gold-light: #f0d080;
+            --silver: #c0c0c0;
+            --silver-light: #e8e8e8;
             --secondary: #ffffff;
             --text: #1f2937;
             --text-light: #6b7280;
-            --bg-light: #f8fafc;
+            --bg-light: #f0f5ff;
             --border: #e5e7eb;
-            --dark-bg: #0f172a;
+            --dark-bg: #0a1628;
             --dark-text: #e2e8f0;
             --dark-card: rgba(30, 41, 59, 0.7);
             --dark-border: #334155;
@@ -26,14 +30,14 @@
             --warning: #f59e0b;
             --danger: #ef4444;
             --info: #3b82f6;
-            --glass-primary: rgba(255, 255, 255, 0.12);
-            --glass-secondary: rgba(255, 255, 255, 0.06);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --glass-border-hover: rgba(37, 99, 235, 0.30);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-            --glass-shadow-hover: 0 12px 48px rgba(37, 99, 235, 0.12);
+            --glass-primary: rgba(255, 255, 255, 0.10);
+            --glass-secondary: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-border-hover: rgba(26, 86, 219, 0.30);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            --glass-shadow-hover: 0 12px 48px rgba(26, 86, 219, 0.10);
             --glass-blur: 20px;
-            --shadow-glow: 0 0 30px rgba(37, 99, 235, 0.15);
+            --shadow-glow: 0 0 30px rgba(26, 86, 219, 0.12);
         }
 
         * {
@@ -45,7 +49,7 @@
         body {
             font-family: 'Inter', sans-serif;
             color: var(--text);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a3a6b 0%, #2a1a5e 100%);
             min-height: 100vh;
             line-height: 1.6;
             background-attachment: fixed;
@@ -53,7 +57,7 @@
         }
 
         body.dark-mode {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            background: linear-gradient(135deg, #0a1628 0%, #1a0a3a 100%);
             color: var(--dark-text);
         }
 
@@ -75,21 +79,21 @@
         }
 
         body.dark-mode .glass-premium {
-            background: rgba(15, 23, 42, 0.6);
-            border-color: rgba(255, 255, 255, 0.05);
+            background: rgba(10, 22, 40, 0.5);
+            border-color: rgba(255, 255, 255, 0.04);
         }
 
         body.dark-mode .glass-premium:hover {
-            background: rgba(30, 41, 59, 0.8);
-            border-color: rgba(37, 99, 235, 0.25);
+            background: rgba(10, 22, 40, 0.7);
+            border-color: rgba(212, 165, 71, 0.25);
         }
 
         /* ----- Header (frosted glass) ----- */
         .header {
-            background: rgba(255, 255, 255, 0.75);
+            background: rgba(255, 255, 255, 0.70);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -97,8 +101,8 @@
         }
 
         body.dark-mode .header {
-            background: rgba(15, 23, 42, 0.75);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(10, 22, 40, 0.70);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         }
 
         .header-content {
@@ -119,18 +123,27 @@
         }
 
         .logo {
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 800;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             text-decoration: none;
+            letter-spacing: -0.3px;
+        }
+        .logo span {
+            font-weight: 400;
+            font-size: 14px;
+            background: linear-gradient(135deg, var(--silver), var(--silver-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         .header-search {
             flex: 1;
-            max-width: 400px;
+            max-width: 380px;
             min-width: 140px;
             position: relative;
         }
@@ -139,20 +152,20 @@
             padding: 10px 16px 10px 42px;
             border-radius: 40px;
             border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.40);
+            background: rgba(255, 255, 255, 0.35);
             backdrop-filter: blur(6px);
             font-size: 14px;
             transition: 0.3s;
         }
         body.dark-mode .header-search input {
-            background: rgba(30, 41, 59, 0.30);
-            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.05);
             color: var(--dark-text);
         }
         .header-search input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 165, 71, 0.10);
         }
         .header-search i {
             position: absolute;
@@ -170,9 +183,9 @@
         }
 
         .btn-icon {
-            background: rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.20);
             backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.10);
             border-radius: 40px;
             width: 42px;
             height: 42px;
@@ -186,14 +199,14 @@
             position: relative;
         }
         body.dark-mode .btn-icon {
-            background: rgba(30, 41, 59, 0.30);
-            border-color: rgba(255, 255, 255, 0.05);
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.04);
             color: var(--dark-text);
         }
         .btn-icon:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+            background: var(--gold);
+            color: #0f172a;
+            border-color: var(--gold);
             transform: translateY(-2px);
         }
 
@@ -221,22 +234,22 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #0f172a;
             font-weight: 700;
             font-size: 16px;
             cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.30);
+            border: 2px solid rgba(255, 255, 255, 0.25);
         }
 
         .logout-btn {
             padding: 8px 18px;
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.10);
             color: var(--text);
             border-radius: 40px;
             cursor: pointer;
@@ -245,7 +258,7 @@
         }
         body.dark-mode .logout-btn {
             color: var(--dark-text);
-            border-color: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.04);
         }
         .logout-btn:hover {
             background: var(--danger);
@@ -257,10 +270,10 @@
         /* ----- Sidebar (glass) ----- */
         .sidebar {
             width: 270px;
-            background: rgba(255, 255, 255, 0.65);
+            background: rgba(255, 255, 255, 0.60);
             backdrop-filter: blur(18px);
             -webkit-backdrop-filter: blur(18px);
-            border-right: 1px solid rgba(255, 255, 255, 0.12);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
             padding: 20px 16px;
             position: fixed;
             height: calc(100vh - 66px);
@@ -270,8 +283,8 @@
         }
 
         body.dark-mode .sidebar {
-            background: rgba(15, 23, 42, 0.65);
-            border-right: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(10, 22, 40, 0.60);
+            border-right: 1px solid rgba(255, 255, 255, 0.02);
         }
 
         .sidebar-menu {
@@ -299,13 +312,13 @@
         }
 
         .sidebar-link:hover {
-            background: rgba(37, 99, 235, 0.08);
+            background: rgba(26, 86, 219, 0.06);
         }
 
         .sidebar-link.active {
-            background: var(--primary-gradient);
-            color: white;
-            box-shadow: var(--shadow-glow);
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
+            box-shadow: 0 4px 20px rgba(212, 165, 71, 0.25);
             transform: translateX(6px);
         }
 
@@ -359,7 +372,7 @@
         .stat-value {
             font-size: 34px;
             font-weight: 800;
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, var(--primary), var(--gold));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -390,6 +403,12 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
+        }
+        .section-title span {
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
         /* ----- Courses Grid ----- */
@@ -433,7 +452,7 @@
             color: white;
         }
         .course-badge.new {
-            background: rgba(37, 99, 235, 0.85);
+            background: rgba(26, 86, 219, 0.85);
             color: white;
         }
 
@@ -501,49 +520,49 @@
             align-items: center;
             gap: 8px;
             padding: 10px 22px;
-            background: var(--primary-gradient);
-            color: white;
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
             border: none;
             border-radius: 40px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
+            box-shadow: 0 4px 20px rgba(212, 165, 71, 0.3);
         }
 
         .btn-outline {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.10);
             backdrop-filter: blur(4px);
             border: 1px solid var(--border);
             color: var(--text);
         }
         body.dark-mode .btn-outline {
-            border-color: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.05);
             color: var(--dark-text);
         }
         .btn-outline:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+            background: var(--gold);
+            color: #0f172a;
+            border-color: var(--gold);
         }
 
         /* ----- Empty State ----- */
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(8px);
             border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
         .empty-state i {
             font-size: 56px;
-            color: var(--primary);
+            color: var(--gold);
             margin-bottom: 16px;
         }
         .empty-state h3 {
@@ -558,17 +577,17 @@
             right: -420px;
             width: 400px;
             height: calc(100vh - 66px);
-            background: rgba(255, 255, 255, 0.88);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
-            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            border-left: 1px solid rgba(255, 255, 255, 0.10);
             z-index: 200;
             transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
         }
         body.dark-mode .notifications-panel {
-            background: rgba(15, 23, 42, 0.88);
-            border-left: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(10, 22, 40, 0.85);
+            border-left: 1px solid rgba(255, 255, 255, 0.03);
         }
         .notifications-panel.open {
             right: 0;
@@ -599,10 +618,10 @@
             transition: 0.2s;
         }
         .notification-item:hover {
-            background: rgba(37, 99, 235, 0.04);
+            background: rgba(26, 86, 219, 0.04);
         }
         .notification-item.unread {
-            border-left: 3px solid var(--primary);
+            border-left: 3px solid var(--gold);
         }
         .notification-item strong {
             display: block;
@@ -626,7 +645,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.30);
             backdrop-filter: blur(8px);
             z-index: 300;
             align-items: center;
@@ -637,7 +656,7 @@
         }
 
         .modal-content {
-            background: rgba(255, 255, 255, 0.88);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(28px);
             -webkit-backdrop-filter: blur(28px);
             border-radius: 28px;
@@ -645,12 +664,12 @@
             width: 92%;
             max-height: 85vh;
             overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.10);
         }
         body.dark-mode .modal-content {
-            background: rgba(15, 23, 42, 0.88);
-            border-color: rgba(255, 255, 255, 0.04);
+            background: rgba(10, 22, 40, 0.85);
+            border-color: rgba(255, 255, 255, 0.03);
         }
 
         .modal-header {
@@ -680,7 +699,7 @@
             max-width: 80%;
         }
         .message.received .bubble {
-            background: rgba(37, 99, 235, 0.08);
+            background: rgba(26, 86, 219, 0.06);
             padding: 10px 16px;
             border-radius: 16px 16px 16px 4px;
             display: inline-block;
@@ -689,8 +708,8 @@
             align-self: flex-end;
         }
         .message.sent .bubble {
-            background: var(--primary-gradient);
-            color: white;
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
             padding: 10px 16px;
             border-radius: 16px 16px 4px 16px;
             display: inline-block;
@@ -700,9 +719,9 @@
         .ai-response {
             margin-top: 20px;
             padding: 20px;
-            background: rgba(37, 99, 235, 0.05);
+            background: rgba(26, 86, 219, 0.04);
             border-radius: 16px;
-            border-left: 4px solid var(--primary);
+            border-left: 4px solid var(--gold);
             display: none;
         }
 
@@ -711,8 +730,8 @@
             display: inline-block;
             width: 40px;
             height: 40px;
-            border: 3px solid rgba(37, 99, 235, 0.12);
-            border-top-color: var(--primary);
+            border: 3px solid rgba(212, 165, 71, 0.12);
+            border-top-color: var(--gold);
             border-radius: 50%;
             animation: spin 0.7s linear infinite;
         }
@@ -807,17 +826,16 @@
         @keyframes pulse-glow {
             0%,
             100% {
-                box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.2);
+                box-shadow: 0 0 0 0 rgba(212, 165, 71, 0.15);
             }
             50% {
-                box-shadow: 0 0 20px 4px rgba(37, 99, 235, 0.08);
+                box-shadow: 0 0 20px 4px rgba(212, 165, 71, 0.06);
             }
         }
         .pulse-glow {
             animation: pulse-glow 2s ease-in-out infinite;
         }
 
-        /* Toast animation (injected) */
         @keyframes toastFadeIn {
             from {
                 opacity: 0;
@@ -828,6 +846,17 @@
                 transform: translateX(-50%) translateY(0);
             }
         }
+
+        /* Form styles (used in profile) */
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -837,7 +866,7 @@
         <div class="header-content">
             <div class="header-left">
                 <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle sidebar">☰</button>
-                <a href="/" class="logo">THE BOX</a>
+                <a href="/" class="logo">Ubuntu <span>Professional</span></a>
             </div>
 
             <div class="header-search">
@@ -1016,7 +1045,7 @@
         //  STATE
         // ============================================================
         let state = {
-            user: { firstName: 'Student', lastName: 'User', email: 'student@thebox.edu', phone: '+1234567890' },
+            user: { firstName: 'Student', lastName: 'User', email: 'student@ubuntu.edu', phone: '+1234567890' },
             token: 'mock-token',
             enrolledCourses: JSON.parse(JSON.stringify(MOCK_COURSES)),
             recommendedCourses: JSON.parse(JSON.stringify(MOCK_RECOMMENDED)),
@@ -1036,7 +1065,6 @@
             const token = localStorage.getItem('accessToken');
             const user = JSON.parse(localStorage.getItem('user') || '{}');
             if (!token) { window.location.href = '/'; return false; }
-            // For demo, allow any user. In production, check role.
             state.user = { ...state.user, ...user };
             document.getElementById('user-name').textContent = user.firstName || 'Student';
             document.getElementById('userAvatar').textContent = (user.firstName || 'S')[0].toUpperCase();
@@ -1050,7 +1078,7 @@
         }
 
         // ============================================================
-        //  UI HELPERS (preserved + enhanced)
+        //  UI HELPERS
         // ============================================================
         function showToast(message, type = 'info') {
             const toast = document.createElement('div');
@@ -1059,7 +1087,7 @@
                 position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
                 background: ${bgColor}; color: white; padding: 12px 28px; border-radius: 40px;
                 z-index: 2000; animation: toastFadeIn 0.3s ease; font-weight: 600; font-size: 14px;
-                box-shadow: 0 8px 30px rgba(0,0,0,0.12); max-width: 90%; text-align: center;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.10); max-width: 90%; text-align: center;
             `;
             toast.textContent = message;
             document.body.appendChild(toast);
@@ -1078,7 +1106,7 @@
         }
 
         // ============================================================
-        //  ANIMATED COUNTER (with Intersection Observer)
+        //  ANIMATED COUNTER
         // ============================================================
         function animateCounter(el, target, duration = 2000) {
             const start = 0;
@@ -1110,7 +1138,7 @@
         }
 
         // ============================================================
-        //  RENDER FUNCTIONS (all pages)
+        //  RENDER FUNCTIONS
         // ============================================================
         function renderOverview() {
             const total = state.enrolledCourses.length;
@@ -1265,7 +1293,7 @@
                     <div class="stat-card glass-premium" style="margin-bottom:12px;cursor:pointer;" onclick="openChat('${c.type}','${c.id}','${c.name}')">
                         <div style="display:flex;justify-content:space-between;"><strong>${c.name}</strong><span style="font-size:12px;color:var(--text-light);">${c.time}</span></div>
                         <div style="font-size:14px;">${c.lastMessage}</div>
-                        ${c.unread ? '<span style="background:var(--primary);color:white;padding:2px 12px;border-radius:30px;font-size:11px;display:inline-block;margin-top:6px;">New</span>' : ''}
+                        ${c.unread ? '<span style="background:var(--gold);color:#0f172a;padding:2px 12px;border-radius:30px;font-size:11px;display:inline-block;margin-top:6px;">New</span>' : ''}
                     </div>
                 `).join('')}
                 <button class="btn-primary" onclick="openNewMessageModal()">+ New Message</button>
@@ -1286,10 +1314,10 @@
                     ${earned.map(c => `
                         <div class="course-card glass-premium" style="text-align:center;">
                             <div class="course-content">
-                                <i class="fas fa-certificate" style="font-size:56px;color:var(--primary);margin-bottom:12px;"></i>
+                                <i class="fas fa-certificate" style="font-size:56px;color:var(--gold);margin-bottom:12px;"></i>
                                 <h3 class="course-title">${c.title}</h3>
                                 <p>Issued: ${new Date(c.certificateIssuedDate).toLocaleDateString()}</p>
-                                <div style="display:inline-flex;gap:8px;margin:12px 0;padding:6px 16px;background:rgba(37,99,235,0.08);border-radius:30px;"><i class="fas fa-link"></i> Blockchain Verified</div>
+                                <div style="display:inline-flex;gap:8px;margin:12px 0;padding:6px 16px;background:rgba(212,165,71,0.08);border-radius:30px;"><i class="fas fa-link"></i> Blockchain Verified</div>
                                 <button class="btn-primary" onclick="showToast('Downloading certificate...','success')">Download PDF</button>
                                 <button class="btn-primary btn-outline" onclick="showToast('Share on LinkedIn','info')">Share</button>
                             </div>
@@ -1302,11 +1330,11 @@
         function renderAITutor() {
             return `
                 <div class="stat-card glass-premium" style="padding:32px;text-align:center;">
-                    <i class="fas fa-robot" style="font-size:64px;color:var(--primary);margin-bottom:16px;"></i>
+                    <i class="fas fa-robot" style="font-size:64px;color:var(--gold);margin-bottom:16px;"></i>
                     <h2 class="section-title" style="justify-content:center;">🤖 AI Tutor Assistant</h2>
                     <p style="margin-bottom:20px;">Ask me anything about your courses! I'm here 24/7.</p>
                     <div style="display:flex;gap:12px;max-width:500px;margin:0 auto;">
-                        <input type="text" id="aiQuestion" placeholder="Ask a question..." style="flex:1;padding:14px;border:1px solid var(--border);border-radius:40px;background:rgba(255,255,255,0.2);font-size:14px;">
+                        <input type="text" id="aiQuestion" placeholder="Ask a question..." style="flex:1;padding:14px;border:1px solid var(--border);border-radius:40px;background:rgba(255,255,255,0.15);font-size:14px;">
                         <button class="btn-primary" onclick="askAI()" style="border:none;padding:14px 28px;">Send</button>
                     </div>
                     <div id="aiResponse" class="ai-response"></div>
@@ -1330,11 +1358,11 @@
                     <div class="stat-card glass-premium"><div class="stat-title">🌍 Global Rank</div><div class="stat-value">#1,234</div></div>
                 </div>
                 <div class="stat-card glass-premium" style="max-width:600px;">
-                    <h3 style="margin-bottom:20px;">👤 Profile Information</h3>
-                    <div class="form-group"><label style="display:block;margin-bottom:6px;font-weight:500;">First Name</label><input type="text" id="pFirstName" value="${u.firstName||''}" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.2);"></div>
-                    <div class="form-group"><label style="display:block;margin-bottom:6px;font-weight:500;">Last Name</label><input type="text" id="pLastName" value="${u.lastName||''}" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.2);"></div>
-                    <div class="form-group"><label style="display:block;margin-bottom:6px;font-weight:500;">Email</label><input type="email" value="${u.email||''}" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.2);" disabled></div>
-                    <div class="form-group"><label style="display:block;margin-bottom:6px;font-weight:500;">Phone</label><input type="tel" id="pPhone" value="${u.phone||''}" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.2);"></div>
+                    <h3 style="margin-bottom:20px; color:var(--gold);">👤 Profile Information</h3>
+                    <div class="form-group"><label>First Name</label><input type="text" id="pFirstName" value="${u.firstName||''}" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.15);"></div>
+                    <div class="form-group"><label>Last Name</label><input type="text" id="pLastName" value="${u.lastName||''}" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.15);"></div>
+                    <div class="form-group"><label>Email</label><input type="email" value="${u.email||''}" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.15);" disabled></div>
+                    <div class="form-group"><label>Phone</label><input type="tel" id="pPhone" value="${u.phone||''}" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.15);"></div>
                     <button class="btn-primary" onclick="updateProfile()">Update Profile</button>
                     <button class="btn-primary btn-outline" style="margin-left:12px;" onclick="openChangePassword()">Change Password</button>
                 </div>
@@ -1369,7 +1397,7 @@
                         <div class="message received"><div class="bubble">Hello! How can I help you today?</div></div>
                     </div>
                     <div style="display:flex;gap:8px;">
-                        <input type="text" id="chatInput" placeholder="Type a message..." style="flex:1;padding:12px;border:1px solid var(--border);border-radius:40px;background:rgba(255,255,255,0.2);">
+                        <input type="text" id="chatInput" placeholder="Type a message..." style="flex:1;padding:12px;border:1px solid var(--border);border-radius:40px;background:rgba(255,255,255,0.15);">
                         <button class="btn-primary" onclick="sendChatMessage()">Send</button>
                     </div>
                 </div>
@@ -1392,8 +1420,8 @@
 
         window.openNewMessageModal = function() {
             openModal('✉️ New Message', `
-                <div class="form-group"><label style="display:block;margin-bottom:6px;font-weight:500;">To</label><select style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);"><option>Select recipient</option><option>Instructor</option><option>Support</option></select></div>
-                <div class="form-group"><label style="display:block;margin-bottom:6px;font-weight:500;">Message</label><textarea rows="4" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);" placeholder="Type your message..."></textarea></div>
+                <div class="form-group"><label>To</label><select style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);"><option>Select recipient</option><option>Instructor</option><option>Support</option></select></div>
+                <div class="form-group"><label>Message</label><textarea rows="4" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);" placeholder="Type your message..."></textarea></div>
                 <button class="btn-primary" onclick="showToast('Message sent!','success');closeModal();">Send</button>
             `);
         };
@@ -1412,9 +1440,9 @@
 
         window.openChangePassword = function() {
             openModal('🔑 Change Password', `
-                <div class="form-group"><label style="display:block;margin-bottom:6px;font-weight:500;">Current</label><input type="password" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);"></div>
-                <div class="form-group"><label style="display:block;margin-bottom:6px;font-weight:500;">New</label><input type="password" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);"></div>
-                <div class="form-group"><label style="display:block;margin-bottom:6px;font-weight:500;">Confirm</label><input type="password" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);"></div>
+                <div class="form-group"><label>Current</label><input type="password" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);"></div>
+                <div class="form-group"><label>New</label><input type="password" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);"></div>
+                <div class="form-group"><label>Confirm</label><input type="password" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);"></div>
                 <button class="btn-primary" onclick="showToast('Password changed!','success');closeModal();">Update</button>
             `);
         };
@@ -1497,7 +1525,6 @@
             await loadPage('overview');
             loadNotifications();
 
-            // Logout
             document.getElementById('logout-btn').addEventListener('click', () => {
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
@@ -1505,7 +1532,6 @@
                 window.location.href = '/';
             });
 
-            // Notifications panel
             document.getElementById('notifBtn').addEventListener('click', () => {
                 document.getElementById('notifPanel').classList.toggle('open');
                 loadNotifications();
@@ -1514,18 +1540,15 @@
                 document.getElementById('notifPanel').classList.remove('open');
             });
 
-            // Modal
             document.getElementById('closeModal').addEventListener('click', closeModal);
             document.getElementById('modal').addEventListener('click', (e) => {
                 if (e.target === e.currentTarget) closeModal();
             });
 
-            // Mobile menu
             document.getElementById('mobile-menu-btn').addEventListener('click', () => {
                 document.getElementById('sidebar').classList.toggle('open');
             });
 
-            // Sidebar links
             document.querySelectorAll('.sidebar-link').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -1535,7 +1558,6 @@
                 });
             });
 
-            // Theme toggle
             const themeToggle = document.getElementById('theme-toggle');
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
@@ -1548,7 +1570,6 @@
                 themeToggle.textContent = isDark ? '☀️' : '🌙';
             });
 
-            // Global search
             document.getElementById('globalSearch').addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     const val = e.target.value.trim();
