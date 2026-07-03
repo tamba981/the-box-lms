@@ -10,17 +10,20 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/thebox')
   .then(() => console.log('✅ MongoDB Connected'))
   .catch(err => console.error('MongoDB Error:', err));
 
 // Middleware
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({ 
+  origin: ['http://wuteveglobalacademy.com', 'https://wuteveglobalacademy.com', 'http://localhost:5000'],
+  credentials: true 
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ============================================
-// USER SCHEMA & AUTH (keep as is)
+// USER SCHEMA & AUTH
 // ============================================
 const UserSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
@@ -130,9 +133,8 @@ app.get('/api/v1/auth/me', async (req, res) => {
 });
 
 // ============================================
-// MODELS (keep all your existing models)
+// MODELS
 // ============================================
-// Enrollment Model
 const EnrollmentSchema = new mongoose.Schema({
   student: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
@@ -144,7 +146,6 @@ const EnrollmentSchema = new mongoose.Schema({
 });
 const Enrollment = mongoose.model('Enrollment', EnrollmentSchema);
 
-// Live Session Model
 const LiveSessionSchema = new mongoose.Schema({
   title: { type: String, required: true },
   courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
@@ -158,7 +159,6 @@ const LiveSessionSchema = new mongoose.Schema({
 });
 const LiveSession = mongoose.model('LiveSession', LiveSessionSchema);
 
-// Notification Model
 const NotificationSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   title: { type: String, required: true },
@@ -169,7 +169,6 @@ const NotificationSchema = new mongoose.Schema({
 });
 const Notification = mongoose.model('Notification', NotificationSchema);
 
-// Community Post Model
 const CommunityPostSchema = new mongoose.Schema({
   courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -187,7 +186,6 @@ const CommunityPostSchema = new mongoose.Schema({
 });
 const CommunityPost = mongoose.model('CommunityPost', CommunityPostSchema);
 
-// Message Model
 const MessageSchema = new mongoose.Schema({
   conversationId: { type: String, required: true },
   sender: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -200,7 +198,6 @@ const MessageSchema = new mongoose.Schema({
 });
 const Message = mongoose.model('Message', MessageSchema);
 
-// Study Group Model
 const StudyGroupSchema = new mongoose.Schema({
   name: { type: String, required: true },
   courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
@@ -210,7 +207,6 @@ const StudyGroupSchema = new mongoose.Schema({
 });
 const StudyGroup = mongoose.model('StudyGroup', StudyGroupSchema);
 
-// Course Model
 const CourseSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
@@ -229,7 +225,6 @@ const CourseSchema = new mongoose.Schema({
 });
 const Course = mongoose.model('Course', CourseSchema);
 
-// Certificate Model
 const CertificateSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
@@ -262,7 +257,7 @@ function authenticateToken(req, res, next) {
 }
 
 // ============================================
-// API ROUTES (keep all your existing API routes)
+// API ROUTES
 // ============================================
 
 // Health check
@@ -274,9 +269,9 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Root endpoint - returns API info (since we're serving static files too)
+// Root endpoint - returns API info
 app.get('/api', (req, res) => {
-  res.json({ message: 'THE BOX LMS API', version: '1.0.0' });
+  res.json({ message: 'Wuteve Global Academy API', version: '1.0.0' });
 });
 
 // API 404 handler
@@ -285,22 +280,21 @@ app.use('/api/*', (req, res) => {
 });
 
 // ============================================
-// STATIC FILE SERVING (MUST COME BEFORE THE * ROUTE)
+// STATIC FILE SERVING
 // ============================================
 // Serve static files from frontend/public
 app.use(express.static(path.join(__dirname, '../frontend/public')));
 
 // ============================================
-// CATCH-ALL ROUTE (MUST BE THE LAST ROUTE)
+// CATCH-ALL ROUTE (SPA support)
 // ============================================
-// For any other route, send the index.html
-// This handles client-side routing (SPA)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/public/index.html'));
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`✅ Health check: http://localhost:${PORT}/health`);
+  console.log(`🌐 Ready for domain: http://wuteveglobalacademy.com`);
 });
