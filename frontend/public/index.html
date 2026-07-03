@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ubuntu Professional Institute · Best Online & Offline Courses</title>
-  <meta name="description" content="Best online and offline courses with blockchain-verified certificates. Transform your career with AI-powered learning, verified certificates, and global community." />
+  <title>Wuteve Global Academy · AI Learning Platform</title>
+  <meta name="description" content="Best online and offline courses with verified certificates. Transform your career with AI-powered learning, blockchain-verified certificates, and global community." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
@@ -24,9 +24,9 @@
       --success: #10b981;
       --text: #1f2937;
       --text-light: #6b7280;
-      --bg-light: #f0f5ff;
+      --bg-light: #f9fafb;
       --border: #e5e7eb;
-      --dark-bg: #0a1628;
+      --dark-bg: #0f172a;
       --dark-text: #e2e8f0;
       --dark-border: #334155;
       --dark-card: #1e293b;
@@ -63,41 +63,61 @@
     }
 
     /* ---------- GLASSMORPHISM (applied globally) ---------- */
-    .glass {
+    .glass,
+    .glass-card,
+    .stat-card,
+    .category-card,
+    .tier-card,
+    .course-card,
+    .feature-card,
+    .partner-card,
+    .explore-stat,
+    .search-filters-enhanced,
+    .trending-card,
+    .partners .glass-card,
+    .features .glass-card {
       background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
-    }
-    .glass-dark {
-      background: rgba(15, 23, 42, 0.6);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
-    .glass-card {
-      background: rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 16px;
-      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
       transition: all 0.3s ease;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
     }
-    .glass-card:hover {
+    .glass-card:hover,
+    .stat-card:hover,
+    .category-card:hover,
+    .tier-card:hover,
+    .course-card:hover,
+    .feature-card:hover,
+    .trending-card:hover {
       transform: translateY(-6px);
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.16);
       border-color: rgba(26, 86, 219, 0.35);
-      box-shadow: 0 15px 45px rgba(26, 86, 219, 0.12);
+      box-shadow: 0 12px 40px rgba(26, 86, 219, 0.10);
     }
-    body.dark-mode .glass-card {
+    body.dark-mode .glass,
+    body.dark-mode .glass-card,
+    body.dark-mode .stat-card,
+    body.dark-mode .category-card,
+    body.dark-mode .tier-card,
+    body.dark-mode .course-card,
+    body.dark-mode .feature-card,
+    body.dark-mode .partner-card,
+    body.dark-mode .explore-stat,
+    body.dark-mode .search-filters-enhanced,
+    body.dark-mode .trending-card {
       background: rgba(15, 23, 42, 0.45);
       border-color: rgba(255, 255, 255, 0.06);
     }
-    body.dark-mode .glass-card:hover {
-      background: rgba(15, 23, 42, 0.65);
+    body.dark-mode .glass-card:hover,
+    body.dark-mode .stat-card:hover,
+    body.dark-mode .category-card:hover,
+    body.dark-mode .tier-card:hover,
+    body.dark-mode .course-card:hover,
+    body.dark-mode .feature-card:hover,
+    body.dark-mode .trending-card:hover {
+      background: rgba(30, 41, 59, 0.65);
       border-color: rgba(212, 165, 71, 0.25);
     }
 
@@ -116,14 +136,14 @@
     }
     .glass-btn:hover {
       background: rgba(26, 86, 219, 0.35);
-      border-color: rgba(212, 165, 71, 0.45);
+      border-color: rgba(212, 165, 71, 0.4);
       transform: translateY(-2px);
       color: white;
     }
 
     /* animations */
     @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-    @keyframes glow-pulse { 0%,100%{box-shadow:0 0 20px rgba(26,86,219,0.15)} 50%{box-shadow:0 0 40px rgba(212,165,71,0.20)} }
+    @keyframes glow-pulse { 0%,100%{box-shadow:0 0 20px rgba(26,86,219,0.15)} 50%{box-shadow:0 0 40px rgba(212,165,71,0.2)} }
     @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
     @keyframes pulse-glow { 0%,100%{opacity:1} 50%{opacity:0.6} }
     @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
@@ -160,27 +180,35 @@
     @keyframes rotate { from{transform:rotate(0)} to{transform:rotate(360deg)} }
     @keyframes pulse { 0%{transform:scale(1);opacity:0.3} 50%{transform:scale(1.2);opacity:0.5} 100%{transform:scale(1);opacity:0.3} }
 
-    /* ---------- Header ---------- */
-    header { background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.15); position:sticky; top:0; z-index:100; transition: background 0.3s; }
-    body.dark-mode header { background: rgba(10,22,40,0.85); border-bottom: 1px solid rgba(255,255,255,0.04); }
+    /* ---------- Header (glass) ---------- */
+    header {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+      position: sticky; top:0; z-index:100; transition: background-color 0.3s;
+    }
+    body.dark-mode header {
+      background: rgba(15, 23, 42, 0.75);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
     .header-container { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
     .logo { font-size:24px; font-weight:800; background: linear-gradient(135deg, var(--primary), var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; text-decoration:none; }
-    .logo span { background: linear-gradient(135deg, var(--gold), var(--silver)); -webkit-background-clip: text; background-clip: text; color: transparent; }
     .nav-menu { display: flex; gap:30px; align-items:center; }
     .nav-menu a { text-decoration:none; color:var(--text); font-weight:500; transition:color 0.3s; position:relative; }
     body.dark-mode .nav-menu a { color:var(--dark-text); }
     .nav-menu a:hover { color:var(--gold); }
     .dropdown { position:relative; }
     .dropdown-content {
-      position:absolute; top:100%; left:0; background:rgba(255,255,255,0.92); backdrop-filter:blur(20px); min-width:220px;
-      box-shadow:0 8px 16px rgba(0,0,0,0.08); border-radius:8px; padding:10px 0; z-index:1;
-      display:none; transition:all 0.3s ease;
+      position:absolute; top:100%; left:0; background:rgba(255,255,255,0.85); backdrop-filter:blur(20px); min-width:220px;
+      box-shadow:0 8px 32px rgba(0,0,0,0.08); border-radius:12px; padding:10px 0; z-index:1;
+      display:none; transition:all 0.3s ease; border:1px solid rgba(255,255,255,0.10);
     }
-    body.dark-mode .dropdown-content { background:rgba(10,22,40,0.92); box-shadow:0 8px 16px rgba(0,0,0,0.3); }
+    body.dark-mode .dropdown-content { background:rgba(15,23,42,0.85); border-color:rgba(255,255,255,0.04); }
     .dropdown:hover .dropdown-content { display:block; }
     .dropdown-content a { display:block; padding:10px 20px; color:var(--text); text-decoration:none; transition:background 0.3s; }
     body.dark-mode .dropdown-content a { color:var(--dark-text); }
-    .dropdown-content a:hover { background:rgba(26,86,219,0.08); color:var(--gold); }
+    .dropdown-content a:hover { background:rgba(26,86,219,0.06); color:var(--gold); }
     .header-actions { display:flex; align-items:center; gap:15px; }
     .btn { padding:10px 20px; border-radius:6px; font-weight:600; text-decoration:none; transition:all 0.3s; display:inline-block; border:none; cursor:pointer; }
     .btn-outline { border:2px solid var(--primary); color:var(--primary); background:transparent; }
@@ -190,13 +218,14 @@
     .btn-gold { background:linear-gradient(135deg, var(--gold), #b8942e); color:white; }
     .btn-gold:hover { transform:translateY(-2px); box-shadow:0 4px 15px rgba(212,165,71,0.4); }
 
-    /* mega menu */
+    /* mega menu (glass) */
     .mega-menu {
-      position:absolute; top:100%; left:0; width:100%; background:rgba(255,255,255,0.92); backdrop-filter:blur(20px);
-      box-shadow:0 10px 25px rgba(0,0,0,0.06); z-index:100; display:none; padding:30px 0;
-      border-top:1px solid rgba(255,255,255,0.1);
+      position:absolute; top:100%; left:0; width:100%;
+      background:rgba(255,255,255,0.80); backdrop-filter:blur(30px);
+      box-shadow:0 10px 40px rgba(0,0,0,0.06); z-index:100; display:none; padding:30px 0;
+      border-top:1px solid rgba(255,255,255,0.10);
     }
-    body.dark-mode .mega-menu { background:rgba(10,22,40,0.92); box-shadow:0 10px 25px rgba(0,0,0,0.3); border-color:rgba(255,255,255,0.04); }
+    body.dark-mode .mega-menu { background:rgba(15,23,42,0.80); border-color:rgba(255,255,255,0.03); }
     .mega-menu.active { display:block; }
     .mega-menu-content { display:grid; grid-template-columns:repeat(4,1fr); gap:30px; }
     .mega-menu-column h4 { font-size:16px; font-weight:600; margin-bottom:15px; color:var(--gold); }
@@ -207,16 +236,17 @@
     .mega-menu-links a:hover { color:var(--gold); }
     .mega-menu-links i { margin-right:8px; width:16px; text-align:center; }
 
-    /* mobile nav */
+    /* mobile nav (glass) */
     .mobile-nav {
       position:fixed; top:0; right:-300px; width:300px; height:100%;
-      background:rgba(255,255,255,0.95); backdrop-filter:blur(20px); z-index:1000; padding:20px;
-      transition:right 0.3s ease; box-shadow:-5px 0 15px rgba(0,0,0,0.06); overflow-y:auto;
+      background:rgba(255,255,255,0.90); backdrop-filter:blur(30px);
+      z-index:1000; padding:20px;
+      transition:right 0.3s ease; box-shadow:-5px 0 30px rgba(0,0,0,0.06); overflow-y:auto;
     }
-    body.dark-mode .mobile-nav { background:rgba(10,22,40,0.95); }
+    body.dark-mode .mobile-nav { background:rgba(15,23,42,0.90); }
     .mobile-nav.active { right:0; }
     .mobile-nav-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; padding-bottom:15px; border-bottom:1px solid var(--border); }
-    body.dark-mode .mobile-nav-header { border-color:rgba(255,255,255,0.06); }
+    body.dark-mode .mobile-nav-header { border-color:var(--dark-border); }
     .close-mobile-menu { background:none; border:none; font-size:24px; cursor:pointer; color:var(--text); }
     .mobile-nav-menu { display:flex; flex-direction:column; gap:15px; }
     .mobile-nav-menu a { text-decoration:none; color:var(--text); font-weight:500; padding:10px 0; border-bottom:1px solid var(--border); }
@@ -238,8 +268,8 @@
       position: absolute;
       inset: 0;
       background: linear-gradient(135deg,
-        rgba(26, 86, 219, 0.78) 0%,
-        rgba(15, 59, 140, 0.55) 40%,
+        rgba(26, 86, 219, 0.75) 0%,
+        rgba(15, 59, 140, 0.6) 40%,
         rgba(212, 165, 71, 0.25) 100%);
       z-index: 1;
     }
@@ -260,7 +290,10 @@
       gap: 50px;
       padding: 60px 0;
     }
-    .hero-text { flex: 1; color: white; }
+    .hero-text {
+      flex: 1;
+      color: white;
+    }
     .hero-text .hero-heading {
       font-size: 48px;
       font-weight: 900;
@@ -281,12 +314,33 @@
       max-width: 560px;
       line-height: 1.7;
     }
-    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
-    .hero-actions .btn { padding: 14px 32px; font-size: 16px; border-radius: 50px; font-weight: 700; }
-    .hero-actions .btn-primary { background: linear-gradient(135deg, var(--gold), #b8942e); color: #0f172a; }
-    .hero-actions .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(212,165,71,0.4); }
-    .hero-actions .btn-outline { border: 2px solid rgba(255,255,255,0.5); color: white; }
-    .hero-actions .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: white; }
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .hero-actions .btn {
+      padding: 14px 32px;
+      font-size: 16px;
+      border-radius: 50px;
+      font-weight: 700;
+    }
+    .hero-actions .btn-primary {
+      background: linear-gradient(135deg, var(--gold), #b8942e);
+      color: #0f172a;
+    }
+    .hero-actions .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(212,165,71,0.4);
+    }
+    .hero-actions .btn-outline {
+      border: 2px solid rgba(255,255,255,0.5);
+      color: white;
+    }
+    .hero-actions .btn-outline:hover {
+      background: rgba(255,255,255,0.10);
+      border-color: white;
+    }
     .blockchain-badge {
       display: inline-flex;
       align-items: center;
@@ -302,7 +356,7 @@
     }
     .blockchain-badge i { color: var(--gold-light); }
 
-    /* Hero Carousel (glass overlay) */
+    /* Hero Carousel (glass) */
     .hero-carousel {
       flex: 1;
       height: 420px;
@@ -336,22 +390,19 @@
     }
     .carousel-indicator {
       width:12px; height:12px; border-radius:50%;
-      background:rgba(255,255,255,0.35); cursor:pointer; border:none;
+      background:rgba(255,255,255,0.3); cursor:pointer; border:none;
       transition:background 0.3s;
     }
     .carousel-indicator.active { background:var(--gold); }
 
-    /* ---------- STATS ---------- */
+    /* ---------- STATS (glass) ---------- */
     .stats { padding:60px 0; background:var(--secondary); }
     body.dark-mode .stats { background-color:var(--dark-bg); }
     .stats-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:30px; }
     .stat-card {
       text-align:center; padding:30px 20px;
-      background:rgba(255,255,255,0.04); backdrop-filter:blur(12px);
-      border-radius:16px; border:1px solid rgba(255,255,255,0.06);
       transition:transform 0.3s;
     }
-    body.dark-mode .stat-card { background:rgba(15,23,42,0.3); border-color:rgba(255,255,255,0.04); }
     .stat-card:hover { transform:translateY(-5px); }
     .stat-number { font-size:44px; font-weight:800; background:linear-gradient(135deg, var(--primary), var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent; margin-bottom:10px; }
     .stat-label { color:var(--text-light); font-weight:500; }
@@ -444,6 +495,7 @@
       color: var(--text-light);
       font-size: 18px;
       margin-bottom: 24px;
+      line-height: 1.7;
     }
     .calendar-downloads {
       display: flex;
@@ -470,17 +522,11 @@
       gap: 20px;
     }
     .explore-stat {
-      background: rgba(255,255,255,0.04);
-      backdrop-filter: blur(8px);
-      border-radius: 16px;
       padding: 24px;
       text-align: center;
-      border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.3s;
     }
-    body.dark-mode .explore-stat {
-      background: rgba(15,23,42,0.3);
-      border-color: rgba(255,255,255,0.04);
-    }
+    .explore-stat:hover { transform: translateY(-4px); }
     .explore-stat .number {
       font-size: 32px;
       font-weight: 800;
@@ -494,15 +540,16 @@
       color: var(--text-light);
     }
 
-    /* ---------- categories, tiers, features, footer ---------- */
+    /* ---------- CATEGORIES, TIERS, COURSES, FEATURES (all glass) ---------- */
     .categories-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:20px; margin:30px 0; }
-    .category-card { background:rgba(255,255,255,0.04); backdrop-filter:blur(8px); border-radius:12px; padding:25px; text-align:center; border:1px solid rgba(255,255,255,0.06); transition:0.3s; }
+    .category-card { padding:25px; text-align:center; transition:0.3s; }
     .category-card:hover { transform:translateY(-5px); border-color: var(--gold); }
     .category-icon { width:60px; height:60px; background:rgba(26,86,219,0.10); border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; color:var(--gold); font-size:24px; }
+
     .certificate-tiers { padding:60px 0; background:var(--bg-light); }
     body.dark-mode .certificate-tiers { background:#0f172a; }
     .tiers-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:25px; margin-top:40px; }
-    .tier-card { background:rgba(255,255,255,0.04); backdrop-filter:blur(8px); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.06); transition:0.3s; }
+    .tier-card { overflow:hidden; transition:0.3s; }
     .tier-card:hover { transform:translateY(-5px); border-color: var(--gold); }
     .tier-header { padding:20px; text-align:center; color:white; }
     .tier-header.basic { background:var(--certificate-basic); }
@@ -524,8 +571,9 @@
     .section-title { font-size:36px; font-weight:800; margin-bottom:15px; color:var(--text); }
     body.dark-mode .section-title { color:var(--dark-text); }
     .section-title span { background:linear-gradient(135deg, var(--primary), var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
     .courses-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:30px; margin-bottom:40px; }
-    .course-card { background:rgba(255,255,255,0.04); backdrop-filter:blur(8px); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.06); transition:0.3s; }
+    .course-card { overflow:hidden; transition:0.3s; }
     .course-card:hover { transform:translateY(-5px); border-color: var(--gold); }
     .course-image { height:180px; background-size:cover; background-position:center; position:relative; }
     .course-badge { position:absolute; top:15px; right:15px; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:600; color:white; background:var(--gold); }
@@ -539,518 +587,187 @@
     .course-link { color:var(--primary); font-weight:600; text-decoration:none; }
     .course-link:hover { color:var(--gold); }
 
-    /* --- BLUE-THEMED GLASS SECTIONS (Trusted & Features) --- */
-    .partners {
+    .search-filters-enhanced { display:flex; flex-wrap:wrap; gap:15px; margin-bottom:30px; padding:20px; border-radius:16px; }
+    .filter-group { flex:1; min-width:150px; }
+    .filter-group label { display:block; margin-bottom:6px; font-weight:500; font-size:14px; }
+    .filter-select { width:100%; padding:10px 14px; border-radius:8px; background:rgba(255,255,255,0.04); backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.08); color:inherit; }
+
+    /* ---------- PARTNERS & FEATURES (Blue themed glass) ---------- */
+    .partners-blue {
       padding: 60px 0;
-      background: var(--bg-light);
+      background: linear-gradient(135deg, #e8f0fe 0%, #d4e0f7 100%);
     }
-    body.dark-mode .partners {
-      background: #0a1628;
+    body.dark-mode .partners-blue {
+      background: linear-gradient(135deg, #0a1628 0%, #14203a 100%);
     }
-    .partners .section-title {
-      color: var(--text);
+    .partners-blue .partner-logo {
+      height:70px;
+      background-size:contain;
+      background-position:center;
+      background-repeat:no-repeat;
+      filter: grayscale(0.2);
+      opacity:0.75;
+      transition:0.3s;
     }
-    body.dark-mode .partners .section-title {
-      color: var(--dark-text);
+    .partners-blue .partner-logo:hover {
+      filter: grayscale(0);
+      opacity:1;
     }
-    .partners-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 30px;
-      align-items: center;
+    .partners-blue .partner-card {
+      padding:20px 16px;
+      text-align:center;
+      transition:0.3s;
+      background:rgba(255,255,255,0.06);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:16px;
     }
-    .partner-logo {
-      height: 70px;
-      background-size: contain;
-      background-position: center;
-      background-repeat: no-repeat;
-      filter: grayscale(0.25) brightness(0.95);
-      opacity: 0.8;
-      transition: 0.3s;
+    .partners-blue .partner-card:hover {
+      transform:translateY(-4px);
+      background:rgba(255,255,255,0.12);
+      border-color:rgba(26,86,219,0.20);
     }
-    .partner-logo:hover {
-      filter: grayscale(0) brightness(1);
-      opacity: 1;
+    .partners-blue .partner-card .logo-placeholder {
+      font-weight:700;
+      font-size:16px;
+      color:var(--primary);
+      letter-spacing:0.5px;
     }
-    body.dark-mode .partner-logo {
-      filter: grayscale(0.3) brightness(0.7);
-    }
-    body.dark-mode .partner-logo:hover {
-      filter: grayscale(0) brightness(0.9);
+    body.dark-mode .partners-blue .partner-card .logo-placeholder {
+      color:var(--gold-light);
     }
 
-    .features {
+    .features-blue {
       padding: 80px 0;
-      background: var(--bg-light);
+      background: linear-gradient(135deg, #dce8f8 0%, #c5d8f5 100%);
     }
-    body.dark-mode .features {
-      background: #0a1628;
+    body.dark-mode .features-blue {
+      background: linear-gradient(135deg, #0b172e 0%, #162240 100%);
     }
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 30px;
+    .features-blue .feature-card {
+      padding:30px;
+      transition:0.3s;
+      background:rgba(255,255,255,0.06);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:16px;
     }
-    .feature-card {
-      background: rgba(26, 86, 219, 0.05);
-      backdrop-filter: blur(12px);
-      border-radius: 16px;
-      padding: 30px;
-      border: 1px solid rgba(26, 86, 219, 0.10);
-      transition: 0.3s;
+    .features-blue .feature-card:hover {
+      transform:translateY(-6px);
+      background:rgba(255,255,255,0.12);
+      border-color:rgba(26,86,219,0.20);
+      box-shadow:0 12px 40px rgba(26,86,219,0.08);
     }
-    .feature-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--gold);
-      background: rgba(26, 86, 219, 0.08);
+    .features-blue .feature-icon {
+      width:60px; height:60px;
+      background:rgba(26,86,219,0.10);
+      border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      margin-bottom:20px;
+      color:var(--primary);
+      font-size:24px;
     }
-    body.dark-mode .feature-card {
-      background: rgba(26, 86, 219, 0.06);
-      border-color: rgba(26, 86, 219, 0.08);
+    body.dark-mode .features-blue .feature-icon {
+      background:rgba(212,165,71,0.10);
+      color:var(--gold-light);
     }
-    body.dark-mode .feature-card:hover {
-      background: rgba(26, 86, 219, 0.12);
-      border-color: var(--gold);
+    .features-blue .feature-title {
+      font-size:20px; font-weight:700; margin-bottom:12px;
+      color:var(--text);
     }
-    .feature-icon {
-      width: 60px;
-      height: 60px;
-      background: rgba(26, 86, 219, 0.10);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      color: var(--gold);
-      font-size: 24px;
+    body.dark-mode .features-blue .feature-title { color:var(--dark-text); }
+    .features-blue .feature-description {
+      color:var(--text-light);
+      line-height:1.7;
     }
-    body.dark-mode .feature-icon {
-      background: rgba(26, 86, 219, 0.15);
-    }
-    .feature-title {
-      font-size: 20px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: var(--text);
-    }
-    body.dark-mode .feature-title {
-      color: var(--dark-text);
-    }
-    .feature-description {
-      color: var(--text-light);
-    }
-    body.dark-mode .feature-description {
-      color: #94a3b8;
-    }
+    body.dark-mode .features-blue .feature-description { color:#94a3b8; }
 
-    .cta {
-      padding: 80px 0;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .cta::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><circle cx="50" cy="50" r="40"/></svg>') repeat;
-    }
-    .cta-title { font-size: 36px; font-weight: 800; margin-bottom: 20px; position: relative; }
-    .cta-text { font-size: 18px; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto; position: relative; }
-    .cta-button {
-      display: inline-block;
-      padding: 16px 40px;
-      background: linear-gradient(135deg, var(--gold), #b8942e);
-      color: #0f172a;
-      border-radius: 50px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: 0.3s;
-      position: relative;
-    }
-    .cta-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(212, 165, 71, 0.4);
-    }
+    /* ---------- CTA ---------- */
+    .cta { padding:80px 0; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; text-align:center; position:relative; overflow:hidden; }
+    .cta::before { content:''; position:absolute; inset:0; background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><circle cx="50" cy="50" r="40"/></svg>') repeat; }
+    .cta-title { font-size:36px; font-weight:800; margin-bottom:20px; position:relative; }
+    .cta-text { font-size:18px; margin-bottom:30px; max-width:600px; margin-left:auto; margin-right:auto; position:relative; }
+    .cta-button { display:inline-block; padding:16px 40px; background:linear-gradient(135deg, var(--gold), #b8942e); color:#0f172a; border-radius:50px; font-weight:700; text-decoration:none; transition:0.3s; position:relative; }
+    .cta-button:hover { transform:translateY(-3px); box-shadow:0 8px 30px rgba(212,165,71,0.4); }
 
-    footer {
-      background: var(--dark-bg);
-      color: #cbd5e1;
-      padding: 60px 0 30px;
-    }
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 40px;
-      margin-bottom: 40px;
-    }
-    .footer-brand h3 {
-      color: white;
-      font-size: 24px;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, var(--gold), var(--silver));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .footer-heading {
-      font-size: 18px;
-      font-weight: 600;
-      color: white;
-      margin-bottom: 20px;
-    }
-    .footer-links ul {
-      list-style: none;
-    }
-    .footer-links li {
-      margin-bottom: 10px;
-    }
-    .footer-links a {
-      color: #cbd5e1;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-    .footer-links a:hover {
-      color: var(--gold);
-    }
-    .footer-social {
-      display: flex;
-      gap: 15px;
-      margin-top: 20px;
-    }
-    .footer-social a {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: #334155;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-decoration: none;
-      transition: 0.3s;
-    }
-    .footer-social a:hover {
-      background: var(--gold);
-      color: #0f172a;
-    }
-    .footer-bottom {
-      text-align: center;
-      padding-top: 30px;
-      border-top: 1px solid #334155;
-    }
+    /* ---------- FOOTER ---------- */
+    footer { background:var(--dark-bg); color:#cbd5e1; padding:60px 0 30px; }
+    .footer-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:40px; margin-bottom:40px; }
+    .footer-brand h3 { color:white; font-size:24px; margin-bottom:16px; background:linear-gradient(135deg, var(--gold), var(--silver)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .footer-heading { font-size:18px; font-weight:600; color:white; margin-bottom:20px; }
+    .footer-links ul { list-style:none; }
+    .footer-links li { margin-bottom:10px; }
+    .footer-links a { color:#cbd5e1; text-decoration:none; transition:0.3s; }
+    .footer-links a:hover { color:var(--gold); }
+    .footer-social { display:flex; gap:15px; margin-top:20px; }
+    .footer-social a { width:36px; height:36px; border-radius:50%; background:#334155; display:flex; align-items:center; justify-content:center; color:white; text-decoration:none; transition:0.3s; }
+    .footer-social a:hover { background:var(--gold); color:#0f172a; }
+    .footer-bottom { text-align:center; padding-top:30px; border-top:1px solid #334155; }
 
     /* ---------- MODALS ---------- */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-      overflow-y: auto;
-    }
-    .modal-content {
-      background: rgba(255, 255, 255, 0.10);
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px);
-      margin: 40px auto;
-      padding: 30px;
-      border-radius: 16px;
-      width: 90%;
-      max-width: 800px;
-      position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-    }
-    body.dark-mode .modal-content {
-      background: rgba(10, 22, 40, 0.7);
-      border-color: rgba(255, 255, 255, 0.04);
-    }
-    .close-modal {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 28px;
-      cursor: pointer;
-      color: var(--text-light);
-    }
-    .modal-title {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 20px;
-      color: var(--gold);
-    }
-    .form-step {
-      display: none;
-    }
-    .form-step.active {
-      display: block;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    .form-label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-    }
-    .form-input,
-    .form-select,
-    .form-textarea {
-      width: 100%;
-      padding: 12px 15px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(4px);
-      font-family: inherit;
-      font-size: 16px;
-      color: inherit;
-    }
-    body.dark-mode .form-input,
-    body.dark-mode .form-select,
-    body.dark-mode .form-textarea {
-      background: rgba(0, 0, 0, 0.2);
-      border-color: rgba(255, 255, 255, 0.06);
-      color: var(--dark-text);
-    }
-    .form-textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-    .form-actions {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-    .donation-options {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    .donation-option {
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 8px;
-      padding: 15px;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.3s;
-      background: rgba(255, 255, 255, 0.02);
-    }
-    .donation-option:hover,
-    .donation-option.selected {
-      border-color: var(--gold);
-      background: rgba(212, 165, 71, 0.08);
-    }
-    .payment-methods {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-    .payment-method {
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 8px;
-      padding: 15px;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.3s;
-      background: rgba(255, 255, 255, 0.02);
-    }
-    .payment-method:hover,
-    .payment-method.selected {
-      border-color: var(--gold);
-      background: rgba(212, 165, 71, 0.08);
-    }
-    .steps-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin: 30px 0;
-    }
-    .step-card {
-      background: rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(4px);
-      border-radius: 8px;
-      padding: 20px;
-      text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-    }
-    .step-number {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, var(--primary), var(--gold));
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 15px;
-      font-weight: 700;
-    }
-    .faq-item {
-      margin-bottom: 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      padding-bottom: 20px;
-    }
-    .faq-question {
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .search-filters-enhanced {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-bottom: 30px;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.04);
-      backdrop-filter: blur(8px);
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-    }
-    .filter-group {
-      flex: 1;
-      min-width: 150px;
-    }
-    .filter-group label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 500;
-      font-size: 14px;
-    }
-    .filter-select {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1px solid rgba(255, 255, 255, 0.10);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(4px);
-      color: inherit;
-    }
+    .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; overflow-y:auto; }
+    .modal-content { background:rgba(255,255,255,0.10); backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px); margin:40px auto; padding:30px; border-radius:16px; width:90%; max-width:800px; position:relative; border:1px solid rgba(255,255,255,0.10); box-shadow:0 20px 60px rgba(0,0,0,0.15); }
+    body.dark-mode .modal-content { background:rgba(15,23,42,0.70); border-color:rgba(255,255,255,0.04); }
+    .close-modal { position:absolute; top:15px; right:20px; font-size:28px; cursor:pointer; color:var(--text-light); }
+    .modal-title { font-size:24px; font-weight:700; margin-bottom:20px; color:var(--gold); }
+    .form-step { display:none; }
+    .form-step.active { display:block; }
+    .form-group { margin-bottom:20px; }
+    .form-label { display:block; margin-bottom:8px; font-weight:500; }
+    .form-input, .form-select, .form-textarea { width:100%; padding:12px 15px; border:1px solid rgba(255,255,255,0.15); border-radius:8px; background:rgba(255,255,255,0.05); backdrop-filter:blur(4px); font-family:inherit; font-size:16px; color:inherit; }
+    body.dark-mode .form-input, body.dark-mode .form-select, body.dark-mode .form-textarea { background:rgba(0,0,0,0.15); border-color:rgba(255,255,255,0.06); color:var(--dark-text); }
+    .form-textarea { min-height:100px; resize:vertical; }
+    .form-actions { display:flex; justify-content:space-between; margin-top:30px; gap:15px; flex-wrap:wrap; }
+    .form-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:20px; }
+    .donation-options { display:grid; grid-template-columns:repeat(auto-fit, minmax(100px,1fr)); gap:15px; margin-bottom:20px; }
+    .donation-option { border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:15px; text-align:center; cursor:pointer; transition:0.3s; background:rgba(255,255,255,0.02); }
+    .donation-option:hover, .donation-option.selected { border-color:var(--gold); background:rgba(212,165,71,0.08); }
+    .payment-methods { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px,1fr)); gap:15px; margin-bottom:20px; }
+    .payment-method { border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:15px; text-align:center; cursor:pointer; transition:0.3s; background:rgba(255,255,255,0.02); }
+    .payment-method:hover, .payment-method.selected { border-color:var(--gold); background:rgba(212,165,71,0.08); }
+    .steps-container { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:20px; margin:30px 0; }
+    .step-card { background:rgba(255,255,255,0.04); backdrop-filter:blur(4px); border-radius:8px; padding:20px; text-align:center; border:1px solid rgba(255,255,255,0.04); }
+    .step-number { width:40px; height:40px; background:linear-gradient(135deg, var(--primary), var(--gold)); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; font-weight:700; }
+    .faq-item { margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.06); padding-bottom:20px; }
+    .faq-question { font-weight:600; margin-bottom:8px; }
 
     /* responsive */
-    @media (max-width: 992px) {
-      .hero-content {
-        flex-direction: column;
-      }
-      .hero-carousel {
-        height: 320px;
-        width: 100%;
-      }
-      .hero-text .hero-heading {
-        font-size: 36px;
-      }
-      .nav-menu {
-        display: none;
-      }
-      .mobile-menu-btn {
-        display: block;
-      }
-      .mega-menu-content {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .trending-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .explore-grid {
-        grid-template-columns: 1fr;
-      }
-      .explore-stats {
-        grid-template-columns: 1fr 1fr;
-      }
+    @media (max-width:992px) {
+      .hero-content { flex-direction:column; }
+      .hero-carousel { height:320px; width:100%; }
+      .hero-text .hero-heading { font-size:38px; }
+      .nav-menu { display:none; }
+      .mobile-menu-btn { display:block; }
+      .mega-menu-content { grid-template-columns:repeat(2,1fr); }
+      .trending-grid { grid-template-columns:repeat(2,1fr); }
+      .explore-grid { grid-template-columns:1fr; }
+      .explore-stats { grid-template-columns:1fr 1fr; }
     }
-    @media (max-width: 768px) {
-      .hero-text .hero-heading {
-        font-size: 30px;
-      }
-      .hero-carousel {
-        height: 240px;
-      }
-      .trending-grid {
-        grid-template-columns: 1fr;
-      }
-      .glass-card {
-        padding: 16px;
-      }
-      .tiers-grid {
-        grid-template-columns: 1fr;
-      }
-      .mega-menu-content {
-        grid-template-columns: 1fr;
-      }
-      .explore-stats {
-        grid-template-columns: 1fr;
-      }
-      .calendar-downloads {
-        flex-direction: column;
-        align-items: stretch;
-      }
+    @media (max-width:768px) {
+      .hero-text .hero-heading { font-size:30px; }
+      .hero-subtext { font-size:16px; }
+      .hero-carousel { height:240px; }
+      .trending-grid { grid-template-columns:1fr; }
+      .glass-card { padding:16px; }
+      .tiers-grid { grid-template-columns:1fr; }
+      .mega-menu-content { grid-template-columns:1fr; }
+      .explore-stats { grid-template-columns:1fr; }
+      .calendar-downloads { flex-direction:column; align-items:stretch; }
+      .partners-blue .partners-grid { grid-template-columns:repeat(2,1fr); }
     }
-    @media (max-width: 576px) {
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .hero-carousel {
-        height: 200px;
-      }
-      .search-filters-enhanced {
-        flex-direction: column;
-      }
-      .hero-actions .btn {
-        width: 100%;
-        text-align: center;
-      }
+    @media (max-width:576px) {
+      .stats-grid { grid-template-columns:repeat(2,1fr); }
+      .hero-carousel { height:200px; }
+      .search-filters-enhanced { flex-direction:column; }
+      .hero-actions .btn { width:100%; text-align:center; }
+      .partners-blue .partners-grid { grid-template-columns:1fr 1fr; }
     }
 
-    /* utility */
-    .btn-loading {
-      position: relative;
-      color: transparent !important;
-    }
-    .btn-loading::after {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      top: 50%;
-      left: 50%;
-      margin: -10px 0 0 -10px;
-      border: 2px solid transparent;
-      border-top-color: currentColor;
-      border-radius: 50%;
-      animation: button-loading-spinner 0.7s linear infinite;
-    }
-    @keyframes button-loading-spinner {
-      from {
-        transform: rotate(0);
-      }
-      to {
-        transform: rotate(1turn);
-      }
-    }
-    .error-message {
-      color: var(--accent);
-      font-size: 14px;
-      display: block;
-      margin-top: 5px;
-    }
-    .success-message {
-      color: var(--gold);
-    }
+    .btn-loading { position:relative; color:transparent !important; }
+    .btn-loading::after { content:""; position:absolute; width:20px; height:20px; top:50%; left:50%; margin:-10px 0 0 -10px; border:2px solid transparent; border-top-color:currentColor; border-radius:50%; animation:button-loading-spinner 0.7s linear infinite; }
+    @keyframes button-loading-spinner { from{transform:rotate(0)} to{transform:rotate(1turn)} }
+    .error-message { color:var(--accent); font-size:14px; display:block; margin-top:5px; }
+    .success-message { color:var(--gold); }
   </style>
 </head>
 <body>
@@ -1059,13 +776,13 @@
     <div class="world-map"></div>
     <div class="africa-highlight"></div>
     <div class="loading-logo"><i class="fas fa-graduation-cap"></i></div>
-    <p>Loading Ubuntu Professional Institute...</p>
+    <p>Loading Wuteve Global Academy...</p>
   </div>
 
   <!-- MOBILE NAV -->
   <div class="mobile-nav" id="mobile-nav">
     <div class="mobile-nav-header">
-      <a href="#" class="logo">Ubuntu <span>Professional</span></a>
+      <a href="#" class="logo">WUTEV</a>
       <button class="close-mobile-menu" id="close-mobile-menu" aria-label="Close menu"><i class="fas fa-times"></i></button>
     </div>
     <nav class="mobile-nav-menu">
@@ -1087,25 +804,18 @@
           <a href="#" id="mobile-donation-link">Make A Donation</a>
         </div>
       </div>
-      <div class="mobile-nav-actions"><a href="/frontend/public/login.html" class="btn btn-primary" style="width:100%;text-align:center;">Account</a></div>
+      <div class="mobile-nav-actions"><a href="/login.html" class="btn btn-primary" style="width:100%;text-align:center;">Account</a></div>
     </nav>
   </div>
 
   <!-- HEADER -->
   <header>
     <div class="container header-container">
-      <a href="#" class="logo">Ubuntu <span>Professional</span></a>
+      <a href="#" class="logo">WUTEV</a>
       <nav class="nav-menu">
-        <a href="/frontend/public/courses.html" class="mega-menu-trigger">Courses <i class="fas fa-chevron-down"></i></a>
+        <a href="#" class="mega-menu-trigger">Courses <i class="fas fa-chevron-down"></i></a>
         <a href="#">AI Tutor</a>
-        <div class="dropdown">
-    <a href="#">Dashboard <i class="fas fa-chevron-down"></i></a>
-    <div class="dropdown-content">
-        <a href="http://127.0.0.1:5500/student-dashboard.html">?? Student Dashboard</a>
-        <a href="http://127.0.0.1:5500/instructor-dashboard.html">????? Instructor Dashboard</a>
-        <a href="http://127.0.0.1:5500/admin-dashboard.html">?? Admin Dashboard</a>
-    </div>
-</div>   
+        <a href="#">Dashboard</a>
         <div class="dropdown">
           <a href="#">Admission <i class="fas fa-chevron-down"></i></a>
           <div class="dropdown-content">
@@ -1127,7 +837,7 @@
       <div class="header-actions">
         <button class="search-btn" aria-label="Search"><i class="fas fa-search"></i></button>
         <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode"><i class="fas fa-moon"></i></button>
-        <a href="/frontend/public/login.html" class="btn btn-primary" id="account-btn">Account</a>
+        <a href="/login.html" class="btn btn-primary" id="account-btn">Account</a>
         <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu"><i class="fas fa-bars"></i></button>
       </div>
     </div>
@@ -1148,8 +858,8 @@
   <section class="hero">
     <div class="container hero-content">
       <div class="hero-text">
-        <h1 class="hero-heading">BEST Online & Offline Courses with <span class="highlight">Blockchain-Verified</span> Certificates</h1>
-        <p class="hero-subtext">Ubuntu Professional Institute bridges the gap between affordable learning and elite career advancement. Rooted in the philosophy of Ubuntu—'I am because we are'—we believe in collaborative, accessible growth. We offer flexible, pay-as-you-progress access to world-class education, where your primary financial investment is directed toward verified certificates that showcase your skills to employers worldwide.</p>
+        <h1 class="hero-heading">Best Online &amp; Offline Courses with <span class="highlight">Blockchain-Verified</span> Certificates</h1>
+        <p class="hero-subtext">Wuteve Global Academy bridges the gap between affordable learning and elite career advancement. Rooted in the unshakeable majesty of our highest peak and driven by the fierce law of personal execution—<strong>'I am because I did'</strong>—we believe that true growth belongs to those who actively climb. We offer flexible, pay-as-you-progress access to world-class education, where your primary financial investment is directed toward verified certificates that showcase your victory to employers worldwide.</p>
         <div class="hero-actions">
           <a href="#explore" class="btn btn-primary">Explore Courses</a>
           <a href="#" class="btn btn-outline"><i class="fas fa-play-circle"></i> How It Works</a>
@@ -1169,15 +879,15 @@
   <section class="stats">
     <div class="container">
       <div class="stats-grid">
-        <div class="stat-card"><div class="stat-number active-users" data-target="12847">0</div><div class="stat-label">Active Users</div></div>
-        <div class="stat-card"><div class="stat-number courses-available" data-target="1247">0</div><div class="stat-label">Courses Available</div></div>
-        <div class="stat-card"><div class="stat-number certificates-issued" data-target="8934">0</div><div class="stat-label">Certificates Issued</div></div>
-        <div class="stat-card"><div class="stat-number ai-conversations" data-target="2100000">0</div><div class="stat-label">AI Conversations</div></div>
+        <div class="stat-card glass"><div class="stat-number active-users" data-target="12847">0</div><div class="stat-label">Active Users</div></div>
+        <div class="stat-card glass"><div class="stat-number courses-available" data-target="1247">0</div><div class="stat-label">Courses Available</div></div>
+        <div class="stat-card glass"><div class="stat-number certificates-issued" data-target="8934">0</div><div class="stat-label">Certificates Issued</div></div>
+        <div class="stat-card glass"><div class="stat-number ai-conversations" data-target="2100000">0</div><div class="stat-label">AI Conversations</div></div>
       </div>
     </div>
   </section>
 
-  <!-- ========== EXPLORE COURSES & CALENDAR DOWNLOADS ========== -->
+  <!-- EXPLORE COURSES & CALENDAR DOWNLOADS -->
   <section class="explore-section" id="explore">
     <div class="container">
       <div class="explore-grid">
@@ -1191,10 +901,10 @@
           <p style="margin-top:16px; font-size:14px; color:var(--text-light);"><i class="fas fa-sync-alt" style="color:var(--gold);"></i> Calendars are updated annually from the admin dashboard</p>
         </div>
         <div class="explore-stats">
-          <div class="explore-stat"><div class="number">500+</div><div class="label">Courses Available</div></div>
-          <div class="explore-stat"><div class="number">50+</div><div class="label">Certificate Programs</div></div>
-          <div class="explore-stat"><div class="number">12</div><div class="label">Categories</div></div>
-          <div class="explore-stat"><div class="number">100%</div><div class="label">Online & Self-Paced</div></div>
+          <div class="explore-stat glass"><div class="number">500+</div><div class="label">Courses</div></div>
+          <div class="explore-stat glass"><div class="number">50+</div><div class="label">Certificate Programs</div></div>
+          <div class="explore-stat glass"><div class="number">12</div><div class="label">Categories</div></div>
+          <div class="explore-stat glass"><div class="number">100%</div><div class="label">Online &amp; Self-Paced</div></div>
         </div>
       </div>
     </div>
@@ -1203,14 +913,14 @@
   <!-- CATEGORIES -->
   <section class="courses">
     <div class="container">
-      <div class="section-header"><h2 class="section-title">Explore Our <span>Course Categories</span></h2><p>Choose from hundreds of courses across multiple disciplines</p></div>
+      <div class="section-header"><h2 class="section-title">Explore Our <span>Course Categories</span></h2><p>Choose from hundreds of free courses across multiple disciplines</p></div>
       <div class="categories-grid">
-        <div class="category-card glass-card"><div class="category-icon"><i class="fas fa-chart-bar"></i></div><h3 class="category-title">Business & Management</h3><p class="category-count">124 Courses</p></div>
-        <div class="category-card glass-card"><div class="category-icon"><i class="fas fa-laptop-code"></i></div><h3 class="category-title">Technology & IT</h3><p class="category-count">98 Courses</p></div>
-        <div class="category-card glass-card"><div class="category-icon"><i class="fas fa-heartbeat"></i></div><h3 class="category-title">Health & Wellness</h3><p class="category-count">76 Courses</p></div>
-        <div class="category-card glass-card"><div class="category-icon"><i class="fas fa-paint-brush"></i></div><h3 class="category-title">Creative Arts</h3><p class="category-count">63 Courses</p></div>
-        <div class="category-card glass-card"><div class="category-icon"><i class="fas fa-globe"></i></div><h3 class="category-title">Languages & Culture</h3><p class="category-count">58 Courses</p></div>
-        <div class="category-card glass-card"><div class="category-icon"><i class="fas fa-graduation-cap"></i></div><h3 class="category-title">Education & Teaching</h3><p class="category-count">45 Courses</p></div>
+        <div class="category-card glass"><div class="category-icon"><i class="fas fa-chart-bar"></i></div><h3 class="category-title">Business &amp; Management</h3><p class="category-count">124 Courses</p></div>
+        <div class="category-card glass"><div class="category-icon"><i class="fas fa-laptop-code"></i></div><h3 class="category-title">Technology &amp; IT</h3><p class="category-count">98 Courses</p></div>
+        <div class="category-card glass"><div class="category-icon"><i class="fas fa-heartbeat"></i></div><h3 class="category-title">Health &amp; Wellness</h3><p class="category-count">76 Courses</p></div>
+        <div class="category-card glass"><div class="category-icon"><i class="fas fa-paint-brush"></i></div><h3 class="category-title">Creative Arts</h3><p class="category-count">63 Courses</p></div>
+        <div class="category-card glass"><div class="category-icon"><i class="fas fa-globe"></i></div><h3 class="category-title">Languages &amp; Culture</h3><p class="category-count">58 Courses</p></div>
+        <div class="category-card glass"><div class="category-icon"><i class="fas fa-graduation-cap"></i></div><h3 class="category-title">Education &amp; Teaching</h3><p class="category-count">45 Courses</p></div>
       </div>
     </div>
   </section>
@@ -1220,14 +930,14 @@
     <div class="container">
       <div class="section-header"><h2 class="section-title">Choose Your <span>Certificate Level</span></h2><p>All courses are free to learn. Pay only for the certificate level that matches your career goals</p></div>
       <div class="tiers-grid">
-        <div class="tier-card glass-card"><div class="tier-header basic"><h3 class="tier-name">Basics Certificate</h3><p class="tier-duration">4-6 hours</p><div class="tier-price">$50</div></div><div class="tier-features"><div class="tier-feature"><i class="fas fa-check"></i> Digital Certificate</div><div class="tier-feature"><i class="fas fa-check"></i> Course Completion Badge</div><div class="tier-feature"><i class="fas fa-check"></i> Basic Verification</div></div><div class="tier-actions"><a href="#" class="btn btn-primary">Get Certificate</a></div></div>
-        <div class="tier-card glass-card"><div class="tier-header essential"><h3 class="tier-name">Essentials Certificate</h3><p class="tier-duration">6-9 hours</p><div class="tier-price">$75</div></div><div class="tier-features"><div class="tier-feature"><i class="fas fa-check"></i> Digital Certificate</div><div class="tier-feature"><i class="fas fa-check"></i> Course Completion Badge</div><div class="tier-feature"><i class="fas fa-check"></i> Blockchain Verification</div><div class="tier-feature"><i class="fas fa-check"></i> LinkedIn Integration</div></div><div class="tier-actions"><a href="#" class="btn btn-primary">Get Certificate</a></div></div>
-        <div class="tier-card glass-card"><div class="tier-header mastering"><h3 class="tier-name">Mastering Certificate</h3><p class="tier-duration">1 week</p><div class="tier-price">$100</div></div><div class="tier-features"><div class="tier-feature"><i class="fas fa-check"></i> Digital Certificate</div><div class="tier-feature"><i class="fas fa-check"></i> Course Completion Badge</div><div class="tier-feature"><i class="fas fa-check"></i> Blockchain Verification</div><div class="tier-feature"><i class="fas fa-check"></i> LinkedIn Integration</div><div class="tier-feature"><i class="fas fa-check"></i> Performance Analytics</div></div><div class="tier-actions"><a href="#" class="btn btn-primary">Get Certificate</a></div></div>
+        <div class="tier-card glass"><div class="tier-header basic"><h3 class="tier-name">Basics Certificate</h3><p class="tier-duration">4-6 hours</p><div class="tier-price">$50</div></div><div class="tier-features"><div class="tier-feature"><i class="fas fa-check"></i> Digital Certificate</div><div class="tier-feature"><i class="fas fa-check"></i> Course Completion Badge</div><div class="tier-feature"><i class="fas fa-check"></i> Basic Verification</div></div><div class="tier-actions"><a href="#" class="btn btn-primary">Get Certificate</a></div></div>
+        <div class="tier-card glass"><div class="tier-header essential"><h3 class="tier-name">Essentials Certificate</h3><p class="tier-duration">6-9 hours</p><div class="tier-price">$75</div></div><div class="tier-features"><div class="tier-feature"><i class="fas fa-check"></i> Digital Certificate</div><div class="tier-feature"><i class="fas fa-check"></i> Course Completion Badge</div><div class="tier-feature"><i class="fas fa-check"></i> Blockchain Verification</div><div class="tier-feature"><i class="fas fa-check"></i> LinkedIn Integration</div></div><div class="tier-actions"><a href="#" class="btn btn-primary">Get Certificate</a></div></div>
+        <div class="tier-card glass"><div class="tier-header mastering"><h3 class="tier-name">Mastering Certificate</h3><p class="tier-duration">1 week</p><div class="tier-price">$100</div></div><div class="tier-features"><div class="tier-feature"><i class="fas fa-check"></i> Digital Certificate</div><div class="tier-feature"><i class="fas fa-check"></i> Course Completion Badge</div><div class="tier-feature"><i class="fas fa-check"></i> Blockchain Verification</div><div class="tier-feature"><i class="fas fa-check"></i> LinkedIn Integration</div><div class="tier-feature"><i class="fas fa-check"></i> Performance Analytics</div></div><div class="tier-actions"><a href="#" class="btn btn-primary">Get Certificate</a></div></div>
       </div>
       <div class="tiers-grid" style="margin-top:20px;">
-        <div class="tier-card glass-card"><div class="tier-header diploma"><h3 class="tier-name">Diploma Program</h3><p class="tier-duration">1-2 weeks</p><div class="tier-price">$150</div></div><div class="tier-features"><div class="tier-feature"><i class="fas fa-check"></i> Digital Diploma</div><div class="tier-feature"><i class="fas fa-check"></i> Blockchain Verification</div><div class="tier-feature"><i class="fas fa-check"></i> LinkedIn Integration</div><div class="tier-feature"><i class="fas fa-check"></i> Performance Analytics</div><div class="tier-feature"><i class="fas fa-check"></i> Career Services Access</div></div><div class="tier-actions"><a href="#" class="btn btn-primary">Get Diploma</a></div></div>
-        <div class="tier-card glass-card"><div class="tier-header executive"><h3 class="tier-name">Executive Diploma</h3><p class="tier-duration">2-3 weeks</p><div class="tier-price">$200</div></div><div class="tier-features"><div class="tier-feature"><i class="fas fa-check"></i> Digital & Physical Diploma</div><div class="tier-feature"><i class="fas fa-check"></i> Blockchain Verification</div><div class="tier-feature"><i class="fas fa-check"></i> LinkedIn Integration</div><div class="tier-feature"><i class="fas fa-check"></i> Performance Analytics</div><div class="tier-feature"><i class="fas fa-check"></i> Career Services Access</div><div class="tier-feature"><i class="fas fa-check"></i> Mentorship Sessions</div></div><div class="tier-actions"><a href="#" class="btn btn-primary">Get Diploma</a></div></div>
-        <div class="tier-card glass-card"><div class="tier-header mba"><h3 class="tier-name">MBA Essentials</h3><p class="tier-duration">4-5 weeks</p><div class="tier-price">$250</div></div><div class="tier-features"><div class="tier-feature"><i class="fas fa-check"></i> Digital & Physical Certificate</div><div class="tier-feature"><i class="fas fa-check"></i> Blockchain Verification</div><div class="tier-feature"><i class="fas fa-check"></i> LinkedIn Integration</div><div class="tier-feature"><i class="fas fa-check"></i> Performance Analytics</div><div class="tier-feature"><i class="fas fa-check"></i> Career Services Access</div><div class="tier-feature"><i class="fas fa-check"></i> Mentorship Sessions</div><div class="tier-feature"><i class="fas fa-check"></i> Networking Events</div></div><div class="tier-actions"><a href="#" class="btn btn-primary">Get Certificate</a></div></div>
+        <div class="tier-card glass"><div class="tier-header diploma"><h3 class="tier-name">Diploma Program</h3><p class="tier-duration">1-2 weeks</p><div class="tier-price">$150</div></div><div class="tier-features"><div class="tier-feature"><i class="fas fa-check"></i> Digital Diploma</div><div class="tier-feature"><i class="fas fa-check"></i> Blockchain Verification</div><div class="tier-feature"><i class="fas fa-check"></i> LinkedIn Integration</div><div class="tier-feature"><i class="fas fa-check"></i> Performance Analytics</div><div class="tier-feature"><i class="fas fa-check"></i> Career Services Access</div></div><div class="tier-actions"><a href="#" class="btn btn-primary">Get Diploma</a></div></div>
+        <div class="tier-card glass"><div class="tier-header executive"><h3 class="tier-name">Executive Diploma</h3><p class="tier-duration">2-3 weeks</p><div class="tier-price">$200</div></div><div class="tier-features"><div class="tier-feature"><i class="fas fa-check"></i> Digital &amp; Physical Diploma</div><div class="tier-feature"><i class="fas fa-check"></i> Blockchain Verification</div><div class="tier-feature"><i class="fas fa-check"></i> LinkedIn Integration</div><div class="tier-feature"><i class="fas fa-check"></i> Performance Analytics</div><div class="tier-feature"><i class="fas fa-check"></i> Career Services Access</div><div class="tier-feature"><i class="fas fa-check"></i> Mentorship Sessions</div></div><div class="tier-actions"><a href="#" class="btn btn-primary">Get Diploma</a></div></div>
+        <div class="tier-card glass"><div class="tier-header mba"><h3 class="tier-name">MBA Essentials</h3><p class="tier-duration">4-5 weeks</p><div class="tier-price">$250</div></div><div class="tier-features"><div class="tier-feature"><i class="fas fa-check"></i> Digital &amp; Physical Certificate</div><div class="tier-feature"><i class="fas fa-check"></i> Blockchain Verification</div><div class="tier-feature"><i class="fas fa-check"></i> LinkedIn Integration</div><div class="tier-feature"><i class="fas fa-check"></i> Performance Analytics</div><div class="tier-feature"><i class="fas fa-check"></i> Career Services Access</div><div class="tier-feature"><i class="fas fa-check"></i> Mentorship Sessions</div><div class="tier-feature"><i class="fas fa-check"></i> Networking Events</div></div><div class="tier-actions"><a href="#" class="btn btn-primary">Get Certificate</a></div></div>
       </div>
     </div>
   </section>
@@ -1235,35 +945,35 @@
   <!-- POPULAR COURSES -->
   <section class="courses">
     <div class="container">
-      <div class="section-header"><h2 class="section-title">Popular <span>Courses</span></h2><p>Start learning today. All courses are completely free with optional certificate upgrades</p></div>
-      <div class="search-filters-enhanced glass-card">
-        <div class="filter-group"><label for="subject-filter">Subject</label><select id="subject-filter" class="filter-select"><option value="">All Subjects</option><option value="business">Business & Management</option><option value="technology">Technology & IT</option><option value="health">Health & Wellness</option><option value="creative">Creative Arts</option><option value="language">Languages</option></select></div>
+      <div class="section-header"><h2 class="section-title">Popular <span>Courses</span></h2><p>Start learning today. All courses are free with optional certificate upgrades</p></div>
+      <div class="search-filters-enhanced glass">
+        <div class="filter-group"><label for="subject-filter">Subject</label><select id="subject-filter" class="filter-select"><option value="">All Subjects</option><option value="business">Business &amp; Management</option><option value="technology">Technology &amp; IT</option><option value="health">Health &amp; Wellness</option><option value="creative">Creative Arts</option><option value="language">Languages</option></select></div>
         <div class="filter-group"><label for="certificate-filter">Certificate Type</label><select id="certificate-filter" class="filter-select"><option value="">All Types</option><option value="basic">Basics</option><option value="essential">Essentials</option><option value="mastering">Mastering</option><option value="diploma">Diploma</option><option value="executive">Executive</option><option value="mba">MBA</option></select></div>
         <div class="filter-group"><label for="duration-filter">Duration</label><select id="duration-filter" class="filter-select"><option value="">Any Duration</option><option value="short">Short (1-5h)</option><option value="medium">Medium (6-15h)</option><option value="long">Long (16+h)</option></select></div>
         <div class="filter-group"><label for="level-filter">Difficulty</label><select id="level-filter" class="filter-select"><option value="">All Levels</option><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select></div>
       </div>
       <div class="courses-grid" id="courses-grid">
-        <div class="course-card glass-card" data-category="technology" data-certificate="essential" data-duration="medium" data-level="beginner" data-title="machine learning fundamentals">
+        <div class="course-card glass" data-category="technology" data-certificate="essential" data-duration="medium" data-level="beginner" data-title="machine learning fundamentals">
           <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=1000&q=80')"><div class="course-badge">FREE</div></div>
           <div class="course-content"><div class="course-header"><h3 class="course-title">Machine Learning Fundamentals</h3><div class="course-rating">4.8</div></div><p class="course-description">Learn the core concepts of ML with practical examples</p><div class="course-meta"><span><i class="fas fa-user"></i> Dr. Sarah Johnson</span><span><i class="fas fa-clock"></i> 8 hours</span></div><span class="certificate-badge essential">Essentials</span><div class="course-footer"><div class="course-price">Free</div><a href="#" class="course-link">Start Learning</a></div></div>
         </div>
-        <div class="course-card glass-card" data-category="technology" data-certificate="mastering" data-duration="long" data-level="beginner" data-title="web development bootcamp">
+        <div class="course-card glass" data-category="technology" data-certificate="mastering" data-duration="long" data-level="beginner" data-title="web development bootcamp">
           <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1581276879432-15e50529f34b?auto=format&fit=crop&w=1000&q=80')"><div class="course-badge">FREE</div></div>
           <div class="course-content"><div class="course-header"><h3 class="course-title">Web Development Bootcamp</h3><div class="course-rating">4.7</div></div><p class="course-description">Master HTML, CSS, JavaScript and modern frameworks</p><div class="course-meta"><span><i class="fas fa-user"></i> Mark Thompson</span><span><i class="fas fa-clock"></i> 20 hours</span></div><span class="certificate-badge mastering">Mastering</span><div class="course-footer"><div class="course-price">Free</div><a href="#" class="course-link">Start Learning</a></div></div>
         </div>
-        <div class="course-card glass-card" data-category="business" data-certificate="diploma" data-duration="long" data-level="intermediate" data-title="data science essentials">
+        <div class="course-card glass" data-category="business" data-certificate="diploma" data-duration="long" data-level="intermediate" data-title="data science essentials">
           <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80')"></div>
           <div class="course-content"><div class="course-header"><h3 class="course-title">Data Science Essentials</h3><div class="course-rating">4.9</div></div><p class="course-description">Transform data into insights with Python and R</p><div class="course-meta"><span><i class="fas fa-user"></i> Dr. Alex Chen</span><span><i class="fas fa-clock"></i> 25 hours</span></div><span class="certificate-badge diploma">Diploma</span><div class="course-footer"><div class="course-price">Free</div><a href="#" class="course-link">Start Learning</a></div></div>
         </div>
-        <div class="course-card glass-card" data-category="business" data-certificate="basic" data-duration="short" data-level="beginner" data-title="business fundamentals">
+        <div class="course-card glass" data-category="business" data-certificate="basic" data-duration="short" data-level="beginner" data-title="business fundamentals">
           <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=1000&q=80')"></div>
           <div class="course-content"><div class="course-header"><h3 class="course-title">Business Fundamentals</h3><div class="course-rating">4.6</div></div><p class="course-description">Learn essential business concepts and strategies</p><div class="course-meta"><span><i class="fas fa-user"></i> Prof. James Wilson</span><span><i class="fas fa-clock"></i> 5 hours</span></div><span class="certificate-badge basic">Basics</span><div class="course-footer"><div class="course-price">Free</div><a href="#" class="course-link">Start Learning</a></div></div>
         </div>
-        <div class="course-card glass-card" data-category="technology" data-certificate="executive" data-duration="long" data-level="advanced" data-title="advanced ai algorithms">
+        <div class="course-card glass" data-category="technology" data-certificate="executive" data-duration="long" data-level="advanced" data-title="advanced ai algorithms">
           <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&w=1000&q=80')"><div class="course-badge">FREE</div></div>
           <div class="course-content"><div class="course-header"><h3 class="course-title">Advanced AI Algorithms</h3><div class="course-rating">4.9</div></div><p class="course-description">Deep dive into advanced artificial intelligence concepts</p><div class="course-meta"><span><i class="fas fa-user"></i> Dr. Lisa Zhang</span><span><i class="fas fa-clock"></i> 30 hours</span></div><span class="certificate-badge executive">Executive</span><div class="course-footer"><div class="course-price">Free</div><a href="#" class="course-link">Start Learning</a></div></div>
         </div>
-        <div class="course-card glass-card" data-category="business" data-certificate="mba" data-duration="long" data-level="intermediate" data-title="introduction to data analysis">
+        <div class="course-card glass" data-category="business" data-certificate="mba" data-duration="long" data-level="intermediate" data-title="introduction to data analysis">
           <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80')"></div>
           <div class="course-content"><div class="course-header"><h3 class="course-title">MBA Essentials: Business Analytics</h3><div class="course-rating">4.5</div></div><p class="course-description">Learn the basics of data analysis and visualization for business</p><div class="course-meta"><span><i class="fas fa-user"></i> Dr. Michael Brown</span><span><i class="fas fa-clock"></i> 35 hours</span></div><span class="certificate-badge mba">MBA</span><div class="course-footer"><div class="course-price">Free</div><a href="#" class="course-link">Start Learning</a></div></div>
         </div>
@@ -1277,41 +987,35 @@
     <div class="container">
       <div class="section-header">
         <div class="trending-badge"><span class="fire">🔥</span> TRENDING NOW</div>
-        <h2 class="section-title">Ubuntu <span>Daily</span></h2>
+        <h2 class="section-title">Wuteve <span>Daily</span></h2>
         <p>Discover today's most popular courses with blockchain-verified certificates</p>
       </div>
       <div class="trending-grid">
-        <!-- #1 -->
         <div class="glass-card trending-card fade-in-up">
           <div class="trending-rank">#1</div>
           <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=600&q=80')"><span class="certificate-badge essential" style="position:absolute; bottom:10px; left:10px;">Essentials</span></div>
           <div class="course-content"><h3>Machine Learning Fundamentals</h3><div class="instructor-info"><span class="instructor-avatar" style="background:var(--primary);"></span> Dr. Sarah Johnson</div><div class="course-stats"><span><i class="fas fa-users"></i> 12,847</span><span><i class="fas fa-star" style="color:var(--gold);"></i> 4.8</span><span><i class="fas fa-clock"></i> 8h</span></div><a href="#" class="glass-btn">Join Now →</a></div>
         </div>
-        <!-- #2 -->
         <div class="glass-card trending-card fade-in-up" style="animation-delay:0.1s;">
           <div class="trending-rank">#2</div>
           <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1581276879432-15e50529f34b?auto=format&fit=crop&w=600&q=80')"><span class="certificate-badge mastering" style="position:absolute; bottom:10px; left:10px;">Mastering</span></div>
           <div class="course-content"><h3>Web Development Bootcamp</h3><div class="instructor-info"><span class="instructor-avatar" style="background:#06b6d4;"></span> Mark Thompson</div><div class="course-stats"><span><i class="fas fa-users"></i> 8,234</span><span><i class="fas fa-star" style="color:var(--gold);"></i> 4.7</span><span><i class="fas fa-clock"></i> 20h</span></div><a href="#" class="glass-btn">Join Now →</a></div>
         </div>
-        <!-- #3 -->
         <div class="glass-card trending-card fade-in-up" style="animation-delay:0.2s;">
           <div class="trending-rank">#3</div>
           <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80')"><span class="certificate-badge diploma" style="position:absolute; bottom:10px; left:10px;">Diploma</span></div>
           <div class="course-content"><h3>Data Science Essentials</h3><div class="instructor-info"><span class="instructor-avatar" style="background:#10b981;"></span> Dr. Alex Chen</div><div class="course-stats"><span><i class="fas fa-users"></i> 5,671</span><span><i class="fas fa-star" style="color:var(--gold);"></i> 4.9</span><span><i class="fas fa-clock"></i> 25h</span></div><a href="#" class="glass-btn">Join Now →</a></div>
         </div>
-        <!-- #4 -->
         <div class="glass-card trending-card fade-in-up" style="animation-delay:0.3s;">
           <div class="trending-rank">#4</div>
           <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=600&q=80')"><span class="certificate-badge mba" style="position:absolute; bottom:10px; left:10px;">MBA</span></div>
           <div class="course-content"><h3>Business Analytics MBA</h3><div class="instructor-info"><span class="instructor-avatar" style="background:#ef4444;"></span> Dr. Michael Brown</div><div class="course-stats"><span><i class="fas fa-users"></i> 3,892</span><span><i class="fas fa-star" style="color:var(--gold);"></i> 4.5</span><span><i class="fas fa-clock"></i> 35h</span></div><a href="#" class="glass-btn">Join Now →</a></div>
         </div>
-        <!-- #5 -->
         <div class="glass-card trending-card fade-in-up" style="animation-delay:0.4s;">
           <div class="trending-rank">#5</div>
           <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&w=600&q=80')"><span class="certificate-badge executive" style="position:absolute; bottom:10px; left:10px;">Executive</span></div>
           <div class="course-content"><h3>Advanced AI Algorithms</h3><div class="instructor-info"><span class="instructor-avatar" style="background:#f59e0b;"></span> Dr. Lisa Zhang</div><div class="course-stats"><span><i class="fas fa-users"></i> 2,145</span><span><i class="fas fa-star" style="color:var(--gold);"></i> 4.9</span><span><i class="fas fa-clock"></i> 30h</span></div><a href="#" class="glass-btn">Join Now →</a></div>
         </div>
-        <!-- #6 -->
         <div class="glass-card trending-card fade-in-up" style="animation-delay:0.5s;">
           <div class="trending-rank">#6</div>
           <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80')"><span class="certificate-badge basic" style="position:absolute; bottom:10px; left:10px;">Basic</span></div>
@@ -1321,32 +1025,28 @@
     </div>
   </section>
 
-  <!-- PARTNERS - Blue Themed Glass -->
-  <section class="partners">
+  <!-- ===== PARTNERS (Blue themed glass) ===== -->
+  <section class="partners-blue">
     <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Trusted by <span>Leading Institutions</span></h2>
-      </div>
-      <div class="partners-grid">
-        <div class="partner-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Stanford_University_seal_2003.svg/1200px-Stanford_University_seal_2003.svg.png')">Stanford</div>
-        <div class="partner-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/MIT_logo.svg/1200px-MIT_logo.svg.png')">MIT</div>
-        <div class="partner-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png')">Google</div>
-        <div class="partner-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/1200px-Microsoft_logo.svg.png')">Microsoft</div>
-        <div class="partner-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/1200px-Amazon_logo.svg.png')">Amazon</div>
-        <div class="partner-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/1200px-IBM_logo.svg.png')">IBM</div>
-        <div class="partner-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/en/thumb/2/29/Harvard_shield_wreath.svg/1200px-Harvard_shield_wreath.svg.png')">Harvard</div>
-        <div class="partner-logo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Yale_University_logo_1.svg/1200px-Yale_University_logo_1.svg.png')">Yale</div>
+      <div class="section-header"><h2 class="section-title">Trusted by <span>Leading Institutions</span></h2></div>
+      <div class="partners-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:30px;align-items:center;">
+        <div class="partner-card"><div class="logo-placeholder"><i class="fas fa-university" style="margin-right:8px;"></i>Stanford</div></div>
+        <div class="partner-card"><div class="logo-placeholder"><i class="fas fa-university" style="margin-right:8px;"></i>MIT</div></div>
+        <div class="partner-card"><div class="logo-placeholder"><i class="fas fa-laptop" style="margin-right:8px;"></i>Google</div></div>
+        <div class="partner-card"><div class="logo-placeholder"><i class="fas fa-windows" style="margin-right:8px;"></i>Microsoft</div></div>
+        <div class="partner-card"><div class="logo-placeholder"><i class="fas fa-shopping-cart" style="margin-right:8px;"></i>Amazon</div></div>
+        <div class="partner-card"><div class="logo-placeholder"><i class="fas fa-microchip" style="margin-right:8px;"></i>IBM</div></div>
+        <div class="partner-card"><div class="logo-placeholder"><i class="fas fa-university" style="margin-right:8px;"></i>Harvard</div></div>
+        <div class="partner-card"><div class="logo-placeholder"><i class="fas fa-university" style="margin-right:8px;"></i>Yale</div></div>
       </div>
     </div>
   </section>
 
-  <!-- FEATURES - Blue Themed Glass -->
-  <section class="features">
+  <!-- ===== FEATURES (Blue themed glass) ===== -->
+  <section class="features-blue">
     <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Why Choose <span>Ubuntu Professional Institute</span></h2>
-      </div>
-      <div class="features-grid">
+      <div class="section-header"><h2 class="section-title">Why Choose <span>Wuteve Global Academy</span></h2></div>
+      <div class="features-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;">
         <div class="feature-card"><div class="feature-icon"><i class="fas fa-brain"></i></div><h3 class="feature-title">AI-Powered Learning</h3><p class="feature-description">95% outcome improvement with adaptive learning paths tailored to your progress.</p></div>
         <div class="feature-card"><div class="feature-icon"><i class="fas fa-comments"></i></div><h3 class="feature-title">Interactive AI Tutor</h3><p class="feature-description">2M+ conversations daily with our advanced AI tutors available 24/7.</p></div>
         <div class="feature-card"><div class="feature-icon"><i class="fas fa-users"></i></div><h3 class="feature-title">Cohorts</h3><p class="feature-description">50k+ active cohorts for collaborative learning and networking.</p></div>
@@ -1358,66 +1058,15 @@
   </section>
 
   <!-- CTA -->
-  <section class="cta">
-    <div class="container">
-      <h2 class="cta-title">Ready to Transform Your Learning Journey?</h2>
-      <p class="cta-text">Join thousands of learners who are already experiencing the future of education with Ubuntu Professional Institute.</p>
-      <a href="/frontend/public/login.html" class="cta-button">Get Started</a>
-    </div>
-  </section>
+  <section class="cta"><div class="container"><h2 class="cta-title">Ready to Climb to Your Next Peak?</h2><p class="cta-text">Join thousands of learners who are already experiencing the future of education</p><a href="/login.html" class="cta-button">Get Started</a></div></section>
 
   <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-brand">
-          <h3>Ubuntu Professional Institute</h3>
-          <p class="footer-description">Ubuntu Professional Institute represents the powerful intersection of human connection and career excellence. It is built on the African philosophy of Ubuntu—'I am because we are'—combined with a strict commitment to world-class professional standards.</p>
-          <p>Sponsored by Motiva Corporation Group of Companies</p>
-        </div>
-        <div class="footer-links">
-          <h4 class="footer-heading">Quick Links</h4>
-          <ul>
-            <li><a href="#">About</a></li>
-            <li><a href="#">Features</a></li>
-            <li><a href="#">Courses</a></li>
-            <li><a href="#">AI Tutor</a></li>
-            <li><a href="#">Pricing</a></li>
-          </ul>
-        </div>
-        <div class="footer-links">
-          <h4 class="footer-heading">Support</h4>
-          <ul>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">Help Center</a></li>
-            <li><a href="#">Policies</a></li>
-          </ul>
-        </div>
-        <div class="footer-contact">
-          <h4 class="footer-heading">Contact Us</h4>
-          <p><i class="fas fa-map-marker-alt"></i> Monrovia Liberia. P.O.BOX 1000</p>
-          <p><i class="fas fa-phone"></i> +231886590302</p>
-          <p><i class="fas fa-phone"></i> +231772876644</p>
-          <p><i class="fas fa-envelope"></i> ubuntu@professional.edu.lr</p>
-          <div class="footer-social">
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>Copyright © 2025 Ubuntu Professional Institute. Sponsored by Motiva Corporation Group of Companies.</p>
-      </div>
-    </div>
-  </footer>
+  <footer><div class="container"><div class="footer-grid"><div class="footer-brand"><h3>WUTEV</h3><p class="footer-description">Wuteve Global Academy bridges the gap between affordable learning and elite career advancement. Rooted in the unshakeable majesty of our highest peak and driven by the fierce law of personal execution—'I am because I did.'</p><p>Sponsored by Motiva Corporation Group of Companies</p></div><div class="footer-links"><h4 class="footer-heading">Quick Links</h4><ul><li><a href="#">About</a></li><li><a href="#">Features</a></li><li><a href="#">Courses</a></li><li><a href="#">AI Tutor</a></li><li><a href="#">Pricing</a></li></ul></div><div class="footer-links"><h4 class="footer-heading">Support</h4><ul><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li><li><a href="#">Help Center</a></li><li><a href="#">Policies</a></li></ul></div><div class="footer-contact"><h4 class="footer-heading">Contact Us</h4><p><i class="fas fa-map-marker-alt"></i> Monrovia Liberia. P.O.BOX 1000</p><p><i class="fas fa-phone"></i> +231886590302</p><p><i class="fas fa-phone"></i> +231772876644</p><p><i class="fas fa-envelope"></i> wuteve@globalacademy.edu</p><div class="footer-social"><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-linkedin"></i></a><a href="#"><i class="fab fa-facebook"></i></a><a href="#"><i class="fab fa-youtube"></i></a></div></div></div><div class="footer-bottom"><p>Copyright © 2025 Wuteve Global Academy · Sponsored by Motiva Corporation Group of Companies.</p></div></div></footer>
 
   <!-- MODALS (preserved) -->
-  <div id="how-to-apply-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">How To Apply</h2><p>Applying to Ubuntu Professional Institute - Building Opportunities and Expertise creates a possibility for a bright future.</p><p>Ubuntu Professional Institute equips emerging talent with the skills needed for in-demand careers, revolutionizing the future of work. Your support makes it all happen.</p><div class="form-actions"><a href="#" class="btn btn-primary">Apply Now</a></div><h3>Application Overview</h3><p>Applying to Ubuntu Professional Institute is simple and straightforward. Follow the steps below to kickstart your journey to a brighter future.</p><div class="steps-container"><div class="step-card"><div class="step-number">1</div><h4>Complete the Online Application Form</h4><p>Start by filling out the application form with accurate personal, academic, and professional information.</p></div><div class="step-card"><div class="step-number">2</div><h4>Submit Required Documents</h4><p>Upload documents such as your CV, transcripts, and letters of recommendation through the portal.</p></div><div class="step-card"><div class="step-number">3</div><h4>Attend an Interview (If Required)</h4><p>Some programs may require a short interview to assess your qualifications and motivation.</p></div><div class="step-card"><div class="step-number">4</div><h4>Receive Admission Decision</h4><p>Our admissions team will review your application and notify you of your admission status.</p></div></div><h3>Frequently Asked Questions (FAQ)</h3><div class="faq-item"><p class="faq-question">What is the admission process?</p><p>The admission process typically includes completing an online application, submitting required documents, and potentially attending an interview (if applicable).</p></div><div class="faq-item"><p class="faq-question">Do I need to take an entrance exam?</p><p>Some programs may require entrance exams. Check the program's requirements for more details.</p></div><div class="faq-item"><p class="faq-question">Can I apply for financial aid?</p><p>No, Ubuntu Professional Institute does not offer financial aid for now.</p></div></div></div>
+  <div id="how-to-apply-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">How To Apply</h2><p>Applying to Wuteve Global Academy creates a possibility for a bright future.</p><p>Wuteve equips emerging talent with the skills needed for in-demand careers, revolutionizing the future of work.</p><div class="form-actions"><a href="#" class="btn btn-primary">Apply Now</a></div><h3>Application Overview</h3><p>Applying is simple and straightforward. Follow the steps below to kickstart your journey.</p><div class="steps-container"><div class="step-card"><div class="step-number">1</div><h4>Complete the Online Application Form</h4><p>Fill out the application form with accurate personal, academic, and professional information.</p></div><div class="step-card"><div class="step-number">2</div><h4>Submit Required Documents</h4><p>Upload documents such as your CV, transcripts, and letters of recommendation.</p></div><div class="step-card"><div class="step-number">3</div><h4>Attend an Interview (If Required)</h4><p>Some programs may require a short interview to assess your qualifications.</p></div><div class="step-card"><div class="step-number">4</div><h4>Receive Admission Decision</h4><p>Our admissions team will review your application and notify you of your admission status.</p></div></div><h3>Frequently Asked Questions (FAQ)</h3><div class="faq-item"><p class="faq-question">What is the admission process?</p><p>The admission process typically includes completing an online application, submitting required documents, and potentially attending an interview (if applicable).</p></div><div class="faq-item"><p class="faq-question">Do I need to take an entrance exam?</p><p>Some programs may require entrance exams. Check the program's requirements for more details.</p></div><div class="faq-item"><p class="faq-question">Can I apply for financial aid?</p><p>Wuteve does not offer financial aid at this time.</p></div></div></div>
 
-  <div id="application-form-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">Admission Form</h2><form id="application-form"><div class="form-step active" id="step-1"><h3>Step 1: Personal Information</h3><div class="form-grid"><div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Date of Birth</label><input type="date" class="form-input" required></div><div class="form-group"><label class="form-label">Gender</label><select class="form-select" required><option value="">Select Gender</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div><div class="form-group"><label class="form-label">Identification Type</label><select class="form-select" required><option value="">Select ID Type</option><option value="passport">Passport</option><option value="id-card">National ID Card</option><option value="drivers-license">Driver's License</option></select></div><div class="form-group"><label class="form-label">Identification Number</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Personal Image</label><input type="file" class="form-input" accept="image/*" required></div><div class="form-group"><label class="form-label">Nationality</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Do you have a personal computer?</label><select class="form-select" required><option value="">Select Option</option><option value="yes">YES</option><option value="no">NO</option></select></div><div class="form-group"><label class="form-label">Desired Program</label><select class="form-select" required><option value="">Select Program</option><option value="ai">Artificial Intelligence</option><option value="web-dev">Web Development</option><option value="data-science">Data Science</option><option value="cybersecurity">Cybersecurity</option></select></div></div><div class="form-actions"><div></div><button type="button" class="btn btn-primary next-step">Next</button></div></div><div class="form-step" id="step-2"><h3>Step 2: Education Background</h3><div class="form-grid"><div class="form-group"><label class="form-label">Highest Level of Education Completed</label><select class="form-select" required><option value="">Select Level</option><option value="high-school">High School</option><option value="associate">Associate Degree</option><option value="bachelor">Bachelor's Degree</option><option value="master">Master's Degree</option><option value="phd">PhD</option></select></div><div class="form-group"><label class="form-label">Name of Last Attended School/College/University</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Graduation Year</label><input type="number" class="form-input" min="1950" max="2025" required></div><div class="form-group"><label class="form-label">Do you have basic computer knowledge?</label><select class="form-select" required><option value="">Select Option</option><option value="yes">YES</option><option value="no">NO</option></select></div><div class="form-group full-width"><label class="form-label">Personal Statement</label><textarea class="form-textarea" placeholder="Tell us about yourself, your goals, and why you want to join Ubuntu Professional Institute" required></textarea></div><div class="form-group full-width"><label class="form-label">Community Impact</label><textarea class="form-textarea" placeholder="Describe any community service or impact you've made" required></textarea></div></div><div class="form-actions"><button type="button" class="btn btn-outline prev-step">Previous</button><button type="button" class="btn btn-primary next-step">Next</button></div></div><div class="form-step" id="step-3"><h3>Step 3: Contact Information</h3><div class="form-grid"><div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" required></div><div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input" required></div><div class="form-group full-width"><label class="form-label">Address</label><textarea class="form-textarea" required></textarea></div><div class="form-group"><label class="form-label">Emergency Contact Name</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Emergency Phone Number</label><input type="tel" class="form-input" required></div><div class="form-group full-width"><label class="form-label">Emergency Person Address</label><textarea class="form-textarea" required></textarea></div><div class="form-group"><label class="form-label">Relationship Type</label><select class="form-select" required><option value="">Select Relationship</option><option value="parent">Parent</option><option value="sibling">Sibling</option><option value="spouse">Spouse</option><option value="friend">Friend</option><option value="other">Other</option></select></div><div class="form-group"><label class="form-label">Supporting Documents</label><input type="file" class="form-input" multiple></div><div class="form-group"><label class="form-label">Community Recommendation</label><input type="file" class="form-input"></div></div><div class="form-group"><label><input type="checkbox" required> I hereby declare that the information provided in this application is accurate to the best of my knowledge. I understand that providing false information may result in the cancellation of my admission.</label></div><div class="form-actions"><button type="button" class="btn btn-outline prev-step">Previous</button><button type="submit" class="btn btn-primary">Submit</button></div></div></form></div></div>
+  <div id="application-form-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">Admission Form</h2><form id="application-form"><div class="form-step active" id="step-1"><h3>Step 1: Personal Information</h3><div class="form-grid"><div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Date of Birth</label><input type="date" class="form-input" required></div><div class="form-group"><label class="form-label">Gender</label><select class="form-select" required><option value="">Select Gender</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div><div class="form-group"><label class="form-label">Identification Type</label><select class="form-select" required><option value="">Select ID Type</option><option value="passport">Passport</option><option value="id-card">National ID Card</option><option value="drivers-license">Driver's License</option></select></div><div class="form-group"><label class="form-label">Identification Number</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Personal Image</label><input type="file" class="form-input" accept="image/*" required></div><div class="form-group"><label class="form-label">Nationality</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Do you have a personal computer?</label><select class="form-select" required><option value="">Select Option</option><option value="yes">YES</option><option value="no">NO</option></select></div><div class="form-group"><label class="form-label">Desired Program</label><select class="form-select" required><option value="">Select Program</option><option value="ai">Artificial Intelligence</option><option value="web-dev">Web Development</option><option value="data-science">Data Science</option><option value="cybersecurity">Cybersecurity</option></select></div></div><div class="form-actions"><div></div><button type="button" class="btn btn-primary next-step">Next</button></div></div><div class="form-step" id="step-2"><h3>Step 2: Education Background</h3><div class="form-grid"><div class="form-group"><label class="form-label">Highest Level of Education Completed</label><select class="form-select" required><option value="">Select Level</option><option value="high-school">High School</option><option value="associate">Associate Degree</option><option value="bachelor">Bachelor's Degree</option><option value="master">Master's Degree</option><option value="phd">PhD</option></select></div><div class="form-group"><label class="form-label">Name of Last Attended School/College/University</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Graduation Year</label><input type="number" class="form-input" min="1950" max="2025" required></div><div class="form-group"><label class="form-label">Do you have basic computer knowledge?</label><select class="form-select" required><option value="">Select Option</option><option value="yes">YES</option><option value="no">NO</option></select></div><div class="form-group full-width"><label class="form-label">Personal Statement</label><textarea class="form-textarea" placeholder="Tell us about yourself, your goals, and why you want to join Wuteve" required></textarea></div><div class="form-group full-width"><label class="form-label">Community Impact</label><textarea class="form-textarea" placeholder="Describe any community service or impact you've made" required></textarea></div></div><div class="form-actions"><button type="button" class="btn btn-outline prev-step">Previous</button><button type="button" class="btn btn-primary next-step">Next</button></div></div><div class="form-step" id="step-3"><h3>Step 3: Contact Information</h3><div class="form-grid"><div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" required></div><div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input" required></div><div class="form-group full-width"><label class="form-label">Address</label><textarea class="form-textarea" required></textarea></div><div class="form-group"><label class="form-label">Emergency Contact Name</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Emergency Phone Number</label><input type="tel" class="form-input" required></div><div class="form-group full-width"><label class="form-label">Emergency Person Address</label><textarea class="form-textarea" required></textarea></div><div class="form-group"><label class="form-label">Relationship Type</label><select class="form-select" required><option value="">Select Relationship</option><option value="parent">Parent</option><option value="sibling">Sibling</option><option value="spouse">Spouse</option><option value="friend">Friend</option><option value="other">Other</option></select></div><div class="form-group"><label class="form-label">Supporting Documents</label><input type="file" class="form-input" multiple></div><div class="form-group"><label class="form-label">Community Recommendation</label><input type="file" class="form-input"></div></div><div class="form-group"><label><input type="checkbox" required> I hereby declare that the information provided in this application is accurate to the best of my knowledge. I understand that providing false information may result in the cancellation of my admission.</label></div><div class="form-actions"><button type="button" class="btn btn-outline prev-step">Previous</button><button type="submit" class="btn btn-primary">Submit</button></div></div></form></div></div>
 
   <div id="portal-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">Sign in to your account</h2><p>Welcome back! Please enter your details to continue.</p><form><div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input" required></div><div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" required></div><div class="form-group"><label class="form-label">Select Your Role</label><select class="form-select" required><option value="">Select Role</option><option value="mentor">Mentor</option><option value="mentee">Mentee</option><option value="student">Student</option><option value="teacher">Teacher</option><option value="tutor">Tutor</option><option value="tutee">Tutee</option><option value="admin">Admin</option></select></div><div class="form-group"><a href="#">Forgot your password?</a></div><div class="form-group"><p>Don't have an account? <a href="#" id="signup-from-login">Sign Up</a></p></div><div class="form-actions"><button type="submit" class="btn btn-primary">Sign in</button></div><div class="form-group"><p>By signing in, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p></div></form></div></div>
 
@@ -1425,7 +1074,7 @@
 
   <div id="signup-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">Create Your Account</h2><form id="signup-form"><div id="signup-error" class="error-message" style="display:none;"></div><div id="signup-success" class="success-message" style="display:none;"></div><div class="form-grid"><div class="form-group"><label class="form-label">First Name</label><input type="text" id="signup-firstname" class="form-input" required></div><div class="form-group"><label class="form-label">Last Name</label><input type="text" id="signup-lastname" class="form-input" required></div><div class="form-group"><label class="form-label">Email Address</label><input type="email" id="signup-email" class="form-input" required></div><div class="form-group"><label class="form-label">Phone Number</label><input type="tel" id="signup-phone" class="form-input"></div><div class="form-group"><label class="form-label">Password</label><input type="password" id="signup-password" class="form-input" required></div><div class="form-group"><label class="form-label">Confirm Password</label><input type="password" id="signup-confirm-password" class="form-input" required></div></div><div class="form-group"><label class="form-label">Account Type</label><select id="signup-role" class="form-select" required><option value="">Select Account Type</option><option value="student">Student</option><option value="instructor">Instructor</option><option value="professional">Professional</option></select></div><div class="form-group"><label><input type="checkbox" id="signup-terms" required> I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label></div><div class="form-actions"><button type="submit" id="signup-submit-btn" class="btn btn-primary">Create Account</button></div><div class="form-group"><p>Already have an account? <a href="#" id="login-from-signup">Login</a></p></div></form></div></div>
 
-  <div id="donation-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">Empower Change, One Gift at a Time</h2><p>Your donation today fuels opportunity, connects talent, and transforms lives.</p><p>At Ubuntu Professional Institute, we believe education should break barriers—not just for a few, but for all.</p><form id="donation-form"><div class="form-step active" id="donation-step-1"><h3>Secured Donation</h3><div class="form-group"><label>Choose Your Donation Type</label><div style="display:flex;gap:15px;"><label><input type="radio" name="donation-type" value="one-time" checked> One-time</label><label><input type="radio" name="donation-type" value="monthly"> Monthly</label></div></div><div class="donation-options"><div class="donation-option selected" data-amount="250"><div class="donation-amount">$250</div></div><div class="donation-option" data-amount="100"><div class="donation-amount">$100</div></div><div class="donation-option" data-amount="50"><div class="donation-amount">$50</div></div><div class="donation-option" data-amount="25"><div class="donation-amount">$25</div></div><div class="donation-option custom-amount" id="custom-amount-option"><div class="donation-amount">Custom Amount</div></div></div><div class="form-group" id="custom-amount-input" style="display:none;"><label class="form-label">Enter Custom Amount</label><input type="number" class="form-input" placeholder="$"></div><div class="form-actions"><div></div><button type="button" class="btn btn-primary next-step">Next</button></div></div><div class="form-step" id="donation-step-2"><h3>Choose Payment Method</h3><div class="payment-methods"><div class="payment-method selected" data-method="credit-card"><i class="fas fa-credit-card"></i><div>Credit Card</div></div><div class="payment-method" data-method="mobile-money"><i class="fas fa-mobile-alt"></i><div>Mobile Money</div></div><div class="payment-method" data-method="bank-transfer"><i class="fas fa-university"></i><div>Bank Transfer</div></div></div><div class="form-actions"><button type="button" class="btn btn-outline prev-step">Back</button><button type="button" class="btn btn-primary next-step">Next</button></div></div><div class="form-step" id="donation-step-3"><h3>Review Your Donation</h3><div class="form-group"><p><strong>Donation Type:</strong> <span id="review-type">One-time</span></p><p><strong>Amount:</strong> $<span id="review-amount">250</span></p><p><strong>Payment Method:</strong> <span id="review-method">Credit Card</span></p></div><div class="form-actions"><button type="button" class="btn btn-outline prev-step">Back</button><button type="button" class="btn btn-primary next-step">Confirm</button></div></div><div class="form-step" id="donation-step-4"><div style="text-align:center;padding:30px 0;"><i class="fas fa-check-circle" style="font-size:60px;color:#10b981;"></i><h3>Thank You for Your Donation!</h3><p>Your support helps us transform lives through education.</p><p>A confirmation email has been sent to your email address.</p></div><div class="form-actions"><button type="button" class="btn btn-primary" id="close-donation">Close</button></div></div></form></div></div>
+  <div id="donation-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">Empower Change, One Gift at a Time</h2><p>Your donation today fuels opportunity, connects talent, and transforms lives.</p><form id="donation-form"><div class="form-step active" id="donation-step-1"><h3>Secured Donation</h3><div class="form-group"><label>Choose Your Donation Type</label><div style="display:flex;gap:15px;"><label><input type="radio" name="donation-type" value="one-time" checked> One-time</label><label><input type="radio" name="donation-type" value="monthly"> Monthly</label></div></div><div class="donation-options"><div class="donation-option selected" data-amount="250"><div class="donation-amount">$250</div></div><div class="donation-option" data-amount="100"><div class="donation-amount">$100</div></div><div class="donation-option" data-amount="50"><div class="donation-amount">$50</div></div><div class="donation-option" data-amount="25"><div class="donation-amount">$25</div></div><div class="donation-option custom-amount" id="custom-amount-option"><div class="donation-amount">Custom Amount</div></div></div><div class="form-group" id="custom-amount-input" style="display:none;"><label class="form-label">Enter Custom Amount</label><input type="number" class="form-input" placeholder="$"></div><div class="form-actions"><div></div><button type="button" class="btn btn-primary next-step">Next</button></div></div><div class="form-step" id="donation-step-2"><h3>Choose Payment Method</h3><div class="payment-methods"><div class="payment-method selected" data-method="credit-card"><i class="fas fa-credit-card"></i><div>Credit Card</div></div><div class="payment-method" data-method="mobile-money"><i class="fas fa-mobile-alt"></i><div>Mobile Money</div></div><div class="payment-method" data-method="bank-transfer"><i class="fas fa-university"></i><div>Bank Transfer</div></div></div><div class="form-actions"><button type="button" class="btn btn-outline prev-step">Back</button><button type="button" class="btn btn-primary next-step">Next</button></div></div><div class="form-step" id="donation-step-3"><h3>Review Your Donation</h3><div class="form-group"><p><strong>Donation Type:</strong> <span id="review-type">One-time</span></p><p><strong>Amount:</strong> $<span id="review-amount">250</span></p><p><strong>Payment Method:</strong> <span id="review-method">Credit Card</span></p></div><div class="form-actions"><button type="button" class="btn btn-outline prev-step">Back</button><button type="button" class="btn btn-primary next-step">Confirm</button></div></div><div class="form-step" id="donation-step-4"><div style="text-align:center;padding:30px 0;"><i class="fas fa-check-circle" style="font-size:60px;color:#10b981;"></i><h3>Thank You for Your Donation!</h3><p>Your support helps us transform lives through education.</p><p>A confirmation email has been sent to your email address.</p></div><div class="form-actions"><button type="button" class="btn btn-primary" id="close-donation">Close</button></div></div></form></div></div>
 
   <!-- ========== JAVASCRIPT ========== -->
   <script>
@@ -1456,10 +1105,8 @@
 
     // ---- Theme toggle ----
     if (dom.themeToggle) {
-      const saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' :
-        'light');
-      if (saved === 'dark') { dom.body.classList.add('dark-mode');
-        dom.themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; }
+      const saved = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (saved === 'dark') { dom.body.classList.add('dark-mode'); dom.themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; }
       dom.themeToggle.addEventListener('click', () => {
         dom.body.classList.toggle('dark-mode');
         const isDark = dom.body.classList.contains('dark-mode');
@@ -1473,17 +1120,14 @@
       dom.megaMenuTrigger.addEventListener('mouseenter', () => dom.megaMenu.classList.add('active'));
       dom.megaMenu.addEventListener('mouseleave', () => dom.megaMenu.classList.remove('active'));
       document.addEventListener('click', (e) => {
-        if (!dom.megaMenu.contains(e.target) && !dom.megaMenuTrigger.contains(e.target)) dom.megaMenu.classList.remove(
-        'active');
+        if (!dom.megaMenu.contains(e.target) && !dom.megaMenuTrigger.contains(e.target)) dom.megaMenu.classList.remove('active');
       });
     }
 
     // ---- Mobile menu ----
     if (dom.mobileMenuBtn && dom.mobileNav && dom.closeMobileMenu) {
-      dom.mobileMenuBtn.addEventListener('click', () => { dom.mobileNav.classList.add('active');
-        document.body.style.overflow = 'hidden'; });
-      dom.closeMobileMenu.addEventListener('click', () => { dom.mobileNav.classList.remove('active');
-        document.body.style.overflow = 'auto'; });
+      dom.mobileMenuBtn.addEventListener('click', () => { dom.mobileNav.classList.add('active'); document.body.style.overflow = 'hidden'; });
+      dom.closeMobileMenu.addEventListener('click', () => { dom.mobileNav.classList.remove('active'); document.body.style.overflow = 'auto'; });
     }
     document.querySelectorAll('.mobile-dropdown-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1499,23 +1143,18 @@
     const indicators = document.querySelectorAll('.carousel-indicator');
     const totalSlides = slides.length;
     let carouselInterval;
-
     function showSlide(index) {
       slides.forEach((s, i) => { s.classList.remove('active'); if (indicators[i]) indicators[i].classList.remove('active'); });
       if (slides[index]) { slides[index].classList.add('active'); }
       if (indicators[index]) { indicators[index].classList.add('active'); }
       currentSlide = index;
     }
-
     function nextSlide() { showSlide((currentSlide + 1) % totalSlides); }
-
     function startCarousel() { if (totalSlides > 0) carouselInterval = setInterval(nextSlide, 5000); }
-
     function stopCarousel() { clearInterval(carouselInterval); }
     startCarousel();
     const carouselEl = document.querySelector('.hero-carousel');
-    if (carouselEl) { carouselEl.addEventListener('mouseenter', stopCarousel);
-      carouselEl.addEventListener('mouseleave', startCarousel); }
+    if (carouselEl) { carouselEl.addEventListener('mouseenter', stopCarousel); carouselEl.addEventListener('mouseleave', startCarousel); }
     indicators.forEach((ind, i) => { ind.addEventListener('click', () => showSlide(i)); });
 
     // ---- Filters ----
@@ -1523,7 +1162,6 @@
     const certificateFilter = document.getElementById('certificate-filter');
     const durationFilter = document.getElementById('duration-filter');
     const levelFilter = document.getElementById('level-filter');
-
     function filterCoursesEnhanced() {
       const subj = subjectFilter ? subjectFilter.value : '';
       const cert = certificateFilter ? certificateFilter.value : '';
@@ -1534,8 +1172,7 @@
         const certificate = card.getAttribute('data-certificate') || '';
         const duration = card.getAttribute('data-duration') || '';
         const level = card.getAttribute('data-level') || '';
-        const matches = (subj === '' || category === subj) && (cert === '' || certificate === cert) && (dur === '' ||
-          duration === dur) && (lvl === '' || level === lvl);
+        const matches = (subj === '' || category === subj) && (cert === '' || certificate === cert) && (dur === '' || duration === dur) && (lvl === '' || level === lvl);
         card.style.display = matches ? 'block' : 'none';
       });
     }
@@ -1548,13 +1185,12 @@
     function downloadCalendar(year) {
       showToast(`📅 Downloading ${year} Course Calendar...`, 'success');
       setTimeout(() => {
-        const content =
-          `Ubuntu Professional Institute Course Calendar ${year}\n\nJanuary: ${year} Courses\nFebruary: ${year} Courses\n...\n\nThis calendar is updated annually from the admin dashboard.`;
+        const content = `Wuteve Global Academy Course Calendar ${year}\n\nJanuary: ${year} Courses\nFebruary: ${year} Courses\n...\n\nThis calendar is updated annually from the admin dashboard.`;
         const blob = new Blob([content], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `Ubuntu_Calendar_${year}.txt`;
+        a.download = `Wuteve_Calendar_${year}.txt`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -1571,12 +1207,11 @@
         position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
         background: ${bgColor}; color: white; padding: 14px 28px; border-radius: 50px;
         z-index: 2000; animation: fadeInUp 0.3s ease; font-weight: 600; font-size: 14px;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.12); max-width: 90%; text-align: center;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.10); max-width: 90%; text-align: center;
       `;
       toast.textContent = message;
       document.body.appendChild(toast);
-      setTimeout(() => { toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 300); }, 3200);
+      setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3200);
     }
 
     // ---- Modals ----
@@ -1597,48 +1232,30 @@
           e.preventDefault();
           const modal = document.getElementById(modalTriggers[id]);
           if (modal) { modal.style.display = 'block'; }
-          if (dom.mobileNav) { dom.mobileNav.classList.remove('active');
-            document.body.style.overflow = 'auto'; }
+          if (dom.mobileNav) { dom.mobileNav.classList.remove('active'); document.body.style.overflow = 'auto'; }
         });
       }
     });
     document.querySelectorAll('#login-btn, #signup-btn').forEach(el => {
-      if (el) el.addEventListener('click', function(e) { e.preventDefault(); document.getElementById(this.id ===
-          'login-btn' ? 'login-modal' : 'signup-modal').style.display = 'block'; });
+      if (el) el.addEventListener('click', function(e) { e.preventDefault(); document.getElementById(this.id === 'login-btn' ? 'login-modal' : 'signup-modal').style.display = 'block'; });
     });
-    document.getElementById('signup-from-login')?.addEventListener('click', function(e) { e.preventDefault();
-      document.getElementById('portal-modal').style.display = 'none';
-      document.getElementById('signup-modal').style.display = 'block'; });
-    document.getElementById('signup-from-login-btn')?.addEventListener('click', function(e) { e.preventDefault();
-      document.getElementById('login-modal').style.display = 'none';
-      document.getElementById('signup-modal').style.display = 'block'; });
-    document.getElementById('login-from-signup')?.addEventListener('click', function(e) { e.preventDefault();
-      document.getElementById('signup-modal').style.display = 'none';
-      document.getElementById('login-modal').style.display = 'block'; });
+    document.getElementById('signup-from-login')?.addEventListener('click', function(e) { e.preventDefault(); document.getElementById('portal-modal').style.display = 'none'; document.getElementById('signup-modal').style.display = 'block'; });
+    document.getElementById('signup-from-login-btn')?.addEventListener('click', function(e) { e.preventDefault(); document.getElementById('login-modal').style.display = 'none'; document.getElementById('signup-modal').style.display = 'block'; });
+    document.getElementById('login-from-signup')?.addEventListener('click', function(e) { e.preventDefault(); document.getElementById('signup-modal').style.display = 'none'; document.getElementById('login-modal').style.display = 'block'; });
 
     dom.closeButtons.forEach(btn => btn.addEventListener('click', () => dom.modals.forEach(m => { m.style.display = 'none'; })));
     window.addEventListener('click', (e) => dom.modals.forEach(m => { if (e.target === m) m.style.display = 'none'; }));
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') dom.modals.forEach(m => { if (m.style.display ===
-          'block') m.style.display = 'none'; }); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') dom.modals.forEach(m => { if (m.style.display === 'block') m.style.display = 'none'; }); });
 
     // ---- Application form ----
     const appForm = document.getElementById('application-form');
     if (appForm) {
       const appSteps = appForm.querySelectorAll('.form-step');
       let currentAppStep = 0;
-
-      function showAppStep(i) { appSteps.forEach(s => s.classList.remove('active'));
-        appSteps[i].classList.add('active');
-        currentAppStep = i; }
-      appForm.querySelectorAll('.next-step').forEach(btn => btn.addEventListener('click', () => { if (currentAppStep <
-          appSteps.length - 1) showAppStep(currentAppStep + 1); }));
-      appForm.querySelectorAll('.prev-step').forEach(btn => btn.addEventListener('click', () => { if (currentAppStep > 0)
-          showAppStep(currentAppStep - 1); }));
-      appForm.addEventListener('submit', (e) => { e.preventDefault();
-        alert('Application submitted successfully!');
-        document.getElementById('application-form-modal').style.display = 'none';
-        appForm.reset();
-        showAppStep(0); });
+      function showAppStep(i) { appSteps.forEach(s => s.classList.remove('active')); appSteps[i].classList.add('active'); currentAppStep = i; }
+      appForm.querySelectorAll('.next-step').forEach(btn => btn.addEventListener('click', () => { if (currentAppStep < appSteps.length - 1) showAppStep(currentAppStep + 1); }));
+      appForm.querySelectorAll('.prev-step').forEach(btn => btn.addEventListener('click', () => { if (currentAppStep > 0) showAppStep(currentAppStep - 1); }));
+      appForm.addEventListener('submit', (e) => { e.preventDefault(); alert('Application submitted successfully!'); document.getElementById('application-form-modal').style.display = 'none'; appForm.reset(); showAppStep(0); });
     }
 
     // ---- Donation form ----
@@ -1646,10 +1263,7 @@
     if (donForm) {
       const donSteps = donForm.querySelectorAll('.form-step');
       let currentDonStep = 0;
-
-      function showDonStep(i) { donSteps.forEach(s => s.classList.remove('active'));
-        donSteps[i].classList.add('active');
-        currentDonStep = i; }
+      function showDonStep(i) { donSteps.forEach(s => s.classList.remove('active')); donSteps[i].classList.add('active'); currentDonStep = i; }
       donForm.querySelectorAll('.next-step').forEach(btn => btn.addEventListener('click', () => {
         if (currentDonStep < donSteps.length - 1) {
           showDonStep(currentDonStep + 1);
@@ -1658,42 +1272,29 @@
             const amt = document.querySelector('.donation-option.selected');
             const method = document.querySelector('.payment-method.selected');
             if (type && amt && method) {
-              document.getElementById('review-type').textContent = type.value === 'one-time' ? 'One-time' :
-                'Monthly';
-              document.getElementById('review-amount').textContent = amt.getAttribute('data-amount') ||
-                'Custom';
-              document.getElementById('review-method').textContent = method.getAttribute('data-method')
-                .replace('-', ' ').toUpperCase();
+              document.getElementById('review-type').textContent = type.value === 'one-time' ? 'One-time' : 'Monthly';
+              document.getElementById('review-amount').textContent = amt.getAttribute('data-amount') || 'Custom';
+              document.getElementById('review-method').textContent = method.getAttribute('data-method').replace('-', ' ').toUpperCase();
             }
           }
         }
       }));
-      donForm.querySelectorAll('.prev-step').forEach(btn => btn.addEventListener('click', () => { if (currentDonStep > 0)
-          showDonStep(currentDonStep - 1); }));
-      document.getElementById('close-donation')?.addEventListener('click', () => {
-        document.getElementById('donation-modal').style.display = 'none';
-        donForm.reset();
-        showDonStep(0);
-      });
+      donForm.querySelectorAll('.prev-step').forEach(btn => btn.addEventListener('click', () => { if (currentDonStep > 0) showDonStep(currentDonStep - 1); }));
+      document.getElementById('close-donation')?.addEventListener('click', () => { document.getElementById('donation-modal').style.display = 'none'; donForm.reset(); showDonStep(0); });
       document.querySelectorAll('.donation-option').forEach(opt => {
         opt.addEventListener('click', function() {
           document.querySelectorAll('.donation-option').forEach(o => o.classList.remove('selected'));
           this.classList.add('selected');
-          document.getElementById('custom-amount-input').style.display = this.classList.contains(
-            'custom-amount') ? 'block' : 'none';
+          document.getElementById('custom-amount-input').style.display = this.classList.contains('custom-amount') ? 'block' : 'none';
         });
       });
-      document.querySelectorAll('.payment-method').forEach(m => m.addEventListener('click', function() {
-        document.querySelectorAll('.payment-method').forEach(p => p.classList.remove('selected'));
-        this.classList.add('selected');
-      }));
+      document.querySelectorAll('.payment-method').forEach(m => m.addEventListener('click', function() { document.querySelectorAll('.payment-method').forEach(p => p.classList.remove('selected')); this.classList.add('selected'); }));
     }
 
     // ---- Animated Stats ----
     function animateCounter(element, target, duration = 2000) {
       const start = 0;
       const startTime = performance.now();
-
       function update(currentTime) {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
@@ -1726,19 +1327,13 @@
 
     // ---- API Integration (preserved) ----
     const API_BASE_URL = 'https://the-box-lms-production.up.railway.app/api/v1';
-
     function setAuthToken(token, refreshToken, user) {
       localStorage.setItem('accessToken', token);
       localStorage.setItem('refreshToken', refreshToken);
       localStorage.setItem('user', JSON.stringify(user));
     }
-
-    function clearAuth() { localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('user'); }
-
+    function clearAuth() { localStorage.removeItem('accessToken'); localStorage.removeItem('refreshToken'); localStorage.removeItem('user'); }
     function isLoggedIn() { return localStorage.getItem('accessToken') !== null; }
-
     function updateAuthUI() {
       const loginBtn = document.getElementById('login-btn');
       const signupBtn = document.getElementById('signup-btn');
@@ -1748,16 +1343,10 @@
         const headerActions = document.querySelector('.header-actions');
         if (headerActions && !document.getElementById('logout-btn')) {
           const logoutBtn = document.createElement('a');
-          logoutBtn.id = 'logout-btn';
-          logoutBtn.href = '#';
-          logoutBtn.className = 'btn btn-outline';
+          logoutBtn.id = 'logout-btn'; logoutBtn.href = '#'; logoutBtn.className = 'btn btn-outline';
           logoutBtn.textContent = 'Logout';
           logoutBtn.style.marginLeft = '10px';
-          logoutBtn.addEventListener('click', function(e) { e.preventDefault();
-            clearAuth();
-            updateAuthUI();
-            showToast('Logged out', 'info');
-            window.location.reload(); });
+          logoutBtn.addEventListener('click', function(e) { e.preventDefault(); clearAuth(); updateAuthUI(); showToast('Logged out', 'info'); window.location.reload(); });
           headerActions.appendChild(logoutBtn);
         }
       } else {
@@ -1767,11 +1356,9 @@
         if (logoutBtn) logoutBtn.remove();
       }
     }
-
     async function handleLogin(email, password) {
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
       const data = await response.json();
@@ -1786,11 +1373,9 @@
         return true;
       }
     }
-
     async function handleRegister(userData) {
       const response = await fetch(`${API_BASE_URL}/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData)
       });
       const data = await response.json();
@@ -1813,16 +1398,12 @@
         const password = document.getElementById('login-password').value;
         const errorDiv = document.getElementById('login-error');
         const submitBtn = document.getElementById('login-submit-btn');
-        if (!email || !password) { errorDiv.style.display = 'block';
-          errorDiv.textContent = 'Please fill all fields'; return; }
+        if (!email || !password) { errorDiv.style.display = 'block'; errorDiv.textContent = 'Please fill all fields'; return; }
         errorDiv.style.display = 'none';
         const orig = submitBtn.textContent;
-        submitBtn.textContent = 'Logging in...';
-        submitBtn.disabled = true;
-        try { await handleLogin(email, password); } catch (err) { errorDiv.style.display = 'block';
-          errorDiv.textContent = err.message; }
-        submitBtn.textContent = orig;
-        submitBtn.disabled = false;
+        submitBtn.textContent = 'Logging in...'; submitBtn.disabled = true;
+        try { await handleLogin(email, password); } catch (err) { errorDiv.style.display = 'block'; errorDiv.textContent = err.message; }
+        submitBtn.textContent = orig; submitBtn.disabled = false;
       });
     }
 
@@ -1841,65 +1422,34 @@
         const errorDiv = document.getElementById('signup-error');
         const successDiv = document.getElementById('signup-success');
         if (!firstName || !lastName || !email || !password || !role) {
-          errorDiv.style.display = 'block';
-          errorDiv.textContent = 'Please fill all required fields';
-          return;
+          errorDiv.style.display = 'block'; errorDiv.textContent = 'Please fill all required fields'; return;
         }
-        if (password !== confirmPassword) { errorDiv.style.display = 'block';
-          errorDiv.textContent = 'Passwords do not match'; return; }
-        if (password.length < 6) { errorDiv.style.display = 'block';
-          errorDiv.textContent = 'Password must be at least 6 characters'; return; }
-        if (!terms) { errorDiv.style.display = 'block';
-          errorDiv.textContent = 'You must agree to Terms'; return; }
-        errorDiv.style.display = 'none';
-        successDiv.style.display = 'none';
+        if (password !== confirmPassword) { errorDiv.style.display = 'block'; errorDiv.textContent = 'Passwords do not match'; return; }
+        if (password.length < 6) { errorDiv.style.display = 'block'; errorDiv.textContent = 'Password must be at least 6 characters'; return; }
+        if (!terms) { errorDiv.style.display = 'block'; errorDiv.textContent = 'You must agree to Terms'; return; }
+        errorDiv.style.display = 'none'; successDiv.style.display = 'none';
         const submitBtn = document.getElementById('signup-submit-btn');
         const orig = submitBtn.textContent;
-        submitBtn.textContent = 'Creating...';
-        submitBtn.disabled = true;
+        submitBtn.textContent = 'Creating...'; submitBtn.disabled = true;
         try {
-          await handleRegister({ firstName, lastName, email, phone, password, role: role === 'student' ?
-              'student' : 'student' });
-          successDiv.style.display = 'block';
-          successDiv.textContent = 'Account created!';
+          await handleRegister({ firstName, lastName, email, phone, password, role: role === 'student' ? 'student' : 'student' });
+          successDiv.style.display = 'block'; successDiv.textContent = 'Account created!';
           setTimeout(() => window.location.href = '/', 1500);
-        } catch (err) { errorDiv.style.display = 'block';
-          errorDiv.textContent = err.message; }
-        submitBtn.textContent = orig;
-        submitBtn.disabled = false;
+        } catch (err) { errorDiv.style.display = 'block'; errorDiv.textContent = err.message; }
+        submitBtn.textContent = orig; submitBtn.disabled = false;
       });
     }
     updateAuthUI();
 
     // ---- Fade-in for cards ----
-    document.querySelectorAll('.trending-card, .feature-card, .course-card, .tier-card, .category-card').forEach((el, i) => {
+    document.querySelectorAll('.trending-card, .feature-card, .course-card, .tier-card, .category-card, .partner-card').forEach((el, i) => {
       el.style.opacity = '0';
       el.style.animation = `fadeInUp 0.6s ease ${i * 0.06}s forwards`;
     });
   </script>
   <!-- Structured Data -->
   <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "EducationalOrganization",
-      "name": "Ubuntu Professional Institute",
-      "description": "Best online and offline courses with blockchain-verified certificates. AI-powered learning platform.",
-      "url": "https://ubuntu.edu.lr",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Monrovia",
-        "addressCountry": "Liberia"
-      },
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "telephone": "+231886590302",
-        "contactType": "customer service"
-      }
-    }
+  {"@context":"https://schema.org","@type":"EducationalOrganization","name":"Wuteve Global Academy","description":"Best online and offline courses with blockchain-verified certificates. AI-powered learning platform.","url":"https://wuteve.edu","address":{"@type":"PostalAddress","addressLocality":"Monrovia","addressCountry":"Liberia"},"contactPoint":{"@type":"ContactPoint","telephone":"+231886590302","contactType":"customer service"}}
   </script>
 </body>
 </html>
-
-
-
-

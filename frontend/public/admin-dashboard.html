@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard · Ubuntu Professional Institute</title>
+    <title>Admin Dashboard · Wuteve Global Academy</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -50,7 +50,7 @@
         body {
             font-family: 'Inter', sans-serif;
             color: var(--text);
-            background: linear-gradient(135deg, #1a3a6b 0%, #2a1a5e 100%);
+            background: linear-gradient(135deg, #0f2b5e 0%, #1a0a3a 100%);
             min-height: 100vh;
             line-height: 1.6;
             background-attachment: fixed;
@@ -839,7 +839,7 @@
         <div class="header-content">
             <div class="header-left">
                 <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle sidebar">☰</button>
-                <a href="/" class="logo">Ubuntu <span>Professional</span></a>
+                <a href="/" class="logo">Wuteve <span>Global Academy</span></a>
                 <span class="admin-badge">Admin</span>
             </div>
 
@@ -922,7 +922,7 @@
         //  MOCK DATA (preserved + extended)
         // ============================================================
         let adminData = {
-            user: { firstName: 'Admin', lastName: 'User', email: 'admin@ubuntu.edu', role: 'admin' },
+            user: { firstName: 'Admin', lastName: 'User', email: 'admin@wuteve.edu', role: 'admin' },
             stats: {
                 totalUsers: 15234,
                 totalStudents: 14892,
@@ -1419,8 +1419,8 @@
                 </div>
                 <div class="table-container glass-premium">
                     <h3 style="margin-bottom:20px;">System Configuration</h3>
-                    <div class="form-group"><label>Site Name</label><input type="text" value="Ubuntu Professional Institute" /></div>
-                    <div class="form-group"><label>Contact Email</label><input type="email" value="admin@ubuntu.edu" /></div>
+                    <div class="form-group"><label>Site Name</label><input type="text" value="Wuteve Global Academy" /></div>
+                    <div class="form-group"><label>Contact Email</label><input type="email" value="admin@wuteve.edu" /></div>
                     <div class="form-group"><label>Default Language</label><select><option>English</option><option>Spanish</option><option>French</option></select></div>
                     <div class="form-group"><label>Maintenance Message</label><textarea rows="3" placeholder="We'll be back soon..."></textarea></div>
                     <button class="btn-primary" onclick="showToast('Settings saved!','success')">Save Changes</button>
