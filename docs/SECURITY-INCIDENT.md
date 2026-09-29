@@ -1,8 +1,10 @@
 # Security incident: credentials committed to a public repository
 
-**Status:** contained except for one step that only the repository owner can perform.
+**Status:** resolved. The exposed credential has been rotated, and the old one is confirmed
+rejected by the cluster.
 **Date of discovery:** 2026-09-29
 **Exposure window:** 2026-07-03 to 2026-09-29 (approximately 12 weeks)
+**Password rotated and verified:** 2026-09-29
 
 ## What happened
 
@@ -52,14 +54,29 @@ local development against `wuteve_dev`.
    appears in exactly one place: `054c489:backend/.env`. Every other occurrence of
    a `mongodb+srv://` URI in the repository is a placeholder in
    `README.md`, `docs/DEPLOYMENT.md` and `scripts/init-env.js`.
-4. The build gate and the 166-check smoke suite pass with the rotated secrets.
+4. The Atlas password for `theboxedulr_db_user` was rotated, and the rotation was
+   verified rather than assumed: connecting with the credentials currently in
+   `backend/.env` succeeds, while connecting with the credentials that were
+   published is refused with an authentication error. The configured database
+   name (`wuteve_dev`) was preserved through the change.
+5. The build gate and the 166-check smoke suite pass against the cluster with the
+   new credentials.
+6. The published commit was removed from `origin/main` by force-push, and a local
+   ref (`backup/origin-main-pre-purge`) retains the previous remote state.
+
+   This step is **not** a security control, and it is recorded here so nobody later
+   mistakes it for one. GitHub continued to serve the removed commit after the
+   force-push — the commit page, the blob page, and `raw.githubusercontent.com` all
+   returned the file, with no authentication. Removing a commit from a branch does
+   not remove it from the service. Only the password rotation made those URLs
+   worthless.
 
 ## What remains
 
-### 1. Rotate the Atlas database password — required
+### 1. Rotate the Atlas database password — done
 
-This is the only step that actually ends the exposure, and it can only be done
-from the Atlas console:
+The password has been rotated and the old one verified as rejected. The steps,
+kept for the next person who has to do this:
 
 1. Atlas → **Database Access** → user `theboxedulr_db_user` → **Edit** →
    **Autogenerate** a new password.
@@ -67,33 +84,22 @@ from the Atlas console:
    databases and nothing else, and should not hold any Atlas administrative role.
 3. Atlas → **Network Access**. If any entry is `0.0.0.0/0`, restrict it.
 4. Review the cluster for activity that is not yours — unexpected collections,
-   documents, database users or API keys. Assume the data was readable.
+   documents, database users or API keys. Assume the data was readable during the
+   exposure window.
 
-Then update `MONGODB_URI` in `backend/.env` and in `backend/.env.backup`, or
-delete the backup file (see below).
+**Still outstanding from this step:** the review of the cluster's privileges,
+network access and contents. Rotation stops the credential working; it does not
+tell you whether anyone used it. The exposure window was about twelve weeks, so
+that review is worth doing properly rather than skipping.
 
-### 2. Purge the commit from the remote — recommended
+### 2. Purge the commit from the remote — done, with a caveat
 
-Removing the commit from the remote's history does **not** un-publish the
-credentials: GitHub may continue serving unreferenced commits by SHA, and any fork
-or scraper keeps its own copy. It is hygiene, not the fix. Rotation is the fix.
-
-The leaked commit exists only on `origin/main`; the local `main` branch never
-contained it and already supersedes it. So the purge is a force-push, not a
-rewrite:
-
-```
-git fetch origin
-git branch backup/origin-main-pre-purge origin/main   # local safety net
-git push --force origin main
-```
-
-This drops `a9e8e7b` and `054c489` from the remote. Nothing of value is lost:
-`a9e8e7b` only rewrote the old `backend/server.js`, which has since been replaced
-by the current entry point, and `054c489` only added `backend/.env`.
-
-Afterwards, ask GitHub Support to remove cached views of the old commit if you
-want it gone from the web interface as well.
+Done by force-push. Note again that it changed nothing about the exposure:
+GitHub kept serving the commit, including over `raw.githubusercontent.com`. It is
+still worth asking GitHub Support to remove the cached views if you want the file
+gone from the web interface, but understand that anyone who fetched it in the
+preceding twelve weeks already has a copy. Rotation is the only real remedy, and
+it has been applied.
 
 ### 3. Decide whether the repository should stay public
 
