@@ -1,0 +1,464 @@
+/**
+ * Wuteve Global Academy — shared shell styles.
+ *
+ * The tokens below are copied from the landing page so that a utility page
+ * (sign-in, password reset, certificate verification) is visibly part of the
+ * same product rather than a page written on a different day. One stylesheet,
+ * shared by every page that is not one of the three big dashboards.
+ */
+
+:root {
+  --primary: #1a56db;
+  --primary-dark: #0f3b8c;
+  --primary-light: #3b82f6;
+  --gold: #d4a547;
+  --accent: #dc2626;
+  --success: #10b981;
+
+  --text: #1f2937;
+  --text-light: #6b7280;
+  --bg: #f4f6f9;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+  --shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+
+  --dark-bg: #0f172a;
+  --dark-surface: #1e293b;
+  --dark-text: #e2e8f0;
+  --dark-muted: #94a3b8;
+  --dark-border: #334155;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.dark-mode {
+  background: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+a {
+  color: var(--primary);
+}
+
+body.dark-mode a {
+  color: var(--primary-light);
+}
+
+/* ---------- Header ---------- */
+
+.wga-header {
+  padding: 22px 24px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1120px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.wga-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  font-weight: 800;
+  font-size: 16.5px;
+  letter-spacing: -0.2px;
+}
+
+.wga-brand i {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+}
+
+.wga-brand .accent {
+  color: var(--primary);
+}
+
+.wga-theme-toggle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: inherit;
+  cursor: pointer;
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+  transition: transform 0.2s ease;
+}
+
+body.dark-mode .wga-theme-toggle {
+  background: var(--dark-surface);
+  border-color: var(--dark-border);
+}
+
+.wga-theme-toggle:hover {
+  transform: scale(1.08);
+}
+
+/* ---------- Layout ---------- */
+
+.wga-main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 20px 24px 64px;
+  width: 100%;
+}
+
+.wga-narrow {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ---------- Card ---------- */
+
+.wga-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 36px 34px;
+  box-shadow: var(--shadow);
+}
+
+body.dark-mode .wga-card {
+  background: var(--dark-surface);
+  border-color: var(--dark-border);
+  box-shadow: none;
+}
+
+.wga-card h1 {
+  font-size: 23px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  margin-bottom: 10px;
+}
+
+.wga-card > p {
+  color: var(--text-light);
+  font-size: 15px;
+  margin-bottom: 22px;
+}
+
+body.dark-mode .wga-card > p {
+  color: var(--dark-muted);
+}
+
+/* ---------- Forms ---------- */
+
+.wga-field {
+  margin-bottom: 18px;
+}
+
+.wga-label {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-bottom: 7px;
+  color: inherit;
+}
+
+.wga-input,
+.wga-select,
+.wga-textarea {
+  width: 100%;
+  padding: 13px 15px;
+  font-size: 15px;
+  font-family: inherit;
+  color: inherit;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+body.dark-mode .wga-input,
+body.dark-mode .wga-select,
+body.dark-mode .wga-textarea {
+  background: var(--dark-bg);
+  border-color: var(--dark-border);
+}
+
+.wga-input:focus,
+.wga-select:focus,
+.wga-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.16);
+}
+
+.wga-input::placeholder {
+  color: #9aa4b2;
+}
+
+.wga-hint {
+  font-size: 12.5px;
+  color: var(--text-light);
+  margin-top: 6px;
+}
+
+body.dark-mode .wga-hint {
+  color: var(--dark-muted);
+}
+
+/* ---------- Buttons ---------- */
+
+.wga-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 13px 26px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.wga-btn:disabled {
+  opacity: 0.62;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.wga-btn-primary {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(26, 86, 219, 0.24);
+}
+
+.wga-btn-primary:not(:disabled):hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.wga-btn-ghost {
+  background: transparent;
+  color: inherit;
+  border-color: var(--border);
+}
+
+body.dark-mode .wga-btn-ghost {
+  border-color: var(--dark-border);
+}
+
+.wga-btn-ghost:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+
+.wga-btn-block {
+  width: 100%;
+}
+
+/* ---------- Misc ---------- */
+
+.wga-alert {
+  display: none;
+  margin-bottom: 18px;
+}
+
+.wga-divider {
+  margin: 26px 0;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+  color: var(--text-light);
+  text-align: center;
+}
+
+body.dark-mode .wga-divider {
+  border-color: var(--dark-border);
+  color: var(--dark-muted);
+}
+
+.wga-muted {
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+body.dark-mode .wga-muted {
+  color: var(--dark-muted);
+}
+
+.wga-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.wga-grid-cards {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+/* ---------- Course card ---------- */
+
+.wga-course-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+body.dark-mode .wga-course-card {
+  background: var(--dark-surface);
+  border-color: var(--dark-border);
+}
+
+.wga-course-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(26, 86, 219, 0.4);
+  box-shadow: 0 14px 36px rgba(26, 86, 219, 0.12);
+}
+
+.wga-course-thumb {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  object-fit: cover;
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+  display: block;
+}
+
+.wga-course-thumb-fallback {
+  aspect-ratio: 16 / 9;
+  display: grid;
+  place-items: center;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 30px;
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+}
+
+.wga-course-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1;
+}
+
+.wga-course-title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.2px;
+}
+
+.wga-course-summary {
+  font-size: 13.5px;
+  color: var(--text-light);
+  flex: 1;
+}
+
+body.dark-mode .wga-course-summary {
+  color: var(--dark-muted);
+}
+
+.wga-course-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+body.dark-mode .wga-course-meta {
+  border-color: var(--dark-border);
+}
+
+.wga-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  background: rgba(26, 86, 219, 0.1);
+  color: var(--primary);
+}
+
+body.dark-mode .wga-pill {
+  background: rgba(59, 130, 246, 0.18);
+  color: var(--primary-light);
+}
+
+.wga-pill-free {
+  background: rgba(16, 185, 129, 0.13);
+  color: #047857;
+}
+
+body.dark-mode .wga-pill-free {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+}
+
+.wga-price {
+  font-weight: 800;
+  font-size: 15px;
+}
+
+/* ---------- Progress ---------- */
+
+.wga-progress {
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.25);
+  overflow: hidden;
+}
+
+.wga-progress span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  transition: width 0.4s ease;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 620px) {
+  .wga-card {
+    padding: 28px 22px;
+  }
+
+  .wga-main {
+    padding: 12px 16px 48px;
+  }
+
+  .wga-btn {
+    padding: 12px 20px;
+  }
+}

@@ -12,12 +12,30 @@ build/
 *.so
 
 # Environment
+#
+# `.env.backup` used to be committed: it is not matched by any of the narrower
+# patterns below, and it holds the MongoDB connection string (with its password)
+# and the JWT signing secret. Ignore every `.env*` file and re-admit only the
+# template, which contains placeholders and no real values.
 .env
-.env.local
-.env.production
+.env.*
+!.env.example
 
 # IDE
 .vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test and runtime artefacts
+coverage/
+*.tmp
 .idea/
 *.swp
 

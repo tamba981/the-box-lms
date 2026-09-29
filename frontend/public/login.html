@@ -551,7 +551,7 @@
                             <span>Remember me</span>
                         </label>
                         <div class="forgot-password">
-                            <a href="#">Forgot password?</a>
+                            <a href="/forgot-password.html">Forgot password?</a>
                         </div>
                     </div>
 
@@ -573,9 +573,12 @@
 
                     <div class="social-help-text">
                         <i class="fas fa-info-circle" style="color:var(--gold);"></i>
-                        <span>How does Google or LinkedIn sign‑in work?</span>
-                        <p>You'll sign in on Google or LinkedIn, then return here. New users will choose their role (Job Seeker, Employer, Student, or University) and complete a short profile. Existing users go straight to their dashboard.</p>
-                        <a href="#">Learn more →</a>
+                        <span>Google and LinkedIn sign-in are not available yet</span>
+                        <p>
+                            These buttons are here for a planned release. Use your email address and password
+                            below to sign in or create an account — every account created that way is a student
+                            account.
+                        </p>
                     </div>
                 </div>
 
@@ -622,15 +625,24 @@
                         </div>
                     </div>
 
-                    <!-- Enhanced Role Selection -->
+                    <!--
+                      Self-registration always creates a student account, and the
+                      API enforces that regardless of what is sent. The role
+                      selector that used to sit here offered "Job Seeker",
+                      "Employer" and "University" — none of which the platform
+                      has ever supported — and the value was passed straight to
+                      the server.
+                    -->
                     <div class="form-group">
-                        <label for="signup-role">I want to join as</label>
-                        <select id="signup-role" class="form-select">
-                            <option value="job-seeker">Job Seeker</option>
-                            <option value="employer">Employer</option>
-                            <option value="student" selected>Student</option>
-                            <option value="university">University</option>
-                        </select>
+                        <label>Account type</label>
+                        <div style="padding:13px 16px;border-radius:10px;border:1px dashed var(--border);font-size:14px;">
+                            <strong>Student</strong>
+                            <span style="opacity:.75;"> — enroll in courses and earn certificates</span>
+                        </div>
+                        <p style="font-size:12.5px;opacity:.72;margin-top:7px;line-height:1.5;">
+                            Instructor and administrator accounts are created by the academy.
+                            Get in touch if you would like to teach on Wuteve.
+                        </p>
                     </div>
 
                     <div class="form-group">
@@ -671,11 +683,16 @@
         </div>
     </div>
 
+    <script src="/assets/js/wga-api.js"></script>
+    <script src="/assets/js/wga-ui.js"></script>
     <script>
         // ============================================================
         //  API CONFIG & HELPERS
         // ============================================================
-        const API_BASE_URL = 'https://the-box-lms-production.up.railway.app/api/v1';
+        // The API base URL and all session handling now live in
+        // /assets/js/wga-api.js. It derives the host from the current origin,
+        // so there is nothing to update when the site moves — the previous
+        // version hardcoded a single deployment's hostname here.
 
         function showToast(message, type = 'info') {
             const toast = document.createElement('div');
@@ -818,33 +835,23 @@
             submitBtn.disabled = true;
 
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
+                const session = await WGA.login(email, password);
 
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.message || 'Login failed');
+                showToast('Signed in. Taking you to your dashboard...', 'success');
 
-                if (data.success && data.data) {
-                    const { accessToken, refreshToken, user } = data.data;
-                    localStorage.setItem('accessToken', accessToken);
-                    localStorage.setItem('refreshToken', refreshToken);
-                    localStorage.setItem('user', JSON.stringify(user));
+                setTimeout(() => {
+                    // Honour ?next= so a link to a protected page returns there
+                    // rather than dropping the visitor on a default dashboard.
+                    // Only same-site paths are accepted.
+                    const next = new URLSearchParams(window.location.search).get('next');
+                    const destination = next && next.startsWith('/') && !next.startsWith('//')
+                        ? next
+                        : WGA.homeForRole(session.user.role);
 
-                    showToast('Login successful! Redirecting...', 'success');
-
-                    setTimeout(() => {
-                        const role = user.role || 'student';
-                        if (role === 'student') window.location.href = '/student-dashboard.html';
-                        else if (role === 'instructor') window.location.href = '/instructor-dashboard.html';
-                        else if (role === 'admin') window.location.href = '/admin-dashboard.html';
-                        else window.location.href = '/';
-                    }, 1500);
-                }
+                    window.location.href = destination;
+                }, 1100);
             } catch (error) {
-                showAlert('login-alert', error.message, 'error');
+                showAlert('login-alert', error.message || 'We could not sign you in.', 'error');
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
             }
@@ -862,7 +869,6 @@
             const phone = document.getElementById('signup-phone').value.trim();
             const password = document.getElementById('signup-password').value;
             const confirmPassword = document.getElementById('signup-confirm-password').value;
-            const role = document.getElementById('signup-role').value;
             const terms = document.getElementById('signup-terms').checked;
             const submitBtn = document.getElementById('signup-submit');
 
@@ -874,8 +880,10 @@
                 showAlert('signup-alert', 'Passwords do not match', 'error');
                 return;
             }
-            if (password.length < 6) {
-                showAlert('signup-alert', 'Password must be at least 6 characters', 'error');
+            // The server enforces this too; checked here so the visitor is told
+            // before a round trip.
+            if (password.length < 8 || !/[A-Za-z]/.test(password) || !/[0-9]/.test(password)) {
+                showAlert('signup-alert', 'Password must be at least 8 characters and include a letter and a number', 'error');
                 return;
             }
             if (!terms) {
@@ -888,36 +896,18 @@
             submitBtn.disabled = true;
 
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        firstName,
-                        lastName,
-                        email,
-                        phone,
-                        password,
-                        role: role === 'student' ? 'student' : role
-                    })
-                });
+                // No `role` is sent: every self-registered account is a student,
+                // and the server assigns the role rather than trusting the
+                // request.
+                await WGA.register({ firstName, lastName, email, phone, password });
 
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.message || 'Registration failed');
+                showToast('Account created. Welcome to Wuteve!', 'success');
 
-                if (data.success && data.data) {
-                    const { accessToken, refreshToken, user } = data.data;
-                    localStorage.setItem('accessToken', accessToken);
-                    localStorage.setItem('refreshToken', refreshToken);
-                    localStorage.setItem('user', JSON.stringify(user));
-
-                    showToast('Account created successfully! Redirecting...', 'success');
-
-                    setTimeout(() => {
-                        window.location.href = '/student-dashboard.html';
-                    }, 1500);
-                }
+                setTimeout(() => {
+                    window.location.href = '/student-dashboard.html';
+                }, 1100);
             } catch (error) {
-                showAlert('signup-alert', error.message, 'error');
+                showAlert('signup-alert', error.message || 'We could not create your account.', 'error');
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
             }
@@ -937,6 +927,50 @@
             `;
             document.head.appendChild(style);
         }
+
+        // ============================================================
+        //  ARRIVAL CONTEXT
+        // ============================================================
+        // Tell the visitor why they are here: they just reset a password, or
+        // they were bounced out of a page that needed a session, or the session
+        // expired while they were working.
+        (function handleArrivalContext() {
+            const params = new URLSearchParams(window.location.search);
+            const reason = params.get('reason');
+
+            if (params.get('reset') === '1') {
+                showAlert('login-alert', 'Your password has been reset. Sign in with your new password.', 'success');
+                setActiveTab('login');
+                return;
+            }
+
+            if (reason === 'session-expired') {
+                showAlert('login-alert', 'Your session ended for security reasons. Please sign in again.', 'info');
+                setActiveTab('login');
+                return;
+            }
+
+            if (reason === 'signin-required') {
+                showAlert('login-alert', 'Please sign in to open that page.', 'info');
+                setActiveTab('login');
+                return;
+            }
+
+            if (reason === 'signout') {
+                showToast('You have been signed out.', 'info');
+                setActiveTab('login');
+                return;
+            }
+
+            // Already signed in and not being sent anywhere specific? Go to the
+            // dashboard rather than showing a sign-in form.
+            if (WGA.isSignedIn() && !params.get('next')) {
+                const user = WGA.getUser();
+                if (user && user.role) {
+                    window.location.replace(WGA.homeForRole(user.role));
+                }
+            }
+        })();
 
         console.log('Wuteve Global Academy · Login/Signup page ready');
     </script>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course catalog · Wuteve Global Academy</title>
+  <meta name="description" content="Browse every course at Wuteve Global Academy. Filter by category, level and price." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/css/wga-shell.css" />
+  <style>
+    .catalog-head { padding: 26px 0 22px; }
+    .catalog-head h1 { font-size: 32px; font-weight: 900; letter-spacing: -0.8px; margin-bottom: 8px; }
+    .catalog-head p { color: var(--text-light); font-size: 15.5px; }
+    body.dark-mode .catalog-head p { color: var(--dark-muted); }
+
+    .filters {
+      display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+      padding: 16px; margin-bottom: 26px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    }
+    body.dark-mode .filters { background: var(--dark-surface); border-color: var(--dark-border); }
+    .filters .grow { flex: 1 1 240px; min-width: 200px; }
+    .filters select { flex: 0 1 170px; }
+    .filters .wga-input, .filters .wga-select { padding: 11px 13px; }
+
+    .results-bar {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 12px; margin-bottom: 16px; font-size: 14px; color: var(--text-light);
+    }
+    body.dark-mode .results-bar { color: var(--dark-muted); }
+
+    .pager { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 34px; }
+
+    .card-locked {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(15,23,42,.72); color: #fff; font-size: 11px;
+      padding: 4px 10px; border-radius: 999px; font-weight: 600;
+    }
+    .thumb-wrap { position: relative; }
+  </style>
+</head>
+<body>
+  <header class="wga-header">
+    <a class="wga-brand" href="/">
+      <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+      Wuteve <span class="accent">Global Academy</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a class="wga-btn wga-btn-ghost" id="dashboard-link" href="/login.html" style="padding:10px 18px;font-size:14px;">
+        <i class="fas fa-right-to-bracket" aria-hidden="true"></i> <span id="dashboard-label">Sign in</span>
+      </a>
+      <button class="wga-theme-toggle" data-theme-toggle type="button" aria-label="Toggle colour theme">🌙</button>
+    </div>
+  </header>
+
+  <main class="wga-main">
+    <div class="catalog-head">
+      <h1>Course catalog</h1>
+      <p>Every published course, taught by our instructors. Free courses start immediately.</p>
+    </div>
+
+    <form class="filters" id="filters">
+      <div class="grow">
+        <input class="wga-input" type="search" id="q" name="q" placeholder="Search courses, topics or instructors…"
+               autocomplete="off" aria-label="Search courses" />
+      </div>
+
+      <select class="wga-select" id="category" name="category" aria-label="Filter by category">
+        <option value="">All categories</option>
+      </select>
+
+      <select class="wga-select" id="level" name="level" aria-label="Filter by level">
+        <option value="">All levels</option>
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="advanced">Advanced</option>
+      </select>
+
+      <select class="wga-select" id="price" name="price" aria-label="Filter by price">
+        <option value="">Any price</option>
+        <option value="free">Free</option>
+        <option value="paid">Paid</option>
+      </select>
+
+      <select class="wga-select" id="sort" name="sort" aria-label="Sort results">
+        <option value="newest">Newest first</option>
+        <option value="popular">Most popular</option>
+        <option value="rating">Highest rated</option>
+        <option value="price_asc">Price: low to high</option>
+        <option value="price_desc">Price: high to low</option>
+        <option value="title">Title A–Z</option>
+      </select>
+    </form>
+
+    <div class="results-bar">
+      <span id="count">Loading courses…</span>
+      <button class="wga-btn wga-btn-ghost" type="button" id="clear" style="display:none;padding:8px 15px;font-size:13px;">
+        <i class="fas fa-xmark" aria-hidden="true"></i> Clear filters
+      </button>
+    </div>
+
+    <div class="wga-grid wga-grid-cards" id="results" aria-live="polite"></div>
+
+    <div class="pager" id="pager" style="display:none;">
+      <button class="wga-btn wga-btn-ghost" type="button" id="prev">
+        <i class="fas fa-chevron-left" aria-hidden="true"></i> Previous
+      </button>
+      <span id="page-label" class="wga-muted"></span>
+      <button class="wga-btn wga-btn-ghost" type="button" id="next">
+        Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
+      </button>
+    </div>
+  </main>
+
+  <script src="/assets/js/wga-api.js"></script>
+  <script src="/assets/js/wga-ui.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      WGAUI.initTheme();
+
+      var results = document.getElementById('results');
+      var count = document.getElementById('count');
+      var pager = document.getElementById('pager');
+      var pageLabel = document.getElementById('page-label');
+      var prev = document.getElementById('prev');
+      var next = document.getElementById('next');
+      var clearButton = document.getElementById('clear');
+
+      var state = { page: 1, limit: 12, totalPages: 1 };
+
+      /** Keep the URL in step with the filters, so a result set is shareable. */
+      function readFilters() {
+        var params = new URLSearchParams(window.location.search);
+        return {
+          q: params.get('q') || '',
+          category: params.get('category') || '',
+          level: params.get('level') || '',
+          price: params.get('price') || '',
+          sort: params.get('sort') || 'newest',
+          page: Math.max(1, parseInt(params.get('page'), 10) || 1)
+        };
+      }
+
+      function writeFilters(filters) {
+        var params = new URLSearchParams();
+        Object.keys(filters).forEach(function (key) {
+          var value = filters[key];
+          if (value && !(key === 'sort' && value === 'newest') && !(key === 'page' && value === 1)) {
+            params.set(key, value);
+          }
+        });
+
+        var query = params.toString();
+        window.history.replaceState({}, '', query ? '/courses.html?' + query : '/courses.html');
+      }
+
+      function applyFiltersToControls(filters) {
+        document.getElementById('q').value = filters.q;
+        document.getElementById('category').value = filters.category;
+        document.getElementById('level').value = filters.level;
+        document.getElementById('price').value = filters.price;
+        document.getElementById('sort').value = filters.sort;
+      }
+
+      function currentControls(page) {
+        var filters = readFilters();
+        filters.q = document.getElementById('q').value.trim();
+        filters.category = document.getElementById('category').value;
+        filters.level = document.getElementById('level').value;
+        filters.price = document.getElementById('price').value;
+        filters.sort = document.getElementById('sort').value;
+        filters.page = page || 1;
+        return filters;
+      }
+
+      function hasActiveFilters(filters) {
+        return Boolean(filters.q || filters.category || filters.level || filters.price);
+      }
+
+      function skeleton() {
+        var markup = '';
+        for (var index = 0; index < 6; index += 1) {
+          markup +=
+            '<div class="wga-course-card" style="pointer-events:none;">' +
+            '<div class="wga-course-thumb-fallback wga-skeleton"></div>' +
+            '<div class="wga-course-body">' +
+            '<div class="wga-skeleton" style="height:18px;width:80%;"></div>' +
+            '<div class="wga-skeleton" style="height:14px;width:100%;"></div>' +
+            '<div class="wga-skeleton" style="height:14px;width:60%;"></div>' +
+            '</div></div>';
+        }
+        results.innerHTML = markup;
+      }
+
+      function courseCard(course) {
+        var thumb = course.thumbnail
+          ? '<img class="wga-course-thumb" src="' + WGAUI.escapeHtml(course.thumbnail) + '" alt="" loading="lazy" />'
+          : '<div class="wga-course-thumb-fallback"><i class="fas fa-book-open" aria-hidden="true"></i></div>';
+
+        var priceMarkup = course.isFree
+          ? '<span class="wga-pill wga-pill-free">Free</span>'
+          : '<span class="wga-price">' + WGAUI.escapeHtml(course.priceLabel || WGAUI.formatMoney(course.priceCents, course.currency)) + '</span>';
+
+        var enrolledMarkup = course.isEnrolled
+          ? '<div style="margin-top:12px;">' +
+            '<div class="wga-progress"><span style="width:' + Math.max(0, Math.min(100, course.myProgress || 0)) + '%"></span></div>' +
+            '<p class="wga-hint" style="margin-top:6px;">You are enrolled · ' + (course.myProgress || 0) + '% complete</p>' +
+            '</div>'
+          : '';
+
+        return (
+          '<a class="wga-course-card" href="/course.html?course=' + encodeURIComponent(course.slug || course.id) + '">' +
+          '<div class="thumb-wrap">' + thumb +
+          '<span class="card-locked" style="background:rgba(15,23,42,.72);">' +
+          WGAUI.escapeHtml(course.level) + '</span></div>' +
+          '<div class="wga-course-body">' +
+          '<span class="wga-pill" style="align-self:flex-start;">' + WGAUI.escapeHtml(course.category) + '</span>' +
+          '<h2 class="wga-course-title">' + WGAUI.escapeHtml(course.title) + '</h2>' +
+          '<p class="wga-course-summary">' + WGAUI.escapeHtml(course.summary || '') + '</p>' +
+          enrolledMarkup +
+          '<div class="wga-course-meta">' +
+          '<span><i class="fas fa-user-tie" aria-hidden="true"></i> ' + WGAUI.escapeHtml(course.instructorName || 'Instructor') + '</span>' +
+          '<span>' + priceMarkup + '</span>' +
+          '</div>' +
+          '<div class="wga-course-meta" style="border-top:none;padding-top:0;">' +
+          '<span><i class="fas fa-play-circle" aria-hidden="true"></i> ' + (course.lessonCount || 0) + ' lessons</span>' +
+          '<span><i class="fas fa-users" aria-hidden="true"></i> ' + (course.enrolledCount || 0) + ' enrolled</span>' +
+          '</div>' +
+          '</div></a>'
+        );
+      }
+
+      function load(filters) {
+        skeleton();
+        count.textContent = 'Loading courses…';
+        pager.style.display = 'none';
+
+        WGA.get('/courses', {
+          query: {
+            q: filters.q,
+            category: filters.category,
+            level: filters.level,
+            price: filters.price,
+            sort: filters.sort,
+            page: filters.page,
+            limit: state.limit
+          }
+        })
+          .then(function (data) {
+            state.totalPages = data.pagination.totalPages;
+
+            if (!data.items.length) {
+              results.innerHTML = WGAUI.emptyState(
+                filters.q || filters.category || filters.level || filters.price
+                  ? 'No courses match those filters'
+                  : 'No courses are published yet',
+                filters.q || filters.category || filters.level || filters.price
+                  ? 'Try a different search term, or clear the filters.'
+                  : 'Please check back soon.'
+              );
+            } else {
+              results.innerHTML = data.items.map(courseCard).join('');
+            }
+
+            count.textContent =
+              data.pagination.total === 1
+                ? '1 course'
+                : data.pagination.total + ' courses';
+
+            clearButton.style.display = hasActiveFilters(filters) ? '' : 'none';
+
+            if (state.totalPages > 1) {
+              pager.style.display = '';
+              pageLabel.textContent = 'Page ' + data.pagination.page + ' of ' + data.pagination.totalPages;
+              prev.disabled = !data.pagination.hasPrevPage;
+              next.disabled = !data.pagination.hasNextPage;
+            }
+          })
+          .catch(function (error) {
+            results.innerHTML = WGAUI.emptyState('We could not load the catalog', error.message || 'Please try again.');
+            count.textContent = '';
+          });
+      }
+
+      function apply(page) {
+        var filters = currentControls(page);
+        writeFilters(filters);
+        load(filters);
+      }
+
+      // Category options come from the server, so the filter list can never
+      // drift from the courses that actually exist.
+      WGA.get('/courses/categories')
+        .then(function (data) {
+          var select = document.getElementById('category');
+          data.categories.forEach(function (category) {
+            var option = document.createElement('option');
+            option.value = category.name;
+            option.textContent = category.name + ' (' + category.count + ')';
+            select.appendChild(option);
+          });
+
+          var initial = readFilters();
+          applyFiltersToControls(initial);
+          apply(initial.page);
+        })
+        .catch(function () {
+          var initial = readFilters();
+          applyFiltersToControls(initial);
+          apply(initial.page);
+        });
+
+      document.getElementById('filters').addEventListener('submit', function (event) {
+        event.preventDefault();
+        apply(1);
+      });
+
+      var debounce = null;
+      document.getElementById('q').addEventListener('input', function () {
+        clearTimeout(debounce);
+        debounce = setTimeout(function () { apply(1); }, 380);
+      });
+
+      ['category', 'level', 'price', 'sort'].forEach(function (id) {
+        document.getElementById(id).addEventListener('change', function () { apply(1); });
+      });
+
+      clearButton.addEventListener('click', function () {
+        document.getElementById('q').value = '';
+        document.getElementById('category').value = '';
+        document.getElementById('level').value = '';
+        document.getElementById('price').value = '';
+        document.getElementById('sort').value = 'newest';
+        apply(1);
+      });
+
+      prev.addEventListener('click', function () {
+        if (state.totalPages > 1) apply(Math.max(1, parseInt(readFilters().page, 10) - 1));
+      });
+
+      next.addEventListener('click', function () {
+        var current = parseInt(readFilters().page, 10);
+        if (current < state.totalPages) apply(current + 1);
+      });
+
+      // Point the header button at the right place for whoever is reading.
+      if (WGA.isSignedIn()) {
+        var user = WGA.getUser();
+        document.getElementById('dashboard-link').href = WGA.homeForRole(user && user.role);
+        document.getElementById('dashboard-label').textContent = 'My dashboard';
+      }
+    })();
+  </script>
+</body>
+</html>

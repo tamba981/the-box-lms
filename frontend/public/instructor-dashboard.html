@@ -935,6 +935,15 @@
             }
         }
     </style>
+
+    <!--
+      The role guard confirms the session against the server before the page is
+      revealed. This replaces the previous check, which treated the presence of
+      any string in localStorage as proof of sign-in.
+    -->
+    <script src="/assets/js/wga-api.js"></script>
+    <script src="/assets/js/wga-ui.js"></script>
+    <script src="/assets/js/wga-guard.js" data-roles="instructor,admin"></script>
 </head>
 <body>
 
@@ -974,16 +983,23 @@
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> My Courses</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="create-course"><i class="fas fa-plus-circle"></i> Create Course</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="students"><i class="fas fa-users"></i> My Students</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="assignments"><i class="fas fa-tasks"></i> Assignments</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="quizzes"><i class="fas fa-question-circle"></i> Quizzes</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="live-classes"><i class="fas fa-video"></i> Live Classes</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="earnings"><i class="fas fa-chart-line"></i> Earnings</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="messages"><i class="fas fa-envelope"></i> Messages</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="profile"><i class="fas fa-user"></i> Profile</a></li>
             </ul>
             <div class="sidebar-footer">
-                <div class="sidebar-item"><a href="#" class="sidebar-link" data-page="analytics"><i class="fas fa-chart-pie"></i> Analytics</a></div>
-                <div class="sidebar-item"><a href="#" class="sidebar-link" data-page="settings"><i class="fas fa-cog"></i> Settings</a></div>
+                <!--
+                  Assignments, Quizzes, Analytics and Settings were removed.
+
+                  Assignments and Quizzes were showing fabricated submission
+                  counts, average scores and attempt numbers for work that cannot
+                  be set: the API has no assignment model, no submission, no
+                  grading and no quiz engine. Analytics and Settings had no page
+                  at all — they silently rendered the overview while the sidebar
+                  implied otherwise.
+                -->
+                <div class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> My Courses</a></div>
             </div>
         </aside>
 
@@ -1017,80 +1033,40 @@
 
     <script>
         // ============================================================
-        //  MOCK DATA (preserved + extended)
+        //  DATA LAYER
         // ============================================================
+        // Everything below is filled in by loadInstructorData() from the API.
+        //
+        // The views were written against a single `instructorData` object, which
+        // makes this straightforward: populate that object and every view becomes
+        // real without rewriting any of them.
+        //
+        // Removed along with the fixtures that used to sit here: assignments and
+        // quizzes. Neither exists in the API — there is no assignment model, no
+        // submission, no grading and no quiz engine — so those pages displayed
+        // fabricated submission counts and average scores for work that could not
+        // be set. They are gone rather than left looking functional.
+
         let instructorData = {
-            user: { id: 1, firstName: 'Sarah', lastName: 'Johnson', email: 'sarah@wuteve.edu', role: 'instructor',
-                bio: 'Expert in ML and AI with 10+ years of experience' },
+            user: {},
             stats: {
-                totalStudents: 3421,
-                totalCourses: 4,
-                publishedCourses: 3,
-                totalRevenue: 28450,
-                monthlyRevenue: 5620,
-                averageRating: 4.8,
-                completionRate: 78
+                totalStudents: 0,
+                totalCourses: 0,
+                publishedCourses: 0,
+                totalRevenue: 0,
+                monthlyRevenue: 0,
+                averageRating: 0,
+                completionRate: null
             },
-            courses: [
-                { id: 1, title: 'Machine Learning Fundamentals', description: 'Learn core ML concepts with hands-on projects.',
-                    thumbnail: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=400&h=160&fit=crop',
-                    students: 1234, status: 'published', price: 0, rating: 4.8, createdAt: '2025-01-10' },
-                { id: 2, title: 'Advanced Machine Learning',
-                    description: 'Deep dive into neural networks, deep learning, and advanced ML.',
-                    thumbnail: 'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=400&h=160&fit=crop',
-                    students: 567, status: 'published', price: 49, rating: 4.9, createdAt: '2025-02-01' },
-                { id: 3, title: 'Python for Data Science',
-                    description: 'Master Python programming for data analysis and visualization.',
-                    thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=160&fit=crop',
-                    students: 890, status: 'draft', price: 0, rating: 0, createdAt: '2025-02-15' }
-            ],
-            students: [
-                { id: 1, name: 'John Doe', email: 'john@example.com', courseId: 1,
-                courseTitle: 'Machine Learning Fundamentals', progress: 75, enrolledAt: '2025-01-15',
-                    lastActive: '2025-02-10' },
-                { id: 2, name: 'Jane Smith', email: 'jane@example.com', courseId: 1,
-                    courseTitle: 'Machine Learning Fundamentals', progress: 45, enrolledAt: '2025-01-20',
-                    lastActive: '2025-02-12' },
-                { id: 3, name: 'Mike Johnson', email: 'mike@example.com', courseId: 2,
-                    courseTitle: 'Advanced Machine Learning', progress: 30, enrolledAt: '2025-02-01',
-                    lastActive: '2025-02-11' },
-                { id: 4, name: 'Sarah Williams', email: 'sarah@example.com', courseId: 2,
-                    courseTitle: 'Advanced Machine Learning', progress: 60, enrolledAt: '2025-02-05',
-                    lastActive: '2025-02-13' },
-                { id: 5, name: 'David Brown', email: 'david@example.com', courseId: 1,
-                    courseTitle: 'Machine Learning Fundamentals', progress: 90, enrolledAt: '2025-01-10',
-                    lastActive: '2025-02-14' }
-            ],
-            assignments: [
-                { id: 1, courseId: 1, title: 'Linear Regression Project', dueDate: '2025-02-20', submissions: 45,
-                    totalStudents: 1234, status: 'active' },
-                { id: 2, courseId: 1, title: 'Classification Assignment', dueDate: '2025-02-28', submissions: 23,
-                    totalStudents: 1234, status: 'active' },
-                { id: 3, courseId: 2, title: 'Neural Network Implementation', dueDate: '2025-03-05', submissions: 12,
-                    totalStudents: 567, status: 'active' }
-            ],
-            quizzes: [
-                { id: 1, courseId: 1, title: 'ML Basics Quiz', questions: 10, avgScore: 78, attempts: 890,
-                    status: 'published' },
-                { id: 2, courseId: 1, title: 'Algorithms Quiz', questions: 15, avgScore: 72, attempts: 756,
-                    status: 'published' },
-                { id: 3, courseId: 2, title: 'Neural Networks Quiz', questions: 12, avgScore: 68, attempts: 234,
-                    status: 'draft' }
-            ],
-            liveClasses: [
-                { id: 1, courseId: 1, title: 'Introduction to ML', date: '2025-02-18T15:00:00', attendees: 342,
-                    recording: null },
-                { id: 2, courseId: 1, title: 'Model Evaluation', date: '2025-02-20T15:00:00', attendees: null,
-                    recording: null },
-                { id: 3, courseId: 2, title: 'Neural Networks Overview', date: '2025-02-22T16:00:00', attendees: null,
-                    recording: 'https://example.com/recording1' }
-            ],
-            messages: [
-                { id: 1, from: 'John Doe', message: 'I have a question about the assignment',
-                    date: '2025-02-14T10:30:00', read: false },
-                { id: 2, from: 'Jane Smith', message: 'When is the next live session?', date: '2025-02-13T15:20:00',
-                    read: true }
-            ]
+            revenue: { totalCents: 0, totalLabel: '—', monthlyCents: 0, monthlyLabel: '—', payments: 0, monthlyPayments: 0 },
+            courses: [],
+            studentCourses: [],
+            students: [],
+            liveClasses: [],
+            recordings: [],
+            messages: [],
+            notifications: [],
+            unread: { notifications: 0, messages: 0 }
         };
 
         let state = {
@@ -1098,23 +1074,154 @@
             charts: {}
         };
 
+        /** A gradient placeholder instead of a broken image when there is no thumbnail. */
+        function courseImageStyle(course) {
+            return course && course.thumbnail
+                ? `background-image:url('${course.thumbnail}')`
+                : 'background-image:linear-gradient(135deg,#1a3a6b 0%,#2a1a5e 100%)';
+        }
+
+        /**
+         * Load everything the instructor views need, in parallel.
+         *
+         * One request answers the overview; the rest fill in the pages that need
+         * a full list rather than a summary.
+         */
+        async function loadInstructorData() {
+            const [dashboard, students, sessions, past, threads, notifications] = await Promise.all([
+                WGA.get('/dashboard/instructor'),
+                WGA.get('/dashboard/instructor/students', { query: { limit: 100 } }),
+                WGA.get('/live-sessions', { query: { scope: 'all', limit: 50 } }),
+                WGA.get('/live-sessions', { query: { scope: 'past', limit: 20 } }),
+                WGA.get('/messages/threads', { query: { limit: 50 } }),
+                WGA.get('/notifications', { query: { limit: 20 } })
+            ]);
+
+            const stats = dashboard.stats || {};
+            const revenue = dashboard.revenue || {};
+
+            instructorData.user = dashboard.user || WGA.getUser() || {};
+
+            instructorData.stats = {
+                totalStudents: stats.students || 0,
+                totalCourses: stats.courses || 0,
+                publishedCourses: stats.published || 0,
+                drafts: stats.drafts || 0,
+                pending: stats.pending || 0,
+                // The API sums money in integer cents; this is the only place it
+                // becomes a decimal, and only for display arithmetic.
+                totalRevenue: (revenue.totalCents || 0) / 100,
+                monthlyRevenue: (revenue.monthlyCents || 0) / 100,
+                averageRating: stats.averageRating || 0,
+                ratingCount: stats.ratingCount || 0,
+                // null, not 0, when there are no students: 0% would read as
+                // "nobody finishes this course", which is a different claim.
+                completionRate: stats.completionRate === null || stats.completionRate === undefined
+                    ? null
+                    : stats.completionRate,
+                averageProgress: stats.averageProgress || 0
+            };
+
+            instructorData.revenue = revenue;
+
+            instructorData.courses = (dashboard.courses || []).map((course) => ({
+                id: String(course.id),
+                slug: course.slug,
+                title: course.title,
+                description: course.summary || '',
+                thumbnail: course.thumbnail || '',
+                students: course.enrolledCount || 0,
+                status: course.status,
+                price: (course.priceCents || 0) / 100,
+                priceLabel: course.priceLabel,
+                isFree: course.isFree,
+                rating: course.rating || 0,
+                lessonCount: course.lessonCount || 0,
+                createdAt: course.publishedAt || null
+            }));
+
+            instructorData.students = (students.items || []).map((student) => ({
+                id: student.id,
+                name: student.name,
+                email: student.email,
+                courseId: student.courseId,
+                courseTitle: student.courseTitle,
+                progress: student.progress,
+                status: student.status,
+                enrolledAt: student.enrolledAt,
+                lastActive: student.lastActive
+            }));
+
+            instructorData.studentCourses = students.courses || [];
+
+            instructorData.liveClasses = (sessions.items || []).map((session) => ({
+                id: String(session.id),
+                courseId: String(session.courseId || ''),
+                courseTitle: session.courseTitle || '',
+                title: session.title,
+                date: session.startTime,
+                endTime: session.endTime,
+                attendees: session.attendeeCount || 0,
+                status: session.status,
+                meetingLink: session.meetingLink || null,
+                recording: session.recordingUrl || null
+            }));
+
+            instructorData.recordings = (past.items || []).filter((session) => session.recordingUrl);
+
+            instructorData.messages = (threads.items || []).map((thread) => ({
+                id: String(thread.id),
+                from: thread.displayName || thread.title || 'Conversation',
+                message: thread.lastMessagePreview || 'No messages yet',
+                date: thread.lastMessageAt,
+                read: !(thread.unreadCount > 0)
+            }));
+
+            instructorData.notifications = (notifications.items || []).map((notification) => ({
+                id: String(notification.id),
+                title: notification.title,
+                message: notification.message,
+                createdAt: notification.createdAt,
+                read: Boolean(notification.read)
+            }));
+
+            instructorData.unread = {
+                notifications: notifications.unreadCount || 0,
+                messages: threads.unreadTotal || 0
+            };
+        }
+
         // ============================================================
         //  AUTH (preserved)
         // ============================================================
+        /** Open a course's public page. */
+        function openCourse(idOrSlug) {
+            if (!idOrSlug) return;
+            window.location.href = '/course.html?course=' + encodeURIComponent(idOrSlug);
+        }
+
+        /**
+         * The session and the role are verified by /assets/js/wga-guard.js before
+         * this page is revealed, so there is nothing to decide here. The previous
+         * version read the role out of localStorage, which the visitor controls.
+         */
         function checkAuth() {
-            const token = localStorage.getItem('accessToken');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            if (!token) { window.location.href = '/'; return false; }
-            if (user.role !== 'instructor' && user.role !== 'admin') { window.location.href = '/'; return false; }
-            document.getElementById('user-name').textContent = instructorData.user.firstName || 'Instructor';
-            document.getElementById('userAvatar').textContent = (instructorData.user.firstName || 'I')[0].toUpperCase();
+            const user = WGA.getUser() || {};
+            const nameEl = document.getElementById('user-name');
+            const avatarEl = document.getElementById('userAvatar');
+
+            if (nameEl) nameEl.textContent = user.firstName || 'Instructor';
+            if (avatarEl) avatarEl.textContent = (user.firstName || 'I')[0].toUpperCase();
+
             updateNotifBadge();
             return true;
         }
 
         function updateNotifBadge() {
-            const unread = instructorData.messages.filter(m => !m.read).length;
-            document.getElementById('notifCount').textContent = unread + 3;
+            // A real unread count. The old version counted the fixture messages
+            // and then added a hardcoded 3.
+            const element = document.getElementById('notifCount');
+            if (element) element.textContent = instructorData.unread.notifications || 0;
         }
 
         // ============================================================
@@ -1145,22 +1252,55 @@
             document.getElementById('modal').classList.remove('active');
         }
 
-        // ============================================================
-        //  ANIMATED COUNTER
-        // ============================================================
+        /**
+         * Count up to a figure.
+         *
+         * Two guards, both learned the hard way. Reading the DOM while a counter
+         * was still animating showed "3 published courses" next to four published
+         * courses — the easing meant the number on screen was simply wrong for
+         * two seconds, which is the same failure as printing a made-up figure.
+         *
+         * So: small counts are set immediately rather than counted up to (there
+         * is nothing to reveal about a four-course total), and a timer backstop
+         * pins the final value in case the browser throttles animation frames in
+         * a background tab and the last frame never arrives.
+         */
         function animateCounter(el, target, duration = 2000) {
-            const start = 0;
+            const value = Number.isFinite(target) ? target : 0;
+
+            function finish() {
+                el.textContent = value.toLocaleString();
+            }
+
+            if (value < 10) {
+                finish();
+                return;
+            }
+
             const startTime = performance.now();
+            let done = false;
 
             function update(now) {
-                const elapsed = now - startTime;
-                const progress = Math.min(elapsed / duration, 1);
+                if (done) return;
+
+                const progress = Math.min((now - startTime) / duration, 1);
                 const eased = 1 - Math.pow(1 - progress, 3);
-                const current = Math.round(eased * target);
-                el.textContent = current.toLocaleString();
-                if (progress < 1) requestAnimationFrame(update);
+                el.textContent = Math.round(eased * value).toLocaleString();
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    done = true;
+                }
             }
+
             requestAnimationFrame(update);
+
+            setTimeout(() => {
+                if (done) return;
+                done = true;
+                finish();
+            }, duration + 400);
         }
 
         function observeCounters() {
@@ -1182,46 +1322,33 @@
         // ============================================================
         function renderOverview() {
             const s = instructorData.stats;
+            const revenue = instructorData.revenue || {};
 
-            setTimeout(() => {
-                const ctx = document.getElementById('revenueChart')?.getContext('2d');
-                if (ctx) {
-                    if (state.charts.revenue) state.charts.revenue.destroy();
-                    state.charts.revenue = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                            datasets: [{ label: 'Revenue ($)', data: [3200, 4500, 5600, 7800, 8900, 5620],
-                                borderColor: '#1a56db', backgroundColor: 'rgba(26,86,219,0.05)', fill: true,
-                                tension: 0.4 }]
-                        },
-                        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false } } }
-                    });
-                }
-            }, 100);
-
+            // There is no revenue-over-time series in the API, so there is no
+            // chart here. The previous version drew a six-month line from a
+            // hardcoded array, which is a graph of nothing. The real totals are
+            // shown as figures instead — see the Earnings page for the breakdown
+            // by course, which is real.
             return `
                 <div class="stats-grid">
-                    <div class="stat-card glass-premium"><div class="stat-title">📚 Total Students</div><div class="stat-value" data-target="${s.totalStudents}">0</div><div class="stat-change up">↑ 234 this month</div></div>
-                    <div class="stat-card glass-premium"><div class="stat-title">📘 Published Courses</div><div class="stat-value" data-target="${s.publishedCourses}">0</div><div class="stat-change up">+1 new</div></div>
-                    <div class="stat-card glass-premium"><div class="stat-title">💰 Total Revenue</div><div class="stat-value" data-target="${s.totalRevenue}">0</div><div class="stat-change up">↑ 23% from last month</div></div>
-                    <div class="stat-card glass-premium"><div class="stat-title">⭐ Avg Rating</div><div class="stat-value" data-target="${s.averageRating * 10}">0</div><div class="stat-change up">★ 4.8/5</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">📚 Total Students</div><div class="stat-value" data-target="${s.totalStudents}">0</div><div class="stat-change">across ${s.totalCourses} ${s.totalCourses === 1 ? 'course' : 'courses'}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">📘 Published Courses</div><div class="stat-value" data-target="${s.publishedCourses}">0</div><div class="stat-change">${s.drafts || 0} draft${(s.drafts || 0) === 1 ? '' : 's'}${s.pending ? `, ${s.pending} awaiting review` : ''}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">💰 Revenue This Month</div><div class="stat-value" style="font-size:24px;">${WGAUI.escapeHtml(revenue.monthlyLabel || '—')}</div><div class="stat-change">${WGAUI.escapeHtml(revenue.totalLabel || '—')} in total</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">⭐ Average Rating</div><div class="stat-value">${s.averageRating || '—'}</div><div class="stat-change">${s.ratingCount || 0} rating${(s.ratingCount || 0) === 1 ? '' : 's'}</div></div>
                 </div>
-
-                <div class="chart-card glass-premium"><div class="chart-title">📊 Revenue Overview</div><canvas id="revenueChart"></canvas></div>
 
                 <div class="section-title"><span>📖 My Courses</span><button class="btn-primary btn-sm" onclick="loadPage('courses')">View All</button></div>
                 <div class="courses-grid">
-                    ${instructorData.courses.filter(c => c.status === 'published').map(c => `
+                    ${instructorData.courses.length > 0 ? instructorData.courses.slice(0, 6).map(c => `
                         <div class="course-card glass-premium fade-in-up">
-                            <div class="course-image" style="background-image:url('${c.thumbnail}')"><span class="course-badge ${c.status}">${c.status}</span></div>
+                            <div class="course-image" style="${courseImageStyle(c)}"><span class="course-badge ${c.status}">${c.status}</span></div>
                             <div class="course-content">
                                 <h3 class="course-title">${c.title}</h3>
-                                <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:var(--gold);"></i> ${c.rating}</div>
-                                <button class="btn-primary btn-sm" onclick="editCourse(${c.id})">Manage Course</button>
+                                <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:var(--gold);"></i> ${c.rating || 'Not rated'}</div>
+                                <button class="btn-primary btn-sm" onclick="editCourse('${c.id}')">Manage Course</button>
                             </div>
                         </div>
-                    `).join('')}
+                    `).join('') : `<div class="empty-state"><i class="fas fa-book"></i><h3>No courses yet</h3><p>Create your first course to get started</p><button class="btn-primary" onclick="loadPage('create-course')">Create a Course</button></div>`}
                 </div>
 
                 <div class="table-container glass-premium">
@@ -1229,14 +1356,14 @@
                     <table class="data-table">
                         <thead><tr><th>Student</th><th>Course</th><th>Progress</th><th>Last Active</th><th>Actions</th></tr></thead>
                         <tbody>
-                            ${instructorData.students.slice(0,5).map(s => `
+                            ${instructorData.students.length > 0 ? instructorData.students.slice(0, 5).map(s => `
                                 <tr>
-                                    <td>${s.name}</td><td>${s.courseTitle}</td>
+                                    <td>${WGAUI.escapeHtml(s.name)}</td><td>${WGAUI.escapeHtml(s.courseTitle)}</td>
                                     <td><div style="width:100px;background:rgba(0,0,0,0.06);border-radius:4px;height:6px;"><div style="width:${s.progress}%;height:6px;background:var(--primary);border-radius:4px;"></div></div> ${s.progress}%</td>
-                                    <td>${s.lastActive}</td>
-                                    <td><button class="action-btn view" onclick="viewStudent(${s.id})"><i class="fas fa-eye"></i></button></td>
+                                    <td>${s.lastActive ? WGAUI.formatRelative(s.lastActive) : 'Never opened'}</td>
+                                    <td><button class="action-btn message" title="Message" onclick="messageStudent('${s.studentId || s.id}', this.getAttribute('data-name'))" data-name="${WGAUI.escapeHtml(s.name)}"><i class="fas fa-envelope"></i></button></td>
                                 </tr>
-                            `).join('')}
+                            `).join('') : `<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--text-light);">No students yet</td></tr>`}
                         </tbody>
                     </table>
                 </div>
@@ -1244,19 +1371,28 @@
         }
 
         function renderCourses() {
+            if (instructorData.courses.length === 0) {
+                return `
+                    <div class="section-title"><span>📚 My Courses</span><button class="btn-primary" onclick="loadPage('create-course')">+ Create New Course</button></div>
+                    <div class="empty-state"><i class="fas fa-book"></i><h3>No courses yet</h3><p>Your courses appear here once you create one</p><button class="btn-primary" onclick="loadPage('create-course')">Create a Course</button></div>
+                `;
+            }
+
             return `
-                <div class="section-title"><span>📚 My Courses</span><button class="btn-primary" onclick="loadPage('create-course')">+ Create New Course</button></div>
+                <div class="section-title"><span>📚 My Courses (${instructorData.courses.length})</span><button class="btn-primary" onclick="loadPage('create-course')">+ Create New Course</button></div>
                 <div class="courses-grid">
                     ${instructorData.courses.map(c => `
                         <div class="course-card glass-premium">
-                            <div class="course-image" style="background-image:url('${c.thumbnail}')"><span class="course-badge ${c.status}">${c.status}</span></div>
+                            <div class="course-image" style="${courseImageStyle(c)}"><span class="course-badge ${c.status}">${c.status}</span></div>
                             <div class="course-content">
-                                <h3 class="course-title">${c.title}</h3>
+                                <h3 class="course-title">${WGAUI.escapeHtml(c.title)}</h3>
                                 <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:var(--gold);"></i> ${c.rating || 'Not rated'}</div>
+                                <div class="course-meta"><span>${WGAUI.escapeHtml(c.priceLabel || 'Free')}</span> · <span>${c.lessonCount} lesson${c.lessonCount === 1 ? '' : 's'}</span></div>
                                 <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
-                                    <button class="btn-primary btn-sm" onclick="editCourse(${c.id})">Edit</button>
-                                    <button class="btn-primary btn-outline btn-sm" onclick="showToast('Loading analytics...','info')">Analytics</button>
-                                    ${c.status === 'draft' ? `<button class="btn-primary btn-sm" onclick="publishCourse(${c.id})">Publish</button>` : ''}
+                                    <button class="btn-primary btn-sm" onclick="editCourse('${c.id}')">Edit</button>
+                                    <button class="btn-primary btn-outline btn-sm" onclick="openCourse('${c.slug || c.id}')">View Page</button>
+                                    ${c.status === 'draft' ? `<button class="btn-primary btn-sm" onclick="publishCourse('${c.id}')">Submit</button>` : ''}
+                                    ${c.status === 'published' ? `<button class="btn-primary btn-outline btn-sm" onclick="unpublishCourse('${c.id}')">Unpublish</button>` : ''}
                                 </div>
                             </div>
                         </div>
@@ -1276,24 +1412,13 @@
                     <div class="form-group"><label>Category</label><select id="courseCat"><option>Technology</option><option>Business</option><option>Design</option></select></div>
                     <div class="form-group"><label>Level</label><select id="courseLevel"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div>
                     <div style="display:flex;gap:12px;flex-wrap:wrap;">
-                        <button class="btn-primary" onclick="saveCourse()">Save as Draft</button>
-                        <button class="btn-primary btn-outline" onclick="publishNewCourse()">Publish Now</button>
+                        <button class="btn-primary" onclick="saveCourse(false)">Save as Draft</button>
+                        <button class="btn-primary btn-outline" onclick="saveCourse(true)">Save and Submit for Review</button>
                     </div>
-                </div>
-
-                <div class="section-title" style="margin-top:32px;">📂 Course Curriculum</div>
-                <div class="glass-premium" style="padding:24px;">
-                    <div id="modulesContainer">
-                        <div style="margin-bottom:16px;padding:16px;background:rgba(0,0,0,0.03);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
-                            <div><strong>Module 1: Introduction</strong> <span style="font-size:13px;color:var(--text-light);margin-left:12px;"><i class="fas fa-file-video"></i> 5 lessons</span></div>
-                            <button class="action-btn edit" onclick="showToast('Edit module coming soon','info')">Edit</button>
-                        </div>
-                        <div style="margin-bottom:16px;padding:16px;background:rgba(0,0,0,0.03);border-radius:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;">
-                            <div><strong>Module 2: Core Concepts</strong> <span style="font-size:13px;color:var(--text-light);margin-left:12px;"><i class="fas fa-file-video"></i> 8 lessons</span></div>
-                            <button class="action-btn edit" onclick="showToast('Edit module coming soon','info')">Edit</button>
-                        </div>
-                    </div>
-                    <button class="btn-primary btn-outline" onclick="showToast('Add module coming soon','info')">+ Add Module</button>
+                    <p style="margin-top:14px;font-size:13px;color:var(--text-light);">
+                        Lessons are added on the course page once the course exists. An administrator
+                        reviews a submitted course before it appears in the catalog.
+                    </p>
                 </div>
             `;
         }
@@ -1303,62 +1428,23 @@
                 <div class="section-title"><span>👥 My Students (${instructorData.stats.totalStudents})</span></div>
                 <div class="table-container glass-premium">
                     <div class="table-header">
-                        <div class="table-toolbar"><input type="text" id="searchStudent" placeholder="Search students..." oninput="filterStudents()" /></div>
-                        <button class="btn-primary btn-outline btn-sm" onclick="showToast('Exporting students...','info')">Export CSV</button>
+                        <div class="table-toolbar"><input type="text" id="searchStudent" placeholder="Search the loaded list by name or email..." oninput="filterStudents()" /></div>
+                        <button class="btn-primary btn-outline btn-sm" onclick="exportStudentsCsv()">Export CSV</button>
                     </div>
                     <table class="data-table">
                         <thead><tr><th>Name</th><th>Email</th><th>Course</th><th>Progress</th><th>Enrolled</th><th>Last Active</th><th>Actions</th></tr></thead>
                         <tbody id="studentsBody">
-                            ${instructorData.students.map(s => `
-                                <tr class="student-row" data-name="${s.name.toLowerCase()}">
-                                    <td>${s.name}</td><td>${s.email}</td><td>${s.courseTitle}</td>
+                            ${instructorData.students.length > 0 ? instructorData.students.map(s => `
+                                <tr class="student-row" data-name="${WGAUI.escapeHtml(s.name)} " data-email="${WGAUI.escapeHtml(s.email)}">
+                                    <td>${WGAUI.escapeHtml(s.name)}</td>
+                                    <td>${WGAUI.escapeHtml(s.email)}</td>
+                                    <td>${WGAUI.escapeHtml(s.courseTitle)}</td>
                                     <td><div style="width:80px;background:rgba(0,0,0,0.06);border-radius:4px;height:6px;"><div style="width:${s.progress}%;height:6px;background:var(--primary);border-radius:4px;"></div></div> ${s.progress}%</td>
-                                    <td>${s.enrolledAt}</td><td>${s.lastActive}</td>
-                                    <td><button class="action-btn message" onclick="messageStudent(${s.id})"><i class="fas fa-envelope"></i></button></td>
+                                    <td>${WGAUI.formatDate(s.enrolledAt)}</td>
+                                    <td>${s.lastActive ? WGAUI.formatRelative(s.lastActive) : 'Never opened'}</td>
+                                    <td><button class="action-btn message" title="Message" data-name="${WGAUI.escapeHtml(s.name)}" onclick="messageStudent('${s.studentId || s.id}', this.getAttribute('data-name'))"><i class="fas fa-envelope"></i></button></td>
                                 </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            `;
-        }
-
-        function renderAssignments() {
-            return `
-                <div class="section-title"><span>📝 Assignments</span><button class="btn-primary" onclick="createAssignment()">+ New Assignment</button></div>
-                <div class="table-container glass-premium">
-                    <table class="data-table">
-                        <thead><tr><th>Title</th><th>Course</th><th>Due Date</th><th>Submissions</th><th>Status</th><th>Actions</th></tr></thead>
-                        <tbody>
-                            ${instructorData.assignments.map(a => `
-                                <tr>
-                                    <td>${a.title}</td><td>${instructorData.courses.find(c=>c.id===a.courseId)?.title}</td>
-                                    <td>${a.dueDate}</td><td>${a.submissions}/${a.totalStudents}</td>
-                                    <td><span class="badge active">Active</span></td>
-                                    <td><button class="action-btn view" onclick="showToast('Viewing submissions...','info')">View</button></td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            `;
-        }
-
-        function renderQuizzes() {
-            return `
-                <div class="section-title"><span>❓ Quizzes</span><button class="btn-primary" onclick="createQuiz()">+ New Quiz</button></div>
-                <div class="table-container glass-premium">
-                    <table class="data-table">
-                        <thead><tr><th>Title</th><th>Course</th><th>Questions</th><th>Avg Score</th><th>Attempts</th><th>Status</th><th>Actions</th></tr></thead>
-                        <tbody>
-                            ${instructorData.quizzes.map(q => `
-                                <tr>
-                                    <td>${q.title}</td><td>${instructorData.courses.find(c=>c.id===q.courseId)?.title}</td>
-                                    <td>${q.questions}</td><td>${q.avgScore}%</td><td>${q.attempts}</td>
-                                    <td><span class="badge ${q.status==='published'?'active':'pending'}">${q.status}</span></td>
-                                    <td><button class="action-btn edit" onclick="showToast('Edit quiz coming soon','info')">Edit</button></td>
-                                </tr>
-                            `).join('')}
+                            `).join('') : `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-light);">No students yet. They appear here as soon as somebody enrols.</td></tr>`}
                         </tbody>
                     </table>
                 </div>
@@ -1370,17 +1456,22 @@
                 <div class="section-title"><span>🎥 Live Classes</span><button class="btn-primary" onclick="scheduleLiveClass()">+ Schedule Class</button></div>
                 <div class="table-container glass-premium">
                     <table class="data-table">
-                        <thead><tr><th>Title</th><th>Course</th><th>Date & Time</th><th>Attendees</th><th>Recording</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>Title</th><th>Course</th><th>Starts</th><th>Attending</th><th>Recording</th><th>Actions</th></tr></thead>
                         <tbody>
-                            ${instructorData.liveClasses.map(l => `
+                            ${instructorData.liveClasses.length > 0 ? instructorData.liveClasses.map(l => `
                                 <tr>
-                                    <td>${l.title}</td><td>${instructorData.courses.find(c=>c.id===l.courseId)?.title}</td>
-                                    <td>${new Date(l.date).toLocaleString()}</td>
-                                    <td>${l.attendees || 'Not started'}</td>
-                                    <td>${l.recording ? '<i class="fas fa-check-circle" style="color:var(--success);"></i>' : 'Pending'}</td>
-                                    <td><button class="action-btn edit" onclick="showToast('Manage live class','info')">Manage</button></td>
+                                    <td>${WGAUI.escapeHtml(l.title)}</td>
+                                    <td>${WGAUI.escapeHtml(l.courseTitle)}</td>
+                                    <td>${WGAUI.formatDateTime(l.date)}</td>
+                                    <td>${l.attendees || 0}</td>
+                                    <td>${l.recording ? '<i class="fas fa-check-circle" style="color:var(--success);"></i> Posted' : '—'}</td>
+                                    <td>
+                                        ${l.status === 'cancelled'
+                                            ? '<span class="badge pending">Cancelled</span>'
+                                            : `<button class="action-btn edit" onclick="cancelLiveClass('${l.id}')">Cancel</button>`}
+                                    </td>
                                 </tr>
-                            `).join('')}
+                            `).join('') : `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-light);">No sessions scheduled yet.</td></tr>`}
                         </tbody>
                     </table>
                 </div>
@@ -1388,24 +1479,56 @@
         }
 
         function renderEarnings() {
+            const revenue = instructorData.revenue || {};
+            const breakdown = revenue.byCourse || [];
+            const rate = instructorData.stats.completionRate;
+
+            // Two currencies cannot be added together, so when an instructor has
+            // sold in more than one the headline is the largest currency and the
+            // rest are listed beneath it. Saying so is the point: the previous
+            // version reported only the first currency as though it were the
+            // whole total.
+            const currencyNote = (mixed, currencies) => {
+                if (!mixed) return '';
+                const parts = (currencies || []).map(
+                    (c) => `${WGAUI.escapeHtml(c.totalLabel)} (${c.payments})`
+                );
+                return `<div class="stat-change" style="color:#b45309;">Across ${parts.length} currencies: ${parts.join(' · ')}</div>`;
+            };
+
             return `
                 <div class="stats-grid">
-                    <div class="stat-card glass-premium"><div class="stat-title">💰 Total Revenue</div><div class="stat-value">$${instructorData.stats.totalRevenue.toLocaleString()}</div></div>
-                    <div class="stat-card glass-premium"><div class="stat-title">📈 This Month</div><div class="stat-value">$${instructorData.stats.monthlyRevenue.toLocaleString()}</div></div>
-                    <div class="stat-card glass-premium"><div class="stat-title">📊 Next Payout</div><div class="stat-value">$${instructorData.stats.monthlyRevenue}</div></div>
-                    <div class="stat-card glass-premium"><div class="stat-title">✅ Completion Rate</div><div class="stat-value">${instructorData.stats.completionRate}%</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">💰 Total Revenue</div><div class="stat-value" style="font-size:24px;">${WGAUI.escapeHtml(revenue.totalLabel || '—')}</div><div class="stat-change">${revenue.payments || 0} paid enrolment${(revenue.payments || 0) === 1 ? '' : 's'}</div>${currencyNote(revenue.mixedCurrency, revenue.currencies)}</div>
+                    <div class="stat-card glass-premium"><div class="stat-title">📈 This Month</div><div class="stat-value" style="font-size:24px;">${WGAUI.escapeHtml(revenue.monthlyLabel || '—')}</div><div class="stat-change">${revenue.monthlyPayments || 0} this month</div>${currencyNote(revenue.monthlyMixedCurrency, revenue.monthlyCurrencies)}</div>
+                    <div class="stat-card glass-premium"><div class="stat-title">🎓 Completion Rate</div><div class="stat-value">${rate === null || rate === undefined ? '—' : rate + '%'}</div><div class="stat-change">${rate === null || rate === undefined ? 'No students yet' : 'of enrolled students'}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">⭐ Average Rating</div><div class="stat-value">${instructorData.stats.averageRating || '—'}</div><div class="stat-change">${instructorData.stats.ratingCount || 0} rating${(instructorData.stats.ratingCount || 0) === 1 ? '' : 's'}</div></div>
                 </div>
-                <div class="chart-card glass-premium"><div class="chart-title">Revenue Breakdown by Course</div><canvas id="earningsChart"></canvas></div>
+
+                ${breakdown.length > 0
+                    ? `<div class="chart-card glass-premium"><div class="chart-title">Revenue by course</div><canvas id="earningsChart"></canvas></div>`
+                    : ''}
+
                 <div class="table-container glass-premium">
-                    <h3 style="margin-bottom:16px;">Transaction History</h3>
+                    <h3 style="margin-bottom:16px;">Revenue by course</h3>
                     <table class="data-table">
-                        <thead><tr><th>Date</th><th>Course</th><th>Student</th><th>Amount</th><th>Status</th></tr></thead>
+                        <thead><tr><th>Course</th><th>Paid enrolments</th><th>Revenue</th></tr></thead>
                         <tbody>
-                            <tr><td>2025-02-15</td><td>Advanced ML</td><td>John Doe</td><td>$49</td><td><span class="badge active">Completed</span></td></tr>
-                            <tr><td>2025-02-10</td><td>ML Fundamentals</td><td>Jane Smith</td><td>$75</td><td><span class="badge active">Completed</span></td></tr>
+                            ${breakdown.length > 0 ? breakdown.map((row) => `
+                                <tr>
+                                    <td>${WGAUI.escapeHtml(row.title)}</td>
+                                    <td>${row.payments}</td>
+                                    <td>${WGAUI.escapeHtml(row.totalLabel)}${row.mixedCurrency ? `<div style="font-size:12px;color:#b45309;">+ ${(row.currencies || []).slice(1).map((c) => WGAUI.escapeHtml(c.totalLabel)).join(', ')} in other currencies</div>` : ''}</td>
+                                </tr>
+                            `).join('') : `<tr><td colspan="3" style="text-align:center;padding:28px;color:var(--text-light);">No payments yet. Revenue appears here once somebody buys one of your courses.</td></tr>`}
                         </tbody>
                     </table>
                 </div>
+
+                <p style="margin-top:18px;font-size:13px;color:var(--text-light);">
+                    Figures come from completed payments for your courses. Payouts to instructors
+                    are handled outside this platform — there is no payout schedule here, and the
+                    page does not pretend otherwise.
+                </p>
             `;
         }
 
@@ -1414,16 +1537,17 @@
                 <div class="section-title">💬 Messages</div>
                 <div class="table-container glass-premium">
                     <table class="data-table">
-                        <thead><tr><th>From</th><th>Message</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>From</th><th>Message</th><th>When</th><th>Status</th><th>Actions</th></tr></thead>
                         <tbody>
-                            ${instructorData.messages.map(m => `
+                            ${instructorData.messages.length > 0 ? instructorData.messages.map(m => `
                                 <tr>
-                                    <td>${m.from}</td><td>${m.message}</td>
-                                    <td>${new Date(m.date).toLocaleString()}</td>
+                                    <td>${WGAUI.escapeHtml(m.from)}</td>
+                                    <td>${WGAUI.escapeHtml(m.message)}</td>
+                                    <td>${m.date ? WGAUI.formatRelative(m.date) : '—'}</td>
                                     <td>${!m.read ? '<span class="badge pending">Unread</span>' : 'Read'}</td>
-                                    <td><button class="action-btn view" onclick="replyToMessage(${m.id})">Reply</button></td>
+                                    <td><button class="action-btn view" onclick="replyToMessage('${m.id}')">Reply</button></td>
                                 </tr>
-                            `).join('')}
+                            `).join('') : `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--text-light);">No conversations yet. Message a student from the roster, or wait for one to write to you.</td></tr>`}
                         </tbody>
                     </table>
                 </div>
@@ -1433,149 +1557,488 @@
 
         function renderProfile() {
             const u = instructorData.user;
+            const expertise = Array.isArray(u.expertise) ? u.expertise.join(', ') : '';
+
             return `
                 <div class="section-title">👤 Profile Settings</div>
                 <div class="glass-premium" style="padding:24px;max-width:600px;">
-                    <div class="form-group"><label>First Name</label><input type="text" id="pFirstName" value="${u.firstName}" /></div>
-                    <div class="form-group"><label>Last Name</label><input type="text" id="pLastName" value="${u.lastName}" /></div>
-                    <div class="form-group"><label>Email</label><input type="email" value="${u.email}" disabled /></div>
-                    <div class="form-group"><label>Bio</label><textarea id="pBio" rows="4">${u.bio}</textarea></div>
-                    <div class="form-group"><label>Expertise</label><select><option>Machine Learning</option><option>Data Science</option><option>Python</option></select></div>
+                    <div class="form-group"><label>First Name</label><input type="text" id="pFirstName" value="${WGAUI.escapeHtml(u.firstName || '')}" /></div>
+                    <div class="form-group"><label>Last Name</label><input type="text" id="pLastName" value="${WGAUI.escapeHtml(u.lastName || '')}" /></div>
+                    <div class="form-group"><label>Email</label><input type="email" value="${WGAUI.escapeHtml(u.email || '')}" disabled /></div>
+                    <div class="form-group"><label>Headline</label><input type="text" id="pHeadline" value="${WGAUI.escapeHtml(u.headline || '')}" placeholder="e.g. Data analyst and lecturer" /></div>
+                    <div class="form-group"><label>Bio</label><textarea id="pBio" rows="4">${WGAUI.escapeHtml(u.bio || '')}</textarea></div>
+                    <div class="form-group"><label>Expertise</label><input type="text" id="pExpertise" value="${WGAUI.escapeHtml(expertise)}" placeholder="Comma separated, e.g. Statistics, Spreadsheets" /></div>
+                    <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">Your email address is used to sign in and cannot be changed here.</p>
                     <button class="btn-primary" onclick="updateProfile()">Update Profile</button>
-                    <button class="btn-primary btn-outline" style="margin-left:12px;" onclick="showToast('Change password coming soon','info')">Change Password</button>
+                    <button class="btn-primary btn-outline" style="margin-left:12px;" onclick="openChangePassword()">Change Password</button>
                 </div>
             `;
         }
 
         // ============================================================
-        //  ACTION HANDLERS (preserved + enhanced)
+        //  ACTION HANDLERS
         // ============================================================
-        window.editCourse = (id) => {
-            const c = instructorData.courses.find(c => c.id === id);
+        // These were placeholders: they showed a success toast and changed
+        // nothing. "Course updated!", "Course published!", "Live class
+        // scheduled!", "Reply sent!", "Message sent!" — none of them contacted
+        // the API. Each one now does what it says, and reports the server's own
+        // error message when it cannot.
+
+        function courseOptions(selectedId) {
+            if (instructorData.courses.length === 0) return '<option value="">No courses yet</option>';
+
+            return instructorData.courses
+                .map((c) => `<option value="${c.id}"${String(c.id) === String(selectedId) ? ' selected' : ''}>${WGAUI.escapeHtml(c.title)}</option>`)
+                .join('');
+        }
+
+        /** Distinct students, keyed by account id, for the message pickers. */
+        function studentOptions() {
+            const byId = new Map();
+            instructorData.students.forEach((s) => {
+                if (s.studentId) byId.set(s.studentId, s.name);
+            });
+
+            if (byId.size === 0) return '<option value="">No students yet</option>';
+
+            return Array.from(byId.entries())
+                .map(([id, name]) => `<option value="${id}">${WGAUI.escapeHtml(name)}</option>`)
+                .join('');
+        }
+
+        window.editCourse = function editCourse(id) {
+            const c = instructorData.courses.find((course) => String(course.id) === String(id));
             if (!c) return;
+
             openModal('Edit Course', `
-                <div class="form-group"><label>Title</label><input type="text" id="editTitle" value="${c.title}" /></div>
-                <div class="form-group"><label>Description</label><textarea id="editDesc" rows="4">${c.description}</textarea></div>
-                <div class="form-group"><label>Price ($)</label><input type="number" id="editPrice" value="${c.price}" /></div>
-                <div class="form-group"><label>Status</label><select id="editStatus"><option ${c.status==='published'?'selected':''}>published</option><option ${c.status==='draft'?'selected':''}>draft</option></select></div>
-                <button class="btn-primary" onclick="saveCourseChanges(${id})">Save Changes</button>
+                <div class="form-group"><label>Title</label><input type="text" id="editTitle" value="${WGAUI.escapeHtml(c.title)}" /></div>
+                <div class="form-group"><label>Summary</label><textarea id="editSummary" rows="3">${WGAUI.escapeHtml(c.description)}</textarea></div>
+                <div class="form-group"><label>Price (in ${WGAUI.escapeHtml((instructorData.revenue && instructorData.revenue.currency) || 'usd').toUpperCase()})</label><input type="number" id="editPrice" min="0" step="0.01" value="${c.price}" /></div>
+                <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">
+                    Status is changed with Publish or Unpublish, not by typing it here — an instructor
+                    cannot set a course live without review.
+                </p>
+                <button class="btn-primary" id="editSubmit" onclick="saveCourseChanges('${c.id}')">Save Changes</button>
             `);
         };
 
-        window.saveCourseChanges = (id) => {
-            showToast('Course updated!', 'success');
-            closeModal();
-            loadPage('courses');
+        window.saveCourseChanges = async function saveCourseChanges(id) {
+            const button = document.getElementById('editSubmit');
+            const price = Number(document.getElementById('editPrice')?.value || 0);
+
+            WGAUI.setBusy(button, true, 'Saving…');
+
+            try {
+                await WGA.patch(`/courses/${encodeURIComponent(id)}`, {
+                    title: document.getElementById('editTitle')?.value.trim(),
+                    summary: document.getElementById('editSummary')?.value.trim(),
+                    priceCents: Math.max(0, Math.round(price * 100)),
+                });
+
+                closeModal();
+                showToast('Course saved.', 'success');
+
+                await loadInstructorData();
+                loadPage('courses');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                showToast(error.message || 'We could not save that course.', 'error');
+            }
         };
 
-        window.publishCourse = (id) => {
-            showToast('Course published!', 'success');
-            loadPage('courses');
+        window.publishCourse = async function publishCourse(id) {
+            try {
+                const data = await WGA.post(`/courses/${encodeURIComponent(id)}/publish`);
+
+                // The API decides whether a submission goes live or into the
+                // review queue, so the message reports which actually happened.
+                showToast(
+                    data.course.status === 'published'
+                        ? 'Course published.'
+                        : 'Submitted for review. An administrator will approve it.',
+                    'success'
+                );
+
+                await loadInstructorData();
+                loadPage('courses');
+            } catch (error) {
+                if (error.details && error.details.length) {
+                    showToast(error.details[0].message, 'error');
+                    return;
+                }
+                showToast(error.message || 'We could not publish that course.', 'error');
+            }
         };
 
-        window.saveCourse = () => {
-            showToast('Course saved as draft!', 'success');
-            loadPage('courses');
+        window.unpublishCourse = async function unpublishCourse(id) {
+            try {
+                await WGA.post(`/courses/${encodeURIComponent(id)}/unpublish`);
+                showToast('Course returned to draft.', 'success');
+                await loadInstructorData();
+                loadPage('courses');
+            } catch (error) {
+                showToast(error.message || 'We could not unpublish that course.', 'error');
+            }
         };
 
-        window.publishNewCourse = () => {
-            showToast('Course published!', 'success');
-            loadPage('courses');
+        /** Create a course from the form, optionally submitting it for review. */
+        window.saveCourse = async function saveCourse(submitForReview) {
+            const button = document.querySelector('#main-content .btn-primary:not(.btn-outline)');
+            const title = document.getElementById('courseTitle')?.value.trim();
+            const summary = document.getElementById('courseDesc')?.value.trim();
+            const thumbnail = document.getElementById('courseThumb')?.value.trim();
+            const price = Number(document.getElementById('coursePrice')?.value || 0);
+            const category = document.getElementById('courseCat')?.value;
+            const level = (document.getElementById('courseLevel')?.value || 'beginner').toLowerCase();
+
+            if (!title || title.length < 4) {
+                showToast('Give the course a title of at least 4 characters.', 'error');
+                return;
+            }
+
+            WGAUI.setBusy(button, true, 'Creating…');
+
+            try {
+                const created = await WGA.post('/courses', {
+                    title,
+                    summary: summary || undefined,
+                    thumbnail: thumbnail || undefined,
+                    priceCents: Math.max(0, Math.round(price * 100)),
+                    category,
+                    level,
+                });
+
+                const courseId = created.course.id;
+
+                if (submitForReview) {
+                    // Publishing with no lessons is refused by the API, which is
+                    // the correct answer — surface it rather than losing the course.
+                    try {
+                        await WGA.post(`/courses/${encodeURIComponent(courseId)}/publish`);
+                        showToast('Course created and submitted for review.', 'success');
+                    } catch (publishError) {
+                        showToast(
+                            `Course saved as a draft. ${publishError.message || 'Add a lesson before submitting.'}`,
+                            'info'
+                        );
+                    }
+                } else {
+                    showToast('Course saved as a draft.', 'success');
+                }
+
+                await loadInstructorData();
+                loadPage('courses');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+
+                if (error.details && error.details.length) {
+                    showToast(error.details[0].message, 'error');
+                    return;
+                }
+                showToast(error.message || 'We could not create that course.', 'error');
+            }
         };
 
-        window.viewStudent = (id) => {
-            const s = instructorData.students.find(s => s.id === id);
+        window.viewStudent = function viewStudent(enrollmentId) {
+            const s = instructorData.students.find((student) => String(student.id) === String(enrollmentId));
             if (!s) return;
-            openModal('Student Details', `
-                <p><strong>Name:</strong> ${s.name}</p>
-                <p><strong>Email:</strong> ${s.email}</p>
-                <p><strong>Course:</strong> ${s.courseTitle}</p>
+
+            openModal('Student', `
+                <p><strong>Name:</strong> ${WGAUI.escapeHtml(s.name)}</p>
+                <p><strong>Email:</strong> ${WGAUI.escapeHtml(s.email)}</p>
+                <p><strong>Course:</strong> ${WGAUI.escapeHtml(s.courseTitle)}</p>
                 <p><strong>Progress:</strong> ${s.progress}%</p>
-                <p><strong>Enrolled:</strong> ${s.enrolledAt}</p>
-                <p><strong>Last Active:</strong> ${s.lastActive}</p>
-                <button class="btn-primary" onclick="messageStudent(${s.id})">Message Student</button>
+                <p><strong>Enrolled:</strong> ${WGAUI.formatDate(s.enrolledAt)}</p>
+                <p><strong>Last active:</strong> ${s.lastActive ? WGAUI.formatRelative(s.lastActive) : 'Never opened'}</p>
+                <button class="btn-primary" onclick="messageStudent('${s.studentId || s.id}')">Message Student</button>
             `);
         };
 
-        window.messageStudent = (id) => {
-            showToast('Opening messaging...', 'info');
-        };
+        /** Open (or reuse) a conversation with a student. */
+        window.messageStudent = async function messageStudent(studentUserId, knownName) {
+            if (!studentUserId) return;
 
-        window.createAssignment = () => {
-            openModal('Create Assignment', `
-                <div class="form-group"><label>Title</label><input type="text" id="assTitle" /></div>
-                <div class="form-group"><label>Course</label><select id="assCourse"><option>Machine Learning Fundamentals</option><option>Advanced Machine Learning</option></select></div>
-                <div class="form-group"><label>Due Date</label><input type="date" id="assDue" /></div>
-                <div class="form-group"><label>Description</label><textarea rows="4"></textarea></div>
-                <button class="btn-primary" onclick="saveAssignment()">Create</button>
+            const student = instructorData.students.find((s) => String(s.studentId) === String(studentUserId));
+            const name = knownName || (student ? student.name : 'this student');
+
+            openModal(`Message ${WGAUI.escapeHtml(name)}`, `
+                <div class="form-group"><label>Message</label><textarea rows="4" id="dmBody" placeholder="Write your message..."></textarea></div>
+                <button class="btn-primary" id="dmSend" onclick="sendDirectMessage('${studentUserId}')">Send</button>
             `);
         };
 
-        window.saveAssignment = () => {
-            showToast('Assignment created!', 'success');
-            closeModal();
-            loadPage('assignments');
+        window.sendDirectMessage = async function sendDirectMessage(recipientId) {
+            const button = document.getElementById('dmSend');
+            const message = document.getElementById('dmBody')?.value.trim();
+
+            if (!message) {
+                showToast('Write a message first.', 'error');
+                return;
+            }
+
+            WGAUI.setBusy(button, true, 'Sending…');
+
+            try {
+                await WGA.post('/messages/threads', { recipientId, message });
+                closeModal();
+                showToast('Message sent.', 'success');
+
+                await loadInstructorData();
+                loadPage('messages');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                showToast(error.message || 'We could not send that message.', 'error');
+            }
         };
 
-        window.createQuiz = () => {
-            showToast('Quiz builder coming soon!', 'info');
-        };
+        window.replyToMessage = async function replyToMessage(threadId) {
+            const thread = instructorData.messages.find((m) => String(m.id) === String(threadId));
+            if (!thread) return;
 
-        window.scheduleLiveClass = () => {
-            openModal('Schedule Live Class', `
-                <div class="form-group"><label>Title</label><input type="text" /></div>
-                <div class="form-group"><label>Course</label><select><option>Machine Learning Fundamentals</option><option>Advanced Machine Learning</option></select></div>
-                <div class="form-group"><label>Date & Time</label><input type="datetime-local" /></div>
-                <div class="form-group"><label>Duration (min)</label><input type="number" value="60" /></div>
-                <button class="btn-primary" onclick="saveLiveClass()">Schedule</button>
+            openModal(`Reply to ${WGAUI.escapeHtml(thread.from)}`, `
+                <p style="font-size:14px;color:var(--text-light);margin-bottom:14px;">${WGAUI.escapeHtml(thread.message)}</p>
+                <div class="form-group"><label>Your reply</label><textarea rows="4" id="replyBody"></textarea></div>
+                <button class="btn-primary" id="replySend" onclick="sendReply('${thread.id}')">Send Reply</button>
             `);
         };
 
-        window.saveLiveClass = () => {
-            showToast('Live class scheduled!', 'success');
-            closeModal();
-            loadPage('live-classes');
+        window.sendReply = async function sendReply(threadId) {
+            const button = document.getElementById('replySend');
+            const content = document.getElementById('replyBody')?.value.trim();
+
+            if (!content) {
+                showToast('Write a reply first.', 'error');
+                return;
+            }
+
+            WGAUI.setBusy(button, true, 'Sending…');
+
+            try {
+                await WGA.post(`/messages/threads/${encodeURIComponent(threadId)}`, { content });
+                closeModal();
+                showToast('Reply sent.', 'success');
+
+                await loadInstructorData();
+                loadPage('messages');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                showToast(error.message || 'We could not send that reply.', 'error');
+            }
         };
 
-        window.replyToMessage = (id) => {
-            const m = instructorData.messages.find(m => m.id === id);
-            if (!m) return;
-            openModal('Reply to Message', `
-                <p><strong>From:</strong> ${m.from}</p>
-                <p><strong>Message:</strong> ${m.message}</p>
-                <div class="form-group"><label>Your Reply</label><textarea rows="4"></textarea></div>
-                <button class="btn-primary" onclick="sendReply()">Send Reply</button>
-            `);
-        };
-
-        window.sendReply = () => {
-            showToast('Reply sent!', 'success');
-            closeModal();
-        };
-
-        window.composeMessage = () => {
+        window.composeMessage = function composeMessage() {
             openModal('New Message', `
-                <div class="form-group"><label>To</label><select><option>John Doe</option><option>Jane Smith</option></select></div>
-                <div class="form-group"><label>Subject</label><input type="text" /></div>
-                <div class="form-group"><label>Message</label><textarea rows="4"></textarea></div>
-                <button class="btn-primary" onclick="sendMessage()">Send</button>
+                <div class="form-group"><label>To</label><select id="newMsgTo">${studentOptions()}</select></div>
+                <div class="form-group"><label>Message</label><textarea rows="4" id="newMsgBody" placeholder="Write your message..."></textarea></div>
+                <button class="btn-primary" id="newMsgSend" onclick="sendDirectMessage(document.getElementById('newMsgTo').value)">Send</button>
             `);
         };
 
-        window.sendMessage = () => {
-            showToast('Message sent!', 'success');
-            closeModal();
+        window.scheduleLiveClass = function scheduleLiveClass() {
+            if (instructorData.courses.length === 0) {
+                openModal('Schedule a Class', `<p>Create a course first — a live class belongs to one.</p>
+                    <button class="btn-primary" onclick="closeModal();loadPage('create-course')">Create a Course</button>`);
+                return;
+            }
+
+            const soon = new Date(Date.now() + 24 * 60 * 60 * 1000);
+            soon.setMinutes(0, 0, 0);
+
+            openModal('Schedule Live Class', `
+                <div class="form-group"><label>Course</label><select id="lcCourse">${courseOptions()}</select></div>
+                <div class="form-group"><label>Title</label><input type="text" id="lcTitle" placeholder="e.g. Live Q&A on the first project" /></div>
+                <div class="form-group"><label>Starts</label><input type="datetime-local" id="lcStart" value="${soon.toISOString().slice(0, 16)}" /></div>
+                <div class="form-group"><label>Duration (minutes)</label><input type="number" id="lcMinutes" value="60" min="5" max="480" /></div>
+                <div class="form-group"><label>Meeting link (optional)</label><input type="url" id="lcLink" placeholder="https://..." /></div>
+                <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">
+                    Enrolled students are notified, but they only receive the join link if they are enrolled.
+                </p>
+                <button class="btn-primary" id="lcSubmit" onclick="saveLiveClass()">Schedule</button>
+            `);
         };
 
-        window.updateProfile = () => {
-            showToast('Profile updated!', 'success');
+        window.saveLiveClass = async function saveLiveClass() {
+            const button = document.getElementById('lcSubmit');
+            const courseId = document.getElementById('lcCourse')?.value;
+            const title = document.getElementById('lcTitle')?.value.trim();
+            const startRaw = document.getElementById('lcStart')?.value;
+            const minutes = Number(document.getElementById('lcMinutes')?.value || 60);
+            const meetingLink = document.getElementById('lcLink')?.value.trim();
+
+            if (!courseId || !title || !startRaw) {
+                showToast('A course, a title and a start time are required.', 'error');
+                return;
+            }
+
+            const start = new Date(startRaw);
+            const end = new Date(start.getTime() + minutes * 60 * 1000);
+
+            WGAUI.setBusy(button, true, 'Scheduling…');
+
+            try {
+                await WGA.post('/live-sessions', {
+                    courseId,
+                    title,
+                    startTime: start.toISOString(),
+                    endTime: end.toISOString(),
+                    meetingLink: meetingLink || undefined,
+                });
+
+                closeModal();
+                showToast('Session scheduled. Enrolled students have been notified.', 'success');
+
+                await loadInstructorData();
+                loadPage('live-classes');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+
+                if (error.details && error.details.length) {
+                    showToast(error.details[0].message, 'error');
+                    return;
+                }
+                showToast(error.message || 'We could not schedule that session.', 'error');
+            }
         };
 
-        window.filterStudents = () => {
-            const search = document.getElementById('searchStudent')?.value.toLowerCase() || '';
-            document.querySelectorAll('.student-row').forEach(row => {
-                const name = row.getAttribute('data-name') || '';
-                row.style.display = name.includes(search) ? '' : 'none';
+        /** Cancel a scheduled session, with a confirmation step. */
+        window.cancelLiveClass = function cancelLiveClass(id) {
+            openModal('Cancel this session?', `
+                <p style="margin-bottom:18px;">Students who saved a place will see it as cancelled. This cannot be undone.</p>
+                <button class="btn-primary" id="lcCancel" onclick="confirmCancelLiveClass('${id}')">Yes, cancel it</button>
+                <button class="btn-primary btn-outline" style="margin-left:10px;" onclick="closeModal()">Keep it</button>
+            `);
+        };
+
+        window.confirmCancelLiveClass = async function confirmCancelLiveClass(id) {
+            const button = document.getElementById('lcCancel');
+            WGAUI.setBusy(button, true, 'Cancelling…');
+
+            try {
+                await WGA.del(`/live-sessions/${encodeURIComponent(id)}`);
+                closeModal();
+                showToast('Session cancelled.', 'success');
+
+                await loadInstructorData();
+                loadPage('live-classes');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                showToast(error.message || 'We could not cancel that session.', 'error');
+            }
+        };
+
+        window.updateProfile = async function updateProfile() {
+            const firstName = document.getElementById('pFirstName')?.value.trim();
+            const lastName = document.getElementById('pLastName')?.value.trim();
+            const headline = document.getElementById('pHeadline')?.value.trim();
+            const bio = document.getElementById('pBio')?.value.trim();
+            const expertiseRaw = document.getElementById('pExpertise')?.value || '';
+
+            const expertise = expertiseRaw
+                .split(',')
+                .map((item) => item.trim())
+                .filter(Boolean);
+
+            try {
+                const data = await WGA.patch('/auth/me', { firstName, lastName, headline, bio, expertise });
+
+                instructorData.user = { ...instructorData.user, ...data.user };
+                WGA.setSession({ user: data.user });
+
+                const nameEl = document.getElementById('user-name');
+                if (nameEl) nameEl.textContent = data.user.firstName || 'Instructor';
+
+                showToast('Your profile has been saved.', 'success');
+            } catch (error) {
+                if (error.details && error.details.length) {
+                    showToast(error.details[0].message, 'error');
+                    return;
+                }
+                showToast(error.message || 'We could not save your profile.', 'error');
+            }
+        };
+
+        window.openChangePassword = function openChangePassword() {
+            openModal('🔑 Change Password', `
+                <div class="form-group"><label>Current password</label><input type="password" id="cpCurrent" /></div>
+                <div class="form-group"><label>New password</label><input type="password" id="cpNew" /></div>
+                <div class="form-group"><label>Confirm new password</label><input type="password" id="cpConfirm" /></div>
+                <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">At least 8 characters, including a letter and a number. You will be signed out of every other device.</p>
+                <button class="btn-primary" id="cpSubmit" onclick="submitChangePassword()">Update password</button>
+            `);
+        };
+
+        window.submitChangePassword = async function submitChangePassword() {
+            const button = document.getElementById('cpSubmit');
+            const currentPassword = document.getElementById('cpCurrent')?.value || '';
+            const newPassword = document.getElementById('cpNew')?.value || '';
+            const confirmPassword = document.getElementById('cpConfirm')?.value || '';
+
+            if (!currentPassword || !newPassword) {
+                showToast('Fill in both password fields.', 'error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showToast('The two new passwords do not match.', 'error');
+                return;
+            }
+
+            WGAUI.setBusy(button, true, 'Saving…');
+
+            try {
+                const data = await WGA.post('/auth/change-password', { currentPassword, newPassword });
+
+                // The API revokes every other session and issues a fresh pair for
+                // this device, so keep the instructor signed in here.
+                WGA.setSession(data);
+                closeModal();
+                showToast('Your password has been changed. Other devices were signed out.', 'success');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                showToast(error.message || 'We could not change your password.', 'error');
+            }
+        };
+
+        /** Download the loaded student list as CSV, generated in the browser. */
+        window.exportStudentsCsv = function exportStudentsCsv() {
+            const rows = [['Name', 'Email', 'Course', 'Progress', 'Enrolled', 'Last active']];
+
+            instructorData.students.forEach((s) => {
+                rows.push([
+                    s.name,
+                    s.email,
+                    s.courseTitle,
+                    `${s.progress}%`,
+                    s.enrolledAt ? new Date(s.enrolledAt).toISOString().slice(0, 10) : '',
+                    s.lastActive ? new Date(s.lastActive).toISOString().slice(0, 10) : 'Never',
+                ]);
+            });
+
+            const escapeCell = (value) => `"${String(value === null || value === undefined ? '' : value).replace(/"/g, '""')}"`;
+            const csv = rows.map((row) => row.map(escapeCell).join(',')).join('\r\n');
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+
+            link.href = url;
+            link.download = `students-${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            showToast(`Exported ${instructorData.students.length} rows.`, 'success');
+        };
+
+        // A client-side filter over the rows already loaded. The API says the same
+        // thing, so the page can be honest about the scope of the search.
+        window.filterStudents = function filterStudents() {
+            const search = (document.getElementById('searchStudent')?.value || '').toLowerCase();
+
+            document.querySelectorAll('.student-row').forEach((row) => {
+                const haystack = (row.getAttribute('data-name') || '') + ' ' + (row.getAttribute('data-email') || '');
+                row.style.display = haystack.includes(search) ? '' : 'none';
             });
         };
 
@@ -1584,18 +2047,28 @@
         // ============================================================
         function loadNotifications() {
             const container = document.getElementById('notifList');
-            const notifs = [
-                { title: 'New Student', message: 'John Doe enrolled in your course', time: '2 hours ago' },
-                { title: 'Assignment Submitted', message: '5 new submissions for ML Quiz', time: 'Yesterday' },
-                { title: 'Message from Admin', message: 'Your course has been approved', time: '2 days ago' }
-            ];
-            container.innerHTML = notifs.map(n => `
-                <div class="notification-item unread">
-                    <strong>${n.title}</strong>
-                    <p>${n.message}</p>
-                    <span style="font-size:12px;color:var(--text-light);">${n.time}</span>
-                </div>
-            `).join('');
+            if (!container) return;
+
+            // Real notifications. This list used to be three hardcoded entries —
+            // "John Doe enrolled in your course", "5 new submissions for ML Quiz",
+            // "Your course has been approved" — shown to every instructor
+            // regardless of what had actually happened.
+            if (instructorData.notifications.length === 0) {
+                container.innerHTML =
+                    '<div style="padding:26px;text-align:center;color:var(--text-light);font-size:14px;">' +
+                    'No notifications yet.</div>';
+                return;
+            }
+
+            container.innerHTML = instructorData.notifications
+                .map((n) => `
+                    <div class="notification-item ${n.read ? '' : 'unread'}"${n.link ? ` style="cursor:pointer;" onclick="window.location.href='${n.link}'"` : ''}>
+                        <strong>${WGAUI.escapeHtml(n.title)}</strong>
+                        <p>${WGAUI.escapeHtml(n.message)}</p>
+                        <span style="font-size:12px;color:var(--text-light);">${WGAUI.formatRelative(n.createdAt)}</span>
+                    </div>
+                `)
+                .join('');
         }
 
         // ============================================================
@@ -1621,12 +2094,6 @@
                     case 'students':
                         html = renderStudents();
                         break;
-                    case 'assignments':
-                        html = renderAssignments();
-                        break;
-                    case 'quizzes':
-                        html = renderQuizzes();
-                        break;
                     case 'live-classes':
                         html = renderLiveClasses();
                         break;
@@ -1645,19 +2112,38 @@
                 content.innerHTML = html;
                 observeCounters();
 
-                // Earnings chart
+                // Revenue breakdown, drawn from real payment totals per course.
                 if (page === 'earnings') {
                     setTimeout(() => {
                         const ctx = document.getElementById('earningsChart')?.getContext('2d');
-                        if (ctx) {
-                            new Chart(ctx, {
-                                type: 'pie',
-                                data: { labels: ['ML Fundamentals', 'Advanced ML'],
-                                    datasets: [{ data: [12500, 15950], backgroundColor: ['#1a56db',
-                                            '#d4a547'] }] },
-                                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-                            });
+                        const breakdown = (instructorData.revenue && instructorData.revenue.byCourse) || [];
+
+                        if (!ctx || breakdown.length === 0) return;
+
+                        // A doughnut is a share-of-total chart, and shares only add
+                        // up inside one currency. If the courses were sold in more
+                        // than one, the table below carries the real figures and we
+                        // draw nothing rather than a shape that means nothing.
+                        if (breakdown.some((row) => row.mixedCurrency) || new Set(breakdown.map((row) => row.currency)).size > 1) {
+                            const card = ctx.canvas.closest('.chart-card');
+                            if (card) {
+                                card.innerHTML = '<div class="chart-title">Revenue by course</div>' +
+                                    '<p style="color:var(--text-light);font-size:13.5px;margin:0;">Your courses sold in more than one currency, so a single breakdown chart would not add up. The figures are listed per course below.</p>';
+                            }
+                            return;
                         }
+
+                        new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: breakdown.map((row) => row.title),
+                                datasets: [{
+                                    data: breakdown.map((row) => row.totalCents / 100),
+                                    backgroundColor: ['#1a56db', '#d4a547', '#10b981', '#8b5cf6', '#06b6d4', '#ef4444']
+                                }]
+                            },
+                            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+                        });
                     }, 150);
                 }
             }, 300);
@@ -1673,14 +2159,35 @@
         async function init() {
             if (!checkAuth()) return;
 
+            // Load before the first render so the overview is real. A failure
+            // says so, rather than showing zeroes that read as "you have no
+            // students" instead of "we could not reach the server".
+            const content = document.getElementById('main-content');
+            content.innerHTML = '<div style="text-align:center;padding:60px;"><div class="loading-spinner"></div></div>';
+
+            try {
+                await loadInstructorData();
+            } catch (error) {
+                content.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <h3>We could not load your dashboard</h3>
+                        <p>${WGAUI.escapeHtml(error.message || 'Please try again in a moment.')}</p>
+                        <button class="btn-primary" onclick="window.location.reload()">Try again</button>
+                    </div>`;
+                return;
+            }
+
             await loadPage('overview');
             loadNotifications();
 
+            // Sign out through the API so the refresh token is revoked on the
+            // server. Clearing localStorage alone leaves a live session that
+            // anyone holding the token could keep using.
             document.getElementById('logout-btn').addEventListener('click', () => {
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken');
-                localStorage.removeItem('user');
-                window.location.href = '/';
+                WGA.logout().finally(() => {
+                    window.location.href = '/login.html?reason=signout';
+                });
             });
 
             document.getElementById('notifBtn').addEventListener('click', () => {

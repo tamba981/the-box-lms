@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Certificate verification · Wuteve Global Academy</title>
+  <meta name="description" content="Verify a certificate issued by Wuteve Global Academy." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/css/wga-shell.css" />
+  <style>
+    .cert-banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 22px;
+      border-radius: 14px;
+      margin-bottom: 26px;
+    }
+    .cert-banner i { font-size: 30px; line-height: 1; }
+    .cert-banner strong { display: block; font-size: 16.5px; }
+    .cert-banner span { font-size: 13.5px; opacity: 0.85; }
+
+    .cert-valid { background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.35); color: #065f46; }
+    .cert-revoked { background: rgba(220,38,38,.1); border: 1px solid rgba(220,38,38,.32); color: #991b1b; }
+    .cert-missing { background: rgba(148,163,184,.16); border: 1px solid rgba(148,163,184,.36); color: #475569; }
+
+    body.dark-mode .cert-valid { color: #6ee7b7; }
+    body.dark-mode .cert-revoked { color: #fca5a5; }
+    body.dark-mode .cert-missing { color: #cbd5e1; }
+
+    .cert-detail {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      gap: 12px 20px;
+      font-size: 14.5px;
+      padding: 4px 0;
+    }
+    .cert-detail dt { color: var(--text-light); font-weight: 600; }
+    body.dark-mode .cert-detail dt { color: var(--dark-muted); }
+    .cert-detail dd { font-weight: 600; word-break: break-word; }
+
+    @media (max-width: 560px) {
+      .cert-detail { grid-template-columns: 1fr; gap: 2px; }
+      .cert-detail dd { margin-bottom: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="wga-header">
+    <a class="wga-brand" href="/">
+      <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+      Wuteve <span class="accent">Global Academy</span>
+    </a>
+    <button class="wga-theme-toggle" data-theme-toggle type="button" aria-label="Toggle colour theme">🌙</button>
+  </header>
+
+  <main class="wga-main wga-narrow">
+    <div class="wga-card" id="card">
+      <div id="banner" class="cert-banner cert-missing">
+        <i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+        <div>
+          <strong id="banner-title">Checking this certificate…</strong>
+          <span id="banner-sub">One moment please.</span>
+        </div>
+      </div>
+
+      <h1 id="heading" style="margin-bottom:14px;">Certificate verification</h1>
+      <dl class="cert-detail" id="details"></dl>
+      <div id="extra" style="margin-top:24px;"></div>
+    </div>
+
+    <form class="wga-card" id="lookup" style="margin-top:22px;padding:26px 24px;">
+      <h1 style="font-size:17px;">Verify another certificate</h1>
+      <p style="margin-bottom:16px;">Enter the certificate number printed on the document.</p>
+      <div class="wga-field" style="margin-bottom:14px;">
+        <label class="wga-label" for="code">Certificate number</label>
+        <input class="wga-input" id="code" name="code" placeholder="WGA-2026-000123"
+               autocomplete="off" spellcheck="false" />
+      </div>
+      <button class="wga-btn wga-btn-primary" type="submit">
+        <i class="fas fa-magnifying-glass" aria-hidden="true"></i> Verify
+      </button>
+    </form>
+
+    <p class="wga-muted" style="text-align:center;margin-top:20px;font-size:13px;">
+      Verification is open to anyone — no account is needed. Only the details printed on
+      the certificate are shown.
+    </p>
+  </main>
+
+  <script src="/assets/js/wga-api.js"></script>
+  <script src="/assets/js/wga-ui.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      WGAUI.initTheme();
+
+      var banner = document.getElementById('banner');
+      var bannerTitle = document.getElementById('banner-title');
+      var bannerSub = document.getElementById('banner-sub');
+      var heading = document.getElementById('heading');
+      var details = document.getElementById('details');
+      var extra = document.getElementById('extra');
+      var lookup = document.getElementById('lookup');
+
+      /**
+       * Read the code from the pretty URL (/verify/abc123) or, as a fallback,
+       * from ?code=abc123 — so both the emailed link and a manually typed
+       * query work.
+       */
+      function codeFromUrl() {
+        var match = window.location.pathname.match(/^\/verify\/(.+)$/);
+        if (match) return decodeURIComponent(match[1]);
+
+        return WGAUI.param('code') || '';
+      }
+
+      function row(label, value) {
+        return '<dt>' + WGAUI.escapeHtml(label) + '</dt><dd>' + WGAUI.escapeHtml(value) + '</dd>';
+      }
+
+      function renderNotVerified(title, sub) {
+        banner.className = 'cert-banner cert-missing';
+        banner.querySelector('i').className = 'fas fa-circle-question';
+        bannerTitle.textContent = title;
+        bannerSub.textContent = sub;
+
+        heading.textContent = 'No certificate found';
+        details.innerHTML = '';
+        extra.innerHTML = '';
+      }
+
+      function render(data) {
+        if (data.revoked) {
+          banner.className = 'cert-banner cert-revoked';
+          banner.querySelector('i').className = 'fas fa-circle-exclamation';
+          bannerTitle.textContent = 'This certificate has been revoked';
+          bannerSub.textContent = 'It is no longer a valid credential.';
+        } else {
+          banner.className = 'cert-banner cert-valid';
+          banner.querySelector('i').className = 'fas fa-circle-check';
+          bannerTitle.textContent = 'Valid certificate';
+          bannerSub.textContent = 'Issued by Wuteve Global Academy.';
+        }
+
+        heading.textContent = data.courseTitle;
+
+        details.innerHTML = [
+          row('Awarded to', data.studentName),
+          row('Course', data.courseTitle),
+          data.instructorName ? row('Instructor', data.instructorName) : '',
+          row('Certificate number', data.certificateNumber),
+          row('Date issued', WGAUI.formatDate(data.issueDate)),
+          data.completionDate ? row('Date completed', WGAUI.formatDate(data.completionDate)) : '',
+          data.hoursCompleted ? row('Learning hours', String(data.hoursCompleted)) : '',
+          data.grade ? row('Grade', data.grade) : '',
+          row('Issued by', data.issuedBy || 'Wuteve Global Academy')
+        ].join('');
+
+        var buttons = [];
+
+        if (data.pdfUrl) {
+          buttons.push(
+            '<a class="wga-btn wga-btn-primary" href="' + WGAUI.escapeHtml(data.pdfUrl) +
+            '" target="_blank" rel="noopener"><i class="fas fa-download" aria-hidden="true"></i> Download PDF</a>'
+          );
+        }
+
+        buttons.push(
+          '<button class="wga-btn wga-btn-ghost" type="button" id="print">' +
+          '<i class="fas fa-print" aria-hidden="true"></i> Print this page</button>'
+        );
+
+        if (data.revoked && data.revokedReason) {
+          buttons.push(
+            '<p class="wga-muted" style="width:100%;margin:6px 0 0;font-size:13.5px;">Reason: ' +
+            WGAUI.escapeHtml(data.revokedReason) + '</p>'
+          );
+        }
+
+        extra.innerHTML = '<div style="display:flex;gap:12px;flex-wrap:wrap;">' + buttons.join('') + '</div>';
+
+        var print = document.getElementById('print');
+        if (print) print.addEventListener('click', function () { window.print(); });
+      }
+
+      function verify(code) {
+        if (!code) {
+          renderNotVerified('No certificate selected', 'Enter a certificate number below to check it.');
+          return;
+        }
+
+        banner.className = 'cert-banner cert-missing';
+        banner.querySelector('i').className = 'fas fa-circle-notch fa-spin';
+        bannerTitle.textContent = 'Checking this certificate…';
+        bannerSub.textContent = 'One moment please.';
+
+        WGA.get('/certificates/verify/' + encodeURIComponent(code))
+          .then(function (data) {
+            if (!data.found) {
+              renderNotVerified('No certificate matches that reference', 'Check the number and try again.');
+              return;
+            }
+
+            // Whatever the status, reflect it in the address bar so the result
+            // can be linked and shared.
+            if (window.location.pathname.indexOf('/verify/') !== 0) {
+              window.history.replaceState({}, '', '/verify/' + encodeURIComponent(code));
+            }
+
+            document.title =
+              (data.revoked ? 'Revoked certificate · ' : 'Verified certificate · ') +
+              data.certificateNumber + ' · Wuteve Global Academy';
+
+            render(data);
+          })
+          .catch(function (error) {
+            renderNotVerified('We could not check that certificate', error.message || 'Please try again.');
+          });
+      }
+
+      lookup.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var value = document.getElementById('code').value.trim();
+        if (value) verify(value);
+      });
+
+      verify(codeFromUrl().trim());
+    })();
+  </script>
+</body>
+</html>

@@ -1,8 +1,11 @@
 {
+  "$schema": "https://schema.railpack.com",
   "build": {
     "commands": {
-      "build": "cd backend && npm install && npm run build",
-      "start": "cd backend && npm start"
+      "build": "cd backend && npm ci && npm run build"
     }
+  },
+  "deploy": {
+    "startCommand": "cd backend && npm start"
   }
 }

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Confirm your email · Wuteve Global Academy</title>
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/css/wga-shell.css" />
+</head>
+<body>
+  <header class="wga-header">
+    <a class="wga-brand" href="/">
+      <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+      Wuteve <span class="accent">Global Academy</span>
+    </a>
+    <button class="wga-theme-toggle" data-theme-toggle type="button" aria-label="Toggle colour theme">🌙</button>
+  </header>
+
+  <main class="wga-main wga-narrow">
+    <div class="wga-card" id="card">
+      <div style="text-align:center;padding:14px 0 22px;">
+        <div id="icon" style="font-size:44px;line-height:1;margin-bottom:16px;color:var(--primary);">
+          <i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+        </div>
+        <h1 id="title" style="margin-bottom:8px;">Confirming your email address…</h1>
+        <p id="message" class="wga-muted" style="margin:0;">One moment please.</p>
+      </div>
+
+      <div id="actions" style="display:none;"></div>
+    </div>
+  </main>
+
+  <script src="/assets/js/wga-api.js"></script>
+  <script src="/assets/js/wga-ui.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      WGAUI.initTheme();
+
+      var icon = document.getElementById('icon');
+      var title = document.getElementById('title');
+      var message = document.getElementById('message');
+      var actions = document.getElementById('actions');
+      var statusBox = document.createElement('div');
+      statusBox.className = 'wga-alert';
+      statusBox.setAttribute('role', 'alert');
+      document.getElementById('card').insertBefore(statusBox, actions);
+
+      var token = WGAUI.param('token');
+
+      function succeed(session) {
+        icon.style.color = 'var(--success)';
+        icon.innerHTML = '<i class="fas fa-circle-check" aria-hidden="true"></i>';
+        title.textContent = 'Your email address is confirmed';
+        message.textContent = 'Your account is now fully active.';
+        actions.style.display = 'block';
+
+        // If the visitor happened to be signed in as the account being
+        // confirmed, send them straight on; otherwise invite them to sign in.
+        var isCurrentUser =
+          session && session.user && WGA.getUser() && String(WGA.getUser().id) === String(session.user.id);
+
+        var target = isCurrentUser ? WGA.homeForRole(session.user.role) : '/login.html';
+        var label = isCurrentUser ? 'Continue to my dashboard' : 'Sign in';
+
+        actions.innerHTML =
+          '<a class="wga-btn wga-btn-primary wga-btn-block" href="' + target + '">' +
+          '<i class="fas fa-arrow-right" aria-hidden="true"></i> ' + WGAUI.escapeHtml(label) + '</a>';
+      }
+
+      function fail(text) {
+        icon.style.color = 'var(--accent)';
+        icon.innerHTML = '<i class="fas fa-circle-exclamation" aria-hidden="true"></i>';
+        title.textContent = 'We could not confirm that link';
+        message.textContent = text;
+        actions.style.display = 'block';
+        actions.innerHTML =
+          '<a class="wga-btn wga-btn-ghost wga-btn-block" href="/login.html">' +
+          '<i class="fas fa-right-to-bracket" aria-hidden="true"></i> Go to sign in</a>';
+      }
+
+      if (!token) {
+        fail('This link is missing its confirmation code. Open the link from your email again, or request a new one.');
+        return;
+      }
+
+      WGA.post('/auth/verify-email', { token: token }, { noRetry: true })
+        .then(function (data) {
+          if (data && data.user) WGA.setSession({ user: data.user });
+          succeed(data);
+        })
+        .catch(function (error) {
+          if (error.status === 401) {
+            fail('This confirmation link is invalid, already used, or has expired. Sign in and we will send you a new one.');
+            return;
+          }
+          fail(error.message || 'Something went wrong while confirming your email. Please try again.');
+        });
+    })();
+  </script>
+</body>
+</html>

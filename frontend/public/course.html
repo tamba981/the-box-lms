@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course · Wuteve Global Academy</title>
+  <meta name="description" content="Course details, syllabus and enrolment." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/css/wga-shell.css" />
+  <style>
+    .hero {
+      display: grid; grid-template-columns: 1.6fr 1fr; gap: 30px;
+      padding: 14px 0 30px; align-items: start;
+    }
+    @media (max-width: 880px) { .hero { grid-template-columns: 1fr; } }
+
+    .hero h1 { font-size: 32px; font-weight: 900; letter-spacing: -0.8px; line-height: 1.2; margin: 12px 0 14px; }
+    .hero .lede { font-size: 16px; color: var(--text-light); margin-bottom: 18px; }
+    body.dark-mode .hero .lede { color: var(--dark-muted); }
+
+    .meta-row { display: flex; flex-wrap: wrap; gap: 18px; font-size: 14px; color: var(--text-light); }
+    body.dark-mode .meta-row { color: var(--dark-muted); }
+    .meta-row span { display: inline-flex; align-items: center; gap: 7px; }
+
+    .buy-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+      padding: 26px; box-shadow: var(--shadow); position: sticky; top: 20px;
+    }
+    body.dark-mode .buy-card { background: var(--dark-surface); border-color: var(--dark-border); box-shadow: none; }
+    .buy-price { font-size: 30px; font-weight: 900; letter-spacing: -1px; margin-bottom: 4px; }
+
+    .section-title { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; margin: 34px 0 14px; }
+
+    .lesson-row {
+      display: flex; align-items: center; gap: 14px; padding: 13px 16px;
+      border: 1px solid var(--border); border-radius: 12px; margin-bottom: 9px;
+      background: var(--surface); font-size: 14.5px;
+    }
+    body.dark-mode .lesson-row { background: var(--dark-surface); border-color: var(--dark-border); }
+    .lesson-row .num {
+      width: 26px; height: 26px; border-radius: 50%; flex: 0 0 26px;
+      display: grid; place-items: center; font-size: 12px; font-weight: 700;
+      background: rgba(26,86,219,.12); color: var(--primary);
+    }
+    body.dark-mode .lesson-row .num { background: rgba(59,130,246,.2); color: var(--primary-light); }
+    .lesson-row .grow { flex: 1; }
+    .lesson-row .tag { font-size: 11.5px; text-transform: uppercase; letter-spacing: .4px; color: var(--text-light); }
+    body.dark-mode .lesson-row .tag { color: var(--dark-muted); }
+    .lesson-row.done .num { background: rgba(16,185,129,.16); color: #047857; }
+
+    .pre { white-space: pre-line; font-size: 15px; line-height: 1.75; }
+    .desc { font-size: 15px; line-height: 1.75; color: var(--text-light); }
+    body.dark-mode .desc { color: var(--dark-muted); }
+  </style>
+</head>
+<body>
+  <header class="wga-header">
+    <a class="wga-brand" href="/">
+      <i class="fas fa-graduation-cap" aria-hidden="true"></i>
+      Wuteve <span class="accent">Global Academy</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a class="wga-btn wga-btn-ghost" href="/courses.html" style="padding:10px 18px;font-size:14px;">
+        <i class="fas fa-arrow-left" aria-hidden="true"></i> Catalog
+      </a>
+      <button class="wga-theme-toggle" data-theme-toggle type="button" aria-label="Toggle colour theme">🌙</button>
+    </div>
+  </header>
+
+  <main class="wga-main" id="main">
+    <div class="wga-card" id="loading">
+      <div class="wga-skeleton" style="height:28px;width:60%;margin-bottom:16px;"></div>
+      <div class="wga-skeleton" style="height:16px;width:90%;margin-bottom:10px;"></div>
+      <div class="wga-skeleton" style="height:16px;width:75%;"></div>
+    </div>
+  </main>
+
+  <script src="/assets/js/wga-api.js"></script>
+  <script src="/assets/js/wga-ui.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      WGAUI.initTheme();
+
+      var main = document.getElementById('main');
+
+      function identifier() {
+        return WGAUI.param('course') || WGAUI.param('slug') || WGAUI.param('id') || '';
+      }
+
+      function lessonRow(lesson, index) {
+        var icon = lesson.completed
+          ? '<i class="fas fa-check" aria-hidden="true"></i>'
+          : '<span>' + index + '</span>';
+
+        var right = lesson.locked
+          ? '<span class="tag"><i class="fas fa-lock" aria-hidden="true"></i> Locked</span>'
+          : lesson.isPreview
+            ? '<span class="tag" style="color:var(--primary);">Preview</span>'
+            : '<span class="tag">' + WGAUI.escapeHtml(lesson.type) + '</span>';
+
+        return (
+          '<div class="lesson-row' + (lesson.completed ? ' done' : '') + '">' +
+          '<div class="num">' + icon + '</div>' +
+          '<div class="grow">' + WGAUI.escapeHtml(lesson.title) +
+          (lesson.durationMinutes ? ' <span class="tag">· ' + lesson.durationMinutes + ' min</span>' : '') +
+          '</div>' + right + '</div>'
+        );
+      }
+
+      function render(data) {
+        var course = data.course;
+        var access = data.access;
+        var syllabus = data.lessons || [];
+
+        document.title = course.title + ' · Wuteve Global Academy';
+
+        var metaDescription = document.querySelector('meta[name="description"]');
+        if (metaDescription && course.summary) metaDescription.setAttribute('content', course.summary);
+
+        /* ---- Primary action ---------------------------------------- */
+        var action = '';
+
+        if (access.manages) {
+          action =
+            '<a class="wga-btn wga-btn-primary wga-btn-block" href="/instructor-dashboard.html#/course/' +
+            encodeURIComponent(course.id) + '"><i class="fas fa-pen-to-square" aria-hidden="true"></i> Manage this course</a>' +
+            '<p class="wga-hint" style="text-align:center;">You teach this course.</p>';
+        } else if (access.isEnrolled) {
+          action =
+            '<a class="wga-btn wga-btn-primary wga-btn-block" href="/student-dashboard.html#/course/' +
+            encodeURIComponent(course.id) + '"><i class="fas fa-play" aria-hidden="true"></i> ' +
+            (access.progress > 0 ? 'Continue learning' : 'Start learning') + '</a>' +
+            '<div style="margin-top:14px;">' +
+            '<div class="wga-progress"><span style="width:' + Math.max(0, Math.min(100, access.progress || 0)) + '%"></span></div>' +
+            '<p class="wga-hint" style="text-align:center;margin-top:7px;">' + (access.progress || 0) + '% complete</p>' +
+            '</div>';
+        } else if (!WGA.isSignedIn()) {
+          action =
+            '<a class="wga-btn wga-btn-primary wga-btn-block" href="/login.html?next=' +
+            encodeURIComponent(window.location.pathname + window.location.search) + '">' +
+            '<i class="fas fa-right-to-bracket" aria-hidden="true"></i> Sign in to enroll</a>';
+        } else if (course.isFree) {
+          action =
+            '<button class="wga-btn wga-btn-primary wga-btn-block" type="button" id="enroll">' +
+            '<i class="fas fa-user-plus" aria-hidden="true"></i> Enroll for free</button>';
+        } else {
+          action =
+            '<button class="wga-btn wga-btn-primary wga-btn-block" type="button" id="checkout">' +
+            '<i class="fas fa-credit-card" aria-hidden="true"></i> Enroll now</button>' +
+            '<p class="wga-hint" style="text-align:center;">Secure payment. You will be redirected to complete your purchase.</p>';
+        }
+
+        if (access.certificateId) {
+          action +=
+            '<a class="wga-btn wga-btn-ghost wga-btn-block" style="margin-top:10px;" href="/student-dashboard.html#/certificates">' +
+            '<i class="fas fa-award" aria-hidden="true"></i> View your certificate</a>';
+        }
+
+        var thumb = course.thumbnail
+          ? '<img src="' + WGAUI.escapeHtml(course.thumbnail) + '" alt="" style="width:100%;border-radius:16px;margin-bottom:24px;" />'
+          : '';
+
+        main.innerHTML =
+          '<div class="hero">' +
+            '<div>' +
+              thumb +
+              '<span class="wga-pill">' + WGAUI.escapeHtml(course.category) + '</span>' +
+              '<h1>' + WGAUI.escapeHtml(course.title) + '</h1>' +
+              '<p class="lede">' + WGAUI.escapeHtml(course.summary || '') + '</p>' +
+              '<div class="meta-row">' +
+                '<span><i class="fas fa-signal" aria-hidden="true"></i> ' + WGAUI.escapeHtml(course.level) + '</span>' +
+                '<span><i class="fas fa-play-circle" aria-hidden="true"></i> ' + (course.lessonCount || syllabus.length) + ' lessons</span>' +
+                (course.durationHours ? '<span><i class="fas fa-clock" aria-hidden="true"></i> ' + course.durationHours + ' hours</span>' : '') +
+                '<span><i class="fas fa-users" aria-hidden="true"></i> ' + (course.enrolledCount || 0) + ' enrolled</span>' +
+                (course.ratingCount ? '<span><i class="fas fa-star" style="color:var(--gold)" aria-hidden="true"></i> ' + course.rating + ' (' + course.ratingCount + ')</span>' : '') +
+              '</div>' +
+            '</div>' +
+            '<aside class="buy-card">' +
+              '<div class="buy-price">' + WGAUI.escapeHtml(course.priceLabel || WGAUI.formatMoney(course.priceCents, course.currency)) + '</div>' +
+              '<p class="wga-hint" style="margin-bottom:20px;">' +
+                (course.isFree ? 'No payment required.' : 'One-time payment, lifetime access.') + '</p>' +
+              action +
+              '<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);">' +
+                '<p class="wga-hint" style="margin:0 0 4px;font-weight:700;color:inherit;">Instructor</p>' +
+                '<p style="margin:0;font-weight:600;">' + WGAUI.escapeHtml(course.instructorName || 'Wuteve Global Academy') + '</p>' +
+              '</div>' +
+            '</aside>' +
+          '</div>' +
+
+          (course.description
+            ? '<h2 class="section-title">About this course</h2><p class="desc pre">' + WGAUI.escapeHtml(course.description) + '</p>'
+            : '') +
+
+          '<h2 class="section-title">Syllabus</h2>' +
+          (syllabus.length
+            ? syllabus.map(function (lesson, index) { return lessonRow(lesson, index + 1); }).join('')
+            : WGAUI.emptyState('No lessons published yet', 'The instructor has not published the syllabus for this course.'));
+
+        bindActions(course);
+      }
+
+      function bindActions(course) {
+        var enroll = document.getElementById('enroll');
+        var checkout = document.getElementById('checkout');
+
+        if (enroll) {
+          enroll.addEventListener('click', function () {
+            WGAUI.setBusy(enroll, true, 'Enrolling…');
+
+            WGA.post('/courses/' + encodeURIComponent(course.id) + '/enroll')
+              .then(function () {
+                WGAUI.toast('You are enrolled. Taking you to your course…', 'success');
+                setTimeout(function () {
+                  window.location.href = '/student-dashboard.html#/course/' + encodeURIComponent(course.id);
+                }, 900);
+              })
+              .catch(function (error) {
+                WGAUI.setBusy(enroll, false);
+
+                if (error.status === 401) {
+                  WGA.requireSignIn();
+                  return;
+                }
+
+                WGAUI.toast(error.message || 'We could not enroll you. Please try again.', 'error');
+              });
+          });
+        }
+
+        if (checkout) {
+          checkout.addEventListener('click', function () {
+            WGAUI.setBusy(checkout, true, 'Starting checkout…');
+
+            WGA.post('/payments/checkout/' + encodeURIComponent(course.id))
+              .then(function (data) {
+                if (data && data.checkoutUrl) {
+                  window.location.href = data.checkoutUrl;
+                  return;
+                }
+                throw new Error('Checkout did not return a payment page.');
+              })
+              .catch(function (error) {
+                WGAUI.setBusy(checkout, false);
+
+                if (error.status === 401) {
+                  WGA.requireSignIn();
+                  return;
+                }
+
+                // A deployment with no payment keys configured says so plainly
+                // rather than failing silently.
+                WGAUI.toast(error.message || 'We could not start the checkout.', 'error');
+              });
+          });
+        }
+      }
+
+      var id = identifier();
+
+      if (!id) {
+        main.innerHTML = '<div class="wga-card">' +
+          WGAUI.emptyState('No course selected', 'Open a course from the catalog.') +
+          '<a class="wga-btn wga-btn-primary wga-btn-block" href="/courses.html">Browse the catalog</a></div>';
+        return;
+      }
+
+      WGA.get('/courses/' + encodeURIComponent(id))
+        .then(render)
+        .catch(function (error) {
+          main.innerHTML =
+            '<div class="wga-card">' +
+            WGAUI.emptyState(
+              error.status === 404 ? 'That course was not found' : 'We could not load this course',
+              error.status === 404
+                ? 'It may have been unpublished, or the link may be mistyped.'
+                : error.message || 'Please try again.'
+            ) +
+            '<a class="wga-btn wga-btn-primary wga-btn-block" href="/courses.html">' +
+            '<i class="fas fa-arrow-left" aria-hidden="true"></i> Back to the catalog</a></div>';
+        });
+    })();
+  </script>
+</body>
+</html>
