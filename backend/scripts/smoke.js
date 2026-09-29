@@ -25,6 +25,14 @@ process.env.LOG_LEVEL = process.env.LOG_LEVEL || 'error';
 // expired-token test — those forge their own tokens with an explicit past expiry.
 process.env.JWT_ACCESS_TTL = process.env.JWT_ACCESS_TTL || '2h';
 
+// The Stripe webhook is testable without a Stripe account: the signature is just
+// an HMAC we can compute ourselves. Supplying a secret here means the suite
+// exercises the real verification and fulfilment path — accepted deliveries,
+// forged signatures, replays and amount mismatches — rather than only ever
+// reaching the "payments are not configured" branch.
+process.env.STRIPE_WEBHOOK_SECRET =
+  process.env.STRIPE_WEBHOOK_SECRET || `whsec_test_${crypto.randomBytes(16).toString('hex')}`;
+
 const db = require('../src/db');
 const User = require('../src/models/User');
 const Token = require('../src/models/Token');
@@ -1815,6 +1823,195 @@ async function testAdminReporting() {
 }
 
 
+async function testStripeWebhook() {
+  const Payment = require('../src/models/Payment');
+  const Course = require('../src/models/Course');
+  const Enrollment = require('../src/models/Enrollment');
+
+  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+
+  /** Stripe signs `${timestamp}.${rawBody}` — reproduce that exactly. */
+  function sign(rawBody, { timestamp, secretOverride } = {}) {
+    const t = timestamp || Math.floor(Date.now() / 1000);
+    const signature = crypto
+      .createHmac('sha256', secretOverride || secret)
+      .update(`${t}.${rawBody}`)
+      .digest('hex');
+    return `t=${t},v1=${signature}`;
+  }
+
+  /** Post the exact bytes, so nothing re-serialises the signed payload. */
+  async function postWebhook(rawBody, signatureHeader) {
+    const response = await fetch(`${baseUrl}/api/v1/payments/webhook`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(signatureHeader ? { 'Stripe-Signature': signatureHeader } : {}),
+      },
+      body: rawBody,
+    });
+    return { status: response.status, json: await response.json().catch(() => null) };
+  }
+
+  // Fixtures created directly, in the suite's own namespace so teardown sweeps them.
+  const instructor = await User.create({
+    firstName: 'Webhook',
+    lastName: 'Instructor',
+    email: `smoke-webhook-instructor-${runId}@example.com`,
+    password: PASSWORD,
+    role: 'instructor',
+    emailVerified: true,
+  });
+  createdEmails.push(instructor.email);
+
+  const student = await User.create({
+    firstName: 'Webhook',
+    lastName: 'Student',
+    email: `smoke-webhook-student-${runId}@example.com`,
+    password: PASSWORD,
+    role: 'student',
+    emailVerified: true,
+  });
+  createdEmails.push(student.email);
+
+  const course = await Course.create({
+    title: 'Webhook fulfilment probe',
+    slug: `webhook-probe-${runId}`,
+    instructor: instructor._id,
+    instructorName: 'Webhook Instructor',
+    priceCents: 4500,
+    currency: 'usd',
+    status: 'published',
+    publishedAt: new Date(),
+  });
+
+  const newPendingPayment = () =>
+    Payment.create({
+      student: student._id,
+      course: course._id,
+      amountCents: 4500,
+      currency: 'usd',
+      provider: 'stripe',
+      status: 'pending',
+      idempotencyKey: `webhook-probe-${runId}-${crypto.randomBytes(4).toString('hex')}`,
+    });
+
+  function sessionFor(payment, overrides = {}) {
+    return {
+      id: `cs_test_${crypto.randomBytes(8).toString('hex')}`,
+      client_reference_id: String(payment._id),
+      metadata: { paymentId: String(payment._id), studentId: String(student._id), courseId: String(course._id) },
+      payment_status: 'paid',
+      amount_total: payment.amountCents,
+      currency: payment.currency,
+      payment_intent: `pi_test_${crypto.randomBytes(8).toString('hex')}`,
+      ...overrides,
+    };
+  }
+
+  const eventBody = (session, type = 'checkout.session.completed') =>
+    JSON.stringify({ id: `evt_${crypto.randomBytes(8).toString('hex')}`, type, data: { object: session } });
+
+  await check('a webhook with no signature is refused', async () => {
+    const { status } = await postWebhook(eventBody(sessionFor({ _id: 'x', amountCents: 4500, currency: 'usd' })), null);
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a webhook signed with the wrong secret is refused', async () => {
+    const raw = eventBody(sessionFor({ _id: 'x', amountCents: 4500, currency: 'usd' }));
+    const { status } = await postWebhook(raw, sign(raw, { secretOverride: 'whsec_not_the_real_one' }));
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a replayed webhook outside the tolerance window is refused', async () => {
+    const raw = eventBody(sessionFor({ _id: 'x', amountCents: 4500, currency: 'usd' }));
+    const stale = Math.floor(Date.now() / 1000) - 600;
+    const { status } = await postWebhook(raw, sign(raw, { timestamp: stale }));
+    assertEqual(status, 400, 'a correctly signed but old delivery must be rejected');
+  });
+
+  await check('a tampered body fails even with a valid signature for the original', async () => {
+    const original = eventBody(sessionFor({ _id: 'x', amountCents: 4500, currency: 'usd' }));
+    const header = sign(original);
+
+    const tampered = eventBody(
+      sessionFor({ _id: 'x', amountCents: 4500, currency: 'usd' }),
+      'checkout.session.completed'
+    ).replace('"payment_status":"paid"', '"payment_status":"unpaid"');
+
+    const { status } = await postWebhook(tampered, header);
+    assertEqual(status, 400, 'the signature covers the whole payload');
+  });
+
+  await check('an unpaid completed session does not grant access', async () => {
+    const payment = await newPendingPayment();
+    const raw = eventBody(sessionFor(payment, { payment_status: 'unpaid' }));
+
+    const { status } = await postWebhook(raw, sign(raw));
+    assertEqual(status, 200, 'acknowledged so Stripe stops retrying');
+
+    const after = await Payment.findById(payment._id);
+    assertEqual(after.status, 'pending', 'the payment must stay pending until it settles');
+
+    const enrolled = await Enrollment.findOne({ student: student._id, course: course._id });
+    assert(enrolled === null, 'no enrolment may exist before the money arrives');
+  });
+
+  await check('a paid completed session grants access exactly once', async () => {
+    const payment = await newPendingPayment();
+    const raw = eventBody(sessionFor(payment));
+
+    const first = await postWebhook(raw, sign(raw));
+    assertEqual(first.status, 200, 'status');
+
+    const settled = await Payment.findById(payment._id);
+    assertEqual(settled.status, 'paid', 'the payment should be marked paid');
+    assert(settled.paidAt, 'paidAt should be set');
+    assert(settled.enrollment, 'the payment should point at the enrolment it created');
+
+    // Same delivery again — Stripe retries, and this must not enrol twice.
+    const second = await postWebhook(raw, sign(raw));
+    assertEqual(second.status, 200, 'a repeat delivery is acknowledged');
+
+    const enrollments = await Enrollment.countDocuments({ student: student._id, course: course._id });
+    assertEqual(enrollments, 1, 'exactly one enrolment, however many times it is delivered');
+  });
+
+  await check('a session whose amount does not match the record is not fulfilled', async () => {
+    const payment = await newPendingPayment();
+    // Stripe charging a different total than we recorded means the two have
+    // drifted; granting access would also record revenue that never happened.
+    const raw = eventBody(sessionFor(payment, { amount_total: 100 }));
+
+    const { status } = await postWebhook(raw, sign(raw));
+    assertEqual(status, 200, 'acknowledged, but not acted on');
+
+    const after = await Payment.findById(payment._id);
+    assertEqual(after.status, 'pending', 'a mismatched amount must not mark the payment paid');
+
+    const enrollments = await Enrollment.countDocuments({ student: student._id, course: course._id });
+    assertEqual(enrollments, 1, 'no further enrolment should have been created');
+  });
+
+  await check('an expired session marks a pending payment failed', async () => {
+    const payment = await newPendingPayment();
+    const raw = eventBody(sessionFor(payment), 'checkout.session.expired');
+
+    const { status } = await postWebhook(raw, sign(raw));
+    assertEqual(status, 200, 'status');
+
+    const after = await Payment.findById(payment._id);
+    assertEqual(after.status, 'failed', 'an abandoned checkout should not stay pending forever');
+  });
+
+  await check('a signed webhook for an unknown event type is acknowledged', async () => {
+    const raw = JSON.stringify({ id: 'evt_unknown', type: 'customer.created', data: { object: {} } });
+    const { status } = await postWebhook(raw, sign(raw));
+    assertEqual(status, 200, 'unhandled events must not cause Stripe to retry forever');
+  });
+}
+
+
 /* ------------------------------------------------------------------ *
  * Run
  * ------------------------------------------------------------------ */
@@ -1876,6 +2073,9 @@ async function main() {
 
     process.stdout.write('\nAdmin reporting\n');
     await testAdminReporting();
+
+    process.stdout.write('\nStripe webhook\n');
+    await testStripeWebhook();
   } finally {
     // Cleanup failures are reported rather than swallowed: a silently failing
     // teardown leaves fixtures in the database and the next run starts from a

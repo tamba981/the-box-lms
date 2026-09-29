@@ -1428,7 +1428,7 @@
                                         <td>${p.paidAt ? WGAUI.formatDateTime(p.paidAt) : '—'}</td>
                                         <td><span class="badge ${p.status === 'paid' ? 'active' : 'inactive'}">${WGAUI.escapeHtml(p.status)}</span></td>
                                         <td>${p.status === 'paid' && !p.refundedAt
-                                            ? `<button class="action-btn delete" onclick="refundPayment('${p.id}')"><i class="fas fa-rotate-left"></i> Refund</button>`
+                                            ? `<button class="action-btn delete" onclick="refundPayment('${p.id}')" title="Marks the payment refunded and closes the enrolment. Does not move money — issue the refund in Stripe."><i class="fas fa-rotate-left"></i> Mark refunded</button>`
                                             : '—'}</td>
                                     </tr>
                                 `).join('')
@@ -1829,10 +1829,19 @@
 
         window.refundPayment = (id, button) =>
             withBusy(button, async () => {
-                if (!window.confirm('Refund this payment? The student loses access to the course.')) return;
+                /**
+                 * This endpoint does not move money. It marks the payment refunded
+                 * locally and closes the enrolment; the refund itself has to be
+                 * issued in Stripe. Saying "Payment refunded" here would be a
+                 * lie the administrator has no way to notice.
+                 */
+                if (!window.confirm(
+                    'Mark this payment as refunded and withdraw the student\'s access?\n\n' +
+                    'This does NOT send money back. Issue the refund itself in the Stripe dashboard.'
+                )) return;
 
                 await WGA.post(`/payments/${id}/refund`, {});
-                showToast('Payment refunded.', 'success');
+                showToast('Marked as refunded. Remember to issue the refund in Stripe.', 'success');
                 await refresh();
                 await loadPage('payments');
             });

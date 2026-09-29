@@ -83,6 +83,23 @@ async function createCheckoutSession({ user, course }) {
       status: 'pending',
       idempotencyKey,
     });
+  } else if (payment.amountCents !== course.priceCents || payment.currency !== course.currency) {
+    /**
+     * A pending record is reused across attempts, and the price is read fresh
+     * each time. If the instructor changed it in between, the record would
+     * describe an amount Stripe is not going to charge — and the revenue
+     * reports would be wrong by whatever the difference was. Bring the record
+     * back in line with the price the student is actually being asked to pay.
+     */
+    logger.info('course price changed between checkout attempts', {
+      paymentId: String(payment._id),
+      was: `${payment.amountCents} ${payment.currency}`,
+      now: `${course.priceCents} ${course.currency}`,
+    });
+
+    payment.amountCents = course.priceCents;
+    payment.currency = course.currency;
+    await payment.save();
   }
 
   const successUrl = `${config.publicBaseUrl}/student-dashboard.html#/course/${course.slug || course._id}?payment=success`;
@@ -207,6 +224,36 @@ async function fulfillCheckoutSession(session) {
   // Already done. A repeated delivery stops here.
   if (payment.status === 'paid' && payment.enrollment) {
     return { handled: true, reason: 'already_fulfilled', paymentId: String(payment._id) };
+  }
+
+  /**
+   * Confirm Stripe charged what this payment record expects.
+   *
+   * The record is the source of truth for revenue reporting, and the two can
+   * drift — a price change mid-checkout, a session built from an older record,
+   * or a session that did not originate from us at all. Refusing here leaves the
+   * payment pending for a human to look at, which is much better than granting
+   * access and recording a figure that never happened.
+   */
+  if (typeof session.amount_total === 'number' && session.amount_total !== payment.amountCents) {
+    logger.error('refusing to fulfil: amount does not match the payment record', {
+      paymentId: String(payment._id),
+      expected: payment.amountCents,
+      charged: session.amount_total,
+    });
+    return { handled: false, reason: 'amount_mismatch', paymentId: String(payment._id) };
+  }
+
+  if (
+    session.currency &&
+    String(session.currency).toLowerCase() !== String(payment.currency).toLowerCase()
+  ) {
+    logger.error('refusing to fulfil: currency does not match the payment record', {
+      paymentId: String(payment._id),
+      expected: payment.currency,
+      charged: session.currency,
+    });
+    return { handled: false, reason: 'currency_mismatch', paymentId: String(payment._id) };
   }
 
   const [student, course] = await Promise.all([

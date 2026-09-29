@@ -123,12 +123,32 @@ router.post(
     try {
       switch (event.type) {
         case 'checkout.session.completed': {
+          /**
+           * Stripe fires this when checkout finishes, which is not the same as
+           * the money arriving. With asynchronous methods — bank debits,
+           * vouchers — payment_status is still 'unpaid' at this point, and
+           * fulfilling here would hand over the course before the payment
+           * settled. Stripe's own guidance is to check this field before
+           * granting anything.
+           *
+           * This is not currently reachable with cards, which is exactly why it
+           * matters: enabling another payment method is a dashboard toggle, not
+           * a code change, so the hole would open silently.
+           */
+          if (event.data.object.payment_status !== 'paid') {
+            logger.info('checkout completed but unpaid — waiting for settlement', {
+              sessionId: event.data.object.id,
+              paymentStatus: event.data.object.payment_status,
+            });
+            break;
+          }
+
           const result = await paymentService.fulfillCheckoutSession(event.data.object);
           logger.info('checkout completed', result);
           break;
         }
 
-        // Deliberately not treated as fulfilment: the payment has not settled.
+        // This one means the money settled, unlike completed-with-unpaid above.
         case 'checkout.session.async_payment_succeeded':
           await paymentService.fulfillCheckoutSession(event.data.object);
           break;
