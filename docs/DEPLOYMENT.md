@@ -73,12 +73,43 @@ emails contain dead links.
 
 | Variable                | Effect when unset                                                |
 | ----------------------- | ---------------------------------------------------------------- |
-| `CORS_ORIGINS`          | Only same-origin requests accepted — correct for this deployment |
+| `CORS_ORIGINS`          | Same-origin requests still work. List a host here only if a separate frontend origin needs to call the API |
 | `RESEND_API_KEY`        | Verification and reset links are logged, not emailed             |
 | `EMAIL_FROM`            | Uses a Resend sandbox sender                                     |
 | `STRIPE_SECRET_KEY`     | Paid courses return a clear 503 on checkout; free courses work   |
 | `STRIPE_WEBHOOK_SECRET` | **Webhooks rejected, so no payment would ever be fulfilled**     |
+| `ORANGE_MONEY_*`        | Orange Money is shown as switched off, naming the absent values, and a charge is refused |
+| `LONESTAR_MOMO_*`       | The same, for Lonestar Cell MTN MoMo                             |
 | `LOG_LEVEL`             | Defaults to `info` in production                                 |
+
+#### `CORS_ORIGINS` and the origin guard
+
+Leaving `CORS_ORIGINS` unset is correct here. It is worth knowing why it used to
+be fatal, because the failure was invisible to everything except a real browser.
+
+Browsers send an `Origin` header on every `POST`, `PATCH` and `DELETE` —
+**including same-origin ones**. The guard compared that header against the
+configured allowlist alone, so with the allowlist empty every write from the
+site's own pages was refused:
+
+```
+POST /api/v1/auth/login   Origin: https://your-domain.com   -> 403
+POST /api/v1/auth/login   (no Origin, e.g. curl)            -> 200
+```
+
+Every `GET` kept working, so the deployment looked healthy: the health check
+passed, pages loaded, and the failure appeared only when somebody tried to sign
+in. The log even described the server's own origin as a blocked cross-origin
+request, which is the opposite of what was happening.
+
+The guard now also accepts an `Origin` that matches the host the request arrived
+on, which is what "same-origin" actually means. Four checks in `npm run smoke`
+pin this, because the suite is not a browser and never once sent the header that
+triggered the bug.
+
+If a write ever returns 403 `CROSS_ORIGIN_BLOCKED` on a healthy deployment, it is
+this: the server is not recognising its own hostname, which normally means `Host`
+or `X-Forwarded-Proto` is not reaching it as expected.
 
 ### Failing to start is intentional
 
@@ -123,9 +154,14 @@ Then check by hand:
    email provider is configured).
 3. `https://your-domain.com/nonexistent` — returns the 404 page **with a 404
    status**.
-4. Sign in as an admin and open `/admin-dashboard.html` — the guard lets you in;
+4. **Sign in.** This is the step that catches the origin trap described above: a
+   browser sends an `Origin` header that `curl` does not, so this is the first
+   place a same-origin guard bug becomes visible.
+5. Open any page that writes — enrol in a free course, or post in the community —
+   to prove `POST` works and not just `GET`.
+6. Sign in as an admin and open `/admin-dashboard.html` — the guard lets you in;
    as a student it redirects you away.
-5. `https://your-domain.com/verify/WGA-1999-999999` — reports not found rather
+7. `https://your-domain.com/verify/WGA-1999-999999` — reports not found rather
    than crashing.
 
 ### Populate real content
@@ -160,6 +196,35 @@ never see the link.**
 ---
 
 ## 7. Payments
+
+### Read this before setting any payment variable
+
+**Stripe does not accept businesses registered in Liberia.** Its own country list
+carries Ghana, Nigeria, Kenya and South Africa and does not carry Liberia, Sierra
+Leone or Guinea. An account needs a business entity and a bank account in a
+supported country, so setting `STRIPE_SECRET_KEY` alone will not make cards work
+for a Liberian business — and no key will.
+
+The steps below are therefore correct but not sufficient. Cards need a gateway that
+covers Liberia, or an entity in a supported country. The Stripe implementation is
+kept because it is correct and tested, and because it is the reference the chosen
+gateway should be modelled on. See `docs/PAYMENTS.md` for the options and the
+questions to put to a prospective provider.
+
+**The mobile money providers cannot take money yet either.** Orange Money and
+Lonestar Cell MTN MoMo are wired end to end — provider registry, phone
+normalisation, signed callbacks, and settlement shared with the card path — but the
+two calls that actually contact each provider are deliberate stubs. They throw
+rather than guess, because inventing an endpoint shape or an authentication scheme
+would produce something that looks finished and fails against real money. Supplying
+their credentials makes a method *selectable*, not *payable*. What is missing, and
+what to request from each provider, is listed in `docs/PAYMENTS.md`.
+
+Until one of those is resolved, the honest state of this deployment is: **free
+courses work, and paid courses tell the student plainly that no payment method is
+available and that nothing has been charged.**
+
+### Stripe
 
 1. Set `STRIPE_SECRET_KEY`.
 2. Dashboard → Developers → **Webhooks** → *Add endpoint*:

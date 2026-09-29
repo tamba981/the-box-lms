@@ -592,6 +592,63 @@ async function testDiscussions() {
 }
 
 /**
+ * The same-origin guard, exercised the way a browser behaves.
+ *
+ * This suite exists because the guard checked only the configured allowlist.
+ * Browsers send an Origin header on every POST, PATCH and DELETE — including
+ * same-origin ones — so with CORS_ORIGINS unset, which is the default, every
+ * write from the site's own pages was refused. Every GET kept working, so the
+ * deployment looked healthy: the health check passed, pages loaded, and the
+ * first sign-in returned 403 "did not originate from a recognised host".
+ *
+ * Nothing here caught it because this harness never sent an Origin header at
+ * all — it is not a browser, so it never reproduced a browser's behaviour.
+ *
+ * A write that needs authentication is used rather than sign-in, because
+ * sign-in sits under the tighter auth limiter and a deliberate failure there
+ * would spend its budget.
+ */
+async function testOriginGuard() {
+  const selfOrigin = baseUrl;
+  const write = ['POST', '/api/v1/payments/checkout/000000000000000000000000'];
+
+  await check('a same-origin write is accepted', async () => {
+    const { status, json } = await request(write[0], write[1], {
+      body: {},
+      headers: { Origin: selfOrigin },
+    });
+
+    // 401 proves the request reached the route: the guard let it through and
+    // the caller simply has no session.
+    assertEqual(status, 401, 'status');
+    assert(json && json.code !== 'CROSS_ORIGIN_BLOCKED', 'must not be blocked as cross-origin');
+  });
+
+  await check('a cross-origin write is refused', async () => {
+    const { status, json } = await request(write[0], write[1], {
+      body: {},
+      headers: { Origin: 'https://not-our-site.example' },
+    });
+
+    assertEqual(status, 403, 'status');
+    assertEqual(json && json.code, 'CROSS_ORIGIN_BLOCKED', 'code');
+  });
+
+  await check('a write with no Origin header is accepted', async () => {
+    const { status } = await request(write[0], write[1], { body: {} });
+    assertEqual(status, 401, 'status');
+  });
+
+  await check('a read is not subject to the origin guard', async () => {
+    const { status } = await request('GET', '/api/v1/courses', {
+      headers: { Origin: 'https://not-our-site.example' },
+    });
+
+    assertEqual(status, 200, 'status');
+  });
+}
+
+/**
  * Every email template must carry a recipient.
  *
  * This suite exists because they did not. Each template returned a subject and
@@ -2298,6 +2355,9 @@ async function main() {
 
     process.stdout.write('\nAuthorisation\n');
     await testDiscussions();
+
+    process.stdout.write('\nSame-origin guard\n');
+    await testOriginGuard();
 
     process.stdout.write('\nLearning loop\n');
     await testLearningLoop();

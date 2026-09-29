@@ -128,8 +128,9 @@ const ALLOWED_ORIGINS = CORS_ORIGINS.length > 0
 
 if (IS_PRODUCTION && ALLOWED_ORIGINS.length === 0) {
   warnings.push(
-    'CORS_ORIGINS is not set. Because all pages are served by this same server, the API will ' +
-      'only accept same-origin requests. Set CORS_ORIGINS if a separate frontend host calls the API.'
+    'CORS_ORIGINS is not set. Same-origin requests are still accepted, because the guard ' +
+      'compares the Origin header against the host the request arrived on. List a host here ' +
+      'only if a separate frontend origin needs to call this API.'
   );
 }
 

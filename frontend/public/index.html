@@ -434,6 +434,29 @@
       margin-top: 40px;
     }
     .trending-card { position: relative; overflow: hidden; padding: 20px; }
+
+    /* ---- Pre-JS placeholders ------------------------------------------ *
+     * These blocks stand in for the course and trending cards until the
+     * catalogue arrives. Fully-written cards used to sit here instead:
+     * invented courses, invented instructors and invented learner counts,
+     * which the page displayed for as long as the fetch took and went on
+     * displaying if the fetch failed. A neutral block says nothing, which is
+     * the only honest thing for a page that does not yet know what the
+     * catalogue contains. The shimmer keyframe is shared with the hero.
+     * ------------------------------------------------------------------- */
+    .loading-block {
+      background: linear-gradient(90deg, rgba(148,163,184,.15) 25%, rgba(148,163,184,.28) 50%, rgba(148,163,184,.15) 75%);
+      background-size: 200% 100%;
+      border-radius: 10px;
+      animation: shimmer 1.6s linear infinite;
+    }
+    body.dark-mode .loading-block {
+      background: linear-gradient(90deg, rgba(148,163,184,.10) 25%, rgba(148,163,184,.22) 50%, rgba(148,163,184,.10) 75%);
+      background-size: 200% 100%;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .loading-block { animation: none; }
+    }
     .trending-rank {
       position: absolute; top:12px; left:12px;
       background: linear-gradient(135deg, var(--primary), var(--gold));
@@ -906,29 +929,53 @@
         <div class="filter-group"><label for="level-filter">Difficulty</label><select id="level-filter" class="filter-select"><option value="">All Levels</option><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select></div>
       </div>
       <div class="courses-grid" id="courses-grid">
-        <div class="course-card glass" data-category="technology" data-certificate="essential" data-duration="medium" data-level="beginner" data-title="machine learning fundamentals">
-          <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=1000&q=80')"><div class="course-badge">FREE</div></div>
-          <div class="course-content"><div class="course-header"><h3 class="course-title">Machine Learning Fundamentals</h3><div class="course-rating">4.8</div></div><p class="course-description">Learn the core concepts of ML with practical examples</p><div class="course-meta"><span><i class="fas fa-user"></i> Dr. Sarah Johnson</span><span><i class="fas fa-clock"></i> 8 hours</span></div><span class="certificate-badge essential">Essentials</span><div class="course-footer"><div class="course-price">Free</div><a href="#" class="course-link">Start Learning</a></div></div>
+        <div class="course-card glass" aria-hidden="true">
+          <div class="loading-block" style="height:170px;border-radius:14px 14px 0 0;"></div>
+          <div class="course-content">
+            <div class="loading-block" style="height:19px;width:78%;margin-bottom:13px;"></div>
+            <div class="loading-block" style="height:13px;width:94%;margin-bottom:10px;"></div>
+            <div class="loading-block" style="height:13px;width:56%;"></div>
+          </div>
         </div>
-        <div class="course-card glass" data-category="technology" data-certificate="mastering" data-duration="long" data-level="beginner" data-title="web development bootcamp">
-          <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1581276879432-15e50529f34b?auto=format&fit=crop&w=1000&q=80')"><div class="course-badge">FREE</div></div>
-          <div class="course-content"><div class="course-header"><h3 class="course-title">Web Development Bootcamp</h3><div class="course-rating">4.7</div></div><p class="course-description">Master HTML, CSS, JavaScript and modern frameworks</p><div class="course-meta"><span><i class="fas fa-user"></i> Mark Thompson</span><span><i class="fas fa-clock"></i> 20 hours</span></div><span class="certificate-badge mastering">Mastering</span><div class="course-footer"><div class="course-price">Free</div><a href="#" class="course-link">Start Learning</a></div></div>
+        <div class="course-card glass" aria-hidden="true">
+          <div class="loading-block" style="height:170px;border-radius:14px 14px 0 0;"></div>
+          <div class="course-content">
+            <div class="loading-block" style="height:19px;width:66%;margin-bottom:13px;"></div>
+            <div class="loading-block" style="height:13px;width:88%;margin-bottom:10px;"></div>
+            <div class="loading-block" style="height:13px;width:62%;"></div>
+          </div>
         </div>
-        <div class="course-card glass" data-category="business" data-certificate="diploma" data-duration="long" data-level="intermediate" data-title="data science essentials">
-          <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80')"></div>
-          <div class="course-content"><div class="course-header"><h3 class="course-title">Data Science Essentials</h3><div class="course-rating">4.9</div></div><p class="course-description">Transform data into insights with Python and R</p><div class="course-meta"><span><i class="fas fa-user"></i> Dr. Alex Chen</span><span><i class="fas fa-clock"></i> 25 hours</span></div><span class="certificate-badge diploma">Diploma</span><div class="course-footer"><div class="course-price">Free</div><a href="#" class="course-link">Start Learning</a></div></div>
+        <div class="course-card glass" aria-hidden="true">
+          <div class="loading-block" style="height:170px;border-radius:14px 14px 0 0;"></div>
+          <div class="course-content">
+            <div class="loading-block" style="height:19px;width:72%;margin-bottom:13px;"></div>
+            <div class="loading-block" style="height:13px;width:90%;margin-bottom:10px;"></div>
+            <div class="loading-block" style="height:13px;width:50%;"></div>
+          </div>
         </div>
-        <div class="course-card glass" data-category="business" data-certificate="basic" data-duration="short" data-level="beginner" data-title="business fundamentals">
-          <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=1000&q=80')"></div>
-          <div class="course-content"><div class="course-header"><h3 class="course-title">Business Fundamentals</h3><div class="course-rating">4.6</div></div><p class="course-description">Learn essential business concepts and strategies</p><div class="course-meta"><span><i class="fas fa-user"></i> Prof. James Wilson</span><span><i class="fas fa-clock"></i> 5 hours</span></div><span class="certificate-badge basic">Basics</span><div class="course-footer"><div class="course-price">Free</div><a href="#" class="course-link">Start Learning</a></div></div>
+        <div class="course-card glass" aria-hidden="true">
+          <div class="loading-block" style="height:170px;border-radius:14px 14px 0 0;"></div>
+          <div class="course-content">
+            <div class="loading-block" style="height:19px;width:64%;margin-bottom:13px;"></div>
+            <div class="loading-block" style="height:13px;width:92%;margin-bottom:10px;"></div>
+            <div class="loading-block" style="height:13px;width:58%;"></div>
+          </div>
         </div>
-        <div class="course-card glass" data-category="technology" data-certificate="executive" data-duration="long" data-level="advanced" data-title="advanced ai algorithms">
-          <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&w=1000&q=80')"><div class="course-badge">FREE</div></div>
-          <div class="course-content"><div class="course-header"><h3 class="course-title">Advanced AI Algorithms</h3><div class="course-rating">4.9</div></div><p class="course-description">Deep dive into advanced artificial intelligence concepts</p><div class="course-meta"><span><i class="fas fa-user"></i> Dr. Lisa Zhang</span><span><i class="fas fa-clock"></i> 30 hours</span></div><span class="certificate-badge executive">Executive</span><div class="course-footer"><div class="course-price">Free</div><a href="#" class="course-link">Start Learning</a></div></div>
+        <div class="course-card glass" aria-hidden="true">
+          <div class="loading-block" style="height:170px;border-radius:14px 14px 0 0;"></div>
+          <div class="course-content">
+            <div class="loading-block" style="height:19px;width:82%;margin-bottom:13px;"></div>
+            <div class="loading-block" style="height:13px;width:86%;margin-bottom:10px;"></div>
+            <div class="loading-block" style="height:13px;width:48%;"></div>
+          </div>
         </div>
-        <div class="course-card glass" data-category="business" data-certificate="mba" data-duration="long" data-level="intermediate" data-title="introduction to data analysis">
-          <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80')"></div>
-          <div class="course-content"><div class="course-header"><h3 class="course-title">MBA Essentials: Business Analytics</h3><div class="course-rating">4.5</div></div><p class="course-description">Learn the basics of data analysis and visualization for business</p><div class="course-meta"><span><i class="fas fa-user"></i> Dr. Michael Brown</span><span><i class="fas fa-clock"></i> 35 hours</span></div><span class="certificate-badge mba">MBA</span><div class="course-footer"><div class="course-price">Free</div><a href="#" class="course-link">Start Learning</a></div></div>
+        <div class="course-card glass" aria-hidden="true">
+          <div class="loading-block" style="height:170px;border-radius:14px 14px 0 0;"></div>
+          <div class="course-content">
+            <div class="loading-block" style="height:19px;width:70%;margin-bottom:13px;"></div>
+            <div class="loading-block" style="height:13px;width:96%;margin-bottom:10px;"></div>
+            <div class="loading-block" style="height:13px;width:54%;"></div>
+          </div>
         </div>
       </div>
       <div class="view-all" style="text-align:center;"><a href="/courses.html" class="btn btn-outline">Browse All Courses</a></div>
@@ -944,35 +991,41 @@
         <p>Discover today's most popular courses</p>
       </div>
       <div class="trending-grid" id="trending-grid">
-        <div class="glass-card trending-card fade-in-up">
+        <div class="glass-card trending-card fade-in-up" aria-hidden="true">
           <div class="trending-rank">#1</div>
-          <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=600&q=80')"><span class="certificate-badge essential" style="position:absolute; bottom:10px; left:10px;">Essentials</span></div>
-          <div class="course-content"><h3>Machine Learning Fundamentals</h3><div class="instructor-info"><span class="instructor-avatar" style="background:var(--primary);"></span> Dr. Sarah Johnson</div><div class="course-stats"><span><i class="fas fa-users"></i> 12,847</span><span><i class="fas fa-star" style="color:var(--gold);"></i> 4.8</span><span><i class="fas fa-clock"></i> 8h</span></div><a href="#" class="glass-btn">Join Now →</a></div>
+          <div class="loading-block" style="height:130px;"></div>
+          <div class="loading-block" style="height:16px;width:74%;margin:15px 0 10px;"></div>
+          <div class="loading-block" style="height:12px;width:48%;"></div>
         </div>
-        <div class="glass-card trending-card fade-in-up" style="animation-delay:0.1s;">
+        <div class="glass-card trending-card fade-in-up" style="animation-delay:0.1s;" aria-hidden="true">
           <div class="trending-rank">#2</div>
-          <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1581276879432-15e50529f34b?auto=format&fit=crop&w=600&q=80')"><span class="certificate-badge mastering" style="position:absolute; bottom:10px; left:10px;">Mastering</span></div>
-          <div class="course-content"><h3>Web Development Bootcamp</h3><div class="instructor-info"><span class="instructor-avatar" style="background:#06b6d4;"></span> Mark Thompson</div><div class="course-stats"><span><i class="fas fa-users"></i> 8,234</span><span><i class="fas fa-star" style="color:var(--gold);"></i> 4.7</span><span><i class="fas fa-clock"></i> 20h</span></div><a href="#" class="glass-btn">Join Now →</a></div>
+          <div class="loading-block" style="height:130px;"></div>
+          <div class="loading-block" style="height:16px;width:64%;margin:15px 0 10px;"></div>
+          <div class="loading-block" style="height:12px;width:54%;"></div>
         </div>
-        <div class="glass-card trending-card fade-in-up" style="animation-delay:0.2s;">
+        <div class="glass-card trending-card fade-in-up" style="animation-delay:0.2s;" aria-hidden="true">
           <div class="trending-rank">#3</div>
-          <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=600&q=80')"><span class="certificate-badge diploma" style="position:absolute; bottom:10px; left:10px;">Diploma</span></div>
-          <div class="course-content"><h3>Data Science Essentials</h3><div class="instructor-info"><span class="instructor-avatar" style="background:#10b981;"></span> Dr. Alex Chen</div><div class="course-stats"><span><i class="fas fa-users"></i> 5,671</span><span><i class="fas fa-star" style="color:var(--gold);"></i> 4.9</span><span><i class="fas fa-clock"></i> 25h</span></div><a href="#" class="glass-btn">Join Now →</a></div>
+          <div class="loading-block" style="height:130px;"></div>
+          <div class="loading-block" style="height:16px;width:80%;margin:15px 0 10px;"></div>
+          <div class="loading-block" style="height:12px;width:42%;"></div>
         </div>
-        <div class="glass-card trending-card fade-in-up" style="animation-delay:0.3s;">
+        <div class="glass-card trending-card fade-in-up" style="animation-delay:0.3s;" aria-hidden="true">
           <div class="trending-rank">#4</div>
-          <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=600&q=80')"><span class="certificate-badge mba" style="position:absolute; bottom:10px; left:10px;">MBA</span></div>
-          <div class="course-content"><h3>Business Analytics MBA</h3><div class="instructor-info"><span class="instructor-avatar" style="background:#ef4444;"></span> Dr. Michael Brown</div><div class="course-stats"><span><i class="fas fa-users"></i> 3,892</span><span><i class="fas fa-star" style="color:var(--gold);"></i> 4.5</span><span><i class="fas fa-clock"></i> 35h</span></div><a href="#" class="glass-btn">Join Now →</a></div>
+          <div class="loading-block" style="height:130px;"></div>
+          <div class="loading-block" style="height:16px;width:68%;margin:15px 0 10px;"></div>
+          <div class="loading-block" style="height:12px;width:46%;"></div>
         </div>
-        <div class="glass-card trending-card fade-in-up" style="animation-delay:0.4s;">
+        <div class="glass-card trending-card fade-in-up" style="animation-delay:0.4s;" aria-hidden="true">
           <div class="trending-rank">#5</div>
-          <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&w=600&q=80')"><span class="certificate-badge executive" style="position:absolute; bottom:10px; left:10px;">Executive</span></div>
-          <div class="course-content"><h3>Advanced AI Algorithms</h3><div class="instructor-info"><span class="instructor-avatar" style="background:#f59e0b;"></span> Dr. Lisa Zhang</div><div class="course-stats"><span><i class="fas fa-users"></i> 2,145</span><span><i class="fas fa-star" style="color:var(--gold);"></i> 4.9</span><span><i class="fas fa-clock"></i> 30h</span></div><a href="#" class="glass-btn">Join Now →</a></div>
+          <div class="loading-block" style="height:130px;"></div>
+          <div class="loading-block" style="height:16px;width:76%;margin:15px 0 10px;"></div>
+          <div class="loading-block" style="height:12px;width:52%;"></div>
         </div>
-        <div class="glass-card trending-card fade-in-up" style="animation-delay:0.5s;">
+        <div class="glass-card trending-card fade-in-up" style="animation-delay:0.5s;" aria-hidden="true">
           <div class="trending-rank">#6</div>
-          <div class="course-image" style="background-image:url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=600&q=80')"><span class="certificate-badge basic" style="position:absolute; bottom:10px; left:10px;">Basic</span></div>
-          <div class="course-content"><h3>Business Fundamentals</h3><div class="instructor-info"><span class="instructor-avatar" style="background:#3b82f6;"></span> Prof. James Wilson</div><div class="course-stats"><span><i class="fas fa-users"></i> 1,876</span><span><i class="fas fa-star" style="color:var(--gold);"></i> 4.6</span><span><i class="fas fa-clock"></i> 5h</span></div><a href="#" class="glass-btn">Join Now →</a></div>
+          <div class="loading-block" style="height:130px;"></div>
+          <div class="loading-block" style="height:16px;width:60%;margin:15px 0 10px;"></div>
+          <div class="loading-block" style="height:12px;width:44%;"></div>
         </div>
       </div>
     </div>
@@ -1572,6 +1625,16 @@
         const grid = document.getElementById('courses-grid');
         if (grid) {
           grid.innerHTML = '<p style="color:var(--text-light);">We could not load the course catalogue just now. Please refresh the page, or open <a href="/courses.html">the courses page</a>.</p>';
+        }
+
+        // The trending grid has to be cleared here too. It used to keep whatever
+        // was in the markup, which was six invented courses with invented
+        // instructors and learner counts — so a failed fetch left the page
+        // stating numbers that do not exist, directly beside the line saying the
+        // catalogue could not be loaded. It now shows the same message.
+        const trending = document.getElementById('trending-grid');
+        if (trending) {
+          trending.innerHTML = '<p style="color:var(--text-light);">We could not load the course catalogue just now. Please refresh the page, or open <a href="/courses.html">the courses page</a>.</p>';
         }
       }
     }

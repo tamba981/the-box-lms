@@ -95,27 +95,63 @@ function securityHeaders() {
   });
 }
 
+/**
+ * Reflect the caller's origin. Only ever reached for an origin that has already
+ * been accepted below, so reflecting is safe and is what keeps credentialed
+ * requests working for an allowlisted host.
+ */
+const reflectCors = cors({
+  origin: true,
+  credentials: true,
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['X-Request-Id'],
+  maxAge: 600,
+});
+
 function corsPolicy() {
   const allowed = new Set(config.allowedOrigins);
 
-  return cors({
-    origin(origin, callback) {
-      // Same-origin requests (and server-to-server callers) send no Origin.
-      if (!origin) return callback(null, true);
+  return function corsMiddleware(req, res, next) {
+    const origin = req.headers.origin;
 
-      if (allowed.has(origin)) return callback(null, true);
+    /**
+     * Same-origin requests are accepted before the log line, not after it.
+     *
+     * The cors package's `origin` callback never sees the request, so it can
+     * only consult the configured allowlist — which meant every ordinary POST
+     * from this site's own pages was reported as a "blocked cross-origin
+     * request" while succeeding. A log that cries wolf on normal traffic is
+     * worse than no log, because it is where a real cross-origin attempt would
+     * have to be noticed.
+     */
+    if (!origin || allowed.has(origin) || origin === requestOrigin(req)) {
+      return reflectCors(req, res, next);
+    }
 
-      // Not a crash: browsers routinely probe with an unexpected Origin. We log
-      // it and answer without the CORS headers, which the browser then blocks.
-      logger.warn('blocked cross-origin request', { origin });
-      return callback(null, false);
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ['X-Request-Id'],
-    maxAge: 600,
-  });
+    logger.warn('blocked cross-origin request', { origin, path: req.originalUrl });
+
+    // Answer without the CORS headers, which the browser then refuses.
+    return next();
+  };
+}
+
+/**
+ * The origin this request was actually addressed to, derived from the request.
+ *
+ * This is what makes "same-origin" true by construction rather than by
+ * configuration. Browsers send an `Origin` header on every POST, PATCH and
+ * DELETE — including same-origin ones — so a check that consults only the
+ * configured allowlist rejects the site's own pages whenever CORS_ORIGINS is
+ * empty. That is the default, and it made every sign-in a 403 while every GET
+ * kept working, which is a confusing way for a deployment to fail.
+ *
+ * Behind a proxy this depends on `trust proxy` being set, so that req.protocol
+ * reports the scheme the browser used (https) rather than the proxy's hop.
+ */
+function requestOrigin(req) {
+  const host = req.get('host');
+  return host ? `${req.protocol}://${host}` : null;
 }
 
 /**
@@ -133,6 +169,11 @@ function sameOriginGuard() {
     if (!origin) return next(); // curl, server-to-server, tests
 
     if (allowed.has(origin)) return next();
+
+    // A request whose Origin matches the host it was sent to came from a page
+    // this server is already serving. An attacker cannot satisfy this: forging
+    // it requires already running on our origin.
+    if (origin === requestOrigin(req)) return next();
 
     return next(forbidden('This request did not originate from a recognised host.', { code: 'CROSS_ORIGIN_BLOCKED' }));
   };

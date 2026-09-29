@@ -216,36 +216,61 @@ name, a course title and a date. No email, no account id.
 - Community, direct messaging, study groups, live sessions.
 - Notifications in-app, with email delivery when a provider is configured.
 - Stripe checkout and webhook fulfilment, disabled cleanly without keys.
+- A payment method registry reporting honestly what is usable: card, Orange Money
+  and Lonestar Cell MTN MoMo, each enabled by configuration, each naming the
+  settings it is missing. The course page renders that list, shows unavailable
+  methods disabled with the reason, and offers no button at all when nothing is
+  configured. See `docs/PAYMENTS.md`.
 - Security: role escalation closed, secrets validated, rate limiting, security
   headers, CORS allowlist, Zod validation on every input.
 
 **Outstanding**
 
-1. **The instructor and administrator dashboards still render mock data.** They
-   are behind a server-verified role guard, so only the right person can open
-   them, but the contents are hardcoded. The student dashboard is done and can
-   serve as the pattern: a loader that fetches in parallel, a mapping function
-   that shapes API responses into what the existing views already read, and real
-   handlers in place of placeholder toasts.
-2. **The landing page course cards and counters are still hardcoded.** It also
-   makes claims that are not true — see below. `courses.html` is the live catalog.
-3. **Streaming lesson video** is a URL field. There is no upload or transcoding.
-4. **Certificate PDFs.** Certificates are records with a public verification
+1. **The mobile money charge calls are not implemented.** The provider registry,
+   phone normalisation, signed callbacks and shared settlement are all in place
+   and tested, but the two calls that contact Orange Money and Lonestar Cell MTN
+   throw rather than guess at an API shape. Supplying credentials makes a method
+   *selectable*, not *payable*.
+2. **Cards cannot serve a Liberian business.** Stripe's own country list does not
+   include Liberia, so the implemented Stripe path cannot be used as it stands.
+   A gateway that covers Liberia has to be chosen first.
+3. **Refunds do not move money.** `POST /payments/:id/refund` marks the payment
+   refunded and cancels the enrolment without calling any provider. The admin
+   button reads "Mark refunded" and warns that the refund must be issued in the
+   provider's dashboard.
+4. **Streaming lesson video** is a URL field. There is no upload or transcoding.
+5. **Certificate PDFs.** Certificates are records with a public verification
    page; `pdfUrl` is a field you can populate, not a generator.
-5. **`'unsafe-inline'` in the Content Security Policy.** Every page carries its
+6. **`'unsafe-inline'` in the Content Security Policy.** Every page carries its
    own inline `<script>`, so it cannot be removed without moving those blocks
    into `/assets/js` files. The directive is documented in
    `src/middleware/security.js`.
 
-**Claims on the landing page that are not true**
+**Claims that were not true, and were removed**
 
-The footer of `index.html` presents Stanford, MIT, Google, Microsoft, Amazon, IBM,
-Harvard and Yale as institutions that trust the academy. There is no relationship
-with any of them. The page also advertises "blockchain-verified" certificates and
-shows counters such as 12,847 learners and 500+ courses. Certificate verification
-is real, but it is a database record checked by a signature code, not a
-blockchain. These were not changed here because they are commercial copy rather
-than a code defect — but they should not go live as they stand.
+The footer of `index.html` presented Stanford, MIT, Google, Microsoft, Amazon, IBM,
+Harvard and Yale as institutions that trust the academy. There was no relationship
+with any of them. The page also advertised "blockchain-verified" certificates and
+showed counters such as 12,847 learners and 500+ courses. Certificate verification
+is real, but it is a database record checked by a signature code, not a blockchain.
+
+All of it is gone: the logo wall removed, the certificate wording now describing
+the actual mechanism, and the counters read from the catalogue.
+
+The last of it was hiding in the pre-JavaScript fallback markup, which is worth
+recording because it survived two rounds of this cleanup. Two blocks of six
+fully-written cards stood in `index.html`, inventing six courses, six instructors
+and six learner counts, with "Join Now" links pointing at `#`. They were replaced
+once the catalogue arrived, so they were only ever meant to be a placeholder — but
+this server serves the pages and the API from one process, so that fetch is not
+instant, and the failure path did not clear them at all. If the API was
+unreachable, the page showed invented courses and invented enrolment numbers
+directly beside the line saying the catalogue could not be loaded.
+
+Both blocks are now neutral skeleton blocks that make no claim, and the failure
+path clears the trending grid as well as the course grid. The only course names in
+that file now come from the template that renders real ones, and the only
+remaining occurrence of "12,847" is the comment recording that it used to be there.
 
 ---
 
@@ -261,6 +286,8 @@ recording because the tests did not catch them:
 | The whole site was blocked by its own CSP | Every page here is inline `<script>` plus ~97 inline `onclick=` handlers. Helmet's *default* policy is `script-src 'self'` and `script-src-attr 'none'`, which blocks all of it. |
 | Signing out did not end the session | The dashboards cleared `localStorage` and navigated away while the refresh token stayed valid on the server. |
 | `GET /courses/:slug` returned 500 | A query projection omitted `resources`, and the lesson serialiser read `.length` off `undefined`. |
+| A production deploy could not accept a single write | The same-origin guard compared the `Origin` header only against the configured allowlist. Browsers send `Origin` on every `POST`, including same-origin ones, so with `CORS_ORIGINS` unset — the default — every write from the site's own pages returned 403 while every `GET` kept working. The log described the server's own origin as a blocked cross-origin request. Nothing caught it because the smoke suite is not a browser and never sent the header. Four checks now pin it. |
+| `npm test` had never run | The script pointed at `tests/`, which has never existed anywhere in this repository's history. It now runs the suite that does exist. |
 
 ---
 
@@ -275,7 +302,7 @@ What was wrong when this work started, and what it is now:
 | Refresh tokens | The refresh token was the same string as the access token | Separate opaque tokens, hashed at rest, rotated on use, replay detection revokes the family |
 | Brute force | No rate limiting | Per-IP limits on sign-in, per-IP-and-email limits on reset and verification |
 | Input validation | None; values passed to Mongoose unchecked | Zod schema on every body, query and param |
-| CORS | `origin: true` — reflected any origin | Explicit allowlist; same-origin only by default |
+| CORS | `origin: true` — reflected any origin | Explicit allowlist, plus the request's own host, so a same-origin write works without configuration |
 | Suspension | A suspended user kept working until their token expired | Status and role read from the database on every request |
 | Security headers | None | Helmet, with a documented CSP |
 | Database startup | Server reported healthy with no database | Connect before listen; the process exits if it cannot |
@@ -291,7 +318,8 @@ What was wrong when this work started, and what it is now:
   secrets before going live.
 - Payments are implemented but unexercised: no live Stripe key has been used
   against this code, so the checkout and webhook paths have only been verified
-  for their failure modes.
+  for their failure modes. Stripe also cannot serve a Liberian business, and the
+  mobile money charge calls are stubs. See `docs/PAYMENTS.md`.
 
 ---
 
