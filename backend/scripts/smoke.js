@@ -17,6 +17,14 @@ const crypto = require('crypto');
 
 process.env.LOG_LEVEL = process.env.LOG_LEVEL || 'error';
 
+// The suite signs in a handful of times and then carries those access tokens
+// through every later section. At the production default of 15 minutes, a run on
+// a slow or distant cluster can outlive its own tokens: the final sections then
+// fail with 401 and read as broken authorisation when nothing is actually wrong.
+// Give the run a lifetime it cannot exceed. This does not mask any deliberate
+// expired-token test — those forge their own tokens with an explicit past expiry.
+process.env.JWT_ACCESS_TTL = process.env.JWT_ACCESS_TTL || '2h';
+
 const db = require('../src/db');
 const User = require('../src/models/User');
 const Token = require('../src/models/Token');
@@ -51,6 +59,19 @@ function assertEqual(actual, expected, label) {
   }
 }
 
+/**
+ * Every rejected authenticated request the suite saw, with the server's own reason.
+ *
+ * The suite has produced an intermittent 401 in its later sections that resisted
+ * explanation. Three attempts were made to reason it out — token lifetime, a
+ * stale token held across the password reset, test ordering — and the timing
+ * evidence ruled the first out and the fixture layout ruled out the second.
+ * Rather than keep guessing, this records what the server actually said. The
+ * error code distinguishes the cases that matter: an expired token, a suspended
+ * account, a superseded password, or a token this process never held.
+ */
+const rejections = [];
+
 async function request(method, path, { body, token, headers = {} } = {}) {
   const response = await fetch(`${baseUrl}${path}`, {
     method,
@@ -68,6 +89,28 @@ async function request(method, path, { body, token, headers = {} } = {}) {
     json = JSON.parse(text);
   } catch {
     /* HTML page or empty body */
+  }
+
+  // Only record rejections that carried a token: a 401 with no Authorization
+  // header is a deliberate unauthenticated probe, not a surprise.
+  if (response.status === 401 && token) {
+    let issuedAt = null;
+    try {
+      const payload = JSON.parse(Buffer.from(String(token).split('.')[1], 'base64url').toString());
+      issuedAt = payload.iat ? new Date(payload.iat * 1000).toISOString() : null;
+    } catch {
+      issuedAt = null;
+    }
+
+    rejections.push({
+      at: new Date().toISOString(),
+      method,
+      path,
+      code: (json && json.code) || '(no code)',
+      message: (json && json.message) || text.slice(0, 120),
+      issuedAt,
+      tokenLength: String(token).length,
+    });
   }
 
   return { status: response.status, json, text, headers: response.headers };
@@ -97,7 +140,20 @@ async function cleanup() {
   const CommunityPost = require('../src/models/CommunityPost');
   const Payment = require('../src/models/Payment');
 
-  const users = await User.find({ email: { $in: createdEmails } }).select('_id');
+  // Clean up by namespace, not only by tracked email.
+  //
+  // Tracking alone was not enough: an account created moments before a failure
+  // never reaches `createdEmails`, and those accounts accumulated — ten of them
+  // were found sitting in the database, along with everything hanging off them.
+  // The suite's own fixture namespace is the reliable key. `example.com` is
+  // reserved for exactly this purpose by RFC 2606, so the pattern cannot collide
+  // with a real account.
+  const users = await User.find({
+    $or: [
+      { email: { $in: createdEmails } },
+      { email: { $regex: '^smoke-.*@example\\.com$' } },
+    ],
+  }).select('_id');
   const userIds = users.map((user) => user._id);
 
   // Courses owned by the fixture instructors, so their lessons go too. This is
@@ -133,6 +189,13 @@ async function cleanup() {
   await Course.deleteMany({ _id: { $in: courseIds } });
   await Token.deleteMany({ user: { $in: userIds } });
   await User.deleteMany({ _id: { $in: userIds } });
+
+  // Report what is left rather than assuming the teardown was complete. A silent
+  // teardown is how the residue above went unnoticed in the first place.
+  const remaining = await User.countDocuments({ email: { $regex: '^smoke-.*@example\\.com$' } });
+  if (remaining > 0) {
+    throw new Error(`teardown left ${remaining} fixture account(s) behind`);
+  }
 }
 
 /* ------------------------------------------------------------------ *
@@ -1767,6 +1830,7 @@ async function main() {
     server = app.listen(0, '127.0.0.1', resolve);
   });
   baseUrl = `http://127.0.0.1:${server.address().port}`;
+  const startedAt = Date.now();
 
   process.stdout.write(`Serving on ${baseUrl}\n\n`);
 
@@ -1830,12 +1894,37 @@ async function main() {
   const failed = results.filter((result) => !result.ok);
   const passed = results.length - failed.length;
 
+  const elapsed = Date.now() - startedAt;
+  const minutes = Math.floor(elapsed / 60000);
+  const seconds = Math.round((elapsed % 60000) / 1000);
+
   process.stdout.write(`\n${'-'.repeat(40)}\n`);
-  process.stdout.write(`${passed}/${results.length} checks passed\n`);
+  process.stdout.write(`${passed}/${results.length} checks passed in ${minutes}m ${seconds}s\n`);
+
+  if (minutes >= 15) {
+    process.stdout.write(
+      'NOTE: this run exceeded the 15-minute production access-token lifetime.\n' +
+        'The suite raises its own TTL to 2h for that reason; if you see 401s in the\n' +
+        'late sections, that override has probably been removed.\n'
+    );
+  }
 
   if (failed.length > 0) {
     process.stdout.write(`\nFailures:\n`);
     for (const failure of failed) process.stdout.write(`  • ${failure.name}: ${failure.error.message}\n`);
+
+    // Print the server's own reason for anything it refused, so a 401 can be
+    // diagnosed from this run rather than needing another one.
+    if (rejections.length > 0) {
+      process.stdout.write('\nAuthenticated requests the server refused:\n');
+      rejections.forEach((r) => {
+        process.stdout.write(`  ${r.method} ${r.path}\n`);
+        process.stdout.write(`      code    : ${r.code}\n`);
+        process.stdout.write(`      message : ${r.message}\n`);
+        process.stdout.write(`      token issued at : ${r.issuedAt || '(unreadable)'}  length ${r.tokenLength}\n`);
+      });
+    }
+
     process.exit(1);
   }
 
