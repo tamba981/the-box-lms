@@ -52,6 +52,58 @@
     .pre { white-space: pre-line; font-size: 15px; line-height: 1.75; }
     .desc { font-size: 15px; line-height: 1.75; color: var(--text-light); }
     body.dark-mode .desc { color: var(--dark-muted); }
+
+    /* ---- Payment method chooser -------------------------------------- *
+     * A payer has to be able to tell, before clicking, which methods will
+     * actually work. Unavailable options are rendered with the `disabled`
+     * attribute rather than merely greyed, so they cannot be reached by
+     * keyboard and are announced as unavailable rather than as choices.
+     * ------------------------------------------------------------------- */
+    .pay-choice {
+      display: flex; gap: 12px; align-items: flex-start;
+      width: 100%; text-align: left; font: inherit; color: inherit;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 13px; margin-bottom: 9px;
+      cursor: pointer; transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .pay-choice:not(:disabled):hover { border-color: var(--primary); }
+    .pay-choice[aria-pressed="true"] {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26,86,219,.14);
+    }
+    .pay-choice[disabled] { cursor: not-allowed; opacity: .6; }
+
+    .pay-choice .pay-icon {
+      width: 32px; height: 32px; flex: 0 0 32px; border-radius: 9px;
+      display: grid; place-items: center; font-size: 14px;
+      background: rgba(26,86,219,.12); color: var(--primary);
+    }
+    .pay-choice[aria-pressed="true"] .pay-icon { background: var(--primary); color: #fff; }
+    .pay-choice[disabled] .pay-icon { background: rgba(120,120,130,.15); color: var(--text-light); }
+
+    .pay-choice .pay-name { display: block; font-size: 14.5px; font-weight: 700; line-height: 1.3; }
+    .pay-choice .pay-why { display: block; font-size: 12.5px; color: var(--text-light); line-height: 1.45; margin-top: 3px; }
+    .pay-choice .pay-missing {
+      display: block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px; color: var(--text-light); margin-top: 5px; overflow-wrap: anywhere;
+    }
+
+    body.dark-mode .pay-choice { background: var(--dark-surface); border-color: var(--dark-border); }
+    body.dark-mode .pay-choice .pay-why,
+    body.dark-mode .pay-choice .pay-missing,
+    body.dark-mode .pay-choice[disabled] .pay-icon { color: var(--dark-muted); }
+
+    .pay-panel {
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 15px; font-size: 14px; line-height: 1.6;
+      background: rgba(26,86,219,.06);
+    }
+    .pay-panel .pay-panel-title { display: block; font-weight: 700; margin-bottom: 7px; }
+    .pay-panel i { color: var(--primary); }
+    body.dark-mode .pay-panel { border-color: var(--dark-border); background: rgba(59,130,246,.1); }
+    .pay-panel-wait { background: rgba(212,165,71,.1); }
+    body.dark-mode .pay-panel-wait { background: rgba(212,165,71,.14); }
   </style>
 </head>
 <body>
@@ -147,10 +199,15 @@
             '<button class="wga-btn wga-btn-primary wga-btn-block" type="button" id="enroll">' +
             '<i class="fas fa-user-plus" aria-hidden="true"></i> Enroll for free</button>';
         } else {
+          // The methods come from the API because availability is a deployment
+          // fact this page cannot see. Until they arrive we show a skeleton
+          // rather than a payment button, since a button that turns out to be
+          // unusable is worse than a moment of waiting.
           action =
-            '<button class="wga-btn wga-btn-primary wga-btn-block" type="button" id="checkout">' +
-            '<i class="fas fa-credit-card" aria-hidden="true"></i> Enroll now</button>' +
-            '<p class="wga-hint" style="text-align:center;">Secure payment. You will be redirected to complete your purchase.</p>';
+            '<div id="checkout-panel">' +
+            '<div class="wga-skeleton" style="height:56px;margin-bottom:9px;"></div>' +
+            '<div class="wga-skeleton" style="height:56px;"></div>' +
+            '</div>';
         }
 
         if (access.certificateId) {
@@ -204,7 +261,7 @@
 
       function bindActions(course) {
         var enroll = document.getElementById('enroll');
-        var checkout = document.getElementById('checkout');
+        var panel = document.getElementById('checkout-panel');
 
         if (enroll) {
           enroll.addEventListener('click', function () {
@@ -230,32 +287,271 @@
           });
         }
 
-        if (checkout) {
-          checkout.addEventListener('click', function () {
-            WGAUI.setBusy(checkout, true, 'Starting checkout…');
+        if (panel) loadMethods(course, panel);
+      }
 
-            WGA.post('/payments/checkout/' + encodeURIComponent(course.id))
-              .then(function (data) {
-                if (data && data.checkoutUrl) {
-                  window.location.href = data.checkoutUrl;
-                  return;
-                }
-                throw new Error('Checkout did not return a payment page.');
-              })
-              .catch(function (error) {
-                WGAUI.setBusy(checkout, false);
+      /* ---------------------------------------------------------------- *
+       * Payment methods
+       *
+       * The list is fetched, never hardcoded, because whether a method works
+       * is a deployment fact that depends on credentials this page cannot
+       * see. The page must not be the source of truth about it.
+       *
+       * An unavailable method is shown disabled, with the reason, rather than
+       * hidden. A student who has only Orange Money needs to know the academy
+       * takes it and has not switched it on — which is a different message
+       * from it never having been considered. Nothing here presents an
+       * unconfigured method as usable, and when nothing is available at all
+       * no button is offered, because one that cannot work is worse than none.
+       * ---------------------------------------------------------------- */
 
-                if (error.status === 401) {
-                  WGA.requireSignIn();
-                  return;
-                }
+      var PROVIDER_ICONS = {
+        card: 'fa-credit-card',
+        orange_money: 'fa-mobile-screen-button',
+        lonestar_momo: 'fa-mobile-screen-button',
+      };
 
-                // A deployment with no payment keys configured says so plainly
-                // rather than failing silently.
-                WGAUI.toast(error.message || 'We could not start the checkout.', 'error');
-              });
+      /** Operator aid, off by default — open with `?debug=1` to see settings. */
+      var SHOW_CONFIG_DETAIL = WGAUI.param('debug') === '1';
+
+      function loadingSkeleton(panel) {
+        panel.innerHTML =
+          '<div class="wga-skeleton" style="height:56px;margin-bottom:9px;"></div>' +
+          '<div class="wga-skeleton" style="height:56px;"></div>';
+      }
+
+      function missingDetail(methods) {
+        if (!SHOW_CONFIG_DETAIL) return '';
+
+        var lines = methods
+          .filter(function (method) {
+            return !method.enabled && method.missing && method.missing.length;
+          })
+          .map(function (method) {
+            return method.id + ': ' + method.missing.join(', ');
           });
+
+        if (!lines.length) return '';
+
+        return '<span class="pay-missing" style="margin-top:11px;">' +
+          WGAUI.escapeHtml(lines.join('  |  ')) + '</span>';
+      }
+
+      function loadMethods(course, panel) {
+        loadingSkeleton(panel);
+
+        WGA.get('/payments/methods')
+          .then(function (data) {
+            var methods = (data && data.methods) || [];
+
+            if (!methods.length) {
+              throw new Error('The server did not report any payment methods.');
+            }
+
+            renderMethods(course, methods, panel);
+          })
+          .catch(function (error) {
+            panel.innerHTML =
+              '<div class="pay-panel">' +
+                '<p style="margin:0 0 7px;font-weight:700;">' +
+                  '<i class="fas fa-triangle-exclamation" aria-hidden="true"></i> ' +
+                  'We could not load the payment methods</p>' +
+                '<p style="margin:0 0 12px;">' +
+                  WGAUI.escapeHtml(error.message || 'Please try again in a moment.') + '</p>' +
+                '<button class="wga-btn wga-btn-ghost wga-btn-block" type="button" id="pay-retry">' +
+                  '<i class="fas fa-rotate-right" aria-hidden="true"></i> Try again</button>' +
+              '</div>';
+
+            panel.querySelector('#pay-retry').addEventListener('click', function () {
+              loadMethods(course, panel);
+            });
+          });
+      }
+
+      function renderMethods(course, methods, panel) {
+        var usable = methods.filter(function (method) { return method.enabled; });
+
+        if (!usable.length) {
+          panel.innerHTML =
+            '<div class="pay-panel pay-panel-wait">' +
+              '<p style="margin:0 0 7px;font-weight:700;">' +
+                '<i class="fas fa-circle-info" aria-hidden="true"></i> ' +
+                'No payment method is available yet</p>' +
+              '<p style="margin:0;">This course is not free, and no payment method has been ' +
+                'switched on for this deployment yet. Nothing has been charged and you have ' +
+                'not been enrolled.</p>' +
+              '<p style="margin:8px 0 0;">Please check back shortly, or contact the academy.</p>' +
+              missingDetail(methods) +
+            '</div>';
+          return;
         }
+
+        var rows = methods.map(function (method) {
+          var icon = PROVIDER_ICONS[method.id] || 'fa-wallet';
+          var why;
+
+          if (!method.enabled) {
+            why = method.note || 'This method is not switched on yet.';
+          } else if (method.kind === 'card') {
+            why = 'You will be taken to a secure payment page to finish.';
+          } else {
+            why = 'You will get a prompt on your phone to approve the payment.';
+          }
+
+          return (
+            '<button class="pay-choice" type="button" data-method="' +
+              WGAUI.escapeHtml(method.id) + '"' +
+              (method.enabled ? ' aria-pressed="false"' : ' disabled aria-disabled="true"') + '>' +
+              '<span class="pay-icon"><i class="fas ' + icon + '" aria-hidden="true"></i></span>' +
+              '<span style="flex:1;min-width:0;">' +
+                '<span class="pay-name">' + WGAUI.escapeHtml(method.label) + '</span>' +
+                '<span class="pay-why">' + WGAUI.escapeHtml(why) + '</span>' +
+                (method.enabled ? '' : missingDetail([method])) +
+              '</span>' +
+            '</button>'
+          );
+        }).join('');
+
+        panel.innerHTML =
+          '<div role="group" aria-label="Choose a payment method">' + rows + '</div>' +
+          '<div class="wga-field" id="pay-phone-field" style="display:none;">' +
+            '<label class="wga-label" for="pay-phone">Mobile money number</label>' +
+            '<input class="wga-input" id="pay-phone" type="tel" inputmode="tel" ' +
+              'autocomplete="tel" placeholder="+231 77 000 0000" />' +
+            '<p class="wga-hint" id="pay-phone-hint"></p>' +
+          '</div>' +
+          '<button class="wga-btn wga-btn-primary wga-btn-block" type="button" id="pay-go" disabled>' +
+            '<i class="fas fa-lock" aria-hidden="true"></i> Choose a payment method</button>' +
+          '<p class="wga-hint" style="text-align:center;" id="pay-status" role="status"></p>';
+
+        var go = panel.querySelector('#pay-go');
+        var phoneField = panel.querySelector('#pay-phone-field');
+        var phone = panel.querySelector('#pay-phone');
+        var phoneHint = panel.querySelector('#pay-phone-hint');
+        var status = panel.querySelector('#pay-status');
+        var buttons = panel.querySelectorAll('.pay-choice');
+        var selected = null;
+
+        function labelGo() {
+          var onPhone = Boolean(selected) && selected.kind === 'mobile_money';
+
+          go.innerHTML =
+            '<i class="fas ' + (onPhone ? 'fa-mobile-screen-button' : 'fa-credit-card') + '" ' +
+              'aria-hidden="true"></i> ' +
+            (onPhone ? 'Send payment prompt' : 'Continue to payment');
+        }
+
+        function select(button) {
+          var chosen = button.getAttribute('data-method');
+          selected = null;
+
+          usable.forEach(function (method) {
+            if (method.id === chosen) selected = method;
+          });
+
+          if (!selected) return;
+
+          Array.prototype.forEach.call(buttons, function (node) {
+            node.setAttribute('aria-pressed', node === button ? 'true' : 'false');
+          });
+
+          var onPhone = selected.kind === 'mobile_money';
+          phoneField.style.display = onPhone ? '' : 'none';
+          phoneHint.textContent = onPhone ? (selected.phoneHint || '') : '';
+
+          go.disabled = false;
+          labelGo();
+          status.textContent = '';
+        }
+
+        function onFailure(error) {
+          WGAUI.setBusy(go, false);
+          labelGo();
+          status.textContent = '';
+
+          if (error.status === 401) {
+            WGA.requireSignIn();
+            return;
+          }
+
+          // A method that is not switched on says so, in the server's words,
+          // rather than failing silently.
+          WGAUI.toast(error.message || 'We could not start the payment.', 'error');
+        }
+
+        function startCard() {
+          WGAUI.setBusy(go, true, 'Starting checkout…');
+
+          WGA.post('/payments/checkout/' + encodeURIComponent(course.id))
+            .then(function (data) {
+              if (!data || !data.checkoutUrl) {
+                throw new Error('Checkout did not return a payment page.');
+              }
+
+              status.textContent = 'Taking you to the payment page…';
+              window.location.href = data.checkoutUrl;
+            })
+            .catch(onFailure);
+        }
+
+        function showWaiting(method, number, data) {
+          var instructions = String((data && data.instructions) || '').trim();
+
+          panel.innerHTML =
+            '<div class="pay-panel pay-panel-wait" role="status">' +
+              '<p style="margin:0 0 8px;font-weight:700;">' +
+                '<i class="fas fa-hourglass-half" aria-hidden="true"></i> ' +
+                'Waiting for your approval</p>' +
+              '<p style="margin:0 0 8px;">We sent a request to ' + WGAUI.escapeHtml(number) +
+                ' with ' + WGAUI.escapeHtml(method.label) + '.</p>' +
+              '<p style="margin:0;">' + WGAUI.escapeHtml(
+                instructions || 'Approve the prompt on your phone to complete the payment.'
+              ) + '</p>' +
+              '<p style="margin:10px 0 0;">Your enrollment is created the moment the payment is ' +
+                'confirmed, so you can close this page. Nothing is charged unless you approve.</p>' +
+            '</div>' +
+            '<a class="wga-btn wga-btn-ghost wga-btn-block" style="margin-top:12px;" ' +
+              'href="/student-dashboard.html#/courses">' +
+              '<i class="fas fa-arrow-right" aria-hidden="true"></i> Go to my courses</a>';
+        }
+
+        function startMobileMoney(method, number) {
+          WGAUI.setBusy(go, true, 'Sending prompt…');
+
+          WGA.post(
+            '/payments/checkout/' + encodeURIComponent(course.id) + '/mobile-money',
+            { provider: method.id, phoneNumber: number }
+          )
+            .then(function (data) { showWaiting(method, number, data || {}); })
+            .catch(onFailure);
+        }
+
+        Array.prototype.forEach.call(buttons, function (button) {
+          button.addEventListener('click', function () {
+            select(button);
+
+            if (selected && selected.kind === 'mobile_money') phone.focus();
+          });
+        });
+
+        go.addEventListener('click', function () {
+          if (!selected) return;
+
+          if (selected.kind === 'mobile_money') {
+            var number = (phone.value || '').trim();
+
+            if (!number) {
+              phone.focus();
+              WGAUI.toast('Enter the number to be charged.', 'error');
+              return;
+            }
+
+            startMobileMoney(selected, number);
+            return;
+          }
+
+          startCard();
+        });
       }
 
       var id = identifier();

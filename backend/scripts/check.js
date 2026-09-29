@@ -158,6 +158,48 @@ if (fs.existsSync(publicDir)) {
     if (guardAt !== -1 && (apiAt === -1 || apiAt > guardAt)) {
       problems.push(`frontend/public/${name} must load /assets/js/wga-api.js before wga-guard.js`);
     }
+
+    /**
+     * Inline script and style blocks.
+     *
+     * These are parsed by the browser, never by the build, so a syntax error in
+     * one is a page that renders its markup and then does nothing — and nothing
+     * above catches it. Most of the page logic in this product is inline, so
+     * that is the likeliest place for a broken change to hide.
+     */
+    let scriptIndex = 0;
+    for (const script of source.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/gi)) {
+      scriptIndex += 1;
+
+      // Skip data blocks (application/ld+json and friends): they are not
+      // JavaScript, and parsing them as if they were reports a false failure.
+      const type = /\btype\s*=\s*["']?([^"'\s>]+)/i.exec(script[1] || '');
+      if (type && !/^(text\/javascript|module)$/i.test(type[1])) continue;
+
+      scanned += 1;
+      try {
+        new vm.Script(script[2], {
+          filename: `frontend/public/${name} (inline script ${scriptIndex})`,
+        });
+      } catch (error) {
+        problems.push(
+          `syntax error in frontend/public/${name} inline script ${scriptIndex}: ${error.message}`
+        );
+      }
+    }
+
+    for (const style of source.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/gi)) {
+      const open = (style[1].match(/\{/g) || []).length;
+      const close = (style[1].match(/\}/g) || []).length;
+
+      // An unbalanced block silently discards every rule after the break, so
+      // the page still loads and simply looks wrong.
+      if (open !== close) {
+        problems.push(
+          `frontend/public/${name} has an unbalanced <style> block (${open} { against ${close} })`
+        );
+      }
+    }
   }
 }
 
