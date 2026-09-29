@@ -157,6 +157,69 @@ const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
 const STRIPE_ENABLED = Boolean(STRIPE_SECRET_KEY);
 
 /* ------------------------------------------------------------------ *
+ * Mobile money — Orange Money Liberia and Lonestar Cell MTN MoMo
+ * ------------------------------------------------------------------ */
+
+/**
+ * Both providers are described the same way, so the registry can report
+ * availability uniformly and checkout can treat them alike.
+ *
+ * `configured` requires all four values, and `missing` names the ones absent.
+ * That is deliberate: "not configured" is useless to whoever has to configure
+ * it, whereas "ORANGE_MONEY_API_KEY is not set" is actionable.
+ *
+ * Note there is no card provider in this list. Stripe — the implementation in
+ * paymentService.js — is not available to businesses registered in Liberia, so a
+ * card gateway has to be chosen separately. See docs/PAYMENTS.md.
+ */
+function describeMobileMoneyProvider({ id, label, prefix, currency, hint }) {
+  const baseUrl = process.env[`${prefix}_BASE_URL`] || '';
+  const merchantId = process.env[`${prefix}_MERCHANT_ID`] || '';
+  const apiKey = process.env[`${prefix}_API_KEY`] || '';
+  const callbackSecret = process.env[`${prefix}_CALLBACK_SECRET`] || '';
+
+  const missing = [
+    ['baseUrl', `${prefix}_BASE_URL`],
+    ['merchantId', `${prefix}_MERCHANT_ID`],
+    ['apiKey', `${prefix}_API_KEY`],
+    ['callbackSecret', `${prefix}_CALLBACK_SECRET`],
+  ]
+    .filter(([key]) => !{ baseUrl, merchantId, apiKey, callbackSecret }[key])
+    .map(([, name]) => name);
+
+  return {
+    id,
+    label,
+    kind: 'mobile_money',
+    currency: (process.env[`${prefix}_CURRENCY`] || currency).toLowerCase(),
+    phoneHint: hint,
+    baseUrl,
+    merchantId,
+    apiKey,
+    callbackSecret,
+    configured: missing.length === 0,
+    missing,
+  };
+}
+
+const MOBILE_MONEY_PROVIDERS = [
+  describeMobileMoneyProvider({
+    id: 'orange_money',
+    label: 'Orange Money',
+    prefix: 'ORANGE_MONEY',
+    currency: 'lrd',
+    hint: 'Orange Liberia mobile number',
+  }),
+  describeMobileMoneyProvider({
+    id: 'lonestar_momo',
+    label: 'Lonestar Cell MTN MoMo',
+    prefix: 'LONESTAR_MOMO',
+    currency: 'lrd',
+    hint: 'Lonestar Cell MTN mobile number',
+  }),
+];
+
+/* ------------------------------------------------------------------ *
  * Tokens
  * ------------------------------------------------------------------ */
 
@@ -191,6 +254,8 @@ const config = {
     secretKey: STRIPE_SECRET_KEY,
     webhookSecret: STRIPE_WEBHOOK_SECRET,
   },
+
+  mobileMoney: MOBILE_MONEY_PROVIDERS,
 
   bcryptRounds: IS_TEST ? 4 : 12,
 };

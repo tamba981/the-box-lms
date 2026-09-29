@@ -221,37 +221,54 @@ async function fulfillCheckoutSession(session) {
     return { handled: false, reason: 'payment_not_found' };
   }
 
-  // Already done. A repeated delivery stops here.
+  return settlePayment(payment, {
+    amountCents: session.amount_total,
+    currency: session.currency,
+    providerPaymentIntentId: session.payment_intent || null,
+  });
+}
+
+/**
+ * The one place a payment becomes an enrolment, whatever moved the money.
+ *
+ * Stripe and the mobile-money providers arrive here by different routes, and
+ * they must not be allowed to diverge. A second copy of this logic would
+ * eventually disagree with the first about idempotency or about what counts as
+ * settled, and the disagreement would stay invisible until it cost someone a
+ * course, a refund, or a duplicated enrolment.
+ */
+async function settlePayment(
+  payment,
+  { amountCents, currency, providerPaymentIntentId = null, providerReference = null, paidAt = null } = {}
+) {
+  // Already settled. A repeated delivery stops here.
   if (payment.status === 'paid' && payment.enrollment) {
     return { handled: true, reason: 'already_fulfilled', paymentId: String(payment._id) };
   }
 
   /**
-   * Confirm Stripe charged what this payment record expects.
+   * Confirm the provider took what this record expects.
    *
    * The record is the source of truth for revenue reporting, and the two can
-   * drift — a price change mid-checkout, a session built from an older record,
-   * or a session that did not originate from us at all. Refusing here leaves the
-   * payment pending for a human to look at, which is much better than granting
-   * access and recording a figure that never happened.
+   * drift — a price change mid-checkout, a charge built from an older record, or
+   * a callback that did not originate from us at all. Refusing leaves the payment
+   * pending for a person to look at, which is much better than granting access
+   * and recording a figure that never happened.
    */
-  if (typeof session.amount_total === 'number' && session.amount_total !== payment.amountCents) {
-    logger.error('refusing to fulfil: amount does not match the payment record', {
+  if (typeof amountCents === 'number' && amountCents !== payment.amountCents) {
+    logger.error('refusing to settle: amount does not match the payment record', {
       paymentId: String(payment._id),
       expected: payment.amountCents,
-      charged: session.amount_total,
+      charged: amountCents,
     });
     return { handled: false, reason: 'amount_mismatch', paymentId: String(payment._id) };
   }
 
-  if (
-    session.currency &&
-    String(session.currency).toLowerCase() !== String(payment.currency).toLowerCase()
-  ) {
-    logger.error('refusing to fulfil: currency does not match the payment record', {
+  if (currency && String(currency).toLowerCase() !== String(payment.currency).toLowerCase()) {
+    logger.error('refusing to settle: currency does not match the payment record', {
       paymentId: String(payment._id),
       expected: payment.currency,
-      charged: session.currency,
+      charged: currency,
     });
     return { handled: false, reason: 'currency_mismatch', paymentId: String(payment._id) };
   }
@@ -269,14 +286,16 @@ async function fulfillCheckoutSession(session) {
   }
 
   payment.status = 'paid';
-  payment.paidAt = new Date();
-  payment.providerPaymentIntentId = session.payment_intent || null;
+  payment.paidAt = paidAt || new Date();
+  if (providerPaymentIntentId) payment.providerPaymentIntentId = providerPaymentIntentId;
+  if (providerReference) payment.providerReference = providerReference;
   await payment.save();
 
   const { enrollment, created: isNew } = await enrollmentService.enroll({
     user: student,
     course,
-    source: 'stripe',
+    // Who took the money, so an enrolment is traceable back to its payment path.
+    source: payment.method === 'mobile_money' ? 'mobile_money' : 'stripe',
     payment,
   });
 
@@ -330,6 +349,7 @@ module.exports = {
   createCheckoutSession,
   verifyWebhookSignature,
   fulfillCheckoutSession,
+  settlePayment,
   markFailed,
   SIGNATURE_TOLERANCE_SECONDS,
 };

@@ -33,6 +33,14 @@ process.env.JWT_ACCESS_TTL = process.env.JWT_ACCESS_TTL || '2h';
 process.env.STRIPE_WEBHOOK_SECRET =
   process.env.STRIPE_WEBHOOK_SECRET || `whsec_test_${crypto.randomBytes(16).toString('hex')}`;
 
+// Only the callback secret is supplied for mobile money, and that is deliberate.
+// It is the state this deployment is genuinely in: a callback can be verified and
+// settled, while starting a charge still reports which settings are missing.
+// Configuring all four would test a happy path that cannot exist yet.
+process.env.LONESTAR_MOMO_CALLBACK_SECRET =
+  process.env.LONESTAR_MOMO_CALLBACK_SECRET ||
+  `test_callback_${crypto.randomBytes(12).toString('hex')}`;
+
 const db = require('../src/db');
 const User = require('../src/models/User');
 const Token = require('../src/models/Token');
@@ -2012,6 +2020,241 @@ async function testStripeWebhook() {
 }
 
 
+async function testMobileMoney() {
+  const Payment = require('../src/models/Payment');
+  const Course = require('../src/models/Course');
+  const Enrollment = require('../src/models/Enrollment');
+  const mobileMoney = require('../src/services/mobileMoneyService');
+
+  const secret = process.env.LONESTAR_MOMO_CALLBACK_SECRET;
+
+  function sign(rawBody, { secretOverride, timestamp } = {}) {
+    const t = timestamp || Math.floor(Date.now() / 1000);
+    const signature = crypto
+      .createHmac('sha256', secretOverride || secret)
+      .update(`${t}.${rawBody}`)
+      .digest('hex');
+    return `t=${t},v1=${signature}`;
+  }
+
+  async function postCallback(providerId, rawBody, signatureHeader) {
+    const response = await fetch(`${baseUrl}/api/v1/payments/callback/${providerId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(signatureHeader ? { 'X-Callback-Signature': signatureHeader } : {}),
+      },
+      body: rawBody,
+    });
+    return { status: response.status, json: await response.json().catch(() => null) };
+  }
+
+  const instructor = await User.create({
+    firstName: 'Mobile',
+    lastName: 'Instructor',
+    email: `smoke-mobile-instructor-${runId}@example.com`,
+    password: PASSWORD,
+    role: 'instructor',
+    emailVerified: true,
+  });
+  createdEmails.push(instructor.email);
+
+  const student = await User.create({
+    firstName: 'Mobile',
+    lastName: 'Student',
+    email: `smoke-mobile-student-${runId}@example.com`,
+    password: PASSWORD,
+    role: 'student',
+    emailVerified: true,
+  });
+  createdEmails.push(student.email);
+
+  const course = await Course.create({
+    title: 'Mobile money probe',
+    slug: `mobile-money-probe-${runId}`,
+    instructor: instructor._id,
+    instructorName: 'Mobile Instructor',
+    priceCents: 30000,
+    currency: 'lrd',
+    status: 'published',
+    publishedAt: new Date(),
+  });
+
+  await check('the methods endpoint lists every method and never leaks a credential', async () => {
+    const { status, json, text } = await request('GET', '/api/v1/payments/methods');
+    assertEqual(status, 200, 'status');
+
+    const ids = json.data.methods.map((m) => m.id).sort();
+    assertEqual(ids.join(','), 'card,lonestar_momo,orange_money', 'every known method is listed');
+
+    json.data.methods.forEach((method) => {
+      assertEqual(typeof method.enabled, 'boolean', `${method.id} reports whether it is usable`);
+      assert(Array.isArray(method.missing), `${method.id} names what it is missing`);
+    });
+
+    // The response is public. Configuring a provider must never put its key,
+    // merchant id or callback secret on the wire.
+    ['apiKey', 'callbackSecret', 'baseUrl', 'merchantId'].forEach((field) => {
+      assert(!text.includes(`"${field}"`), `the response must not contain ${field}`);
+    });
+  });
+
+  await check('starting a charge names the settings that are missing', async () => {
+    const { status, json } = await request('POST', `/api/v1/payments/checkout/${course._id}/mobile-money`, {
+      token: primaryUser.accessToken,
+      body: { provider: 'lonestar_momo', phoneNumber: '0771234567' },
+    });
+
+    assertEqual(status, 503, 'an unconfigured provider is unavailable, not a server error');
+    assertEqual(json.code, 'PROVIDER_NOT_CONFIGURED', 'code');
+
+    const named = (json.details || []).map((d) => d.field).join(',');
+    assert(named.includes('LONESTAR_MOMO_BASE_URL'), 'the response should name the missing settings');
+  });
+
+  await check('an unknown mobile money provider is rejected', async () => {
+    const { status, json } = await request('POST', `/api/v1/payments/checkout/${course._id}/mobile-money`, {
+      token: primaryUser.accessToken,
+      body: { provider: 'carrier_pigeon', phoneNumber: '0771234567' },
+    });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'UNKNOWN_PAYMENT_METHOD', 'code');
+  });
+
+  await check('a failed charge does not leave a pending payment behind', async () => {
+    const before = await Payment.countDocuments({ student: student._id, status: 'pending' });
+    assertEqual(before, 0, 'start clean');
+
+    const { status } = await request('POST', `/api/v1/payments/checkout/${course._id}/mobile-money`, {
+      token: primaryUser.accessToken,
+      body: { provider: 'orange_money', phoneNumber: '0771234567' },
+    });
+
+    assertEqual(status, 503, 'status');
+
+    // A pending record with no charge behind it reads as money in flight when
+    // nothing is happening at all, so it must not survive the failure.
+    const stranded = await Payment.countDocuments({ status: 'pending', amountCents: 30000 });
+    assertEqual(stranded, 0, 'no payment should be left pending after the charge failed');
+  });
+
+  await check('Liberian numbers are normalised and nonsense is refused', async () => {
+    assertEqual(mobileMoney.normalisePhone('0771234567'), '+231771234567', 'national format');
+    assertEqual(mobileMoney.normalisePhone('+231 77 123 4567'), '+231771234567', 'international with spaces');
+    assertEqual(mobileMoney.normalisePhone('231771234567'), '+231771234567', 'country code, no plus');
+
+    for (const bad of ['', '123', 'not-a-phone', '07712']) {
+      let threw = false;
+      try {
+        mobileMoney.normalisePhone(bad);
+      } catch {
+        threw = true;
+      }
+      assert(threw, `"${bad}" should be refused`);
+    }
+  });
+
+  await check('a callback with no signature is refused', async () => {
+    const { status } = await postCallback('lonestar_momo', JSON.stringify({ reference: 'x', status: 'paid' }), null);
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a callback signed with the wrong secret is refused', async () => {
+    const raw = JSON.stringify({ reference: 'x', status: 'paid' });
+    const { status } = await postCallback('lonestar_momo', raw, sign(raw, { secretOverride: 'not_the_secret' }));
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a replayed callback outside the tolerance window is refused', async () => {
+    const raw = JSON.stringify({ reference: 'x', status: 'paid' });
+    const stale = Math.floor(Date.now() / 1000) - 600;
+    const { status } = await postCallback('lonestar_momo', raw, sign(raw, { timestamp: stale }));
+    assertEqual(status, 400, 'a correctly signed but old callback must be rejected');
+  });
+
+  await check('a provider with no callback secret refuses everything', async () => {
+    // Orange Money is entirely unconfigured here, which is its real state.
+    const raw = JSON.stringify({ reference: 'x', status: 'paid' });
+    const { status, json } = await postCallback('orange_money', raw, sign(raw));
+    assertEqual(status, 400, 'status');
+    assertEqual(json.reason, 'callback_secret_missing', 'reason');
+  });
+
+  await check('a confirmed mobile money payment settles exactly once', async () => {
+    const payment = await Payment.create({
+      student: student._id,
+      course: course._id,
+      amountCents: 30000,
+      currency: 'lrd',
+      provider: 'lonestar_momo',
+      method: 'mobile_money',
+      payerPhone: '+231771234567',
+      status: 'pending',
+      providerReference: `LON-${crypto.randomBytes(6).toString('hex')}`,
+      idempotencyKey: `mobile-probe-${runId}`,
+    });
+
+    const raw = JSON.stringify({
+      reference: payment.providerReference,
+      status: 'paid',
+      amountCents: 30000,
+      currency: 'lrd',
+      transactionId: payment.providerReference,
+    });
+
+    const first = await postCallback('lonestar_momo', raw, sign(raw));
+    assertEqual(first.status, 200, 'status');
+
+    const settled = await Payment.findById(payment._id);
+    assertEqual(settled.status, 'paid', 'the payment should be marked paid');
+    assert(settled.enrollment, 'it should point at the enrolment it created');
+
+    const enrollments = await Enrollment.countDocuments({ student: student._id, course: course._id });
+    assertEqual(enrollments, 1, 'an enrolment should exist');
+
+    const created = await Enrollment.findOne({ student: student._id, course: course._id });
+    assertEqual(created.source, 'mobile_money', 'the enrolment should record how it was paid for');
+
+    // The provider will retry. This must not enrol a second time.
+    const second = await postCallback('lonestar_momo', raw, sign(raw));
+    assertEqual(second.status, 200, 'a repeat callback is acknowledged');
+    assertEqual(
+      await Enrollment.countDocuments({ student: student._id, course: course._id }),
+      1,
+      'still exactly one enrolment'
+    );
+  });
+
+  await check('a callback whose amount disagrees with the record is not settled', async () => {
+    const payment = await Payment.create({
+      student: student._id,
+      course: course._id,
+      amountCents: 30000,
+      currency: 'lrd',
+      provider: 'lonestar_momo',
+      method: 'mobile_money',
+      status: 'pending',
+      providerReference: `LON-${crypto.randomBytes(6).toString('hex')}`,
+      idempotencyKey: `mobile-probe-mismatch-${runId}`,
+    });
+
+    const raw = JSON.stringify({
+      reference: payment.providerReference,
+      status: 'paid',
+      amountCents: 50,
+      currency: 'lrd',
+    });
+
+    const { status } = await postCallback('lonestar_momo', raw, sign(raw));
+    assertEqual(status, 200, 'acknowledged so the provider stops retrying');
+
+    const after = await Payment.findById(payment._id);
+    assertEqual(after.status, 'pending', 'a mismatched amount must not mark the payment paid');
+  });
+}
+
+
 /* ------------------------------------------------------------------ *
  * Run
  * ------------------------------------------------------------------ */
@@ -2076,6 +2319,9 @@ async function main() {
 
     process.stdout.write('\nStripe webhook\n');
     await testStripeWebhook();
+
+    process.stdout.write('\nMobile money\n');
+    await testMobileMoney();
   } finally {
     // Cleanup failures are reported rather than swallowed: a silently failing
     // teardown leaves fixtures in the database and the next run starts from a

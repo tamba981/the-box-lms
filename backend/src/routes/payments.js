@@ -8,6 +8,7 @@ const Enrollment = require('../models/Enrollment');
 const Payment = require('../models/Payment');
 
 const paymentService = require('../services/paymentService');
+const mobileMoneyService = require('../services/mobileMoneyService');
 
 const config = require('../config/env');
 const logger = require('../lib/logger');
@@ -37,6 +38,44 @@ router.get(
       // Deliberately no key material: the publishable key is not needed while
       // checkout is handled by Stripe's hosted page.
       provider: 'stripe',
+    })
+  )
+);
+
+/* ------------------------------------------------------------------ *
+ * GET /api/v1/payments/methods — what a payer can actually choose
+ * ------------------------------------------------------------------ */
+
+/**
+ * Reports every method the platform knows about, whether it is usable, and what
+ * is missing where it is not.
+ *
+ * Listing a disabled method rather than hiding it is deliberate. A student who
+ * has only Orange Money needs to know that the option exists and is not yet
+ * switched on, which is a different message from that option never having been
+ * considered. Nothing here exposes key material — cards are a redirect to
+ * Stripe's hosted page, so no publishable key is involved.
+ */
+router.get(
+  '/methods',
+  asyncHandler(async (req, res) =>
+    ok(res, {
+      methods: [
+        {
+          id: 'card',
+          label: 'Debit or credit card',
+          kind: 'card',
+          currency: 'usd',
+          enabled: config.stripe.enabled,
+          missing: config.stripe.enabled ? [] : ['STRIPE_SECRET_KEY'],
+          // Stated plainly because it is not a configuration oversight: Stripe
+          // does not accept businesses registered in Liberia.
+          note: config.stripe.enabled
+            ? null
+            : 'Card payments need a gateway that supports Liberia.',
+        },
+        ...mobileMoneyService.listProviders(),
+      ],
     })
   )
 );
@@ -78,6 +117,104 @@ router.post(
       { payment: payment.toJSONForOwner(), checkoutUrl },
       'Checkout ready.'
     );
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * POST /api/v1/payments/checkout/:courseId/mobile-money
+ * ------------------------------------------------------------------ */
+
+/**
+ * A separate route rather than a `method` field on the card flow.
+ *
+ * The two differ in more than a parameter: cards redirect the browser to Stripe
+ * and settle by webhook, whereas mobile money sends a prompt to a handset and
+ * settles by callback. Sharing one handler would mean one function with two
+ * shapes of failure, and the card path already works and is covered by tests.
+ */
+router.post(
+  '/checkout/:courseId/mobile-money',
+  authenticate,
+  validate({
+    params: z.object({ courseId: objectId }),
+    body: z.object({
+      provider: z.string().trim().min(1, 'Choose a mobile money provider').max(40),
+      phoneNumber: z.string().trim().min(7, 'Enter the number to charge').max(30),
+    }),
+  }),
+  asyncHandler(async (req, res) => {
+    const course = await Course.findById(req.valid.params.courseId);
+    if (!course) throw notFound('That course could not be found.', { code: 'COURSE_NOT_FOUND' });
+
+    if (course.status !== 'published') {
+      throw notFound('That course is not open for enrollment.', { code: 'COURSE_NOT_PUBLISHED' });
+    }
+
+    const { payment, instructions } = await mobileMoneyService.initiateCharge({
+      user: req.user,
+      course,
+      providerId: req.valid.body.provider,
+      phoneNumber: req.valid.body.phoneNumber,
+    });
+
+    return created(
+      res,
+      { payment: payment.toJSONForOwner(), instructions },
+      'Approve the prompt on your phone to complete the payment.'
+    );
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * POST /api/v1/payments/callback/:provider — mobile money
+ * ------------------------------------------------------------------ */
+
+/**
+ * Mounted with `express.raw` for the same reason as the Stripe webhook: the
+ * signature covers the exact bytes sent, so the body must not be parsed first.
+ *
+ * The signature is our own shared secret, not (yet) whichever scheme the
+ * provider uses. See the note at the top of mobileMoneyService.
+ */
+router.post(
+  '/callback/:provider',
+  validate({ params: z.object({ provider: z.string().trim().min(1).max(40) }) }),
+  asyncHandler(async (req, res) => {
+    const provider = mobileMoneyService.getProvider(req.valid.params.provider);
+    const rawBody = Buffer.isBuffer(req.body) ? req.body : Buffer.from(req.body || '');
+
+    const verification = mobileMoneyService.verifyCallback(
+      provider,
+      rawBody,
+      req.headers['x-callback-signature']
+    );
+
+    if (!verification.valid) {
+      logger.warn('rejected mobile money callback', {
+        provider: req.valid.params.provider,
+        reason: verification.reason,
+      });
+      return res.status(400).json({ received: false, reason: verification.reason });
+    }
+
+    let payload;
+    try {
+      payload = JSON.parse(rawBody.toString('utf8'));
+    } catch {
+      return res.status(400).json({ received: false, reason: 'invalid_json' });
+    }
+
+    try {
+      const result = await mobileMoneyService.processCallback(provider, payload);
+      logger.info('mobile money callback processed', { provider: provider.id, ...result });
+    } catch (error) {
+      // Ours, not theirs — most likely transient. 500 so the provider retries;
+      // settlement is idempotent, so a retry is safe.
+      logger.error('mobile money callback failed', { provider: provider.id, error });
+      return res.status(500).json({ received: false, reason: 'processing_failed' });
+    }
+
+    return res.status(200).json({ received: true });
   })
 );
 

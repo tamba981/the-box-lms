@@ -70,6 +70,9 @@ function createApp() {
    */
   app.use('/api/v1/payments/webhook', express.raw({ type: 'application/json', limit: '1mb' }));
 
+// Mobile money callbacks are signed over the raw bytes for the same reason.
+app.use('/api/v1/payments/callback', express.raw({ type: 'application/json', limit: '1mb' }));
+
   // 1 MB is generous for JSON here and caps a trivial memory-exhaustion attempt.
   app.use(express.json({ limit: '1mb' }));
   app.use(express.urlencoded({ extended: false, limit: '1mb' }));
