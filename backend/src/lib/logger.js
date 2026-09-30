@@ -48,13 +48,41 @@ function redact(value, depth = 0) {
   return value;
 }
 
+/**
+ * A short, readable summary of an error, for the log message itself.
+ *
+ * Railway renders these JSON lines by their `msg` field, so a call like
+ * `logger.error('failed to start', { error })` reached the deploy log as the
+ * bare words "failed to start". The cause was sitting in `meta.error.message`
+ * the entire time — recorded and invisible at once, which is worse than not
+ * recording it, because it implies there is nothing further to learn. A crash
+ * loop was diagnosed by guessing at an answer that was already in the log.
+ *
+ * Folding it into the message is done here, at the single point every log line
+ * passes through, so that a future call site cannot reintroduce the problem by
+ * forgetting. The stack is deliberately not included: this is for a human
+ * reading a deployment log, and `meta` still carries the whole error.
+ */
+function summarise(value) {
+  if (!value) return null;
+  if (value instanceof Error) {
+    const name = value.name && value.name !== 'Error' ? `${value.name}: ` : '';
+    return `${name}${value.message}`;
+  }
+  if (typeof value === 'string') return value;
+  if (typeof value === 'object' && typeof value.message === 'string') return value.message;
+  return null;
+}
+
 function emit(level, message, meta) {
   if (LEVELS[level] > ACTIVE_LEVEL) return;
+
+  const cause = meta ? summarise(meta.error) : null;
 
   const line = {
     ts: new Date().toISOString(),
     level,
-    msg: message,
+    msg: cause ? `${message}: ${cause}` : message,
   };
 
   if (meta !== undefined) line.meta = redact(meta);
@@ -72,4 +100,5 @@ module.exports = {
   /** Whether a level would actually be printed, for expensive diagnostics. */
   enabled: (level) => LEVELS[level] <= ACTIVE_LEVEL,
   redact,
+  summarise,
 };

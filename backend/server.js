@@ -84,7 +84,33 @@ process.on('uncaughtException', (error) => {
   shutdown('uncaughtException');
 });
 
+/**
+ * The one startup failure that is almost always the same two mistakes.
+ *
+ * Worth a little pattern matching: the alternative is a crash loop whose only
+ * visible symptom from outside is a 502 from the edge, and whoever is reading
+ * it cannot tell a rotated password from a URI that needs percent-encoding.
+ * These are the two ways a connection string is normally wrong.
+ */
+function isCredentialRejection(error) {
+  return /authentication failed|bad auth|not authorized|AuthenticationFailed/i.test(
+    String((error && error.message) || '')
+  );
+}
+
 start().catch((error) => {
   logger.error('failed to start', { error });
+
+  if (isCredentialRejection(error)) {
+    logger.error(
+      'That is the database refusing the credentials in MONGODB_URI, not a network problem — ' +
+        'the server was reached and it answered, which is why this failed in about a second ' +
+        'rather than waiting out the ten-second selection timeout. The two usual causes: the ' +
+        'Atlas password was rotated after this value was set, so the deployed copy is the old ' +
+        'one; or the password contains one of @ : / ? # % & or a space and is not ' +
+        'percent-encoded in the URI.'
+    );
+  }
+
   process.exit(1);
 });
