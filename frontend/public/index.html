@@ -194,7 +194,12 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     }
     .header-container { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
-    .logo { font-size:24px; font-weight:800; background: linear-gradient(135deg, var(--primary), var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; text-decoration:none; }
+    .logo { display:inline-flex; align-items:center; gap:10px; font-size:24px; font-weight:800; text-decoration:none; }
+    /* The emblem is navy, so on the dark theme it sits on a white chip.
+       The gradient wordmark moved to an inner span: background-clip:text on an
+       element that also contains an image clips the wrong thing. */
+    .logo-text { background: linear-gradient(135deg, var(--primary), var(--gold)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .logo-mark { width:34px; height:34px; flex:0 0 34px; border-radius:50%; background:#fff; padding:3px; object-fit:contain; }
     .nav-menu { display: flex; gap:30px; align-items:center; }
     .nav-menu a { text-decoration:none; color:var(--text); font-weight:500; transition:color 0.3s; position:relative; }
     body.dark-mode .nav-menu a { color:var(--dark-text); }
@@ -806,7 +811,7 @@
   <!-- MOBILE NAV -->
   <div class="mobile-nav" id="mobile-nav">
     <div class="mobile-nav-header">
-      <a href="/" class="logo">WUTEV</a>
+      <a href="/" class="logo"><img class="logo-mark" src="/Imges/Brand/wuteve-emblem.png" alt="" width="34" height="34" /><span class="logo-text">WUTEV</span></a>
       <button class="close-mobile-menu" id="close-mobile-menu" aria-label="Close menu"><i class="fas fa-times"></i></button>
     </div>
     <nav class="mobile-nav-menu">
@@ -818,7 +823,7 @@
   <!-- HEADER -->
   <header>
     <div class="container header-container">
-      <a href="/" class="logo">WUTEV</a>
+      <a href="/" class="logo"><img class="logo-mark" src="/Imges/Brand/wuteve-emblem.png" alt="" width="34" height="34" /><span class="logo-text">WUTEV</span></a>
       <!--
         The navigation used to promise an "AI Tutor", an "Admission" area with an
         application form and a portal, a "Marketplace", a "Research Lab", degree
@@ -1075,19 +1080,6 @@
   <!-- FOOTER -->
   <footer><div class="container"><div class="footer-grid"><div class="footer-brand"><h3>WUTEV</h3><p class="footer-description">Wuteve Global Academy offers affordable, self-paced online courses. Completing a course issues a certificate that anyone can verify at a public link.</p><p>Sponsored by Motiva Corporation Group of Companies</p></div><div class="footer-links"><h4 class="footer-heading">Learn</h4><ul><li><a href="/courses.html">All courses</a></li><li><a href="/courses.html?price=free">Free courses</a></li><li><a href="/certificate.html">Verify a certificate</a></li><li><a href="/login.html">Create an account</a></li></ul></div><div class="footer-links"><h4 class="footer-heading">Your account</h4><ul><li><a href="/login.html">Sign in</a></li><li><a href="/forgot-password.html">Forgot password</a></li><li><a href="/student-dashboard.html">My learning</a></li><li><a href="/instructor-dashboard.html">Teach on Wuteve</a></li></ul></div><div class="footer-contact"><h4 class="footer-heading">Contact Us</h4><p><i class="fas fa-map-marker-alt"></i> Monrovia Liberia. P.O.BOX 1000</p><p><i class="fas fa-phone"></i> +231886590302</p><p><i class="fas fa-phone"></i> +231772876644</p><p><i class="fas fa-envelope"></i> wuteve@globalacademy.edu</p></div></div><div class="footer-bottom"><p>Copyright © 2025 Wuteve Global Academy · Sponsored by Motiva Corporation Group of Companies.</p></div></div></footer>
 
-  <!-- MODALS (preserved) -->
-  <div id="how-to-apply-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">How To Apply</h2><p>Applying to Wuteve Global Academy creates a possibility for a bright future.</p><p>Wuteve equips emerging talent with the skills needed for in-demand careers, revolutionizing the future of work.</p><div class="form-actions"><a href="#" class="btn btn-primary">Apply Now</a></div><h3>Application Overview</h3><p>Applying is simple and straightforward. Follow the steps below to kickstart your journey.</p><div class="steps-container"><div class="step-card"><div class="step-number">1</div><h4>Complete the Online Application Form</h4><p>Fill out the application form with accurate personal, academic, and professional information.</p></div><div class="step-card"><div class="step-number">2</div><h4>Submit Required Documents</h4><p>Upload documents such as your CV, transcripts, and letters of recommendation.</p></div><div class="step-card"><div class="step-number">3</div><h4>Attend an Interview (If Required)</h4><p>Some programs may require a short interview to assess your qualifications.</p></div><div class="step-card"><div class="step-number">4</div><h4>Receive Admission Decision</h4><p>Our admissions team will review your application and notify you of your admission status.</p></div></div><h3>Frequently Asked Questions (FAQ)</h3><div class="faq-item"><p class="faq-question">What is the admission process?</p><p>The admission process typically includes completing an online application, submitting required documents, and potentially attending an interview (if applicable).</p></div><div class="faq-item"><p class="faq-question">Do I need to take an entrance exam?</p><p>Some programs may require entrance exams. Check the program's requirements for more details.</p></div><div class="faq-item"><p class="faq-question">Can I apply for financial aid?</p><p>Wuteve does not offer financial aid at this time.</p></div></div></div>
-
-  <div id="application-form-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">Admission Form</h2><form id="application-form"><div class="form-step active" id="step-1"><h3>Step 1: Personal Information</h3><div class="form-grid"><div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Date of Birth</label><input type="date" class="form-input" required></div><div class="form-group"><label class="form-label">Gender</label><select class="form-select" required><option value="">Select Gender</option><option value="male">Male</option><option value="female">Female</option><option value="other">Other</option></select></div><div class="form-group"><label class="form-label">Identification Type</label><select class="form-select" required><option value="">Select ID Type</option><option value="passport">Passport</option><option value="id-card">National ID Card</option><option value="drivers-license">Driver's License</option></select></div><div class="form-group"><label class="form-label">Identification Number</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Personal Image</label><input type="file" class="form-input" accept="image/*" required></div><div class="form-group"><label class="form-label">Nationality</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Do you have a personal computer?</label><select class="form-select" required><option value="">Select Option</option><option value="yes">YES</option><option value="no">NO</option></select></div><div class="form-group"><label class="form-label">Desired Program</label><select class="form-select" required><option value="">Select Program</option><option value="ai">Artificial Intelligence</option><option value="web-dev">Web Development</option><option value="data-science">Data Science</option><option value="cybersecurity">Cybersecurity</option></select></div></div><div class="form-actions"><div></div><button type="button" class="btn btn-primary next-step">Next</button></div></div><div class="form-step" id="step-2"><h3>Step 2: Education Background</h3><div class="form-grid"><div class="form-group"><label class="form-label">Highest Level of Education Completed</label><select class="form-select" required><option value="">Select Level</option><option value="high-school">High School</option><option value="associate">Associate Degree</option><option value="bachelor">Bachelor's Degree</option><option value="master">Master's Degree</option><option value="phd">PhD</option></select></div><div class="form-group"><label class="form-label">Name of Last Attended School/College/University</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Graduation Year</label><input type="number" class="form-input" min="1950" max="2025" required></div><div class="form-group"><label class="form-label">Do you have basic computer knowledge?</label><select class="form-select" required><option value="">Select Option</option><option value="yes">YES</option><option value="no">NO</option></select></div><div class="form-group full-width"><label class="form-label">Personal Statement</label><textarea class="form-textarea" placeholder="Tell us about yourself, your goals, and why you want to join Wuteve" required></textarea></div><div class="form-group full-width"><label class="form-label">Community Impact</label><textarea class="form-textarea" placeholder="Describe any community service or impact you've made" required></textarea></div></div><div class="form-actions"><button type="button" class="btn btn-outline prev-step">Previous</button><button type="button" class="btn btn-primary next-step">Next</button></div></div><div class="form-step" id="step-3"><h3>Step 3: Contact Information</h3><div class="form-grid"><div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" required></div><div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input" required></div><div class="form-group full-width"><label class="form-label">Address</label><textarea class="form-textarea" required></textarea></div><div class="form-group"><label class="form-label">Emergency Contact Name</label><input type="text" class="form-input" required></div><div class="form-group"><label class="form-label">Emergency Phone Number</label><input type="tel" class="form-input" required></div><div class="form-group full-width"><label class="form-label">Emergency Person Address</label><textarea class="form-textarea" required></textarea></div><div class="form-group"><label class="form-label">Relationship Type</label><select class="form-select" required><option value="">Select Relationship</option><option value="parent">Parent</option><option value="sibling">Sibling</option><option value="spouse">Spouse</option><option value="friend">Friend</option><option value="other">Other</option></select></div><div class="form-group"><label class="form-label">Supporting Documents</label><input type="file" class="form-input" multiple></div><div class="form-group"><label class="form-label">Community Recommendation</label><input type="file" class="form-input"></div></div><div class="form-group"><label><input type="checkbox" required> I hereby declare that the information provided in this application is accurate to the best of my knowledge. I understand that providing false information may result in the cancellation of my admission.</label></div><div class="form-actions"><button type="button" class="btn btn-outline prev-step">Previous</button><button type="submit" class="btn btn-primary">Submit</button></div></div></form></div></div>
-
-  <div id="portal-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">Sign in to your account</h2><p>Welcome back! Please enter your details to continue.</p><form><div class="form-group"><label class="form-label">Email Address</label><input type="email" class="form-input" required></div><div class="form-group"><label class="form-label">Password</label><input type="password" class="form-input" required></div><div class="form-group"><label class="form-label">Select Your Role</label><select class="form-select" required><option value="">Select Role</option><option value="mentor">Mentor</option><option value="mentee">Mentee</option><option value="student">Student</option><option value="teacher">Teacher</option><option value="tutor">Tutor</option><option value="tutee">Tutee</option><option value="admin">Admin</option></select></div><div class="form-group"><a href="#">Forgot your password?</a></div><div class="form-group"><p>Don't have an account? <a href="#" id="signup-from-login">Sign Up</a></p></div><div class="form-actions"><button type="submit" class="btn btn-primary">Sign in</button></div><div class="form-group"><p>By signing in, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></p></div></form></div></div>
-
-  <div id="login-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">Login to Your Account</h2><form id="login-form"><div id="login-error" class="error-message" style="display:none;"></div><div class="form-group"><label class="form-label">Email Address</label><input type="email" id="login-email" class="form-input" required></div><div class="form-group"><label class="form-label">Password</label><input type="password" id="login-password" class="form-input" required></div><div class="form-group"><a href="#">Forgot your password?</a></div><div class="form-actions"><button type="submit" id="login-submit-btn" class="btn btn-primary">Login</button></div><div class="form-group"><p>Don't have an account? <a href="#" id="signup-from-login-btn">Sign Up</a></p></div></form></div></div>
-
-  <div id="signup-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">Create Your Account</h2><form id="signup-form"><div id="signup-error" class="error-message" style="display:none;"></div><div id="signup-success" class="success-message" style="display:none;"></div><div class="form-grid"><div class="form-group"><label class="form-label">First Name</label><input type="text" id="signup-firstname" class="form-input" required></div><div class="form-group"><label class="form-label">Last Name</label><input type="text" id="signup-lastname" class="form-input" required></div><div class="form-group"><label class="form-label">Email Address</label><input type="email" id="signup-email" class="form-input" required></div><div class="form-group"><label class="form-label">Phone Number</label><input type="tel" id="signup-phone" class="form-input"></div><div class="form-group"><label class="form-label">Password</label><input type="password" id="signup-password" class="form-input" required></div><div class="form-group"><label class="form-label">Confirm Password</label><input type="password" id="signup-confirm-password" class="form-input" required></div></div><div class="form-group"><label class="form-label">Account Type</label><select id="signup-role" class="form-select" required><option value="">Select Account Type</option><option value="student">Student</option><option value="instructor">Instructor</option><option value="professional">Professional</option></select></div><div class="form-group"><label><input type="checkbox" id="signup-terms" required> I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label></div><div class="form-actions"><button type="submit" id="signup-submit-btn" class="btn btn-primary">Create Account</button></div><div class="form-group"><p>Already have an account? <a href="#" id="login-from-signup">Login</a></p></div></form></div></div>
-
-  <div id="donation-modal" class="modal"><div class="modal-content"><span class="close-modal">&times;</span><h2 class="modal-title">Empower Change, One Gift at a Time</h2><p>Your donation today fuels opportunity, connects talent, and transforms lives.</p><form id="donation-form"><div class="form-step active" id="donation-step-1"><h3>Secured Donation</h3><div class="form-group"><label>Choose Your Donation Type</label><div style="display:flex;gap:15px;"><label><input type="radio" name="donation-type" value="one-time" checked> One-time</label><label><input type="radio" name="donation-type" value="monthly"> Monthly</label></div></div><div class="donation-options"><div class="donation-option selected" data-amount="250"><div class="donation-amount">$250</div></div><div class="donation-option" data-amount="100"><div class="donation-amount">$100</div></div><div class="donation-option" data-amount="50"><div class="donation-amount">$50</div></div><div class="donation-option" data-amount="25"><div class="donation-amount">$25</div></div><div class="donation-option custom-amount" id="custom-amount-option"><div class="donation-amount">Custom Amount</div></div></div><div class="form-group" id="custom-amount-input" style="display:none;"><label class="form-label">Enter Custom Amount</label><input type="number" class="form-input" placeholder="$"></div><div class="form-actions"><div></div><button type="button" class="btn btn-primary next-step">Next</button></div></div><div class="form-step" id="donation-step-2"><h3>Choose Payment Method</h3><div class="payment-methods"><div class="payment-method selected" data-method="credit-card"><i class="fas fa-credit-card"></i><div>Credit Card</div></div><div class="payment-method" data-method="mobile-money"><i class="fas fa-mobile-alt"></i><div>Mobile Money</div></div><div class="payment-method" data-method="bank-transfer"><i class="fas fa-university"></i><div>Bank Transfer</div></div></div><div class="form-actions"><button type="button" class="btn btn-outline prev-step">Back</button><button type="button" class="btn btn-primary next-step">Next</button></div></div><div class="form-step" id="donation-step-3"><h3>Review Your Donation</h3><div class="form-group"><p><strong>Donation Type:</strong> <span id="review-type">One-time</span></p><p><strong>Amount:</strong> $<span id="review-amount">250</span></p><p><strong>Payment Method:</strong> <span id="review-method">Credit Card</span></p></div><div class="form-actions"><button type="button" class="btn btn-outline prev-step">Back</button><button type="button" class="btn btn-primary next-step">Confirm</button></div></div><div class="form-step" id="donation-step-4"><div style="text-align:center;padding:30px 0;"><i class="fas fa-check-circle" style="font-size:60px;color:#10b981;"></i><h3>Thank You for Your Donation!</h3><p>Your support helps us transform lives through education.</p><p>A confirmation email has been sent to your email address.</p></div><div class="form-actions"><button type="button" class="btn btn-primary" id="close-donation">Close</button></div></div></form></div></div>
-
   <!-- ========== JAVASCRIPT ========== -->
   <script src="/assets/js/wga-api.js"></script>
   <script src="/assets/js/wga-ui.js"></script>
@@ -1230,66 +1222,20 @@
 
     // ---- Fabricated modals ----
     //
-    // This page shipped six modal dialogs that no longer correspond to anything
-    // the platform does, and two of them collected sensitive data with nowhere
-    // to send it:
+    // This page used to carry six modal dialogs that correspond to nothing the
+    // platform does. Two collected sensitive data with nowhere to send it: one
+    // asked for card details for a donation feature that has never existed, the
+    // other a passport number, a photograph and a date of birth for an
+    // admissions process that does not exist. Three more were duplicate sign-in
+    // forms offering account types that public sign-up cannot grant.
     //
-    //   donation-modal          asked for a donation of $25-$250 by "credit
-    //                           card", "mobile money" or "bank transfer". There
-    //                           is no donation feature and no payment provider
-    //                           for one.
-    //   application-form-modal  collected a passport or national ID number, a
-    //                           photograph and a date of birth, for an admissions
-    //                           process that does not exist.
-    //   portal / login / signup modals
-    //                           duplicate, non-functional sign-in forms that
-    //                           bypassed the real one and offered account types
-    //                           (Instructor, Professional, Mentor, Tutor) that
-    //                           public sign-up cannot grant.
-    //   how-to-apply-modal      described an application and interview process.
-    //
-    // Their navigation links are gone, so nothing could open them, but a form
-    // that asks for card details should not sit in the document at all. Removing
-    // the elements also makes every handler written for them inert, because each
-    // one looks its element up first. The real flows live on /login.html.
-    [
-      'donation-modal',
-      'application-form-modal',
-      'how-to-apply-modal',
-      'portal-modal',
-      'login-modal',
-      'signup-modal'
-    ].forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) el.remove();
-    });
-    const modalTriggers = {
-      'how-to-apply-link': 'how-to-apply-modal',
-      'mobile-how-to-apply-link': 'how-to-apply-modal',
-      'application-form-link': 'application-form-modal',
-      'mobile-application-form-link': 'application-form-modal',
-      'portal-link': 'portal-modal',
-      'mobile-portal-link': 'portal-modal',
-      'donation-link': 'donation-modal',
-      'mobile-donation-link': 'donation-modal'
-    };
-    Object.keys(modalTriggers).forEach(id => {
-      const el = document.getElementById(id);
-      if (el) {
-        el.addEventListener('click', function(e) {
-          e.preventDefault();
-          const modal = document.getElementById(modalTriggers[id]);
-          if (modal) { modal.style.display = 'block'; }
-          if (dom.mobileNav) { dom.mobileNav.classList.remove('active'); document.body.style.overflow = 'auto'; }
-        });
-      }
-    });
-    document.querySelectorAll('#login-btn, #signup-btn').forEach(el => {
-      if (el) el.addEventListener('click', function(e) { e.preventDefault(); document.getElementById(this.id === 'login-btn' ? 'login-modal' : 'signup-modal').style.display = 'block'; });
-    });
-    document.getElementById('signup-from-login')?.addEventListener('click', function(e) { e.preventDefault(); document.getElementById('portal-modal').style.display = 'none'; document.getElementById('signup-modal').style.display = 'block'; });
-    document.getElementById('signup-from-login-btn')?.addEventListener('click', function(e) { e.preventDefault(); document.getElementById('login-modal').style.display = 'none'; document.getElementById('signup-modal').style.display = 'block'; });
-    document.getElementById('login-from-signup')?.addEventListener('click', function(e) { e.preventDefault(); document.getElementById('signup-modal').style.display = 'none'; document.getElementById('login-modal').style.display = 'block'; });
+    // They were first quarantined by removing them from the DOM on load, because
+    // each dialog sat on a single line of several thousand characters and could
+    // not be cut with the editing tools. The markup has since been deleted from
+    // the document outright, so there is nothing left to remove in the browser,
+    // and the handlers that used to look them up — none of which can find an
+    // element any more — have gone with them. The real sign-in and sign-up
+    // flows live on /login.html.
 
     dom.closeButtons.forEach(btn => btn.addEventListener('click', () => dom.modals.forEach(m => { m.style.display = 'none'; })));
     window.addEventListener('click', (e) => dom.modals.forEach(m => { if (e.target === m) m.style.display = 'none'; }));
@@ -1422,85 +1368,16 @@
       }
     }
 
-    async function handleLogin(email, password) {
-      const session = await WGA.login(email, password);
+    // The landing page no longer hosts its own sign-in or sign-up forms. It used
+    // to carry modal copies that duplicated — and in places bypassed — the real
+    // screens, offering account types public sign-up cannot grant. Those dialogs
+    // are gone from the document, and the handlers built for them (handleLogin,
+    // handleRegister and the two submit blocks that called them) have gone with
+    // them. The real flows live on /login.html, which the header links to.
+    //
+    // updateAuthUI() above is not part of that: it reflects an existing session
+    // in the header and is called on load, immediately below.
 
-      updateAuthUI();
-      showToast('Signed in. Taking you to your dashboard...', 'success');
-      document.getElementById('login-modal').style.display = 'none';
-
-      setTimeout(function() {
-        window.location.href = WGA.homeForRole(session.user.role);
-      }, 900);
-
-      return true;
-    }
-
-    async function handleRegister(userData) {
-      // Any `role` in userData is ignored: the server assigns student to every
-      // self-registered account.
-      const session = await WGA.register(userData);
-
-      updateAuthUI();
-      showToast('Account created. Welcome to Wuteve!', 'success');
-      document.getElementById('signup-modal').style.display = 'none';
-
-      setTimeout(function() {
-        window.location.href = '/student-dashboard.html';
-      }, 900);
-
-      return true;
-    }
-
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-      loginForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value;
-        const password = document.getElementById('login-password').value;
-        const errorDiv = document.getElementById('login-error');
-        const submitBtn = document.getElementById('login-submit-btn');
-        if (!email || !password) { errorDiv.style.display = 'block'; errorDiv.textContent = 'Please fill all fields'; return; }
-        errorDiv.style.display = 'none';
-        const orig = submitBtn.textContent;
-        submitBtn.textContent = 'Logging in...'; submitBtn.disabled = true;
-        try { await handleLogin(email, password); } catch (err) { errorDiv.style.display = 'block'; errorDiv.textContent = err.message; }
-        submitBtn.textContent = orig; submitBtn.disabled = false;
-      });
-    }
-
-    const signupForm = document.getElementById('signup-form');
-    if (signupForm) {
-      signupForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const firstName = document.getElementById('signup-firstname').value;
-        const lastName = document.getElementById('signup-lastname').value;
-        const email = document.getElementById('signup-email').value;
-        const phone = document.getElementById('signup-phone').value;
-        const password = document.getElementById('signup-password').value;
-        const confirmPassword = document.getElementById('signup-confirm-password').value;
-        const role = document.getElementById('signup-role').value;
-        const terms = document.getElementById('signup-terms').checked;
-        const errorDiv = document.getElementById('signup-error');
-        const successDiv = document.getElementById('signup-success');
-        if (!firstName || !lastName || !email || !password || !role) {
-          errorDiv.style.display = 'block'; errorDiv.textContent = 'Please fill all required fields'; return;
-        }
-        if (password !== confirmPassword) { errorDiv.style.display = 'block'; errorDiv.textContent = 'Passwords do not match'; return; }
-        if (password.length < 6) { errorDiv.style.display = 'block'; errorDiv.textContent = 'Password must be at least 6 characters'; return; }
-        if (!terms) { errorDiv.style.display = 'block'; errorDiv.textContent = 'You must agree to Terms'; return; }
-        errorDiv.style.display = 'none'; successDiv.style.display = 'none';
-        const submitBtn = document.getElementById('signup-submit-btn');
-        const orig = submitBtn.textContent;
-        submitBtn.textContent = 'Creating...'; submitBtn.disabled = true;
-        try {
-          await handleRegister({ firstName, lastName, email, phone, password, role: role === 'student' ? 'student' : 'student' });
-          successDiv.style.display = 'block'; successDiv.textContent = 'Account created!';
-          setTimeout(() => window.location.href = '/', 1500);
-        } catch (err) { errorDiv.style.display = 'block'; errorDiv.textContent = err.message; }
-        submitBtn.textContent = orig; submitBtn.disabled = false;
-      });
-    }
     updateAuthUI();
 
     // ---- Live catalogue data ----
