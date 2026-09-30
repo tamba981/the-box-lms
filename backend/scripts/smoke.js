@@ -1822,9 +1822,14 @@ async function testAdminReporting() {
    *
    * These two are created here instead. Their addresses match the `smoke-`
    * namespace the teardown already sweeps, so they remove themselves.
+   *
+   * Deliberately not `smoke-admin-…`: `testLearningLoop()` already provisions an
+   * account at that exact address, and every section of this file shares one
+   * `runId`, so borrowing the name made this insert collide with that one on the
+   * unique email index and abort the run. Same namespace, different prefix.
    */
-  const adminEmail = `smoke-admin-${runId}@example.com`;
-  const studentEmail = `smoke-adminstudent-${runId}@example.com`;
+  const adminEmail = `smoke-reporting-${runId}@example.com`;
+  const studentEmail = `smoke-reporting-student-${runId}@example.com`;
 
   await User.create({
     firstName: 'Ada',
