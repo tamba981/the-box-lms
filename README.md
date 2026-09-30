@@ -27,7 +27,7 @@ One Node process serves both the JSON API and the static pages. There is no
 separate front-end build step, and nothing to deploy twice.
 
 ```
-THE BOX WEBSITE/
+wuteve-global-academy/
 ├── backend/                     Express API + static file serving
 │   ├── server.js                entry point: config → database → listen
 │   ├── src/
@@ -113,6 +113,7 @@ Inside `backend/`:
 | `npm run smoke`           | The same suite, under its older name                                    |
 | `npm run verify:deploy`   | Check a deployed instance from outside it — pass it a URL               |
 | `npm run check:mongo-uri` | Test a connection string without ever printing it           |
+| `npm run db:inspect`      | Report what is in the database this configuration points at, and compare databases |
 | `npm run new-secrets`     | Print a fresh variable block to paste into Railway                      |
 | `npm run env:init`        | Create or repair `.env`; preserves values it does not manage            |
 | `npm run seed`            | Create demo content                                                     |
@@ -332,6 +333,31 @@ What was wrong when this work started, and what it is now:
   against this code, so the checkout and webhook paths have only been verified
   for their failure modes. Stripe also cannot serve a Liberian business, and the
   mobile money charge calls are stubs. See `docs/PAYMENTS.md`.
+
+---
+
+## Renaming from the old name
+
+This project was called **The Box** and is now **Wuteve Global Academy**. Several
+identifiers still carry the old name, because each of them lives in another system
+and is changed there rather than here. They are listed so that nothing in this
+repository is quietly false:
+
+| Where | Current value | How to change it |
+| --- | --- | --- |
+| Database user (Atlas) | `theboxedulr_db_user` | Atlas → **Database Access** → add a new user, point `MONGODB_URI` at it, then delete the old one. A username cannot be edited in place. |
+| Database | `thebox_lms` | Nothing to rename: `wuteve_dev` already exists and holds the content. Just name it in `MONGODB_URI`. `npm run db:inspect` shows what each one contains. |
+| Railway service and domain | `the-box-lms-production.up.railway.app` | Railway → **Settings**. Renaming the service changes the domain, so update `PUBLIC_BASE_URL` in the same pass and redeploy. |
+| GitHub repository | `tamba981/the-box-lms` | GitHub → **Settings → Rename**. GitHub redirects the old URL, so existing clones keep working. |
+| Local folder | `THE BOX WEBSITE` | Rename it when nothing has it open — the editor, the terminals and the absolute paths in any running session all point at the current name. |
+
+Two references are deliberately left as they are:
+
+- `backend/scripts/check.js` holds `RETIRED_HOST = 'the-box-lms-production.up.railway.app'`
+  as a guard, so that no page may hard-code that hostname again. It names a
+  specific host to avoid rather than a brand, and it still needs to say what it says.
+- `docs/SECURITY-INCIDENT.md` records what happened at the time, so it uses the
+  names that existed when it happened.
 
 ---
 

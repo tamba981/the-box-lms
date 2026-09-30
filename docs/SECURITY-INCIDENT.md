@@ -1,5 +1,15 @@
 # Security incident: credentials committed to a public repository
 
+> **Note on names.** This record describes what happened at the time, so it uses
+> the identifiers that existed then: the Atlas database user
+> `theboxedulr_db_user`, the database `thebox_lms`, and the repository
+> `the-box-lms`. The project has since been renamed to Wuteve Global Academy, and
+> those identifiers have not all been changed — an Atlas user and a GitHub
+> repository are renamed in their own dashboards, not in a document. They are left
+> here because a record that renames its own facts is no longer a record of
+> anything. See "Renaming from the old name" in `README.md` for what still
+> carries it and where to change it.
+
 **Status:** resolved. The exposed credential has been rotated, and the old one is confirmed
 rejected by the cluster.
 **Date of discovery:** 2026-09-29

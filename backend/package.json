@@ -17,6 +17,7 @@
     "verify:deploy": "node scripts/verify-deploy.js",
     "new-secrets": "node scripts/new-secrets.js",
     "check:mongo-uri": "node scripts/check-mongo-uri.js",
+    "db:inspect": "node scripts/db-inspect.js",
     "env:init": "node scripts/init-env.js",
     "seed": "node scripts/seed.js",
     "smoke": "node scripts/smoke.js"

@@ -66,8 +66,8 @@ Two values are deliberately left blank:
                     if it has ever been written down anywhere shared.
 
   PUBLIC_BASE_URL   Your Railway domain, for example
-                    https://the-box-lms-production.up.railway.app - no trailing
-                    slash. Deploy once to learn the hostname, then set this and
+                    https://your-service.up.railway.app - no trailing slash.
+                    Deploy once to learn the hostname, then set this and
                     redeploy, or set it up front if you already know it.
 
 Both are checked after you deploy:
