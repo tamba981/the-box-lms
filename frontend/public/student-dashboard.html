@@ -123,6 +123,17 @@
             gap: 14px;
         }
 
+        /* The emblem is navy, so on the dark theme it sits on a white chip. */
+        .header-left .brand-mark {
+            width: 34px;
+            height: 34px;
+            flex: 0 0 34px;
+            border-radius: 50%;
+            background: #fff;
+            padding: 3px;
+            object-fit: contain;
+        }
+
         .logo {
             font-size: 22px;
             font-weight: 800;
@@ -876,6 +887,7 @@
         <div class="header-content">
             <div class="header-left">
                 <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle sidebar">☰</button>
+                <img class="brand-mark" src="/Imges/Brand/wuteve-emblem.png" alt="" width="34" height="34" />
                 <a href="/" class="logo">Wuteve <span>Global Academy</span></a>
             </div>
 
