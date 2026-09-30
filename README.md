@@ -112,6 +112,7 @@ Inside `backend/`:
 | `npm test`                | The end-to-end suite alone (190 checks against a real database)         |
 | `npm run smoke`           | The same suite, under its older name                                    |
 | `npm run verify:deploy`   | Check a deployed instance from outside it — pass it a URL               |
+| `npm run check:mongo-uri` | Test a connection string without ever printing it           |
 | `npm run new-secrets`     | Print a fresh variable block to paste into Railway                      |
 | `npm run env:init`        | Create or repair `.env`; preserves values it does not manage            |
 | `npm run seed`            | Create demo content                                                     |

@@ -201,6 +201,63 @@ Then check by hand:
 7. `https://your-domain.com/verify/WGA-1999-999999` — reports not found rather
    than crashing.
 
+### When the deploy crashes
+
+The first question after a crash is whether the container ever ran. Ask the edge,
+not the log:
+
+```bash
+curl -s -i https://your-domain.com/health | head -6
+```
+
+If the reply carries **`x-railway-fallback: true`**, Railway has no healthy
+deployment behind the domain and is answering for itself. Every path returns the
+same 502, including `/`, and the message is `Application failed to respond`. That
+is not a routing or code problem: the container either was not built or is exiting
+on startup, and Railway's on-failure restart policy turns that into a loop rather
+than a single error.
+
+A bare `502` without that header is a different thing — something is running and
+the request specifically failed.
+
+Then read the deploy log. Because the logger folds an error's own message into the
+log line, a startup failure names its cause:
+
+```
+failed to start: MongoServerError: bad auth : Authentication failed.
+```
+
+#### Telling a credential failure from a network one
+
+The timing settles it, and the two need opposite fixes:
+
+| How it failed | What it means |
+| --- | --- |
+| Seconds (while `serverSelectionTimeoutMS` is 10) | The cluster was **reached and answered**. The address is right; the **credentials** are not. |
+| The full 10 seconds | Nothing answered. A **network or address** problem — check Atlas → Network Access, and that the cluster is not paused. |
+
+A credential failure is nearly always one of two things: the Atlas password was
+rotated and this value was not updated, or the password contains `@ : / ? # % &` or
+a space and is not percent-encoded in the URI.
+
+#### Test a connection string without exposing it
+
+```bash
+npm run check:mongo-uri
+npm run check:mongo-uri -- "$env:TEMP\uri.txt"
+```
+
+It reports the host, database, username and password length — never the password,
+in any branch, including error messages, which some driver errors would otherwise
+echo back. It classifies the failure and says which of the two conclusions above
+applies.
+
+To test a candidate value without putting it anywhere git can see, or into shell
+history, save it to a file in your temp directory and pass that path.
+
+**Never point `MONGODB_URI` at the development database.** `wuteve_dev` holds a
+live administrator whose password is published in this repository's README.
+
 ### Populate real content
 
 Do **not** run `npm run seed` against production — it creates accounts with
