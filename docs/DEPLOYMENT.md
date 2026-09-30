@@ -55,6 +55,23 @@ for a tired evening.
 
 Railway → **Variables**. Set these on the service, never in the repository.
 
+### Generate the secrets
+
+Do not compose these by hand. From `backend/`:
+
+```bash
+npm run new-secrets
+```
+
+It generates the two signing secrets separately — using the same value for both is
+an easy mistake, and the server will not tell you — checks them against the length
+rule the server enforces, and prints a block to paste straight into Railway's
+variable editor. It writes nothing to disk and sends nothing anywhere.
+
+Do not paste that output into a chat, an issue or a screenshot. A signing key that
+has been in a conversation is not a secret; anyone holding it can forge a token for
+any account, including an administrator.
+
 ### Required
 
 | Variable             | Value                                                                    |
@@ -135,6 +152,26 @@ ever been written down somewhere shared.
 ---
 
 ## 5. Deploy, then verify
+
+The first command to run is not `curl`. From `backend/`:
+
+```bash
+npm run verify:deploy -- https://your-domain.com
+```
+
+It checks ten things from outside the deployment and exits non-zero if any fail:
+health, the public catalogue, that a **same-origin write is not blocked**, that a
+cross-origin write still is, that `PUBLIC_BASE_URL` matches the host it was given,
+that a page is served, that an unknown path returns a real 404, that a content
+security policy is sent, that the framework is not advertised, and that the public
+payment method list carries no credentials.
+
+It exists because a checklist depends on somebody remembering, and the defect that
+would have taken this deployment down was invisible from a terminal. Run it after
+every deploy — it is read-only apart from two requests that are supposed to be
+refused, and it sends no credentials.
+
+The same picture by hand:
 
 ```bash
 curl https://your-domain.com/health
@@ -259,8 +296,12 @@ and harmless; the Railway hostname keeps working.
 
 ## 9. Ongoing
 
-- `npm run build` and `npm run smoke` before every deploy. Do not deploy on a
-  red smoke run.
+- `npm run verify` before every deploy: the build gate and the end-to-end suite.
+  Do not deploy on a red run.
+- `npm run verify:deploy -- https://your-domain.com` after every deploy.
+- A mobile money method becoming selectable is not the same as it being payable —
+  the charge calls are still stubs. `verify:deploy` reports which methods are
+  usable so this is visible rather than assumed.
 - Rotate the JWT secrets if one is ever pasted into a chat, a screenshot or a
   ticket. Rotating signs everybody out, which is the correct response.
 - The `Token` collection is TTL-indexed; expired tokens remove themselves. No

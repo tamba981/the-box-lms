@@ -13,6 +13,9 @@
     "build": "node scripts/check.js",
     "test": "node scripts/smoke.js",
     "verify": "npm run build && node scripts/smoke.js",
+    "verify:deploy": "node scripts/verify-deploy.js",
+    "new-secrets": "node scripts/new-secrets.js",
+    "env:init": "node scripts/init-env.js",
     "seed": "node scripts/seed.js",
     "smoke": "node scripts/smoke.js"
   },

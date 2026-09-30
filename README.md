@@ -107,20 +107,29 @@ Inside `backend/`:
 | ------------------------- | ----------------------------------------------------------------------- |
 | `npm start`               | Run the server                                                          |
 | `npm run dev`             | Run with `--watch`                                                      |
-| `npm run build`           | **The build gate.** Parses every file, resolves every import, checks deps |
-| `npm run smoke`           | 111 end-to-end checks against a real database                           |
+| `npm run build`           | **The build gate.** Parses every file and every page's inline script, resolves every import, checks dependencies |
+| `npm run verify`          | The build gate, then the end-to-end suite — the whole gate in one command |
+| `npm test`                | The end-to-end suite alone (190 checks against a real database)         |
+| `npm run smoke`           | The same suite, under its older name                                    |
+| `npm run verify:deploy`   | Check a deployed instance from outside it — pass it a URL               |
+| `npm run new-secrets`     | Print a fresh variable block to paste into Railway                      |
+| `npm run env:init`        | Create or repair `.env`; preserves values it does not manage            |
 | `npm run seed`            | Create demo content                                                     |
-| `npm run env:init`        | Create or repair `.env` with strong random secrets                      |
 
 `npm run build` is what the deploy runs. It does not execute application code,
 so it needs no database and no secrets — it fails fast on a syntax error, a
-mistyped import, a missing dependency or a missing page.
+mistyped import, a missing dependency or a missing page. It also parses the
+inline `<script>` in every page and checks each `<style>` block's braces, because
+most of this product's front-end logic lives in those blocks and a truncated paste
+there produces a page that renders and then does nothing.
 
-`npm run smoke` boots the real app, exercises registration, sign-in, refresh
+`npm test` boots the real app and exercises registration, sign-in, refresh
 rotation, password reset, the full learning loop (instructor writes a course →
 admin approves → student enrols → completes → certificate issued → verified
-publicly), community, messaging, live sessions and input validation. It cleans
-up after itself. Run it before every deploy.
+publicly), community, messaging, live sessions, input validation, email templates,
+money formatting, the admin reports, the Stripe webhook path, the mobile money
+path, and the same-origin guard. It cleans up after itself. Run it before every
+deploy — `npm run verify` does it for you.
 
 ---
 
@@ -288,6 +297,8 @@ recording because the tests did not catch them:
 | `GET /courses/:slug` returned 500 | A query projection omitted `resources`, and the lesson serialiser read `.length` off `undefined`. |
 | A production deploy could not accept a single write | The same-origin guard compared the `Origin` header only against the configured allowlist. Browsers send `Origin` on every `POST`, including same-origin ones, so with `CORS_ORIGINS` unset — the default — every write from the site's own pages returned 403 while every `GET` kept working. The log described the server's own origin as a blocked cross-origin request. Nothing caught it because the smoke suite is not a browser and never sent the header. Four checks now pin it. |
 | `npm test` had never run | The script pointed at `tests/`, which has never existed anywhere in this repository's history. It now runs the suite that does exist. |
+| `npm run env:init` did not exist | The README documented it twice as the first step of the quick start, and `scripts/init-env.js` was there and working. Nothing had wired it up, so following the instructions failed at step one. |
+| `env:init` deleted credentials it did not recognise | Once wired up, it regenerated `.env` from a fixed template, so any key the template had not been taught about was silently removed. It would have done that to the mobile money keys on their first run. Unknown keys are now preserved and reported. |
 
 ---
 
@@ -328,3 +339,13 @@ What was wrong when this work started, and what it is now:
 See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md). In short: one Railway service,
 root directory the repository root, with `MONGODB_URI`, the two JWT secrets and
 `PUBLIC_BASE_URL` set as variables.
+
+Two commands do the parts that are easy to get wrong:
+
+```bash
+npm run new-secrets                      # in backend/ — prints a variable block to paste into Railway
+npm run verify:deploy -- https://your-domain.com   # after deploying
+```
+
+The second one fails if a same-origin write is refused, which is the failure that
+would otherwise take the whole site down while every health check still passed.
