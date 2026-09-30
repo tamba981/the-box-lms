@@ -92,6 +92,23 @@ body.dark-mode a {
   font-size: 15px;
 }
 
+/*
+ * The academy emblem, cropped from the uploaded lockup by
+ * scripts/make-emblem.js's sibling in the repo root. It sits on a white
+ * circular chip because the mark is navy: on the dark theme it would otherwise
+ * be navy on a near-black surface, which is the one place a transparent PNG
+ * still needs help.
+ */
+.wga-brand .brand-mark {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 50%;
+  background: #fff;
+  padding: 3px;
+  object-fit: contain;
+}
+
 .wga-brand .accent {
   color: var(--primary);
 }

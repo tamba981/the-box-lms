@@ -1810,32 +1810,58 @@ async function testMoneyFormatting() {
  * were formatted with their own `toFixed` call rather than the shared helper.
  */
 async function testAdminReporting() {
-  const login = await request('POST', '/api/v1/auth/login', {
-    body: { email: 'admin@wuteve.edu', password: 'WuteveDemo12345' },
+  /**
+   * Fixture accounts rather than the seeded demo ones.
+   *
+   * This suite used to sign in as `admin@wuteve.edu` with the password published
+   * in the README, so its six checks ran only against a database that had been
+   * seeded. Against one without that account — an empty database, or one whose
+   * demo password has been changed, which is the whole point of changing it —
+   * the sign-in returned 401 and the suite returned early. The run still ended
+   * "All checks passed", six checks lighter, and nothing said so.
+   *
+   * These two are created here instead. Their addresses match the `smoke-`
+   * namespace the teardown already sweeps, so they remove themselves.
+   */
+  const adminEmail = `smoke-admin-${runId}@example.com`;
+  const studentEmail = `smoke-adminstudent-${runId}@example.com`;
+
+  await User.create({
+    firstName: 'Ada',
+    lastName: 'Admin',
+    email: adminEmail,
+    password: PASSWORD,
+    role: 'admin',
+    emailVerified: true,
   });
 
-  if (login.status !== 200) {
-    assertEqual(login.status, 401, 'admin login should succeed or be rejected as unknown');
+  await User.create({
+    firstName: 'Stan',
+    lastName: 'Student',
+    email: studentEmail,
+    password: PASSWORD,
+    role: 'student',
+    emailVerified: true,
+  });
 
-    // Reported rather than returned from silently. Six checks live below this
-    // line, and a reader comparing today's total with yesterday's has no other
-    // way to tell that they did not run.
-    skipped.push('admin reporting (6 checks) — no seeded admin account in this database');
-    process.stdout.write(
-      '  SKIP  admin reporting — no seeded admin account, so 6 checks did not run\n' +
-        '        Seed the database, or expect a total six lower than usual.\n'
-    );
-    return;
-  }
+  createdEmails.push(adminEmail, studentEmail);
+
+  const login = await request('POST', '/api/v1/auth/login', {
+    body: { email: adminEmail, password: PASSWORD },
+  });
+
+  // A failure here is now a real failure rather than a reason to skip: nothing
+  // outside this file has to exist for it to work.
+  assertEqual(login.status, 200, 'fixture admin sign-in');
 
   const token = login.json.data.accessToken;
 
   await check('an ordinary student cannot read the admin summaries', async () => {
     const student = await request('POST', '/api/v1/auth/login', {
-      body: { email: 'student@wuteve.edu', password: 'WuteveDemo12345' },
+      body: { email: studentEmail, password: PASSWORD },
     });
 
-    if (student.status !== 200) return;
+    assertEqual(student.status, 200, 'fixture student sign-in');
 
     for (const path of ['/api/v1/admin/stats', '/api/v1/admin/users', '/api/v1/admin/certificates']) {
       // eslint-disable-next-line no-await-in-loop
