@@ -47,6 +47,19 @@ const Token = require('../src/models/Token');
 const { createApp } = require('../src/app');
 
 const results = [];
+
+/**
+ * Suites that declined to run, and why.
+ *
+ * Some of the admin checks sign in with the seeded demo account, so they need a
+ * database that has been seeded. That is a reasonable thing to tolerate — but the
+ * tolerance used to be silent, and the only symptom was a smaller total. A run
+ * against a database with no demo admin reported "184/184 checks passed" while
+ * six checks had not run at all, and an empty deployment passed the suite that
+ * was supposed to be watching it.
+ */
+const skipped = [];
+
 let baseUrl = '';
 let server = null;
 
@@ -1803,6 +1816,15 @@ async function testAdminReporting() {
 
   if (login.status !== 200) {
     assertEqual(login.status, 401, 'admin login should succeed or be rejected as unknown');
+
+    // Reported rather than returned from silently. Six checks live below this
+    // line, and a reader comparing today's total with yesterday's has no other
+    // way to tell that they did not run.
+    skipped.push('admin reporting (6 checks) — no seeded admin account in this database');
+    process.stdout.write(
+      '  SKIP  admin reporting — no seeded admin account, so 6 checks did not run\n' +
+        '        Seed the database, or expect a total six lower than usual.\n'
+    );
     return;
   }
 
@@ -2412,6 +2434,15 @@ async function main() {
       'NOTE: this run exceeded the 15-minute production access-token lifetime.\n' +
         'The suite raises its own TTL to 2h for that reason; if you see 401s in the\n' +
         'late sections, that override has probably been removed.\n'
+    );
+  }
+
+  if (skipped.length > 0) {
+    process.stdout.write(`\nChecks that did not run:\n`);
+    for (const item of skipped) process.stdout.write(`  • ${item}\n`);
+    process.stdout.write(
+      '\nA total lower than usual means a suite was skipped, not that the product\n' +
+        'is healthier. The number is not a constant — read it, do not just check it passed.\n'
     );
   }
 
