@@ -13,6 +13,7 @@
     "build": "node scripts/check.js",
     "test": "node scripts/smoke.js",
     "verify": "npm run build && node scripts/smoke.js",
+    "build:deploy": "node scripts/check.js && node scripts/stage-pages.js",
     "verify:deploy": "node scripts/verify-deploy.js",
     "new-secrets": "node scripts/new-secrets.js",
     "check:mongo-uri": "node scripts/check-mongo-uri.js",

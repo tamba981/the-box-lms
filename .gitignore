@@ -36,6 +36,10 @@ npm-debug.log*
 # Test and runtime artefacts
 coverage/
 *.tmp
+
+# The static pages copied beside the app at build time by
+# scripts/stage-pages.js. Generated, and the originals live in frontend/public.
+backend/public/
 .idea/
 *.swp
 

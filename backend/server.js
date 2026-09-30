@@ -9,10 +9,13 @@
  * immediately and reported itself healthy with no database at all.
  */
 
+const fs = require('fs');
+const path = require('path');
+
 const config = require('./src/config/env');
 const db = require('./src/db');
 const logger = require('./src/lib/logger');
-const { createApp } = require('./src/app');
+const { createApp, PUBLIC_DIR } = require('./src/app');
 
 let server = null;
 
@@ -22,6 +25,29 @@ async function start() {
   await db.connect();
 
   const app = createApp();
+
+  /**
+   * Say where the pages are, or that they are not there at all.
+   *
+   * Worth its own log line because of how this failure presents: when the
+   * static directory is missing the API still answers everything, so the
+   * deployment looks like it is half-working. Every page URL, including `/`,
+   * comes back as the API's JSON 404, which reads as a routing problem and is
+   * not one. Naming the directory, whether it exists, what sits beside it, and
+   * the working directory turns a deduction into a fact in the deploy log.
+   */
+  const repoRoot = path.join(__dirname, '..');
+  const staticPresent = fs.existsSync(PUBLIC_DIR);
+
+  logger.info('static pages', {
+    cwd: process.cwd(),
+    node: process.version,
+    resolved: PUBLIC_DIR,
+    present: staticPresent,
+    contains: staticPresent ? fs.readdirSync(PUBLIC_DIR).slice(0, 5) : null,
+    // What the builder actually shipped, which is the part that was wrong.
+    beside: fs.existsSync(repoRoot) ? fs.readdirSync(repoRoot) : null,
+  });
 
   server = app.listen(config.port, () => {
     logger.info('listening', {

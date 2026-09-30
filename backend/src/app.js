@@ -26,7 +26,33 @@ const adminRoutes = require('./routes/admin');
 const paymentsRoutes = require('./routes/payments');
 const dashboardRoutes = require('./routes/dashboard');
 
-const PUBLIC_DIR = path.join(__dirname, '..', '..', 'frontend', 'public');
+/**
+ * Where the static pages actually are.
+ *
+ * This used to be one hard-coded path, `<repo>/frontend/public`, and it worked
+ * everywhere except the deployment: the pages were present when the build ran —
+ * `scripts/check.js` fails the build if they are not — and absent from the
+ * container that served the API. The result was a deployment that answered
+ * every URL, including `/`, with the API's JSON 404, which reads as a routing
+ * problem rather than a missing directory.
+ *
+ * So the candidates are tried in order and the first that exists wins. The
+ * last two use the working directory, because a builder that copies the app
+ * directory somewhere else changes that without changing `__dirname`'s
+ * relationship to it. `start()` logs which one was chosen, so this never has to
+ * be guessed at again.
+ */
+const PUBLIC_DIR_CANDIDATES = [
+  path.join(__dirname, '..', '..', 'frontend', 'public'), // repo layout
+  path.join(process.cwd(), 'frontend', 'public'), // run from the repo root
+  path.join(process.cwd(), '..', 'frontend', 'public'), // run from backend/
+  path.join(__dirname, '..', '..', 'public'), // pages copied beside the app
+  path.join(__dirname, '..', 'public'),
+];
+
+const PUBLIC_DIR =
+  PUBLIC_DIR_CANDIDATES.find((candidate) => fs.existsSync(candidate)) || PUBLIC_DIR_CANDIDATES[0];
+
 const PUBLIC_DIR_EXISTS = fs.existsSync(PUBLIC_DIR);
 
 /**
