@@ -86,16 +86,33 @@ npm run seed          # demo accounts, 5 courses, a live session
 npm start             # http://localhost:5000
 ```
 
-Demo sign-in (change these before anyone else can reach the database):
+Demo sign-in. The seed creates these accounts, all with one password:
 
-| Account                 | Password           | Role       |
-| ----------------------- | ------------------ | ---------- |
-| `admin@wuteve.edu`      | `WuteveDemo12345`  | admin      |
-| `instructor@wuteve.edu` | `WuteveDemo12345`  | instructor |
-| `student@wuteve.edu`    | `WuteveDemo12345`  | student    |
+| Account                 | Role       |
+| ----------------------- | ---------- |
+| `admin@wuteve.edu`      | admin      |
+| `instructor@wuteve.edu` | instructor |
+| `student@wuteve.edu`    | student    |
 
-Use `SEED_PASSWORD=… npm run seed` to choose your own, and `npm run seed -- --fresh`
-to replace the demo content.
+The password is deliberately not printed here. The seed defaults to a well-known
+string that lives in `backend/scripts/seed.js`, so anything that can read this
+repository can sign in as an administrator wherever that default is still in
+place. Set your own before the database is reachable:
+
+```bash
+SEED_PASSWORD='…' npm run seed
+```
+
+Two things worth knowing:
+
+- The seed only assigns a password when it **creates** an account. For one that
+  already exists it updates the profile and leaves the password alone — so
+  re-seeding neither restores a known password nor undoes a change you made.
+- Change one afterwards with `POST /api/v1/auth/change-password`. That also
+  invalidates every token issued before the change; writing the password field
+  directly would not, and existing sessions would stay signed in.
+
+`npm run seed -- --fresh` replaces the demo content.
 
 ---
 
