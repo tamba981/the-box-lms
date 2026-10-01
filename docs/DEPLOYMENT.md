@@ -77,14 +77,56 @@ any account, including an administrator.
 | Variable             | Value                                                                    |
 | -------------------- | ------------------------------------------------------------------------ |
 | `NODE_ENV`           | `production`                                                             |
-| `MONGODB_URI`        | `mongodb+srv://user:pass@cluster/wuteve?retryWrites=true&w=majority`      |
+| `MONGODB_URI`        | `mongodb+srv://user:pass@cluster/wuteve_dev?retryWrites=true&w=majority`  |
 | `JWT_ACCESS_SECRET`  | A fresh 48-byte random string                                            |
 | `JWT_REFRESH_SECRET` | A different fresh 48-byte random string                                  |
-| `PUBLIC_BASE_URL`    | `https://your-domain.com` — no trailing slash                            |
+| `PUBLIC_BASE_URL`    | `https://wuteveglobalacademy.com` — no trailing slash                            |
+
+The database name at the end of `MONGODB_URI` is not a label for humans — it
+selects which database the app reads. Point it at the one that actually holds the
+content, or the deployment comes up healthy and serves nothing: `/health` reports
+`mongodb: connected`, every request returns 200, and every list is empty. Nothing
+about that looks like a failure, which is what makes it worth checking first.
+`npm run db:inspect` shows what each database contains, and
+`GET /api/v1/courses` reporting `total: 0` is the symptom.
 
 `PUBLIC_BASE_URL` is not cosmetic: it is the link inside every verification and
 password-reset email, and the address Stripe redirects to. If it is wrong, those
-emails contain dead links.
+emails contain dead links. It must be a bare origin — the code concatenates paths
+onto it directly (`${publicBaseUrl}/verify-email.html?token=…`), so a trailing
+slash or an `/api/v1` suffix produces broken links.
+
+### The domain
+
+`wuteveglobalacademy.com` is registered at Namecheap and reaches the app through
+Railway. Two settings have to agree, and they live in different places:
+
+1. **Railway → Settings → Networking → Custom Domain.** Add the domain there.
+   Railway issues the exact records to create and the target to point at. Read
+   those values from the dashboard, not from any document — the target is
+   generated per service and changes if the service is ever recreated.
+2. **Namecheap → Domain List → Manage → Advanced DNS.** Create those records using
+   **BasicDNS**, which is the default. Do not switch to "Web Hosting DNS" or
+   Namecheap's redirect service; each replaces the records with its own and the
+   app stops being reachable.
+
+Add both the apex and `www`. Treat the apex as canonical — that is what
+`PUBLIC_BASE_URL` uses — and let `www` redirect to it, so verification links and
+Stripe returns always land on one hostname instead of two spellings of the same
+site.
+
+TLS is issued automatically once the records resolve; no certificate needs
+buying. HSTS is already sent in production, so visitors should reach the site over
+`https://` from the first visit.
+
+Do not set `PUBLIC_BASE_URL` to the domain before DNS points at the app: any
+verification or reset email sent in that window carries a dead link. Set it in the
+same pass as the DNS, then redeploy. `npm run verify:deploy` checks it — `GET /api`
+reports the configured value — and fails the run if it does not match the host
+being tested.
+
+The `*.up.railway.app` address keeps working alongside the custom domain, which is
+useful for confirming a deploy before DNS has propagated.
 
 ### Optional
 
@@ -110,7 +152,7 @@ configured allowlist alone, so with the allowlist empty every write from the
 site's own pages was refused:
 
 ```
-POST /api/v1/auth/login   Origin: https://your-domain.com   -> 403
+POST /api/v1/auth/login   Origin: https://wuteveglobalacademy.com   -> 403
 POST /api/v1/auth/login   (no Origin, e.g. curl)            -> 200
 ```
 
@@ -156,7 +198,7 @@ ever been written down somewhere shared.
 The first command to run is not `curl`. From `backend/`:
 
 ```bash
-npm run verify:deploy -- https://your-domain.com
+npm run verify:deploy -- https://wuteveglobalacademy.com
 ```
 
 It checks ten things from outside the deployment and exits non-zero if any fail:
@@ -174,7 +216,7 @@ refused, and it sends no credentials.
 The same picture by hand:
 
 ```bash
-curl https://your-domain.com/health
+curl https://wuteveglobalacademy.com/health
 ```
 
 ```json
@@ -186,10 +228,10 @@ so a health check can be wired to an alert without parsing the body.
 
 Then check by hand:
 
-1. `https://your-domain.com/courses.html` — the catalog loads.
+1. `https://wuteveglobalacademy.com/courses.html` — the catalog loads.
 2. Register a new account. The confirmation link arrives (or is in the log if no
    email provider is configured).
-3. `https://your-domain.com/nonexistent` — returns the 404 page **with a 404
+3. `https://wuteveglobalacademy.com/nonexistent` — returns the 404 page **with a 404
    status**.
 4. **Sign in.** This is the step that catches the origin trap described above: a
    browser sends an `Origin` header that `curl` does not, so this is the first
@@ -198,7 +240,7 @@ Then check by hand:
    to prove `POST` works and not just `GET`.
 6. Sign in as an admin and open `/admin-dashboard.html` — the guard lets you in;
    as a student it redirects you away.
-7. `https://your-domain.com/verify/WGA-1999-999999` — reports not found rather
+7. `https://wuteveglobalacademy.com/verify/WGA-1999-999999` — reports not found rather
    than crashing.
 
 ### When the deploy crashes
@@ -207,7 +249,7 @@ The first question after a crash is whether the container ever ran. Ask the edge
 not the log:
 
 ```bash
-curl -s -i https://your-domain.com/health | head -6
+curl -s -i https://wuteveglobalacademy.com/health | head -6
 ```
 
 If the reply carries **`x-railway-fallback: true`**, Railway has no healthy
@@ -322,7 +364,7 @@ available and that nothing has been charged.**
 
 1. Set `STRIPE_SECRET_KEY`.
 2. Dashboard → Developers → **Webhooks** → *Add endpoint*:
-   `https://your-domain.com/api/v1/payments/webhook`
+   `https://wuteveglobalacademy.com/api/v1/payments/webhook`
 3. Subscribe to `checkout.session.completed`, `checkout.session.async_payment_succeeded`,
    `checkout.session.expired`, `payment_intent.payment_failed`.
 4. Copy the signing secret into `STRIPE_WEBHOOK_SECRET`.
@@ -355,7 +397,7 @@ and harmless; the Railway hostname keeps working.
 
 - `npm run verify` before every deploy: the build gate and the end-to-end suite.
   Do not deploy on a red run.
-- `npm run verify:deploy -- https://your-domain.com` after every deploy.
+- `npm run verify:deploy -- https://wuteveglobalacademy.com` after every deploy.
 - A mobile money method becoming selectable is not the same as it being payable —
   the charge calls are still stubs. `verify:deploy` reports which methods are
   usable so this is visible rather than assumed.

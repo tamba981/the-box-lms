@@ -388,7 +388,7 @@ Two commands do the parts that are easy to get wrong:
 
 ```bash
 npm run new-secrets                      # in backend/ — prints a variable block to paste into Railway
-npm run verify:deploy -- https://your-domain.com   # after deploying
+npm run verify:deploy -- https://wuteveglobalacademy.com   # after deploying
 ```
 
 The second one fails if a same-origin write is refused, which is the failure that
