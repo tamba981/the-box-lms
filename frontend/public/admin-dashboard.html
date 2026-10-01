@@ -877,7 +877,15 @@
                     <span class="notification-badge" id="notifCount">0</span>
                 </button>
                 <button class="btn-icon" id="theme-toggle" aria-label="Toggle theme">🌙</button>
-                <div class="user-avatar" id="userAvatar">A</div>
+                <!--
+                    The avatar has always looked interactive (its class carries
+                    cursor:pointer) but did nothing when clicked. It now opens the
+                    administrator's own account — which is also the only place an
+                    admin can change their password. Student and instructor both
+                    offered that; this dashboard, the most privileged account on
+                    the site, did not.
+                -->
+                <div class="user-avatar" id="userAvatar" role="button" tabindex="0" title="Your account" aria-label="Your account" onclick="openMyAccount()">A</div>
                 <button class="logout-btn" id="logout-btn">Logout</button>
             </div>
         </div>
@@ -1015,7 +1023,18 @@
 
             adminData.user = user;
             const avatar = document.getElementById('userAvatar');
-            if (avatar) avatar.textContent = (user.firstName || 'A')[0].toUpperCase();
+            if (avatar) {
+                avatar.textContent = (user.firstName || 'A')[0].toUpperCase();
+
+                // It is a div styled as a button, so give it the keyboard
+                // behaviour a real button would have had.
+                avatar.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        openMyAccount();
+                    }
+                });
+            }
             return true;
         }
 
@@ -1732,6 +1751,72 @@
                 if (button) { button.disabled = false; button.textContent = label; }
             }
         }
+
+        /**
+         * The administrator's own account, and the password change that belongs
+         * with it.
+         *
+         * This dashboard was the only one without a way to change its own
+         * password: student and instructor each had one and admin did not, which
+         * left the most privileged credential on the site as the only one that
+         * could not be rotated from the interface.
+         */
+        window.openMyAccount = function openMyAccount() {
+            const user = adminData.user || WGA.getUser() || {};
+            const name = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+
+            openModal(
+                name || 'Your account',
+                `
+                    <div class="form-group"><label>Email</label><div>${WGAUI.escapeHtml(user.email || '—')}</div></div>
+                    <div class="form-group"><label>Role</label><div>${WGAUI.escapeHtml(user.role || '—')}</div></div>
+                    <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">Your email address is used to sign in and cannot be changed here.</p>
+                    <button class="btn-primary" onclick="openChangePassword()">Change Password</button>
+                `
+            );
+        };
+
+        window.openChangePassword = function openChangePassword() {
+            openModal('🔑 Change Password', `
+                <div class="form-group"><label>Current password</label><input type="password" id="cpCurrent" /></div>
+                <div class="form-group"><label>New password</label><input type="password" id="cpNew" /></div>
+                <div class="form-group"><label>Confirm new password</label><input type="password" id="cpConfirm" /></div>
+                <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">At least 8 characters, including a letter and a number. You will be signed out of every other device.</p>
+                <button class="btn-primary" id="cpSubmit" onclick="submitChangePassword()">Update password</button>
+            `);
+        };
+
+        window.submitChangePassword = async function submitChangePassword() {
+            const button = document.getElementById('cpSubmit');
+            const currentPassword = document.getElementById('cpCurrent')?.value || '';
+            const newPassword = document.getElementById('cpNew')?.value || '';
+            const confirmPassword = document.getElementById('cpConfirm')?.value || '';
+
+            if (!currentPassword || !newPassword) {
+                showToast('Fill in both password fields.', 'error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showToast('The two new passwords do not match.', 'error');
+                return;
+            }
+
+            WGAUI.setBusy(button, true, 'Saving…');
+
+            try {
+                const data = await WGA.post('/auth/change-password', { currentPassword, newPassword });
+
+                // The API revokes every other session and issues a fresh pair for
+                // this device, so keep the administrator signed in here.
+                WGA.setSession(data);
+                closeModal();
+                showToast('Your password has been changed. Other devices were signed out.', 'success');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                showToast(error.message || 'We could not change your password.', 'error');
+            }
+        };
 
         window.viewUser = async (id) => {
             if (!id) return;
