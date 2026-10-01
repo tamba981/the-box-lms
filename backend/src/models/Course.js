@@ -16,6 +16,21 @@ const courseSchema = new mongoose.Schema(
     description: { type: String, trim: true, maxlength: 20000, default: '' },
 
     thumbnail: { type: String, trim: true, default: null },
+
+  /**
+   * An uploaded cover image, if the instructor uploaded one rather than linking
+   * to one.
+   *
+   * Kept in the database rather than written to `public/`: the app runs in a
+   * container whose filesystem is discarded on every deploy, so a file saved to
+   * disk would disappear and every cover would 404 after the next release.
+   *
+   * Both fields are `select: false` so the binary never travels with a course
+   * list — `thumbnail` above holds the URL the pages actually render, and that is
+   * the only thing they need.
+   */
+  thumbnailImage: { type: Buffer, select: false, default: null },
+  thumbnailContentType: { type: String, select: false, default: null },
     promoVideoUrl: { type: String, trim: true, default: null },
 
     category: { ...lowercaseTrim, default: 'general', index: true },

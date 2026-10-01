@@ -347,6 +347,131 @@ router.delete(
 );
 
 /* ------------------------------------------------------------------ *
+ * Cover image
+ *
+ * Uploaded rather than linked. Asking an instructor to host an image somewhere
+ * else and paste a URL is the step where most of them stop, and the course ends
+ * up with a gradient placeholder.
+ *
+ * There is no multipart parser on this deployment — no `multer`, and no route to
+ * the npm registry from the machine this is developed on — so the image arrives
+ * base64-encoded in a JSON body. The decoded length and the magic bytes are
+ * re-checked here: the `image/...` prefix of a data URL is supplied by the client
+ * and is not evidence of anything.
+ * ------------------------------------------------------------------ */
+
+const MAX_THUMBNAIL_BYTES = 600 * 1024;
+
+const IMAGE_SIGNATURES = {
+  'image/png': [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a],
+  'image/jpeg': [0xff, 0xd8, 0xff],
+};
+
+/** The real format of the bytes, or null if it is not one we accept. */
+function detectImageType(buffer) {
+  for (const [type, signature] of Object.entries(IMAGE_SIGNATURES)) {
+    if (buffer.length >= signature.length && buffer.subarray(0, signature.length).equals(Buffer.from(signature))) {
+      return type;
+    }
+  }
+
+  // WebP is a RIFF container: "RIFF" .... "WEBP"
+  if (
+    buffer.length >= 12 &&
+    buffer.subarray(0, 4).toString('ascii') === 'RIFF' &&
+    buffer.subarray(8, 12).toString('ascii') === 'WEBP'
+  ) {
+    return 'image/webp';
+  }
+
+  return null;
+}
+
+router.get(
+  '/:courseId/thumbnail',
+  validate({ params: schemas.courseIdParam }),
+  asyncHandler(async (req, res) => {
+    const course = await Course.findById(req.valid.params.courseId).select(
+      '+thumbnailImage +thumbnailContentType'
+    );
+
+    if (!course || !course.thumbnailImage || course.thumbnailImage.length === 0) {
+      throw notFound('That course has no cover image.', { code: 'THUMBNAIL_NOT_FOUND' });
+    }
+
+    res.set('Content-Type', course.thumbnailContentType || 'application/octet-stream');
+    // Short-lived rather than immutable: a replaced image is served from the same
+    // URL, so a long cache would show the old cover for a day.
+    res.set('Cache-Control', 'public, max-age=3600');
+    // The bytes are attacker-influenced; never let a browser second-guess the type.
+    res.set('X-Content-Type-Options', 'nosniff');
+
+    return res.send(course.thumbnailImage);
+  })
+);
+
+router.put(
+  '/:courseId/thumbnail',
+  authenticate,
+  requireInstructor,
+  writeLimiter,
+  validate({ params: schemas.courseIdParam, body: schemas.thumbnailUploadBody }),
+  asyncHandler(async (req, res) => {
+    const course = await loadManagedCourse(req);
+
+    const buffer = Buffer.from(req.valid.body.image.split(',')[1], 'base64');
+
+    if (buffer.length === 0) {
+      throw badRequest('That image could not be read.', { code: 'THUMBNAIL_UNREADABLE' });
+    }
+
+    if (buffer.length > MAX_THUMBNAIL_BYTES) {
+      throw badRequest(
+        `That image is ${Math.round(buffer.length / 1024)} KB. Please use one under ${MAX_THUMBNAIL_BYTES / 1024} KB.`,
+        { code: 'THUMBNAIL_TOO_LARGE' }
+      );
+    }
+
+    const contentType = detectImageType(buffer);
+    if (!contentType) {
+      throw badRequest('That file is not a PNG, JPEG or WebP image.', { code: 'THUMBNAIL_BAD_TYPE' });
+    }
+
+    course.thumbnailImage = buffer;
+    course.thumbnailContentType = contentType;
+    // Every page already renders `thumbnail`, so pointing it at the route that
+    // serves what was just stored is the whole of the integration.
+    course.thumbnail = `/api/v1/courses/${course._id}/thumbnail`;
+    await course.save();
+
+    return ok(res, { course: course.toCardJSON() }, 'Cover image updated.');
+  })
+);
+
+router.delete(
+  '/:courseId/thumbnail',
+  authenticate,
+  requireInstructor,
+  writeLimiter,
+  validate({ params: schemas.courseIdParam }),
+  asyncHandler(async (req, res) => {
+    const course = await loadManagedCourse(req);
+
+    course.thumbnailImage = null;
+    course.thumbnailContentType = null;
+
+    // Only withdraw the URL if it is the one this route serves. An external URL
+    // was the instructor's choice and is not ours to delete.
+    const served = `/api/v1/courses/${course._id}/thumbnail`;
+    if (course.thumbnail === served) course.thumbnail = null;
+
+    await course.save();
+
+    return ok(res, { course: course.toCardJSON() }, 'Cover image removed.');
+  })
+);
+
+/* ------------------------------------------------------------------ *
  * Publish lifecycle
  * ------------------------------------------------------------------ */
 

@@ -139,6 +139,29 @@ const reorderLessonsBody = z.object({
   lessonIds: z.array(objectId).min(1, 'Provide the lesson order').max(500),
 });
 
+/**
+ * An uploaded cover image, sent as a data URL.
+ *
+ * There is no multipart parser on this deployment — no `multer`, and no route to
+ * the npm registry from the machine this runs on — so the image travels
+ * base64-encoded inside JSON instead. Express already caps a JSON body at 1 MB,
+ * and the cap below sits deliberately inside that, so an oversized image is
+ * refused with a readable message rather than an opaque 413.
+ *
+ * The route re-checks the decoded length and the magic bytes. The `image/...`
+ * prefix in a data URL is supplied by the client and is not evidence of anything.
+ */
+const thumbnailUploadBody = z.object({
+  image: z
+    .string()
+    .trim()
+    .regex(
+      /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/,
+      'Upload a PNG, JPEG or WebP image'
+    )
+    .max(900000, 'That image is too large — please use one under about 600 KB'),
+});
+
 module.exports = {
   slugOrId,
   courseIdParam,
@@ -150,4 +173,4 @@ module.exports = {
   createLessonBody,
   updateLessonBody,
   reorderLessonsBody,
-};
+    thumbnailUploadBody,  };

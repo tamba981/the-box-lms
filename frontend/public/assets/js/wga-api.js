@@ -256,6 +256,9 @@
     patch: function (path, body, options) {
       return request('PATCH', path, Object.assign({ body: body }, options || {}));
     },
+    put: function (path, body, options) {
+      return request('PUT', path, Object.assign({ body: body }, options || {}));
+    },
     del: function (path, options) {
       return request('DELETE', path, options || {});
     },

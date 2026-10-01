@@ -1420,7 +1420,15 @@
                 <div class="glass-premium" style="padding:24px;">
                     <div class="form-group"><label>Course Title</label><input type="text" id="courseTitle" placeholder="e.g., Advanced Python Programming" /></div>
                     <div class="form-group"><label>Description</label><textarea id="courseDesc" rows="4" placeholder="Describe what students will learn..."></textarea></div>
-                    <div class="form-group"><label>Thumbnail URL</label><input type="text" id="courseThumb" placeholder="https://..." /></div>
+                    <div class="form-group">
+                        <label>Course cover image</label>
+                        <input type="file" id="courseThumbFile" accept="image/png,image/jpeg,image/webp" data-preview="courseThumbPreview" onchange="previewCourseCover(this)" />
+                        <div id="courseThumbPreview" style="margin-top:10px;"></div>
+                        <p style="font-size:12.5px;color:var(--text-light);margin-top:8px;">
+                            Optional. PNG, JPEG or WebP — choose any size, it is shrunk in your browser
+                            before upload. Without one the course shows a coloured placeholder.
+                        </p>
+                    </div>
                     <div class="form-group"><label>Price ($)</label><input type="number" id="coursePrice" value="0" /></div>
                     <div class="form-group"><label>Category</label><select id="courseCat"><option>Technology</option><option>Business</option><option>Design</option></select></div>
                     <div class="form-group"><label>Level</label><select id="courseLevel"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div>
@@ -1619,6 +1627,105 @@
                 .join('');
         }
 
+        /* ------------------------------------------------------------------ *
+         * Course cover images
+         *
+         * Uploaded, not linked. Asking an instructor to find hosting for a picture
+         * and paste in a URL is the step where most of them stop, and the course is
+         * left showing a placeholder.
+         * ------------------------------------------------------------------ */
+
+        /**
+         * Shrink a chosen image in the browser before uploading it.
+         *
+         * A photo straight off a phone is several megabytes and the API refuses
+         * anything over 600 KB. Downscaling here means an instructor can pick any
+         * picture they already have, rather than being told to go and resize it
+         * first. A cover is never displayed larger than a card, so 1280x720 is ample.
+         */
+        function prepareCoverImage(file) {
+            return new Promise((resolve, reject) => {
+                if (!file || !/^image\/(png|jpeg|webp)$/.test(file.type || '')) {
+                    reject(new Error('Choose a PNG, JPEG or WebP image.'));
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onerror = () => reject(new Error('That file could not be read.'));
+
+                reader.onload = () => {
+                    const image = new Image();
+
+                    image.onerror = () => reject(new Error('That file is not an image we can display.'));
+
+                    image.onload = () => {
+                        const scale = Math.min(1, 1280 / image.width, 720 / image.height);
+                        const width = Math.max(1, Math.round(image.width * scale));
+                        const height = Math.max(1, Math.round(image.height * scale));
+
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+
+                        resolve(canvas.toDataURL('image/jpeg', 0.85));
+                    };
+
+                    image.src = reader.result;
+                };
+
+                reader.readAsDataURL(file);
+            });
+        }
+
+        /** Show the chosen file at once, so the instructor sees what they picked. */
+        window.previewCourseCover = async function previewCourseCover(input) {
+            const box = document.getElementById(input.dataset.preview || 'courseThumbPreview');
+            const file = input.files && input.files[0];
+
+            if (!box) return;
+
+            if (!file) {
+                box.innerHTML = '';
+                box.dataset.prepared = '';
+                return;
+            }
+
+            try {
+                const dataUrl = await prepareCoverImage(file);
+                box.dataset.prepared = dataUrl;
+                box.innerHTML =
+                    '<img src="' + dataUrl + '" alt="" style="width:100%;max-width:340px;border-radius:12px;border:1px solid var(--border);display:block;" />';
+            } catch (error) {
+                input.value = '';
+                box.dataset.prepared = '';
+                box.innerHTML = '';
+                showToast(error.message, 'error');
+            }
+        };
+
+        /**
+         * The API reports a rejected image as a field message inside `details`, plus
+         * a generic sentence at the top level. Showing the generic one would tell an
+         * instructor "The submitted data is invalid" and nothing about what to fix.
+         */
+        function coverErrorMessage(error) {
+            const detail = error && error.details && error.details[0];
+            return (detail && detail.message) || (error && error.message) || 'We could not save that cover image.';
+        }
+
+        /** Returns true when the cover was stored, so callers can report honestly. */
+        async function sendCourseCover(courseId, dataUrl) {
+            try {
+                await WGA.put('/courses/' + encodeURIComponent(courseId) + '/thumbnail', { image: dataUrl });
+                return true;
+            } catch (error) {
+                showToast(coverErrorMessage(error), 'error');
+                return false;
+            }
+        }
+
         window.editCourse = function editCourse(id) {
             const c = instructorData.courses.find((course) => String(course.id) === String(id));
             if (!c) return;
@@ -1627,6 +1734,15 @@
                 <div class="form-group"><label>Title</label><input type="text" id="editTitle" value="${WGAUI.escapeHtml(c.title)}" /></div>
                 <div class="form-group"><label>Summary</label><textarea id="editSummary" rows="3">${WGAUI.escapeHtml(c.description)}</textarea></div>
                 <div class="form-group"><label>Price (in ${WGAUI.escapeHtml((instructorData.revenue && instructorData.revenue.currency) || 'usd').toUpperCase()})</label><input type="number" id="editPrice" min="0" step="0.01" value="${c.price}" /></div>
+                <div class="form-group">
+                    <label>Course cover image</label>
+                    ${c.thumbnail
+                        ? `<img src="${WGAUI.escapeHtml(c.thumbnail)}" alt="" style="width:100%;max-width:340px;border-radius:12px;border:1px solid var(--border);display:block;margin-bottom:10px;" />`
+                        : '<p style="font-size:12.5px;color:var(--text-light);margin-bottom:10px;">No cover yet — this course shows a coloured placeholder.</p>'}
+                    <input type="file" id="editThumbFile" accept="image/png,image/jpeg,image/webp" data-preview="editThumbPreview" onchange="previewCourseCover(this)" />
+                    <div id="editThumbPreview" style="margin-top:10px;"></div>
+                    ${c.thumbnail ? `<button class="btn-primary btn-outline" style="margin-top:10px;" onclick="removeCourseCover('${c.id}')">Remove cover</button>` : ''}
+                </div>
                 <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">
                     Status is changed with Publish or Unpublish, not by typing it here — an instructor
                     cannot set a course live without review.
@@ -1648,6 +1764,11 @@
                     priceCents: Math.max(0, Math.round(price * 100)),
                 });
 
+                // Uploaded before the modal closes, otherwise the preview element
+                // holding the prepared image is gone from the document.
+                const pendingCover = document.getElementById('editThumbPreview')?.dataset.prepared;
+                if (pendingCover) await sendCourseCover(id, pendingCover);
+
                 closeModal();
                 showToast('Course saved.', 'success');
 
@@ -1656,6 +1777,18 @@
             } catch (error) {
                 WGAUI.setBusy(button, false);
                 showToast(error.message || 'We could not save that course.', 'error');
+            }
+        };
+
+        window.removeCourseCover = async function removeCourseCover(id) {
+            try {
+                await WGA.del('/courses/' + encodeURIComponent(id) + '/thumbnail');
+                showToast('Cover image removed.', 'success');
+                closeModal();
+                await loadInstructorData();
+                loadPage('courses');
+            } catch (error) {
+                showToast(coverErrorMessage(error), 'error');
             }
         };
 
@@ -1699,7 +1832,6 @@
             const button = document.querySelector('#main-content .btn-primary:not(.btn-outline)');
             const title = document.getElementById('courseTitle')?.value.trim();
             const summary = document.getElementById('courseDesc')?.value.trim();
-            const thumbnail = document.getElementById('courseThumb')?.value.trim();
             const price = Number(document.getElementById('coursePrice')?.value || 0);
             const category = document.getElementById('courseCat')?.value;
             const level = (document.getElementById('courseLevel')?.value || 'beginner').toLowerCase();
@@ -1715,13 +1847,18 @@
                 const created = await WGA.post('/courses', {
                     title,
                     summary: summary || undefined,
-                    thumbnail: thumbnail || undefined,
                     priceCents: Math.max(0, Math.round(price * 100)),
                     category,
                     level,
                 });
 
                 const courseId = created.course.id;
+
+                // The cover is uploaded after the course exists, because the endpoint is
+                // addressed to a course id. If it fails, the course is still saved rather
+                // than everything the instructor just typed being thrown away.
+                const pendingCover = document.getElementById('courseThumbPreview')?.dataset.prepared;
+                if (pendingCover) await sendCourseCover(courseId, pendingCover);
 
                 if (submitForReview) {
                     // Publishing with no lessons is refused by the API, which is
