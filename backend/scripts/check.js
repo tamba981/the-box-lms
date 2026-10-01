@@ -13,6 +13,8 @@
  *      mistyped path, which is otherwise only found at request time)
  *   3. every declared dependency is actually installed
  *   4. the static pages directory is present
+ *   5. every local asset a page or stylesheet references exists, matched
+ *      case-sensitively — section 7 explains why that is not paranoia
  *
  * It never executes application code, so it needs no database and no secrets.
  */
@@ -203,6 +205,99 @@ if (fs.existsSync(publicDir)) {
   }
 }
 
+/**
+ * 7. Every local asset reference must match the file on disk *including case*.
+ *
+ * This check exists because of a real failure. The brand folder was renamed from
+ * `Imges` to `Images`. Windows resolves either spelling, so every page kept
+ * working on the machine the change was made on — while the Linux container is
+ * case-sensitive and would have 404'd every logo and favicon across the site.
+ *
+ * A deployment is the worst place for this: the breakage appears only after the
+ * change is live, it hits every page at once, and it reads as a missing file
+ * rather than a casing mistake. `fs.existsSync` cannot catch it either, because
+ * on Windows it says yes. So this compares each path segment against the real
+ * directory entries, where a case-insensitive filesystem cannot paper over it.
+ */
+function resolveExactly(baseDir, urlPath) {
+  const segments = urlPath.split('/').filter(Boolean);
+  let current = baseDir;
+
+  for (const segment of segments) {
+    let entries;
+    try {
+      entries = fs.readdirSync(current);
+    } catch {
+      return { ok: false };
+    }
+
+    // Array.includes is case-sensitive, which is the entire point here.
+    if (!entries.includes(segment)) {
+      // Look for the same name in a different case, so the failure can name the
+      // file that is actually there rather than only the one that is not.
+      const nearMiss = entries.find((entry) => entry.toLowerCase() === segment.toLowerCase());
+      return { ok: false, nearMiss };
+    }
+
+    current = path.join(current, segment);
+  }
+
+  try {
+    return { ok: fs.statSync(current).isFile() };
+  } catch {
+    return { ok: false };
+  }
+}
+
+const ASSET_EXTENSIONS = /\.(png|jpe?g|svg|webp|gif|ico|css|js|mjs|woff2?|ttf|eot|mp4|webm|pdf)$/i;
+
+let assetsChecked = 0;
+
+if (fs.existsSync(publicDir)) {
+  const sourceFiles = [];
+  const stack = [publicDir];
+
+  while (stack.length > 0) {
+    const dir = stack.pop();
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) stack.push(full);
+      else if (entry.isFile() && /\.(html|css)$/i.test(entry.name)) sourceFiles.push(full);
+    }
+  }
+
+  const projectRoot = path.join(ROOT, '..');
+
+  for (const file of sourceFiles) {
+    const source = fs.readFileSync(file, 'utf8');
+    const relative = path.relative(projectRoot, file).split(path.sep).join('/');
+
+    // src/href attributes in pages, and url(...) in the pages' inline styles and
+    // the stylesheets. Query strings and fragments are not part of the path.
+    const patterns = [
+      /(?:src|href)\s*=\s*["'](\/[^"'#?]+)(?:[#?][^"']*)?["']/gi,
+      /url\(\s*['"]?(\/[^'")#?]+)(?:[#?][^'")]*)?['"]?\s*\)/gi,
+    ];
+
+    for (const pattern of patterns) {
+      for (const match of source.matchAll(pattern)) {
+        const urlPath = decodeURIComponent(match[1]);
+        if (!ASSET_EXTENSIONS.test(urlPath)) continue;
+
+        assetsChecked += 1;
+        const result = resolveExactly(publicDir, urlPath);
+
+        if (!result.ok) {
+          const hint = result.nearMiss
+            ? ` — on disk it is "${result.nearMiss}", which differs only in case`
+            : '';
+          problems.push(`${relative} references "${urlPath}", which does not exist${hint}`);
+        }
+      }
+    }
+  }
+}
+
 if (problems.length > 0) {
   process.stderr.write(`\nBuild check failed with ${problems.length} problem(s):\n\n`);
   for (const problem of problems) process.stderr.write(`  • ${problem}\n`);
@@ -212,5 +307,5 @@ if (problems.length > 0) {
 
 process.stdout.write(
   `Build check passed: ${scanned} files parsed, ${requiresChecked} relative imports resolved, ` +
-    `${declared.length} dependencies present.\n`
+    `${assetsChecked} local assets resolved, ${declared.length} dependencies present.\n`
 );
