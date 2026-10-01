@@ -53,6 +53,10 @@
     body.dark-mode {
       background-color: var(--dark-bg);
       color: var(--dark-text);
+      /* --text-light is a grey picked for white backgrounds; on the dark one it
+         only reaches 3.65:1, under the 4.5 body text needs, which is why the
+         secondary copy was hard to read with the theme on. */
+      --text-light: #94a3b8;
     }
     .container {
       width: 100%;
@@ -70,7 +74,6 @@
     .course-card,
     .feature-card,
     .partner-card,
-    .explore-stat,
     .search-filters-enhanced,
     .trending-card,
     .partners .glass-card,
@@ -103,7 +106,6 @@
     body.dark-mode .course-card,
     body.dark-mode .feature-card,
     body.dark-mode .partner-card,
-    body.dark-mode .explore-stat,
     body.dark-mode .search-filters-enhanced,
     body.dark-mode .trending-card {
       background: rgba(15, 23, 42, 0.45);
@@ -506,10 +508,13 @@
     }
     .explore-grid {
       display: grid;
-      grid-template-columns: 2fr 1fr;
+      grid-template-columns: 1fr;
       gap: 40px;
       align-items: center;
     }
+    /* One column now that the duplicated counters are gone, so cap the measure
+       and centre the block rather than leaving half the band empty. */
+    .explore-text { max-width: 760px; margin: 0 auto; }
     .explore-text h2 {
       font-size: 36px;
       font-weight: 800;
@@ -526,6 +531,7 @@
       font-size: 18px;
       margin-bottom: 24px;
       line-height: 1.7;
+      max-width: 68ch;
     }
     .calendar-downloads {
       display: flex;
@@ -546,35 +552,18 @@
     .calendar-downloads .btn-outline { border: 2px solid var(--primary); color: var(--primary); }
     .calendar-downloads .btn-outline:hover { background: var(--primary); color: white; }
 
-    .explore-stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-    .explore-stat {
-      padding: 24px;
-      text-align: center;
-      transition: transform 0.3s;
-    }
-    .explore-stat:hover { transform: translateY(-4px); }
-    .explore-stat .number {
-      font-size: 32px;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--primary), var(--gold));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .explore-stat .label {
-      font-size: 14px;
-      color: var(--text-light);
-    }
-
     /* ---------- CATEGORIES, TIERS, COURSES, FEATURES (all glass) ---------- */
     .categories-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:20px; margin:30px 0; }
     .category-card { padding:25px; text-align:center; transition:0.3s; }
     .category-card:hover { transform:translateY(-5px); border-color: var(--gold); }
+    /* These cards are links, so without this reset the heading and the count
+       fall back to the browser's default link blue: near-invisible on the dark
+       background and off-palette on the light one. Inherit so the theme wins. */
+    a.category-card { display:block; color:inherit; text-decoration:none; }
+    .category-title { font-size:17px; font-weight:700; margin-bottom:6px; }
+    .category-count { font-size:14px; color:var(--text-light); }
     .category-icon { width:60px; height:60px; background:rgba(26,86,219,0.10); border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; color:var(--gold); font-size:24px; }
+    body.dark-mode .category-icon { background:rgba(255,255,255,0.06); }
 
     .certificate-tiers { padding:60px 0; background:var(--bg-light); }
     body.dark-mode .certificate-tiers { background:#0f172a; }
@@ -606,11 +595,18 @@
     .course-card { overflow:hidden; transition:0.3s; }
     .course-card:hover { transform:translateY(-5px); border-color: var(--gold); }
     .course-image { height:180px; background-size:cover; background-position:center; position:relative; }
-    .course-badge { position:absolute; top:15px; right:15px; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:600; color:white; background:var(--gold); }
+    .course-badge { position:absolute; top:15px; right:15px; z-index:2; padding:5px 12px; border-radius:20px; font-size:12px; font-weight:600; color:white; background:var(--gold); }
     .course-content { padding:20px; }
     .course-header { display:flex; justify-content:space-between; align-items:flex-start; }
     .course-title { font-size:18px; font-weight:600; margin-bottom:8px; }
-    .course-rating { background:var(--gold); color:#0f172a; padding:4px 10px; border-radius:4px; font-size:12px; font-weight:700; }
+    .course-rating { display:inline-flex; align-items:center; gap:4px; background:var(--gold); color:#0f172a; padding:4px 10px; border-radius:999px; font-size:12px; font-weight:700; flex-shrink:0; }
+    /* A course with no uploaded cover still has to look finished, so the real
+       initials of its real title sit on a gradient instead of a blank box. */
+    .course-image-fallback {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      font-size:46px; font-weight:800; letter-spacing:3px;
+      color:rgba(255,255,255,0.28); user-select:none; pointer-events:none;
+    }
     .course-meta { display:flex; gap:15px; color:var(--text-light); font-size:14px; margin:10px 0; }
     .course-footer { display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
     .course-price { font-weight:700; font-size:18px; color:var(--gold); }
@@ -771,7 +767,6 @@
       .mega-menu-content { grid-template-columns:repeat(2,1fr); }
       .trending-grid { grid-template-columns:repeat(2,1fr); }
       .explore-grid { grid-template-columns:1fr; }
-      .explore-stats { grid-template-columns:1fr 1fr; }
     }
     @media (max-width:768px) {
       .hero-text .hero-heading { font-size:30px; }
@@ -781,7 +776,6 @@
       .glass-card { padding:16px; }
       .tiers-grid { grid-template-columns:1fr; }
       .mega-menu-content { grid-template-columns:1fr; }
-      .explore-stats { grid-template-columns:1fr; }
       .calendar-downloads { flex-direction:column; align-items:stretch; }
       .partners-blue .partners-grid { grid-template-columns:repeat(2,1fr); }
     }
@@ -858,7 +852,7 @@
 
   <!-- HERO with Full Background Image -->
   <section class="hero">
-    <div class="container hero-content">
+        <div class="container hero-content">
       <div class="hero-text">
         <h1 class="hero-heading">Affordable, Self-Paced Courses with <span class="highlight">Verifiable</span> Certificates</h1>
         <p class="hero-subtext">Wuteve Global Academy makes practical, career-focused courses affordable and self-paced. Rooted in the unshakeable majesty of our highest peak and driven by the fierce law of personal execution—<strong>'I am because I did'</strong>—we believe that growth belongs to those who actively climb. Each course is priced by the instructor who wrote it: some are free, and completing any of them issues a certificate you can share with an employer.</p>
@@ -901,12 +895,6 @@
             <a href="/certificate.html" class="btn btn-outline"><i class="fas fa-certificate"></i> Verify a certificate</a>
           </div>
         </div>
-        <div class="explore-stats">
-          <div class="explore-stat glass"><div class="number" id="explore-courses">—</div><div class="label">Courses</div></div>
-          <div class="explore-stat glass"><div class="number" id="explore-free">—</div><div class="label">Free To Learn</div></div>
-          <div class="explore-stat glass"><div class="number" id="explore-categories">—</div><div class="label">Categories</div></div>
-          <div class="explore-stat glass"><div class="number">100%</div><div class="label">Online &amp; Self-Paced</div></div>
-        </div>
       </div>
     </div>
   </section>
@@ -916,12 +904,7 @@
     <div class="container">
       <div class="section-header"><h2 class="section-title">Explore Our <span>Course Categories</span></h2><p>Every category that currently has a published course</p></div>
       <div class="categories-grid" id="landing-categories">
-        <div class="category-card glass"><div class="category-icon"><i class="fas fa-chart-bar"></i></div><h3 class="category-title">Business &amp; Management</h3><p class="category-count">124 Courses</p></div>
-        <div class="category-card glass"><div class="category-icon"><i class="fas fa-laptop-code"></i></div><h3 class="category-title">Technology &amp; IT</h3><p class="category-count">98 Courses</p></div>
-        <div class="category-card glass"><div class="category-icon"><i class="fas fa-heartbeat"></i></div><h3 class="category-title">Health &amp; Wellness</h3><p class="category-count">76 Courses</p></div>
-        <div class="category-card glass"><div class="category-icon"><i class="fas fa-paint-brush"></i></div><h3 class="category-title">Creative Arts</h3><p class="category-count">63 Courses</p></div>
-        <div class="category-card glass"><div class="category-icon"><i class="fas fa-globe"></i></div><h3 class="category-title">Languages &amp; Culture</h3><p class="category-count">58 Courses</p></div>
-        <div class="category-card glass"><div class="category-icon"><i class="fas fa-graduation-cap"></i></div><h3 class="category-title">Education &amp; Teaching</h3><p class="category-count">45 Courses</p></div>
+        <p style="color:var(--text-light);">Loading categories…</p>
       </div>
     </div>
   </section>
@@ -1381,6 +1364,13 @@
 
     updateAuthUI();
 
+    // ---- Footer year ----
+    // The copyright line was hardcoded and had already gone stale by a year.
+    (function stampFooterYear() {
+      const el = document.getElementById('footerYear');
+      if (el) el.textContent = String(new Date().getFullYear());
+    })();
+
     // ---- Live catalogue data ----
     //
     // Everything here used to be hardcoded: "12,847 active users", "1,247
@@ -1390,21 +1380,73 @@
     //
     // Nothing falls back to an invented number. If the request fails the figures
     // stay as em dashes, which is the truth: we could not load them.
+    // No cover uploaded? The card still has to look designed, so the real
+    // initials of the real title sit on a gradient keyed to the real slug.
+    // Same course, same colours every load. Nothing here invents a fact.
+    const COVER_GRADIENTS = [
+      ['#1a56db', '#0f172a'], ['#7c3aed', '#1e1b4b'], ['#0d9488', '#0f2027'],
+      ['#b45309', '#1c1917'], ['#be123c', '#1c1917'], ['#0369a1', '#0f172a']
+    ];
+    function coverStyle(course) {
+      if (course.thumbnail) {
+        return `background-image:url('${WGAUI.escapeHtml(course.thumbnail)}')`;
+      }
+      const key = String(course.slug || course.title || '');
+      let hash = 0;
+      for (let i = 0; i < key.length; i += 1) hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+      const pair = COVER_GRADIENTS[hash % COVER_GRADIENTS.length];
+      return `background:linear-gradient(135deg,${pair[0]},${pair[1]})`;
+    }
+    function coverInitials(course) {
+      if (course.thumbnail) return '';
+      const initials = String(course.title || '')
+        .split(/\s+/)
+        .filter((word) => /[A-Za-z0-9]/.test(word))
+        .slice(0, 2)
+        .map((word) => word[0].toUpperCase())
+        .join('');
+      if (!initials) return '';
+      return `<span class="course-image-fallback" aria-hidden="true">${WGAUI.escapeHtml(initials)}</span>`;
+    }
+
+    // Category names are stored exactly as they were typed, so they are shown
+    // capitalised but still link with the original value the API filters on.
+    function titleCase(value) {
+      return String(value || '')
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((word) => word[0].toUpperCase() + word.slice(1))
+        .join(' ');
+    }
+    // One icon per category, rather than the same book on every card.
+    const CATEGORY_ICONS = {
+      business: 'fa-briefcase', data: 'fa-chart-bar', productivity: 'fa-clock',
+      technology: 'fa-laptop-code', design: 'fa-paint-brush', marketing: 'fa-bullhorn',
+      finance: 'fa-coins', language: 'fa-language', health: 'fa-heartbeat',
+      education: 'fa-graduation-cap', science: 'fa-flask', art: 'fa-palette'
+    };
+    function categoryIcon(name) {
+      return CATEGORY_ICONS[String(name || '').trim().toLowerCase()] || 'fa-book-open';
+    }
+
     function landingCourseCard(course) {
-      const image = course.thumbnail
-        ? `background-image:url('${WGAUI.escapeHtml(course.thumbnail)}')`
-        : 'background:linear-gradient(135deg,#1a56db,#0f172a)';
+      const image = coverStyle(course);
+      const cover = coverInitials(course);
       const badge = course.priceCents === 0 ? '<div class="course-badge">FREE</div>' : '';
-      const rating = course.ratingCount > 0 ? course.rating : '—';
+      // A lone em dash where a rating belongs reads as broken, so an unrated
+      // course simply does not get a chip until somebody rates it.
+      const ratingChip = course.ratingCount > 0
+        ? `<div class="course-rating"><i class="fas fa-star"></i> ${WGAUI.escapeHtml(String(course.rating))}</div>`
+        : '';
       const length = course.durationHours > 0
         ? `${course.durationHours} hours`
         : `${course.lessonCount} lesson${course.lessonCount === 1 ? '' : 's'}`;
 
       return `
         <div class="course-card glass" data-category="${WGAUI.escapeHtml(course.category)}" data-level="${WGAUI.escapeHtml(course.level)}">
-          <div class="course-image" style="${image}">${badge}</div>
+          <div class="course-image" style="${image}">${badge}${cover}</div>
           <div class="course-content">
-            <div class="course-header"><h3 class="course-title">${WGAUI.escapeHtml(course.title)}</h3><div class="course-rating">${WGAUI.escapeHtml(String(rating))}</div></div>
+            <div class="course-header"><h3 class="course-title">${WGAUI.escapeHtml(course.title)}</h3>${ratingChip}</div>
             <p class="course-description">${WGAUI.escapeHtml(course.summary || '')}</p>
             <div class="course-meta"><span><i class="fas fa-user"></i> ${WGAUI.escapeHtml(course.instructorName || 'Instructor')}</span><span><i class="fas fa-clock"></i> ${WGAUI.escapeHtml(length)}</span></div>
             <div class="course-footer"><div class="course-price">${WGAUI.escapeHtml(course.priceLabel)}</div><a href="/course.html?slug=${encodeURIComponent(course.slug)}" class="course-link">View course</a></div>
@@ -1413,19 +1455,20 @@
     }
 
     function landingTrendingCard(course, rank) {
-      const image = course.thumbnail
-        ? `background-image:url('${WGAUI.escapeHtml(course.thumbnail)}')`
-        : 'background:linear-gradient(135deg,#1a56db,#0f172a)';
-      const rating = course.ratingCount > 0 ? course.rating : '—';
+      const image = coverStyle(course);
+      const cover = coverInitials(course);
+      const ratingChip = course.ratingCount > 0
+        ? `<span><i class="fas fa-star" style="color:var(--gold);"></i> ${WGAUI.escapeHtml(String(course.rating))}</span>`
+        : '';
 
       return `
         <div class="glass-card trending-card">
           <div class="trending-rank">#${rank}</div>
-          <div class="course-image" style="${image}"></div>
+          <div class="course-image" style="${image}">${cover}</div>
           <div class="course-content">
             <h3>${WGAUI.escapeHtml(course.title)}</h3>
             <div class="instructor-info"><span class="instructor-avatar" style="background:var(--primary);"></span> ${WGAUI.escapeHtml(course.instructorName || 'Instructor')}</div>
-            <div class="course-stats"><span><i class="fas fa-users"></i> ${course.enrolledCount || 0}</span><span><i class="fas fa-star" style="color:var(--gold);"></i> ${WGAUI.escapeHtml(String(rating))}</span><span><i class="fas fa-book"></i> ${course.lessonCount} lessons</span></div>
+            <div class="course-stats"><span><i class="fas fa-users"></i> ${course.enrolledCount || 0}</span>${ratingChip}<span><i class="fas fa-book"></i> ${course.lessonCount} lessons</span></div>
             <a href="/course.html?slug=${encodeURIComponent(course.slug)}" class="glass-btn">View course →</a>
           </div>
         </div>`;
@@ -1453,9 +1496,6 @@
         setText('stat-free', freeCount.toLocaleString());
         setText('stat-categories', String(categories.length));
         setText('stat-paid', (total - freeCount).toLocaleString());
-        setText('explore-courses', total.toLocaleString());
-        setText('explore-free', freeCount.toLocaleString());
-        setText('explore-categories', String(categories.length));
 
         const subjectFilter = document.getElementById('subject-filter');
         if (subjectFilter) {
@@ -1475,8 +1515,8 @@
           categoryGrid.innerHTML = categories.length
             ? categories.slice(0, 6).map((c) => `
                 <a class="category-card glass" href="/courses.html?category=${encodeURIComponent(c.name)}">
-                  <div class="category-icon"><i class="fas fa-book-open"></i></div>
-                  <h3 class="category-title">${WGAUI.escapeHtml(c.name)}</h3>
+                  <div class="category-icon"><i class="fas ${categoryIcon(c.name)}"></i></div>
+                  <h3 class="category-title">${WGAUI.escapeHtml(titleCase(c.name))}</h3>
                   <p class="category-count">${c.count} course${c.count === 1 ? '' : 's'}</p>
                 </a>`).join('')
             : '<p style="color:var(--text-light);">No courses have been published yet. Check back soon.</p>';
