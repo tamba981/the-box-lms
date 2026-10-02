@@ -40,6 +40,7 @@
     }
 
     body.dark-mode {
+      --text-light: #94a3b8; /* #6b7280 is a light-background grey: 3.65:1 here */
       background-color: var(--dark-bg);
       color: var(--dark-text);
     }
@@ -78,6 +79,8 @@
     }
 
     .brand span.accent { color: var(--primary); }
+    /* --primary is a light-background blue: as text on this theme it is 2.89:1. */
+    body.dark-mode .brand span.accent { color: #60a5fa; }
 
     .card {
       width: 100%;

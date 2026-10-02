@@ -16,7 +16,10 @@
   --success: #10b981;
 
   --text: #1f2937;
-  --text-light: #6b7280;
+  /* #6b7280 clears 4.5:1 on white but only reaches 4.47:1 on the page
+     background (#f4f6f9), so secondary copy missed AA by a hair on every page.
+     Same grey, one shade darker: 5.15:1 on white, 4.76:1 on the page. */
+  --text-light: #656e7c;
   --bg: #f4f6f9;
   --surface: #ffffff;
   --border: #e5e7eb;
@@ -27,6 +30,10 @@
   --dark-text: #e2e8f0;
   --dark-muted: #94a3b8;
   --dark-border: #334155;
+  /* --primary-light is a background blue. As this theme's body text it only
+     reaches 3.98:1, so links and small blue labels need the lighter one. */
+  --dark-link: #60a5fa;
+  --dark-link-soft: #93c5fd;
 }
 
 * {
@@ -48,6 +55,10 @@ body {
 body.dark-mode {
   background: var(--dark-bg);
   color: var(--dark-text);
+  /* --text-light is a grey picked for the light background; on this one it only
+     reaches 3.65:1, under the 4.5:1 body text needs. Point it at the dark token
+     so every muted line in every page that loads this file is legible. */
+  --text-light: var(--dark-muted);
 }
 
 a {
@@ -55,7 +66,7 @@ a {
 }
 
 body.dark-mode a {
-  color: var(--primary-light);
+  color: var(--dark-link);
 }
 
 /* ---------- Header ---------- */
@@ -111,6 +122,10 @@ body.dark-mode a {
 
 .wga-brand .accent {
   color: var(--primary);
+}
+
+body.dark-mode .wga-brand .accent {
+  color: var(--dark-link);
 }
 
 .wga-theme-toggle {
@@ -349,6 +364,10 @@ body.dark-mode .wga-muted {
 body.dark-mode .wga-course-card {
   background: var(--dark-surface);
   border-color: var(--dark-border);
+  /* "body.dark-mode a" matches the whole card and out-specifies the reset
+     above, which turned every title and price link-blue. The card is the link;
+     its contents must read as text, not as a link colour. */
+  color: inherit;
 }
 
 .wga-course-card:hover {
@@ -429,7 +448,7 @@ body.dark-mode .wga-course-meta {
 
 body.dark-mode .wga-pill {
   background: rgba(59, 130, 246, 0.18);
-  color: var(--primary-light);
+  color: var(--dark-link-soft);
 }
 
 .wga-pill-free {

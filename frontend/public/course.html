@@ -48,6 +48,11 @@
     .lesson-row .grow { flex: 1; }
     .lesson-row .tag { font-size: 11.5px; text-transform: uppercase; letter-spacing: .4px; color: var(--text-light); }
     body.dark-mode .lesson-row .tag { color: var(--dark-muted); }
+    /* "Preview" is the one tag with a colour of its own. It used to carry an
+       inline var(--primary), and an inline style cannot follow the theme — so it
+       stayed at 2.37:1 on the dark row. A class can. */
+    .lesson-row .tag.tag-preview { color: var(--primary); }
+    body.dark-mode .lesson-row .tag.tag-preview { color: var(--dark-link); }
     .lesson-row.done .num { background: rgba(16,185,129,.16); color: #047857; }
 
     .pre { white-space: pre-line; font-size: 15px; line-height: 1.75; }
@@ -151,7 +156,7 @@
         var right = lesson.locked
           ? '<span class="tag"><i class="fas fa-lock" aria-hidden="true"></i> Locked</span>'
           : lesson.isPreview
-            ? '<span class="tag" style="color:var(--primary);">Preview</span>'
+            ? '<span class="tag tag-preview">Preview</span>'
             : '<span class="tag">' + WGAUI.escapeHtml(lesson.type) + '</span>';
 
         return (

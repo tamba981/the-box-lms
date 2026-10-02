@@ -15,6 +15,10 @@
       --primary-dark: #0f3b8c;
       --primary-light: #3b82f6;
       --gold: #d4a547;
+      /* --gold is a background colour: as 18px text on a white card it only
+         reaches 2.17:1, so text uses this darker shade of the same hue and the
+         bright one stays for fills, borders and gradients. */
+      --gold-text: #8a6d1d;
       --gold-light: #f0d080;
       --silver: #c0c0c0;
       --silver-light: #e8e8e8;
@@ -29,12 +33,15 @@
       --dark-text: #e2e8f0;
       --dark-border: #334155;
       --dark-card: #1e293b;
-      --certificate-basic: #3b82f6;
-      --certificate-essential: #8b5cf6;
-      --certificate-mastering: #06b6d4;
-      --certificate-diploma: #10b981;
-      --certificate-executive: #f59e0b;
-      --certificate-mba: #ef4444;
+      /* Every one of these sits behind WHITE text (badges and tier headers).
+         At their original brightness white measured 2.4:1 to 3.7:1 on them;
+         these are the same hues one step deeper, so white now clears 5:1. */
+      --certificate-basic: #1d4ed8;
+      --certificate-essential: #6d28d9;
+      --certificate-mastering: #0e7490;
+      --certificate-diploma: #047857;
+      --certificate-executive: #b45309;
+      --certificate-mba: #b91c1c;
       --glass-bg: rgba(255, 255, 255, 0.10);
       --glass-border: rgba(255, 255, 255, 0.15);
       --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
@@ -57,6 +64,8 @@
          only reaches 3.65:1, under the 4.5 body text needs, which is why the
          secondary copy was hard to read with the theme on. */
       --text-light: #94a3b8;
+      /* On this background the bright gold is the readable one. */
+      --gold-text: var(--gold);
     }
     .container {
       width: 100%;
@@ -222,6 +231,8 @@
     .btn { padding:10px 20px; border-radius:6px; font-weight:600; text-decoration:none; transition:all 0.3s; display:inline-block; border:none; cursor:pointer; }
     .btn-outline { border:2px solid var(--primary); color:var(--primary); background:transparent; }
     .btn-outline:hover { background:var(--primary); color:white; }
+    /* --primary is a light-background blue: 2.89:1 as text on the dark theme. */
+    body.dark-mode .btn-outline { border-color:#60a5fa; color:#60a5fa; }
     .btn-primary { background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; }
     .btn-primary:hover { transform:translateY(-2px); box-shadow:0 4px 15px rgba(26,86,219,0.3); }
     .btn-gold { background:linear-gradient(135deg, var(--gold), #b8942e); color:white; }
@@ -259,6 +270,9 @@
     .close-mobile-menu { background:none; border:none; font-size:24px; cursor:pointer; color:var(--text); }
     .mobile-nav-menu { display:flex; flex-direction:column; gap:15px; }
     .mobile-nav-menu a { text-decoration:none; color:var(--text); font-weight:500; padding:10px 0; border-bottom:1px solid var(--border); }
+    /* The panel goes dark with the theme but these links kept the light-theme
+       text colour, which left them at 1.22:1 — effectively invisible. */
+    body.dark-mode .mobile-nav-menu a { color:var(--dark-text); border-bottom-color:var(--dark-border); }
     .mobile-dropdown-btn { display:flex; justify-content:space-between; align-items:center; width:100%; background:none; border:none; text-align:left; color:var(--text); font-weight:500; padding:10px 0; cursor:pointer; border-bottom:1px solid var(--border); }
     .mobile-dropdown-content { display:none; padding-left:15px; margin-top:10px; }
     .mobile-dropdown.active .mobile-dropdown-content { display:block; }
@@ -609,9 +623,10 @@
     }
     .course-meta { display:flex; gap:15px; color:var(--text-light); font-size:14px; margin:10px 0; }
     .course-footer { display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
-    .course-price { font-weight:700; font-size:18px; color:var(--gold); }
+    .course-price { font-weight:700; font-size:18px; color:var(--gold-text); }
     .course-link { color:var(--primary); font-weight:600; text-decoration:none; }
-    .course-link:hover { color:var(--gold); }
+    .course-link:hover { color:var(--gold-text); }
+    body.dark-mode .course-link { color:#60a5fa; }
 
     .search-filters-enhanced { display:flex; flex-wrap:wrap; gap:15px; margin-bottom:30px; padding:20px; border-radius:16px; }
     .filter-group { flex:1; min-width:150px; }
