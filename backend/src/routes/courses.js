@@ -9,6 +9,9 @@ const User = require('../models/User');
 
 const enrollmentService = require('../services/enrollmentService');
 const notifications = require('../services/notificationService');
+const storageService = require('../services/storageService');
+
+const config = require('../config/env');
 
 const { asyncHandler } = require('../lib/asyncHandler');
 const { ok, created, noContent } = require('../lib/respond');
@@ -202,6 +205,21 @@ router.get(
 
     return ok(res, paginated(items, total, { page, limit }));
   })
+);
+
+/* ------------------------------------------------------------------ *
+ * GET /api/v1/courses/storage — can this deployment accept uploads?
+ *
+ * Declared before `/:slug`, or Express would treat "storage" as a course slug.
+ * The authoring UI calls this to decide whether to offer an upload button at all,
+ * so that an instructor is never shown a control that cannot work.
+ * ------------------------------------------------------------------ */
+
+router.get(
+  '/storage',
+  authenticate,
+  requireInstructor,
+  asyncHandler(async (req, res) => res.json({ success: true, data: storageService.describeStatus() }))
 );
 
 /* ------------------------------------------------------------------ *
@@ -673,8 +691,31 @@ router.get(
 
     const position = siblings.findIndex((sibling) => String(sibling._id) === String(lesson._id));
 
+    /**
+     * An uploaded video is served through a short-lived signed URL minted here,
+     * not through an address stored on the lesson. The bucket stays private, so
+     * the enrolment and preview checks above are what actually gate the file —
+     * which is the entire reason the lesson is not simply given a public URL.
+     */
+    let videoPlaybackUrl = null;
+    let videoPlaybackUrlExpiresAt = null;
+
+    if (lesson.resolvedVideoType() === 'upload') {
+      videoPlaybackUrl = await storageService.createDownloadUrl(lesson.videoFile.key, {
+        disposition: 'inline',
+      });
+      videoPlaybackUrlExpiresAt = new Date(
+        Date.now() + config.storage.urlTtlSeconds * 1000
+      ).toISOString();
+    }
+
     return ok(res, {
-      lesson: lesson.toFullJSON({ completed, locked: false }),
+      lesson: lesson.toFullJSON({
+        completed,
+        locked: false,
+        videoPlaybackUrl,
+        videoPlaybackUrlExpiresAt,
+      }),
       course: course.toCardJSON(),
       access: { isEnrolled: access.isEnrolled, manages: access.manages },
       navigation: {
@@ -803,6 +844,207 @@ router.delete(
     await refreshCourseCounters(course);
 
     return noContent(res, 'Lesson removed.');
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * Lesson video — link mode
+ * ------------------------------------------------------------------ */
+
+/**
+ * Point the lesson at a YouTube or Vimeo video.
+ *
+ * Its own route rather than part of PATCH /lessons/:id, because switching source
+ * is the one operation where two fields must move together: setting a link clears
+ * any uploaded file. That keeps a lesson from ever holding both, so the player
+ * never has to guess which one the instructor meant.
+ */
+router.put(
+  '/:courseId/lessons/:lessonId/video/link',
+  authenticate,
+  requireInstructor,
+  writeLimiter,
+  validate({ params: schemas.lessonIdParam, body: schemas.videoLinkBody }),
+  asyncHandler(async (req, res) => {
+    const course = await loadManagedCourse(req);
+
+    const lesson = await Lesson.findOne({ _id: req.valid.params.lessonId, course: course._id });
+    if (!lesson) throw notFound('That lesson could not be found.', { code: 'LESSON_NOT_FOUND' });
+
+    const orphaned = lesson.videoFile && lesson.videoFile.key;
+
+    lesson.videoUrl = req.valid.body.url;
+    lesson.videoFile = null;
+    lesson.videoType = 'link';
+    await lesson.save();
+
+    // The replaced upload is unreferenced now. Delete it rather than pay to keep
+    // a file nothing points at; a failure here is logged and not surfaced.
+    if (orphaned) await storageService.deleteObject(orphaned);
+
+    return ok(res, { lesson: lesson.toFullJSON() }, 'Video link saved.');
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * Lesson video — upload mode
+ *
+ * Two steps, because the file never passes through this API. The browser asks for
+ * a signed URL, PUTs the file straight to the bucket, then says it finished. This
+ * API then asks the bucket what it actually received.
+ * ------------------------------------------------------------------ */
+
+/**
+ * Step one: issue a signed PUT for one file.
+ *
+ * Nothing is recorded on the lesson yet. An upload that is abandoned, cancelled
+ * or fails halfway leaves no trace, and the lesson keeps whatever video it already
+ * had until step two succeeds.
+ */
+router.post(
+  '/:courseId/lessons/:lessonId/video/presign',
+  authenticate,
+  requireInstructor,
+  writeLimiter,
+  validate({ params: schemas.lessonIdParam, body: schemas.presignVideoBody }),
+  asyncHandler(async (req, res) => {
+    const course = await loadManagedCourse(req);
+
+    const lesson = await Lesson.findOne({ _id: req.valid.params.lessonId, course: course._id });
+    if (!lesson) throw notFound('That lesson could not be found.', { code: 'LESSON_NOT_FOUND' });
+
+    const { filename, contentType, sizeBytes } = req.valid.body;
+
+    /**
+     * The validator enforces the hard ceiling; this enforces the deployment's own
+     * setting, which may be lower. Both are checked before a URL exists, so an
+     * oversized file is refused before it crosses anybody's data allowance.
+     */
+    if (sizeBytes > config.storage.videoMaxBytes) {
+      throw badRequest(
+        `Video must be ${Math.floor(config.storage.videoMaxBytes / (1024 * 1024))} MB or smaller.`,
+        { code: 'VIDEO_TOO_LARGE', details: [{ field: 'sizeBytes', message: 'Too large' }] }
+      );
+    }
+
+    const key = storageService.buildVideoKey({
+      courseId: course._id,
+      lessonId: lesson._id,
+      filename,
+    });
+
+    const signed = await storageService.createUploadUrl({ key, contentType });
+
+    return ok(
+      res,
+      {
+        uploadUrl: signed.url,
+        key: signed.key,
+        expiresIn: signed.expiresIn,
+        // The client must send this exact Content-Type header, because it is part
+        // of the signature. A mismatch is rejected by the bucket with an error
+        // that looks nothing like a content-type problem.
+        contentType: signed.contentType,
+        maxBytes: config.storage.videoMaxBytes,
+      },
+      'Upload URL issued.'
+    );
+  })
+);
+
+/**
+ * Step two: confirm the upload and attach it to the lesson.
+ *
+ * The client is not believed about anything it could get wrong. The key has to
+ * name this course and this lesson, and the size comes from the bucket rather than
+ * from the request, so nobody can claim a 2 GB upload that never happened.
+ */
+router.post(
+  '/:courseId/lessons/:lessonId/video/complete',
+  authenticate,
+  requireInstructor,
+  writeLimiter,
+  validate({ params: schemas.lessonIdParam, body: schemas.completeVideoBody }),
+  asyncHandler(async (req, res) => {
+    const course = await loadManagedCourse(req);
+
+    const lesson = await Lesson.findOne({ _id: req.valid.params.lessonId, course: course._id });
+    if (!lesson) throw notFound('That lesson could not be found.', { code: 'LESSON_NOT_FOUND' });
+
+    const { key, mime, originalName } = req.valid.body;
+
+    /**
+     * The key embeds a course and a lesson. Both must be the ones in this URL —
+     * otherwise an instructor could confirm a file belonging to a course they do
+     * not own and attach it to their own lesson, which is a read of somebody
+     * else's content through a write endpoint.
+     */
+    const expectedPrefix = `courses/${course._id}/lessons/${lesson._id}/video/`;
+    if (!key.startsWith(expectedPrefix)) {
+      throw forbidden('That upload does not belong to this lesson.', {
+        code: 'UPLOAD_KEY_MISMATCH',
+      });
+    }
+
+    const stat = await storageService.statObject(key);
+    if (!stat.exists) {
+      throw badRequest('That upload was not found in storage. Please upload the file again.', {
+        code: 'UPLOAD_MISSING',
+      });
+    }
+
+    if (stat.size > config.storage.videoMaxBytes) {
+      // Remove it rather than leave an unusable object behind paying rent.
+      await storageService.deleteObject(key);
+      throw badRequest(
+        `Video must be ${Math.floor(config.storage.videoMaxBytes / (1024 * 1024))} MB or smaller.`,
+        { code: 'VIDEO_TOO_LARGE' }
+      );
+    }
+
+    const previous = lesson.videoFile && lesson.videoFile.key;
+
+    lesson.videoUrl = null;
+    lesson.videoFile = {
+      key,
+      size: stat.size,
+      mime: stat.contentType || mime || '',
+      originalName: originalName || '',
+      uploadedAt: new Date(),
+    };
+    lesson.videoType = 'upload';
+    await lesson.save();
+
+    if (previous && previous !== key) await storageService.deleteObject(previous);
+
+    const playbackUrl = await storageService.createDownloadUrl(key, { disposition: 'inline' });
+
+    return ok(res, { lesson: lesson.toFullJSON({ videoPlaybackUrl: playbackUrl }) }, 'Video uploaded.');
+  })
+);
+
+/** Remove a lesson's video, whichever kind it is, and delete any stored file. */
+router.delete(
+  '/:courseId/lessons/:lessonId/video',
+  authenticate,
+  requireInstructor,
+  validate({ params: schemas.lessonIdParam }),
+  asyncHandler(async (req, res) => {
+    const course = await loadManagedCourse(req);
+
+    const lesson = await Lesson.findOne({ _id: req.valid.params.lessonId, course: course._id });
+    if (!lesson) throw notFound('That lesson could not be found.', { code: 'LESSON_NOT_FOUND' });
+
+    const orphaned = lesson.videoFile && lesson.videoFile.key;
+
+    lesson.videoUrl = null;
+    lesson.videoFile = null;
+    lesson.videoType = 'none';
+    await lesson.save();
+
+    if (orphaned) await storageService.deleteObject(orphaned);
+
+    return ok(res, { lesson: lesson.toFullJSON() }, 'Video removed.');
   })
 );
 

@@ -263,6 +263,65 @@
       return request('DELETE', path, options || {});
     },
 
+    /**
+     * Send a file straight to object storage at a URL the API signed for it.
+     *
+     * This deliberately does not go through `request`. That helper prefixes the
+     * API base and attaches the session token; both would be wrong here. The URL
+     * is absolute and already carries its own signature, and sending our
+     * Authorization header to a third-party origin would hand the visitor's
+     * session to the storage provider for no reason at all.
+     *
+     * `contentType` must be exactly what was signed, because it is part of the
+     * signature. A mismatch is rejected by the bucket with an error that looks
+     * nothing like a content-type problem.
+     *
+     * options.onProgress  receives a whole-number percentage, 0-100
+     * options.onXhr       receives the XMLHttpRequest, so a caller can abort it
+     */
+    uploadToSignedUrl: function (url, file, options) {
+      var settings = options || {};
+      var contentType = settings.contentType || file.type;
+
+      return new Promise(function (resolve, reject) {
+        var xhr = new XMLHttpRequest();
+
+        xhr.open('PUT', url, true);
+        xhr.setRequestHeader('Content-Type', contentType);
+
+        if (xhr.upload && typeof settings.onProgress === 'function') {
+          xhr.upload.addEventListener('progress', function (event) {
+            if (!event.lengthComputable) return;
+            settings.onProgress(Math.round((event.loaded / event.total) * 100));
+          });
+        }
+
+        xhr.addEventListener('load', function () {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            resolve({ status: xhr.status });
+            return;
+          }
+          reject(new Error('Storage refused the upload (status ' + xhr.status + ').'));
+        });
+
+        xhr.addEventListener('error', function () {
+          reject(
+            new Error(
+              'The upload could not reach storage. Check your connection, then try again.'
+            )
+          );
+        });
+
+        xhr.addEventListener('abort', function () {
+          reject(new Error('Upload cancelled.'));
+        });
+
+        if (typeof settings.onXhr === 'function') settings.onXhr(xhr);
+
+        xhr.send(file);
+      });
+    },
+
     /* ---- session ---- */
     getAccessToken: getAccessToken,
     getRefreshToken: getRefreshToken,

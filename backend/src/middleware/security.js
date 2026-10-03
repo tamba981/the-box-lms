@@ -59,8 +59,35 @@ const CSP_DIRECTIVES = {
   'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://cdnjs.cloudflare.com'],
   'font-src': ["'self'", 'https://fonts.gstatic.com', 'https://cdnjs.cloudflare.com', 'data:'],
   'img-src': ["'self'", 'data:', 'https:'],
+  // Lesson video is served from a signed object-storage URL, so https: stays.
   'media-src': ["'self'", 'https:'],
-  'connect-src': ["'self'", ...config.allowedOrigins],
+  /*
+   * Lesson video may be embedded from YouTube or Vimeo.
+   *
+   * This directive has to exist: `frame-src` otherwise falls back to
+   * `default-src 'self'`, and every embed is refused. The failure is a console
+   * violation and an empty player, with nothing on the page to explain it — the
+   * same shape of silent breakage as the helmet defaults described below.
+   *
+   * Origins are named rather than opening `https:` wholesale. The stored address
+   * is already restricted to these hosts when it is saved; this is the second
+   * half of that boundary, and the player builds the embed from the parsed video
+   * id rather than dropping the stored address into a src attribute.
+   */
+  'frame-src': [
+    "'self'",
+    'https://www.youtube.com',
+    'https://www.youtube-nocookie.com',
+    'https://player.vimeo.com',
+  ],
+  'connect-src': [
+    "'self'",
+    ...config.allowedOrigins,
+    // An instructor's browser PUTs the video file straight to object storage at a
+    // signed URL. That origin has to be reachable from the page, or the upload
+    // fails as an opaque network error.
+    ...(config.storage.endpoint ? [config.storage.endpoint] : []),
+  ],
 
   'form-action': ["'self'"],
 };

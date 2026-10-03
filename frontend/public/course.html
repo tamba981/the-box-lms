@@ -55,6 +55,49 @@
     body.dark-mode .lesson-row .tag.tag-preview { color: var(--dark-link); }
     .lesson-row.done .num { background: rgba(16,185,129,.16); color: #047857; }
 
+    /* ---- Lesson viewer ------------------------------------------------ *
+     * One lesson at a time, opened in place above the syllabus. Opening in
+     * place rather than navigating keeps the syllabus where the reader left
+     * it, and means the back button cannot dump them somewhere unexpected.
+     * -------------------------------------------------------------------- */
+    .lesson-open {
+      font: inherit; color: inherit; background: none; border: 0;
+      padding: 0; margin: 0; width: 100%; text-align: left;
+      display: flex; align-items: center; gap: 14px; cursor: pointer;
+      border-radius: 12px;
+    }
+    .lesson-open:hover .grow { text-decoration: underline; }
+    .lesson-row.is-open { border-color: var(--primary); }
+    .lesson-row.is-locked { opacity: .68; }
+
+    .viewer { margin: 22px 0 8px; }
+    .viewer-head {
+      display: flex; align-items: center; gap: 12px;
+      flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .viewer-head h2 {
+      font-size: 21px; font-weight: 800; letter-spacing: -0.4px;
+      margin: 0; flex: 1 1 220px; line-height: 1.3;
+    }
+    .viewer-media { margin-bottom: 20px; }
+    .viewer-media .aspect {
+      position: relative; width: 100%; aspect-ratio: 16 / 9;
+      background: #000; border-radius: 14px; overflow: hidden;
+    }
+    .viewer-media video,
+    .viewer-media iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+    .viewer-body { font-size: 16px; line-height: 1.8; white-space: pre-line; }
+    .viewer-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+    .viewer-nav .spacer { flex: 1 1 auto; }
+    .resource-list { list-style: none; margin: 10px 0 0; padding: 0; }
+    .resource-list li { margin-bottom: 7px; }
+    .resource-list a { display: inline-flex; align-items: center; gap: 9px; font-size: 14.5px; }
+
+    /* Upload progress, used by the instructor authoring form. */
+    .upload-bar { height: 6px; border-radius: 99px; background: var(--border); overflow: hidden; margin-top: 8px; }
+    body.dark-mode .upload-bar { background: var(--dark-border); }
+    .upload-bar span { display: block; height: 100%; width: 0; background: var(--primary); transition: width .2s ease; }
+
     .pre { white-space: pre-line; font-size: 15px; line-height: 1.75; }
     .desc { font-size: 15px; line-height: 1.75; color: var(--text-light); }
     body.dark-mode .desc { color: var(--dark-muted); }
@@ -148,6 +191,13 @@
         return WGAUI.param('course') || WGAUI.param('slug') || WGAUI.param('id') || '';
       }
 
+      /**
+       * A syllabus row.
+       *
+       * A row the reader is allowed to open becomes a real button, so it is
+       * reachable by keyboard and announced as actionable. A row they may not open
+       * stays a plain div rather than a button that silently does nothing.
+       */
       function lessonRow(lesson, index) {
         var icon = lesson.completed
           ? '<i class="fas fa-check" aria-hidden="true"></i>'
@@ -159,19 +209,322 @@
             ? '<span class="tag tag-preview">Preview</span>'
             : '<span class="tag">' + WGAUI.escapeHtml(lesson.type) + '</span>';
 
-        return (
-          '<div class="lesson-row' + (lesson.completed ? ' done' : '') + '">' +
+        var inner =
           '<div class="num">' + icon + '</div>' +
           '<div class="grow">' + WGAUI.escapeHtml(lesson.title) +
           (lesson.durationMinutes ? ' <span class="tag">· ' + lesson.durationMinutes + ' min</span>' : '') +
-          '</div>' + right + '</div>'
+          '</div>' + right;
+
+        if (lesson.locked) {
+          return '<div class="lesson-row is-locked">' + inner + '</div>';
+        }
+
+        return (
+          '<div class="lesson-row' + (lesson.completed ? ' done' : '') + '">' +
+          '<button type="button" class="lesson-open" data-lesson-id="' +
+          WGAUI.escapeHtml(String(lesson.id)) + '">' + inner + '</button></div>'
         );
+      }
+
+      /* ------------------------------------------------------------- *
+       * Lesson viewer
+       * ------------------------------------------------------------- */
+
+      var currentCourse = null;
+      var currentSyllabus = [];
+      var openLessonId = null;
+
+      /**
+       * Only http(s) addresses become links.
+       *
+       * `escapeHtml` makes a string safe to place in HTML; it does not make it
+       * safe to place in an href. `javascript:` survives escaping intact and runs
+       * on click, so the scheme is checked as well.
+       */
+      function safeUrl(url) {
+        if (!url) return null;
+        try {
+          var parsed = new URL(url, window.location.origin);
+          return parsed.protocol === 'http:' || parsed.protocol === 'https:' ? parsed.href : null;
+        } catch (error) {
+          return null;
+        }
+      }
+
+      /**
+       * Build a privacy-preserving embed address from a stored video link.
+       *
+       * The stored address is never put into an iframe src. The host is matched
+       * against a fixed list and the video id is extracted and reassembled, so an
+       * unexpected host, a `javascript:` address, or a path crafted to escape the
+       * player cannot become a frame.
+       */
+      function videoEmbed(url) {
+        var parsed;
+        try {
+          parsed = new URL(url);
+        } catch (error) {
+          return null;
+        }
+
+        if (parsed.protocol !== 'https:') return null;
+
+        var host = parsed.hostname.replace(/^www\./, '');
+        var youtube = 'https://www.youtube-nocookie.com/embed/';
+
+        if (host === 'youtu.be') {
+          var shortId = parsed.pathname.slice(1).split('/')[0];
+          return shortId ? youtube + encodeURIComponent(shortId) : null;
+        }
+
+        if (
+          host === 'youtube.com' ||
+          host === 'm.youtube.com' ||
+          host === 'music.youtube.com' ||
+          host === 'youtube-nocookie.com'
+        ) {
+          var byQuery = parsed.searchParams.get('v');
+          if (byQuery) return youtube + encodeURIComponent(byQuery);
+
+          var byPath = parsed.pathname.match(/^\/(?:embed|shorts|v)\/([^/?#]+)/);
+          return byPath ? youtube + encodeURIComponent(byPath[1]) : null;
+        }
+
+        if (host === 'vimeo.com' || host === 'player.vimeo.com') {
+          var vimeoId = parsed.pathname.match(/(\d{6,})/);
+          return vimeoId ? 'https://player.vimeo.com/video/' + vimeoId[1] : null;
+        }
+
+        return null;
+      }
+
+      function mediaBlock(lesson) {
+        var video = lesson.video || {};
+
+        if (video.type === 'upload' && video.playbackUrl) {
+          return (
+            '<div class="viewer-media"><div class="aspect">' +
+            '<video controls playsinline preload="metadata" src="' +
+            WGAUI.escapeHtml(video.playbackUrl) + '"></video></div></div>'
+          );
+        }
+
+        if (video.type === 'link' && video.url) {
+          var embed = videoEmbed(video.url);
+          if (!embed) {
+            // The address passed validation when it was saved, so this means it
+            // changed shape since. Say so rather than showing an empty frame.
+            return (
+              '<p class="wga-hint">This lesson\'s video link could not be embedded. ' +
+              'Open it directly instead.</p>'
+            );
+          }
+
+          return (
+            '<div class="viewer-media"><div class="aspect">' +
+            '<iframe src="' + WGAUI.escapeHtml(embed) + '" title="' +
+            WGAUI.escapeHtml(lesson.title) + '" loading="lazy" allowfullscreen ' +
+            'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">' +
+            '</iframe></div></div>'
+          );
+        }
+
+        return '';
+      }
+
+      function resourcesBlock(lesson) {
+        var resources = lesson.resources || [];
+        var usable = resources.filter(function (resource) {
+          return safeUrl(resource.url);
+        });
+
+        if (!usable.length) return '';
+
+        return (
+          '<h3 class="section-title" style="font-size:16px;margin:28px 0 4px;">Lesson materials</h3>' +
+          '<ul class="resource-list">' +
+          usable
+            .map(function (resource) {
+              return (
+                '<li><a href="' + WGAUI.escapeHtml(safeUrl(resource.url)) +
+                '" target="_blank" rel="noopener noreferrer">' +
+                '<i class="fas fa-file-lines" aria-hidden="true"></i> ' +
+                WGAUI.escapeHtml(resource.title) + '</a></li>'
+              );
+            })
+            .join('') +
+          '</ul>'
+        );
+      }
+
+      /** Keep the address shareable, so a lesson can be linked to directly. */
+      function rememberLesson(lessonId) {
+        if (!window.history || !window.history.replaceState) return;
+        try {
+          var url = new URL(window.location.href);
+          if (lessonId) url.searchParams.set('lesson', lessonId);
+          else url.searchParams.delete('lesson');
+          window.history.replaceState({}, '', url);
+        } catch (error) {
+          /* not worth failing over */
+        }
+      }
+
+      function closeViewer() {
+        var viewer = document.getElementById('viewer');
+        if (viewer) {
+          viewer.hidden = true;
+          viewer.innerHTML = '';
+        }
+        document.querySelectorAll('.lesson-row.is-open').forEach(function (row) {
+          row.classList.remove('is-open');
+        });
+        openLessonId = null;
+        rememberLesson(null);
+      }
+
+      function openLesson(lessonId) {
+        var viewer = document.getElementById('viewer');
+        if (!viewer || !currentCourse || !lessonId) return;
+
+        openLessonId = lessonId;
+        rememberLesson(lessonId);
+
+        document.querySelectorAll('.lesson-row.is-open').forEach(function (row) {
+          row.classList.remove('is-open');
+        });
+        var row = document.querySelector('[data-lesson-id="' + lessonId + '"]');
+        if (row) row.closest('.lesson-row').classList.add('is-open');
+
+        viewer.hidden = false;
+        viewer.innerHTML =
+          '<div class="wga-card"><div class="wga-skeleton" style="height:24px;width:55%;margin-bottom:12px;"></div>' +
+          '<div class="wga-skeleton" style="height:200px;"></div></div>';
+        viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        WGA.get(
+          '/courses/' +
+            encodeURIComponent(currentCourse.id) +
+            '/lessons/' +
+            encodeURIComponent(lessonId)
+        )
+          .then(function (data) {
+            var lesson = data.lesson;
+            var navigation = data.navigation || {};
+
+            viewer.innerHTML =
+              '<div class="viewer">' +
+                '<div class="viewer-head">' +
+                  '<h2>' + WGAUI.escapeHtml(lesson.title) + '</h2>' +
+                  '<span class="tag">' + WGAUI.escapeHtml(lesson.type) + '</span>' +
+                  '<button type="button" class="wga-btn wga-btn-ghost" id="close-lesson">Close</button>' +
+                '</div>' +
+                mediaBlock(lesson) +
+                (lesson.content
+                  ? '<div class="viewer-body">' + WGAUI.escapeHtml(lesson.content) + '</div>'
+                  : '') +
+                resourcesBlock(lesson) +
+                '<div class="viewer-nav">' +
+                  (navigation.previousLessonId
+                    ? '<button type="button" class="wga-btn wga-btn-ghost" data-goto="' +
+                      WGAUI.escapeHtml(navigation.previousLessonId) + '">' +
+                      '<i class="fas fa-arrow-left" aria-hidden="true"></i> Previous</button>'
+                    : '') +
+                  (lesson.completed
+                    ? '<span class="wga-pill wga-pill-free"><i class="fas fa-check" aria-hidden="true"></i> Completed</span>'
+                    : '<button type="button" class="wga-btn wga-btn-primary" id="mark-complete">' +
+                      'Mark complete</button>') +
+                  '<span class="spacer"></span>' +
+                  (navigation.nextLessonId
+                    ? '<button type="button" class="wga-btn wga-btn-ghost" data-goto="' +
+                      WGAUI.escapeHtml(navigation.nextLessonId) + '">Next ' +
+                      '<i class="fas fa-arrow-right" aria-hidden="true"></i></button>'
+                    : '') +
+                '</div>' +
+                '<p class="wga-hint" style="margin-top:14px;">Lesson ' +
+                  (navigation.position || 0) +
+                  ' of ' +
+                  (navigation.total || 0) +
+                  (lesson.durationMinutes ? ' · about ' + lesson.durationMinutes + ' min' : '') +
+                '</p>' +
+              '</div>';
+
+            bindViewer();
+          })
+          .catch(function (error) {
+            viewer.innerHTML =
+              '<div class="wga-card"><p style="margin:0 0 12px;">' +
+              WGAUI.escapeHtml(
+                error && error.status === 403
+                  ? 'Enroll in this course to open this lesson.'
+                  : (error && error.message) || 'That lesson could not be opened.'
+              ) +
+              '</p><button type="button" class="wga-btn wga-btn-ghost" id="close-lesson">Close</button></div>';
+            bindViewer();
+          });
+      }
+
+      function bindViewer() {
+        var viewer = document.getElementById('viewer');
+        if (!viewer) return;
+
+        viewer.querySelectorAll('[data-goto]').forEach(function (button) {
+          button.addEventListener('click', function () {
+            openLesson(button.getAttribute('data-goto'));
+          });
+        });
+
+        var close = document.getElementById('close-lesson');
+        if (close) close.addEventListener('click', closeViewer);
+
+        var complete = document.getElementById('mark-complete');
+        if (complete) {
+          complete.addEventListener('click', function () {
+            WGAUI.setBusy(complete, true, 'Saving…');
+
+            WGA.post(
+              '/courses/' +
+                encodeURIComponent(currentCourse.id) +
+                '/lessons/' +
+                encodeURIComponent(openLessonId) +
+                '/complete'
+            )
+              .then(function () {
+                WGAUI.toast('Lesson completed.', 'success');
+                var reopen = openLessonId;
+                // Re-read the course so the tick, the progress bar and the
+                // certificate state all move together rather than drifting.
+                return WGA.get('/courses/' + encodeURIComponent(identifier())).then(function (fresh) {
+                  render(fresh);
+                  if (reopen) openLesson(reopen);
+                });
+              })
+              .catch(function (error) {
+                WGAUI.setBusy(complete, false);
+                WGAUI.toast((error && error.message) || 'Could not save that.', 'error');
+              });
+          });
+        }
+      }
+
+      /** The first lesson the reader may actually open and has not finished. */
+      function nextLessonToWatch(syllabus) {
+        var open = syllabus.filter(function (lesson) {
+          return !lesson.locked;
+        });
+        for (var i = 0; i < open.length; i += 1) {
+          if (!open[i].completed) return open[i].id;
+        }
+        return open.length ? open[0].id : null;
       }
 
       function render(data) {
         var course = data.course;
         var access = data.access;
         var syllabus = data.lessons || [];
+
+        currentCourse = course;
+        currentSyllabus = syllabus;
 
         document.title = course.title + ' · Wuteve Global Academy';
 
@@ -187,10 +540,12 @@
             encodeURIComponent(course.id) + '"><i class="fas fa-pen-to-square" aria-hidden="true"></i> Manage this course</a>' +
             '<p class="wga-hint" style="text-align:center;">You teach this course.</p>';
         } else if (access.isEnrolled) {
+          // Opens the lesson in place. This used to send the reader to a dashboard
+          // route with no lesson viewer on it, which is where the learning stopped.
           action =
-            '<a class="wga-btn wga-btn-primary wga-btn-block" href="/student-dashboard.html#/course/' +
-            encodeURIComponent(course.id) + '"><i class="fas fa-play" aria-hidden="true"></i> ' +
-            (access.progress > 0 ? 'Continue learning' : 'Start learning') + '</a>' +
+            '<button class="wga-btn wga-btn-primary wga-btn-block" type="button" id="resume">' +
+            '<i class="fas fa-play" aria-hidden="true"></i> ' +
+            (access.progress > 0 ? 'Continue learning' : 'Start learning') + '</button>' +
             '<div style="margin-top:14px;">' +
             '<div class="wga-progress"><span style="width:' + Math.max(0, Math.min(100, access.progress || 0)) + '%"></span></div>' +
             '<p class="wga-hint" style="text-align:center;margin-top:7px;">' + (access.progress || 0) + '% complete</p>' +
@@ -257,15 +612,44 @@
             ? '<h2 class="section-title">About this course</h2><p class="desc pre">' + WGAUI.escapeHtml(course.description) + '</p>'
             : '') +
 
+          '<section class="viewer" id="viewer" hidden></section>' +
           '<h2 class="section-title">Syllabus</h2>' +
           (syllabus.length
             ? syllabus.map(function (lesson, index) { return lessonRow(lesson, index + 1); }).join('')
             : WGAUI.emptyState('No lessons published yet', 'The instructor has not published the syllabus for this course.'));
 
         bindActions(course);
+
+        /*
+         * Honour ?lesson=, so a lesson can be linked to directly and a reload
+         * does not lose the reader's place.
+         */
+        var wanted = WGAUI.param('lesson');
+        var isOpenable =
+          wanted &&
+          syllabus.some(function (lesson) {
+            return String(lesson.id) === String(wanted) && !lesson.locked;
+          });
+
+        if (isOpenable) openLesson(wanted);
       }
 
       function bindActions(course) {
+        document.querySelectorAll('.lesson-open').forEach(function (button) {
+          button.addEventListener('click', function () {
+            openLesson(button.getAttribute('data-lesson-id'));
+          });
+        });
+
+        var resume = document.getElementById('resume');
+        if (resume) {
+          resume.addEventListener('click', function () {
+            var first = nextLessonToWatch(currentSyllabus);
+            if (first) openLesson(first);
+            else WGAUI.toast('No lessons have been published yet.', 'info');
+          });
+        }
+
         var enroll = document.getElementById('enroll');
         var panel = document.getElementById('checkout-panel');
 

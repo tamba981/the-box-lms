@@ -15,6 +15,8 @@
 const crypto = require('crypto');
 const path = require('path');
 
+const { MAX_VIDEO_BYTES } = require('../lib/constants');
+
 require('dotenv').config({ path: path.join(__dirname, '..', '..', '.env') });
 
 const NODE_ENV = process.env.NODE_ENV || 'development';
@@ -221,6 +223,72 @@ const MOBILE_MONEY_PROVIDERS = [
 ];
 
 /* ------------------------------------------------------------------ *
+ * Object storage — lesson video and materials
+ * ------------------------------------------------------------------ */
+
+/**
+ * Deliberately optional, and deliberately not `resolveSecret`.
+ *
+ * The platform works without object storage: an instructor can point a lesson at
+ * a YouTube or Vimeo URL instead of uploading a file. So a production deployment
+ * with no storage configured must still boot — refusing to start would take the
+ * whole site down over a feature nobody is obliged to use.
+ *
+ * What is NOT acceptable is a half-configured bucket, or a placeholder secret,
+ * because those fail at upload time with an opaque provider error. So the mode is
+ * either fully configured or reported as missing by name.
+ *
+ * `missing` exists for the same reason the payment providers report it: "storage
+ * is not configured" tells whoever has to fix it nothing, whereas
+ * "STORAGE_BUCKET is not set" is actionable.
+ */
+const STORAGE_PROVIDER = String(process.env.STORAGE_PROVIDER || '').trim().toLowerCase();
+const STORAGE_BUCKET = String(process.env.STORAGE_BUCKET || '').trim();
+const STORAGE_ENDPOINT = String(process.env.STORAGE_ENDPOINT || '').trim().replace(/\/+$/, '');
+const STORAGE_ACCESS_KEY_ID = String(process.env.STORAGE_ACCESS_KEY_ID || '').trim();
+const STORAGE_SECRET_ACCESS_KEY = String(process.env.STORAGE_SECRET_ACCESS_KEY || '').trim();
+const STORAGE_REGION = String(process.env.STORAGE_REGION || 'auto').trim();
+
+/**
+ * R2 addresses buckets virtually-hosted, which is the SDK default. This exists
+ * for S3-compatible providers that need path-style addressing instead.
+ */
+const STORAGE_FORCE_PATH_STYLE = String(process.env.STORAGE_FORCE_PATH_STYLE || '').toLowerCase() === 'true';
+
+const STORAGE_VIDEO_MAX_BYTES =
+  Number.parseInt(process.env.STORAGE_VIDEO_MAX_BYTES, 10) || MAX_VIDEO_BYTES;
+const STORAGE_URL_TTL_SECONDS = Number.parseInt(process.env.STORAGE_URL_TTL_SECONDS, 10) || 3600;
+
+const STORAGE_MISSING = [
+  ['STORAGE_PROVIDER', STORAGE_PROVIDER],
+  ['STORAGE_BUCKET', STORAGE_BUCKET],
+  ['STORAGE_ENDPOINT', STORAGE_ENDPOINT],
+  ['STORAGE_ACCESS_KEY_ID', STORAGE_ACCESS_KEY_ID],
+  ['STORAGE_SECRET_ACCESS_KEY', STORAGE_SECRET_ACCESS_KEY],
+]
+  .filter(([, value]) => !value)
+  .map(([name]) => name);
+
+const STORAGE_ENABLED = STORAGE_MISSING.length === 0;
+
+// A secret that is present but weak is worse than an absent one: it looks set up.
+if (STORAGE_SECRET_ACCESS_KEY && !isUsableSecret(STORAGE_SECRET_ACCESS_KEY)) {
+  const message =
+    'STORAGE_SECRET_ACCESS_KEY is set but is a placeholder, or shorter than 32 characters. ' +
+    'Use the Secret Access Key from the R2 API token.';
+  if (IS_PRODUCTION) fatal.push(message);
+  else warnings.push(message);
+}
+
+if (!STORAGE_ENABLED && IS_PRODUCTION) {
+  warnings.push(
+    'Object storage is not configured. Instructors can still link to YouTube or Vimeo videos, ' +
+      'but cannot upload video or material files. Missing: ' +
+      STORAGE_MISSING.join(', ')
+  );
+}
+
+/* ------------------------------------------------------------------ *
  * Tokens
  * ------------------------------------------------------------------ */
 
@@ -243,6 +311,20 @@ const config = {
 
   publicBaseUrl: PUBLIC_BASE_URL,
   allowedOrigins: ALLOWED_ORIGINS,
+
+  storage: {
+    enabled: STORAGE_ENABLED,
+    provider: STORAGE_PROVIDER,
+    bucket: STORAGE_BUCKET,
+    endpoint: STORAGE_ENDPOINT,
+    region: STORAGE_REGION,
+    accessKeyId: STORAGE_ACCESS_KEY_ID,
+    secretAccessKey: STORAGE_SECRET_ACCESS_KEY,
+    videoMaxBytes: STORAGE_VIDEO_MAX_BYTES,
+    urlTtlSeconds: STORAGE_URL_TTL_SECONDS,
+    forcePathStyle: STORAGE_FORCE_PATH_STYLE,
+    missing: STORAGE_MISSING,
+  },
 
   email: {
     enabled: EMAIL_ENABLED,

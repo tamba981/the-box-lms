@@ -4,6 +4,7 @@ const { z } = require('zod');
 
 const { COURSE_LEVELS, COURSE_STATUSES, LESSON_TYPES } = require('./auth').enums;
 const { objectId, paginationQuery, optionalUrl } = require('./auth');
+const { ALLOWED_VIDEO_MIME, MAX_VIDEO_BYTES, EMBEDDABLE_VIDEO_HOSTS } = require('../lib/constants');
 
 /**
  * Course and lesson input schemas.
@@ -139,6 +140,90 @@ const reorderLessonsBody = z.object({
   lessonIds: z.array(objectId).min(1, 'Provide the lesson order').max(500),
 });
 
+/* ------------------------------------------------------------------ *
+ * Video upload — two steps, because the file never passes through this API
+ * ------------------------------------------------------------------ */
+
+/**
+ * Step one: ask for somewhere to put the file.
+ *
+ * Everything checkable before an upload is checked here, so a doomed upload is
+ * refused before it starts rather than after 400 MB has crossed someone's mobile
+ * data allowance.
+ */
+const presignVideoBody = z.object({
+  filename: z.string().trim().min(1, 'A filename is required').max(260, 'That filename is too long'),
+  contentType: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .refine((value) => ALLOWED_VIDEO_MIME.includes(value), {
+      message:
+        'Video must be MP4 or WebM. MOV is not accepted because iPhones record it as HEVC, ' +
+        'which Chrome and Firefox cannot play — it would upload successfully and then not play.',
+    }),
+  sizeBytes: z.coerce
+    .number({ invalid_type_error: 'A file size is required' })
+    .int()
+    .min(1, 'That file appears to be empty')
+    .max(MAX_VIDEO_BYTES, 'Video must be 500 MB or smaller'),
+});
+
+/**
+ * Step two: report that the upload finished.
+ *
+ * The key is client-supplied, so it is constrained rather than trusted. It has to
+ * match the shape this API issues, and the route additionally checks that the
+ * course and lesson in the key are the ones in the URL. Without that, an
+ * instructor could confirm a key belonging to somebody else's course and attach it
+ * to their own lesson.
+ *
+ * The declared size is not trusted either: the route asks the bucket what it
+ * actually holds and stores that.
+ */
+const completeVideoBody = z.object({
+  key: z
+    .string()
+    .trim()
+    .min(1, 'An upload key is required')
+    .max(500)
+    .regex(
+      /^courses\/[a-f\d]{24}\/lessons\/[a-f\d]{24}\/video\/[0-9a-f-]{36}\.(mp4|webm|ogv|ogg)$/,
+      'That upload key is not one this API issued'
+    ),
+  mime: z.string().trim().max(120).optional(),
+  originalName: z.string().trim().max(260).optional(),
+});
+
+/**
+ * A pasted YouTube or Vimeo address.
+ *
+ * The host is restricted to an allowlist because the value ends up in an iframe
+ * src. `new URL` is used rather than a regular expression so that tricks like
+ * `https://youtube.com.evil.example/` and `https://evil.example/?x=youtube.com`
+ * resolve to the host they actually are.
+ */
+const videoLinkBody = z.object({
+  url: z
+    .string()
+    .trim()
+    .min(1, 'Paste a video address')
+    .max(2000, 'That address is too long')
+    .url('Paste the full address, starting with https://')
+    .refine(
+      (value) => {
+        try {
+          const { hostname } = new URL(value);
+          const bare = hostname.replace(/^www\./, '');
+          return EMBEDDABLE_VIDEO_HOSTS.includes(bare);
+        } catch (_) {
+          return false;
+        }
+      },
+      { message: 'Only YouTube and Vimeo addresses can be embedded. Paste the video\'s own address.' }
+    ),
+});
+
 /**
  * An uploaded cover image, sent as a data URL.
  *
@@ -173,4 +258,8 @@ module.exports = {
   createLessonBody,
   updateLessonBody,
   reorderLessonsBody,
-    thumbnailUploadBody,  };
+  presignVideoBody,
+  completeVideoBody,
+  videoLinkBody,
+  thumbnailUploadBody,
+};
