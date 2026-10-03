@@ -31,8 +31,7 @@ async function loadVisibleCourse(identifier, viewer) {
   if (!course) throw notFound('That course could not be found.', { code: 'COURSE_NOT_FOUND' });
 
   const maySeeUnpublished =
-    viewer && (viewer.role === 'admin' || String(course.instructor) === String(viewer._id));
-
+      viewer && (viewer.role === 'admin' || instructorIdOf(course) === String(viewer._id));
   if (course.status !== 'published' && !maySeeUnpublished) {
     throw notFound('That course could not be found.', { code: 'COURSE_NOT_FOUND' });
   }
@@ -40,11 +39,28 @@ async function loadVisibleCourse(identifier, viewer) {
   return course;
 }
 
+/**
+ * The instructor's id, whether the field holds an id or a populated document.
+ *
+ * `course.instructor` is a ref, so it is normally an ObjectId. But the course
+ * detail route populates it into a full User document so the page can show a real
+ * author card — and a populated document stringifies to "[object Object]", never
+ * matching a user id. Comparing the raw field therefore reported `manages: false`
+ * to a course's own instructor, which left them looking at their own course as a
+ * stranger: a padlock on every lesson, no Manage button, and their unpublished
+ * lessons hidden from the very page they were meant to be authoring from.
+ */
+function instructorIdOf(course) {
+  const value = course && course.instructor;
+  if (!value) return null;
+  return String(value._id || value.id || value);
+}
+
 /** Admins manage everything; an instructor manages only their own courses. */
 function canManageCourse(user, course) {
   if (!user || !course) return false;
   if (user.role === 'admin') return true;
-  return user.role === 'instructor' && String(course.instructor) === String(user._id);
+  return user.role === 'instructor' && instructorIdOf(course) === String(user._id);
 }
 
 function assertCanManageCourse(user, course) {
@@ -102,6 +118,7 @@ module.exports = {
   findCourse,
   loadVisibleCourse,
   canManageCourse,
+  instructorIdOf,
   assertCanManageCourse,
   findEnrollment,
   resolveCourseAccess,
