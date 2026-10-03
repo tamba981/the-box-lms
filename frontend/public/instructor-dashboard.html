@@ -1857,8 +1857,10 @@
 
                         <div class="form-group">
                             <label>Materials (one per line, as <em>Title | https://address</em>)</label>
-                            <textarea id="lessonResources" rows="3" placeholder="Worksheet | https://example.com/worksheet.pdf">${WGAUI.escapeHtml((editing.resources || []).map((r) => (r.title || '') + ' | ' + (r.url || '')).join('\n'))}</textarea>
+                            <textarea id="lessonResources" rows="3" placeholder="Worksheet | https://example.com/worksheet.pdf">${WGAUI.escapeHtml(editing.resourcesText !== undefined ? editing.resourcesText : (editing.resources || []).map((r) => (r.title || '') + ' | ' + (r.url || '')).join('\n'))}</textarea>
                         </div>
+
+                        ${quizEditorHTML()}
 
                         <div style="display:flex;gap:10px;flex-wrap:wrap;">
                             <button class="btn-primary" id="lessonSaveBtn" onclick="lessonSave()">${editing.isNew ? 'Add lesson' : 'Save lesson'}</button>
@@ -1895,19 +1897,278 @@
             }
         };
 
+        /* ---- Quiz editor ------------------------------------------- *
+         *
+         * One quiz per lesson. The editor redraws the whole modal on every change,
+         * and the lesson fields live in that same modal — so each action reads the
+         * form back into state first, or adding a question would silently discard
+         * whatever the instructor had just typed into the lesson title.
+         * ------------------------------------------------------------ */
+
+        const quizState = { lessonId: null, exists: false, title: 'Quiz', passPercent: 70, maxAttempts: 0, questions: [] };
+
+        async function resetQuizState(lessonId) {
+            quizState.lessonId = lessonId;
+            quizState.exists = false;
+            quizState.title = 'Quiz';
+            quizState.passPercent = 70;
+            quizState.maxAttempts = 0;
+            quizState.questions = [];
+
+            if (!lessonId) return;
+
+            try {
+                const data = await WGA.get('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(lessonId) + '/quiz');
+                if (!data.quiz) return;
+
+                quizState.exists = true;
+                quizState.title = data.quiz.title || 'Quiz';
+                quizState.passPercent = data.quiz.passPercent;
+                quizState.maxAttempts = data.quiz.maxAttempts;
+                quizState.questions = (data.quiz.questions || []).map((question) => ({
+                    prompt: question.prompt,
+                    kind: question.kind || 'single',
+                    explanation: question.explanation || '',
+                    points: question.points || 1,
+                    options: (question.options || []).map((option) => ({ text: option.text, isCorrect: Boolean(option.isCorrect) }))
+                }));
+            } catch (error) {
+                /* No quiz yet is the ordinary case, not a failure. */
+            }
+        }
+
+        function quizQuestionEditor(question, index) {
+            const options = (question.options || [])
+                .map((option, optionIndex) => `
+                    <div class="quiz-opt-row">
+                        <input type="radio" name="correct-${index}" ${option.isCorrect ? 'checked' : ''} onchange="quizMarkCorrect(${index},${optionIndex})" title="Mark as the correct answer" />
+                        <input type="text" class="quiz-opt-text" value="${WGAUI.escapeHtml(option.text || '')}" placeholder="Option ${optionIndex + 1}" />
+                        <button class="btn-primary btn-outline btn-sm" onclick="quizRemoveOption(${index},${optionIndex})" title="Remove this option">&times;</button>
+                    </div>
+                `)
+                .join('');
+
+            return `
+                <div class="quiz-q-editor">
+                    <div class="quiz-q-editor-head">
+                        <strong>Question ${index + 1}</strong>
+                        <button class="btn-primary btn-outline btn-sm" onclick="quizRemoveQuestion(${index})">Remove</button>
+                    </div>
+                    <div class="form-group"><label>Question</label><input type="text" class="quiz-prompt" value="${WGAUI.escapeHtml(question.prompt || '')}" placeholder="What should the student know?" /></div>
+                    ${options}
+                    <button class="btn-primary btn-outline btn-sm" onclick="quizAddOption(${index})">+ Option</button>
+                    <div class="form-group" style="margin-top:10px;"><label>Explanation (shown after submitting)</label><input type="text" class="quiz-explanation" value="${WGAUI.escapeHtml(question.explanation || '')}" placeholder="Why that answer is right" /></div>
+                </div>
+            `;
+        }
+
+        function quizEditorHTML() {
+            const questions = quizState.questions.map((question, index) => quizQuestionEditor(question, index)).join('');
+
+            return `
+                <div class="lesson-form">
+                    <h4>Quiz</h4>
+                    <div style="display:flex;gap:14px;flex-wrap:wrap;">
+                        <div class="form-group" style="flex:1 1 140px;"><label>Pass mark (%)</label><input type="number" id="quizPass" min="0" max="100" value="${quizState.passPercent}" /></div>
+                        <div class="form-group" style="flex:1 1 170px;"><label>Attempts allowed (0 = unlimited)</label><input type="number" id="quizAttempts" min="0" max="100" value="${quizState.maxAttempts}" /></div>
+                    </div>
+                    ${questions || '<p class="lesson-hint">No questions yet. A lesson without a quiz simply has none.</p>'}
+                    <button class="btn-primary btn-outline btn-sm" onclick="quizAddQuestion()">+ Add question</button>
+                    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+                        <button class="btn-primary btn-sm" id="quizSaveBtn" onclick="quizSave()">${quizState.exists ? 'Save quiz' : 'Create quiz'}</button>
+                        ${quizState.exists ? '<button class="btn-primary btn-outline btn-sm" onclick="quizRemove()">Remove quiz</button>' : ''}
+                    </div>
+                    <p class="lesson-hint">
+                        Every question needs exactly one correct answer. Students see the questions but never the
+                        answers, and marking happens on the server.
+                    </p>
+                </div>
+            `;
+        }
+
+        /** Read the lesson form back into state, so a redraw cannot lose it. */
+        function captureLessonForm() {
+            const editing = lessonState.editing;
+            if (!editing) return;
+
+            const val = (id) => { const el = document.getElementById(id); return el ? el.value : undefined; };
+            const on = (id) => { const el = document.getElementById(id); return el ? el.checked : undefined; };
+
+            if (val('lessonTitle') !== undefined) editing.title = val('lessonTitle');
+            if (val('lessonSummary') !== undefined) editing.summary = val('lessonSummary');
+            if (val('lessonType') !== undefined) editing.type = val('lessonType');
+            if (val('lessonContent') !== undefined) editing.content = val('lessonContent');
+            if (val('lessonDuration') !== undefined) editing.durationMinutes = Number(val('lessonDuration') || 0);
+            if (on('lessonPreview') !== undefined) editing.isPreview = on('lessonPreview');
+            if (on('lessonPublished') !== undefined) editing.published = on('lessonPublished');
+            if (val('lessonResources') !== undefined) editing.resourcesText = val('lessonResources');
+            if (val('lessonVideoUrl') !== undefined) editing.videoUrl = val('lessonVideoUrl');
+
+            const mode = document.querySelector('input[name="lessonVideoMode"]:checked');
+            if (mode) editing.videoMode = mode.value;
+        }
+
+        function captureQuizForm() {
+            const pass = document.getElementById('quizPass');
+            const attempts = document.getElementById('quizAttempts');
+            if (pass) quizState.passPercent = Number(pass.value || 0);
+            if (attempts) quizState.maxAttempts = Number(attempts.value || 0);
+
+            document.querySelectorAll('.quiz-q-editor').forEach((editor, index) => {
+                const question = quizState.questions[index];
+                if (!question) return;
+
+                const prompt = editor.querySelector('.quiz-prompt');
+                const explanation = editor.querySelector('.quiz-explanation');
+                if (prompt) question.prompt = prompt.value;
+                if (explanation) question.explanation = explanation.value;
+
+                editor.querySelectorAll('.quiz-opt-row').forEach((row, optionIndex) => {
+                    const option = question.options[optionIndex];
+                    const text = row.querySelector('.quiz-opt-text');
+                    if (option && text) option.text = text.value;
+                });
+            });
+        }
+
+        /** Capture, mutate, redraw — the order every quiz action uses. */
+        function editQuiz(mutate) {
+            captureLessonForm();
+            captureQuizForm();
+            mutate();
+            refreshLessonModal();
+        }
+
+        window.quizAddQuestion = function quizAddQuestion() {
+            editQuiz(() => {
+                quizState.questions.push({
+                    prompt: '', kind: 'single', explanation: '', points: 1,
+                    options: [{ text: '', isCorrect: true }, { text: '', isCorrect: false }]
+                });
+            });
+        };
+
+        window.quizRemoveQuestion = function quizRemoveQuestion(index) {
+            editQuiz(() => { quizState.questions.splice(index, 1); });
+        };
+
+        window.quizAddOption = function quizAddOption(index) {
+            editQuiz(() => {
+                const question = quizState.questions[index];
+                if (question && question.options.length < 10) question.options.push({ text: '', isCorrect: false });
+            });
+        };
+
+        window.quizRemoveOption = function quizRemoveOption(index, optionIndex) {
+            editQuiz(() => {
+                const question = quizState.questions[index];
+                if (!question || question.options.length <= 2) return;
+
+                const wasCorrect = question.options[optionIndex].isCorrect;
+                question.options.splice(optionIndex, 1);
+                // Never leave a question with no right answer; the API refuses it.
+                if (wasCorrect && question.options.length) question.options[0].isCorrect = true;
+            });
+        };
+
+        /** One correct answer per question, so the radios behave as a group. */
+        window.quizMarkCorrect = function quizMarkCorrect(index, optionIndex) {
+            editQuiz(() => {
+                const question = quizState.questions[index];
+                if (!question) return;
+                question.options.forEach((option, i) => { option.isCorrect = i === optionIndex; });
+            });
+        };
+
+        window.quizSave = async function quizSave() {
+            captureLessonForm();
+            captureQuizForm();
+
+            const lessonId = quizState.lessonId || (lessonState.editing && lessonState.editing.id);
+            if (!lessonId) { showToast('Save the lesson first, then add its quiz.', 'error'); return; }
+
+            const questions = quizState.questions.filter((question) => (question.prompt || '').trim().length >= 2);
+            if (!questions.length) { showToast('Write at least one question.', 'error'); return; }
+
+            if (questions.some((question) => question.options.some((option) => !(option.text || '').trim()))) {
+                showToast('Every option needs text.', 'error');
+                return;
+            }
+
+            if (!questions.every((question) => question.options.some((option) => option.isCorrect))) {
+                showToast('Mark the correct answer on every question.', 'error');
+                return;
+            }
+
+            const button = document.getElementById('quizSaveBtn');
+            WGAUI.setBusy(button, true, 'Saving…');
+
+            try {
+                const saved = await WGA.put('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(lessonId) + '/quiz', {
+                    title: quizState.title || 'Quiz',
+                    passPercent: quizState.passPercent,
+                    maxAttempts: quizState.maxAttempts,
+                    questions: questions.map((question) => ({
+                        prompt: question.prompt.trim(),
+                        kind: question.kind || 'single',
+                        explanation: question.explanation || '',
+                        points: question.points || 1,
+                        options: question.options.map((option) => ({ text: option.text.trim(), isCorrect: Boolean(option.isCorrect) }))
+                    }))
+                });
+
+                quizState.exists = true;
+                quizState.questions = (saved.quiz.questions || []).map((question) => ({
+                    prompt: question.prompt,
+                    kind: question.kind,
+                    explanation: question.explanation || '',
+                    points: question.points,
+                    options: (question.options || []).map((option) => ({ text: option.text, isCorrect: Boolean(option.isCorrect) }))
+                }));
+
+                refreshLessonModal();
+                showToast('Quiz saved.', 'success');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                const detail = error.details && error.details.length ? error.details[0].message : null;
+                showToast(detail || error.message || 'Could not save the quiz.', 'error');
+            }
+        };
+
+        window.quizRemove = async function quizRemove() {
+            const lessonId = quizState.lessonId || (lessonState.editing && lessonState.editing.id);
+            if (!lessonId) return;
+            if (!window.confirm('Remove this quiz? Student attempts are kept.')) return;
+
+            try {
+                await WGA.del('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(lessonId) + '/quiz');
+                await resetQuizState(lessonId);
+                refreshLessonModal();
+                showToast('Quiz removed.', 'success');
+            } catch (error) {
+                showToast(error.message || 'Could not remove the quiz.', 'error');
+            }
+        };
+
         window.lessonNew = function lessonNew() {
             lessonState.editing = { isNew: true, title: '', summary: '', type: 'video', content: '', durationMinutes: 0, isPreview: false, published: true, videoMode: 'none', resources: [] };
+            resetQuizState(null);
             refreshLessonModal();
         };
 
-        window.lessonEdit = function lessonEdit(id) {
+        window.lessonEdit = async function lessonEdit(id) {
             const lesson = lessonState.items.find((l) => String(l.id) === String(id));
             if (!lesson) return;
+
             lessonState.editing = Object.assign({}, lesson, {
                 isNew: false,
                 videoMode: lesson.videoType === 'upload' ? 'upload' : (lesson.videoType === 'link' ? 'link' : 'none'),
                 isUploaded: lesson.videoType === 'upload'
             });
+
+            // Load the existing quiz before drawing the form, so the editor opens
+            // with it rather than appearing empty and then filling in.
+            await resetQuizState(id);
             refreshLessonModal();
         };
 
@@ -1982,6 +2243,9 @@
 
                 const id = lesson.id || editing.id;
                 lessonState.editing = Object.assign({}, editing, { isNew: false, id: id, isUploaded: lesson.videoType === 'upload' });
+                // A lesson that has just been created can now carry a quiz, so the
+                // editor stops saying "save the lesson first".
+                if (!quizState.lessonId) quizState.lessonId = id;
 
                 /**
                  * The video is saved separately from the lesson, because it is a

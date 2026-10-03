@@ -93,6 +93,71 @@
     .resource-list li { margin-bottom: 7px; }
     .resource-list a { display: inline-flex; align-items: center; gap: 9px; font-size: 14.5px; }
 
+    /* ---- Quiz --------------------------------------------------------- */
+    .quiz-card {
+      margin-top: 26px; padding: 22px; border-radius: 16px;
+      background: var(--surface); border: 1px solid var(--border);
+    }
+    body.dark-mode .quiz-card { background: var(--dark-surface); border-color: var(--dark-border); }
+    .quiz-head h3 { font-size: 17px; font-weight: 800; margin: 0 0 4px; }
+    .quiz-question {
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 14px 16px; margin: 16px 0 0; min-width: 0;
+    }
+    body.dark-mode .quiz-question { border-color: var(--dark-border); }
+    .quiz-question legend { font-size: 15px; font-weight: 600; padding: 0 6px; }
+    .quiz-num {
+      display: inline-grid; place-items: center; width: 22px; height: 22px;
+      border-radius: 50%; font-size: 11.5px; font-weight: 700; margin-right: 6px;
+      background: rgba(26,86,219,.12); color: var(--primary);
+    }
+    body.dark-mode .quiz-num { background: rgba(255,255,255,.08); color: var(--dark-link); }
+    .quiz-option {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 9px 11px; border-radius: 9px; cursor: pointer; font-size: 15px;
+    }
+    .quiz-option:hover { background: rgba(26,86,219,.06); }
+    body.dark-mode .quiz-option:hover { background: rgba(255,255,255,.05); }
+    .quiz-option input { margin-top: 3px; }
+    .quiz-score {
+      display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+      padding: 14px 16px; border-radius: 12px; margin-bottom: 16px;
+    }
+    .quiz-score strong { font-size: 26px; font-weight: 900; letter-spacing: -0.5px; }
+    .quiz-score.is-pass { background: rgba(16,185,129,.14); color: #047857; }
+    .quiz-score.is-fail { background: rgba(220,38,38,.10); color: #b91c1c; }
+    body.dark-mode .quiz-score.is-pass { background: rgba(16,185,129,.18); color: #6ee7b7; }
+    body.dark-mode .quiz-score.is-fail { background: rgba(220,38,38,.20); color: #fca5a5; }
+    .quiz-review-row {
+      border-left: 3px solid var(--border); padding: 4px 0 10px 12px; margin-bottom: 14px;
+    }
+    .quiz-review-row.is-right { border-left-color: #10b981; }
+    .quiz-review-row.is-wrong { border-left-color: #dc2626; }
+    .quiz-review-head { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .quiz-mark { font-size: 12px; font-weight: 700; margin-left: 8px; text-transform: uppercase; letter-spacing: .4px; }
+    .quiz-review-row.is-right .quiz-mark { color: #047857; }
+    .quiz-review-row.is-wrong .quiz-mark { color: #b91c1c; }
+    body.dark-mode .quiz-review-row.is-right .quiz-mark { color: #6ee7b7; }
+    body.dark-mode .quiz-review-row.is-wrong .quiz-mark { color: #fca5a5; }
+    .quiz-review-option { font-size: 14.5px; color: var(--text-light); padding: 3px 0; }
+    body.dark-mode .quiz-review-option { color: var(--dark-muted); }
+    .quiz-review-option.is-key { color: #047857; font-weight: 600; }
+    body.dark-mode .quiz-review-option.is-key { color: #6ee7b7; }
+    .quiz-review-option.is-chosen { font-weight: 600; }
+    .quiz-why { font-size: 14px; color: var(--text-light); margin-top: 8px; font-style: italic; }
+    body.dark-mode .quiz-why { color: var(--dark-muted); }
+
+    /* ---- Quiz authoring (dashboard) ---------------------------------- */
+    .quiz-q-editor {
+      border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 12px;
+    }
+    .quiz-q-editor-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px;
+    }
+    .quiz-opt-row { display: flex; align-items: center; gap: 9px; margin-bottom: 7px; }
+    .quiz-opt-row input[type="text"] { flex: 1 1 auto; min-width: 0; }
+    .quiz-opt-row label { white-space: nowrap; font-size: 12.5px; display: inline-flex; align-items: center; gap: 5px; }
+
     /* Upload progress, used by the instructor authoring form. */
     .upload-bar { height: 6px; border-radius: 99px; background: var(--border); overflow: hidden; margin-top: 8px; }
     body.dark-mode .upload-bar { background: var(--dark-border); }
@@ -233,6 +298,7 @@
       var currentCourse = null;
       var currentSyllabus = [];
       var openLessonId = null;
+      var quizState = { quiz: null, result: null, submitting: false };
 
       /**
        * Only http(s) addresses become links.
@@ -357,6 +423,206 @@
         );
       }
 
+      /* ------------------------------------------------------------- *
+       * Quiz
+       *
+       * Marking happens on the server. This draws the questions it is given and
+       * shows the result that comes back — the correct answers are not in the
+       * payload before a submission, so there is nothing here that could leak
+       * them even if it tried.
+       * ------------------------------------------------------------- */
+
+      function quizChoice(label, value, checked, name) {
+        return (
+          '<label class="quiz-option">' +
+          '<input type="radio" name="' + WGAUI.escapeHtml(name) + '" value="' +
+          WGAUI.escapeHtml(value) + '"' + (checked ? ' checked' : '') + ' />' +
+          '<span>' + WGAUI.escapeHtml(label) + '</span></label>'
+        );
+      }
+
+      function quizQuestionForm(question, index) {
+        return (
+          '<fieldset class="quiz-question">' +
+          '<legend><span class="quiz-num">' + index + '</span>' +
+          WGAUI.escapeHtml(question.prompt) + '</legend>' +
+          question.options
+            .map(function (option) {
+              return quizChoice(option.text, option.id, false, 'q-' + question.id);
+            })
+            .join('') +
+          '</fieldset>'
+        );
+      }
+
+      function quizResultBlock(quiz, result) {
+        var byQuestion = {};
+        (result.answers || []).forEach(function (answer) {
+          byQuestion[String(answer.question)] = answer;
+        });
+
+        return (
+          '<div class="quiz-score ' + (result.passed ? 'is-pass' : 'is-fail') + '">' +
+            '<strong>' + result.scorePercent + '%</strong>' +
+            '<span>' + (result.passed ? 'Passed' : 'Not passed yet — ' + quiz.passPercent + '% is needed') + '</span>' +
+          '</div>' +
+          '<div class="quiz-review">' +
+          quiz.questions
+            .map(function (question, index) {
+              var answer = byQuestion[String(question.id)];
+              var correctIds = (answer && answer.correctOptionIds) || [];
+
+              return (
+                '<div class="quiz-review-row ' + (answer && answer.correct ? 'is-right' : 'is-wrong') + '">' +
+                '<div class="quiz-review-head">' +
+                  '<span class="quiz-num">' + (index + 1) + '</span>' +
+                  WGAUI.escapeHtml(question.prompt) +
+                  '<span class="quiz-mark">' + (answer && answer.correct ? 'Correct' : 'Not quite') + '</span>' +
+                '</div>' +
+                question.options
+                  .map(function (option) {
+                    var isKey = correctIds.indexOf(String(option.id)) !== -1;
+                    var chosen = answer && (answer.selected || []).indexOf(String(option.id)) !== -1;
+                    var tag = isKey ? ' — the right answer' : (chosen ? ' — your answer' : '');
+                    return '<div class="quiz-review-option' + (isKey ? ' is-key' : '') + (chosen && !isKey ? ' is-chosen' : '') + '">' +
+                      WGAUI.escapeHtml(option.text) + WGAUI.escapeHtml(tag) + '</div>';
+                  })
+                  .join('') +
+                (answer && answer.explanation
+                  ? '<p class="quiz-why">' + WGAUI.escapeHtml(answer.explanation) + '</p>'
+                  : '') +
+                '</div>'
+              );
+            })
+            .join('') +
+          '</div>'
+        );
+      }
+
+      function renderQuiz() {
+        var host = document.getElementById('lesson-quiz');
+        if (!host) return;
+
+        var quiz = quizState.quiz;
+        if (!quiz) { host.innerHTML = ''; return; }
+
+        var unlimited = !quiz.maxAttempts || quiz.maxAttempts === 0;
+        var remaining = quiz.attemptsRemaining;
+        var exhausted = !unlimited && remaining !== null && remaining <= 0;
+
+        var header =
+          '<div class="quiz-head">' +
+            '<h3><i class="fas fa-circle-question" aria-hidden="true"></i> ' +
+            WGAUI.escapeHtml(quiz.title || 'Quiz') + '</h3>' +
+            '<p class="wga-hint">' +
+              quiz.questionCount + ' question' + (quiz.questionCount === 1 ? '' : 's') +
+              ' · ' + quiz.passPercent + '% to pass' +
+              (unlimited ? ' · unlimited attempts' : ' · ' + remaining + ' of ' + quiz.maxAttempts + ' attempt' + (quiz.maxAttempts === 1 ? '' : 's') + ' left') +
+            '</p>' +
+          '</div>';
+
+        var body;
+
+        if (quizState.result) {
+          body =
+            quizResultBlock(quiz, quizState.result) +
+            ((!exhausted && !quizState.result.passed)
+              ? '<button type="button" class="wga-btn wga-btn-primary" id="quiz-again">Try again</button>'
+              : '') +
+            (quizState.result.passed
+              ? '<button type="button" class="wga-btn wga-btn-ghost" id="quiz-again">Review the questions</button>'
+              : '');
+        } else if (exhausted) {
+          body =
+            '<p class="wga-hint">You have used every attempt for this quiz. ' +
+            (quiz.bestScore !== null && quiz.bestScore !== undefined ? 'Your best was ' + quiz.bestScore + '%.' : '') +
+            ' Contact your instructor if you need another.</p>';
+        } else {
+          body =
+            (quiz.bestScore !== null && quiz.bestScore !== undefined
+              ? '<p class="wga-hint">Your best so far: ' + quiz.bestScore + '%</p>'
+              : '') +
+            '<form id="quiz-form">' +
+              quiz.questions.map(function (question, index) { return quizQuestionForm(question, index + 1); }).join('') +
+              '<button type="submit" class="wga-btn wga-btn-primary" id="quiz-submit">Submit answers</button>' +
+            '</form>';
+        }
+
+        host.innerHTML = '<div class="quiz-card">' + header + body + '</div>';
+        bindQuiz(quiz);
+      }
+
+      function bindQuiz(quiz) {
+        var form = document.getElementById('quiz-form');
+        if (form) {
+          form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            submitQuiz(quiz);
+          });
+        }
+
+        var again = document.getElementById('quiz-again');
+        if (again) {
+          again.addEventListener('click', function () {
+            quizState.result = null;
+            renderQuiz();
+          });
+        }
+      }
+
+      function submitQuiz(quiz) {
+        var button = document.getElementById('quiz-submit');
+        var answers = [];
+
+        quiz.questions.forEach(function (question) {
+          var chosen = document.querySelector('input[name="q-' + question.id + '"]:checked');
+          answers.push({ questionId: question.id, optionIds: chosen ? [chosen.value] : [] });
+        });
+
+        WGAUI.setBusy(button, true, 'Marking…');
+
+        WGA.post(
+          '/courses/' + encodeURIComponent(currentCourse.id) + '/lessons/' +
+          encodeURIComponent(openLessonId) + '/quiz/attempts',
+          { answers: answers }
+        )
+          .then(function (data) {
+            quizState.result = data.attempt;
+            // The API returns the updated attempt count with the quiz, so ask for
+            // it again rather than guessing what is left.
+            return WGA.get('/courses/' + encodeURIComponent(currentCourse.id) + '/lessons/' + encodeURIComponent(openLessonId) + '/quiz');
+          })
+          .then(function (data) {
+            quizState.quiz = data.quiz;
+            renderQuiz();
+            WGAUI.toast(quizState.result.passed ? 'Passed.' : 'Submitted — see your result.', quizState.result.passed ? 'success' : 'info');
+          })
+          .catch(function (error) {
+            WGAUI.setBusy(button, false);
+            WGAUI.toast((error && error.message) || 'Could not submit that.', 'error');
+          });
+      }
+
+      function loadLessonQuiz(lesson) {
+        var host = document.getElementById('lesson-quiz');
+        if (!host || !currentCourse) return;
+
+        quizState = { quiz: null, result: null, submitting: false };
+        host.innerHTML = '<div class="wga-skeleton" style="height:64px;margin-top:26px;"></div>';
+
+        WGA.get(
+          '/courses/' + encodeURIComponent(currentCourse.id) +
+          '/lessons/' + encodeURIComponent(lesson.id) + '/quiz'
+        )
+          .then(function (data) {
+            quizState.quiz = data.quiz;
+            renderQuiz();
+          })
+          .catch(function () {
+            host.innerHTML = '';
+          });
+      }
+
       /** Keep the address shareable, so a lesson can be linked to directly. */
       function rememberLesson(lessonId) {
         if (!window.history || !window.history.replaceState) return;
@@ -424,6 +690,7 @@
                   ? '<div class="viewer-body">' + WGAUI.escapeHtml(lesson.content) + '</div>'
                   : '') +
                 resourcesBlock(lesson) +
+                '<div id="lesson-quiz"></div>' +
                 '<div class="viewer-nav">' +
                   (navigation.previousLessonId
                     ? '<button type="button" class="wga-btn wga-btn-ghost" data-goto="' +
@@ -450,6 +717,7 @@
               '</div>';
 
             bindViewer();
+            loadLessonQuiz(lesson);
           })
           .catch(function (error) {
             viewer.innerHTML =
