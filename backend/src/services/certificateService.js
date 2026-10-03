@@ -2,6 +2,7 @@
 
 const Certificate = require('../models/Certificate');
 const Counter = require('../models/Counter');
+const QuizAttempt = require('../models/QuizAttempt');
 const logger = require('../lib/logger');
 
 /**
@@ -20,6 +21,56 @@ async function nextCertificateNumber(date = new Date()) {
   const sequence = await Counter.next(`certificate-${year}`);
 
   return `WGA-${year}-${String(sequence).padStart(6, '0')}`;
+}
+
+/**
+ * A course grade, from the quizzes the student actually sat.
+ *
+ * The best score on each quiz, averaged over the course's quizzes — a second
+ * attempt should help, not be averaged in as a penalty.
+ *
+ * Returns null when the course has no quizzes the student has attempted. A course
+ * with no assessment has no grade, and printing "0%" on a certificate would be a
+ * claim about the student that nothing supports.
+ */
+async function quizGradeFor(studentId, courseId) {
+  const attempts = await QuizAttempt.find({ student: studentId, course: courseId }).select(
+    'quiz scorePercent'
+  );
+
+  if (!attempts.length) return null;
+
+  const best = new Map();
+  for (const attempt of attempts) {
+    const key = String(attempt.quiz);
+    best.set(key, Math.max(best.get(key) || 0, attempt.scorePercent));
+  }
+
+  const scores = [...best.values()];
+  const average = Math.round(scores.reduce((sum, value) => sum + value, 0) / scores.length);
+
+  return `${average}%`;
+}
+
+/**
+ * Re-derive an already-issued certificate's grade.
+ *
+ * A student can finish every lesson and be issued a certificate before sitting the
+ * last quiz, which would leave it permanently ungraded. Called after an attempt,
+ * it keeps the document describing the student's actual result.
+ */
+async function refreshGrade(studentId, courseId) {
+  const certificate = await Certificate.findOne({ student: studentId, course: courseId, revokedAt: null });
+  if (!certificate) return null;
+
+  const grade = await quizGradeFor(studentId, courseId);
+  if (grade && grade !== certificate.grade) {
+    certificate.grade = grade;
+    await certificate.save();
+    logger.info('certificate grade updated', { certificateNumber: certificate.certificateNumber, grade });
+  }
+
+  return certificate;
 }
 
 /**
@@ -56,6 +107,8 @@ async function issueFor(enrollment, course, student) {
       certificateNumber: await nextCertificateNumber(),
       completionDate: enrollment.completedAt || new Date(),
       hoursCompleted: enrollment.hoursSpent || 0,
+      // Null when the course has no quizzes; the certificate simply shows none.
+      grade: await quizGradeFor(student._id, course._id),
     });
 
     enrollment.certificate = certificate._id;
@@ -90,4 +143,4 @@ async function revoke(certificateId, reason) {
   );
 }
 
-module.exports = { issueFor, revoke, nextCertificateNumber };
+module.exports = { issueFor, revoke, nextCertificateNumber, quizGradeFor, refreshGrade };

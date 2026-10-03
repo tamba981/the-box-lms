@@ -5,11 +5,14 @@ const express = require('express');
 const Course = require('../models/Course');
 const Enrollment = require('../models/Enrollment');
 const Lesson = require('../models/Lesson');
+const Quiz = require('../models/Quiz');
+const QuizAttempt = require('../models/QuizAttempt');
 const User = require('../models/User');
 
 const enrollmentService = require('../services/enrollmentService');
 const notifications = require('../services/notificationService');
 const storageService = require('../services/storageService');
+const certificateService = require('../services/certificateService');
 
 const config = require('../config/env');
 
@@ -25,6 +28,7 @@ const { authenticate, optionalAuth, requireInstructor } = require('../middleware
 const { validate } = require('../middleware/validate');
 const { writeLimiter } = require('../middleware/rateLimit');
 const schemas = require('../validators/courses');
+const quizSchemas = require('../validators/quizzes');
 
 const router = express.Router();
 
@@ -1050,6 +1054,239 @@ router.delete(
     if (orphaned) await storageService.deleteObject(orphaned);
 
     return ok(res, { lesson: lesson.toFullJSON() }, 'Video removed.');
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * Lesson quiz
+ *
+ * One quiz per lesson. The answer key lives on the server and is only ever sent
+ * to someone who may author the course; a student receives the questions with the
+ * correct option omitted, and the marking happens here. That is the whole reason
+ * grading is not done in the browser.
+ * ------------------------------------------------------------------ */
+
+/** The quiz for a lesson, with the caller's view of it. */
+router.get(
+  '/:courseId/lessons/:lessonId/quiz',
+  optionalAuth,
+  validate({ params: schemas.lessonIdParam }),
+  asyncHandler(async (req, res) => {
+    const course = await Course.findById(req.valid.params.courseId);
+    if (!course) throw notFound('That course could not be found.', { code: 'COURSE_NOT_FOUND' });
+
+    const lesson = await Lesson.findOne({ _id: req.valid.params.lessonId, course: course._id });
+    if (!lesson) throw notFound('That lesson could not be found.', { code: 'LESSON_NOT_FOUND' });
+
+    const access = await permissions.resolveCourseAccess(req.user, course);
+    if (!access.canReadContent && !lesson.isPreview) {
+      throw forbidden('Enroll in this course to open this lesson.', { code: 'ENROLLMENT_REQUIRED' });
+    }
+
+    const quiz = await Quiz.findOne({ lesson: lesson._id });
+    if (!quiz) return ok(res, { quiz: null }, 'This lesson has no quiz.');
+
+    const isAuthor = Boolean(access.manages || (req.user && req.user.role === 'admin'));
+
+    // A student's own attempts, or every attempt for whoever may author it.
+    const attempts = isAuthor
+      ? await QuizAttempt.find({ quiz: quiz._id })
+          .sort({ createdAt: -1 })
+          .limit(100)
+          .populate({ path: 'student', select: 'firstName lastName' })
+      : req.user
+        ? await QuizAttempt.find({ quiz: quiz._id, student: req.user._id }).sort({ createdAt: -1 })
+        : [];
+
+    const myBest = attempts
+      .filter((attempt) => !req.user || String(attempt.student?._id || attempt.student) === String(req.user._id))
+      .reduce((best, attempt) => Math.max(best, attempt.scorePercent), 0);
+
+    return ok(res, {
+      // The author view carries the key; the student view never does.
+      quiz: isAuthor ? quiz.toAuthorJSON({ attemptsUsed: attempts.length }) : quiz.toStudentJSON({
+        attemptsUsed: attempts.length,
+        attemptsRemaining: quiz.maxAttempts > 0 ? Math.max(0, quiz.maxAttempts - attempts.length) : null,
+        bestScore: attempts.length ? myBest : null
+      }),
+      attempts: isAuthor
+        ? attempts.map((attempt) => ({
+            id: String(attempt._id),
+            studentName: attempt.student ? attempt.student.fullName : 'A student',
+            scorePercent: attempt.scorePercent,
+            passed: attempt.passed,
+            submittedAt: attempt.createdAt
+          }))
+        : attempts.map((attempt) => attempt.toResultJSON()),
+      access: { manages: access.manages, isEnrolled: access.isEnrolled }
+    });
+  })
+);
+
+/** Create or replace the quiz for a lesson. */
+router.put(
+  '/:courseId/lessons/:lessonId/quiz',
+  authenticate,
+  requireInstructor,
+  writeLimiter,
+  validate({ params: schemas.lessonIdParam, body: quizSchemas.quizBody }),
+  asyncHandler(async (req, res) => {
+    const course = await loadManagedCourse(req);
+
+    const lesson = await Lesson.findOne({ _id: req.valid.params.lessonId, course: course._id });
+    if (!lesson) throw notFound('That lesson could not be found.', { code: 'LESSON_NOT_FOUND' });
+
+    const body = req.valid.body;
+
+    const questions = body.questions.map((question, index) => ({
+      prompt: question.prompt,
+      kind: question.kind,
+      explanation: question.explanation || '',
+      points: question.points,
+      order: index + 1,
+      options: question.options.map((option) => ({ text: option.text, isCorrect: Boolean(option.isCorrect) })),
+    }));
+
+    /**
+     * Replaced rather than merged. A quiz is edited as a whole — questions added,
+     * reordered and re-pointed between two saves — and merging would leave stale
+     * questions behind that nobody could see to delete. Existing attempts keep
+     * their own awarded marks, so history is not rewritten by this.
+     */
+    const quiz = await Quiz.findOneAndUpdate(
+      { lesson: lesson._id },
+      { $set: { course: course._id, title: body.title, passPercent: body.passPercent, maxAttempts: body.maxAttempts, questions } },
+      { new: true, upsert: true, setDefaultsOnInsert: true }
+    );
+
+    return ok(res, { quiz: quiz.toAuthorJSON() }, 'Quiz saved.');
+  })
+);
+
+router.delete(
+  '/:courseId/lessons/:lessonId/quiz',
+  authenticate,
+  requireInstructor,
+  validate({ params: schemas.lessonIdParam }),
+  asyncHandler(async (req, res) => {
+    const course = await loadManagedCourse(req);
+
+    const lesson = await Lesson.findOne({ _id: req.valid.params.lessonId, course: course._id });
+    if (!lesson) throw notFound('That lesson could not be found.', { code: 'LESSON_NOT_FOUND' });
+
+    await Quiz.findOneAndDelete({ lesson: lesson._id });
+
+    // Attempts are kept. They record what a student did, and deleting the quiz
+    // does not un-answer it — a certificate grade already computed from them has
+    // to stay explicable.
+    return ok(res, { removed: true }, 'Quiz removed.');
+  })
+);
+
+/** Submit an attempt. Marked here, never in the browser. */
+router.post(
+  '/:courseId/lessons/:lessonId/quiz/attempts',
+  authenticate,
+  writeLimiter,
+  validate({ params: schemas.lessonIdParam, body: quizSchemas.submitAttemptBody }),
+  asyncHandler(async (req, res) => {
+    const course = await Course.findById(req.valid.params.courseId);
+    if (!course) throw notFound('That course could not be found.', { code: 'COURSE_NOT_FOUND' });
+
+    const lesson = await Lesson.findOne({ _id: req.valid.params.lessonId, course: course._id });
+    if (!lesson) throw notFound('That lesson could not be found.', { code: 'LESSON_NOT_FOUND' });
+
+    const access = await permissions.resolveCourseAccess(req.user, course);
+
+    /**
+     * Enrolment is required to sit a quiz, including for the instructor who wrote
+     * it. Letting an author attempt their own quiz would put their marks into the
+     * class results and the course average, which is a record about students.
+     */
+    if (!access.enrollment) {
+      throw forbidden('Enroll in this course to take this quiz.', { code: 'ENROLLMENT_REQUIRED' });
+    }
+
+    const quiz = await Quiz.findOne({ lesson: lesson._id });
+    if (!quiz) throw notFound('This lesson has no quiz yet.', { code: 'QUIZ_NOT_FOUND' });
+
+    const previous = await QuizAttempt.countDocuments({ quiz: quiz._id, student: req.user._id });
+
+    if (quiz.maxAttempts > 0 && previous >= quiz.maxAttempts) {
+      throw badRequest(
+        `You have used all ${quiz.maxAttempts} attempt${quiz.maxAttempts === 1 ? '' : 's'} for this quiz.`,
+        { code: 'ATTEMPTS_EXHAUSTED' }
+      );
+    }
+
+    const graded = quiz.grade(req.valid.body.answers);
+
+    const attempt = await QuizAttempt.create({
+      quiz: quiz._id,
+      student: req.user._id,
+      course: course._id,
+      lesson: lesson._id,
+      answers: graded.results,
+      pointsEarned: graded.pointsEarned,
+      pointsPossible: graded.pointsPossible,
+      scorePercent: graded.scorePercent,
+      passed: graded.passed,
+    });
+
+    /**
+     * A student can finish every lesson and be certified before sitting the last
+     * quiz, which would leave that certificate permanently ungraded. Re-deriving
+     * here keeps the document describing the result they actually got.
+     */
+    if (graded.passed) {
+      await certificateService.refreshGrade(req.user._id, course._id);
+    }
+
+    return created(
+      res,
+      { attempt: attempt.toResultJSON({ includeKey: true, quiz }) },
+      graded.passed ? 'Passed.' : 'Submitted.'
+    );
+  })
+);
+
+/** Every attempt at this quiz: the caller's own, or the class's for an author. */
+router.get(
+  '/:courseId/lessons/:lessonId/quiz/attempts',
+  authenticate,
+  validate({ params: schemas.lessonIdParam }),
+  asyncHandler(async (req, res) => {
+    const course = await Course.findById(req.valid.params.courseId);
+    if (!course) throw notFound('That course could not be found.', { code: 'COURSE_NOT_FOUND' });
+
+    const quiz = await Quiz.findOne({ course: course._id, lesson: req.valid.params.lessonId });
+    if (!quiz) throw notFound('This lesson has no quiz yet.', { code: 'QUIZ_NOT_FOUND' });
+
+    const access = await permissions.resolveCourseAccess(req.user, course);
+    const isAuthor = Boolean(access.manages || req.user.role === 'admin');
+
+    if (!isAuthor && !access.enrollment) {
+      throw forbidden('Enroll in this course to see your attempts.', { code: 'ENROLLMENT_REQUIRED' });
+    }
+
+    const attempts = await QuizAttempt.find(
+      isAuthor ? { quiz: quiz._id } : { quiz: quiz._id, student: req.user._id }
+    )
+      .sort({ createdAt: -1 })
+      .limit(200)
+      .populate({ path: 'student', select: 'firstName lastName' });
+
+    return ok(res, {
+      attempts: isAuthor
+        ? attempts.map((attempt) => ({
+            id: String(attempt._id),
+            studentName: attempt.student ? attempt.student.fullName : 'A student',
+            scorePercent: attempt.scorePercent,
+            passed: attempt.passed,
+            submittedAt: attempt.createdAt,
+          }))
+        : attempts.map((attempt) => attempt.toResultJSON()),
+    });
   })
 );
 
