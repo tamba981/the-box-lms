@@ -161,6 +161,8 @@ async function cleanup() {
   const Lesson = require('../src/models/Lesson');
   const Enrollment = require('../src/models/Enrollment');
   const Certificate = require('../src/models/Certificate');
+  const Quiz = require('../src/models/Quiz');
+  const QuizAttempt = require('../src/models/QuizAttempt');
   const Message = require('../src/models/Message');
   const Notification = require('../src/models/Notification');
   const Thread = require('../src/models/Thread');
@@ -214,6 +216,13 @@ async function cleanup() {
     $or: [{ student: { $in: userIds } }, { course: { $in: courseIds } }],
   });
   await Enrollment.deleteMany({ _id: { $in: enrollments.map((enrollment) => enrollment._id) } });
+
+  // Attempts go before quizzes: an attempt is a record of what a real student did,
+  // and one left pointing at a deleted quiz would be an orphan nothing can explain.
+  await QuizAttempt.deleteMany({
+    $or: [{ student: { $in: userIds } }, { course: { $in: courseIds } }],
+  });
+  await Quiz.deleteMany({ course: { $in: courseIds } });
   await Lesson.deleteMany({ course: { $in: courseIds } });
   await Course.deleteMany({ _id: { $in: courseIds } });
   await Token.deleteMany({ user: { $in: userIds } });
@@ -2364,6 +2373,784 @@ async function testMobileMoney() {
   });
 }
 
+/* ------------------------------------------------------------------ *
+ * Lesson video and lesson quizzes
+ *
+ * The suites above treat courses, lessons and enrolment as a pipeline. This one
+ * covers what an instructor puts *inside* a lesson — a video and a quiz — and the
+ * access decisions around them. Two of these checks exist because the defect they
+ * cover was silent and would return silently:
+ *
+ *   - The course owner has to be recognised as the owner on the one endpoint the
+ *     course page reads. `GET /:slug` populates `instructor` into a document, and
+ *     an ownership test that stringifies that document never matches, so the owner
+ *     was told `manages: false`, every lesson rendered padlocked and the page
+ *     offered them a checkout panel for their own course. Nothing errored.
+ *   - A student's quiz payload must not carry the answer key. Marking happens on
+ *     the server for exactly this reason; the browser is handed questions only.
+ * ------------------------------------------------------------------ */
+
+async function testLessonVideoAndQuizzes() {
+  const Quiz = require('../src/models/Quiz');
+  const QuizAttempt = require('../src/models/QuizAttempt');
+  const Lesson = require('../src/models/Lesson');
+  const certificateService = require('../src/services/certificateService');
+
+  // Read from the same config the routes read, so the upload checks below assert
+  // the behaviour of this deployment rather than an assumption about it.
+  const storage = require('../src/config/env').storage;
+
+  const adminEmail = `smoke-admin-vq-${runId}@example.com`;
+  const instructorEmail = `smoke-instructor-vq-${runId}@example.com`;
+  const rivalEmail = `smoke-rival-vq-${runId}@example.com`;
+  const studentEmail = `smoke-student-vq-${runId}@example.com`;
+
+  createdEmails.push(adminEmail, instructorEmail, rivalEmail, studentEmail);
+
+  let adminSession = null;
+  let instructorSession = null;
+  let rivalSession = null;
+  let studentSession = null;
+  let studentId = null;
+
+  let course = null;
+  let rivalCourse = null;
+  let lesson = null;
+  let limitLesson = null;
+  let quiz = null;
+
+  const lessonPath = (suffix = '') =>
+    `/api/v1/courses/${course.id}/lessons/${lesson.id}${suffix}`;
+
+  /** A key of the exact shape this API issues, for any course and lesson. */
+  const videoKey = (courseId, lessonId) =>
+    `courses/${courseId}/lessons/${lessonId}/video/${crypto.randomUUID()}.mp4`;
+
+  const quizBody = (overrides = {}) => ({
+    title: 'Lesson check',
+    passPercent: 70,
+    maxAttempts: 0,
+    questions: [
+      {
+        prompt: 'Which of these is a number?',
+        kind: 'single',
+        explanation: 'Only one of them is numeric.',
+        points: 1,
+        options: [
+          { text: '42', isCorrect: true },
+          { text: 'banana', isCorrect: false },
+        ],
+      },
+      {
+        prompt: 'A lesson can hold a video.',
+        kind: 'true_false',
+        explanation: 'It can — uploaded or linked.',
+        points: 1,
+        options: [
+          { text: 'True', isCorrect: true },
+          { text: 'False', isCorrect: false },
+        ],
+      },
+    ],
+    ...overrides,
+  });
+
+  await check('an administrator can be provisioned for the lesson fixtures', async () => {
+    await User.create({
+      firstName: 'Ada',
+      lastName: 'Admin',
+      email: adminEmail,
+      password: PASSWORD,
+      role: 'admin',
+      emailVerified: true,
+    });
+
+    const { status, json } = await request('POST', '/api/v1/auth/login', {
+      body: { email: adminEmail, password: PASSWORD },
+    });
+
+    assertEqual(status, 200, 'admin sign-in');
+    adminSession = json.data;
+  });
+
+  await check('an instructor, a rival instructor and a student can be provisioned', async () => {
+    const people = [
+      { email: instructorEmail, firstName: 'Isaac', lastName: 'Instructor', role: 'instructor', store: 'instructor' },
+      { email: rivalEmail, firstName: 'Rita', lastName: 'Rival', role: 'instructor', store: 'rival' },
+      { email: studentEmail, firstName: 'Sam', lastName: 'Student', role: 'student', store: 'student' },
+    ];
+
+    for (const person of people) {
+      const { status } = await request('POST', '/api/v1/admin/users', {
+        token: adminSession.accessToken,
+        body: {
+          firstName: person.firstName,
+          lastName: person.lastName,
+          email: person.email,
+          password: PASSWORD,
+          role: person.role,
+        },
+      });
+      assertEqual(status, 201, `${person.role} created`);
+
+      const { status: loginStatus, json } = await request('POST', '/api/v1/auth/login', {
+        body: { email: person.email, password: PASSWORD },
+      });
+      assertEqual(loginStatus, 200, `${person.role} sign-in`);
+
+      if (person.store === 'instructor') instructorSession = json.data;
+      if (person.store === 'rival') rivalSession = json.data;
+      if (person.store === 'student') {
+        studentSession = json.data;
+        studentId = json.data.user.id;
+      }    }
+  });
+
+  await check('each instructor can create a course', async () => {
+    const mine = await request('POST', '/api/v1/courses', {
+      token: instructorSession.accessToken,
+      body: {
+        title: 'Video and quiz fixtures',
+        summary: 'A course holding the video and quiz fixtures.',
+        description: 'Created by the lesson video and quiz suite.',
+        category: 'data',
+        level: 'beginner',
+        priceCents: 0,
+      },
+    });
+
+    assertEqual(mine.status, 201, 'owner course created');
+    course = mine.json.data.course;
+
+    const theirs = await request('POST', '/api/v1/courses', {
+      token: rivalSession.accessToken,
+      body: {
+        title: 'A rival course',
+        summary: 'Owned by somebody else, used to prove ownership is enforced.',
+        description: 'Created by the lesson video and quiz suite.',
+        category: 'data',
+        level: 'beginner',
+        priceCents: 0,
+      },
+    });
+
+    assertEqual(theirs.status, 201, 'rival course created');
+    rivalCourse = theirs.json.data.course;
+  });
+
+  await check('lessons can be added for the video and quiz fixtures', async () => {
+    const first = await request('POST', `/api/v1/courses/${course.id}/lessons`, {
+      token: instructorSession.accessToken,
+      body: {
+        title: 'A lesson with a video',
+        summary: 'Carries the video and quiz fixtures.',
+        type: 'video',
+        content: 'Lesson body.',
+        // A preview lesson so the outline is readable without an enrolment, which
+        // keeps the read checks below independent of the enrolment checks.
+        isPreview: true,
+      },
+    });
+
+    assertEqual(first.status, 201, `first lesson created: ${first.json?.message || first.text.slice(0, 160)}`);
+    lesson = first.json.data.lesson;
+
+    const second = await request('POST', `/api/v1/courses/${course.id}/lessons`, {
+      token: instructorSession.accessToken,
+      body: {
+        title: 'A lesson with an attempt limit',
+        summary: 'Holds the limited-attempt quiz.',
+        type: 'text',
+        content: 'Lesson body.',
+        isPreview: true,
+      },
+    });
+
+    assertEqual(second.status, 201, `second lesson created: ${second.json?.message || second.text.slice(0, 160)}`);
+    limitLesson = second.json.data.lesson;
+
+    // The rival course needs a lesson of its own: publishing requires one, and it
+    // has to be visible to a non-owner for the ownership check below to be about
+    // ownership rather than about visibility.
+    const filler = await request('POST', `/api/v1/courses/${rivalCourse.id}/lessons`, {
+      token: rivalSession.accessToken,
+      body: { title: 'A rival lesson', type: 'text', content: 'Body.', isPreview: true },
+    });
+
+    assertEqual(filler.status, 201, 'rival lesson created');
+  });
+
+  await check('both courses can be published so that a non-owner may see them', async () => {
+    // Published by an administrator deliberately: an instructor publishing their own
+    // course only queues it for review, and a queued course stays hidden from
+    // everybody but its owner and the administrators. The ownership checks below
+    // would otherwise pass for the wrong reason — a 404 rather than `manages: false`.
+    for (const target of [course, rivalCourse]) {
+      const { status, json } = await request('POST', `/api/v1/courses/${target.id}/publish`, {
+        token: adminSession.accessToken,
+      });
+
+      assertEqual(status, 200, `publish ${target.slug}: ${json?.message || ''}`);
+    }
+  });
+
+  /* ---- Ownership on the endpoint the course page actually reads ---- */
+
+  await check('the owner of a course is told they manage it', async () => {
+    const { status, json } = await request('GET', `/api/v1/courses/${course.slug}`, {
+      token: instructorSession.accessToken,
+    });
+
+    assertEqual(status, 200, 'course detail');
+    assertEqual(json.data.access.manages, true, 'the owner must manage their own course');
+    assertEqual(json.data.access.canReadContent, true, 'the owner can read their own content');
+
+    const locked = json.data.lessons.filter((entry) => entry.locked);
+    assertEqual(locked.length, 0, 'the owner must not see their own lessons padlocked');
+  });
+
+  await check('a student is not told they manage somebody else\'s course', async () => {
+    const { status, json } = await request('GET', `/api/v1/courses/${course.slug}`, {
+      token: studentSession.accessToken,
+    });
+
+    assertEqual(status, 200, 'course detail');
+    assertEqual(json.data.access.manages, false, 'a student must not manage the course');
+    assertEqual(json.data.access.isEnrolled, false, 'a student who has not enrolled is not enrolled');
+  });
+
+  await check('an administrator is told they manage any course', async () => {
+    const { status, json } = await request('GET', `/api/v1/courses/${course.slug}`, {
+      token: adminSession.accessToken,
+    });
+
+    assertEqual(status, 200, 'course detail');
+    assertEqual(json.data.access.manages, true, 'an administrator must manage any course');
+  });
+
+  await check('an owner is not mistaken for a stranger on the rival course', async () => {
+    // The same comparison, from the other side: the fix must not have made every
+    // instructor an owner of every course.
+    const { status, json } = await request('GET', `/api/v1/courses/${rivalCourse.slug}`, {
+      token: instructorSession.accessToken,
+    });
+
+    assertEqual(status, 200, 'course detail');
+    assertEqual(json.data.access.manages, false, 'one instructor must not manage another\'s course');
+  });
+
+  /* ---- Video, link mode ---- */
+
+  await check('an instructor can attach a video link to their own lesson', async () => {
+    const { status, json } = await request('PUT', lessonPath('/video/link'), {
+      token: instructorSession.accessToken,
+      body: { url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
+    });
+
+    assertEqual(status, 200, 'link saved');
+    assertEqual(json.data.lesson.videoType, 'link', 'the lesson must report a linked video');
+    assertEqual(
+      json.data.lesson.video.playbackUrl,
+      'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      'a link needs no signing, so playback is the stored address'
+    );
+  });
+
+  await check('the lesson detail reports the linked video', async () => {
+    // This is the `.select()` regression: the summary derives `videoType` from
+    // `videoUrl` and `videoFile`, so a projection that omits them reports every
+    // lesson as having no video at all.
+    const { status, json } = await request('GET', lessonPath(), {
+      token: instructorSession.accessToken,
+    });
+
+    assertEqual(status, 200, 'lesson detail');
+    assertEqual(json.data.lesson.video.type, 'link', 'the linked video must survive the projection');
+  });
+
+  await check('a host that cannot be embedded is refused', async () => {
+    const { status } = await request('PUT', lessonPath('/video/link'), {
+      token: instructorSession.accessToken,
+      body: { url: 'https://example.com/not-a-video-host' },
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a host that merely looks like YouTube is refused', async () => {
+    // Parsed with `new URL` rather than matched with a regular expression, so the
+    // host is the host. A pattern match would accept both of these.
+    const lookalike = await request('PUT', lessonPath('/video/link'), {
+      token: instructorSession.accessToken,
+      body: { url: 'https://youtube.com.evil.example/watch?v=dQw4w9WgXcQ' },
+    });
+    assertEqual(lookalike.status, 400, 'a lookalike host must be refused');
+
+    const smuggled = await request('PUT', lessonPath('/video/link'), {
+      token: instructorSession.accessToken,
+      body: { url: 'https://evil.example/watch?x=youtube.com' },
+    });
+    assertEqual(smuggled.status, 400, 'a host in the query string must not count');
+  });
+
+  await check('another instructor cannot change somebody else\'s lesson video', async () => {
+    const { status } = await request('PUT', lessonPath('/video/link'), {
+      token: rivalSession.accessToken,
+      body: { url: 'https://www.youtube.com/watch?v=oHg5SJYRHA0' },
+    });
+
+    assertEqual(status, 403, 'status');
+
+    const after = await Lesson.findById(lesson.id);
+    assertEqual(
+      after.videoUrl,
+      'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      'a refused write must leave the video untouched'
+    );
+  });
+
+  /* ---- Video, upload mode ---- */
+
+  await check('an oversized video is refused before any upload starts', async () => {
+    const { status } = await request('POST', lessonPath('/video/presign'), {
+      token: instructorSession.accessToken,
+      body: { filename: 'huge.mp4', contentType: 'video/mp4', sizeBytes: 600 * 1024 * 1024 },
+    });
+
+    // Refused here rather than after 500 MB has crossed somebody's data allowance.
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a container the browsers cannot play is refused', async () => {
+    const { status } = await request('POST', lessonPath('/video/presign'), {
+      token: instructorSession.accessToken,
+      body: { filename: 'clip.mov', contentType: 'video/quicktime', sizeBytes: 10 * 1024 * 1024 },
+    });
+
+    // An iPhone records MOV as HEVC. Accepting it would produce an upload that
+    // succeeds and then will not play, with no transcoder on this deployment.
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('upload mode reports storage as unconfigured rather than pretending', async () => {
+    const { status, json } = await request('POST', lessonPath('/video/presign'), {
+      token: instructorSession.accessToken,
+      body: { filename: 'lesson.mp4', contentType: 'video/mp4', sizeBytes: 10 * 1024 * 1024 },
+    });
+
+    if (!storage.enabled) {
+      assertEqual(status, 503, 'status');
+      assertEqual(json.code, 'STORAGE_NOT_CONFIGURED', 'error code');
+
+      // The refusal has to leave the instructor with something to do instead.
+      // A 503 that only says "not configured" strands whoever hit it, because the
+      // link mode beside it works perfectly well without any of this.
+      const message = String(json.message || '');
+      assert(
+        message.includes('YouTube') || message.includes('link'),
+        `the refusal must point at the alternative that does work, got: ${message}`
+      );
+    } else {
+      assertEqual(status, 200, 'status');
+      assertEqual(
+        json.data.key.startsWith(`courses/${course.id}/lessons/${lesson.id}/video/`),
+        true,
+        'the issued key must name this course and this lesson'
+      );
+      assert(json.data.uploadUrl, 'a signed upload URL must be returned');
+    }
+  });
+
+  await check('an upload key that is not one this API issued is refused', async () => {
+    const { status } = await request('POST', lessonPath('/video/complete'), {
+      token: instructorSession.accessToken,
+      body: { key: 'not-a-key-this-api-issued', mime: 'video/mp4' },
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('an upload naming another course cannot be attached to this lesson', async () => {
+    // The client supplies the key, so the route checks that the course and lesson
+    // inside it are the ones in the URL. Without that an instructor could confirm
+    // a file belonging to a course they do not own and attach it here — reading
+    // somebody else's upload through a write endpoint.
+    const foreign = videoKey(rivalCourse.id, lesson.id);
+
+    const { status, json } = await request('POST', lessonPath('/video/complete'), {
+      token: instructorSession.accessToken,
+      body: { key: foreign, mime: 'video/mp4' },
+    });
+
+    assertEqual(status, 403, 'status');
+    assertEqual(json.code, 'UPLOAD_KEY_MISMATCH', 'error code');
+
+    const after = await Lesson.findById(lesson.id);
+    assertEqual(after.videoType, 'link', 'the lesson must keep the video it already had');
+  });
+
+  await check('removing a video clears the link and any stored file', async () => {
+    const { status, json } = await request('DELETE', lessonPath('/video'), {
+      token: instructorSession.accessToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.lesson.video.type, 'none', 'the lesson must report no video');
+
+    const after = await Lesson.findById(lesson.id);
+    assertEqual(after.videoUrl, null, 'the stored link must be cleared');
+    assertEqual(after.videoFile, null, 'any stored file reference must be cleared');
+    assertEqual(after.videoType, 'none', 'the derived type must follow');
+  });
+
+  /* ---- Quiz authoring ---- */
+
+  await check('an instructor can write a quiz on their own lesson', async () => {
+    const { status, json } = await request('PUT', lessonPath('/quiz'), {
+      token: instructorSession.accessToken,
+      body: quizBody(),
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.quiz.questionCount, 2, 'question count');
+    assertEqual(json.data.quiz.questions[0].options[0].isCorrect, true, 'the author view carries the key');
+    quiz = json.data.quiz;
+  });
+
+  await check('a question with no correct answer is refused', async () => {
+    const { status } = await request('PUT', lessonPath('/quiz'), {
+      token: instructorSession.accessToken,
+      body: quizBody({
+        questions: [
+          {
+            prompt: 'Which of these is a number?',
+            kind: 'single',
+            options: [
+              { text: '42', isCorrect: false },
+              { text: 'banana', isCorrect: false },
+            ],
+          },
+        ],
+      }),
+    });
+
+    // A question nobody can answer right costs every student the marks for it.
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a question with two correct answers is refused', async () => {
+    const { status } = await request('PUT', lessonPath('/quiz'), {
+      token: instructorSession.accessToken,
+      body: quizBody({
+        questions: [
+          {
+            prompt: 'Which of these is a number?',
+            kind: 'single',
+            options: [
+              { text: '42', isCorrect: true },
+              { text: 'seven', isCorrect: true },
+            ],
+          },
+        ],
+      }),
+    });
+
+    // Two right answers makes "correct" ambiguous and marks a defensible answer wrong.
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a true/false question must have exactly two options', async () => {
+    const { status } = await request('PUT', lessonPath('/quiz'), {
+      token: instructorSession.accessToken,
+      body: quizBody({
+        questions: [
+          {
+            prompt: 'A lesson can hold a video.',
+            kind: 'true_false',
+            options: [
+              { text: 'True', isCorrect: true },
+              { text: 'False', isCorrect: false },
+              { text: 'Maybe', isCorrect: false },
+            ],
+          },
+        ],
+      }),
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('another instructor cannot write a quiz on somebody else\'s lesson', async () => {
+    const { status } = await request('PUT', lessonPath('/quiz'), {
+      token: rivalSession.accessToken,
+      body: quizBody({ title: 'Hijacked' }),
+    });
+
+    assertEqual(status, 403, 'status');
+
+    const after = await Quiz.findById(quiz.id);
+    assertEqual(after.title, 'Lesson check', 'a refused write must leave the quiz untouched');
+  });
+
+  /* ---- Quiz access ---- */
+
+  await check('a student who has not enrolled cannot sit a lesson quiz', async () => {
+    const { status } = await request('POST', lessonPath('/quiz/attempts'), {
+      token: studentSession.accessToken,
+      body: { answers: [] },
+    });
+
+    assertEqual(status, 403, 'status');
+  });
+
+  await check('a student can enrol in a free course', async () => {
+    const { status } = await request('POST', `/api/v1/courses/${course.id}/enroll`, {
+      token: studentSession.accessToken,
+    });
+
+    assertEqual(status, 201, 'status');
+  });
+
+  await check('the student quiz payload carries no answer key', async () => {
+    const { status, json } = await request('GET', lessonPath('/quiz'), {
+      token: studentSession.accessToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.quiz.questionCount, 2, 'the student still sees every question');
+
+    // Checked as a whole document rather than field by field: a leak would arrive
+    // as a field somebody added to the serializer, and this catches any of them.
+    const serialised = JSON.stringify(json.data.quiz);
+    assert(
+      !serialised.includes('isCorrect'),
+      'the student payload must not carry which option is correct'
+    );
+    assert(
+      !serialised.includes('explanation'),
+      'the student payload must not carry the explanation, which gives the answer away'
+    );
+    assert(
+      json.data.quiz.questions[0].options.length > 0,
+      'the student payload must still offer the options to choose between'
+    );
+  });
+
+  await check('the author quiz payload carries the answer key', async () => {
+    const { status, json } = await request('GET', lessonPath('/quiz'), {
+      token: instructorSession.accessToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    assert(
+      JSON.stringify(json.data.quiz).includes('isCorrect'),
+      'the author must be able to see which option is correct'
+    );
+    assertEqual(json.data.access.manages, true, 'the author is recognised as the author');
+  });
+
+  /* ---- Quiz marking ---- */
+
+  /** The option ids a student would send, taken from the author's own view. */
+  const optionsOf = (authorQuiz) =>
+    authorQuiz.questions.map((question) => ({
+      correct: question.options.filter((option) => option.isCorrect).map((option) => String(option.id)),
+      wrong: question.options.filter((option) => !option.isCorrect).map((option) => String(option.id)),
+      all: question.options.map((option) => String(option.id)),
+    }));
+
+  let perfectAttempt = null;
+
+  await check('a fully correct attempt scores 100 and passes', async () => {
+    const author = await request('GET', lessonPath('/quiz'), {
+      token: instructorSession.accessToken,
+    });
+    const choices = optionsOf(author.json.data.quiz);
+
+    const { status, json } = await request('POST', lessonPath('/quiz/attempts'), {
+      token: studentSession.accessToken,
+      body: {
+        answers: [
+          { questionId: author.json.data.quiz.questions[0].id, optionIds: choices[0].correct },
+          { questionId: author.json.data.quiz.questions[1].id, optionIds: choices[1].correct },
+        ],
+      },
+    });
+
+    assertEqual(status, 201, 'status');
+    assertEqual(json.data.attempt.scorePercent, 100, 'score');
+    assertEqual(json.data.attempt.passed, true, 'a perfect attempt must pass');
+    assertEqual(json.data.attempt.pointsEarned, 2, 'points earned');
+    perfectAttempt = json.data.attempt;
+  });
+
+  await check('a second tick is wrong even when the first is right', async () => {
+    const author = await request('GET', lessonPath('/quiz'), {
+      token: instructorSession.accessToken,
+    });
+    const choices = optionsOf(author.json.data.quiz);
+
+    const { status, json } = await request('POST', lessonPath('/quiz/attempts'), {
+      token: studentSession.accessToken,
+      body: {
+        answers: [
+          // Both options ticked: right one among them, but the selection is not
+          // the answer. Compared exactly, so this is wrong rather than half right.
+          { questionId: author.json.data.quiz.questions[0].id, optionIds: choices[0].all },
+          { questionId: author.json.data.quiz.questions[1].id, optionIds: choices[1].correct },
+        ],
+      },
+    });
+
+    assertEqual(status, 201, 'status');
+    assertEqual(json.data.attempt.pointsEarned, 1, 'the padded question must earn nothing');
+    assertEqual(json.data.attempt.scorePercent, 50, 'score');
+    assertEqual(json.data.attempt.passed, false, 'half marks must not pass a 70% quiz');
+  });
+
+  await check('a blank attempt scores zero', async () => {
+    const { status, json } = await request('POST', lessonPath('/quiz/attempts'), {
+      token: studentSession.accessToken,
+      body: { answers: [] },
+    });
+
+    assertEqual(status, 201, 'status');
+    assertEqual(json.data.attempt.scorePercent, 0, 'score');
+    assertEqual(json.data.attempt.passed, false, 'a blank attempt must not pass');
+  });
+
+  await check('an option id from elsewhere cannot be counted as correct', async () => {
+    const author = await request('GET', lessonPath('/quiz'), {
+      token: instructorSession.accessToken,
+    });
+    const choices = optionsOf(author.json.data.quiz);
+    const foreign = crypto.randomBytes(12).toString('hex');
+
+    const { status, json } = await request('POST', lessonPath('/quiz/attempts'), {
+      token: studentSession.accessToken,
+      body: {
+        answers: [
+          { questionId: author.json.data.quiz.questions[0].id, optionIds: [foreign] },
+          { questionId: author.json.data.quiz.questions[1].id, optionIds: [foreign] },
+        ],
+      },
+    });
+
+    assertEqual(status, 201, 'status');
+    assertEqual(json.data.attempt.pointsEarned, 0, 'an unknown option must earn nothing');
+    assertEqual(choices[0].correct.length, 1, 'the fixture quiz has one correct option per question');
+  });
+
+  await check('a student\'s own attempt history tells them what they got wrong', async () => {
+    const { status, json } = await request('GET', lessonPath('/quiz/attempts'), {
+      token: studentSession.accessToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    assert(json.data.attempts.length >= 4, 'every attempt must be recorded');
+
+    // Their own marks, and nothing about anybody else's.
+    const serialised = JSON.stringify(json.data.attempts);
+    assert(!serialised.includes('studentName'), 'a student must not see other students\' results');
+  });
+
+  await check('the attempt limit is enforced', async () => {
+    const saved = await request('PUT', `/api/v1/courses/${course.id}/lessons/${limitLesson.id}/quiz`, {
+      token: instructorSession.accessToken,
+      body: quizBody({ title: 'One attempt only', maxAttempts: 1 }),
+    });
+    assertEqual(saved.status, 200, `limited quiz saved: ${saved.json?.message || ''}`);
+
+    const author = await request('GET', `/api/v1/courses/${course.id}/lessons/${limitLesson.id}/quiz`, {
+      token: instructorSession.accessToken,
+    });
+    const choices = optionsOf(author.json.data.quiz);
+
+    const first = await request('POST', `/api/v1/courses/${course.id}/lessons/${limitLesson.id}/quiz/attempts`, {
+      token: studentSession.accessToken,
+      body: {
+        answers: [
+          { questionId: author.json.data.quiz.questions[0].id, optionIds: choices[0].correct },
+          { questionId: author.json.data.quiz.questions[1].id, optionIds: choices[1].correct },
+        ],
+      },
+    });
+    assertEqual(first.status, 201, 'the first attempt is allowed');
+
+    const second = await request('POST', `/api/v1/courses/${course.id}/lessons/${limitLesson.id}/quiz/attempts`, {
+      token: studentSession.accessToken,
+      body: {
+        answers: [
+          { questionId: author.json.data.quiz.questions[0].id, optionIds: choices[0].correct },
+          { questionId: author.json.data.quiz.questions[1].id, optionIds: choices[1].correct },
+        ],
+      },
+    });
+
+    assertEqual(second.status, 400, 'the second attempt must be refused');
+    assertEqual(second.json.code, 'ATTEMPTS_EXHAUSTED', 'error code');
+
+    const recorded = await QuizAttempt.countDocuments({ lesson: limitLesson.id, student: studentId });
+    assertEqual(recorded, 1, 'a refused attempt must not be recorded');
+  });
+
+  await check('an instructor cannot sit their own quiz', async () => {
+    const author = await request('GET', lessonPath('/quiz'), {
+      token: instructorSession.accessToken,
+    });
+    const choices = optionsOf(author.json.data.quiz);
+
+    const { status } = await request('POST', lessonPath('/quiz/attempts'), {
+      token: instructorSession.accessToken,
+      body: {
+        answers: [
+          { questionId: author.json.data.quiz.questions[0].id, optionIds: choices[0].correct },
+        ],
+      },
+    });
+
+    // Their marks would otherwise land in the class results and the course average,
+    // which is a record about students.
+    assertEqual(status, 403, 'status');
+  });
+
+  await check('quiz attempts feed the certificate grade', async () => {
+    // The best attempt per quiz, averaged across the course's quizzes and formatted
+    // the way `Certificate.grade` stores it. The perfect attempts above must be what
+    // counts — not the blank attempt or the padded one that followed them.
+    const grade = await certificateService.quizGradeFor(studentId, course.id);
+
+    assertEqual(grade, '100%', 'the grade must come from the best attempt at each quiz');
+
+    // And a student who has sat nothing is ungraded rather than scored zero, which
+    // would otherwise look like a fail on a certificate they never earned marks on.
+    // The student has attempts on the first course and none at all on the rival one.
+    const ungraded = await certificateService.quizGradeFor(studentId, rivalCourse.id);
+    assertEqual(ungraded, null, 'no attempts must mean no grade at all');
+  });
+
+  await check('removing a quiz keeps the record of attempts already made', async () => {
+    const before = await QuizAttempt.countDocuments({ quiz: quiz.id });
+
+    const { status } = await request('DELETE', lessonPath('/quiz'), {
+      token: instructorSession.accessToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(await Quiz.countDocuments({ lesson: lesson.id }), 0, 'the quiz must be gone');
+
+    // Deleting the quiz does not un-answer it: a grade already computed from these
+    // attempts has to stay explicable.
+    assertEqual(
+      await QuizAttempt.countDocuments({ quiz: quiz.id }),
+      before,
+      'the attempts must survive the quiz'
+    );
+    assert(before >= 4, 'the fixture must have attempts worth preserving');
+  });
+
+  assert(perfectAttempt, 'the fixture must have produced a passing attempt');
+}
 
 /* ------------------------------------------------------------------ *
  * Run
@@ -2414,6 +3201,9 @@ async function main() {
 
     process.stdout.write('\nLearning loop\n');
     await testLearningLoop();
+
+    process.stdout.write('\nLesson video and quizzes\n');
+    await testLessonVideoAndQuizzes();
 
     process.stdout.write('\nCommunity, messaging and sessions\n');
     await testCommunityAndMessaging();
