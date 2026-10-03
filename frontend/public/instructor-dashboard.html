@@ -947,6 +947,34 @@
                 transform: translateX(-50%) translateY(0);
             }
         }
+
+        /* ---- Lesson authoring ------------------------------------- */
+        .lesson-admin-row {
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+            padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px;
+            margin-bottom: 9px; background: rgba(255,255,255,.04);
+        }
+        .lesson-admin-num {
+            width: 26px; height: 26px; border-radius: 50%; flex: 0 0 26px;
+            display: grid; place-items: center; font-size: 12px; font-weight: 700;
+            background: rgba(26,86,219,.12); color: var(--primary);
+        }
+        .lesson-admin-main { flex: 1 1 200px; min-width: 0; }
+        .lesson-admin-meta { font-size: 12.5px; color: var(--text-light); margin-top: 3px; }
+        .lesson-admin-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .lesson-admin-actions button[disabled] { opacity: .4; cursor: not-allowed; }
+        .lesson-video-state { white-space: nowrap; }
+        .lesson-video-state.is-upload { color: var(--success); }
+        .lesson-video-state.is-link { color: var(--primary); }
+
+        .lesson-form {
+            margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border);
+        }
+        .lesson-form h4 { font-size: 15px; font-weight: 800; margin-bottom: 14px; }
+        .lesson-hint { font-size: 12.5px; color: var(--text-light); margin-top: 7px; }
+        .lesson-video-choices { display: flex; flex-direction: column; gap: 7px; }
+        .lesson-video-choices label { display: flex; align-items: center; gap: 9px; font-size: 14px; }
+        .lesson-video-choices label.is-disabled { opacity: .55; }
     </style>
 
     <!--
@@ -1360,6 +1388,7 @@
                                 <h3 class="course-title">${c.title}</h3>
                                 <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:var(--gold);"></i> ${c.rating || 'Not rated'}</div>
                                 <button class="btn-primary btn-sm" onclick="editCourse('${c.id}')">Manage Course</button>
+                                <button class="btn-primary btn-outline btn-sm" onclick="manageLessons('${c.id}')">Lessons</button>
                             </div>
                         </div>
                     `).join('') : `<div class="empty-state"><i class="fas fa-book"></i><h3>No courses yet</h3><p>Create your first course to get started</p><button class="btn-primary" onclick="loadPage('create-course')">Create a Course</button></div>`}
@@ -1404,6 +1433,7 @@
                                 <div class="course-meta"><span>${WGAUI.escapeHtml(c.priceLabel || 'Free')}</span> · <span>${c.lessonCount} lesson${c.lessonCount === 1 ? '' : 's'}</span></div>
                                 <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
                                     <button class="btn-primary btn-sm" onclick="editCourse('${c.id}')">Edit</button>
+                                    <button class="btn-primary btn-sm" onclick="manageLessons('${c.id}')">Lessons</button>
                                     <button class="btn-primary btn-outline btn-sm" onclick="openCourse('${c.slug || c.id}')">View Page</button>
                                     ${c.status === 'draft' ? `<button class="btn-primary btn-sm" onclick="publishCourse('${c.id}')">Submit</button>` : ''}
                                     ${c.status === 'published' ? `<button class="btn-primary btn-outline btn-sm" onclick="unpublishCourse('${c.id}')">Unpublish</button>` : ''}
@@ -1725,6 +1755,371 @@
                 showToast(coverErrorMessage(error), 'error');
                 return false;
             }
+        }
+
+        /* ============================================================
+         *  LESSON AUTHORING
+         *
+         *  Lessons belong to a course, so this is a modal opened from one
+         *  rather than a page of its own: an instructor is always editing "the
+         *  syllabus of this course", and a course must exist before a lesson can.
+         * ============================================================ */
+        const lessonState = { courseId: null, title: '', items: [], editing: null, storage: null, draft: null };
+
+        function lessonVideoLabel(lesson) {
+            if (lesson.videoType === 'upload') {
+                return '<span class="lesson-video-state is-upload"><i class="fas fa-circle-check"></i> Uploaded video</span>';
+            }
+            if (lesson.videoType === 'link') {
+                return '<span class="lesson-video-state is-link"><i class="fas fa-link"></i> Video link</span>';
+            }
+            return '<span class="lesson-video-state"><i class="fas fa-video-slash"></i> No video</span>';
+        }
+
+        function refreshLessonModal() {
+            openModal(lessonState.title, lessonModalBody());
+            bindLessonModal();
+        }
+
+        function lessonModalBody() {
+            const storage = lessonState.storage || { enabled: false, missing: [] };
+            const editing = lessonState.editing;
+
+            const list = lessonState.items.length
+                ? lessonState.items.map((lesson, index) => `
+                    <div class="lesson-admin-row">
+                        <div class="lesson-admin-num">${index + 1}</div>
+                        <div class="lesson-admin-main">
+                            <strong>${WGAUI.escapeHtml(lesson.title)}</strong>
+                            <div class="lesson-admin-meta">
+                                ${WGAUI.escapeHtml(lesson.type)}
+                                ${lesson.durationMinutes ? ' · ' + lesson.durationMinutes + ' min' : ''}
+                                ${lesson.isPreview ? ' · <span style="color:var(--primary);">Preview</span>' : ''}
+                                ${lesson.published ? '' : ' · <span style="color:var(--text-light);">Hidden</span>'}
+                                · ${lessonVideoLabel(lesson)}
+                            </div>
+                        </div>
+                        <div class="lesson-admin-actions">
+                            <button class="btn-primary btn-outline btn-sm" onclick="lessonMove('${lesson.id}',-1)" ${index === 0 ? 'disabled' : ''} title="Move up"><i class="fas fa-arrow-up"></i></button>
+                            <button class="btn-primary btn-outline btn-sm" onclick="lessonMove('${lesson.id}',1)" ${index === lessonState.items.length - 1 ? 'disabled' : ''} title="Move down"><i class="fas fa-arrow-down"></i></button>
+                            <button class="btn-primary btn-sm" onclick="lessonEdit('${lesson.id}')">Edit</button>
+                            <button class="btn-primary btn-outline btn-sm" onclick="lessonDelete('${lesson.id}')" title="Delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `).join('')
+                : '<p style="color:var(--text-light);font-size:14px;">No lessons yet. A course needs at least one published lesson before it can go live.</p>';
+
+            const form = editing
+                ? `
+                    <div class="lesson-form">
+                        <h4>${editing.isNew ? 'New lesson' : 'Edit lesson'}</h4>
+                        <div class="form-group"><label>Title</label><input type="text" id="lessonTitle" value="${WGAUI.escapeHtml(editing.title || '')}" placeholder="e.g. Reading a payslip" /></div>
+                        <div class="form-group"><label>Summary</label><input type="text" id="lessonSummary" value="${WGAUI.escapeHtml(editing.summary || '')}" placeholder="One line describing this lesson" /></div>
+                        <div style="display:flex;gap:14px;flex-wrap:wrap;">
+                            <div class="form-group" style="flex:1 1 180px;">
+                                <label>Type</label>
+                                <select id="lessonType">
+                                    <option value="video" ${editing.type === 'video' ? 'selected' : ''}>Video</option>
+                                    <option value="text" ${editing.type === 'text' ? 'selected' : ''}>Text</option>
+                                    <option value="live" ${editing.type === 'live' ? 'selected' : ''}>Live session</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex:1 1 140px;"><label>Length (minutes)</label><input type="number" id="lessonDuration" min="0" value="${editing.durationMinutes || 0}" /></div>
+                            <div class="form-group" style="flex:1 1 140px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+                                <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="lessonPreview" ${editing.isPreview ? 'checked' : ''} /> Free preview</label>
+                                <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="lessonPublished" ${editing.published !== false ? 'checked' : ''} /> Visible to students</label>
+                            </div>
+                        </div>
+                        <div class="form-group"><label>Lesson notes</label><textarea id="lessonContent" rows="5" placeholder="What this lesson covers. Shown under the video.">${WGAUI.escapeHtml(editing.content || '')}</textarea></div>
+
+                        <div class="form-group">
+                            <label>Video</label>
+                            <div class="lesson-video-choices">
+                                <label><input type="radio" name="lessonVideoMode" value="none" ${editing.videoMode === 'none' ? 'checked' : ''} onchange="setLessonVideoMode()" /> None</label>
+                                <label><input type="radio" name="lessonVideoMode" value="link" ${editing.videoMode === 'link' ? 'checked' : ''} onchange="setLessonVideoMode()" /> Paste a YouTube or Vimeo link</label>
+                                <label class="${storage.enabled ? '' : 'is-disabled'}"><input type="radio" name="lessonVideoMode" value="upload" ${editing.videoMode === 'upload' ? 'checked' : ''} ${storage.enabled ? '' : 'disabled'} onchange="setLessonVideoMode()" /> Upload a video file</label>
+                            </div>
+
+                            <div id="lessonLinkPane" style="display:none;margin-top:10px;">
+                                <input type="text" id="lessonVideoUrl" value="${WGAUI.escapeHtml(editing.videoUrl || '')}" placeholder="https://www.youtube.com/watch?v=..." />
+                                <p class="lesson-hint">YouTube and Vimeo only. Students watch it inside the lesson page.</p>
+                            </div>
+
+                            <div id="lessonUploadPane" style="display:none;margin-top:10px;">
+                                ${storage.enabled
+                                    ? `<input type="file" id="lessonVideoFile" accept="video/mp4,video/webm" />
+                                       <div class="upload-bar" id="lessonUploadBar" style="display:none;"><span></span></div>
+                                       <p class="lesson-hint" id="lessonUploadNote">Up to ${Math.round((storage.videoMaxBytes || 0) / (1024 * 1024))} MB. MP4 or WebM — not MOV, because iPhones record it in a format browsers cannot play.</p>
+                                       <button class="btn-primary btn-sm" id="lessonUploadBtn" style="margin-top:8px;" onclick="uploadLessonVideo()">Upload video</button>`
+                                    : `<p class="lesson-hint">Uploads are switched off on this deployment — no storage is configured. Use a YouTube or Vimeo link instead. Missing: ${WGAUI.escapeHtml((storage.missing || []).join(', ')) || 'storage settings'}.</p>`}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Materials (one per line, as <em>Title | https://address</em>)</label>
+                            <textarea id="lessonResources" rows="3" placeholder="Worksheet | https://example.com/worksheet.pdf">${WGAUI.escapeHtml((editing.resources || []).map((r) => (r.title || '') + ' | ' + (r.url || '')).join('\n'))}</textarea>
+                        </div>
+
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <button class="btn-primary" id="lessonSaveBtn" onclick="lessonSave()">${editing.isNew ? 'Add lesson' : 'Save lesson'}</button>
+                            <button class="btn-primary btn-outline" onclick="lessonCancelEdit()">Cancel</button>
+                            ${editing.isUploaded ? `<button class="btn-primary btn-outline" onclick="lessonRemoveVideo()">Remove video</button>` : ''}
+                        </div>
+                    </div>
+                `
+                : '<button class="btn-primary" style="margin-top:16px;" onclick="lessonNew()">+ Add lesson</button>';
+
+            return `<div class="lesson-admin">${list}${form}</div>`;
+        }
+
+        window.manageLessons = async function manageLessons(courseId) {
+            const course = instructorData.courses.find((c) => String(c.id) === String(courseId));
+            lessonState.courseId = courseId;
+            lessonState.title = 'Lessons' + (course ? ' · ' + WGAUI.escapeHtml(course.title) : '');
+            lessonState.editing = null;
+
+            openModal(lessonState.title, '<div class="wga-skeleton" style="height:140px;"></div>');
+
+            try {
+                // Whether uploads are possible has to be known before the form is
+                // built, so an instructor is never offered a control that cannot work.
+                const [lessons, storage] = await Promise.all([
+                    WGA.get('/courses/' + encodeURIComponent(courseId) + '/lessons'),
+                    WGA.get('/courses/storage').catch(() => ({ enabled: false, missing: [] }))
+                ]);
+                lessonState.items = lessons.lessons || lessons.items || [];
+                lessonState.storage = storage;
+                refreshLessonModal();
+            } catch (error) {
+                openModal(lessonState.title, '<p>' + WGAUI.escapeHtml(error.message || 'Could not load the syllabus.') + '</p>');
+            }
+        };
+
+        window.lessonNew = function lessonNew() {
+            lessonState.editing = { isNew: true, title: '', summary: '', type: 'video', content: '', durationMinutes: 0, isPreview: false, published: true, videoMode: 'none', resources: [] };
+            refreshLessonModal();
+        };
+
+        window.lessonEdit = function lessonEdit(id) {
+            const lesson = lessonState.items.find((l) => String(l.id) === String(id));
+            if (!lesson) return;
+            lessonState.editing = Object.assign({}, lesson, {
+                isNew: false,
+                videoMode: lesson.videoType === 'upload' ? 'upload' : (lesson.videoType === 'link' ? 'link' : 'none'),
+                isUploaded: lesson.videoType === 'upload'
+            });
+            refreshLessonModal();
+        };
+
+        window.lessonCancelEdit = function lessonCancelEdit() {
+            lessonState.editing = null;
+            refreshLessonModal();
+        };
+
+        window.setLessonVideoMode = function setLessonVideoMode() {
+            const chosen = document.querySelector('input[name="lessonVideoMode"]:checked');
+            const mode = chosen ? chosen.value : 'none';
+            const link = document.getElementById('lessonLinkPane');
+            const upload = document.getElementById('lessonUploadPane');
+            if (link) link.style.display = mode === 'link' ? 'block' : 'none';
+            if (upload) upload.style.display = mode === 'upload' ? 'block' : 'none';
+        };
+
+        function bindLessonModal() {
+            const modal = document.getElementById('modalBody') || document;
+            if (modal.querySelector && modal.querySelector('input[name="lessonVideoMode"]')) setLessonVideoMode();
+        }
+
+        /** "Title | URL" per line, which is one less control than a repeatable row. */
+        function parseLessonResources(value) {
+            return String(value || '')
+                .split('\n')
+                .map((line) => line.trim())
+                .filter(Boolean)
+                .map((line) => {
+                    const at = line.indexOf('|');
+                    if (at === -1) return null;
+                    const title = line.slice(0, at).trim();
+                    const url = line.slice(at + 1).trim();
+                    return title && /^https?:\/\//i.test(url) ? { title: title, url: url } : null;
+                })
+                .filter(Boolean);
+        }
+
+        window.lessonSave = async function lessonSave() {
+            const button = document.getElementById('lessonSaveBtn');
+            const editing = lessonState.editing;
+            if (!editing) return;
+
+            const title = (document.getElementById('lessonTitle')?.value || '').trim();
+            if (title.length < 2) { showToast('Give the lesson a title.', 'error'); return; }
+
+            const mode = (document.querySelector('input[name="lessonVideoMode"]:checked') || {}).value || 'none';
+            const videoUrl = (document.getElementById('lessonVideoUrl')?.value || '').trim();
+
+            if (mode === 'link' && !videoUrl) { showToast('Paste a YouTube or Vimeo address, or choose None.', 'error'); return; }
+
+            const payload = {
+                title: title,
+                summary: (document.getElementById('lessonSummary')?.value || '').trim(),
+                type: document.getElementById('lessonType')?.value || 'video',
+                content: document.getElementById('lessonContent')?.value || '',
+                durationMinutes: Number(document.getElementById('lessonDuration')?.value || 0),
+                isPreview: Boolean(document.getElementById('lessonPreview')?.checked),
+                published: Boolean(document.getElementById('lessonPublished')?.checked),
+                resources: parseLessonResources(document.getElementById('lessonResources')?.value)
+            };
+
+            WGAUI.setBusy(button, true, 'Saving…');
+
+            try {
+                let lesson;
+                if (editing.isNew) {
+                    lesson = (await WGA.post('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons', payload)).lesson;
+                } else {
+                    lesson = (await WGA.patch('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(editing.id), payload)).lesson;
+                }
+
+                const id = lesson.id || editing.id;
+                lessonState.editing = Object.assign({}, editing, { isNew: false, id: id, isUploaded: lesson.videoType === 'upload' });
+
+                /**
+                 * The video is saved separately from the lesson, because it is a
+                 * different operation: a link is a field, an upload is a file that
+                 * has to land in a bucket. Switching between them replaces the
+                 * other, which is why this runs after the lesson itself exists.
+                 */
+                if (mode === 'none') {
+                    if (lesson.videoType !== 'none') {
+                        await WGA.del('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(id) + '/video');
+                        lessonState.editing.isUploaded = false;
+                    }
+                } else if (mode === 'link') {
+                    await WGA.put('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(id) + '/video/link', { url: videoUrl });
+                }
+
+                await refreshLessons();
+                showToast(editing.isNew ? 'Lesson added.' : 'Lesson saved.', 'success');
+
+                // An upload needs the lesson to exist first, so the file picker and
+                // progress bar stay on screen for it rather than the modal closing.
+                if (mode === 'upload') {
+                    refreshLessonModal();
+                } else {
+                    lessonState.editing = null;
+                    refreshLessonModal();
+                }
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                const detail = error.details && error.details.length ? error.details[0].message : null;
+                showToast(detail || error.message || 'We could not save that lesson.', 'error');
+            }
+        };
+
+        window.lessonDelete = async function lessonDelete(id) {
+            const lesson = lessonState.items.find((l) => String(l.id) === String(id));
+            if (!lesson) return;
+            if (!window.confirm('Delete "' + lesson.title + '"? Student progress for this lesson is removed too.')) return;
+
+            try {
+                await WGA.del('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(id));
+                if (lessonState.editing && String(lessonState.editing.id) === String(id)) lessonState.editing = null;
+                await refreshLessons();
+                refreshLessonModal();
+                showToast('Lesson removed.', 'success');
+            } catch (error) {
+                showToast(error.message || 'Could not remove that lesson.', 'error');
+            }
+        };
+
+        /** Swap with the neighbour, which is what the API does with an order change. */
+        window.lessonMove = async function lessonMove(id, delta) {
+            const index = lessonState.items.findIndex((l) => String(l.id) === String(id));
+            const target = index + delta;
+            if (index === -1 || target < 0 || target >= lessonState.items.length) return;
+
+            try {
+                await WGA.patch('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(id), { order: target + 1 });
+                await refreshLessons();
+                refreshLessonModal();
+            } catch (error) {
+                showToast(error.message || 'Could not reorder that lesson.', 'error');
+            }
+        };
+
+        window.uploadLessonVideo = async function uploadLessonVideo() {
+            const editing = lessonState.editing;
+            const file = document.getElementById('lessonVideoFile')?.files?.[0];
+
+            if (!editing || editing.isNew || !editing.id) {
+                showToast('Save the lesson first, then upload its video.', 'error');
+                return;
+            }
+            if (!file) { showToast('Choose a video file first.', 'error'); return; }
+
+            const button = document.getElementById('lessonUploadBtn');
+            const bar = document.getElementById('lessonUploadBar');
+            const note = document.getElementById('lessonUploadNote');
+
+            WGAUI.setBusy(button, true, 'Preparing…');
+
+            try {
+                const signed = await WGA.post('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(editing.id) + '/video/presign', {
+                    filename: file.name,
+                    contentType: file.type,
+                    sizeBytes: file.size
+                });
+
+                if (bar) { bar.style.display = 'block'; bar.firstElementChild.style.width = '0%'; }
+                WGAUI.setBusy(button, true, 'Uploading…');
+
+                await WGA.uploadToSignedUrl(signed.uploadUrl, file, {
+                    contentType: signed.contentType,
+                    onProgress: (percent) => {
+                        if (bar) bar.firstElementChild.style.width = percent + '%';
+                        WGAUI.setBusy(button, true, percent + '%');
+                    }
+                });
+
+                if (note) note.textContent = 'Uploaded. Confirming with the server…';
+
+                await WGA.post('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(editing.id) + '/video/complete', {
+                    key: signed.key,
+                    mime: file.type,
+                    originalName: file.name
+                });
+
+                await refreshLessons();
+                lessonState.editing.isUploaded = true;
+                refreshLessonModal();
+                showToast('Video uploaded.', 'success');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                if (note) note.textContent = '';
+                showToast(error.message || 'The upload did not finish.', 'error');
+            }
+        };
+
+        window.lessonRemoveVideo = async function lessonRemoveVideo() {
+            const editing = lessonState.editing;
+            if (!editing || !editing.id) return;
+
+            try {
+                await WGA.del('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(editing.id) + '/video');
+                await refreshLessons();
+                editing.isUploaded = false;
+                editing.videoMode = 'none';
+                refreshLessonModal();
+                showToast('Video removed.', 'success');
+            } catch (error) {
+                showToast(error.message || 'Could not remove the video.', 'error');
+            }
+        };
+
+        async function refreshLessons() {
+            const data = await WGA.get('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons');
+            lessonState.items = data.lessons || data.items || [];
+            await loadInstructorData();
         }
 
         window.editCourse = function editCourse(id) {

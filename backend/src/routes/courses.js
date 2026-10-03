@@ -237,7 +237,12 @@ router.get(
 
     const lessons = await Lesson.find({ course: course._id })
       .sort({ order: 1 })
-      .select('title summary type order durationMinutes isPreview published');
+      // videoUrl and videoFile have to be here: the summary derives `videoType`
+      // from them, and a projected-out field reads as absent, which would report
+      // every lesson as having no video.
+      .select(
+        'title summary type order durationMinutes isPreview published videoUrl videoFile videoType'
+      );
 
     const access = await permissions.resolveCourseAccess(req.user, course);
 

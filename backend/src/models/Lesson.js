@@ -123,6 +123,8 @@ lessonSchema.methods.toSummaryJSON = function toSummaryJSON(extra = {}) {
     // Guarded: a query that projects a subset of fields leaves an unselected
     // array path undefined, and reading `.length` off it would throw.
     resourceCount: Array.isArray(this.resources) ? this.resources.length : 0,
+    // Which video source is live, so a list can show it without fetching bodies.
+    videoType: this.resolvedVideoType(),
     ...extra,
   };
 };
