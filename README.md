@@ -94,14 +94,17 @@ Demo sign-in. The seed creates these accounts, all with one password:
 | `instructor@wuteve.edu` | instructor |
 | `student@wuteve.edu`    | student    |
 
-The password is deliberately not printed here. The seed defaults to a well-known
-string that lives in `backend/scripts/seed.js`, so anything that can read this
-repository can sign in as an administrator wherever that default is still in
-place. Set your own before the database is reachable:
+The password is not printed here, and there is no default. With `SEED_PASSWORD`
+unset the seed generates one at random, uses it, and prints it **once** when it
+finishes — save it then, because nothing stores it. To pick your own instead:
 
 ```bash
 SEED_PASSWORD='…' npm run seed
 ```
+
+Earlier versions defaulted to a fixed string that was also written down in this
+repository, so anything that could read it could sign in as an administrator
+wherever that default was still in place. That fallback is gone.
 
 Two things worth knowing:
 

@@ -6,12 +6,15 @@
  *   npm run seed              # create anything that is missing
  *   npm run seed -- --fresh   # remove the demo content first, then recreate it
  *
- * Refuses to run against a production database unless forced, because it
- * creates accounts with published passwords.
+ * Refuses to run against a production database unless forced. It no longer
+ * creates accounts with published passwords: with no SEED_PASSWORD set it
+ * generates one for the run and prints it once.
  *
  * Every account it makes is idempotent: seeding twice updates the existing
  * record rather than failing on the unique email index.
  */
+
+const crypto = require('crypto');
 
 const config = require('../src/config/env');
 const db = require('../src/db');
@@ -29,8 +32,24 @@ const { slugify } = require('../src/lib/slug');
 
 const FRESH = process.argv.includes('--fresh');
 
-/** Override with SEED_PASSWORD=… to avoid the published demo passwords. */
-const PASSWORD = process.env.SEED_PASSWORD || 'WuteveDemo12345';
+/**
+ * The password every seeded account is given.
+ *
+ * There is deliberately no fallback. This used to default to a fixed string that
+ * was also written in the README, so seeding any database a person could reach
+ * handed out three working logins to whoever read the repository. Warning about
+ * it afterwards was not enough — the accounts existed either way, and the seed
+ * was run against production at least once.
+ *
+ * With SEED_PASSWORD unset a random one is generated, used, and printed once at
+ * the end of the run. Nothing stores it, so saving it is the operator's job, and
+ * losing it costs only another seed run.
+ */
+const GENERATED_PASSWORD = process.env.SEED_PASSWORD
+  ? null
+  : `Wga-${crypto.randomBytes(9).toString('base64url')}!7`;
+
+const PASSWORD = process.env.SEED_PASSWORD || GENERATED_PASSWORD;
 
 const ACCOUNTS = [
   {
@@ -295,9 +314,11 @@ async function main() {
   if (config.isProduction && !process.argv.includes('--force')) {
     process.stderr.write(
       '\nRefusing to seed a production database.\n\n' +
-        'This creates accounts with published demo passwords. If you genuinely mean to do this,\n' +
-        'run it with --force and set SEED_PASSWORD to something private:\n\n' +
-        '  SEED_PASSWORD="…" npm run seed -- --force\n\n'
+        'This creates instructor and admin accounts. If you genuinely mean to do this,\n' +
+        'run it with --force:\n\n' +
+        '  npm run seed -- --force\n\n' +
+        'Set SEED_PASSWORD to choose their password; otherwise one is generated and\n' +
+        'printed once at the end.\n\n'
     );
     process.exit(1);
   }
@@ -367,14 +388,36 @@ async function main() {
   process.stdout.write(`\n${'-'.repeat(40)}\n`);
   process.stdout.write(`${courseCount} courses published.\n\n`);
   process.stdout.write('Sign in with:\n');
-  process.stdout.write(`  admin@wuteve.edu        / ${PASSWORD}\n`);
-  process.stdout.write(`  instructor@wuteve.edu   / ${PASSWORD}\n`);
-  process.stdout.write(`  student@wuteve.edu      / ${PASSWORD}\n\n`);
+  process.stdout.write('  admin@wuteve.edu\n');
+  process.stdout.write('  instructor@wuteve.edu\n');
+  process.stdout.write('  student@wuteve.edu\n\n');
 
-  if (!process.env.SEED_PASSWORD) {
+  /**
+   * Only accounts created by this run were given this password, and saying
+   * otherwise would send somebody to a sign-in form with a password that does
+   * not work. The distinction is not cosmetic: on a database that has already
+   * been seeded, every account is "updated", and the password printed here would
+   * have been a lie.
+   */
+  if (created.users > 0) {
     process.stdout.write(
-      'These passwords are published in the seed script. Change them before this database is\n' +
-        'reachable by anyone else, or re-run with SEED_PASSWORD set.\n\n'
+      `The ${created.users} account${created.users === 1 ? '' : 's'} created just now can sign in with:\n\n` +
+        `  ${PASSWORD}\n\n`
+    );
+
+    if (GENERATED_PASSWORD) {
+      process.stdout.write(
+        'That password was generated for this run and is stored nowhere. Save it now — it is\n' +
+          'shown here only. Set SEED_PASSWORD to choose your own instead.\n\n'
+      );
+    }
+  }
+
+  if (created.updated > 0) {
+    process.stdout.write(
+      `${created.updated} account${created.updated === 1 ? '' : 's'} already existed and kept their existing\n` +
+        'passwords, because the seed only sets one when it creates an account. Change one with\n' +
+        'POST /api/v1/auth/change-password, or re-run with --fresh to recreate them.\n\n'
     );
   }
 
