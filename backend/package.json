@@ -10,6 +10,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
+    "postinstall": "node scripts/stage-pages.js",
     "build": "node scripts/check.js",
     "test": "node scripts/smoke.js",
     "verify": "npm run build && node scripts/smoke.js",

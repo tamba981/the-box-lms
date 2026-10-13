@@ -66,6 +66,18 @@ const PUBLIC_PAGE_COUNT = PUBLIC_DIR_EXISTS
   : 0;
 
 /**
+ * Every place the pages were looked for, and whether it held any.
+ *
+ * Computed once at startup and reported by `/health`. When a deployment serves an
+ * API with no pages, this is the difference between reading one response and
+ * deducing the layout of a container from a 404 body.
+ */
+const PUBLIC_DIR_SEARCH = PUBLIC_DIR_CANDIDATES.map((candidate) => ({
+  path: candidate,
+  exists: fs.existsSync(candidate),
+}));
+
+/**
  * Assemble the Express application.
  *
  * Middleware order matters and is deliberate:
@@ -143,7 +155,12 @@ app.use('/api/v1/payments/callback', express.raw({ type: 'application/json', lim
       version: require('../package.json').version,
       // The distinction that was invisible before: the API being up is not the
       // same as the site working.
-      pages: { present: pagesPresent, directory: PUBLIC_DIR, htmlFiles: PUBLIC_PAGE_COUNT },
+      pages: {
+        present: pagesPresent,
+        directory: PUBLIC_DIR,
+        htmlFiles: PUBLIC_PAGE_COUNT,
+        searched: PUBLIC_DIR_SEARCH,
+      },
     });
   });
 
