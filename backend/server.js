@@ -46,7 +46,10 @@ async function start() {
     present: staticPresent,
     contains: staticPresent ? fs.readdirSync(PUBLIC_DIR).slice(0, 5) : null,
     // What the builder actually shipped, which is the part that was wrong.
-    beside: fs.existsSync(repoRoot) ? fs.readdirSync(repoRoot) : null,
+    // Capped at 40: this says whether the pages were shipped beside the app, and
+    // an unbounded listing buries the line it exists to make readable — a
+    // working directory holding a year of temp files produced hundreds of entries.
+    beside: fs.existsSync(repoRoot) ? fs.readdirSync(repoRoot).slice(0, 40) : null,
   });
 
   server = app.listen(config.port, () => {

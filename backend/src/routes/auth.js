@@ -314,10 +314,20 @@ router.post(
       sendLater('password-reset', () => email.passwordResetEmail({ user, url }));
     }
 
+    /**
+     * The message must not vary with whether the address exists — that is the
+     * account-enumeration oracle this endpoint is written to avoid. It may vary
+     * with the deployment, which is not a fact about any account: with no mail
+     * provider configured nothing can be delivered, so telling somebody a link is
+     * on its way would promise the one thing this server cannot do. The flag lets
+     * the page say something true instead of being told a comforting untruth.
+     */
     return ok(
       res,
-      null,
-      'If that email address has an account, a password reset link is on its way.'
+      { emailEnabled: config.email.enabled },
+      config.email.enabled
+        ? 'If that email address has an account, a password reset link is on its way.'
+        : 'Email is not configured on this deployment, so a reset link cannot be sent. An administrator can reset your password instead.'
     );
   })
 );

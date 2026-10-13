@@ -56,6 +56,16 @@ const PUBLIC_DIR =
 const PUBLIC_DIR_EXISTS = fs.existsSync(PUBLIC_DIR);
 
 /**
+ * How many pages are actually there.
+ *
+ * Counted once at startup: the directory does not change while the process runs,
+ * and `/health` is polled.
+ */
+const PUBLIC_PAGE_COUNT = PUBLIC_DIR_EXISTS
+  ? fs.readdirSync(PUBLIC_DIR).filter((name) => name.endsWith('.html')).length
+  : 0;
+
+/**
  * Assemble the Express application.
  *
  * Middleware order matters and is deliberate:
@@ -107,13 +117,33 @@ app.use('/api/v1/payments/callback', express.raw({ type: 'application/json', lim
   // Deliberately before the same-origin guard and the rate limiter: a health
   // probe must always be answerable, from any host, as often as needed.
   app.get('/health', (req, res) => {
-    const healthy = db.isConnected();
+    /**
+     * The pages are part of health, not a detail beside it.
+     *
+     * This endpoint reported `ok` for ten days while the deployment served no
+     * pages at all. The API answered every request including `/`, so the site
+     * was broken, the dashboard said it was fine, and nothing asked the one
+     * question that would have shown it: are the pages there?
+     *
+     * In production their absence now makes the service unhealthy, which is what
+     * a host's own healthcheck reads. A container built without its pages is
+     * therefore never promoted, instead of quietly answering on the API's
+     * behalf. Outside production this is reported but does not degrade, because
+     * running from `backend/` without staging the pages is normal in development.
+     */
+    const pagesPresent = PUBLIC_PAGE_COUNT > 0;
+    const databaseUp = db.isConnected();
+    const healthy = databaseUp && (config.env !== 'production' || pagesPresent);
+
     res.status(healthy ? 200 : 503).json({
       status: healthy ? 'ok' : 'degraded',
       timestamp: new Date().toISOString(),
       mongodb: db.state(),
       uptimeSeconds: Math.round(process.uptime()),
       version: require('../package.json').version,
+      // The distinction that was invisible before: the API being up is not the
+      // same as the site working.
+      pages: { present: pagesPresent, directory: PUBLIC_DIR, htmlFiles: PUBLIC_PAGE_COUNT },
     });
   });
 

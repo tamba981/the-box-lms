@@ -220,11 +220,28 @@ curl https://wuteveglobalacademy.com/health
 ```
 
 ```json
-{ "status": "ok", "mongodb": "connected", "uptimeSeconds": 12, "version": "1.0.0" }
+{
+  "status": "ok",
+  "mongodb": "connected",
+  "uptimeSeconds": 12,
+  "version": "1.0.0",
+  "pages": { "present": true, "directory": "/app/backend/public", "htmlFiles": 14 }
+}
 ```
 
 `status` is `degraded` and the HTTP code is `503` if the database is unreachable,
 so a health check can be wired to an alert without parsing the body.
+
+`pages` says whether the container actually holds the site, and in production a
+missing page directory **also** answers `503`. Both halves of that are deliberate.
+This endpoint once reported `ok` for ten days while the deployment served no pages
+at all: the API answered every URL including `/`, so the deployment looked alive,
+the site was unusable, and nothing asked the question that would have shown it. A
+host's healthcheck reads the status code, so a container built without its pages
+is now never promoted instead of quietly answering on the API's behalf.
+
+Outside production this is reported but does not degrade, because running from
+`backend/` without staged pages is a normal development state.
 
 Then check by hand:
 
@@ -242,6 +259,42 @@ Then check by hand:
    as a student it redirects you away.
 7. `https://wuteveglobalacademy.com/verify/WGA-1999-999999` — reports not found rather
    than crashing.
+
+### The pages have to be inside the image
+
+This is worth its own heading because it has already cost ten days of downtime
+while every indicator said the deployment was fine.
+
+The API and the pages are one process, but they are not in one directory:
+
+```
+frontend/public/*.html     the pages
+backend/                   the app, which looks for them beside itself
+```
+
+A builder that treats `backend/` as "the app" — the nearest directory holding a
+`package.json` — ships only that, and every page URL including `/` then returns
+the API's JSON 404. That reads as a routing fault and is not one.
+
+`npm run build:deploy` (which is `scripts/check.js` then `scripts/stage-pages.js`)
+copies `frontend/public` to `backend/public` so the pages travel inside the image,
+and `src/app.js` tries five candidate directories at startup, logging which one it
+chose. Whichever the host ships, one of them works.
+
+Two things must therefore hold, and both must be checked after any builder change:
+
+1. **The build command actually runs.** `railpack.json` previously asked for it
+   under `build.commands.build` — a key that does not exist in the Railpack schema,
+   which has no `build` key at all. The file looked correct, was silently ignored,
+   and the staging step never ran. It now uses `steps`, and a root `Dockerfile`
+   does the same job for hosts that prefer one. A `Dockerfile` takes precedence
+   over `railpack.json`, so if you change one, check which is in play.
+2. **`GET /health` reports `pages.present: true`.** That is the check that would
+   have caught it on the first day.
+
+To reproduce the container layout locally without Docker, copy `backend/` to a
+directory with no sibling `frontend/` and run the server from there: it should
+serve `/` from the staged `public/` directory.
 
 ### When the deploy crashes
 

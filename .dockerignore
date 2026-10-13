@@ -1,0 +1,19 @@
+# Keep the image to what the app actually needs.
+#
+# `.env` and `.env.backup` are excluded deliberately. They hold the MongoDB URI
+# and the JWT signing secrets, and Railway supplies those as service variables.
+# Nothing in `backend/src` reads a `.env` file at runtime in production — the
+# config comes from the environment — so leaving them out changes no behaviour
+# and keeps live credentials out of an image layer, where they would persist in
+# the registry and in every `docker history`.
+
+.git
+.gitignore
+
+**/node_modules
+
+backend/.env
+backend/.env.backup
+backend/.env.*
+
+.vscode

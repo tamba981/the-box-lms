@@ -1,8 +1,11 @@
 {
   "$schema": "https://schema.railpack.com",
-  "build": {
-    "commands": {
-      "build": "if [ -f backend/package.json ]; then cd backend; fi; npm ci && npm run build:deploy"
+  "provider": "node",
+  "steps": {
+    "build": {
+      "commands": [
+        "if [ -f backend/package.json ]; then cd backend; fi; npm ci && npm run build:deploy"
+      ]
     }
   },
   "deploy": {
