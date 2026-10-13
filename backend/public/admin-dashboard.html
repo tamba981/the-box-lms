@@ -1,0 +1,2149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/Images/Brand/wuteve-emblem.png" />
+    <title>Admin Dashboard · Wuteve Global Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* ----- CSS Variables & Base ----- */
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #0f3b8c;
+            --primary-light: #3b82f6;
+            --primary-gradient: linear-gradient(135deg, #1a56db 0%, #0f3b8c 100%);
+            --gold: #d4a547;
+            --gold-light: #f0d080;
+            --silver: #c0c0c0;
+            --silver-light: #e8e8e8;
+            --secondary: #ffffff;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f0f5ff;
+            --border: #e5e7eb;
+            --dark-bg: #0a1628;
+            --dark-text: #e2e8f0;
+            --dark-card: rgba(30, 41, 59, 0.7);
+            --dark-border: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --glass-bg: rgba(255, 255, 255, 0.10);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            --glass-blur: 20px;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.06);
+            --shadow-glow: 0 0 30px rgba(26, 86, 219, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: linear-gradient(135deg, #0f2b5e 0%, #1a0a3a 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+            background-attachment: fixed;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode {
+            --text-light: #94a3b8; /* #6b7280 is a light-background grey: 3.65:1 here */
+            background: linear-gradient(135deg, #0a1628 0%, #1a0a3a 100%);
+            color: var(--dark-text);
+        }
+
+        /* ----- Glassmorphism Premium ----- */
+        .glass-premium {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-hover:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(212, 165, 71, 0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(26, 86, 219, 0.08);
+        }
+
+        body.dark-mode .glass-premium {
+            background: rgba(10, 22, 40, 0.5);
+            border-color: rgba(255, 255, 255, 0.03);
+        }
+
+        body.dark-mode .glass-hover:hover {
+            background: rgba(10, 22, 40, 0.7);
+            border-color: rgba(212, 165, 71, 0.20);
+        }
+
+        /* ----- Header (glass) ----- */
+        .header {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode .header {
+            background: rgba(10, 22, 40, 0.75);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            max-width: 1600px;
+            margin: 0 auto;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* The emblem is navy, so on the dark theme it sits on a white chip. */
+        .header-left .brand-mark {
+            width: 34px;
+            height: 34px;
+            flex: 0 0 34px;
+            border-radius: 50%;
+            background: #fff;
+            padding: 3px;
+            object-fit: contain;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            white-space: nowrap;
+            letter-spacing: -0.3px;
+        }
+        .logo span {
+            font-weight: 400;
+            font-size: 14px;
+            background: linear-gradient(135deg, var(--silver), var(--silver-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .admin-badge {
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
+            padding: 2px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .header-search {
+            flex: 1;
+            max-width: 420px;
+            min-width: 160px;
+            position: relative;
+        }
+        .header-search input {
+            width: 100%;
+            padding: 10px 16px 10px 42px;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(6px);
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        body.dark-mode .header-search input {
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.04);
+            color: var(--dark-text);
+        }
+        .header-search input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 165, 71, 0.08);
+        }
+        .header-search i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.20);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 40px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text);
+            position: relative;
+        }
+        body.dark-mode .btn-icon {
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.03);
+            color: var(--dark-text);
+        }
+        .btn-icon:hover {
+            background: var(--gold);
+            color: #0f172a;
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+        body.dark-mode .notification-badge {
+            border-color: var(--dark-bg);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.20);
+        }
+
+        .logout-btn {
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        body.dark-mode .logout-btn {
+            color: var(--dark-text);
+            border-color: rgba(255, 255, 255, 0.03);
+        }
+        .logout-btn:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+            transform: translateY(-2px);
+        }
+
+        /* ----- Sidebar (glass) ----- */
+        .sidebar {
+            width: 280px;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 20px 16px;
+            position: fixed;
+            height: calc(100vh - 73px);
+            overflow-y: auto;
+            transition: all 0.3s;
+            z-index: 50;
+        }
+
+        body.dark-mode .sidebar {
+            background: rgba(10, 22, 40, 0.65);
+            border-right: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-item {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 16px;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        body.dark-mode .sidebar-link {
+            color: var(--dark-text);
+        }
+
+        .sidebar-link:hover {
+            background: rgba(26, 86, 219, 0.05);
+        }
+
+        .sidebar-link.active {
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
+            box-shadow: 0 4px 20px rgba(212, 165, 71, 0.25);
+            transform: translateX(6px);
+        }
+
+        .sidebar-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .sidebar-footer {
+            margin-top: 32px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        body.dark-mode .sidebar-footer {
+            border-top-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .sidebar-footer .sidebar-link {
+            font-size: 13px;
+        }
+
+        /* ----- Main Content ----- */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 28px 32px 40px;
+            transition: margin 0.3s;
+        }
+
+        /* Quick Stats Banner (glass) */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .quick-stat {
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            text-align: center;
+        }
+        body.dark-mode .quick-stat {
+            background: rgba(30, 41, 59, 0.20);
+            border-color: rgba(255, 255, 255, 0.02);
+        }
+        .quick-stat .label {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        .quick-stat .value {
+            font-size: 22px;
+            font-weight: 700;
+            margin-top: 2px;
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            padding: 24px 20px;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .stat-title {
+            color: var(--text-light);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 34px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .stat-change.up {
+            color: var(--success);
+        }
+        .stat-change.down {
+            color: var(--danger);
+        }
+
+        /* Charts */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .chart-card {
+            padding: 24px 20px;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+
+        canvas {
+            max-height: 260px;
+            width: 100% !important;
+        }
+
+        /* Tables (glass) */
+        .table-container {
+            padding: 20px 0 0;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 0 20px 16px;
+        }
+
+        .table-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .table-toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .table-toolbar input,
+        .table-toolbar select {
+            padding: 8px 14px;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            font-size: 13px;
+        }
+        body.dark-mode .table-toolbar input,
+        body.dark-mode .table-toolbar select {
+            background: rgba(30, 41, 59, 0.20);
+            border-color: rgba(255, 255, 255, 0.03);
+            color: var(--dark-text);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        body.dark-mode .data-table th,
+        body.dark-mode .data-table td {
+            border-bottom-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .data-table th {
+            font-weight: 600;
+            color: var(--gold);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(26, 86, 219, 0.02);
+        }
+        body.dark-mode .data-table tr:hover td {
+            background: rgba(26, 86, 219, 0.03);
+        }
+
+        .badge {
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .badge.active {
+            background: var(--success);
+            color: white;
+        }
+        .badge.inactive {
+            background: var(--danger);
+            color: white;
+        }
+        .badge.pending {
+            background: var(--warning);
+            color: white;
+        }
+        .badge.approved {
+            background: var(--success);
+            color: white;
+        }
+        .badge.draft {
+            background: var(--text-light);
+            color: white;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            border: none;
+            padding: 6px 10px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 13px;
+            margin: 0 2px;
+        }
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+        .action-btn.edit {
+            color: var(--primary);
+        }
+        .action-btn.delete {
+            color: var(--danger);
+        }
+        .action-btn.view {
+            color: var(--success);
+        }
+        .action-btn.approve {
+            color: var(--success);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
+            border: none;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(212, 165, 71, 0.30);
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .btn-outline {
+            border-color: rgba(255, 255, 255, 0.03);
+            color: var(--dark-text);
+        }
+        .btn-outline:hover {
+            background: var(--gold);
+            color: #0f172a;
+            border-color: var(--gold);
+        }
+
+        /* Modal (glass) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.30);
+            backdrop-filter: blur(8px);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 28px;
+            max-width: 600px;
+            width: 92%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: var(--shadow-lg);
+        }
+        body.dark-mode .modal-content {
+            background: rgba(10, 22, 40, 0.85);
+            border-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        body.dark-mode .modal-header {
+            border-bottom-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            font-family: inherit;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group select,
+        body.dark-mode .form-group textarea {
+            background: rgba(30, 41, 59, 0.20);
+            border-color: rgba(255, 255, 255, 0.03);
+            color: var(--dark-text);
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 165, 71, 0.06);
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(212, 165, 71, 0.10);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Activity Feed */
+        .activity-feed {
+            padding: 6px 0;
+        }
+        .activity-item {
+            display: flex;
+            gap: 14px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            align-items: flex-start;
+        }
+        body.dark-mode .activity-item {
+            border-bottom-color: rgba(255, 255, 255, 0.03);
+        }
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(26, 86, 219, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+        .activity-text {
+            flex: 1;
+        }
+        .activity-text .time {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        /* Mobile */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text);
+        }
+        body.dark-mode .mobile-menu-btn {
+            color: var(--dark-text);
+        }
+
+        @media (max-width: 992px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 150;
+                width: 280px;
+                transition: transform 0.3s;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 16px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .quick-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .header-search {
+                display: none;
+            }
+            .header-content {
+                padding: 10px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .quick-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+            .table-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+
+    <!--
+      The role guard confirms the session against the server before the page is
+      revealed. This replaces the previous check, which treated the presence of
+      any string in localStorage as proof of sign-in — typing anything into that
+      key was enough to open the administrator panel.
+    -->
+    <script src="/assets/js/wga-api.js"></script>
+    <script src="/assets/js/wga-guard.js" data-roles="admin"></script>
+    <script src="/assets/js/wga-ui.js"></script>
+</head>
+<body>
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle sidebar">☰</button>
+                <img class="brand-mark" src="/Images/Brand/wuteve-emblem.png" alt="" width="34" height="34" />
+                <a href="/" class="logo">Wuteve <span>Global Academy</span></a>
+                <span class="admin-badge">Admin</span>
+            </div>
+
+            <div class="header-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="globalSearch" placeholder="Search users, courses, certificates..." />
+            </div>
+
+            <div class="header-right">
+                <button class="btn-icon" id="notifBtn" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notifCount">0</span>
+                </button>
+                <button class="btn-icon" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+                <!--
+                    The avatar has always looked interactive (its class carries
+                    cursor:pointer) but did nothing when clicked. It now opens the
+                    administrator's own account — which is also the only place an
+                    admin can change their password. Student and instructor both
+                    offered that; this dashboard, the most privileged account on
+                    the site, did not.
+                -->
+                <div class="user-avatar" id="userAvatar" role="button" tabindex="0" title="Your account" aria-label="Your account" onclick="openMyAccount()">A</div>
+                <button class="logout-btn" id="logout-btn">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="dashboard" style="display:flex;">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-item"><a href="#" class="sidebar-link active" data-page="overview"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="users"><i class="fas fa-users"></i> Users</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> Courses</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="instructors"><i class="fas fa-chalkboard-user"></i> Instructors</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="certificates"><i class="fas fa-certificate"></i> Certificates</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="payments"><i class="fas fa-credit-card"></i> Payments</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="reports"><i class="fas fa-chart-line"></i> Reports</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="announcements"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="sidebar-item"><a href="/" ><i class="fas fa-globe"></i> View site</a></div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <div style="text-align:center; padding:60px;">
+                <div class="loading-spinner"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="modal-title">Modal Title</span>
+                <button id="close-modal" style="background:none;border:none;font-size:28px;cursor:pointer;color:var(--text-light);">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- ===== NOTIFICATION PANEL ===== -->
+    <div class="modal" id="notifModal">
+        <div class="modal-content" style="max-width:460px;">
+            <div class="modal-header">
+                <span>Notifications</span>
+                <button id="close-notif" style="background:none;border:none;font-size:28px;cursor:pointer;color:var(--text-light);">&times;</button>
+            </div>
+            <div class="modal-body" id="notifBody">
+                <div style="text-align:center;padding:20px;"><div class="loading-spinner"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  LIVE DATA
+        // ============================================================
+        /**
+         * This object used to be a fixture: 15,234 users, 456 courses, $125,680
+         * of revenue, 5,678 certificates and five invented people called John
+         * Doe. Every figure an administrator saw was fabricated, and several of
+         * the action handlers ("Certificate verified on blockchain!", "Settings
+         * saved!") reported success for work that never happened.
+         *
+         * It now holds only what the API returned. Empty arrays and zeroes mean
+         * "nothing here yet" and the pages say so, rather than inventing rows.
+         */
+        let adminData = {
+            user: null,
+            stats: null,
+            users: [],
+            courses: [],
+            pendingCourses: [],
+            certificates: [],
+            payments: [],
+            enrollments: [],
+            revenue: [],
+            recent: { signups: [], enrollments: [] },
+            unread: 0
+        };
+
+        let state = {
+            currentPage: 'overview',
+            charts: {},
+            notifOpen: false
+        };
+
+        /** Load everything the dashboard summarises, in parallel. */
+        async function loadAdminData() {
+            // WGA.get already unwraps the { success, data } envelope and takes
+            // its query string as `query`, not `params`.
+            const [stats, users, courses, pending, certificates, payments, enrollments, notifications] =
+                await Promise.all([
+                    WGA.get('/admin/stats'),
+                    WGA.get('/admin/users', { query: { limit: 50 } }),
+                    WGA.get('/admin/courses', { query: { limit: 50 } }),
+                    WGA.get('/admin/courses', { query: { status: 'pending', limit: 50 } }),
+                    WGA.get('/admin/certificates', { query: { limit: 50 } }),
+                    WGA.get('/payments', { query: { limit: 50 } }),
+                    WGA.get('/admin/enrollments', { query: { limit: 50 } }),
+                    WGA.get('/notifications', { query: { limit: 20 } })
+                ]);
+
+            adminData.user = WGA.getUser();
+            adminData.stats = stats;
+            adminData.users = users.items || [];
+            adminData.courses = courses.items || [];
+            adminData.pendingCourses = pending.items || [];
+            adminData.certificates = certificates.items || [];
+            adminData.certificateCounts = certificates.counts || { issued: 0, revoked: 0, total: 0 };
+            adminData.payments = payments.items || [];
+            adminData.enrollments = enrollments.items || [];
+            adminData.revenue = stats.revenue || [];
+            adminData.recent = stats.recent || { signups: [], enrollments: [] };
+            adminData.notifications = notifications.items || [];
+            adminData.unread =
+                notifications.unreadCount === undefined
+                    ? (notifications.items || []).filter((n) => !n.read).length
+                    : notifications.unreadCount;
+        }
+
+        // ============================================================
+        //  AUTH
+        // ============================================================
+        function checkAuth() {
+            // The page guard already confirmed this session with the server and
+            // refused to reveal the document otherwise, so there is nothing left
+            // to verify here — and no reason to trust localStorage for the role,
+            // which is what the previous version of this function did.
+            const user = WGA.getUser();
+            if (!user) return false;
+
+            adminData.user = user;
+            const avatar = document.getElementById('userAvatar');
+            if (avatar) {
+                avatar.textContent = (user.firstName || 'A')[0].toUpperCase();
+
+                // It is a div styled as a button, so give it the keyboard
+                // behaviour a real button would have had.
+                avatar.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        openMyAccount();
+                    }
+                });
+            }
+            return true;
+        }
+
+        // ============================================================
+        //  UI HELPERS (preserved + enhanced)
+        // ============================================================
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const bgColor = type === 'error' ? '#ef4444' : type === 'success' ? '#10b981' : '#3b82f6';
+            toast.style.cssText = `
+                position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+                background: ${bgColor}; color: white; padding: 12px 28px; border-radius: 40px;
+                z-index: 2000; animation: fadeInUp 0.3s ease; font-weight: 600; font-size: 14px;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.10); max-width: 90%; text-align: center;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3200);
+        }
+
+        function openModal(title, body) {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-body').innerHTML = body;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        // ============================================================
+        //  ANIMATED COUNTER
+        // ============================================================
+        /**
+         * Count up to a figure.
+         *
+         * Small counts are set immediately — a four-item total has nothing to
+         * reveal, and easing through 0,1,2,3 puts a number on screen that is
+         * simply wrong for two seconds. A timer backstop pins the final value in
+         * case the browser throttles animation frames in a background tab.
+         */
+        function animateNumber(element, target, duration = 2000) {
+            const value = Number.isFinite(target) ? target : 0;
+            const finish = () => { element.textContent = value.toLocaleString(); };
+
+            if (value < 10) {
+                finish();
+                return;
+            }
+
+            const startTime = performance.now();
+            let done = false;
+
+            function update(currentTime) {
+                if (done) return;
+
+                const progress = Math.min((currentTime - startTime) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                element.textContent = Math.round(eased * value).toLocaleString();
+
+                if (progress < 1) requestAnimationFrame(update);
+                else done = true;
+            }
+
+            requestAnimationFrame(update);
+            setTimeout(() => { if (!done) { done = true; finish(); } }, duration + 400);
+        }
+
+        /** Start every stat counter that has scrolled into view. */
+        function observeCounters() {
+            const counters = document.querySelectorAll('.stat-value[data-target]');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+                    const target = parseInt(entry.target.dataset.target, 10);
+                    animateNumber(entry.target, Number.isNaN(target) ? 0 : target);
+                    observer.unobserve(entry.target);
+                });
+            }, { threshold: 0.3 });
+
+            counters.forEach((el) => observer.observe(el));
+        }
+
+        // ============================================================
+        //  RENDER FUNCTIONS
+        // ============================================================
+        /** Real revenue totals, or an honest blank when nothing has been sold. */
+        function revenueHeadline(entries) {
+            if (!entries || entries.length === 0) return { value: '—', note: 'No payments recorded' };
+
+            const primary = entries[0];
+            const note =
+                entries.length > 1
+                    ? `Across ${entries.length} currencies: ${entries.map((entry) => `${entry.totalLabel} (${entry.payments})`).join(' · ')}`
+                    : `${primary.payments} paid enrolment${primary.payments === 1 ? '' : 's'}`;
+
+            return { value: primary.totalLabel, note, mixed: entries.length > 1 };
+        }
+
+        /**
+         * A stat figure.
+         *
+         * The number is written into the markup straight away rather than being
+         * rendered as 0 and left for the IntersectionObserver to fill in. The
+         * observer only reports elements that are actually on screen, so cards
+         * below the fold kept the placeholder — the dashboard read "Courses 0"
+         * beside "5 published". Counting up is a decoration layered on top of a
+         * correct value, never a substitute for one.
+         */
+        function statValue(value, style) {
+            if (typeof value !== 'number' || !Number.isFinite(value)) {
+                return `<div class="stat-value"${style ? ` style="${style}"` : ''}>—</div>`;
+            }
+
+            return `<div class="stat-value" data-target="${value}"${style ? ` style="${style}"` : ''}>${value.toLocaleString()}</div>`;
+        }
+
+        function renderOverview() {
+            const stats = adminData.stats || {};
+            const users = stats.users || { total: 0, students: 0, instructors: 0, admins: 0 };
+            const courses = stats.courses || { total: 0, published: 0, draft: 0, pending: 0 };
+            const enrollments = stats.enrollments || { total: 0, completed: 0 };
+            const certificates = stats.certificates || { issued: 0 };
+            const revenue = revenueHeadline(adminData.revenue);
+
+            // There is no revenue-over-time series and no signup-over-time series
+            // in the API, so there are no charts here. The previous version drew
+            // two of them from hardcoded arrays — graphs of nothing, presented as
+            // the platform's own figures.
+            const rows = (items, empty, render) =>
+                items.length > 0
+                    ? items.map(render).join('')
+                    : `<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--text-light);">${empty}</td></tr>`;
+
+            const signups = adminData.recent.signups || [];
+            const recentEnrollments = adminData.recent.enrollments || [];
+
+            return `
+                <div class="stats-grid">
+                    <div class="stat-card glass-premium glass-hover"><div class="stat-title">Total Users</div>${statValue(users.total)}<div class="stat-change">${users.students} students · ${users.instructors} instructors · ${users.admins} admin${users.admins === 1 ? '' : 's'}</div></div>
+                    <div class="stat-card glass-premium glass-hover"><div class="stat-title">Courses</div>${statValue(courses.total)}<div class="stat-change">${courses.published} published · ${courses.draft} draft${courses.pending ? ` · ${courses.pending} awaiting review` : ''}</div></div>
+                    <div class="stat-card glass-premium glass-hover"><div class="stat-title">Enrolments</div>${statValue(enrollments.total)}<div class="stat-change">${enrollments.completed} completed</div></div>
+                    <div class="stat-card glass-premium glass-hover"><div class="stat-title">Certificates Issued</div>${statValue(certificates.issued)}<div class="stat-change">currently valid</div></div>
+                    <div class="stat-card glass-premium glass-hover"><div class="stat-title">Revenue</div><div class="stat-value" style="font-size:24px;">${WGAUI.escapeHtml(revenue.value)}</div><div class="stat-change"${revenue.mixed ? ' style="color:#b45309;"' : ''}>${WGAUI.escapeHtml(revenue.note)}</div></div>
+                    <div class="stat-card glass-premium glass-hover"><div class="stat-title">Needs Attention</div>${statValue(stats.needsAttention ? stats.needsAttention.pendingCourses : null, (stats.needsAttention?.pendingCourses || 0) > 0 ? 'color:var(--warning);' : '')}<div class="stat-change">course${(stats.needsAttention?.pendingCourses || 0) === 1 ? '' : 's'} awaiting review</div></div>
+                </div>
+
+                <div class="table-container glass-premium">
+                    <div class="table-header">
+                        <h3>🔄 Recent Activity</h3>
+                        <div class="table-toolbar"><button class="btn-primary btn-outline" onclick="loadPage('users')">View All</button></div>
+                    </div>
+                    <table class="data-table">
+                        <thead><tr><th>Who</th><th>What</th><th>When</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${rows([...signups.map((u) => ({ u })), ...recentEnrollments.map((e) => ({ e }))], 'Nothing has happened yet.',
+                                ({ u, e }) => u
+                                    ? `<tr><td>${WGAUI.escapeHtml(u.fullName || u.email)}</td><td>created a ${WGAUI.escapeHtml(u.role)} account</td><td>${WGAUI.formatRelative(u.createdAt)}</td><td><button class="action-btn view" onclick="viewUser('${u.id}')"><i class="fas fa-eye"></i></button></td></tr>`
+                                    : `<tr><td>${WGAUI.escapeHtml(e.studentName)}</td><td>enrolled in ${WGAUI.escapeHtml(e.courseTitle)}</td><td>${WGAUI.formatRelative(e.enrolledAt)}</td><td><button class="action-btn view" onclick="viewUser('${e.studentId || ''}')"><i class="fas fa-eye"></i></button></td></tr>`
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-container glass-premium">
+                    <div class="table-header">
+                        <h3>⏳ Pending Course Approvals</h3>
+                        <div class="table-toolbar"><button class="btn-primary btn-outline" onclick="loadPage('courses')">View All</button></div>
+                    </div>
+                    <table class="data-table">
+                        <thead><tr><th>Course</th><th>Instructor</th><th>Price</th><th>Updated</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${adminData.pendingCourses.length > 0
+                                ? adminData.pendingCourses.map((c) => `
+                                    <tr>
+                                        <td>${WGAUI.escapeHtml(c.title)}</td>
+                                        <td>${WGAUI.escapeHtml(c.instructor ? c.instructor.name : '—')}</td>
+                                        <td>${WGAUI.escapeHtml(c.priceLabel)}</td>
+                                        <td>${WGAUI.formatRelative(c.updatedAt)}</td>
+                                        <td>
+                                            <button class="action-btn approve" onclick="approveCourse('${c.id}')"><i class="fas fa-check-circle"></i> Approve</button>
+                                            <button class="action-btn delete" onclick="rejectCourse('${c.id}')"><i class="fas fa-times-circle"></i> Reject</button>
+                                        </td>
+                                    </tr>
+                                `).join('')
+                                : `<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--text-light);">No courses are waiting for review.</td></tr>`}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderUsers() {
+            const statusBadge = (status) =>
+                `<span class="badge ${status === 'active' ? 'active' : 'inactive'}">${WGAUI.escapeHtml(status)}</span>`;
+
+            return `
+                <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                    <span style="font-size:24px;font-weight:700;">👥 User Management</span>
+                    <button class="btn-primary" onclick="openAddUserModal()">+ Add User</button>
+                </div>
+                <div class="table-container glass-premium">
+                    <div class="table-header">
+                        <div class="table-toolbar">
+                            <input type="text" id="userSearch" placeholder="Search users..." oninput="filterUsersTable()" />
+                            <select id="userRoleFilter" onchange="filterUsersTable()">
+                                <option value="">All Roles</option>
+                                <option value="student">Student</option>
+                                <option value="instructor">Instructor</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary btn-outline" onclick="exportUsersCsv()">Export CSV</button>
+                    </div>
+                    <table class="data-table" id="usersTable">
+                        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Enrolments</th><th>Joined</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${adminData.users.length > 0
+                                ? adminData.users.map((user) => `
+                                    <tr data-role="${WGAUI.escapeHtml(user.role)}" data-name="${WGAUI.escapeHtml((user.fullName || '').toLowerCase())}">
+                                        <td>${WGAUI.escapeHtml(user.fullName || '—')}</td>
+                                        <td>${WGAUI.escapeHtml(user.email)}</td>
+                                        <td><span class="badge" style="background:var(--gold);color:#0f172a;">${WGAUI.escapeHtml(user.role)}</span></td>
+                                        <td>${statusBadge(user.status)}</td>
+                                        <td>${user.stats ? `${user.stats.enrollments} (${user.stats.completed} done)` : '—'}</td>
+                                        <td>${WGAUI.formatDate(user.createdAt)}</td>
+                                        <td>
+                                            <button class="action-btn view" title="View account" onclick="viewUser('${user.id}')"><i class="fas fa-eye"></i></button>
+                                            <button class="action-btn edit" title="Edit account" onclick="editUser('${user.id}')"><i class="fas fa-edit"></i></button>
+                                        </td>
+                                    </tr>
+                                `).join('')
+                                : `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-light);">No accounts yet.</td></tr>`}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderCourses() {
+            const statusBadge = (status) => {
+                const tone = status === 'published' ? 'active' : status === 'pending' ? 'pending' : 'inactive';
+                return `<span class="badge ${tone}">${WGAUI.escapeHtml(status)}</span>`;
+            };
+
+            return `
+                <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                    <span style="font-size:24px;font-weight:700;">📚 Course Management</span>
+                    <button class="btn-primary btn-outline" onclick="exportCoursesCsv()">Export CSV</button>
+                </div>
+                <div class="table-container glass-premium">
+                    <div class="table-header">
+                        <div class="table-toolbar">
+                            <input type="text" id="courseSearch" placeholder="Search courses..." oninput="filterTable('courseSearch','coursesTable')" />
+                        </div>
+                    </div>
+                    <table class="data-table" id="coursesTable">
+                        <thead><tr><th>Title</th><th>Instructor</th><th>Enrolments</th><th>Price</th><th>Status</th><th>Updated</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${adminData.courses.length > 0
+                                ? adminData.courses.map((c) => `
+                                    <tr>
+                                        <td>${WGAUI.escapeHtml(c.title)}</td>
+                                        <td>${WGAUI.escapeHtml(c.instructor ? c.instructor.name : '—')}</td>
+                                        <td>${c.enrollmentCount || 0}</td>
+                                        <td>${WGAUI.escapeHtml(c.priceLabel)}</td>
+                                        <td>${statusBadge(c.status)}</td>
+                                        <td>${WGAUI.formatDate(c.updatedAt || c.createdAt)}</td>
+                                        <td>
+                                            <a class="action-btn view" href="/course.html?slug=${encodeURIComponent(c.slug)}" target="_blank" rel="noopener" title="Open public page"><i class="fas fa-eye"></i></a>
+                                            ${c.status !== 'published'
+                                                ? `<button class="action-btn approve" onclick="approveCourse('${c.id}')"><i class="fas fa-check-circle"></i> Approve</button>`
+                                                : ''}
+                                            ${c.status !== 'draft' || c.reviewNote
+                                                ? `<button class="action-btn delete" onclick="rejectCourse('${c.id}')"><i class="fas fa-undo"></i> Return to draft</button>`
+                                                : ''}
+                                        </td>
+                                    </tr>
+                                `).join('')
+                                : `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-light);">No courses yet.</td></tr>`}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top:28px;">
+                    <h3 style="font-weight:700;margin-bottom:16px;">⏳ Awaiting Review</h3>
+                    <div class="table-container glass-premium">
+                        <table class="data-table">
+                            <thead><tr><th>Title</th><th>Instructor</th><th>Price</th><th>Updated</th><th>Actions</th></tr></thead>
+                            <tbody>
+                                ${adminData.pendingCourses.length > 0
+                                    ? adminData.pendingCourses.map((c) => `
+                                        <tr>
+                                            <td>${WGAUI.escapeHtml(c.title)}</td>
+                                            <td>${WGAUI.escapeHtml(c.instructor ? c.instructor.name : '—')}</td>
+                                            <td>${WGAUI.escapeHtml(c.priceLabel)}</td>
+                                            <td>${WGAUI.formatRelative(c.updatedAt)}</td>
+                                            <td>
+                                                <button class="action-btn approve" onclick="approveCourse('${c.id}')"><i class="fas fa-check-circle"></i> Approve</button>
+                                                <button class="action-btn delete" onclick="rejectCourse('${c.id}')"><i class="fas fa-times-circle"></i> Reject</button>
+                                            </td>
+                                        </tr>
+                                    `).join('')
+                                    : `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--text-light);">No courses are waiting for review.</td></tr>`}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderInstructors() {
+            const instructors = adminData.users.filter((u) => u.role === 'instructor');
+
+            // Course counts are counted from the course list already loaded, not
+            // asserted. The previous version printed a `courses` field that only
+            // existed in its own fixture.
+            const coursesByInstructor = new Map();
+            adminData.courses.forEach((course) => {
+                if (!course.instructor) return;
+                const id = course.instructor.id;
+                coursesByInstructor.set(id, (coursesByInstructor.get(id) || 0) + 1);
+            });
+
+            return `
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                    <span style="font-size:24px;font-weight:700;">🧑‍🏫 Instructor Management</span>
+                    <button class="btn-primary" onclick="openAddUserModal('instructor')">+ Add Instructor</button>
+                </div>
+                <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
+                    <div class="stat-card glass-premium"><div class="stat-title">Total Instructors</div><div class="stat-value">${instructors.length}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">Active</div><div class="stat-value">${instructors.filter((i) => i.status === 'active').length}</div></div>
+                </div>
+                <div class="table-container glass-premium">
+                    <table class="data-table">
+                        <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Courses</th><th>Joined</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${instructors.length > 0
+                                ? instructors.map((inst) => `
+                                    <tr>
+                                        <td>${WGAUI.escapeHtml(inst.fullName || '—')}</td>
+                                        <td>${WGAUI.escapeHtml(inst.email)}</td>
+                                        <td><span class="badge ${inst.status === 'active' ? 'active' : 'inactive'}">${WGAUI.escapeHtml(inst.status)}</span></td>
+                                        <td>${coursesByInstructor.get(inst.id) || 0}</td>
+                                        <td>${WGAUI.formatDate(inst.createdAt)}</td>
+                                        <td><button class="action-btn edit" onclick="editUser('${inst.id}')"><i class="fas fa-edit"></i></button></td>
+                                    </tr>
+                                `).join('')
+                                : `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-light);">No instructor accounts yet.</td></tr>`}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderCertificates() {
+            const counts = adminData.certificateCounts || { issued: 0, revoked: 0, total: 0 };
+
+            return `
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                    <span style="font-size:24px;font-weight:700;">🎓 Certificate Management</span>
+                    <button class="btn-primary btn-outline" onclick="exportCertificatesCsv()">Export CSV</button>
+                </div>
+                <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+                    <div class="stat-card glass-premium"><div class="stat-title">Currently Valid</div><div class="stat-value">${counts.issued}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">Revoked</div><div class="stat-value">${counts.revoked}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">Total Issued</div><div class="stat-value">${counts.total}</div></div>
+                </div>
+                <div class="table-container glass-premium">
+                    <table class="data-table">
+                        <thead><tr><th>Number</th><th>Student</th><th>Course</th><th>Issued</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${adminData.certificates.length > 0
+                                ? adminData.certificates.map((c) => `
+                                    <tr>
+                                        <td>${WGAUI.escapeHtml(c.certificateNumber)}</td>
+                                        <td>${WGAUI.escapeHtml(c.studentName)}</td>
+                                        <td>${WGAUI.escapeHtml(c.courseTitle)}</td>
+                                        <td>${WGAUI.formatDate(c.issueDate)}</td>
+                                        <td>${c.revoked
+                                            ? `<span class="badge inactive" title="${WGAUI.escapeHtml(c.revokedReason || '')}">revoked</span>`
+                                            : '<span class="badge active">valid</span>'}</td>
+                                        <td>
+                                            <a class="action-btn view" href="/verify/${encodeURIComponent(c.verificationCode)}" target="_blank" rel="noopener" title="Open public verification"><i class="fas fa-eye"></i></a>
+                                            ${c.revoked ? '' : `<button class="action-btn delete" onclick="revokeCertificate('${c.id}', '${WGAUI.escapeHtml(c.certificateNumber)}')"><i class="fas fa-ban"></i> Revoke</button>`}
+                                        </td>
+                                    </tr>
+                                `).join('')
+                                : `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-light);">No certificates have been issued yet.</td></tr>`}
+                        </tbody>
+                    </table>
+                </div>
+                <p style="margin-top:18px;font-size:13px;color:var(--text-light);">
+                    Certificates are verifiable at a public link and can be revoked here. There is no
+                    blockchain involved — this page previously claimed "Blockchain Verified".
+                </p>
+            `;
+        }
+
+        function renderPayments() {
+            const revenue = adminData.revenue || [];
+            const headline = revenueHeadline(revenue);
+
+            return `
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                    <span style="font-size:24px;font-weight:700;">💳 Payments</span>
+                    <button class="btn-primary btn-outline" onclick="loadPayments()">Refresh</button>
+                </div>
+                <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
+                    <div class="stat-card glass-premium"><div class="stat-title">Revenue Collected</div><div class="stat-value" style="font-size:24px;">${WGAUI.escapeHtml(headline.value)}</div><div class="stat-change"${headline.mixed ? ' style="color:#b45309;"' : ''}>${WGAUI.escapeHtml(headline.note)}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">Paid Transactions</div><div class="stat-value">${adminData.payments.length}</div><div class="stat-change">most recent first</div></div>
+                </div>
+                <div class="table-container glass-premium">
+                    <table class="data-table">
+                        <thead><tr><th>Reference</th><th>Course</th><th>Amount</th><th>Paid</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${adminData.payments.length > 0
+                                ? adminData.payments.map((p) => `
+                                    <tr>
+                                        <td style="font-family:monospace;font-size:12px;">${WGAUI.escapeHtml(p.id)}</td>
+                                        <td>${WGAUI.escapeHtml(p.courseTitle || '—')}</td>
+                                        <td>${WGAUI.escapeHtml(p.amountLabel)}</td>
+                                        <td>${p.paidAt ? WGAUI.formatDateTime(p.paidAt) : '—'}</td>
+                                        <td><span class="badge ${p.status === 'paid' ? 'active' : 'inactive'}">${WGAUI.escapeHtml(p.status)}</span></td>
+                                        <td>${p.status === 'paid' && !p.refundedAt
+                                            ? `<button class="action-btn delete" onclick="refundPayment('${p.id}')" title="Marks the payment refunded and closes the enrolment. Does not move money — issue the refund in Stripe."><i class="fas fa-rotate-left"></i> Mark refunded</button>`
+                                            : '—'}</td>
+                                    </tr>
+                                `).join('')
+                                : `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-light);">No payments recorded. Paid course purchases appear here.</td></tr>`}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderReports() {
+            const enrollments = adminData.enrollments || [];
+            const completed = enrollments.filter((e) => e.status === 'completed').length;
+            const total = enrollments.length;
+
+            // Derived from the enrolments actually on the platform. The previous
+            // version printed "+23% year over year", "68% completion" and "42 min
+            // average session" — none of which were measured, and the last of
+            // which the platform cannot measure at all.
+            const completionRate = total > 0 ? Math.round((completed / total) * 100) : null;
+
+            const byCourse = new Map();
+            enrollments.forEach((e) => {
+                if (!e.course) return;
+                const entry = byCourse.get(e.course.id) || { title: e.course.title, count: 0, completed: 0 };
+                entry.count += 1;
+                if (e.status === 'completed') entry.completed += 1;
+                byCourse.set(e.course.id, entry);
+            });
+
+            const top = Array.from(byCourse.values()).sort((a, b) => b.count - a.count).slice(0, 10);
+
+            return `
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                    <span style="font-size:24px;font-weight:700;">📊 Platform Report</span>
+                    <button class="btn-primary btn-outline" onclick="exportEnrollmentsCsv()">Export enrolments</button>
+                </div>
+                <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+                    <div class="stat-card glass-premium"><div class="stat-title">Completion Rate</div><div class="stat-value">${completionRate === null ? '—' : completionRate + '%'}</div><div class="stat-change">${total > 0 ? `${completed} of ${total} enrolments finished` : 'No enrolments yet'}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">Enrolments</div><div class="stat-value">${total}</div><div class="stat-change">across ${byCourse.size} course${byCourse.size === 1 ? '' : 's'}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">Certificates</div><div class="stat-value">${(adminData.certificateCounts || {}).issued || 0}</div><div class="stat-change">currently valid</div></div>
+                </div>
+                <div class="table-container glass-premium">
+                    <h3 style="margin-bottom:16px;">🏆 Courses by Enrolments</h3>
+                    <table class="data-table">
+                        <thead><tr><th>Course</th><th>Enrolments</th><th>Completed</th><th>Completion</th></tr></thead>
+                        <tbody>
+                            ${top.length > 0
+                                ? top.map((row) => `
+                                    <tr>
+                                        <td>${WGAUI.escapeHtml(row.title)}</td>
+                                        <td>${row.count}</td>
+                                        <td>${row.completed}</td>
+                                        <td>${Math.round((row.completed / row.count) * 100)}%</td>
+                                    </tr>
+                                `).join('')
+                                : `<tr><td colspan="4" style="text-align:center;padding:32px;color:var(--text-light);">Nobody has enrolled yet.</td></tr>`}
+                        </tbody>
+                    </table>
+                </div>
+                <p style="margin-top:18px;font-size:13px;color:var(--text-light);">
+                    Every figure on this page is counted from your own data. There are no
+                    revenue-over-time or growth-over-time charts because the platform does not
+                    record the history they would need.
+                </p>
+            `;
+        }
+
+        function renderAnnouncements() {
+            const audiences = [
+                { value: 'all', label: 'Everyone' },
+                { value: 'students', label: 'All students' },
+                { value: 'instructors', label: 'All instructors' }
+            ];
+
+            return `
+                <div style="margin-bottom:20px;">
+                    <span style="font-size:24px;font-weight:700;">📣 Send an Announcement</span>
+                </div>
+                <div class="glass-premium" style="padding:24px;max-width:640px;">
+                    <div class="form-group"><label>Title</label><input type="text" id="annTitle" maxlength="160" placeholder="e.g. Scheduled maintenance on Sunday" /></div>
+                    <div class="form-group"><label>Message</label><textarea id="annMessage" rows="4" maxlength="1000" placeholder="What do you need to tell them?"></textarea></div>
+                    <div class="form-group"><label>Audience</label>
+                        <select id="annAudience">${audiences.map((a) => `<option value="${a.value}">${a.label}</option>`).join('')}</select>
+                    </div>
+                    <div class="form-group">
+                        <label style="display:flex;align-items:center;gap:8px;font-weight:500;">
+                            <input type="checkbox" id="annEmail" style="width:auto;" />
+                            Also send by email
+                        </label>
+                        <p style="font-size:12.5px;color:var(--text-light);margin:6px 0 0;">Email is queued to at most 500 people per announcement. Requires a mail provider to be configured.</p>
+                    </div>
+                    <button class="btn-primary" onclick="sendAnnouncement()">Send Announcement</button>
+                </div>
+                <p style="margin-top:18px;font-size:13px;color:var(--text-light);">
+                    This replaces the old Settings page, whose "Save Changes" and "Maintenance Mode"
+                    buttons reported success without saving anything — there is no settings store here.
+                </p>
+            `;
+        }
+
+        // ============================================================
+        //  PAGE LOADER
+        // ============================================================
+        async function loadPage(page) {
+            const content = document.getElementById('main-content');
+            content.innerHTML =
+                '<div style="text-align:center;padding:60px;"><div class="loading-spinner"></div></div>';
+
+            state.currentPage = page;
+
+            let html = '';
+            switch (page) {
+                case 'overview':
+                    html = renderOverview();
+                    break;
+                case 'users':
+                    html = renderUsers();
+                    break;
+                case 'courses':
+                    html = renderCourses();
+                    break;
+                case 'instructors':
+                    html = renderInstructors();
+                    break;
+                case 'certificates':
+                    html = renderCertificates();
+                    break;
+                case 'payments':
+                    html = renderPayments();
+                    break;
+                case 'reports':
+                    html = renderReports();
+                    break;
+                case 'announcements':
+                    html = renderAnnouncements();
+                    break;
+                default:
+                    html = renderOverview();
+            }
+
+            content.innerHTML = html;
+            observeCounters();
+
+            document.querySelectorAll('.sidebar-link').forEach((link) => {
+                link.classList.toggle('active', link.getAttribute('data-page') === page);
+            });
+        }
+
+        // ============================================================
+        //  TABLE FILTER
+        // ============================================================
+        function filterTable(searchId, tableId) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+
+            const term = (document.getElementById(searchId)?.value || '').toLowerCase();
+            table.querySelectorAll('tbody tr').forEach((row) => {
+                row.style.display = row.textContent.toLowerCase().includes(term) ? '' : 'none';
+            });
+        }
+
+        /**
+         * Search and role filter together.
+         *
+         * Both controls used to call `filterTable` with their own id, so each one
+         * only saw itself: typing a name and then picking a role silently
+         * discarded the search.
+         */
+        function filterUsersTable() {
+            const table = document.getElementById('usersTable');
+            if (!table) return;
+
+            const term = (document.getElementById('userSearch')?.value || '').toLowerCase();
+            const role = document.getElementById('userRoleFilter')?.value || '';
+
+            table.querySelectorAll('tbody tr').forEach((row) => {
+                const matchesTerm = !term || (row.dataset.name || '').includes(term) || row.textContent.toLowerCase().includes(term);
+                const matchesRole = !role || row.dataset.role === role;
+                row.style.display = matchesTerm && matchesRole ? '' : 'none';
+            });
+        }
+
+        /* ---------------------------------------------------------------- *
+         * CSV export — built in the browser from data already on the page
+         * ---------------------------------------------------------------- */
+
+        function downloadCsv(filename, header, rows) {
+            if (rows.length === 0) {
+                showToast('There is nothing to export yet.', 'info');
+                return;
+            }
+
+            const escape = (value) => `"${String(value === null || value === undefined ? '' : value).replace(/"/g, '""')}"`;
+            const csv = [header, ...rows].map((row) => row.map(escape).join(',')).join('\r\n');
+
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+
+            showToast(`Exported ${rows.length} row${rows.length === 1 ? '' : 's'}.`, 'success');
+        }
+
+        function exportUsersCsv() {
+            downloadCsv(
+                'wuteve-users.csv',
+                ['Name', 'Email', 'Role', 'Status', 'Enrolments', 'Completed', 'Joined'],
+                adminData.users.map((u) => [
+                    u.fullName,
+                    u.email,
+                    u.role,
+                    u.status,
+                    u.stats ? u.stats.enrollments : 0,
+                    u.stats ? u.stats.completed : 0,
+                    WGAUI.formatDate(u.createdAt)
+                ])
+            );
+        }
+
+        function exportCoursesCsv() {
+            downloadCsv(
+                'wuteve-courses.csv',
+                ['Title', 'Slug', 'Instructor', 'Enrolments', 'Price', 'Status', 'Updated'],
+                adminData.courses.map((c) => [
+                    c.title,
+                    c.slug,
+                    c.instructor ? c.instructor.name : '',
+                    c.enrollmentCount || 0,
+                    c.priceLabel,
+                    c.status,
+                    WGAUI.formatDate(c.updatedAt || c.createdAt)
+                ])
+            );
+        }
+
+        function exportCertificatesCsv() {
+            downloadCsv(
+                'wuteve-certificates.csv',
+                ['Number', 'Student', 'Course', 'Issued', 'Status', 'Revoked reason'],
+                adminData.certificates.map((c) => [
+                    c.certificateNumber,
+                    c.studentName,
+                    c.courseTitle,
+                    WGAUI.formatDate(c.issueDate),
+                    c.revoked ? 'revoked' : 'valid',
+                    c.revokedReason || ''
+                ])
+            );
+        }
+
+        function exportEnrollmentsCsv() {
+            downloadCsv(
+                'wuteve-enrollments.csv',
+                ['Student', 'Email', 'Course', 'Progress', 'Status', 'Enrolled'],
+                adminData.enrollments.map((e) => [
+                    e.student ? e.student.name : '',
+                    e.student ? e.student.email : '',
+                    e.course ? e.course.title : '',
+                    `${e.progress || 0}%`,
+                    e.status,
+                    WGAUI.formatDate(e.enrolledAt)
+                ])
+            );
+        }
+
+        // ============================================================
+        //  ACTION HANDLERS
+        // ============================================================
+        // Every handler below used to show a success toast without calling
+        // anything — "Course approved!", "User updated successfully!",
+        // "Certificate verified on blockchain!". They now call the API and report
+        // what it actually said.
+
+        async function withBusy(button, task) {
+            const label = button ? button.textContent : '';
+            try {
+                if (button) { button.disabled = true; button.textContent = 'Working…'; }
+                await task();
+            } catch (error) {
+                showToast(error.message || 'Something went wrong.', 'error');
+            } finally {
+                if (button) { button.disabled = false; button.textContent = label; }
+            }
+        }
+
+        /**
+         * The administrator's own account, and the password change that belongs
+         * with it.
+         *
+         * This dashboard was the only one without a way to change its own
+         * password: student and instructor each had one and admin did not, which
+         * left the most privileged credential on the site as the only one that
+         * could not be rotated from the interface.
+         */
+        window.openMyAccount = function openMyAccount() {
+            const user = adminData.user || WGA.getUser() || {};
+            const name = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+
+            openModal(
+                name || 'Your account',
+                `
+                    <div class="form-group"><label>Email</label><div>${WGAUI.escapeHtml(user.email || '—')}</div></div>
+                    <div class="form-group"><label>Role</label><div>${WGAUI.escapeHtml(user.role || '—')}</div></div>
+                    <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">Your email address is used to sign in and cannot be changed here.</p>
+                    <button class="btn-primary" onclick="openChangePassword()">Change Password</button>
+                `
+            );
+        };
+
+        window.openChangePassword = function openChangePassword() {
+            openModal('🔑 Change Password', `
+                <div class="form-group"><label>Current password</label><input type="password" id="cpCurrent" /></div>
+                <div class="form-group"><label>New password</label><input type="password" id="cpNew" /></div>
+                <div class="form-group"><label>Confirm new password</label><input type="password" id="cpConfirm" /></div>
+                <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">At least 8 characters, including a letter and a number. You will be signed out of every other device.</p>
+                <button class="btn-primary" id="cpSubmit" onclick="submitChangePassword()">Update password</button>
+            `);
+        };
+
+        window.submitChangePassword = async function submitChangePassword() {
+            const button = document.getElementById('cpSubmit');
+            const currentPassword = document.getElementById('cpCurrent')?.value || '';
+            const newPassword = document.getElementById('cpNew')?.value || '';
+            const confirmPassword = document.getElementById('cpConfirm')?.value || '';
+
+            if (!currentPassword || !newPassword) {
+                showToast('Fill in both password fields.', 'error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showToast('The two new passwords do not match.', 'error');
+                return;
+            }
+
+            WGAUI.setBusy(button, true, 'Saving…');
+
+            try {
+                const data = await WGA.post('/auth/change-password', { currentPassword, newPassword });
+
+                // The API revokes every other session and issues a fresh pair for
+                // this device, so keep the administrator signed in here.
+                WGA.setSession(data);
+                closeModal();
+                showToast('Your password has been changed. Other devices were signed out.', 'success');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                showToast(error.message || 'We could not change your password.', 'error');
+            }
+        };
+
+        window.viewUser = async (id) => {
+            if (!id) return;
+            openModal('Account', '<div style="text-align:center;padding:24px;"><div class="loading-spinner"></div></div>');
+
+            try {
+                const data = await WGA.get(`/admin/users/${id}`);
+                const user = data.user || {};
+
+                openModal(
+                    user.fullName || 'Account',
+                    `
+                        <div class="form-group"><label>Email</label><div>${WGAUI.escapeHtml(user.email || '—')}</div></div>
+                        <div class="form-group"><label>Role</label><div>${WGAUI.escapeHtml(user.role || '—')}</div></div>
+                        <div class="form-group"><label>Status</label><div>${WGAUI.escapeHtml(user.status || '—')}</div></div>
+                        <div class="form-group"><label>Headline</label><div>${WGAUI.escapeHtml(user.headline || '—')}</div></div>
+                        <div class="form-group"><label>Joined</label><div>${WGAUI.formatDate(user.createdAt)}</div></div>
+                        <div class="form-group"><label>Last seen</label><div>${user.lastLoginAt ? WGAUI.formatDateTime(user.lastLoginAt) : 'Never signed in'}</div></div>
+                        <div class="form-group"><label>Enrolments</label><div>${(data.enrollments || []).length}</div></div>
+                        <div class="form-group"><label>Certificates</label><div>${(data.certificates || []).length}</div></div>
+                        <div class="form-group"><label>Payments</label><div>${(data.payments || []).length}</div></div>
+                    `
+                );
+            } catch (error) {
+                closeModal();
+                showToast(error.message || 'Could not load that account.', 'error');
+            }
+        };
+
+        window.editUser = (id) => {
+            const user = adminData.users.find((u) => u.id === id);
+            if (!user) return;
+
+            // Only 'active' and 'suspended' exist. The old form offered 'inactive'
+            // and 'pending', which the API rejects with a 400.
+            openModal(
+                'Edit Account',
+                `
+                    <div class="form-group"><label>First name</label><input type="text" id="edit-first" value="${WGAUI.escapeHtml(user.firstName || '')}" /></div>
+                    <div class="form-group"><label>Last name</label><input type="text" id="edit-last" value="${WGAUI.escapeHtml(user.lastName || '')}" /></div>
+                    <div class="form-group"><label>Email</label><input type="email" value="${WGAUI.escapeHtml(user.email)}" disabled /></div>
+                    <div class="form-group"><label>Role</label>
+                        <select id="edit-role">
+                            ${['student', 'instructor', 'admin'].map((r) => `<option value="${r}"${user.role === r ? ' selected' : ''}>${r}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Status</label>
+                        <select id="edit-status">
+                            <option value="active"${user.status === 'active' ? ' selected' : ''}>active</option>
+                            <option value="suspended"${user.status === 'suspended' ? ' selected' : ''}>suspended</option>
+                        </select>
+                    </div>
+                    <p style="font-size:12.5px;color:var(--text-light);">Suspending an account signs it out everywhere immediately. You cannot change your own role or suspend yourself, and the last administrator cannot be demoted.</p>
+                    <button class="btn-primary" onclick="saveUser('${id}', this)">Save</button>
+                `
+            );
+        };
+
+        window.saveUser = (id, button) =>
+            withBusy(button, async () => {
+                await WGA.patch(`/admin/users/${id}`, {
+                    firstName: document.getElementById('edit-first').value.trim(),
+                    lastName: document.getElementById('edit-last').value.trim(),
+                    role: document.getElementById('edit-role').value,
+                    status: document.getElementById('edit-status').value
+                });
+
+                closeModal();
+                showToast('Account updated.', 'success');
+                await refresh();
+                await loadPage('users');
+            });
+
+        window.approveCourse = (id, button) =>
+            withBusy(button, async () => {
+                await WGA.post(`/admin/courses/${id}/approve`);
+                showToast('Course approved and published.', 'success');
+                await refresh();
+                await loadPage(state.currentPage);
+            });
+
+        window.rejectCourse = (id, button) =>
+            withBusy(button, async () => {
+                // The API requires a note, and the instructor receives it.
+                const note = window.prompt('What needs changing? The instructor will receive this.');
+                if (note === null) return;
+                if (note.trim().length < 4) {
+                    showToast('Please give a reason of at least 4 characters.', 'error');
+                    return;
+                }
+
+                await WGA.post(`/admin/courses/${id}/reject`, { note: note.trim() });
+                showToast('Course returned to the instructor.', 'success');
+                await refresh();
+                await loadPage(state.currentPage);
+            });
+
+        window.revokeCertificate = (id, number, button) =>
+            withBusy(button, async () => {
+                const reason = window.prompt(`Why is ${number} being revoked? The student will see this on the public verification page.`);
+                if (reason === null) return;
+
+                await WGA.post(`/admin/certificates/${id}/revoke`, { reason: reason.trim() || undefined });
+                showToast('Certificate revoked.', 'success');
+                await refresh();
+                await loadPage('certificates');
+            });
+
+        window.refundPayment = (id, button) =>
+            withBusy(button, async () => {
+                /**
+                 * This endpoint does not move money. It marks the payment refunded
+                 * locally and closes the enrolment; the refund itself has to be
+                 * issued in Stripe. Saying "Payment refunded" here would be a
+                 * lie the administrator has no way to notice.
+                 */
+                if (!window.confirm(
+                    'Mark this payment as refunded and withdraw the student\'s access?\n\n' +
+                    'This does NOT send money back. Issue the refund itself in the Stripe dashboard.'
+                )) return;
+
+                await WGA.post(`/payments/${id}/refund`, {});
+                showToast('Marked as refunded. Remember to issue the refund in Stripe.', 'success');
+                await refresh();
+                await loadPage('payments');
+            });
+
+        window.sendAnnouncement = (button) =>
+            withBusy(button, async () => {
+                const title = document.getElementById('annTitle').value.trim();
+                const message = document.getElementById('annMessage').value.trim();
+
+                if (title.length < 3 || message.length < 3) {
+                    showToast('Give the announcement a title and a message.', 'error');
+                    return;
+                }
+
+                const result = await WGA.post('/admin/announcements', {
+                    title,
+                    message,
+                    audience: document.getElementById('annAudience').value,
+                    sendEmail: document.getElementById('annEmail').checked
+                });
+
+                document.getElementById('annTitle').value = '';
+                document.getElementById('annMessage').value = '';
+                document.getElementById('annEmail').checked = false;
+
+                showToast(
+                    `Sent to ${result.notified} ${result.notified === 1 ? 'person' : 'people'}` +
+                        (result.emailQueued ? `, ${result.emailQueued} emails queued.` : '.'),
+                    'success'
+                );
+            });
+
+        window.openAddUserModal = (presetRole) => {
+            openModal(
+                'Add Account',
+                `
+                    <div class="form-group"><label>First name</label><input type="text" id="new-first" /></div>
+                    <div class="form-group"><label>Last name</label><input type="text" id="new-last" /></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="new-email" /></div>
+                    <div class="form-group"><label>Role</label>
+                        <select id="new-role">
+                            ${['student', 'instructor', 'admin'].map((r) => `<option value="${r}"${presetRole === r ? ' selected' : ''}>${r}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="form-group"><label>Temporary password</label><input type="password" id="new-password" /></div>
+                    <p style="font-size:12.5px;color:var(--text-light);">At least 10 characters. This is the only place a role can be set — public sign-up always creates a student, and the account is marked as email-verified because you chose the password.</p>
+                    <button class="btn-primary" onclick="addUser(this)">Create account</button>
+                `
+            );
+        };
+
+        window.addUser = (button) =>
+            withBusy(button, async () => {
+                await WGA.post('/admin/users', {
+                    firstName: document.getElementById('new-first').value.trim(),
+                    lastName: document.getElementById('new-last').value.trim(),
+                    email: document.getElementById('new-email').value.trim(),
+                    role: document.getElementById('new-role').value,
+                    password: document.getElementById('new-password').value
+                });
+
+                closeModal();
+                showToast('Account created.', 'success');
+                await refresh();
+                await loadPage('users');
+            });
+
+        /** Reload the summary data after a mutation, then re-render. */
+        async function refresh() {
+            try {
+                await loadAdminData();
+                updateNotifBadge();
+            } catch (error) {
+                showToast(error.message || 'Could not refresh the data.', 'error');
+            }
+        }
+
+        function updateNotifBadge() {
+            const badge = document.getElementById('notifCount');
+            if (badge) badge.textContent = String(adminData.unread || 0);
+            renderNotifList();
+        }
+
+        function renderNotifList() {
+            const body = document.getElementById('notifBody');
+            if (!body) return;
+
+            if (!adminData.notifications || adminData.notifications.length === 0) {
+                body.innerHTML =
+                    '<div style="padding:26px;text-align:center;color:var(--text-light);font-size:14px;">No notifications yet.</div>';
+                return;
+            }
+
+            body.innerHTML = adminData.notifications
+                .map(
+                    (n) => `
+                    <div class="activity-item">
+                        <div class="activity-icon"><i class="fas fa-bell"></i></div>
+                        <div class="activity-text">
+                            <strong>${WGAUI.escapeHtml(n.title)}</strong>
+                            ${WGAUI.escapeHtml(n.message)}
+                            <span class="time">${WGAUI.formatRelative(n.createdAt)}</span>
+                        </div>
+                    </div>
+                `
+                )
+                .join('');
+        }
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        async function init() {
+            if (!checkAuth()) return;
+
+            // Theme toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.textContent = '☀️';
+            }
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                themeToggle.textContent = isDark ? '☀️' : '🌙';
+            });
+
+            // Sidebar navigation
+            document.querySelectorAll('.sidebar-link').forEach((link) => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    loadPage(link.getAttribute('data-page'));
+                    if (window.innerWidth <= 768) {
+                        document.getElementById('sidebar').classList.remove('open');
+                    }
+                });
+            });
+
+            // Logout. Goes through the API so the refresh token is revoked on the
+            // server; clearing localStorage alone would leave the session alive
+            // for anyone holding the token.
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                WGA.logout().finally(() => {
+                    window.location.href = '/login.html?reason=signout';
+                });
+            });
+
+            // Modal close
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+            document.getElementById('modal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeModal();
+            });
+
+            // Notification panel
+            const notifModal = document.getElementById('notifModal');
+            document.getElementById('notifBtn').addEventListener('click', () => {
+                renderNotifList();
+                notifModal.classList.add('active');
+            });
+            document.getElementById('close-notif').addEventListener('click', () => notifModal.classList.remove('active'));
+            notifModal.addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) notifModal.classList.remove('active');
+            });
+
+            // Mobile menu
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('open');
+            });
+
+            // Global search jumps to the users list.
+            document.getElementById('globalSearch').addEventListener('keydown', (e) => {
+                if (e.key !== 'Enter') return;
+                const term = e.target.value.trim();
+                if (!term) return;
+
+                loadPage('users').then(() => {
+                    const input = document.getElementById('userSearch');
+                    if (input) {
+                        input.value = term;
+                        filterUsersTable();
+                    }
+                });
+            });
+
+            // Load the real data before the first paint, so no page can render a
+            // placeholder figure as though it were a measurement.
+            try {
+                await loadAdminData();
+                updateNotifBadge();
+                await loadPage('overview');
+            } catch (error) {
+                document.getElementById('main-content').innerHTML = `
+                    <div class="glass-premium" style="padding:40px;text-align:center;max-width:560px;margin:60px auto;">
+                        <h2 style="margin-bottom:10px;">We could not load the dashboard</h2>
+                        <p style="color:var(--text-light);margin-bottom:20px;">${WGAUI.escapeHtml(error.message || 'Unexpected error')}</p>
+                        <button class="btn-primary" onclick="window.location.reload()">Try again</button>
+                    </div>
+                `;
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

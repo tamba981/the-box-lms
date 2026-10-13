@@ -37,9 +37,20 @@ npm-debug.log*
 coverage/
 *.tmp
 
-# The static pages copied beside the app at build time by
-# scripts/stage-pages.js. Generated, and the originals live in frontend/public.
-backend/public/
+# The static pages copied beside the app. scripts/stage-pages.js refreshes them
+# from frontend/public on every install, and the copies are committed as well.
+#
+# Committing them is deliberate. The deployment served an API with no pages for
+# ten days because the builder shipped only `backend/` — the nearest directory
+# holding a package.json — and the pages lived beside it. Staging depends on the
+# build command being honoured, and it was not; a committed copy ships whatever
+# the host decides to include. Locally nothing changes: the app prefers
+# frontend/public whenever it exists, so editing the originals works as before.
+#
+# The hero video is excluded on purpose. It is not committed in frontend/public
+# either — it is a 49 MB file awaiting a lighter encode — and it must not be
+# swept into the repository by the staging step that copies its whole directory.
+backend/public/Images/hero/
 .idea/
 *.swp
 

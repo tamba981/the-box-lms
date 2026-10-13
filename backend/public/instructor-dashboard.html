@@ -1,0 +1,3052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/Images/Brand/wuteve-emblem.png" />
+    <title>Instructor Dashboard · Wuteve Global Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* ----- CSS Variables & Base ----- */
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #0f3b8c;
+            --primary-light: #3b82f6;
+            --primary-gradient: linear-gradient(135deg, #1a56db 0%, #0f3b8c 100%);
+            --gold: #d4a547;
+            --gold-light: #f0d080;
+            --silver: #c0c0c0;
+            --silver-light: #e8e8e8;
+            --secondary: #ffffff;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --bg-light: #f0f5ff;
+            --border: #e5e7eb;
+            --dark-bg: #0a1628;
+            --dark-text: #e2e8f0;
+            --dark-card: rgba(30, 41, 59, 0.7);
+            --dark-border: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --glass-primary: rgba(255, 255, 255, 0.10);
+            --glass-border: rgba(255, 255, 255, 0.10);
+            --glass-border-hover: rgba(26, 86, 219, 0.30);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            --glass-shadow-hover: 0 12px 48px rgba(26, 86, 219, 0.10);
+            --glass-blur: 20px;
+            --shadow-glow: 0 0 30px rgba(26, 86, 219, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: linear-gradient(135deg, #1a3a6b 0%, #2a1a5e 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+            background-attachment: fixed;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode {
+            --text-light: #94a3b8; /* #6b7280 is a light-background grey: 3.65:1 here */
+            background: linear-gradient(135deg, #0a1628 0%, #1a0a3a 100%);
+            color: var(--dark-text);
+        }
+
+        /* ----- Premium Glassmorphism ----- */
+        .glass-premium {
+            background: var(--glass-primary);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-premium:hover {
+            transform: translateY(-4px);
+            border-color: var(--glass-border-hover);
+            box-shadow: var(--glass-shadow-hover);
+        }
+
+        body.dark-mode .glass-premium {
+            background: rgba(10, 22, 40, 0.5);
+            border-color: rgba(255, 255, 255, 0.04);
+        }
+
+        body.dark-mode .glass-premium:hover {
+            background: rgba(10, 22, 40, 0.7);
+            border-color: rgba(212, 165, 71, 0.25);
+        }
+
+        .glass-gradient {
+            background: linear-gradient(135deg, rgba(26, 86, 219, 0.10), rgba(212, 165, 71, 0.06));
+            backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+        }
+
+        /* ----- Header (frosted glass) ----- */
+        .header {
+            background: rgba(255, 255, 255, 0.70);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: background 0.3s;
+        }
+
+        body.dark-mode .header {
+            background: rgba(10, 22, 40, 0.70);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 24px;
+            max-width: 1600px;
+            margin: 0 auto;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        /* The emblem is navy, so on the dark theme it sits on a white chip. */
+        .header-left .brand-mark {
+            width: 34px;
+            height: 34px;
+            flex: 0 0 34px;
+            border-radius: 50%;
+            background: #fff;
+            padding: 3px;
+            object-fit: contain;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: none;
+            letter-spacing: -0.3px;
+        }
+        .logo span {
+            font-weight: 400;
+            font-size: 14px;
+            background: linear-gradient(135deg, var(--silver), var(--silver-light));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .instructor-badge {
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .header-search {
+            flex: 1;
+            max-width: 380px;
+            min-width: 140px;
+            position: relative;
+        }
+        .header-search input {
+            width: 100%;
+            padding: 10px 16px 10px 42px;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(6px);
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        body.dark-mode .header-search input {
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.04);
+            color: var(--dark-text);
+        }
+        .header-search input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 165, 71, 0.10);
+        }
+        .header-search i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-icon {
+            background: rgba(255, 255, 255, 0.20);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 40px;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--text);
+            position: relative;
+        }
+        body.dark-mode .btn-icon {
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.03);
+            color: var(--dark-text);
+        }
+        .btn-icon:hover {
+            background: var(--gold);
+            color: #0f172a;
+            border-color: var(--gold);
+            transform: translateY(-2px);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+        body.dark-mode .notification-badge {
+            border-color: var(--dark-bg);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.20);
+        }
+
+        .logout-btn {
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        body.dark-mode .logout-btn {
+            color: var(--dark-text);
+            border-color: rgba(255, 255, 255, 0.03);
+        }
+        .logout-btn:hover {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+            transform: translateY(-2px);
+        }
+
+        /* ----- Sidebar (glass) ----- */
+        .sidebar {
+            width: 270px;
+            background: rgba(255, 255, 255, 0.60);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 20px 16px;
+            position: fixed;
+            height: calc(100vh - 66px);
+            overflow-y: auto;
+            transition: all 0.3s;
+            z-index: 50;
+        }
+
+        body.dark-mode .sidebar {
+            background: rgba(10, 22, 40, 0.60);
+            border-right: 1px solid rgba(255, 255, 255, 0.02);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-item {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 16px;
+            color: var(--text);
+            text-decoration: none;
+            border-radius: 16px;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        body.dark-mode .sidebar-link {
+            color: var(--dark-text);
+        }
+
+        .sidebar-link:hover {
+            background: rgba(26, 86, 219, 0.06);
+        }
+
+        .sidebar-link.active {
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
+            box-shadow: 0 4px 20px rgba(212, 165, 71, 0.25);
+            transform: translateX(6px);
+        }
+
+        .sidebar-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .sidebar-footer {
+            margin-top: 28px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+        body.dark-mode .sidebar-footer {
+            border-top-color: rgba(255, 255, 255, 0.03);
+        }
+        .sidebar-footer .sidebar-link {
+            font-size: 13px;
+        }
+
+        /* ----- Main Content ----- */
+        .main-content {
+            flex: 1;
+            margin-left: 270px;
+            padding: 28px 32px 40px;
+            transition: margin 0.3s;
+        }
+
+        /* ----- Stats Cards (with counter) ----- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            padding: 22px 20px;
+            cursor: default;
+        }
+
+        .stat-title {
+            color: var(--text-light);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 34px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .stat-change.up {
+            color: var(--success);
+        }
+        .stat-change.down {
+            color: var(--danger);
+        }
+
+        /* ----- Section Title ----- */
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .section-title span {
+            background: linear-gradient(135deg, var(--primary), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* ----- Courses Grid ----- */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 28px;
+            margin-bottom: 40px;
+        }
+
+        .course-card {
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .course-image {
+            height: 150px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .course-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            backdrop-filter: blur(8px);
+        }
+        .course-badge.published {
+            background: rgba(16, 185, 129, 0.85);
+            color: white;
+        }
+        .course-badge.draft {
+            background: rgba(245, 158, 11, 0.85);
+            color: white;
+        }
+        .course-badge.pending {
+            background: rgba(239, 68, 68, 0.85);
+            color: white;
+        }
+
+        .course-content {
+            padding: 20px 22px 22px;
+        }
+
+        .course-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .course-meta {
+            font-size: 13px;
+            color: var(--text-light);
+            margin: 6px 0 12px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            background: linear-gradient(135deg, var(--gold), #b8942e);
+            color: #0f172a;
+            border: none;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(212, 165, 71, 0.30);
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        body.dark-mode .btn-outline {
+            border-color: rgba(255, 255, 255, 0.04);
+            color: var(--dark-text);
+        }
+        .btn-outline:hover {
+            background: var(--gold);
+            color: #0f172a;
+            border-color: var(--gold);
+        }
+
+        .btn-sm {
+            padding: 6px 16px;
+            font-size: 12px;
+        }
+
+        /* ----- Tables (glass) ----- */
+        .table-container {
+            padding: 0 0 0;
+            overflow-x: auto;
+            margin-bottom: 24px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding: 16px 20px 12px;
+        }
+
+        .table-header h3 {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .table-toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .table-toolbar input,
+        .table-toolbar select {
+            padding: 8px 14px;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            font-size: 13px;
+        }
+        body.dark-mode .table-toolbar input,
+        body.dark-mode .table-toolbar select {
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.04);
+            color: var(--dark-text);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        body.dark-mode .data-table th,
+        body.dark-mode .data-table td {
+            border-bottom-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .data-table th {
+            font-weight: 600;
+            color: var(--gold);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .data-table tr:hover td {
+            background: rgba(26, 86, 219, 0.02);
+        }
+
+        .badge {
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .badge.active {
+            background: var(--success);
+            color: white;
+        }
+        .badge.pending {
+            background: var(--warning);
+            color: white;
+        }
+        .badge.completed {
+            background: var(--success);
+            color: white;
+        }
+        .badge.in-progress {
+            background: var(--info);
+            color: white;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            border: none;
+            padding: 6px 10px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 13px;
+            margin: 0 2px;
+        }
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+        .action-btn.edit {
+            color: var(--primary);
+        }
+        .action-btn.delete {
+            color: var(--danger);
+        }
+        .action-btn.view {
+            color: var(--success);
+        }
+        .action-btn.message {
+            color: var(--info);
+        }
+
+        /* ----- Chart Cards ----- */
+        .chart-card {
+            padding: 24px 22px;
+            margin-bottom: 24px;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 18px;
+        }
+
+        canvas {
+            max-height: 260px;
+            width: 100% !important;
+        }
+
+        /* ----- Empty State ----- */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(8px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .empty-state i {
+            font-size: 56px;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        /* ----- Modal (glass) ----- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.30);
+            backdrop-filter: blur(8px);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border-radius: 28px;
+            max-width: 680px;
+            width: 92%;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+        body.dark-mode .modal-content {
+            background: rgba(10, 22, 40, 0.85);
+            border-color: rgba(255, 255, 255, 0.03);
+        }
+
+        .modal-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(4px);
+            font-family: inherit;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        body.dark-mode .form-group input,
+        body.dark-mode .form-group select,
+        body.dark-mode .form-group textarea {
+            background: rgba(30, 41, 59, 0.25);
+            border-color: rgba(255, 255, 255, 0.04);
+            color: var(--dark-text);
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 165, 71, 0.08);
+        }
+
+        /* ----- Notifications Panel ----- */
+        .notifications-panel {
+            position: fixed;
+            top: 66px;
+            right: -420px;
+            width: 400px;
+            height: calc(100vh - 66px);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-left: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: 200;
+            transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-y: auto;
+        }
+        body.dark-mode .notifications-panel {
+            background: rgba(10, 22, 40, 0.85);
+            border-left: 1px solid rgba(255, 255, 255, 0.02);
+        }
+        .notifications-panel.open {
+            right: 0;
+        }
+
+        .panel-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 18px;
+            position: sticky;
+            top: 0;
+            background: inherit;
+            backdrop-filter: inherit;
+            z-index: 2;
+        }
+
+        .notification-item {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border);
+            cursor: default;
+            transition: 0.2s;
+        }
+        .notification-item:hover {
+            background: rgba(26, 86, 219, 0.03);
+        }
+        .notification-item.unread {
+            border-left: 3px solid var(--gold);
+        }
+
+        /* ----- Loading ----- */
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(212, 165, 71, 0.10);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text);
+        }
+        body.dark-mode .mobile-menu-btn {
+            color: var(--dark-text);
+        }
+
+        /* ----- Responsive ----- */
+        @media (max-width: 992px) {
+            .courses-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 150;
+                width: 270px;
+                height: 100vh;
+                top: 0;
+                padding-top: 70px;
+                border-right: none;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 16px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .header-search {
+                display: none;
+            }
+            .header-content {
+                padding: 8px 16px;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .notifications-panel {
+                width: 100%;
+                right: -100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .header-right .user-name {
+                display: none;
+            }
+            .courses-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.4s ease forwards;
+        }
+
+        @keyframes toastFadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* ---- Lesson authoring ------------------------------------- */
+        .lesson-admin-row {
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+            padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px;
+            margin-bottom: 9px; background: rgba(255,255,255,.04);
+        }
+        .lesson-admin-num {
+            width: 26px; height: 26px; border-radius: 50%; flex: 0 0 26px;
+            display: grid; place-items: center; font-size: 12px; font-weight: 700;
+            background: rgba(26,86,219,.12); color: var(--primary);
+        }
+        .lesson-admin-main { flex: 1 1 200px; min-width: 0; }
+        .lesson-admin-meta { font-size: 12.5px; color: var(--text-light); margin-top: 3px; }
+        .lesson-admin-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+        .lesson-admin-actions button[disabled] { opacity: .4; cursor: not-allowed; }
+        .lesson-video-state { white-space: nowrap; }
+        .lesson-video-state.is-upload { color: var(--success); }
+        .lesson-video-state.is-link { color: var(--primary); }
+
+        .lesson-form {
+            margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border);
+        }
+        .lesson-form h4 { font-size: 15px; font-weight: 800; margin-bottom: 14px; }
+        .lesson-hint { font-size: 12.5px; color: var(--text-light); margin-top: 7px; }
+        .lesson-video-choices { display: flex; flex-direction: column; gap: 7px; }
+        .lesson-video-choices label { display: flex; align-items: center; gap: 9px; font-size: 14px; }
+        .lesson-video-choices label.is-disabled { opacity: .55; }
+    </style>
+
+    <!--
+      The role guard confirms the session against the server before the page is
+      revealed. This replaces the previous check, which treated the presence of
+      any string in localStorage as proof of sign-in.
+    -->
+    <script src="/assets/js/wga-api.js"></script>
+    <script src="/assets/js/wga-ui.js"></script>
+    <script src="/assets/js/wga-guard.js" data-roles="instructor,admin"></script>
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-left">
+                <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle sidebar">☰</button>
+                <img class="brand-mark" src="/Images/Brand/wuteve-emblem.png" alt="" width="34" height="34" />
+                <a href="/" class="logo">Wuteve <span>Global Academy</span></a>
+                <span class="instructor-badge">Instructor</span>
+            </div>
+
+            <div class="header-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="globalSearch" placeholder="Search courses, students..." />
+            </div>
+
+            <div class="header-right">
+                <span class="user-name" id="user-name" style="font-weight:600;">Instructor</span>
+                <button class="btn-icon" id="notifBtn" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notifCount">3</span>
+                </button>
+                <button class="btn-icon" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+                <div class="user-avatar" id="userAvatar">I</div>
+                <button class="logout-btn" id="logout-btn">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="dashboard" style="display:flex;">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-item"><a href="#" class="sidebar-link active" data-page="overview"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> My Courses</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="create-course"><i class="fas fa-plus-circle"></i> Create Course</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="students"><i class="fas fa-users"></i> My Students</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="live-classes"><i class="fas fa-video"></i> Live Classes</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="earnings"><i class="fas fa-chart-line"></i> Earnings</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="messages"><i class="fas fa-envelope"></i> Messages</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="profile"><i class="fas fa-user"></i> Profile</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <!--
+                  Assignments, Quizzes, Analytics and Settings were removed.
+
+                  Assignments and Quizzes were showing fabricated submission
+                  counts, average scores and attempt numbers for work that cannot
+                  be set: the API has no assignment model, no submission, no
+                  grading and no quiz engine. Analytics and Settings had no page
+                  at all — they silently rendered the overview while the sidebar
+                  implied otherwise.
+                -->
+                <div class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> My Courses</a></div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <div style="text-align:center;padding:60px;">
+                <div class="loading-spinner"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== NOTIFICATIONS PANEL ===== -->
+    <div class="notifications-panel" id="notifPanel">
+        <div class="panel-header">
+            <span>Notifications</span>
+            <button id="closeNotif" style="background:none;border:none;font-size:26px;cursor:pointer;color:var(--text-light);">&times;</button>
+        </div>
+        <div id="notifList"></div>
+    </div>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="modalTitle">Modal</span>
+                <button id="closeModal" style="background:none;border:none;font-size:28px;cursor:pointer;color:var(--text-light);">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  DATA LAYER
+        // ============================================================
+        // Everything below is filled in by loadInstructorData() from the API.
+        //
+        // The views were written against a single `instructorData` object, which
+        // makes this straightforward: populate that object and every view becomes
+        // real without rewriting any of them.
+        //
+        // Removed along with the fixtures that used to sit here: assignments and
+        // quizzes. Neither exists in the API — there is no assignment model, no
+        // submission, no grading and no quiz engine — so those pages displayed
+        // fabricated submission counts and average scores for work that could not
+        // be set. They are gone rather than left looking functional.
+
+        let instructorData = {
+            user: {},
+            stats: {
+                totalStudents: 0,
+                totalCourses: 0,
+                publishedCourses: 0,
+                totalRevenue: 0,
+                monthlyRevenue: 0,
+                averageRating: 0,
+                completionRate: null
+            },
+            revenue: { totalCents: 0, totalLabel: '—', monthlyCents: 0, monthlyLabel: '—', payments: 0, monthlyPayments: 0 },
+            courses: [],
+            studentCourses: [],
+            students: [],
+            liveClasses: [],
+            recordings: [],
+            messages: [],
+            notifications: [],
+            unread: { notifications: 0, messages: 0 }
+        };
+
+        let state = {
+            currentPage: 'overview',
+            charts: {}
+        };
+
+        /** A gradient placeholder instead of a broken image when there is no thumbnail. */
+        function courseImageStyle(course) {
+            return course && course.thumbnail
+                ? `background-image:url('${course.thumbnail}')`
+                : 'background-image:linear-gradient(135deg,#1a3a6b 0%,#2a1a5e 100%)';
+        }
+
+        /**
+         * Load everything the instructor views need, in parallel.
+         *
+         * One request answers the overview; the rest fill in the pages that need
+         * a full list rather than a summary.
+         */
+        async function loadInstructorData() {
+            const [dashboard, students, sessions, past, threads, notifications] = await Promise.all([
+                WGA.get('/dashboard/instructor'),
+                WGA.get('/dashboard/instructor/students', { query: { limit: 100 } }),
+                WGA.get('/live-sessions', { query: { scope: 'all', limit: 50 } }),
+                WGA.get('/live-sessions', { query: { scope: 'past', limit: 20 } }),
+                WGA.get('/messages/threads', { query: { limit: 50 } }),
+                WGA.get('/notifications', { query: { limit: 20 } })
+            ]);
+
+            const stats = dashboard.stats || {};
+            const revenue = dashboard.revenue || {};
+
+            instructorData.user = dashboard.user || WGA.getUser() || {};
+
+            instructorData.stats = {
+                totalStudents: stats.students || 0,
+                totalCourses: stats.courses || 0,
+                publishedCourses: stats.published || 0,
+                drafts: stats.drafts || 0,
+                pending: stats.pending || 0,
+                // The API sums money in integer cents; this is the only place it
+                // becomes a decimal, and only for display arithmetic.
+                totalRevenue: (revenue.totalCents || 0) / 100,
+                monthlyRevenue: (revenue.monthlyCents || 0) / 100,
+                averageRating: stats.averageRating || 0,
+                ratingCount: stats.ratingCount || 0,
+                // null, not 0, when there are no students: 0% would read as
+                // "nobody finishes this course", which is a different claim.
+                completionRate: stats.completionRate === null || stats.completionRate === undefined
+                    ? null
+                    : stats.completionRate,
+                averageProgress: stats.averageProgress || 0
+            };
+
+            instructorData.revenue = revenue;
+
+            instructorData.courses = (dashboard.courses || []).map((course) => ({
+                id: String(course.id),
+                slug: course.slug,
+                title: course.title,
+                description: course.summary || '',
+                thumbnail: course.thumbnail || '',
+                students: course.enrolledCount || 0,
+                status: course.status,
+                price: (course.priceCents || 0) / 100,
+                priceLabel: course.priceLabel,
+                isFree: course.isFree,
+                rating: course.rating || 0,
+                lessonCount: course.lessonCount || 0,
+                createdAt: course.publishedAt || null
+            }));
+
+            instructorData.students = (students.items || []).map((student) => ({
+                id: student.id,
+                name: student.name,
+                email: student.email,
+                courseId: student.courseId,
+                courseTitle: student.courseTitle,
+                progress: student.progress,
+                status: student.status,
+                enrolledAt: student.enrolledAt,
+                lastActive: student.lastActive
+            }));
+
+            instructorData.studentCourses = students.courses || [];
+
+            instructorData.liveClasses = (sessions.items || []).map((session) => ({
+                id: String(session.id),
+                courseId: String(session.courseId || ''),
+                courseTitle: session.courseTitle || '',
+                title: session.title,
+                date: session.startTime,
+                endTime: session.endTime,
+                attendees: session.attendeeCount || 0,
+                status: session.status,
+                meetingLink: session.meetingLink || null,
+                recording: session.recordingUrl || null
+            }));
+
+            instructorData.recordings = (past.items || []).filter((session) => session.recordingUrl);
+
+            instructorData.messages = (threads.items || []).map((thread) => ({
+                id: String(thread.id),
+                from: thread.displayName || thread.title || 'Conversation',
+                message: thread.lastMessagePreview || 'No messages yet',
+                date: thread.lastMessageAt,
+                read: !(thread.unreadCount > 0)
+            }));
+
+            instructorData.notifications = (notifications.items || []).map((notification) => ({
+                id: String(notification.id),
+                title: notification.title,
+                message: notification.message,
+                createdAt: notification.createdAt,
+                read: Boolean(notification.read)
+            }));
+
+            instructorData.unread = {
+                notifications: notifications.unreadCount || 0,
+                messages: threads.unreadTotal || 0
+            };
+        }
+
+        // ============================================================
+        //  AUTH (preserved)
+        // ============================================================
+        /** Open a course's public page. */
+        function openCourse(idOrSlug) {
+            if (!idOrSlug) return;
+            window.location.href = '/course.html?course=' + encodeURIComponent(idOrSlug);
+        }
+
+        /**
+         * The session and the role are verified by /assets/js/wga-guard.js before
+         * this page is revealed, so there is nothing to decide here. The previous
+         * version read the role out of localStorage, which the visitor controls.
+         */
+        function checkAuth() {
+            const user = WGA.getUser() || {};
+            const nameEl = document.getElementById('user-name');
+            const avatarEl = document.getElementById('userAvatar');
+
+            if (nameEl) nameEl.textContent = user.firstName || 'Instructor';
+            if (avatarEl) avatarEl.textContent = (user.firstName || 'I')[0].toUpperCase();
+
+            updateNotifBadge();
+            return true;
+        }
+
+        function updateNotifBadge() {
+            // A real unread count. The old version counted the fixture messages
+            // and then added a hardcoded 3.
+            const element = document.getElementById('notifCount');
+            if (element) element.textContent = instructorData.unread.notifications || 0;
+        }
+
+        // ============================================================
+        //  UI HELPERS
+        // ============================================================
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const bgColor = type === 'error' ? '#ef4444' : type === 'success' ? '#10b981' : '#3b82f6';
+            toast.style.cssText = `
+                position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+                background: ${bgColor}; color: white; padding: 12px 28px; border-radius: 40px;
+                z-index: 2000; animation: toastFadeIn 0.3s ease; font-weight: 600; font-size: 14px;
+                box-shadow: 0 8px 30px rgba(0,0,0,0.08); max-width: 90%; text-align: center;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300); }, 3200);
+        }
+
+        function openModal(title, bodyHTML) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').innerHTML = bodyHTML;
+            document.getElementById('modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        /**
+         * Count up to a figure.
+         *
+         * Two guards, both learned the hard way. Reading the DOM while a counter
+         * was still animating showed "3 published courses" next to four published
+         * courses — the easing meant the number on screen was simply wrong for
+         * two seconds, which is the same failure as printing a made-up figure.
+         *
+         * So: small counts are set immediately rather than counted up to (there
+         * is nothing to reveal about a four-course total), and a timer backstop
+         * pins the final value in case the browser throttles animation frames in
+         * a background tab and the last frame never arrives.
+         */
+        function animateCounter(el, target, duration = 2000) {
+            const value = Number.isFinite(target) ? target : 0;
+
+            function finish() {
+                el.textContent = value.toLocaleString();
+            }
+
+            if (value < 10) {
+                finish();
+                return;
+            }
+
+            const startTime = performance.now();
+            let done = false;
+
+            function update(now) {
+                if (done) return;
+
+                const progress = Math.min((now - startTime) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.round(eased * value).toLocaleString();
+
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    done = true;
+                }
+            }
+
+            requestAnimationFrame(update);
+
+            setTimeout(() => {
+                if (done) return;
+                done = true;
+                finish();
+            }, duration + 400);
+        }
+
+        function observeCounters() {
+            const counters = document.querySelectorAll('.stat-value[data-target]');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = parseInt(entry.target.dataset.target, 10);
+                        animateCounter(entry.target, target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 });
+            counters.forEach(el => observer.observe(el));
+        }
+
+        // ============================================================
+        //  RENDER FUNCTIONS (all pages)
+        // ============================================================
+        function renderOverview() {
+            const s = instructorData.stats;
+            const revenue = instructorData.revenue || {};
+
+            // There is no revenue-over-time series in the API, so there is no
+            // chart here. The previous version drew a six-month line from a
+            // hardcoded array, which is a graph of nothing. The real totals are
+            // shown as figures instead — see the Earnings page for the breakdown
+            // by course, which is real.
+            return `
+                <div class="stats-grid">
+                    <div class="stat-card glass-premium"><div class="stat-title">📚 Total Students</div><div class="stat-value" data-target="${s.totalStudents}">0</div><div class="stat-change">across ${s.totalCourses} ${s.totalCourses === 1 ? 'course' : 'courses'}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">📘 Published Courses</div><div class="stat-value" data-target="${s.publishedCourses}">0</div><div class="stat-change">${s.drafts || 0} draft${(s.drafts || 0) === 1 ? '' : 's'}${s.pending ? `, ${s.pending} awaiting review` : ''}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">💰 Revenue This Month</div><div class="stat-value" style="font-size:24px;">${WGAUI.escapeHtml(revenue.monthlyLabel || '—')}</div><div class="stat-change">${WGAUI.escapeHtml(revenue.totalLabel || '—')} in total</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">⭐ Average Rating</div><div class="stat-value">${s.averageRating || '—'}</div><div class="stat-change">${s.ratingCount || 0} rating${(s.ratingCount || 0) === 1 ? '' : 's'}</div></div>
+                </div>
+
+                <div class="section-title"><span>📖 My Courses</span><button class="btn-primary btn-sm" onclick="loadPage('courses')">View All</button></div>
+                <div class="courses-grid">
+                    ${instructorData.courses.length > 0 ? instructorData.courses.slice(0, 6).map(c => `
+                        <div class="course-card glass-premium fade-in-up">
+                            <div class="course-image" style="${courseImageStyle(c)}"><span class="course-badge ${c.status}">${c.status}</span></div>
+                            <div class="course-content">
+                                <h3 class="course-title">${c.title}</h3>
+                                <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:var(--gold);"></i> ${c.rating || 'Not rated'}</div>
+                                <button class="btn-primary btn-sm" onclick="editCourse('${c.id}')">Manage Course</button>
+                                <button class="btn-primary btn-outline btn-sm" onclick="manageLessons('${c.id}')">Lessons</button>
+                            </div>
+                        </div>
+                    `).join('') : `<div class="empty-state"><i class="fas fa-book"></i><h3>No courses yet</h3><p>Create your first course to get started</p><button class="btn-primary" onclick="loadPage('create-course')">Create a Course</button></div>`}
+                </div>
+
+                <div class="table-container glass-premium">
+                    <div class="table-header"><h3>👥 Recent Student Activity</h3><button class="btn-primary btn-outline btn-sm" onclick="loadPage('students')">View All</button></div>
+                    <table class="data-table">
+                        <thead><tr><th>Student</th><th>Course</th><th>Progress</th><th>Last Active</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${instructorData.students.length > 0 ? instructorData.students.slice(0, 5).map(s => `
+                                <tr>
+                                    <td>${WGAUI.escapeHtml(s.name)}</td><td>${WGAUI.escapeHtml(s.courseTitle)}</td>
+                                    <td><div style="width:100px;background:rgba(0,0,0,0.06);border-radius:4px;height:6px;"><div style="width:${s.progress}%;height:6px;background:var(--primary);border-radius:4px;"></div></div> ${s.progress}%</td>
+                                    <td>${s.lastActive ? WGAUI.formatRelative(s.lastActive) : 'Never opened'}</td>
+                                    <td><button class="action-btn message" title="Message" onclick="messageStudent('${s.studentId || s.id}', this.getAttribute('data-name'))" data-name="${WGAUI.escapeHtml(s.name)}"><i class="fas fa-envelope"></i></button></td>
+                                </tr>
+                            `).join('') : `<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--text-light);">No students yet</td></tr>`}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderCourses() {
+            if (instructorData.courses.length === 0) {
+                return `
+                    <div class="section-title"><span>📚 My Courses</span><button class="btn-primary" onclick="loadPage('create-course')">+ Create New Course</button></div>
+                    <div class="empty-state"><i class="fas fa-book"></i><h3>No courses yet</h3><p>Your courses appear here once you create one</p><button class="btn-primary" onclick="loadPage('create-course')">Create a Course</button></div>
+                `;
+            }
+
+            return `
+                <div class="section-title"><span>📚 My Courses (${instructorData.courses.length})</span><button class="btn-primary" onclick="loadPage('create-course')">+ Create New Course</button></div>
+                <div class="courses-grid">
+                    ${instructorData.courses.map(c => `
+                        <div class="course-card glass-premium">
+                            <div class="course-image" style="${courseImageStyle(c)}"><span class="course-badge ${c.status}">${c.status}</span></div>
+                            <div class="course-content">
+                                <h3 class="course-title">${WGAUI.escapeHtml(c.title)}</h3>
+                                <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:var(--gold);"></i> ${c.rating || 'Not rated'}</div>
+                                <div class="course-meta"><span>${WGAUI.escapeHtml(c.priceLabel || 'Free')}</span> · <span>${c.lessonCount} lesson${c.lessonCount === 1 ? '' : 's'}</span></div>
+                                <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+                                    <button class="btn-primary btn-sm" onclick="editCourse('${c.id}')">Edit</button>
+                                    <button class="btn-primary btn-sm" onclick="manageLessons('${c.id}')">Lessons</button>
+                                    <button class="btn-primary btn-outline btn-sm" onclick="openCourse('${c.slug || c.id}')">View Page</button>
+                                    ${c.status === 'draft' ? `<button class="btn-primary btn-sm" onclick="publishCourse('${c.id}')">Submit</button>` : ''}
+                                    ${c.status === 'published' ? `<button class="btn-primary btn-outline btn-sm" onclick="unpublishCourse('${c.id}')">Unpublish</button>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderCreateCourse() {
+            return `
+                <div class="section-title">✏️ Create New Course</div>
+                <div class="glass-premium" style="padding:24px;">
+                    <div class="form-group"><label>Course Title</label><input type="text" id="courseTitle" placeholder="e.g., Advanced Python Programming" /></div>
+                    <div class="form-group"><label>Description</label><textarea id="courseDesc" rows="4" placeholder="Describe what students will learn..."></textarea></div>
+                    <div class="form-group">
+                        <label>Course cover image</label>
+                        <input type="file" id="courseThumbFile" accept="image/png,image/jpeg,image/webp" data-preview="courseThumbPreview" onchange="previewCourseCover(this)" />
+                        <div id="courseThumbPreview" style="margin-top:10px;"></div>
+                        <p style="font-size:12.5px;color:var(--text-light);margin-top:8px;">
+                            Optional. PNG, JPEG or WebP — choose any size, it is shrunk in your browser
+                            before upload. Without one the course shows a coloured placeholder.
+                        </p>
+                    </div>
+                    <div class="form-group"><label>Price ($)</label><input type="number" id="coursePrice" value="0" /></div>
+                    <div class="form-group"><label>Category</label><select id="courseCat"><option>Technology</option><option>Business</option><option>Design</option></select></div>
+                    <div class="form-group"><label>Level</label><select id="courseLevel"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div>
+                    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                        <button class="btn-primary" onclick="saveCourse(false)">Save as Draft</button>
+                        <button class="btn-primary btn-outline" onclick="saveCourse(true)">Save and Submit for Review</button>
+                    </div>
+                    <p style="margin-top:14px;font-size:13px;color:var(--text-light);">
+                        Lessons are added on the course page once the course exists. An administrator
+                        reviews a submitted course before it appears in the catalog.
+                    </p>
+                </div>
+            `;
+        }
+
+        function renderStudents() {
+            return `
+                <div class="section-title"><span>👥 My Students (${instructorData.stats.totalStudents})</span></div>
+                <div class="table-container glass-premium">
+                    <div class="table-header">
+                        <div class="table-toolbar"><input type="text" id="searchStudent" placeholder="Search the loaded list by name or email..." oninput="filterStudents()" /></div>
+                        <button class="btn-primary btn-outline btn-sm" onclick="exportStudentsCsv()">Export CSV</button>
+                    </div>
+                    <table class="data-table">
+                        <thead><tr><th>Name</th><th>Email</th><th>Course</th><th>Progress</th><th>Enrolled</th><th>Last Active</th><th>Actions</th></tr></thead>
+                        <tbody id="studentsBody">
+                            ${instructorData.students.length > 0 ? instructorData.students.map(s => `
+                                <tr class="student-row" data-name="${WGAUI.escapeHtml(s.name)} " data-email="${WGAUI.escapeHtml(s.email)}">
+                                    <td>${WGAUI.escapeHtml(s.name)}</td>
+                                    <td>${WGAUI.escapeHtml(s.email)}</td>
+                                    <td>${WGAUI.escapeHtml(s.courseTitle)}</td>
+                                    <td><div style="width:80px;background:rgba(0,0,0,0.06);border-radius:4px;height:6px;"><div style="width:${s.progress}%;height:6px;background:var(--primary);border-radius:4px;"></div></div> ${s.progress}%</td>
+                                    <td>${WGAUI.formatDate(s.enrolledAt)}</td>
+                                    <td>${s.lastActive ? WGAUI.formatRelative(s.lastActive) : 'Never opened'}</td>
+                                    <td><button class="action-btn message" title="Message" data-name="${WGAUI.escapeHtml(s.name)}" onclick="messageStudent('${s.studentId || s.id}', this.getAttribute('data-name'))"><i class="fas fa-envelope"></i></button></td>
+                                </tr>
+                            `).join('') : `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-light);">No students yet. They appear here as soon as somebody enrols.</td></tr>`}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderLiveClasses() {
+            return `
+                <div class="section-title"><span>🎥 Live Classes</span><button class="btn-primary" onclick="scheduleLiveClass()">+ Schedule Class</button></div>
+                <div class="table-container glass-premium">
+                    <table class="data-table">
+                        <thead><tr><th>Title</th><th>Course</th><th>Starts</th><th>Attending</th><th>Recording</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${instructorData.liveClasses.length > 0 ? instructorData.liveClasses.map(l => `
+                                <tr>
+                                    <td>${WGAUI.escapeHtml(l.title)}</td>
+                                    <td>${WGAUI.escapeHtml(l.courseTitle)}</td>
+                                    <td>${WGAUI.formatDateTime(l.date)}</td>
+                                    <td>${l.attendees || 0}</td>
+                                    <td>${l.recording ? '<i class="fas fa-check-circle" style="color:var(--success);"></i> Posted' : '—'}</td>
+                                    <td>
+                                        ${l.status === 'cancelled'
+                                            ? '<span class="badge pending">Cancelled</span>'
+                                            : `<button class="action-btn edit" onclick="cancelLiveClass('${l.id}')">Cancel</button>`}
+                                    </td>
+                                </tr>
+                            `).join('') : `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-light);">No sessions scheduled yet.</td></tr>`}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderEarnings() {
+            const revenue = instructorData.revenue || {};
+            const breakdown = revenue.byCourse || [];
+            const rate = instructorData.stats.completionRate;
+
+            // Two currencies cannot be added together, so when an instructor has
+            // sold in more than one the headline is the largest currency and the
+            // rest are listed beneath it. Saying so is the point: the previous
+            // version reported only the first currency as though it were the
+            // whole total.
+            const currencyNote = (mixed, currencies) => {
+                if (!mixed) return '';
+                const parts = (currencies || []).map(
+                    (c) => `${WGAUI.escapeHtml(c.totalLabel)} (${c.payments})`
+                );
+                return `<div class="stat-change" style="color:#b45309;">Across ${parts.length} currencies: ${parts.join(' · ')}</div>`;
+            };
+
+            return `
+                <div class="stats-grid">
+                    <div class="stat-card glass-premium"><div class="stat-title">💰 Total Revenue</div><div class="stat-value" style="font-size:24px;">${WGAUI.escapeHtml(revenue.totalLabel || '—')}</div><div class="stat-change">${revenue.payments || 0} paid enrolment${(revenue.payments || 0) === 1 ? '' : 's'}</div>${currencyNote(revenue.mixedCurrency, revenue.currencies)}</div>
+                    <div class="stat-card glass-premium"><div class="stat-title">📈 This Month</div><div class="stat-value" style="font-size:24px;">${WGAUI.escapeHtml(revenue.monthlyLabel || '—')}</div><div class="stat-change">${revenue.monthlyPayments || 0} this month</div>${currencyNote(revenue.monthlyMixedCurrency, revenue.monthlyCurrencies)}</div>
+                    <div class="stat-card glass-premium"><div class="stat-title">🎓 Completion Rate</div><div class="stat-value">${rate === null || rate === undefined ? '—' : rate + '%'}</div><div class="stat-change">${rate === null || rate === undefined ? 'No students yet' : 'of enrolled students'}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">⭐ Average Rating</div><div class="stat-value">${instructorData.stats.averageRating || '—'}</div><div class="stat-change">${instructorData.stats.ratingCount || 0} rating${(instructorData.stats.ratingCount || 0) === 1 ? '' : 's'}</div></div>
+                </div>
+
+                ${breakdown.length > 0
+                    ? `<div class="chart-card glass-premium"><div class="chart-title">Revenue by course</div><canvas id="earningsChart"></canvas></div>`
+                    : ''}
+
+                <div class="table-container glass-premium">
+                    <h3 style="margin-bottom:16px;">Revenue by course</h3>
+                    <table class="data-table">
+                        <thead><tr><th>Course</th><th>Paid enrolments</th><th>Revenue</th></tr></thead>
+                        <tbody>
+                            ${breakdown.length > 0 ? breakdown.map((row) => `
+                                <tr>
+                                    <td>${WGAUI.escapeHtml(row.title)}</td>
+                                    <td>${row.payments}</td>
+                                    <td>${WGAUI.escapeHtml(row.totalLabel)}${row.mixedCurrency ? `<div style="font-size:12px;color:#b45309;">+ ${(row.currencies || []).slice(1).map((c) => WGAUI.escapeHtml(c.totalLabel)).join(', ')} in other currencies</div>` : ''}</td>
+                                </tr>
+                            `).join('') : `<tr><td colspan="3" style="text-align:center;padding:28px;color:var(--text-light);">No payments yet. Revenue appears here once somebody buys one of your courses.</td></tr>`}
+                        </tbody>
+                    </table>
+                </div>
+
+                <p style="margin-top:18px;font-size:13px;color:var(--text-light);">
+                    Figures come from completed payments for your courses. Payouts to instructors
+                    are handled outside this platform — there is no payout schedule here, and the
+                    page does not pretend otherwise.
+                </p>
+            `;
+        }
+
+        function renderMessages() {
+            return `
+                <div class="section-title">💬 Messages</div>
+                <div class="table-container glass-premium">
+                    <table class="data-table">
+                        <thead><tr><th>From</th><th>Message</th><th>When</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${instructorData.messages.length > 0 ? instructorData.messages.map(m => `
+                                <tr>
+                                    <td>${WGAUI.escapeHtml(m.from)}</td>
+                                    <td>${WGAUI.escapeHtml(m.message)}</td>
+                                    <td>${m.date ? WGAUI.formatRelative(m.date) : '—'}</td>
+                                    <td>${!m.read ? '<span class="badge pending">Unread</span>' : 'Read'}</td>
+                                    <td><button class="action-btn view" onclick="replyToMessage('${m.id}')">Reply</button></td>
+                                </tr>
+                            `).join('') : `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--text-light);">No conversations yet. Message a student from the roster, or wait for one to write to you.</td></tr>`}
+                        </tbody>
+                    </table>
+                </div>
+                <button class="btn-primary" onclick="composeMessage()">+ Compose New Message</button>
+            `;
+        }
+
+        function renderProfile() {
+            const u = instructorData.user;
+            const expertise = Array.isArray(u.expertise) ? u.expertise.join(', ') : '';
+
+            return `
+                <div class="section-title">👤 Profile Settings</div>
+                <div class="glass-premium" style="padding:24px;max-width:600px;">
+                    <div class="form-group"><label>First Name</label><input type="text" id="pFirstName" value="${WGAUI.escapeHtml(u.firstName || '')}" /></div>
+                    <div class="form-group"><label>Last Name</label><input type="text" id="pLastName" value="${WGAUI.escapeHtml(u.lastName || '')}" /></div>
+                    <div class="form-group"><label>Email</label><input type="email" value="${WGAUI.escapeHtml(u.email || '')}" disabled /></div>
+                    <div class="form-group"><label>Headline</label><input type="text" id="pHeadline" value="${WGAUI.escapeHtml(u.headline || '')}" placeholder="e.g. Data analyst and lecturer" /></div>
+                    <div class="form-group"><label>Bio</label><textarea id="pBio" rows="4">${WGAUI.escapeHtml(u.bio || '')}</textarea></div>
+                    <div class="form-group"><label>Expertise</label><input type="text" id="pExpertise" value="${WGAUI.escapeHtml(expertise)}" placeholder="Comma separated, e.g. Statistics, Spreadsheets" /></div>
+                    <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">Your email address is used to sign in and cannot be changed here.</p>
+                    <button class="btn-primary" onclick="updateProfile()">Update Profile</button>
+                    <button class="btn-primary btn-outline" style="margin-left:12px;" onclick="openChangePassword()">Change Password</button>
+                </div>
+            `;
+        }
+
+        // ============================================================
+        //  ACTION HANDLERS
+        // ============================================================
+        // These were placeholders: they showed a success toast and changed
+        // nothing. "Course updated!", "Course published!", "Live class
+        // scheduled!", "Reply sent!", "Message sent!" — none of them contacted
+        // the API. Each one now does what it says, and reports the server's own
+        // error message when it cannot.
+
+        function courseOptions(selectedId) {
+            if (instructorData.courses.length === 0) return '<option value="">No courses yet</option>';
+
+            return instructorData.courses
+                .map((c) => `<option value="${c.id}"${String(c.id) === String(selectedId) ? ' selected' : ''}>${WGAUI.escapeHtml(c.title)}</option>`)
+                .join('');
+        }
+
+        /** Distinct students, keyed by account id, for the message pickers. */
+        function studentOptions() {
+            const byId = new Map();
+            instructorData.students.forEach((s) => {
+                if (s.studentId) byId.set(s.studentId, s.name);
+            });
+
+            if (byId.size === 0) return '<option value="">No students yet</option>';
+
+            return Array.from(byId.entries())
+                .map(([id, name]) => `<option value="${id}">${WGAUI.escapeHtml(name)}</option>`)
+                .join('');
+        }
+
+        /* ------------------------------------------------------------------ *
+         * Course cover images
+         *
+         * Uploaded, not linked. Asking an instructor to find hosting for a picture
+         * and paste in a URL is the step where most of them stop, and the course is
+         * left showing a placeholder.
+         * ------------------------------------------------------------------ */
+
+        /**
+         * Shrink a chosen image in the browser before uploading it.
+         *
+         * A photo straight off a phone is several megabytes and the API refuses
+         * anything over 600 KB. Downscaling here means an instructor can pick any
+         * picture they already have, rather than being told to go and resize it
+         * first. A cover is never displayed larger than a card, so 1280x720 is ample.
+         */
+        function prepareCoverImage(file) {
+            return new Promise((resolve, reject) => {
+                if (!file || !/^image\/(png|jpeg|webp)$/.test(file.type || '')) {
+                    reject(new Error('Choose a PNG, JPEG or WebP image.'));
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onerror = () => reject(new Error('That file could not be read.'));
+
+                reader.onload = () => {
+                    const image = new Image();
+
+                    image.onerror = () => reject(new Error('That file is not an image we can display.'));
+
+                    image.onload = () => {
+                        const scale = Math.min(1, 1280 / image.width, 720 / image.height);
+                        const width = Math.max(1, Math.round(image.width * scale));
+                        const height = Math.max(1, Math.round(image.height * scale));
+
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+
+                        resolve(canvas.toDataURL('image/jpeg', 0.85));
+                    };
+
+                    image.src = reader.result;
+                };
+
+                reader.readAsDataURL(file);
+            });
+        }
+
+        /** Show the chosen file at once, so the instructor sees what they picked. */
+        window.previewCourseCover = async function previewCourseCover(input) {
+            const box = document.getElementById(input.dataset.preview || 'courseThumbPreview');
+            const file = input.files && input.files[0];
+
+            if (!box) return;
+
+            if (!file) {
+                box.innerHTML = '';
+                box.dataset.prepared = '';
+                return;
+            }
+
+            try {
+                const dataUrl = await prepareCoverImage(file);
+                box.dataset.prepared = dataUrl;
+                box.innerHTML =
+                    '<img src="' + dataUrl + '" alt="" style="width:100%;max-width:340px;border-radius:12px;border:1px solid var(--border);display:block;" />';
+            } catch (error) {
+                input.value = '';
+                box.dataset.prepared = '';
+                box.innerHTML = '';
+                showToast(error.message, 'error');
+            }
+        };
+
+        /**
+         * The API reports a rejected image as a field message inside `details`, plus
+         * a generic sentence at the top level. Showing the generic one would tell an
+         * instructor "The submitted data is invalid" and nothing about what to fix.
+         */
+        function coverErrorMessage(error) {
+            const detail = error && error.details && error.details[0];
+            return (detail && detail.message) || (error && error.message) || 'We could not save that cover image.';
+        }
+
+        /** Returns true when the cover was stored, so callers can report honestly. */
+        async function sendCourseCover(courseId, dataUrl) {
+            try {
+                await WGA.put('/courses/' + encodeURIComponent(courseId) + '/thumbnail', { image: dataUrl });
+                return true;
+            } catch (error) {
+                showToast(coverErrorMessage(error), 'error');
+                return false;
+            }
+        }
+
+        /* ============================================================
+         *  LESSON AUTHORING
+         *
+         *  Lessons belong to a course, so this is a modal opened from one
+         *  rather than a page of its own: an instructor is always editing "the
+         *  syllabus of this course", and a course must exist before a lesson can.
+         * ============================================================ */
+        const lessonState = { courseId: null, title: '', items: [], editing: null, storage: null, draft: null };
+
+        function lessonVideoLabel(lesson) {
+            if (lesson.videoType === 'upload') {
+                return '<span class="lesson-video-state is-upload"><i class="fas fa-circle-check"></i> Uploaded video</span>';
+            }
+            if (lesson.videoType === 'link') {
+                return '<span class="lesson-video-state is-link"><i class="fas fa-link"></i> Video link</span>';
+            }
+            return '<span class="lesson-video-state"><i class="fas fa-video-slash"></i> No video</span>';
+        }
+
+        function refreshLessonModal() {
+            openModal(lessonState.title, lessonModalBody());
+            bindLessonModal();
+        }
+
+        function lessonModalBody() {
+            const storage = lessonState.storage || { enabled: false, missing: [] };
+            const editing = lessonState.editing;
+
+            const list = lessonState.items.length
+                ? lessonState.items.map((lesson, index) => `
+                    <div class="lesson-admin-row">
+                        <div class="lesson-admin-num">${index + 1}</div>
+                        <div class="lesson-admin-main">
+                            <strong>${WGAUI.escapeHtml(lesson.title)}</strong>
+                            <div class="lesson-admin-meta">
+                                ${WGAUI.escapeHtml(lesson.type)}
+                                ${lesson.durationMinutes ? ' · ' + lesson.durationMinutes + ' min' : ''}
+                                ${lesson.isPreview ? ' · <span style="color:var(--primary);">Preview</span>' : ''}
+                                ${lesson.published ? '' : ' · <span style="color:var(--text-light);">Hidden</span>'}
+                                · ${lessonVideoLabel(lesson)}
+                            </div>
+                        </div>
+                        <div class="lesson-admin-actions">
+                            <button class="btn-primary btn-outline btn-sm" onclick="lessonMove('${lesson.id}',-1)" ${index === 0 ? 'disabled' : ''} title="Move up"><i class="fas fa-arrow-up"></i></button>
+                            <button class="btn-primary btn-outline btn-sm" onclick="lessonMove('${lesson.id}',1)" ${index === lessonState.items.length - 1 ? 'disabled' : ''} title="Move down"><i class="fas fa-arrow-down"></i></button>
+                            <button class="btn-primary btn-sm" onclick="lessonEdit('${lesson.id}')">Edit</button>
+                            <button class="btn-primary btn-outline btn-sm" onclick="lessonDelete('${lesson.id}')" title="Delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `).join('')
+                : '<p style="color:var(--text-light);font-size:14px;">No lessons yet. A course needs at least one published lesson before it can go live.</p>';
+
+            const form = editing
+                ? `
+                    <div class="lesson-form">
+                        <h4>${editing.isNew ? 'New lesson' : 'Edit lesson'}</h4>
+                        <div class="form-group"><label>Title</label><input type="text" id="lessonTitle" value="${WGAUI.escapeHtml(editing.title || '')}" placeholder="e.g. Reading a payslip" /></div>
+                        <div class="form-group"><label>Summary</label><input type="text" id="lessonSummary" value="${WGAUI.escapeHtml(editing.summary || '')}" placeholder="One line describing this lesson" /></div>
+                        <div style="display:flex;gap:14px;flex-wrap:wrap;">
+                            <div class="form-group" style="flex:1 1 180px;">
+                                <label>Type</label>
+                                <select id="lessonType">
+                                    <option value="video" ${editing.type === 'video' ? 'selected' : ''}>Video</option>
+                                    <option value="text" ${editing.type === 'text' ? 'selected' : ''}>Text</option>
+                                    <option value="live" ${editing.type === 'live' ? 'selected' : ''}>Live session</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex:1 1 140px;"><label>Length (minutes)</label><input type="number" id="lessonDuration" min="0" value="${editing.durationMinutes || 0}" /></div>
+                            <div class="form-group" style="flex:1 1 140px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
+                                <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="lessonPreview" ${editing.isPreview ? 'checked' : ''} /> Free preview</label>
+                                <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="lessonPublished" ${editing.published !== false ? 'checked' : ''} /> Visible to students</label>
+                            </div>
+                        </div>
+                        <div class="form-group"><label>Lesson notes</label><textarea id="lessonContent" rows="5" placeholder="What this lesson covers. Shown under the video.">${WGAUI.escapeHtml(editing.content || '')}</textarea></div>
+
+                        <div class="form-group">
+                            <label>Video</label>
+                            <div class="lesson-video-choices">
+                                <label><input type="radio" name="lessonVideoMode" value="none" ${editing.videoMode === 'none' ? 'checked' : ''} onchange="setLessonVideoMode()" /> None</label>
+                                <label><input type="radio" name="lessonVideoMode" value="link" ${editing.videoMode === 'link' ? 'checked' : ''} onchange="setLessonVideoMode()" /> Paste a YouTube or Vimeo link</label>
+                                <label class="${storage.enabled ? '' : 'is-disabled'}"><input type="radio" name="lessonVideoMode" value="upload" ${editing.videoMode === 'upload' ? 'checked' : ''} ${storage.enabled ? '' : 'disabled'} onchange="setLessonVideoMode()" /> Upload a video file</label>
+                            </div>
+
+                            <div id="lessonLinkPane" style="display:none;margin-top:10px;">
+                                <input type="text" id="lessonVideoUrl" value="${WGAUI.escapeHtml(editing.videoUrl || '')}" placeholder="https://www.youtube.com/watch?v=..." />
+                                <p class="lesson-hint">YouTube and Vimeo only. Students watch it inside the lesson page.</p>
+                            </div>
+
+                            <div id="lessonUploadPane" style="display:none;margin-top:10px;">
+                                ${storage.enabled
+                                    ? `<input type="file" id="lessonVideoFile" accept="video/mp4,video/webm" />
+                                       <div class="upload-bar" id="lessonUploadBar" style="display:none;"><span></span></div>
+                                       <p class="lesson-hint" id="lessonUploadNote">Up to ${Math.round((storage.videoMaxBytes || 0) / (1024 * 1024))} MB. MP4 or WebM — not MOV, because iPhones record it in a format browsers cannot play.</p>
+                                       <button class="btn-primary btn-sm" id="lessonUploadBtn" style="margin-top:8px;" onclick="uploadLessonVideo()">Upload video</button>`
+                                    : `<p class="lesson-hint">Uploads are switched off on this deployment — no storage is configured. Use a YouTube or Vimeo link instead. Missing: ${WGAUI.escapeHtml((storage.missing || []).join(', ')) || 'storage settings'}.</p>`}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Materials (one per line, as <em>Title | https://address</em>)</label>
+                            <textarea id="lessonResources" rows="3" placeholder="Worksheet | https://example.com/worksheet.pdf">${WGAUI.escapeHtml(editing.resourcesText !== undefined ? editing.resourcesText : (editing.resources || []).map((r) => (r.title || '') + ' | ' + (r.url || '')).join('\n'))}</textarea>
+                        </div>
+
+                        ${quizEditorHTML()}
+
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                            <button class="btn-primary" id="lessonSaveBtn" onclick="lessonSave()">${editing.isNew ? 'Add lesson' : 'Save lesson'}</button>
+                            <button class="btn-primary btn-outline" onclick="lessonCancelEdit()">Cancel</button>
+                            ${editing.isUploaded ? `<button class="btn-primary btn-outline" onclick="lessonRemoveVideo()">Remove video</button>` : ''}
+                        </div>
+                    </div>
+                `
+                : '<button class="btn-primary" style="margin-top:16px;" onclick="lessonNew()">+ Add lesson</button>';
+
+            return `<div class="lesson-admin">${list}${form}</div>`;
+        }
+
+        window.manageLessons = async function manageLessons(courseId) {
+            const course = instructorData.courses.find((c) => String(c.id) === String(courseId));
+            lessonState.courseId = courseId;
+            lessonState.title = 'Lessons' + (course ? ' · ' + WGAUI.escapeHtml(course.title) : '');
+            lessonState.editing = null;
+
+            openModal(lessonState.title, '<div class="wga-skeleton" style="height:140px;"></div>');
+
+            try {
+                // Whether uploads are possible has to be known before the form is
+                // built, so an instructor is never offered a control that cannot work.
+                const [lessons, storage] = await Promise.all([
+                    WGA.get('/courses/' + encodeURIComponent(courseId) + '/lessons'),
+                    WGA.get('/courses/storage').catch(() => ({ enabled: false, missing: [] }))
+                ]);
+                lessonState.items = lessons.lessons || lessons.items || [];
+                lessonState.storage = storage;
+                refreshLessonModal();
+            } catch (error) {
+                openModal(lessonState.title, '<p>' + WGAUI.escapeHtml(error.message || 'Could not load the syllabus.') + '</p>');
+            }
+        };
+
+        /* ---- Quiz editor ------------------------------------------- *
+         *
+         * One quiz per lesson. The editor redraws the whole modal on every change,
+         * and the lesson fields live in that same modal — so each action reads the
+         * form back into state first, or adding a question would silently discard
+         * whatever the instructor had just typed into the lesson title.
+         * ------------------------------------------------------------ */
+
+        const quizState = { lessonId: null, exists: false, title: 'Quiz', passPercent: 70, maxAttempts: 0, questions: [] };
+
+        async function resetQuizState(lessonId) {
+            quizState.lessonId = lessonId;
+            quizState.exists = false;
+            quizState.title = 'Quiz';
+            quizState.passPercent = 70;
+            quizState.maxAttempts = 0;
+            quizState.questions = [];
+
+            if (!lessonId) return;
+
+            try {
+                const data = await WGA.get('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(lessonId) + '/quiz');
+                if (!data.quiz) return;
+
+                quizState.exists = true;
+                quizState.title = data.quiz.title || 'Quiz';
+                quizState.passPercent = data.quiz.passPercent;
+                quizState.maxAttempts = data.quiz.maxAttempts;
+                quizState.questions = (data.quiz.questions || []).map((question) => ({
+                    prompt: question.prompt,
+                    kind: question.kind || 'single',
+                    explanation: question.explanation || '',
+                    points: question.points || 1,
+                    options: (question.options || []).map((option) => ({ text: option.text, isCorrect: Boolean(option.isCorrect) }))
+                }));
+            } catch (error) {
+                /* No quiz yet is the ordinary case, not a failure. */
+            }
+        }
+
+        function quizQuestionEditor(question, index) {
+            const options = (question.options || [])
+                .map((option, optionIndex) => `
+                    <div class="quiz-opt-row">
+                        <input type="radio" name="correct-${index}" ${option.isCorrect ? 'checked' : ''} onchange="quizMarkCorrect(${index},${optionIndex})" title="Mark as the correct answer" />
+                        <input type="text" class="quiz-opt-text" value="${WGAUI.escapeHtml(option.text || '')}" placeholder="Option ${optionIndex + 1}" />
+                        <button class="btn-primary btn-outline btn-sm" onclick="quizRemoveOption(${index},${optionIndex})" title="Remove this option">&times;</button>
+                    </div>
+                `)
+                .join('');
+
+            return `
+                <div class="quiz-q-editor">
+                    <div class="quiz-q-editor-head">
+                        <strong>Question ${index + 1}</strong>
+                        <button class="btn-primary btn-outline btn-sm" onclick="quizRemoveQuestion(${index})">Remove</button>
+                    </div>
+                    <div class="form-group"><label>Question</label><input type="text" class="quiz-prompt" value="${WGAUI.escapeHtml(question.prompt || '')}" placeholder="What should the student know?" /></div>
+                    ${options}
+                    <button class="btn-primary btn-outline btn-sm" onclick="quizAddOption(${index})">+ Option</button>
+                    <div class="form-group" style="margin-top:10px;"><label>Explanation (shown after submitting)</label><input type="text" class="quiz-explanation" value="${WGAUI.escapeHtml(question.explanation || '')}" placeholder="Why that answer is right" /></div>
+                </div>
+            `;
+        }
+
+        function quizEditorHTML() {
+            const questions = quizState.questions.map((question, index) => quizQuestionEditor(question, index)).join('');
+
+            return `
+                <div class="lesson-form">
+                    <h4>Quiz</h4>
+                    <div style="display:flex;gap:14px;flex-wrap:wrap;">
+                        <div class="form-group" style="flex:1 1 140px;"><label>Pass mark (%)</label><input type="number" id="quizPass" min="0" max="100" value="${quizState.passPercent}" /></div>
+                        <div class="form-group" style="flex:1 1 170px;"><label>Attempts allowed (0 = unlimited)</label><input type="number" id="quizAttempts" min="0" max="100" value="${quizState.maxAttempts}" /></div>
+                    </div>
+                    ${questions || '<p class="lesson-hint">No questions yet. A lesson without a quiz simply has none.</p>'}
+                    <button class="btn-primary btn-outline btn-sm" onclick="quizAddQuestion()">+ Add question</button>
+                    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+                        <button class="btn-primary btn-sm" id="quizSaveBtn" onclick="quizSave()">${quizState.exists ? 'Save quiz' : 'Create quiz'}</button>
+                        ${quizState.exists ? '<button class="btn-primary btn-outline btn-sm" onclick="quizRemove()">Remove quiz</button>' : ''}
+                    </div>
+                    <p class="lesson-hint">
+                        Every question needs exactly one correct answer. Students see the questions but never the
+                        answers, and marking happens on the server.
+                    </p>
+                </div>
+            `;
+        }
+
+        /** Read the lesson form back into state, so a redraw cannot lose it. */
+        function captureLessonForm() {
+            const editing = lessonState.editing;
+            if (!editing) return;
+
+            const val = (id) => { const el = document.getElementById(id); return el ? el.value : undefined; };
+            const on = (id) => { const el = document.getElementById(id); return el ? el.checked : undefined; };
+
+            if (val('lessonTitle') !== undefined) editing.title = val('lessonTitle');
+            if (val('lessonSummary') !== undefined) editing.summary = val('lessonSummary');
+            if (val('lessonType') !== undefined) editing.type = val('lessonType');
+            if (val('lessonContent') !== undefined) editing.content = val('lessonContent');
+            if (val('lessonDuration') !== undefined) editing.durationMinutes = Number(val('lessonDuration') || 0);
+            if (on('lessonPreview') !== undefined) editing.isPreview = on('lessonPreview');
+            if (on('lessonPublished') !== undefined) editing.published = on('lessonPublished');
+            if (val('lessonResources') !== undefined) editing.resourcesText = val('lessonResources');
+            if (val('lessonVideoUrl') !== undefined) editing.videoUrl = val('lessonVideoUrl');
+
+            const mode = document.querySelector('input[name="lessonVideoMode"]:checked');
+            if (mode) editing.videoMode = mode.value;
+        }
+
+        function captureQuizForm() {
+            const pass = document.getElementById('quizPass');
+            const attempts = document.getElementById('quizAttempts');
+            if (pass) quizState.passPercent = Number(pass.value || 0);
+            if (attempts) quizState.maxAttempts = Number(attempts.value || 0);
+
+            document.querySelectorAll('.quiz-q-editor').forEach((editor, index) => {
+                const question = quizState.questions[index];
+                if (!question) return;
+
+                const prompt = editor.querySelector('.quiz-prompt');
+                const explanation = editor.querySelector('.quiz-explanation');
+                if (prompt) question.prompt = prompt.value;
+                if (explanation) question.explanation = explanation.value;
+
+                editor.querySelectorAll('.quiz-opt-row').forEach((row, optionIndex) => {
+                    const option = question.options[optionIndex];
+                    const text = row.querySelector('.quiz-opt-text');
+                    if (option && text) option.text = text.value;
+                });
+            });
+        }
+
+        /** Capture, mutate, redraw — the order every quiz action uses. */
+        function editQuiz(mutate) {
+            captureLessonForm();
+            captureQuizForm();
+            mutate();
+            refreshLessonModal();
+        }
+
+        window.quizAddQuestion = function quizAddQuestion() {
+            editQuiz(() => {
+                quizState.questions.push({
+                    prompt: '', kind: 'single', explanation: '', points: 1,
+                    options: [{ text: '', isCorrect: true }, { text: '', isCorrect: false }]
+                });
+            });
+        };
+
+        window.quizRemoveQuestion = function quizRemoveQuestion(index) {
+            editQuiz(() => { quizState.questions.splice(index, 1); });
+        };
+
+        window.quizAddOption = function quizAddOption(index) {
+            editQuiz(() => {
+                const question = quizState.questions[index];
+                if (question && question.options.length < 10) question.options.push({ text: '', isCorrect: false });
+            });
+        };
+
+        window.quizRemoveOption = function quizRemoveOption(index, optionIndex) {
+            editQuiz(() => {
+                const question = quizState.questions[index];
+                if (!question || question.options.length <= 2) return;
+
+                const wasCorrect = question.options[optionIndex].isCorrect;
+                question.options.splice(optionIndex, 1);
+                // Never leave a question with no right answer; the API refuses it.
+                if (wasCorrect && question.options.length) question.options[0].isCorrect = true;
+            });
+        };
+
+        /** One correct answer per question, so the radios behave as a group. */
+        window.quizMarkCorrect = function quizMarkCorrect(index, optionIndex) {
+            editQuiz(() => {
+                const question = quizState.questions[index];
+                if (!question) return;
+                question.options.forEach((option, i) => { option.isCorrect = i === optionIndex; });
+            });
+        };
+
+        window.quizSave = async function quizSave() {
+            captureLessonForm();
+            captureQuizForm();
+
+            const lessonId = quizState.lessonId || (lessonState.editing && lessonState.editing.id);
+            if (!lessonId) { showToast('Save the lesson first, then add its quiz.', 'error'); return; }
+
+            const questions = quizState.questions.filter((question) => (question.prompt || '').trim().length >= 2);
+            if (!questions.length) { showToast('Write at least one question.', 'error'); return; }
+
+            if (questions.some((question) => question.options.some((option) => !(option.text || '').trim()))) {
+                showToast('Every option needs text.', 'error');
+                return;
+            }
+
+            if (!questions.every((question) => question.options.some((option) => option.isCorrect))) {
+                showToast('Mark the correct answer on every question.', 'error');
+                return;
+            }
+
+            const button = document.getElementById('quizSaveBtn');
+            WGAUI.setBusy(button, true, 'Saving…');
+
+            try {
+                const saved = await WGA.put('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(lessonId) + '/quiz', {
+                    title: quizState.title || 'Quiz',
+                    passPercent: quizState.passPercent,
+                    maxAttempts: quizState.maxAttempts,
+                    questions: questions.map((question) => ({
+                        prompt: question.prompt.trim(),
+                        kind: question.kind || 'single',
+                        explanation: question.explanation || '',
+                        points: question.points || 1,
+                        options: question.options.map((option) => ({ text: option.text.trim(), isCorrect: Boolean(option.isCorrect) }))
+                    }))
+                });
+
+                quizState.exists = true;
+                quizState.questions = (saved.quiz.questions || []).map((question) => ({
+                    prompt: question.prompt,
+                    kind: question.kind,
+                    explanation: question.explanation || '',
+                    points: question.points,
+                    options: (question.options || []).map((option) => ({ text: option.text, isCorrect: Boolean(option.isCorrect) }))
+                }));
+
+                refreshLessonModal();
+                showToast('Quiz saved.', 'success');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                const detail = error.details && error.details.length ? error.details[0].message : null;
+                showToast(detail || error.message || 'Could not save the quiz.', 'error');
+            }
+        };
+
+        window.quizRemove = async function quizRemove() {
+            const lessonId = quizState.lessonId || (lessonState.editing && lessonState.editing.id);
+            if (!lessonId) return;
+            if (!window.confirm('Remove this quiz? Student attempts are kept.')) return;
+
+            try {
+                await WGA.del('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(lessonId) + '/quiz');
+                await resetQuizState(lessonId);
+                refreshLessonModal();
+                showToast('Quiz removed.', 'success');
+            } catch (error) {
+                showToast(error.message || 'Could not remove the quiz.', 'error');
+            }
+        };
+
+        window.lessonNew = function lessonNew() {
+            lessonState.editing = { isNew: true, title: '', summary: '', type: 'video', content: '', durationMinutes: 0, isPreview: false, published: true, videoMode: 'none', resources: [] };
+            resetQuizState(null);
+            refreshLessonModal();
+        };
+
+        window.lessonEdit = async function lessonEdit(id) {
+            const lesson = lessonState.items.find((l) => String(l.id) === String(id));
+            if (!lesson) return;
+
+            lessonState.editing = Object.assign({}, lesson, {
+                isNew: false,
+                videoMode: lesson.videoType === 'upload' ? 'upload' : (lesson.videoType === 'link' ? 'link' : 'none'),
+                isUploaded: lesson.videoType === 'upload'
+            });
+
+            // Load the existing quiz before drawing the form, so the editor opens
+            // with it rather than appearing empty and then filling in.
+            await resetQuizState(id);
+            refreshLessonModal();
+        };
+
+        window.lessonCancelEdit = function lessonCancelEdit() {
+            lessonState.editing = null;
+            refreshLessonModal();
+        };
+
+        window.setLessonVideoMode = function setLessonVideoMode() {
+            const chosen = document.querySelector('input[name="lessonVideoMode"]:checked');
+            const mode = chosen ? chosen.value : 'none';
+            const link = document.getElementById('lessonLinkPane');
+            const upload = document.getElementById('lessonUploadPane');
+            if (link) link.style.display = mode === 'link' ? 'block' : 'none';
+            if (upload) upload.style.display = mode === 'upload' ? 'block' : 'none';
+        };
+
+        function bindLessonModal() {
+            const modal = document.getElementById('modalBody') || document;
+            if (modal.querySelector && modal.querySelector('input[name="lessonVideoMode"]')) setLessonVideoMode();
+        }
+
+        /** "Title | URL" per line, which is one less control than a repeatable row. */
+        function parseLessonResources(value) {
+            return String(value || '')
+                .split('\n')
+                .map((line) => line.trim())
+                .filter(Boolean)
+                .map((line) => {
+                    const at = line.indexOf('|');
+                    if (at === -1) return null;
+                    const title = line.slice(0, at).trim();
+                    const url = line.slice(at + 1).trim();
+                    return title && /^https?:\/\//i.test(url) ? { title: title, url: url } : null;
+                })
+                .filter(Boolean);
+        }
+
+        window.lessonSave = async function lessonSave() {
+            const button = document.getElementById('lessonSaveBtn');
+            const editing = lessonState.editing;
+            if (!editing) return;
+
+            const title = (document.getElementById('lessonTitle')?.value || '').trim();
+            if (title.length < 2) { showToast('Give the lesson a title.', 'error'); return; }
+
+            const mode = (document.querySelector('input[name="lessonVideoMode"]:checked') || {}).value || 'none';
+            const videoUrl = (document.getElementById('lessonVideoUrl')?.value || '').trim();
+
+            if (mode === 'link' && !videoUrl) { showToast('Paste a YouTube or Vimeo address, or choose None.', 'error'); return; }
+
+            const payload = {
+                title: title,
+                summary: (document.getElementById('lessonSummary')?.value || '').trim(),
+                type: document.getElementById('lessonType')?.value || 'video',
+                content: document.getElementById('lessonContent')?.value || '',
+                durationMinutes: Number(document.getElementById('lessonDuration')?.value || 0),
+                isPreview: Boolean(document.getElementById('lessonPreview')?.checked),
+                published: Boolean(document.getElementById('lessonPublished')?.checked),
+                resources: parseLessonResources(document.getElementById('lessonResources')?.value)
+            };
+
+            WGAUI.setBusy(button, true, 'Saving…');
+
+            try {
+                let lesson;
+                if (editing.isNew) {
+                    lesson = (await WGA.post('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons', payload)).lesson;
+                } else {
+                    lesson = (await WGA.patch('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(editing.id), payload)).lesson;
+                }
+
+                const id = lesson.id || editing.id;
+                lessonState.editing = Object.assign({}, editing, { isNew: false, id: id, isUploaded: lesson.videoType === 'upload' });
+                // A lesson that has just been created can now carry a quiz, so the
+                // editor stops saying "save the lesson first".
+                if (!quizState.lessonId) quizState.lessonId = id;
+
+                /**
+                 * The video is saved separately from the lesson, because it is a
+                 * different operation: a link is a field, an upload is a file that
+                 * has to land in a bucket. Switching between them replaces the
+                 * other, which is why this runs after the lesson itself exists.
+                 */
+                if (mode === 'none') {
+                    if (lesson.videoType !== 'none') {
+                        await WGA.del('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(id) + '/video');
+                        lessonState.editing.isUploaded = false;
+                    }
+                } else if (mode === 'link') {
+                    await WGA.put('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(id) + '/video/link', { url: videoUrl });
+                }
+
+                await refreshLessons();
+                showToast(editing.isNew ? 'Lesson added.' : 'Lesson saved.', 'success');
+
+                // An upload needs the lesson to exist first, so the file picker and
+                // progress bar stay on screen for it rather than the modal closing.
+                if (mode === 'upload') {
+                    refreshLessonModal();
+                } else {
+                    lessonState.editing = null;
+                    refreshLessonModal();
+                }
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                const detail = error.details && error.details.length ? error.details[0].message : null;
+                showToast(detail || error.message || 'We could not save that lesson.', 'error');
+            }
+        };
+
+        window.lessonDelete = async function lessonDelete(id) {
+            const lesson = lessonState.items.find((l) => String(l.id) === String(id));
+            if (!lesson) return;
+            if (!window.confirm('Delete "' + lesson.title + '"? Student progress for this lesson is removed too.')) return;
+
+            try {
+                await WGA.del('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(id));
+                if (lessonState.editing && String(lessonState.editing.id) === String(id)) lessonState.editing = null;
+                await refreshLessons();
+                refreshLessonModal();
+                showToast('Lesson removed.', 'success');
+            } catch (error) {
+                showToast(error.message || 'Could not remove that lesson.', 'error');
+            }
+        };
+
+        /** Swap with the neighbour, which is what the API does with an order change. */
+        window.lessonMove = async function lessonMove(id, delta) {
+            const index = lessonState.items.findIndex((l) => String(l.id) === String(id));
+            const target = index + delta;
+            if (index === -1 || target < 0 || target >= lessonState.items.length) return;
+
+            try {
+                await WGA.patch('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(id), { order: target + 1 });
+                await refreshLessons();
+                refreshLessonModal();
+            } catch (error) {
+                showToast(error.message || 'Could not reorder that lesson.', 'error');
+            }
+        };
+
+        window.uploadLessonVideo = async function uploadLessonVideo() {
+            const editing = lessonState.editing;
+            const file = document.getElementById('lessonVideoFile')?.files?.[0];
+
+            if (!editing || editing.isNew || !editing.id) {
+                showToast('Save the lesson first, then upload its video.', 'error');
+                return;
+            }
+            if (!file) { showToast('Choose a video file first.', 'error'); return; }
+
+            const button = document.getElementById('lessonUploadBtn');
+            const bar = document.getElementById('lessonUploadBar');
+            const note = document.getElementById('lessonUploadNote');
+
+            WGAUI.setBusy(button, true, 'Preparing…');
+
+            try {
+                const signed = await WGA.post('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(editing.id) + '/video/presign', {
+                    filename: file.name,
+                    contentType: file.type,
+                    sizeBytes: file.size
+                });
+
+                if (bar) { bar.style.display = 'block'; bar.firstElementChild.style.width = '0%'; }
+                WGAUI.setBusy(button, true, 'Uploading…');
+
+                await WGA.uploadToSignedUrl(signed.uploadUrl, file, {
+                    contentType: signed.contentType,
+                    onProgress: (percent) => {
+                        if (bar) bar.firstElementChild.style.width = percent + '%';
+                        WGAUI.setBusy(button, true, percent + '%');
+                    }
+                });
+
+                if (note) note.textContent = 'Uploaded. Confirming with the server…';
+
+                await WGA.post('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(editing.id) + '/video/complete', {
+                    key: signed.key,
+                    mime: file.type,
+                    originalName: file.name
+                });
+
+                await refreshLessons();
+                lessonState.editing.isUploaded = true;
+                refreshLessonModal();
+                showToast('Video uploaded.', 'success');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                if (note) note.textContent = '';
+                showToast(error.message || 'The upload did not finish.', 'error');
+            }
+        };
+
+        window.lessonRemoveVideo = async function lessonRemoveVideo() {
+            const editing = lessonState.editing;
+            if (!editing || !editing.id) return;
+
+            try {
+                await WGA.del('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(editing.id) + '/video');
+                await refreshLessons();
+                editing.isUploaded = false;
+                editing.videoMode = 'none';
+                refreshLessonModal();
+                showToast('Video removed.', 'success');
+            } catch (error) {
+                showToast(error.message || 'Could not remove the video.', 'error');
+            }
+        };
+
+        async function refreshLessons() {
+            const data = await WGA.get('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons');
+            lessonState.items = data.lessons || data.items || [];
+            await loadInstructorData();
+        }
+
+        window.editCourse = function editCourse(id) {
+            const c = instructorData.courses.find((course) => String(course.id) === String(id));
+            if (!c) return;
+
+            openModal('Edit Course', `
+                <div class="form-group"><label>Title</label><input type="text" id="editTitle" value="${WGAUI.escapeHtml(c.title)}" /></div>
+                <div class="form-group"><label>Summary</label><textarea id="editSummary" rows="3">${WGAUI.escapeHtml(c.description)}</textarea></div>
+                <div class="form-group"><label>Price (in ${WGAUI.escapeHtml((instructorData.revenue && instructorData.revenue.currency) || 'usd').toUpperCase()})</label><input type="number" id="editPrice" min="0" step="0.01" value="${c.price}" /></div>
+                <div class="form-group">
+                    <label>Course cover image</label>
+                    ${c.thumbnail
+                        ? `<img src="${WGAUI.escapeHtml(c.thumbnail)}" alt="" style="width:100%;max-width:340px;border-radius:12px;border:1px solid var(--border);display:block;margin-bottom:10px;" />`
+                        : '<p style="font-size:12.5px;color:var(--text-light);margin-bottom:10px;">No cover yet — this course shows a coloured placeholder.</p>'}
+                    <input type="file" id="editThumbFile" accept="image/png,image/jpeg,image/webp" data-preview="editThumbPreview" onchange="previewCourseCover(this)" />
+                    <div id="editThumbPreview" style="margin-top:10px;"></div>
+                    ${c.thumbnail ? `<button class="btn-primary btn-outline" style="margin-top:10px;" onclick="removeCourseCover('${c.id}')">Remove cover</button>` : ''}
+                </div>
+                <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">
+                    Status is changed with Publish or Unpublish, not by typing it here — an instructor
+                    cannot set a course live without review.
+                </p>
+                <button class="btn-primary" id="editSubmit" onclick="saveCourseChanges('${c.id}')">Save Changes</button>
+            `);
+        };
+
+        window.saveCourseChanges = async function saveCourseChanges(id) {
+            const button = document.getElementById('editSubmit');
+            const price = Number(document.getElementById('editPrice')?.value || 0);
+
+            WGAUI.setBusy(button, true, 'Saving…');
+
+            try {
+                await WGA.patch(`/courses/${encodeURIComponent(id)}`, {
+                    title: document.getElementById('editTitle')?.value.trim(),
+                    summary: document.getElementById('editSummary')?.value.trim(),
+                    priceCents: Math.max(0, Math.round(price * 100)),
+                });
+
+                // Uploaded before the modal closes, otherwise the preview element
+                // holding the prepared image is gone from the document.
+                const pendingCover = document.getElementById('editThumbPreview')?.dataset.prepared;
+                if (pendingCover) await sendCourseCover(id, pendingCover);
+
+                closeModal();
+                showToast('Course saved.', 'success');
+
+                await loadInstructorData();
+                loadPage('courses');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                showToast(error.message || 'We could not save that course.', 'error');
+            }
+        };
+
+        window.removeCourseCover = async function removeCourseCover(id) {
+            try {
+                await WGA.del('/courses/' + encodeURIComponent(id) + '/thumbnail');
+                showToast('Cover image removed.', 'success');
+                closeModal();
+                await loadInstructorData();
+                loadPage('courses');
+            } catch (error) {
+                showToast(coverErrorMessage(error), 'error');
+            }
+        };
+
+        window.publishCourse = async function publishCourse(id) {
+            try {
+                const data = await WGA.post(`/courses/${encodeURIComponent(id)}/publish`);
+
+                // The API decides whether a submission goes live or into the
+                // review queue, so the message reports which actually happened.
+                showToast(
+                    data.course.status === 'published'
+                        ? 'Course published.'
+                        : 'Submitted for review. An administrator will approve it.',
+                    'success'
+                );
+
+                await loadInstructorData();
+                loadPage('courses');
+            } catch (error) {
+                if (error.details && error.details.length) {
+                    showToast(error.details[0].message, 'error');
+                    return;
+                }
+                showToast(error.message || 'We could not publish that course.', 'error');
+            }
+        };
+
+        window.unpublishCourse = async function unpublishCourse(id) {
+            try {
+                await WGA.post(`/courses/${encodeURIComponent(id)}/unpublish`);
+                showToast('Course returned to draft.', 'success');
+                await loadInstructorData();
+                loadPage('courses');
+            } catch (error) {
+                showToast(error.message || 'We could not unpublish that course.', 'error');
+            }
+        };
+
+        /** Create a course from the form, optionally submitting it for review. */
+        window.saveCourse = async function saveCourse(submitForReview) {
+            const button = document.querySelector('#main-content .btn-primary:not(.btn-outline)');
+            const title = document.getElementById('courseTitle')?.value.trim();
+            const summary = document.getElementById('courseDesc')?.value.trim();
+            const price = Number(document.getElementById('coursePrice')?.value || 0);
+            const category = document.getElementById('courseCat')?.value;
+            const level = (document.getElementById('courseLevel')?.value || 'beginner').toLowerCase();
+
+            if (!title || title.length < 4) {
+                showToast('Give the course a title of at least 4 characters.', 'error');
+                return;
+            }
+
+            WGAUI.setBusy(button, true, 'Creating…');
+
+            try {
+                const created = await WGA.post('/courses', {
+                    title,
+                    summary: summary || undefined,
+                    priceCents: Math.max(0, Math.round(price * 100)),
+                    category,
+                    level,
+                });
+
+                const courseId = created.course.id;
+
+                // The cover is uploaded after the course exists, because the endpoint is
+                // addressed to a course id. If it fails, the course is still saved rather
+                // than everything the instructor just typed being thrown away.
+                const pendingCover = document.getElementById('courseThumbPreview')?.dataset.prepared;
+                if (pendingCover) await sendCourseCover(courseId, pendingCover);
+
+                if (submitForReview) {
+                    // Publishing with no lessons is refused by the API, which is
+                    // the correct answer — surface it rather than losing the course.
+                    try {
+                        await WGA.post(`/courses/${encodeURIComponent(courseId)}/publish`);
+                        showToast('Course created and submitted for review.', 'success');
+                    } catch (publishError) {
+                        showToast(
+                            `Course saved as a draft. ${publishError.message || 'Add a lesson before submitting.'}`,
+                            'info'
+                        );
+                    }
+                } else {
+                    showToast('Course saved as a draft.', 'success');
+                }
+
+                await loadInstructorData();
+                loadPage('courses');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+
+                if (error.details && error.details.length) {
+                    showToast(error.details[0].message, 'error');
+                    return;
+                }
+                showToast(error.message || 'We could not create that course.', 'error');
+            }
+        };
+
+        window.viewStudent = function viewStudent(enrollmentId) {
+            const s = instructorData.students.find((student) => String(student.id) === String(enrollmentId));
+            if (!s) return;
+
+            openModal('Student', `
+                <p><strong>Name:</strong> ${WGAUI.escapeHtml(s.name)}</p>
+                <p><strong>Email:</strong> ${WGAUI.escapeHtml(s.email)}</p>
+                <p><strong>Course:</strong> ${WGAUI.escapeHtml(s.courseTitle)}</p>
+                <p><strong>Progress:</strong> ${s.progress}%</p>
+                <p><strong>Enrolled:</strong> ${WGAUI.formatDate(s.enrolledAt)}</p>
+                <p><strong>Last active:</strong> ${s.lastActive ? WGAUI.formatRelative(s.lastActive) : 'Never opened'}</p>
+                <button class="btn-primary" onclick="messageStudent('${s.studentId || s.id}')">Message Student</button>
+            `);
+        };
+
+        /** Open (or reuse) a conversation with a student. */
+        window.messageStudent = async function messageStudent(studentUserId, knownName) {
+            if (!studentUserId) return;
+
+            const student = instructorData.students.find((s) => String(s.studentId) === String(studentUserId));
+            const name = knownName || (student ? student.name : 'this student');
+
+            openModal(`Message ${WGAUI.escapeHtml(name)}`, `
+                <div class="form-group"><label>Message</label><textarea rows="4" id="dmBody" placeholder="Write your message..."></textarea></div>
+                <button class="btn-primary" id="dmSend" onclick="sendDirectMessage('${studentUserId}')">Send</button>
+            `);
+        };
+
+        window.sendDirectMessage = async function sendDirectMessage(recipientId) {
+            const button = document.getElementById('dmSend');
+            const message = document.getElementById('dmBody')?.value.trim();
+
+            if (!message) {
+                showToast('Write a message first.', 'error');
+                return;
+            }
+
+            WGAUI.setBusy(button, true, 'Sending…');
+
+            try {
+                await WGA.post('/messages/threads', { recipientId, message });
+                closeModal();
+                showToast('Message sent.', 'success');
+
+                await loadInstructorData();
+                loadPage('messages');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                showToast(error.message || 'We could not send that message.', 'error');
+            }
+        };
+
+        window.replyToMessage = async function replyToMessage(threadId) {
+            const thread = instructorData.messages.find((m) => String(m.id) === String(threadId));
+            if (!thread) return;
+
+            openModal(`Reply to ${WGAUI.escapeHtml(thread.from)}`, `
+                <p style="font-size:14px;color:var(--text-light);margin-bottom:14px;">${WGAUI.escapeHtml(thread.message)}</p>
+                <div class="form-group"><label>Your reply</label><textarea rows="4" id="replyBody"></textarea></div>
+                <button class="btn-primary" id="replySend" onclick="sendReply('${thread.id}')">Send Reply</button>
+            `);
+        };
+
+        window.sendReply = async function sendReply(threadId) {
+            const button = document.getElementById('replySend');
+            const content = document.getElementById('replyBody')?.value.trim();
+
+            if (!content) {
+                showToast('Write a reply first.', 'error');
+                return;
+            }
+
+            WGAUI.setBusy(button, true, 'Sending…');
+
+            try {
+                await WGA.post(`/messages/threads/${encodeURIComponent(threadId)}`, { content });
+                closeModal();
+                showToast('Reply sent.', 'success');
+
+                await loadInstructorData();
+                loadPage('messages');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                showToast(error.message || 'We could not send that reply.', 'error');
+            }
+        };
+
+        window.composeMessage = function composeMessage() {
+            openModal('New Message', `
+                <div class="form-group"><label>To</label><select id="newMsgTo">${studentOptions()}</select></div>
+                <div class="form-group"><label>Message</label><textarea rows="4" id="newMsgBody" placeholder="Write your message..."></textarea></div>
+                <button class="btn-primary" id="newMsgSend" onclick="sendDirectMessage(document.getElementById('newMsgTo').value)">Send</button>
+            `);
+        };
+
+        window.scheduleLiveClass = function scheduleLiveClass() {
+            if (instructorData.courses.length === 0) {
+                openModal('Schedule a Class', `<p>Create a course first — a live class belongs to one.</p>
+                    <button class="btn-primary" onclick="closeModal();loadPage('create-course')">Create a Course</button>`);
+                return;
+            }
+
+            const soon = new Date(Date.now() + 24 * 60 * 60 * 1000);
+            soon.setMinutes(0, 0, 0);
+
+            openModal('Schedule Live Class', `
+                <div class="form-group"><label>Course</label><select id="lcCourse">${courseOptions()}</select></div>
+                <div class="form-group"><label>Title</label><input type="text" id="lcTitle" placeholder="e.g. Live Q&A on the first project" /></div>
+                <div class="form-group"><label>Starts</label><input type="datetime-local" id="lcStart" value="${soon.toISOString().slice(0, 16)}" /></div>
+                <div class="form-group"><label>Duration (minutes)</label><input type="number" id="lcMinutes" value="60" min="5" max="480" /></div>
+                <div class="form-group"><label>Meeting link (optional)</label><input type="url" id="lcLink" placeholder="https://..." /></div>
+                <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">
+                    Enrolled students are notified, but they only receive the join link if they are enrolled.
+                </p>
+                <button class="btn-primary" id="lcSubmit" onclick="saveLiveClass()">Schedule</button>
+            `);
+        };
+
+        window.saveLiveClass = async function saveLiveClass() {
+            const button = document.getElementById('lcSubmit');
+            const courseId = document.getElementById('lcCourse')?.value;
+            const title = document.getElementById('lcTitle')?.value.trim();
+            const startRaw = document.getElementById('lcStart')?.value;
+            const minutes = Number(document.getElementById('lcMinutes')?.value || 60);
+            const meetingLink = document.getElementById('lcLink')?.value.trim();
+
+            if (!courseId || !title || !startRaw) {
+                showToast('A course, a title and a start time are required.', 'error');
+                return;
+            }
+
+            const start = new Date(startRaw);
+            const end = new Date(start.getTime() + minutes * 60 * 1000);
+
+            WGAUI.setBusy(button, true, 'Scheduling…');
+
+            try {
+                await WGA.post('/live-sessions', {
+                    courseId,
+                    title,
+                    startTime: start.toISOString(),
+                    endTime: end.toISOString(),
+                    meetingLink: meetingLink || undefined,
+                });
+
+                closeModal();
+                showToast('Session scheduled. Enrolled students have been notified.', 'success');
+
+                await loadInstructorData();
+                loadPage('live-classes');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+
+                if (error.details && error.details.length) {
+                    showToast(error.details[0].message, 'error');
+                    return;
+                }
+                showToast(error.message || 'We could not schedule that session.', 'error');
+            }
+        };
+
+        /** Cancel a scheduled session, with a confirmation step. */
+        window.cancelLiveClass = function cancelLiveClass(id) {
+            openModal('Cancel this session?', `
+                <p style="margin-bottom:18px;">Students who saved a place will see it as cancelled. This cannot be undone.</p>
+                <button class="btn-primary" id="lcCancel" onclick="confirmCancelLiveClass('${id}')">Yes, cancel it</button>
+                <button class="btn-primary btn-outline" style="margin-left:10px;" onclick="closeModal()">Keep it</button>
+            `);
+        };
+
+        window.confirmCancelLiveClass = async function confirmCancelLiveClass(id) {
+            const button = document.getElementById('lcCancel');
+            WGAUI.setBusy(button, true, 'Cancelling…');
+
+            try {
+                await WGA.del(`/live-sessions/${encodeURIComponent(id)}`);
+                closeModal();
+                showToast('Session cancelled.', 'success');
+
+                await loadInstructorData();
+                loadPage('live-classes');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                showToast(error.message || 'We could not cancel that session.', 'error');
+            }
+        };
+
+        window.updateProfile = async function updateProfile() {
+            const firstName = document.getElementById('pFirstName')?.value.trim();
+            const lastName = document.getElementById('pLastName')?.value.trim();
+            const headline = document.getElementById('pHeadline')?.value.trim();
+            const bio = document.getElementById('pBio')?.value.trim();
+            const expertiseRaw = document.getElementById('pExpertise')?.value || '';
+
+            const expertise = expertiseRaw
+                .split(',')
+                .map((item) => item.trim())
+                .filter(Boolean);
+
+            try {
+                const data = await WGA.patch('/auth/me', { firstName, lastName, headline, bio, expertise });
+
+                instructorData.user = { ...instructorData.user, ...data.user };
+                WGA.setSession({ user: data.user });
+
+                const nameEl = document.getElementById('user-name');
+                if (nameEl) nameEl.textContent = data.user.firstName || 'Instructor';
+
+                showToast('Your profile has been saved.', 'success');
+            } catch (error) {
+                if (error.details && error.details.length) {
+                    showToast(error.details[0].message, 'error');
+                    return;
+                }
+                showToast(error.message || 'We could not save your profile.', 'error');
+            }
+        };
+
+        window.openChangePassword = function openChangePassword() {
+            openModal('🔑 Change Password', `
+                <div class="form-group"><label>Current password</label><input type="password" id="cpCurrent" /></div>
+                <div class="form-group"><label>New password</label><input type="password" id="cpNew" /></div>
+                <div class="form-group"><label>Confirm new password</label><input type="password" id="cpConfirm" /></div>
+                <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">At least 8 characters, including a letter and a number. You will be signed out of every other device.</p>
+                <button class="btn-primary" id="cpSubmit" onclick="submitChangePassword()">Update password</button>
+            `);
+        };
+
+        window.submitChangePassword = async function submitChangePassword() {
+            const button = document.getElementById('cpSubmit');
+            const currentPassword = document.getElementById('cpCurrent')?.value || '';
+            const newPassword = document.getElementById('cpNew')?.value || '';
+            const confirmPassword = document.getElementById('cpConfirm')?.value || '';
+
+            if (!currentPassword || !newPassword) {
+                showToast('Fill in both password fields.', 'error');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showToast('The two new passwords do not match.', 'error');
+                return;
+            }
+
+            WGAUI.setBusy(button, true, 'Saving…');
+
+            try {
+                const data = await WGA.post('/auth/change-password', { currentPassword, newPassword });
+
+                // The API revokes every other session and issues a fresh pair for
+                // this device, so keep the instructor signed in here.
+                WGA.setSession(data);
+                closeModal();
+                showToast('Your password has been changed. Other devices were signed out.', 'success');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                showToast(error.message || 'We could not change your password.', 'error');
+            }
+        };
+
+        /** Download the loaded student list as CSV, generated in the browser. */
+        window.exportStudentsCsv = function exportStudentsCsv() {
+            const rows = [['Name', 'Email', 'Course', 'Progress', 'Enrolled', 'Last active']];
+
+            instructorData.students.forEach((s) => {
+                rows.push([
+                    s.name,
+                    s.email,
+                    s.courseTitle,
+                    `${s.progress}%`,
+                    s.enrolledAt ? new Date(s.enrolledAt).toISOString().slice(0, 10) : '',
+                    s.lastActive ? new Date(s.lastActive).toISOString().slice(0, 10) : 'Never',
+                ]);
+            });
+
+            const escapeCell = (value) => `"${String(value === null || value === undefined ? '' : value).replace(/"/g, '""')}"`;
+            const csv = rows.map((row) => row.map(escapeCell).join(',')).join('\r\n');
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+
+            link.href = url;
+            link.download = `students-${new Date().toISOString().slice(0, 10)}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            showToast(`Exported ${instructorData.students.length} rows.`, 'success');
+        };
+
+        // A client-side filter over the rows already loaded. The API says the same
+        // thing, so the page can be honest about the scope of the search.
+        window.filterStudents = function filterStudents() {
+            const search = (document.getElementById('searchStudent')?.value || '').toLowerCase();
+
+            document.querySelectorAll('.student-row').forEach((row) => {
+                const haystack = (row.getAttribute('data-name') || '') + ' ' + (row.getAttribute('data-email') || '');
+                row.style.display = haystack.includes(search) ? '' : 'none';
+            });
+        };
+
+        // ============================================================
+        //  NOTIFICATIONS
+        // ============================================================
+        function loadNotifications() {
+            const container = document.getElementById('notifList');
+            if (!container) return;
+
+            // Real notifications. This list used to be three hardcoded entries —
+            // "John Doe enrolled in your course", "5 new submissions for ML Quiz",
+            // "Your course has been approved" — shown to every instructor
+            // regardless of what had actually happened.
+            if (instructorData.notifications.length === 0) {
+                container.innerHTML =
+                    '<div style="padding:26px;text-align:center;color:var(--text-light);font-size:14px;">' +
+                    'No notifications yet.</div>';
+                return;
+            }
+
+            container.innerHTML = instructorData.notifications
+                .map((n) => `
+                    <div class="notification-item ${n.read ? '' : 'unread'}"${n.link ? ` style="cursor:pointer;" onclick="window.location.href='${n.link}'"` : ''}>
+                        <strong>${WGAUI.escapeHtml(n.title)}</strong>
+                        <p>${WGAUI.escapeHtml(n.message)}</p>
+                        <span style="font-size:12px;color:var(--text-light);">${WGAUI.formatRelative(n.createdAt)}</span>
+                    </div>
+                `)
+                .join('');
+        }
+
+        // ============================================================
+        //  PAGE NAVIGATION
+        // ============================================================
+        async function loadPage(page) {
+            const content = document.getElementById('main-content');
+            content.innerHTML = '<div style="text-align:center;padding:60px;"><div class="loading-spinner"></div></div>';
+            state.currentPage = page;
+
+            setTimeout(() => {
+                let html = '';
+                switch (page) {
+                    case 'overview':
+                        html = renderOverview();
+                        break;
+                    case 'courses':
+                        html = renderCourses();
+                        break;
+                    case 'create-course':
+                        html = renderCreateCourse();
+                        break;
+                    case 'students':
+                        html = renderStudents();
+                        break;
+                    case 'live-classes':
+                        html = renderLiveClasses();
+                        break;
+                    case 'earnings':
+                        html = renderEarnings();
+                        break;
+                    case 'messages':
+                        html = renderMessages();
+                        break;
+                    case 'profile':
+                        html = renderProfile();
+                        break;
+                    default:
+                        html = renderOverview();
+                }
+                content.innerHTML = html;
+                observeCounters();
+
+                // Revenue breakdown, drawn from real payment totals per course.
+                if (page === 'earnings') {
+                    setTimeout(() => {
+                        const ctx = document.getElementById('earningsChart')?.getContext('2d');
+                        const breakdown = (instructorData.revenue && instructorData.revenue.byCourse) || [];
+
+                        if (!ctx || breakdown.length === 0) return;
+
+                        // A doughnut is a share-of-total chart, and shares only add
+                        // up inside one currency. If the courses were sold in more
+                        // than one, the table below carries the real figures and we
+                        // draw nothing rather than a shape that means nothing.
+                        if (breakdown.some((row) => row.mixedCurrency) || new Set(breakdown.map((row) => row.currency)).size > 1) {
+                            const card = ctx.canvas.closest('.chart-card');
+                            if (card) {
+                                card.innerHTML = '<div class="chart-title">Revenue by course</div>' +
+                                    '<p style="color:var(--text-light);font-size:13.5px;margin:0;">Your courses sold in more than one currency, so a single breakdown chart would not add up. The figures are listed per course below.</p>';
+                            }
+                            return;
+                        }
+
+                        new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: breakdown.map((row) => row.title),
+                                datasets: [{
+                                    data: breakdown.map((row) => row.totalCents / 100),
+                                    backgroundColor: ['#1a56db', '#d4a547', '#10b981', '#8b5cf6', '#06b6d4', '#ef4444']
+                                }]
+                            },
+                            options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+                        });
+                    }, 150);
+                }
+            }, 300);
+
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                link.classList.toggle('active', link.getAttribute('data-page') === page);
+            });
+        }
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        async function init() {
+            if (!checkAuth()) return;
+
+            // Load before the first render so the overview is real. A failure
+            // says so, rather than showing zeroes that read as "you have no
+            // students" instead of "we could not reach the server".
+            const content = document.getElementById('main-content');
+            content.innerHTML = '<div style="text-align:center;padding:60px;"><div class="loading-spinner"></div></div>';
+
+            try {
+                await loadInstructorData();
+            } catch (error) {
+                content.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <h3>We could not load your dashboard</h3>
+                        <p>${WGAUI.escapeHtml(error.message || 'Please try again in a moment.')}</p>
+                        <button class="btn-primary" onclick="window.location.reload()">Try again</button>
+                    </div>`;
+                return;
+            }
+
+            await loadPage('overview');
+            loadNotifications();
+
+            // Sign out through the API so the refresh token is revoked on the
+            // server. Clearing localStorage alone leaves a live session that
+            // anyone holding the token could keep using.
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                WGA.logout().finally(() => {
+                    window.location.href = '/login.html?reason=signout';
+                });
+            });
+
+            document.getElementById('notifBtn').addEventListener('click', () => {
+                document.getElementById('notifPanel').classList.toggle('open');
+                loadNotifications();
+            });
+            document.getElementById('closeNotif').addEventListener('click', () => {
+                document.getElementById('notifPanel').classList.remove('open');
+            });
+
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('modal').addEventListener('click', (e) => {
+                if (e.target === e.currentTarget) closeModal();
+            });
+
+            document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('open');
+            });
+
+            document.querySelectorAll('.sidebar-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    loadPage(page);
+                    if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+                });
+            });
+
+            const themeToggle = document.getElementById('theme-toggle');
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.textContent = '☀️';
+            }
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                themeToggle.textContent = isDark ? '☀️' : '🌙';
+            });
+
+            document.getElementById('globalSearch').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const val = e.target.value.trim();
+                    if (val) showToast(`Searching for "${val}"...`, 'info');
+                }
+            });
+        }
+
+        init();
+    </script>
+</body>
+</html>

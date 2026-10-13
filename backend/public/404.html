@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/Images/Brand/wuteve-emblem.png" />
+  <title>Page not found · Wuteve Global Academy</title>
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    :root {
+      --primary: #1a56db;
+      --primary-dark: #0f3b8c;
+      --primary-light: #3b82f6;
+      --gold: #d4a547;
+      --text: #1f2937;
+      --text-light: #6b7280;
+      --bg-light: #f9fafb;
+      --border: #e5e7eb;
+      --dark-bg: #0f172a;
+      --dark-text: #e2e8f0;
+      --dark-border: #334155;
+      --dark-card: #1e293b;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark-mode {
+      --text-light: #94a3b8; /* #6b7280 is a light-background grey: 3.65:1 here */
+      background-color: var(--dark-bg);
+      color: var(--dark-text);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+      font-weight: 800;
+      font-size: 17px;
+      letter-spacing: -0.2px;
+      margin-bottom: 34px;
+    }
+
+    .brand i {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 9px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .brand .brand-mark {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      border-radius: 50%;
+      background: #fff;
+      padding: 3px;
+      object-fit: contain;
+    }
+
+    .brand span.accent { color: var(--primary); }
+    /* --primary is a light-background blue: as text on this theme it is 2.89:1. */
+    body.dark-mode .brand span.accent { color: #60a5fa; }
+
+    .card {
+      width: 100%;
+      max-width: 520px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 46px 38px 40px;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    body.dark-mode .card {
+      background: var(--dark-card);
+      border-color: var(--dark-border);
+      box-shadow: none;
+    }
+
+    .code {
+      font-size: 76px;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -3px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 55%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 23px;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+
+    body.dark-mode p { color: #94a3b8; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 13px 26px;
+      border-radius: 10px;
+      font-size: 14.5px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid transparent;
+      transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(26, 86, 219, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: inherit;
+      border-color: var(--border);
+    }
+
+    body.dark-mode .btn-ghost { border-color: var(--dark-border); }
+
+    .btn-ghost:hover { transform: translateY(-2px); }
+
+    .hint {
+      margin-top: 26px;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    body.dark-mode .hint { border-color: var(--dark-border); color: #94a3b8; }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: inherit;
+      cursor: pointer;
+      font-size: 16px;
+      display: grid;
+      place-items: center;
+      transition: transform 0.2s ease;
+    }
+
+    body.dark-mode .theme-toggle { background: var(--dark-card); border-color: var(--dark-border); }
+    .theme-toggle:hover { transform: scale(1.08); }
+
+    @media (max-width: 480px) {
+      .card { padding: 36px 24px 32px; }
+      .code { font-size: 60px; }
+      h1 { font-size: 20px; }
+      .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle colour theme">🌙</button>
+
+  <a class="brand" href="/">
+    <img class="brand-mark" src="/Images/Brand/wuteve-emblem.png" alt="" width="34" height="34" />
+    Wuteve <span class="accent">Global Academy</span>
+  </a>
+
+  <main class="card">
+    <div class="code">404</div>
+    <h1>We could not find that page</h1>
+    <p>The address may be mistyped, or the page may have moved.</p>
+
+    <div class="actions">
+      <a class="btn btn-primary" href="/">
+        <i class="fas fa-house" aria-hidden="true"></i>
+        Go to the homepage
+      </a>
+      <a class="btn btn-ghost" href="/login">
+        <i class="fas fa-right-to-bracket" aria-hidden="true"></i>
+        Sign in
+      </a>
+    </div>
+
+    <p class="hint">Looking for a course? Start from the homepage and browse the catalog.</p>
+  </main>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById('theme-toggle');
+
+      function apply(isDark) {
+        document.body.classList.toggle('dark-mode', isDark);
+        toggle.textContent = isDark ? '☀️' : '🌙';
+      }
+
+      apply(localStorage.getItem('theme') === 'dark');
+
+      toggle.addEventListener('click', function () {
+        var isDark = !document.body.classList.contains('dark-mode');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        apply(isDark);
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/Images/Brand/wuteve-emblem.png" />
+  <title>Course · Wuteve Global Academy</title>
+  <meta name="description" content="Course details, syllabus and enrolment." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/css/wga-shell.css" />
+  <style>
+    .hero {
+      display: grid; grid-template-columns: 1.6fr 1fr; gap: 30px;
+      padding: 14px 0 30px; align-items: start;
+    }
+    @media (max-width: 880px) { .hero { grid-template-columns: 1fr; } }
+
+    .hero h1 { font-size: 32px; font-weight: 900; letter-spacing: -0.8px; line-height: 1.2; margin: 12px 0 14px; }
+    .hero .lede { font-size: 16px; color: var(--text-light); margin-bottom: 18px; }
+    body.dark-mode .hero .lede { color: var(--dark-muted); }
+
+    .meta-row { display: flex; flex-wrap: wrap; gap: 18px; font-size: 14px; color: var(--text-light); }
+    body.dark-mode .meta-row { color: var(--dark-muted); }
+    .meta-row span { display: inline-flex; align-items: center; gap: 7px; }
+
+    .buy-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+      padding: 26px; box-shadow: var(--shadow); position: sticky; top: 20px;
+    }
+    body.dark-mode .buy-card { background: var(--dark-surface); border-color: var(--dark-border); box-shadow: none; }
+    .buy-price { font-size: 30px; font-weight: 900; letter-spacing: -1px; margin-bottom: 4px; }
+
+    .section-title { font-size: 20px; font-weight: 800; letter-spacing: -0.4px; margin: 34px 0 14px; }
+
+    .lesson-row {
+      display: flex; align-items: center; gap: 14px; padding: 13px 16px;
+      border: 1px solid var(--border); border-radius: 12px; margin-bottom: 9px;
+      background: var(--surface); font-size: 14.5px;
+    }
+    body.dark-mode .lesson-row { background: var(--dark-surface); border-color: var(--dark-border); }
+    .lesson-row .num {
+      width: 26px; height: 26px; border-radius: 50%; flex: 0 0 26px;
+      display: grid; place-items: center; font-size: 12px; font-weight: 700;
+      background: rgba(26,86,219,.12); color: var(--primary);
+    }
+    body.dark-mode .lesson-row .num { background: rgba(59,130,246,.2); color: var(--primary-light); }
+    .lesson-row .grow { flex: 1; }
+    .lesson-row .tag { font-size: 11.5px; text-transform: uppercase; letter-spacing: .4px; color: var(--text-light); }
+    body.dark-mode .lesson-row .tag { color: var(--dark-muted); }
+    /* "Preview" is the one tag with a colour of its own. It used to carry an
+       inline var(--primary), and an inline style cannot follow the theme — so it
+       stayed at 2.37:1 on the dark row. A class can. */
+    .lesson-row .tag.tag-preview { color: var(--primary); }
+    body.dark-mode .lesson-row .tag.tag-preview { color: var(--dark-link); }
+    .lesson-row.done .num { background: rgba(16,185,129,.16); color: #047857; }
+
+    /* ---- Lesson viewer ------------------------------------------------ *
+     * One lesson at a time, opened in place above the syllabus. Opening in
+     * place rather than navigating keeps the syllabus where the reader left
+     * it, and means the back button cannot dump them somewhere unexpected.
+     * -------------------------------------------------------------------- */
+    .lesson-open {
+      font: inherit; color: inherit; background: none; border: 0;
+      padding: 0; margin: 0; width: 100%; text-align: left;
+      display: flex; align-items: center; gap: 14px; cursor: pointer;
+      border-radius: 12px;
+    }
+    .lesson-open:hover .grow { text-decoration: underline; }
+    .lesson-row.is-open { border-color: var(--primary); }
+    .lesson-row.is-locked { opacity: .68; }
+
+    .viewer { margin: 22px 0 8px; }
+    .viewer-head {
+      display: flex; align-items: center; gap: 12px;
+      flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .viewer-head h2 {
+      font-size: 21px; font-weight: 800; letter-spacing: -0.4px;
+      margin: 0; flex: 1 1 220px; line-height: 1.3;
+    }
+    .viewer-media { margin-bottom: 20px; }
+    .viewer-media .aspect {
+      position: relative; width: 100%; aspect-ratio: 16 / 9;
+      background: #000; border-radius: 14px; overflow: hidden;
+    }
+    .viewer-media video,
+    .viewer-media iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+    .viewer-body { font-size: 16px; line-height: 1.8; white-space: pre-line; }
+    .viewer-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+    .viewer-nav .spacer { flex: 1 1 auto; }
+    .resource-list { list-style: none; margin: 10px 0 0; padding: 0; }
+    .resource-list li { margin-bottom: 7px; }
+    .resource-list a { display: inline-flex; align-items: center; gap: 9px; font-size: 14.5px; }
+
+    /* ---- Quiz --------------------------------------------------------- */
+    .quiz-card {
+      margin-top: 26px; padding: 22px; border-radius: 16px;
+      background: var(--surface); border: 1px solid var(--border);
+    }
+    body.dark-mode .quiz-card { background: var(--dark-surface); border-color: var(--dark-border); }
+    .quiz-head h3 { font-size: 17px; font-weight: 800; margin: 0 0 4px; }
+    .quiz-question {
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 14px 16px; margin: 16px 0 0; min-width: 0;
+    }
+    body.dark-mode .quiz-question { border-color: var(--dark-border); }
+    .quiz-question legend { font-size: 15px; font-weight: 600; padding: 0 6px; }
+    .quiz-num {
+      display: inline-grid; place-items: center; width: 22px; height: 22px;
+      border-radius: 50%; font-size: 11.5px; font-weight: 700; margin-right: 6px;
+      background: rgba(26,86,219,.12); color: var(--primary);
+    }
+    body.dark-mode .quiz-num { background: rgba(255,255,255,.08); color: var(--dark-link); }
+    .quiz-option {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 9px 11px; border-radius: 9px; cursor: pointer; font-size: 15px;
+    }
+    .quiz-option:hover { background: rgba(26,86,219,.06); }
+    body.dark-mode .quiz-option:hover { background: rgba(255,255,255,.05); }
+    .quiz-option input { margin-top: 3px; }
+    .quiz-score {
+      display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+      padding: 14px 16px; border-radius: 12px; margin-bottom: 16px;
+    }
+    .quiz-score strong { font-size: 26px; font-weight: 900; letter-spacing: -0.5px; }
+    .quiz-score.is-pass { background: rgba(16,185,129,.14); color: #047857; }
+    .quiz-score.is-fail { background: rgba(220,38,38,.10); color: #b91c1c; }
+    body.dark-mode .quiz-score.is-pass { background: rgba(16,185,129,.18); color: #6ee7b7; }
+    body.dark-mode .quiz-score.is-fail { background: rgba(220,38,38,.20); color: #fca5a5; }
+    .quiz-review-row {
+      border-left: 3px solid var(--border); padding: 4px 0 10px 12px; margin-bottom: 14px;
+    }
+    .quiz-review-row.is-right { border-left-color: #10b981; }
+    .quiz-review-row.is-wrong { border-left-color: #dc2626; }
+    .quiz-review-head { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .quiz-mark { font-size: 12px; font-weight: 700; margin-left: 8px; text-transform: uppercase; letter-spacing: .4px; }
+    .quiz-review-row.is-right .quiz-mark { color: #047857; }
+    .quiz-review-row.is-wrong .quiz-mark { color: #b91c1c; }
+    body.dark-mode .quiz-review-row.is-right .quiz-mark { color: #6ee7b7; }
+    body.dark-mode .quiz-review-row.is-wrong .quiz-mark { color: #fca5a5; }
+    .quiz-review-option { font-size: 14.5px; color: var(--text-light); padding: 3px 0; }
+    body.dark-mode .quiz-review-option { color: var(--dark-muted); }
+    .quiz-review-option.is-key { color: #047857; font-weight: 600; }
+    body.dark-mode .quiz-review-option.is-key { color: #6ee7b7; }
+    .quiz-review-option.is-chosen { font-weight: 600; }
+    .quiz-why { font-size: 14px; color: var(--text-light); margin-top: 8px; font-style: italic; }
+    body.dark-mode .quiz-why { color: var(--dark-muted); }
+
+    /* ---- Quiz authoring (dashboard) ---------------------------------- */
+    .quiz-q-editor {
+      border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 12px;
+    }
+    .quiz-q-editor-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px;
+    }
+    .quiz-opt-row { display: flex; align-items: center; gap: 9px; margin-bottom: 7px; }
+    .quiz-opt-row input[type="text"] { flex: 1 1 auto; min-width: 0; }
+    .quiz-opt-row label { white-space: nowrap; font-size: 12.5px; display: inline-flex; align-items: center; gap: 5px; }
+
+    /* Upload progress, used by the instructor authoring form. */
+    .upload-bar { height: 6px; border-radius: 99px; background: var(--border); overflow: hidden; margin-top: 8px; }
+    body.dark-mode .upload-bar { background: var(--dark-border); }
+    .upload-bar span { display: block; height: 100%; width: 0; background: var(--primary); transition: width .2s ease; }
+
+    .pre { white-space: pre-line; font-size: 15px; line-height: 1.75; }
+    .desc { font-size: 15px; line-height: 1.75; color: var(--text-light); }
+    body.dark-mode .desc { color: var(--dark-muted); }
+
+    /* ---- Payment method chooser -------------------------------------- *
+     * A payer has to be able to tell, before clicking, which methods will
+     * actually work. Unavailable options are rendered with the `disabled`
+     * attribute rather than merely greyed, so they cannot be reached by
+     * keyboard and are announced as unavailable rather than as choices.
+     * ------------------------------------------------------------------- */
+    .pay-choice {
+      display: flex; gap: 12px; align-items: flex-start;
+      width: 100%; text-align: left; font: inherit; color: inherit;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 13px; margin-bottom: 9px;
+      cursor: pointer; transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .pay-choice:not(:disabled):hover { border-color: var(--primary); }
+    .pay-choice[aria-pressed="true"] {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26,86,219,.14);
+    }
+    .pay-choice[disabled] { cursor: not-allowed; opacity: .6; }
+
+    .pay-choice .pay-icon {
+      width: 32px; height: 32px; flex: 0 0 32px; border-radius: 9px;
+      display: grid; place-items: center; font-size: 14px;
+      background: rgba(26,86,219,.12); color: var(--primary);
+    }
+    .pay-choice[aria-pressed="true"] .pay-icon { background: var(--primary); color: #fff; }
+    .pay-choice[disabled] .pay-icon { background: rgba(120,120,130,.15); color: var(--text-light); }
+
+    .pay-choice .pay-name { display: block; font-size: 14.5px; font-weight: 700; line-height: 1.3; }
+    .pay-choice .pay-why { display: block; font-size: 12.5px; color: var(--text-light); line-height: 1.45; margin-top: 3px; }
+    .pay-choice .pay-missing {
+      display: block;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px; color: var(--text-light); margin-top: 5px; overflow-wrap: anywhere;
+    }
+
+    body.dark-mode .pay-choice { background: var(--dark-surface); border-color: var(--dark-border); }
+    body.dark-mode .pay-choice .pay-why,
+    body.dark-mode .pay-choice .pay-missing,
+    body.dark-mode .pay-choice[disabled] .pay-icon { color: var(--dark-muted); }
+
+    .pay-panel {
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 15px; font-size: 14px; line-height: 1.6;
+      background: rgba(26,86,219,.06);
+    }
+    .pay-panel .pay-panel-title { display: block; font-weight: 700; margin-bottom: 7px; }
+    .pay-panel i { color: var(--primary); }
+    body.dark-mode .pay-panel { border-color: var(--dark-border); background: rgba(59,130,246,.1); }
+    .pay-panel-wait { background: rgba(212,165,71,.1); }
+    body.dark-mode .pay-panel-wait { background: rgba(212,165,71,.14); }
+  </style>
+</head>
+<body>
+  <header class="wga-header">
+    <a class="wga-brand" href="/">
+      <img class="brand-mark" src="/Images/Brand/wuteve-emblem.png" alt="" width="34" height="34" />
+      Wuteve <span class="accent">Global Academy</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a class="wga-btn wga-btn-ghost" href="/courses.html" style="padding:10px 18px;font-size:14px;">
+        <i class="fas fa-arrow-left" aria-hidden="true"></i> Catalog
+      </a>
+      <button class="wga-theme-toggle" data-theme-toggle type="button" aria-label="Toggle colour theme">🌙</button>
+    </div>
+  </header>
+
+  <main class="wga-main" id="main">
+    <div class="wga-card" id="loading">
+      <div class="wga-skeleton" style="height:28px;width:60%;margin-bottom:16px;"></div>
+      <div class="wga-skeleton" style="height:16px;width:90%;margin-bottom:10px;"></div>
+      <div class="wga-skeleton" style="height:16px;width:75%;"></div>
+    </div>
+  </main>
+
+  <script src="/assets/js/wga-api.js"></script>
+  <script src="/assets/js/wga-ui.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      WGAUI.initTheme();
+
+      var main = document.getElementById('main');
+
+      function identifier() {
+        return WGAUI.param('course') || WGAUI.param('slug') || WGAUI.param('id') || '';
+      }
+
+      /**
+       * A syllabus row.
+       *
+       * A row the reader is allowed to open becomes a real button, so it is
+       * reachable by keyboard and announced as actionable. A row they may not open
+       * stays a plain div rather than a button that silently does nothing.
+       */
+      function lessonRow(lesson, index) {
+        var icon = lesson.completed
+          ? '<i class="fas fa-check" aria-hidden="true"></i>'
+          : '<span>' + index + '</span>';
+
+        var right = lesson.locked
+          ? '<span class="tag"><i class="fas fa-lock" aria-hidden="true"></i> Locked</span>'
+          : lesson.isPreview
+            ? '<span class="tag tag-preview">Preview</span>'
+            : '<span class="tag">' + WGAUI.escapeHtml(lesson.type) + '</span>';
+
+        var inner =
+          '<div class="num">' + icon + '</div>' +
+          '<div class="grow">' + WGAUI.escapeHtml(lesson.title) +
+          (lesson.durationMinutes ? ' <span class="tag">· ' + lesson.durationMinutes + ' min</span>' : '') +
+          '</div>' + right;
+
+        if (lesson.locked) {
+          return '<div class="lesson-row is-locked">' + inner + '</div>';
+        }
+
+        return (
+          '<div class="lesson-row' + (lesson.completed ? ' done' : '') + '">' +
+          '<button type="button" class="lesson-open" data-lesson-id="' +
+          WGAUI.escapeHtml(String(lesson.id)) + '">' + inner + '</button></div>'
+        );
+      }
+
+      /* ------------------------------------------------------------- *
+       * Lesson viewer
+       * ------------------------------------------------------------- */
+
+      var currentCourse = null;
+      var currentSyllabus = [];
+      var openLessonId = null;
+      var quizState = { quiz: null, result: null, submitting: false };
+
+      /**
+       * Only http(s) addresses become links.
+       *
+       * `escapeHtml` makes a string safe to place in HTML; it does not make it
+       * safe to place in an href. `javascript:` survives escaping intact and runs
+       * on click, so the scheme is checked as well.
+       */
+      function safeUrl(url) {
+        if (!url) return null;
+        try {
+          var parsed = new URL(url, window.location.origin);
+          return parsed.protocol === 'http:' || parsed.protocol === 'https:' ? parsed.href : null;
+        } catch (error) {
+          return null;
+        }
+      }
+
+      /**
+       * Build a privacy-preserving embed address from a stored video link.
+       *
+       * The stored address is never put into an iframe src. The host is matched
+       * against a fixed list and the video id is extracted and reassembled, so an
+       * unexpected host, a `javascript:` address, or a path crafted to escape the
+       * player cannot become a frame.
+       */
+      function videoEmbed(url) {
+        var parsed;
+        try {
+          parsed = new URL(url);
+        } catch (error) {
+          return null;
+        }
+
+        if (parsed.protocol !== 'https:') return null;
+
+        var host = parsed.hostname.replace(/^www\./, '');
+        var youtube = 'https://www.youtube-nocookie.com/embed/';
+
+        if (host === 'youtu.be') {
+          var shortId = parsed.pathname.slice(1).split('/')[0];
+          return shortId ? youtube + encodeURIComponent(shortId) : null;
+        }
+
+        if (
+          host === 'youtube.com' ||
+          host === 'm.youtube.com' ||
+          host === 'music.youtube.com' ||
+          host === 'youtube-nocookie.com'
+        ) {
+          var byQuery = parsed.searchParams.get('v');
+          if (byQuery) return youtube + encodeURIComponent(byQuery);
+
+          var byPath = parsed.pathname.match(/^\/(?:embed|shorts|v)\/([^/?#]+)/);
+          return byPath ? youtube + encodeURIComponent(byPath[1]) : null;
+        }
+
+        if (host === 'vimeo.com' || host === 'player.vimeo.com') {
+          var vimeoId = parsed.pathname.match(/(\d{6,})/);
+          return vimeoId ? 'https://player.vimeo.com/video/' + vimeoId[1] : null;
+        }
+
+        return null;
+      }
+
+      function mediaBlock(lesson) {
+        var video = lesson.video || {};
+
+        if (video.type === 'upload' && video.playbackUrl) {
+          return (
+            '<div class="viewer-media"><div class="aspect">' +
+            '<video controls playsinline preload="metadata" src="' +
+            WGAUI.escapeHtml(video.playbackUrl) + '"></video></div></div>'
+          );
+        }
+
+        if (video.type === 'link' && video.url) {
+          var embed = videoEmbed(video.url);
+          if (!embed) {
+            // The address passed validation when it was saved, so this means it
+            // changed shape since. Say so rather than showing an empty frame.
+            return (
+              '<p class="wga-hint">This lesson\'s video link could not be embedded. ' +
+              'Open it directly instead.</p>'
+            );
+          }
+
+          return (
+            '<div class="viewer-media"><div class="aspect">' +
+            '<iframe src="' + WGAUI.escapeHtml(embed) + '" title="' +
+            WGAUI.escapeHtml(lesson.title) + '" loading="lazy" allowfullscreen ' +
+            'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">' +
+            '</iframe></div></div>'
+          );
+        }
+
+        return '';
+      }
+
+      function resourcesBlock(lesson) {
+        var resources = lesson.resources || [];
+        var usable = resources.filter(function (resource) {
+          return safeUrl(resource.url);
+        });
+
+        if (!usable.length) return '';
+
+        return (
+          '<h3 class="section-title" style="font-size:16px;margin:28px 0 4px;">Lesson materials</h3>' +
+          '<ul class="resource-list">' +
+          usable
+            .map(function (resource) {
+              return (
+                '<li><a href="' + WGAUI.escapeHtml(safeUrl(resource.url)) +
+                '" target="_blank" rel="noopener noreferrer">' +
+                '<i class="fas fa-file-lines" aria-hidden="true"></i> ' +
+                WGAUI.escapeHtml(resource.title) + '</a></li>'
+              );
+            })
+            .join('') +
+          '</ul>'
+        );
+      }
+
+      /* ------------------------------------------------------------- *
+       * Quiz
+       *
+       * Marking happens on the server. This draws the questions it is given and
+       * shows the result that comes back — the correct answers are not in the
+       * payload before a submission, so there is nothing here that could leak
+       * them even if it tried.
+       * ------------------------------------------------------------- */
+
+      function quizChoice(label, value, checked, name) {
+        return (
+          '<label class="quiz-option">' +
+          '<input type="radio" name="' + WGAUI.escapeHtml(name) + '" value="' +
+          WGAUI.escapeHtml(value) + '"' + (checked ? ' checked' : '') + ' />' +
+          '<span>' + WGAUI.escapeHtml(label) + '</span></label>'
+        );
+      }
+
+      function quizQuestionForm(question, index) {
+        return (
+          '<fieldset class="quiz-question">' +
+          '<legend><span class="quiz-num">' + index + '</span>' +
+          WGAUI.escapeHtml(question.prompt) + '</legend>' +
+          question.options
+            .map(function (option) {
+              return quizChoice(option.text, option.id, false, 'q-' + question.id);
+            })
+            .join('') +
+          '</fieldset>'
+        );
+      }
+
+      function quizResultBlock(quiz, result) {
+        var byQuestion = {};
+        (result.answers || []).forEach(function (answer) {
+          byQuestion[String(answer.question)] = answer;
+        });
+
+        return (
+          '<div class="quiz-score ' + (result.passed ? 'is-pass' : 'is-fail') + '">' +
+            '<strong>' + result.scorePercent + '%</strong>' +
+            '<span>' + (result.passed ? 'Passed' : 'Not passed yet — ' + quiz.passPercent + '% is needed') + '</span>' +
+          '</div>' +
+          '<div class="quiz-review">' +
+          quiz.questions
+            .map(function (question, index) {
+              var answer = byQuestion[String(question.id)];
+              var correctIds = (answer && answer.correctOptionIds) || [];
+
+              return (
+                '<div class="quiz-review-row ' + (answer && answer.correct ? 'is-right' : 'is-wrong') + '">' +
+                '<div class="quiz-review-head">' +
+                  '<span class="quiz-num">' + (index + 1) + '</span>' +
+                  WGAUI.escapeHtml(question.prompt) +
+                  '<span class="quiz-mark">' + (answer && answer.correct ? 'Correct' : 'Not quite') + '</span>' +
+                '</div>' +
+                question.options
+                  .map(function (option) {
+                    var isKey = correctIds.indexOf(String(option.id)) !== -1;
+                    var chosen = answer && (answer.selected || []).indexOf(String(option.id)) !== -1;
+                    var tag = isKey ? ' — the right answer' : (chosen ? ' — your answer' : '');
+                    return '<div class="quiz-review-option' + (isKey ? ' is-key' : '') + (chosen && !isKey ? ' is-chosen' : '') + '">' +
+                      WGAUI.escapeHtml(option.text) + WGAUI.escapeHtml(tag) + '</div>';
+                  })
+                  .join('') +
+                (answer && answer.explanation
+                  ? '<p class="quiz-why">' + WGAUI.escapeHtml(answer.explanation) + '</p>'
+                  : '') +
+                '</div>'
+              );
+            })
+            .join('') +
+          '</div>'
+        );
+      }
+
+      function renderQuiz() {
+        var host = document.getElementById('lesson-quiz');
+        if (!host) return;
+
+        var quiz = quizState.quiz;
+        if (!quiz) { host.innerHTML = ''; return; }
+
+        var unlimited = !quiz.maxAttempts || quiz.maxAttempts === 0;
+        var remaining = quiz.attemptsRemaining;
+        var exhausted = !unlimited && remaining !== null && remaining <= 0;
+
+        var header =
+          '<div class="quiz-head">' +
+            '<h3><i class="fas fa-circle-question" aria-hidden="true"></i> ' +
+            WGAUI.escapeHtml(quiz.title || 'Quiz') + '</h3>' +
+            '<p class="wga-hint">' +
+              quiz.questionCount + ' question' + (quiz.questionCount === 1 ? '' : 's') +
+              ' · ' + quiz.passPercent + '% to pass' +
+              (unlimited ? ' · unlimited attempts' : ' · ' + remaining + ' of ' + quiz.maxAttempts + ' attempt' + (quiz.maxAttempts === 1 ? '' : 's') + ' left') +
+            '</p>' +
+          '</div>';
+
+        var body;
+
+        if (quizState.result) {
+          body =
+            quizResultBlock(quiz, quizState.result) +
+            ((!exhausted && !quizState.result.passed)
+              ? '<button type="button" class="wga-btn wga-btn-primary" id="quiz-again">Try again</button>'
+              : '') +
+            (quizState.result.passed
+              ? '<button type="button" class="wga-btn wga-btn-ghost" id="quiz-again">Review the questions</button>'
+              : '');
+        } else if (exhausted) {
+          body =
+            '<p class="wga-hint">You have used every attempt for this quiz. ' +
+            (quiz.bestScore !== null && quiz.bestScore !== undefined ? 'Your best was ' + quiz.bestScore + '%.' : '') +
+            ' Contact your instructor if you need another.</p>';
+        } else {
+          body =
+            (quiz.bestScore !== null && quiz.bestScore !== undefined
+              ? '<p class="wga-hint">Your best so far: ' + quiz.bestScore + '%</p>'
+              : '') +
+            '<form id="quiz-form">' +
+              quiz.questions.map(function (question, index) { return quizQuestionForm(question, index + 1); }).join('') +
+              '<button type="submit" class="wga-btn wga-btn-primary" id="quiz-submit">Submit answers</button>' +
+            '</form>';
+        }
+
+        host.innerHTML = '<div class="quiz-card">' + header + body + '</div>';
+        bindQuiz(quiz);
+      }
+
+      function bindQuiz(quiz) {
+        var form = document.getElementById('quiz-form');
+        if (form) {
+          form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            submitQuiz(quiz);
+          });
+        }
+
+        var again = document.getElementById('quiz-again');
+        if (again) {
+          again.addEventListener('click', function () {
+            quizState.result = null;
+            renderQuiz();
+          });
+        }
+      }
+
+      function submitQuiz(quiz) {
+        var button = document.getElementById('quiz-submit');
+        var answers = [];
+
+        quiz.questions.forEach(function (question) {
+          var chosen = document.querySelector('input[name="q-' + question.id + '"]:checked');
+          answers.push({ questionId: question.id, optionIds: chosen ? [chosen.value] : [] });
+        });
+
+        WGAUI.setBusy(button, true, 'Marking…');
+
+        WGA.post(
+          '/courses/' + encodeURIComponent(currentCourse.id) + '/lessons/' +
+          encodeURIComponent(openLessonId) + '/quiz/attempts',
+          { answers: answers }
+        )
+          .then(function (data) {
+            quizState.result = data.attempt;
+            // The API returns the updated attempt count with the quiz, so ask for
+            // it again rather than guessing what is left.
+            return WGA.get('/courses/' + encodeURIComponent(currentCourse.id) + '/lessons/' + encodeURIComponent(openLessonId) + '/quiz');
+          })
+          .then(function (data) {
+            quizState.quiz = data.quiz;
+            renderQuiz();
+            WGAUI.toast(quizState.result.passed ? 'Passed.' : 'Submitted — see your result.', quizState.result.passed ? 'success' : 'info');
+          })
+          .catch(function (error) {
+            WGAUI.setBusy(button, false);
+            WGAUI.toast((error && error.message) || 'Could not submit that.', 'error');
+          });
+      }
+
+      function loadLessonQuiz(lesson) {
+        var host = document.getElementById('lesson-quiz');
+        if (!host || !currentCourse) return;
+
+        quizState = { quiz: null, result: null, submitting: false };
+        host.innerHTML = '<div class="wga-skeleton" style="height:64px;margin-top:26px;"></div>';
+
+        WGA.get(
+          '/courses/' + encodeURIComponent(currentCourse.id) +
+          '/lessons/' + encodeURIComponent(lesson.id) + '/quiz'
+        )
+          .then(function (data) {
+            quizState.quiz = data.quiz;
+            renderQuiz();
+          })
+          .catch(function () {
+            host.innerHTML = '';
+          });
+      }
+
+      /** Keep the address shareable, so a lesson can be linked to directly. */
+      function rememberLesson(lessonId) {
+        if (!window.history || !window.history.replaceState) return;
+        try {
+          var url = new URL(window.location.href);
+          if (lessonId) url.searchParams.set('lesson', lessonId);
+          else url.searchParams.delete('lesson');
+          window.history.replaceState({}, '', url);
+        } catch (error) {
+          /* not worth failing over */
+        }
+      }
+
+      function closeViewer() {
+        var viewer = document.getElementById('viewer');
+        if (viewer) {
+          viewer.hidden = true;
+          viewer.innerHTML = '';
+        }
+        document.querySelectorAll('.lesson-row.is-open').forEach(function (row) {
+          row.classList.remove('is-open');
+        });
+        openLessonId = null;
+        rememberLesson(null);
+      }
+
+      function openLesson(lessonId) {
+        var viewer = document.getElementById('viewer');
+        if (!viewer || !currentCourse || !lessonId) return;
+
+        openLessonId = lessonId;
+        rememberLesson(lessonId);
+
+        document.querySelectorAll('.lesson-row.is-open').forEach(function (row) {
+          row.classList.remove('is-open');
+        });
+        var row = document.querySelector('[data-lesson-id="' + lessonId + '"]');
+        if (row) row.closest('.lesson-row').classList.add('is-open');
+
+        viewer.hidden = false;
+        viewer.innerHTML =
+          '<div class="wga-card"><div class="wga-skeleton" style="height:24px;width:55%;margin-bottom:12px;"></div>' +
+          '<div class="wga-skeleton" style="height:200px;"></div></div>';
+        viewer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        WGA.get(
+          '/courses/' +
+            encodeURIComponent(currentCourse.id) +
+            '/lessons/' +
+            encodeURIComponent(lessonId)
+        )
+          .then(function (data) {
+            var lesson = data.lesson;
+            var navigation = data.navigation || {};
+
+            viewer.innerHTML =
+              '<div class="viewer">' +
+                '<div class="viewer-head">' +
+                  '<h2>' + WGAUI.escapeHtml(lesson.title) + '</h2>' +
+                  '<span class="tag">' + WGAUI.escapeHtml(lesson.type) + '</span>' +
+                  '<button type="button" class="wga-btn wga-btn-ghost" id="close-lesson">Close</button>' +
+                '</div>' +
+                mediaBlock(lesson) +
+                (lesson.content
+                  ? '<div class="viewer-body">' + WGAUI.escapeHtml(lesson.content) + '</div>'
+                  : '') +
+                resourcesBlock(lesson) +
+                '<div id="lesson-quiz"></div>' +
+                '<div class="viewer-nav">' +
+                  (navigation.previousLessonId
+                    ? '<button type="button" class="wga-btn wga-btn-ghost" data-goto="' +
+                      WGAUI.escapeHtml(navigation.previousLessonId) + '">' +
+                      '<i class="fas fa-arrow-left" aria-hidden="true"></i> Previous</button>'
+                    : '') +
+                  (lesson.completed
+                    ? '<span class="wga-pill wga-pill-free"><i class="fas fa-check" aria-hidden="true"></i> Completed</span>'
+                    : '<button type="button" class="wga-btn wga-btn-primary" id="mark-complete">' +
+                      'Mark complete</button>') +
+                  '<span class="spacer"></span>' +
+                  (navigation.nextLessonId
+                    ? '<button type="button" class="wga-btn wga-btn-ghost" data-goto="' +
+                      WGAUI.escapeHtml(navigation.nextLessonId) + '">Next ' +
+                      '<i class="fas fa-arrow-right" aria-hidden="true"></i></button>'
+                    : '') +
+                '</div>' +
+                '<p class="wga-hint" style="margin-top:14px;">Lesson ' +
+                  (navigation.position || 0) +
+                  ' of ' +
+                  (navigation.total || 0) +
+                  (lesson.durationMinutes ? ' · about ' + lesson.durationMinutes + ' min' : '') +
+                '</p>' +
+              '</div>';
+
+            bindViewer();
+            loadLessonQuiz(lesson);
+          })
+          .catch(function (error) {
+            viewer.innerHTML =
+              '<div class="wga-card"><p style="margin:0 0 12px;">' +
+              WGAUI.escapeHtml(
+                error && error.status === 403
+                  ? 'Enroll in this course to open this lesson.'
+                  : (error && error.message) || 'That lesson could not be opened.'
+              ) +
+              '</p><button type="button" class="wga-btn wga-btn-ghost" id="close-lesson">Close</button></div>';
+            bindViewer();
+          });
+      }
+
+      function bindViewer() {
+        var viewer = document.getElementById('viewer');
+        if (!viewer) return;
+
+        viewer.querySelectorAll('[data-goto]').forEach(function (button) {
+          button.addEventListener('click', function () {
+            openLesson(button.getAttribute('data-goto'));
+          });
+        });
+
+        var close = document.getElementById('close-lesson');
+        if (close) close.addEventListener('click', closeViewer);
+
+        var complete = document.getElementById('mark-complete');
+        if (complete) {
+          complete.addEventListener('click', function () {
+            WGAUI.setBusy(complete, true, 'Saving…');
+
+            WGA.post(
+              '/courses/' +
+                encodeURIComponent(currentCourse.id) +
+                '/lessons/' +
+                encodeURIComponent(openLessonId) +
+                '/complete'
+            )
+              .then(function () {
+                WGAUI.toast('Lesson completed.', 'success');
+                var reopen = openLessonId;
+                // Re-read the course so the tick, the progress bar and the
+                // certificate state all move together rather than drifting.
+                return WGA.get('/courses/' + encodeURIComponent(identifier())).then(function (fresh) {
+                  render(fresh);
+                  if (reopen) openLesson(reopen);
+                });
+              })
+              .catch(function (error) {
+                WGAUI.setBusy(complete, false);
+                WGAUI.toast((error && error.message) || 'Could not save that.', 'error');
+              });
+          });
+        }
+      }
+
+      /** The first lesson the reader may actually open and has not finished. */
+      function nextLessonToWatch(syllabus) {
+        var open = syllabus.filter(function (lesson) {
+          return !lesson.locked;
+        });
+        for (var i = 0; i < open.length; i += 1) {
+          if (!open[i].completed) return open[i].id;
+        }
+        return open.length ? open[0].id : null;
+      }
+
+      function render(data) {
+        var course = data.course;
+        var access = data.access;
+        var syllabus = data.lessons || [];
+
+        currentCourse = course;
+        currentSyllabus = syllabus;
+
+        document.title = course.title + ' · Wuteve Global Academy';
+
+        var metaDescription = document.querySelector('meta[name="description"]');
+        if (metaDescription && course.summary) metaDescription.setAttribute('content', course.summary);
+
+        /* ---- Primary action ---------------------------------------- */
+        var action = '';
+
+        if (access.manages) {
+          action =
+            '<a class="wga-btn wga-btn-primary wga-btn-block" href="/instructor-dashboard.html#/course/' +
+            encodeURIComponent(course.id) + '"><i class="fas fa-pen-to-square" aria-hidden="true"></i> Manage this course</a>' +
+            '<p class="wga-hint" style="text-align:center;">You teach this course.</p>';
+        } else if (access.isEnrolled) {
+          // Opens the lesson in place. This used to send the reader to a dashboard
+          // route with no lesson viewer on it, which is where the learning stopped.
+          action =
+            '<button class="wga-btn wga-btn-primary wga-btn-block" type="button" id="resume">' +
+            '<i class="fas fa-play" aria-hidden="true"></i> ' +
+            (access.progress > 0 ? 'Continue learning' : 'Start learning') + '</button>' +
+            '<div style="margin-top:14px;">' +
+            '<div class="wga-progress"><span style="width:' + Math.max(0, Math.min(100, access.progress || 0)) + '%"></span></div>' +
+            '<p class="wga-hint" style="text-align:center;margin-top:7px;">' + (access.progress || 0) + '% complete</p>' +
+            '</div>';
+        } else if (!WGA.isSignedIn()) {
+          action =
+            '<a class="wga-btn wga-btn-primary wga-btn-block" href="/login.html?next=' +
+            encodeURIComponent(window.location.pathname + window.location.search) + '">' +
+            '<i class="fas fa-right-to-bracket" aria-hidden="true"></i> Sign in to enroll</a>';
+        } else if (course.isFree) {
+          action =
+            '<button class="wga-btn wga-btn-primary wga-btn-block" type="button" id="enroll">' +
+            '<i class="fas fa-user-plus" aria-hidden="true"></i> Enroll for free</button>';
+        } else {
+          // The methods come from the API because availability is a deployment
+          // fact this page cannot see. Until they arrive we show a skeleton
+          // rather than a payment button, since a button that turns out to be
+          // unusable is worse than a moment of waiting.
+          action =
+            '<div id="checkout-panel">' +
+            '<div class="wga-skeleton" style="height:56px;margin-bottom:9px;"></div>' +
+            '<div class="wga-skeleton" style="height:56px;"></div>' +
+            '</div>';
+        }
+
+        if (access.certificateId) {
+          action +=
+            '<a class="wga-btn wga-btn-ghost wga-btn-block" style="margin-top:10px;" href="/student-dashboard.html#/certificates">' +
+            '<i class="fas fa-award" aria-hidden="true"></i> View your certificate</a>';
+        }
+
+        var thumb = course.thumbnail
+          ? '<img src="' + WGAUI.escapeHtml(course.thumbnail) + '" alt="" style="width:100%;border-radius:16px;margin-bottom:24px;" />'
+          : '';
+
+        main.innerHTML =
+          '<div class="hero">' +
+            '<div>' +
+              thumb +
+              '<span class="wga-pill">' + WGAUI.escapeHtml(course.category) + '</span>' +
+              '<h1>' + WGAUI.escapeHtml(course.title) + '</h1>' +
+              '<p class="lede">' + WGAUI.escapeHtml(course.summary || '') + '</p>' +
+              '<div class="meta-row">' +
+                '<span><i class="fas fa-signal" aria-hidden="true"></i> ' + WGAUI.escapeHtml(course.level) + '</span>' +
+                '<span><i class="fas fa-play-circle" aria-hidden="true"></i> ' + (course.lessonCount || syllabus.length) + ' lessons</span>' +
+                (course.durationHours ? '<span><i class="fas fa-clock" aria-hidden="true"></i> ' + course.durationHours + ' hours</span>' : '') +
+                '<span><i class="fas fa-users" aria-hidden="true"></i> ' + (course.enrolledCount || 0) + ' enrolled</span>' +
+                (course.ratingCount ? '<span><i class="fas fa-star" style="color:var(--gold)" aria-hidden="true"></i> ' + course.rating + ' (' + course.ratingCount + ')</span>' : '') +
+              '</div>' +
+            '</div>' +
+            '<aside class="buy-card">' +
+              '<div class="buy-price">' + WGAUI.escapeHtml(course.priceLabel || WGAUI.formatMoney(course.priceCents, course.currency)) + '</div>' +
+              '<p class="wga-hint" style="margin-bottom:20px;">' +
+                (course.isFree ? 'No payment required.' : 'One-time payment, lifetime access.') + '</p>' +
+              action +
+              '<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);">' +
+                '<p class="wga-hint" style="margin:0 0 4px;font-weight:700;color:inherit;">Instructor</p>' +
+                '<p style="margin:0;font-weight:600;">' + WGAUI.escapeHtml(course.instructorName || 'Wuteve Global Academy') + '</p>' +
+              '</div>' +
+            '</aside>' +
+          '</div>' +
+
+          (course.description
+            ? '<h2 class="section-title">About this course</h2><p class="desc pre">' + WGAUI.escapeHtml(course.description) + '</p>'
+            : '') +
+
+          '<section class="viewer" id="viewer" hidden></section>' +
+          '<h2 class="section-title">Syllabus</h2>' +
+          (syllabus.length
+            ? syllabus.map(function (lesson, index) { return lessonRow(lesson, index + 1); }).join('')
+            : WGAUI.emptyState('No lessons published yet', 'The instructor has not published the syllabus for this course.'));
+
+        bindActions(course);
+
+        /*
+         * Honour ?lesson=, so a lesson can be linked to directly and a reload
+         * does not lose the reader's place.
+         */
+        var wanted = WGAUI.param('lesson');
+        var isOpenable =
+          wanted &&
+          syllabus.some(function (lesson) {
+            return String(lesson.id) === String(wanted) && !lesson.locked;
+          });
+
+        if (isOpenable) openLesson(wanted);
+      }
+
+      function bindActions(course) {
+        document.querySelectorAll('.lesson-open').forEach(function (button) {
+          button.addEventListener('click', function () {
+            openLesson(button.getAttribute('data-lesson-id'));
+          });
+        });
+
+        var resume = document.getElementById('resume');
+        if (resume) {
+          resume.addEventListener('click', function () {
+            var first = nextLessonToWatch(currentSyllabus);
+            if (first) openLesson(first);
+            else WGAUI.toast('No lessons have been published yet.', 'info');
+          });
+        }
+
+        var enroll = document.getElementById('enroll');
+        var panel = document.getElementById('checkout-panel');
+
+        if (enroll) {
+          enroll.addEventListener('click', function () {
+            WGAUI.setBusy(enroll, true, 'Enrolling…');
+
+            WGA.post('/courses/' + encodeURIComponent(course.id) + '/enroll')
+              .then(function () {
+                WGAUI.toast('You are enrolled. Taking you to your course…', 'success');
+                setTimeout(function () {
+                  window.location.href = '/student-dashboard.html#/course/' + encodeURIComponent(course.id);
+                }, 900);
+              })
+              .catch(function (error) {
+                WGAUI.setBusy(enroll, false);
+
+                if (error.status === 401) {
+                  WGA.requireSignIn();
+                  return;
+                }
+
+                WGAUI.toast(error.message || 'We could not enroll you. Please try again.', 'error');
+              });
+          });
+        }
+
+        if (panel) loadMethods(course, panel);
+      }
+
+      /* ---------------------------------------------------------------- *
+       * Payment methods
+       *
+       * The list is fetched, never hardcoded, because whether a method works
+       * is a deployment fact that depends on credentials this page cannot
+       * see. The page must not be the source of truth about it.
+       *
+       * An unavailable method is shown disabled, with the reason, rather than
+       * hidden. A student who has only Orange Money needs to know the academy
+       * takes it and has not switched it on — which is a different message
+       * from it never having been considered. Nothing here presents an
+       * unconfigured method as usable, and when nothing is available at all
+       * no button is offered, because one that cannot work is worse than none.
+       * ---------------------------------------------------------------- */
+
+      var PROVIDER_ICONS = {
+        card: 'fa-credit-card',
+        orange_money: 'fa-mobile-screen-button',
+        lonestar_momo: 'fa-mobile-screen-button',
+      };
+
+      /** Operator aid, off by default — open with `?debug=1` to see settings. */
+      var SHOW_CONFIG_DETAIL = WGAUI.param('debug') === '1';
+
+      function loadingSkeleton(panel) {
+        panel.innerHTML =
+          '<div class="wga-skeleton" style="height:56px;margin-bottom:9px;"></div>' +
+          '<div class="wga-skeleton" style="height:56px;"></div>';
+      }
+
+      function missingDetail(methods) {
+        if (!SHOW_CONFIG_DETAIL) return '';
+
+        var lines = methods
+          .filter(function (method) {
+            return !method.enabled && method.missing && method.missing.length;
+          })
+          .map(function (method) {
+            return method.id + ': ' + method.missing.join(', ');
+          });
+
+        if (!lines.length) return '';
+
+        return '<span class="pay-missing" style="margin-top:11px;">' +
+          WGAUI.escapeHtml(lines.join('  |  ')) + '</span>';
+      }
+
+      function loadMethods(course, panel) {
+        loadingSkeleton(panel);
+
+        WGA.get('/payments/methods')
+          .then(function (data) {
+            var methods = (data && data.methods) || [];
+
+            if (!methods.length) {
+              throw new Error('The server did not report any payment methods.');
+            }
+
+            renderMethods(course, methods, panel);
+          })
+          .catch(function (error) {
+            panel.innerHTML =
+              '<div class="pay-panel">' +
+                '<p style="margin:0 0 7px;font-weight:700;">' +
+                  '<i class="fas fa-triangle-exclamation" aria-hidden="true"></i> ' +
+                  'We could not load the payment methods</p>' +
+                '<p style="margin:0 0 12px;">' +
+                  WGAUI.escapeHtml(error.message || 'Please try again in a moment.') + '</p>' +
+                '<button class="wga-btn wga-btn-ghost wga-btn-block" type="button" id="pay-retry">' +
+                  '<i class="fas fa-rotate-right" aria-hidden="true"></i> Try again</button>' +
+              '</div>';
+
+            panel.querySelector('#pay-retry').addEventListener('click', function () {
+              loadMethods(course, panel);
+            });
+          });
+      }
+
+      function renderMethods(course, methods, panel) {
+        var usable = methods.filter(function (method) { return method.enabled; });
+
+        if (!usable.length) {
+          panel.innerHTML =
+            '<div class="pay-panel pay-panel-wait">' +
+              '<p style="margin:0 0 7px;font-weight:700;">' +
+                '<i class="fas fa-circle-info" aria-hidden="true"></i> ' +
+                'No payment method is available yet</p>' +
+              '<p style="margin:0;">This course is not free, and no payment method has been ' +
+                'switched on for this deployment yet. Nothing has been charged and you have ' +
+                'not been enrolled.</p>' +
+              '<p style="margin:8px 0 0;">Please check back shortly, or contact the academy.</p>' +
+              missingDetail(methods) +
+            '</div>';
+          return;
+        }
+
+        var rows = methods.map(function (method) {
+          var icon = PROVIDER_ICONS[method.id] || 'fa-wallet';
+          var why;
+
+          if (!method.enabled) {
+            why = method.note || 'This method is not switched on yet.';
+          } else if (method.kind === 'card') {
+            why = 'You will be taken to a secure payment page to finish.';
+          } else {
+            why = 'You will get a prompt on your phone to approve the payment.';
+          }
+
+          return (
+            '<button class="pay-choice" type="button" data-method="' +
+              WGAUI.escapeHtml(method.id) + '"' +
+              (method.enabled ? ' aria-pressed="false"' : ' disabled aria-disabled="true"') + '>' +
+              '<span class="pay-icon"><i class="fas ' + icon + '" aria-hidden="true"></i></span>' +
+              '<span style="flex:1;min-width:0;">' +
+                '<span class="pay-name">' + WGAUI.escapeHtml(method.label) + '</span>' +
+                '<span class="pay-why">' + WGAUI.escapeHtml(why) + '</span>' +
+                (method.enabled ? '' : missingDetail([method])) +
+              '</span>' +
+            '</button>'
+          );
+        }).join('');
+
+        panel.innerHTML =
+          '<div role="group" aria-label="Choose a payment method">' + rows + '</div>' +
+          '<div class="wga-field" id="pay-phone-field" style="display:none;">' +
+            '<label class="wga-label" for="pay-phone">Mobile money number</label>' +
+            '<input class="wga-input" id="pay-phone" type="tel" inputmode="tel" ' +
+              'autocomplete="tel" placeholder="+231 77 000 0000" />' +
+            '<p class="wga-hint" id="pay-phone-hint"></p>' +
+          '</div>' +
+          '<button class="wga-btn wga-btn-primary wga-btn-block" type="button" id="pay-go" disabled>' +
+            '<i class="fas fa-lock" aria-hidden="true"></i> Choose a payment method</button>' +
+          '<p class="wga-hint" style="text-align:center;" id="pay-status" role="status"></p>';
+
+        var go = panel.querySelector('#pay-go');
+        var phoneField = panel.querySelector('#pay-phone-field');
+        var phone = panel.querySelector('#pay-phone');
+        var phoneHint = panel.querySelector('#pay-phone-hint');
+        var status = panel.querySelector('#pay-status');
+        var buttons = panel.querySelectorAll('.pay-choice');
+        var selected = null;
+
+        function labelGo() {
+          var onPhone = Boolean(selected) && selected.kind === 'mobile_money';
+
+          go.innerHTML =
+            '<i class="fas ' + (onPhone ? 'fa-mobile-screen-button' : 'fa-credit-card') + '" ' +
+              'aria-hidden="true"></i> ' +
+            (onPhone ? 'Send payment prompt' : 'Continue to payment');
+        }
+
+        function select(button) {
+          var chosen = button.getAttribute('data-method');
+          selected = null;
+
+          usable.forEach(function (method) {
+            if (method.id === chosen) selected = method;
+          });
+
+          if (!selected) return;
+
+          Array.prototype.forEach.call(buttons, function (node) {
+            node.setAttribute('aria-pressed', node === button ? 'true' : 'false');
+          });
+
+          var onPhone = selected.kind === 'mobile_money';
+          phoneField.style.display = onPhone ? '' : 'none';
+          phoneHint.textContent = onPhone ? (selected.phoneHint || '') : '';
+
+          go.disabled = false;
+          labelGo();
+          status.textContent = '';
+        }
+
+        function onFailure(error) {
+          WGAUI.setBusy(go, false);
+          labelGo();
+          status.textContent = '';
+
+          if (error.status === 401) {
+            WGA.requireSignIn();
+            return;
+          }
+
+          // A method that is not switched on says so, in the server's words,
+          // rather than failing silently.
+          WGAUI.toast(error.message || 'We could not start the payment.', 'error');
+        }
+
+        function startCard() {
+          WGAUI.setBusy(go, true, 'Starting checkout…');
+
+          WGA.post('/payments/checkout/' + encodeURIComponent(course.id))
+            .then(function (data) {
+              if (!data || !data.checkoutUrl) {
+                throw new Error('Checkout did not return a payment page.');
+              }
+
+              status.textContent = 'Taking you to the payment page…';
+              window.location.href = data.checkoutUrl;
+            })
+            .catch(onFailure);
+        }
+
+        function showWaiting(method, number, data) {
+          var instructions = String((data && data.instructions) || '').trim();
+
+          panel.innerHTML =
+            '<div class="pay-panel pay-panel-wait" role="status">' +
+              '<p style="margin:0 0 8px;font-weight:700;">' +
+                '<i class="fas fa-hourglass-half" aria-hidden="true"></i> ' +
+                'Waiting for your approval</p>' +
+              '<p style="margin:0 0 8px;">We sent a request to ' + WGAUI.escapeHtml(number) +
+                ' with ' + WGAUI.escapeHtml(method.label) + '.</p>' +
+              '<p style="margin:0;">' + WGAUI.escapeHtml(
+                instructions || 'Approve the prompt on your phone to complete the payment.'
+              ) + '</p>' +
+              '<p style="margin:10px 0 0;">Your enrollment is created the moment the payment is ' +
+                'confirmed, so you can close this page. Nothing is charged unless you approve.</p>' +
+            '</div>' +
+            '<a class="wga-btn wga-btn-ghost wga-btn-block" style="margin-top:12px;" ' +
+              'href="/student-dashboard.html#/courses">' +
+              '<i class="fas fa-arrow-right" aria-hidden="true"></i> Go to my courses</a>';
+        }
+
+        function startMobileMoney(method, number) {
+          WGAUI.setBusy(go, true, 'Sending prompt…');
+
+          WGA.post(
+            '/payments/checkout/' + encodeURIComponent(course.id) + '/mobile-money',
+            { provider: method.id, phoneNumber: number }
+          )
+            .then(function (data) { showWaiting(method, number, data || {}); })
+            .catch(onFailure);
+        }
+
+        Array.prototype.forEach.call(buttons, function (button) {
+          button.addEventListener('click', function () {
+            select(button);
+
+            if (selected && selected.kind === 'mobile_money') phone.focus();
+          });
+        });
+
+        go.addEventListener('click', function () {
+          if (!selected) return;
+
+          if (selected.kind === 'mobile_money') {
+            var number = (phone.value || '').trim();
+
+            if (!number) {
+              phone.focus();
+              WGAUI.toast('Enter the number to be charged.', 'error');
+              return;
+            }
+
+            startMobileMoney(selected, number);
+            return;
+          }
+
+          startCard();
+        });
+      }
+
+      var id = identifier();
+
+      if (!id) {
+        main.innerHTML = '<div class="wga-card">' +
+          WGAUI.emptyState('No course selected', 'Open a course from the catalog.') +
+          '<a class="wga-btn wga-btn-primary wga-btn-block" href="/courses.html">Browse the catalog</a></div>';
+        return;
+      }
+
+      WGA.get('/courses/' + encodeURIComponent(id))
+        .then(render)
+        .catch(function (error) {
+          main.innerHTML =
+            '<div class="wga-card">' +
+            WGAUI.emptyState(
+              error.status === 404 ? 'That course was not found' : 'We could not load this course',
+              error.status === 404
+                ? 'It may have been unpublished, or the link may be mistyped.'
+                : error.message || 'Please try again.'
+            ) +
+            '<a class="wga-btn wga-btn-primary wga-btn-block" href="/courses.html">' +
+            '<i class="fas fa-arrow-left" aria-hidden="true"></i> Back to the catalog</a></div>';
+        });
+    })();
+  </script>
+  <footer class="wga-footer">
+    <a href="/">Home</a>
+    <a href="/courses.html">Courses</a>
+    <a href="/terms.html">Terms of Service</a>
+    <a href="/privacy.html">Privacy Policy</a>
+    <a href="mailto:wuteve@wuteveglobalacademy.com">Contact</a>
+  </footer>
+
+</body>
+</html>
