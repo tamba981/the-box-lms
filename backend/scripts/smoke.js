@@ -3153,6 +3153,152 @@ async function testLessonVideoAndQuizzes() {
 }
 
 /* ------------------------------------------------------------------ *
+ * Administrator-issued password replacement
+ *
+ * This route can take over any account, so it is exactly the kind of thing that
+ * must not be added without a test. It exists because the platform's own recovery
+ * path — a reset link by email — cannot work where no mail provider is configured,
+ * which leaves a locked-out user with no way back in and an administrator with no
+ * way to help them short of editing the database by hand.
+ * ------------------------------------------------------------------ */
+
+async function testAdminPasswordReset() {
+  const adminEmail = `smoke-admin-reset-${runId}@example.com`;
+  const targetEmail = `smoke-target-reset-${runId}@example.com`;
+  const outsiderEmail = `smoke-outsider-reset-${runId}@example.com`;
+
+  createdEmails.push(adminEmail, targetEmail, outsiderEmail);
+
+  // The policy the server enforces, so a generated password is checked against the
+  // real rule rather than against what the generator happens to produce.
+  const POLICY = /^(?=.*[A-Za-z])(?=.*[0-9]).{8,72}$/;
+
+  let adminSession = null;
+  let outsiderSession = null;
+  let targetId = null;
+
+  await check('an administrator and two accounts exist for the reset fixtures', async () => {
+    await User.create({
+      firstName: 'Ada',
+      lastName: 'Admin',
+      email: adminEmail,
+      password: PASSWORD,
+      role: 'admin',
+      emailVerified: true,
+    });
+
+    const admin = await request('POST', '/api/v1/auth/login', {
+      body: { email: adminEmail, password: PASSWORD },
+    });
+    assertEqual(admin.status, 200, 'admin sign-in');
+    adminSession = admin.json.data;
+
+    for (const [email, firstName] of [[targetEmail, 'Tara'], [outsiderEmail, 'Owen']]) {
+      const made = await request('POST', '/api/v1/admin/users', {
+        token: adminSession.accessToken,
+        body: { firstName, lastName: 'Fixture', email, password: PASSWORD, role: 'student' },
+      });
+      assertEqual(made.status, 201, `account created: ${email}`);
+
+      const session = await request('POST', '/api/v1/auth/login', {
+        body: { email, password: PASSWORD },
+      });
+      assertEqual(session.status, 200, `sign-in: ${email}`);
+
+      if (email === targetEmail) {
+        targetId = session.json.data.user.id;
+      } else {
+        outsiderSession = session.json.data;
+      }
+    }
+  });
+
+  let issued = null;
+
+  await check('an administrator can issue a replacement password', async () => {
+    const { status, json } = await request('POST', `/api/v1/admin/users/${targetId}/reset-password`, {
+      token: adminSession.accessToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    assert(typeof json.data.password === 'string', 'a password must come back');
+    assert(
+      POLICY.test(json.data.password),
+      `the issued password must satisfy the sign-in policy, got "${json.data.password}"`
+    );
+    issued = json.data.password;
+  });
+
+  await check('the issued password actually works', async () => {
+    const { status } = await request('POST', '/api/v1/auth/login', {
+      body: { email: targetEmail, password: issued },
+    });
+
+    assertEqual(status, 200, 'status');
+  });
+
+  await check('the previous password stops working', async () => {
+    const { status } = await request('POST', '/api/v1/auth/login', {
+      body: { email: targetEmail, password: PASSWORD },
+    });
+
+    assertEqual(status, 401, 'status');
+  });
+
+  await check('a student cannot issue a replacement password', async () => {
+    const { status } = await request('POST', `/api/v1/admin/users/${targetId}/reset-password`, {
+      token: outsiderSession.accessToken,
+    });
+
+    assertEqual(status, 403, 'status');
+
+    // And the refusal must not have changed anything.
+    const stillWorks = await request('POST', '/api/v1/auth/login', {
+      body: { email: targetEmail, password: issued },
+    });
+    assertEqual(stillWorks.status, 200, 'a refused reset must leave the password alone');
+  });
+
+  await check('a session that outlived the replacement stops working', async () => {
+    /**
+     * The server allows a five-second clock skew, so that signing in immediately
+     * after changing your own password is not rejected on a slow request. A token
+     * minted moments before the replacement is therefore *still valid*, so this
+     * has to wait the skew out to test the thing it means to test. Six seconds is
+     * the honest cost of asserting it rather than assuming it.
+     */
+    const before = await request('POST', '/api/v1/auth/login', {
+      body: { email: targetEmail, password: issued },
+    });
+    assertEqual(before.status, 200, 'sign in to obtain a token that predates the change');
+    const older = before.json.data.accessToken;
+
+    await new Promise((resolve) => setTimeout(resolve, 6000));
+
+    // A second replacement, so `passwordChangedAt` is now newer than that token.
+    const second = await request('POST', `/api/v1/admin/users/${targetId}/reset-password`, {
+      token: adminSession.accessToken,
+    });
+    assertEqual(second.status, 200, 'second replacement issued');
+
+    // The point of setting `passwordChangedAt`: a replacement must take access away
+    // from whoever held the old password, not merely add a second way in.
+    const { status, json } = await request('GET', '/api/v1/auth/me', { token: older });
+
+    assertEqual(status, 401, 'status');
+    assertEqual(json.code, 'PASSWORD_CHANGED', 'error code');
+  });
+
+  await check('an unknown account cannot be reset', async () => {
+    const { status } = await request('POST', '/api/v1/admin/users/000000000000000000000000/reset-password', {
+      token: adminSession.accessToken,
+    });
+
+    assertEqual(status, 404, 'status');
+  });
+}
+
+/* ------------------------------------------------------------------ *
  * Run
  * ------------------------------------------------------------------ */
 
@@ -3204,6 +3350,9 @@ async function main() {
 
     process.stdout.write('\nLesson video and quizzes\n');
     await testLessonVideoAndQuizzes();
+
+    process.stdout.write('\nAdministrator-issued password replacement\n');
+    await testAdminPasswordReset();
 
     process.stdout.write('\nCommunity, messaging and sessions\n');
     await testCommunityAndMessaging();

@@ -14,8 +14,6 @@
  * record rather than failing on the unique email index.
  */
 
-const crypto = require('crypto');
-
 const config = require('../src/config/env');
 const db = require('../src/db');
 const logger = require('../src/lib/logger');
@@ -29,6 +27,7 @@ const Notification = require('../src/models/Notification');
 const User = require('../src/models/User');
 
 const { slugify } = require('../src/lib/slug');
+const { generatePassword } = require('../src/lib/generatePassword');
 
 const FRESH = process.argv.includes('--fresh');
 
@@ -45,9 +44,7 @@ const FRESH = process.argv.includes('--fresh');
  * the end of the run. Nothing stores it, so saving it is the operator's job, and
  * losing it costs only another seed run.
  */
-const GENERATED_PASSWORD = process.env.SEED_PASSWORD
-  ? null
-  : `Wga-${crypto.randomBytes(9).toString('base64url')}!7`;
+const GENERATED_PASSWORD = process.env.SEED_PASSWORD ? null : generatePassword();
 
 const PASSWORD = process.env.SEED_PASSWORD || GENERATED_PASSWORD;
 

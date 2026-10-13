@@ -24,6 +24,7 @@ const { parsePagination, paginated } = require('../lib/pagination');
 const { contains } = require('../lib/text');
 const { formatCents } = require('../lib/money');
 const { ROLES, COURSE_STATUSES } = require('../lib/constants');
+const { generatePassword } = require('../lib/generatePassword');
 
 const { authenticate, requireAdmin } = require('../middleware/auth');
 const { validate } = require('../middleware/validate');
@@ -307,6 +308,67 @@ router.patch(
     }
 
     return ok(res, { user: user.toPublicJSON({ includePrivate: true }) }, 'Account updated.');
+  })
+);
+
+/**
+ * Issue a replacement password for an account, and show it once.
+ *
+ * Password recovery normally goes by email, which only works where a mail provider
+ * is configured. Without one, a user who has forgotten their password has no way
+ * back in — and until this route neither did an administrator, because
+ * `PATCH /users/:id` deliberately cannot touch a password field. The only remedy
+ * left was editing the database by hand, which is worse in every way: no audit
+ * trail, no session invalidation, and a plaintext password in a shell history.
+ *
+ * The password is generated here rather than chosen by the administrator, so it is
+ * not something a person picked and can be guessed from who they are. It is
+ * returned in this response and nowhere else — never logged, never stored in the
+ * clear. `passwordChangedAt` is set and every session revoked, exactly as
+ * `POST /auth/change-password` does, so whoever held the old password loses access
+ * the moment this runs. The account holder is told by email where that is
+ * configured.
+ */
+router.post(
+  '/users/:id/reset-password',
+  writeLimiter,
+  validate({ params: z.object({ id: objectId }) }),
+  asyncHandler(async (req, res) => {
+    const user = await User.findById(req.valid.params.id);
+    if (!user) throw notFound('That account could not be found.', { code: 'USER_NOT_FOUND' });
+
+    const password = generatePassword();
+
+    // Assigned as plain text; the model hashes it in its pre-save hook.
+    user.password = password;
+    // Invalidates every access token minted before this moment.
+    user.passwordChangedAt = new Date();
+    await user.save();
+
+    // Whoever held the old password is signed out everywhere, immediately.
+    await tokenService.revokeAllSessions(user._id);
+
+    try {
+      await email.deliver(email.passwordChangedEmail({ user }));
+    } catch (error) {
+      // The password is already set and is on its way to the administrator; a
+      // provider failure must not turn this into a failed request.
+      logger.error('password-change notice failed', { error, userId: String(user._id) });
+    }
+
+    // Recorded without the password. An administrator silently taking over an
+    // account should be visible afterwards, to somebody other than that
+    // administrator.
+    logger.info('administrator issued a replacement password', {
+      targetUserId: String(user._id),
+      actorUserId: String(req.user._id),
+    });
+
+    return ok(
+      res,
+      { password },
+      'A replacement password was issued. Give it to them now — it is shown once and stored nowhere.'
+    );
   })
 );
 
