@@ -15,27 +15,43 @@ no external DNS provider to log into.
 
 ---
 
-## Step 0 — remove two records that will break the site
+## Step 0 — clear out the defaults that will break both
 
-Do this first. Both are already on the domain and both interfere.
+**Do this first.** A newly registered Namecheap domain ships pointing at
+Namecheap's own parking page and email-forwarding service, and every one of those
+records has to go. Until they do, the domain serves somebody else's page and mail
+to it goes nowhere.
 
-1. **Delete the URL Redirect.** The domain currently carries:
+1. **Turn the Parking Page off.** Domain List → **Manage** → **Parking Page →
+   TURN OFF**. This owns several of the records below, and it recreates them.
+2. **Delete the apex `A` record.** It holds `162.255.119.228`, which is
+   Namecheap's parking address, not the app.
+3. **Delete the `CNAME` on `www`** pointing at `parkingpage.namecheap.com`.
+4. **Delete the five `MX` records** pointing at `eforward1`–`eforward5.registrar-servers.com`,
+   and the `TXT` reading `v=spf1 include:spf.efwd.registrar-servers.com ~all`.
+   That is Namecheap's free email forwarding, on by default. With no forwarders
+   configured, mail addressed to this domain currently goes nowhere — so
+   `wuteve@wuteveglobalacademy.com` is not receiving anything yet, on any records.
 
-   ```
-   wuteveglobalacademy.com  →  http://www.wuteveglobalacademy.com/
-   ```
+Also delete any **`URL Redirect Record` for `@`**, if one exists. It is the same
+parking mechanism under a different name, and it sends visitors *away* from the
+server.
 
-   This redirects the root domain away from the server. While it exists the site
-   can never load on `wuteveglobalacademy.com`, no matter what else is configured
-   — and its destination, `www`, has no record at all, so it currently leads
-   nowhere. In **Advanced DNS**, delete the `URL Redirect Record` for `@`.
+### What this domain resolved to before any of that was changed
 
-2. **Turn the Parking Page off.** On the domain's main page, **Parking Page →
-   TURN OFF**. A parked page also claims the root hostname.
+Recorded here because these are the exact values to look for, and seeing them
+confirms nothing was missed:
+
+| Type | Host | Value | What it is |
+| ---- | ---- | ----- | ---------- |
+| `NS` | `@` | `dns1/dns2.registrar-servers.com` | Namecheap BasicDNS — correct, leave it |
+| `A` | `@` | `162.255.119.228` | Namecheap parking **— delete** |
+| `CNAME` | `www` | `parkingpage.namecheap.com` | Namecheap parking **— delete** |
+| `MX` | `@` | `eforward1`–`eforward5.registrar-servers.com` | Namecheap email forwarding **— delete** |
+| `TXT` | `@` | `v=spf1 include:spf.efwd.registrar-servers.com ~all` | Forwarding SPF **— delete** |
 
 If you skip this step, every record below can be correct and the domain will still
-not serve the site. This is the single most likely reason for "the domain doesn't
-work" afterwards.
+not serve the site or receive a single message.
 
 ---
 
