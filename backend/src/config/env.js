@@ -142,6 +142,12 @@ if (IS_PRODUCTION && ALLOWED_ORIGINS.length === 0) {
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 const EMAIL_FROM = process.env.EMAIL_FROM || 'Wuteve Global Academy <onboarding@resend.dev>';
+
+/**
+ * Where contact-form submissions are sent. The public address by default, so a
+ * reply comes from the same place somebody would have written to.
+ */
+const CONTACT_INBOX = process.env.CONTACT_INBOX || 'info@wuteveglobalacademy.com';
 const EMAIL_ENABLED = Boolean(RESEND_API_KEY);
 
 if (!EMAIL_ENABLED && IS_PRODUCTION) {
@@ -330,6 +336,7 @@ const config = {
     enabled: EMAIL_ENABLED,
     apiKey: RESEND_API_KEY,
     from: EMAIL_FROM,
+    inbox: CONTACT_INBOX,
   },
 
   stripe: {

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/Images/Brand/wuteve-emblem.png" />
+  <title>Contact us · Wuteve Global Academy</title>
+  <meta name="description" content="Contact Wuteve Global Academy about a course, a partnership, your account or anything else. We reply to every message." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/css/wga-shell.css" />
+</head>
+<body>
+  <header class="wga-header">
+    <a class="wga-brand" href="/">
+      <img class="brand-mark" src="/Images/Brand/wuteve-emblem.png" alt="" width="34" height="34" />
+      Wuteve <span class="accent">Global Academy</span>
+    </a>
+    <button class="wga-theme-toggle" data-theme-toggle type="button" aria-label="Toggle colour theme">🌙</button>
+  </header>
+
+  <main class="wga-main wga-narrow">
+    <div class="wga-card">
+      <h1>Contact us</h1>
+      <p>Send us a message and a person will reply. If you are asking about a course you are enrolled in, tell us which one.</p>
+
+      <div class="wga-alert" id="status" role="alert"></div>
+
+      <form id="contact-form" novalidate>
+        <div class="wga-field">
+          <label class="wga-label" for="name">Your name</label>
+          <input class="wga-input" type="text" id="name" name="name" autocomplete="name" maxlength="120" required />
+        </div>
+
+        <div class="wga-field">
+          <label class="wga-label" for="email">Email address</label>
+          <input class="wga-input" type="email" id="email" name="email" autocomplete="email"
+                 placeholder="you@example.com" maxlength="254" required />
+        </div>
+
+        <div class="wga-field">
+          <label class="wga-label" for="reason">What is this about?</label>
+          <select class="wga-input" id="reason" name="reason">
+            <option value="general">General question</option>
+            <option value="partnership">Partnership</option>
+            <option value="support">Support with my account</option>
+            <option value="other">Something else</option>
+          </select>
+        </div>
+
+        <div class="wga-field">
+          <label class="wga-label" for="subject">Subject</label>
+          <input class="wga-input" type="text" id="subject" name="subject" maxlength="160" required />
+        </div>
+
+        <div class="wga-field">
+          <label class="wga-label" for="message">Message</label>
+          <textarea class="wga-input" id="message" name="message" rows="7" maxlength="4000" required></textarea>
+        </div>
+
+        <button class="wga-btn wga-btn-primary wga-btn-block" type="submit" id="submit">
+          <i class="fas fa-paper-plane" aria-hidden="true"></i>
+          Send message
+        </button>
+      </form>
+    </div>
+
+    <div class="wga-card">
+      <h2>Other ways to reach us</h2>
+
+      <p>
+        <i class="fas fa-envelope" aria-hidden="true"></i>
+        <a href="mailto:info@wuteveglobalacademy.com">info@wuteveglobalacademy.com</a>
+      </p>
+      <p>
+        <i class="fas fa-handshake" aria-hidden="true"></i>
+        Partnerships: <a href="mailto:partnership@wuteveglobalacademy.com">partnership@wuteveglobalacademy.com</a>
+      </p>
+      <p>
+        <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+        Monrovia, Liberia · P.O. Box 1000
+      </p>
+      <p>
+        <i class="fas fa-phone" aria-hidden="true"></i>
+        +231 886 590 302 · +231 772 876 644
+      </p>
+    </div>
+  </main>
+
+  <footer class="wga-footer">
+    <span>© <span id="year">2026</span> Wuteve Global Academy</span>
+    <span class="wga-footer-sep">·</span>
+    <a href="/">Home</a>
+    <a href="/courses.html">Courses</a>
+    <a href="/terms.html">Terms of Service</a>
+    <a href="/privacy.html">Privacy Policy</a>
+  </footer>
+
+  <script src="/assets/js/wga-api.js"></script>
+  <script src="/assets/js/wga-ui.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      WGAUI.initTheme();
+
+      var form = document.getElementById('contact-form');
+      var button = document.getElementById('submit');
+      var status = document.getElementById('status');
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        var payload = {
+          name: document.getElementById('name').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          reason: document.getElementById('reason').value,
+          subject: document.getElementById('subject').value.trim(),
+          message: document.getElementById('message').value.trim(),
+        };
+
+        // Checked here so an obvious omission does not cost a round trip. The
+        // server validates all five fields again; this is a courtesy, not the
+        // check, and the limits below match the ones it enforces.
+        if (!payload.name) {
+          WGAUI.status(status, 'Please tell us your name.', 'error');
+          return;
+        }
+        if (!payload.email || payload.email.indexOf('@') < 1) {
+          WGAUI.status(status, 'Please enter a valid email address so we can reply.', 'error');
+          return;
+        }
+        if (payload.subject.length < 3) {
+          WGAUI.status(status, 'Please add a short subject.', 'error');
+          return;
+        }
+        if (payload.message.length < 10) {
+          WGAUI.status(status, 'Please tell us a little more than that.', 'error');
+          return;
+        }
+
+        WGAUI.status(status, null);
+        WGAUI.setBusy(button, true, 'Sending\u2026');
+
+        WGA.post('/contact', payload)
+          .then(function (response) {
+            WGAUI.status(
+              status,
+              (response && response.message) || "We've received your message.",
+              'success'
+            );
+            form.reset();
+          })
+          .catch(function (error) {
+            // The server's own wording is preferred where it gave one: it names the
+            // offending field, which is more useful than a generic failure.
+            var detail = error && error.details && error.details.length ? error.details[0].message : null;
+
+            WGAUI.status(
+              status,
+              detail ||
+                (error && error.code === 'RATE_LIMITED'
+                  ? 'Too many messages. Please wait a little while and try again.'
+                  : (error && error.message) || 'That did not send. Please try again in a moment.'),
+              'error'
+            );
+          })
+          .then(function () {
+            WGAUI.setBusy(button, false);
+          });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -19,7 +19,7 @@ const logger = require('../../lib/logger');
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 
-async function deliver({ to, subject, html, text }) {
+async function deliver({ to, subject, html, text, replyTo }) {
   /**
    * Refuse to send without a recipient.
    *
@@ -55,7 +55,17 @@ async function deliver({ to, subject, html, text }) {
         Authorization: `Bearer ${config.email.apiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ from: config.email.from, to: [to], subject, html, text }),
+      body: JSON.stringify({
+        from: config.email.from,
+        to: [to],
+        subject,
+        html,
+        text,
+        // Carried through only when set. The contact notification uses it so that
+        // replying in a mail client answers the person who wrote in, rather than
+        // the platform.
+        ...(replyTo ? { reply_to: replyTo } : {}),
+      }),
     });
 
     if (!response.ok) {
@@ -313,6 +323,40 @@ function announcementEmail({ user, title, message, url }) {
   };
 }
 
+/**
+ * A message from the public contact form, addressed to the academy's inbox.
+ *
+ * `replyTo` is the whole point of the notification: whoever reads it can hit
+ * reply and answer the person directly, instead of copying an address out of the
+ * body. The reason is put in the subject too, so a partnership enquiry can be
+ * spotted and filed without opening it.
+ */
+function contactMessageEmail({ name, email: address, reason, subject, message, inbox }) {
+  const label = reason ? reason.charAt(0).toUpperCase() + reason.slice(1) : 'General';
+
+  const text = [
+    `From:    ${name} <${address}>`,
+    `Reason:  ${label}`,
+    `Subject: ${subject}`,
+    '',
+    message,
+  ].join('\n');
+
+  return {
+    to: inbox,
+    replyTo: address,
+    subject: `[Contact - ${label}] ${subject}`,
+    text,
+    html: layout({
+      heading: 'New contact message',
+      bodyHtml: `<p style="margin:0 0 6px;"><strong>${escapeHtml(name)}</strong> &lt;${escapeHtml(address)}&gt;</p>
+        <p style="margin:0 0 14px;font-size:13px;color:#8792a2;">${escapeHtml(label)}</p>
+        <p style="margin:0 0 12px;"><strong>${escapeHtml(subject)}</strong></p>
+        <p style="margin:0;white-space:pre-line;">${escapeHtml(message)}</p>`,
+    }),
+  };
+}
+
 module.exports = {
   deliver,
   verificationEmail,
@@ -323,6 +367,7 @@ module.exports = {
   certificateEmail,
   paymentReceiptEmail,
   announcementEmail,
+  contactMessageEmail,
   layout,
   escapeHtml,
 };

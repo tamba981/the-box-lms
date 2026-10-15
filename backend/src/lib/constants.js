@@ -87,8 +87,15 @@ const THREAD_TYPES = Object.freeze(['direct', 'group', 'instructor', 'course']);
 /** Progress at or above this percentage is treated as course completion. */
 const COMPLETION_THRESHOLD = 100;
 
+/**
+ * Why somebody is writing to the academy. Stored as the key; the contact form
+ * shows the label.
+ */
+const CONTACT_REASONS = Object.freeze(['general', 'partnership', 'support', 'other']);
+
 module.exports = {
   ROLES,
+  CONTACT_REASONS,
   COURSE_LEVELS,
   COURSE_STATUSES,
   ENROLLMENT_STATUSES,

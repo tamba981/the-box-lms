@@ -128,6 +128,32 @@ Match the `include:` to your data centre — `include:zoho.eu` for Europe, and s
 Start DMARC at `p=none`. Move it to `p=quarantine` once you have watched the
 reports for a week and confirmed nothing legitimate is failing.
 
+### DKIM — do not skip this one
+
+SPF says which servers may send for the domain. **DKIM is what proves a message
+was not altered in transit**, and without it mail still sends and mostly arrives —
+so it is the step that gets postponed and then forgotten. Its absence shows up as
+an odd delivery here and there, not as an obvious failure.
+
+In **Zoho Admin Console → Domains → Email Configuration → DKIM**:
+
+1. Generate a **1024-bit** key. (2048-bit is stronger, but some DNS hosts reject
+   the longer TXT record; 1024-bit is Zoho's supported default and is far better
+   than none.)
+2. Zoho shows a hostname (usually `zoho._domainkey`) and a long public key.
+3. Add it in Namecheap **Advanced DNS** as a `TXT` record with exactly that
+   hostname and value.
+4. Return to Zoho and click **Verify**.
+
+Check it resolves, from here:
+
+```powershell
+Resolve-DnsName -Name zoho._domainkey.wuteveglobalacademy.com -Type TXT -Server 8.8.8.8
+```
+
+A long `v=DKIM1; k=rsa; p=…` value means it is in place. **Nothing at all means
+mail is still being sent unsigned**, which is the state this domain is in today.
+
 > ### ⚠️ A domain may have only **one** SPF record
 >
 > If you later add Resend's SPF, do not create a second `TXT` on `@` — two SPF
