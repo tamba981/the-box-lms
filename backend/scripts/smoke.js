@@ -163,6 +163,8 @@ async function cleanup() {
   const Certificate = require('../src/models/Certificate');
   const Quiz = require('../src/models/Quiz');
   const QuizAttempt = require('../src/models/QuizAttempt');
+  const NewsletterSubscriber = require('../src/models/NewsletterSubscriber');
+  const ContactMessage = require('../src/models/ContactMessage');
   const Message = require('../src/models/Message');
   const Notification = require('../src/models/Notification');
   const Thread = require('../src/models/Thread');
@@ -223,6 +225,12 @@ async function cleanup() {
     $or: [{ student: { $in: userIds } }, { course: { $in: courseIds } }],
   });
   await Quiz.deleteMany({ course: { $in: courseIds } });
+
+  // These two have no owner to hang off, so the fixture namespace is the only
+  // handle. Without this the suite leaves a subscriber and a contact message
+  // behind on every run, which is how stray rows accumulate unnoticed.
+  await NewsletterSubscriber.deleteMany({ email: { $regex: '^smoke-.*@example\\.com$' } });
+  await ContactMessage.deleteMany({ email: { $regex: '^smoke-.*@example\\.com$' } });
   await Lesson.deleteMany({ course: { $in: courseIds } });
   await Course.deleteMany({ _id: { $in: courseIds } });
   await Token.deleteMany({ user: { $in: userIds } });
@@ -3299,6 +3307,150 @@ async function testAdminPasswordReset() {
 }
 
 /* ------------------------------------------------------------------ *
+ * Newsletter and contact
+ *
+ * Both are open to anyone and both write to the database, so they are the two
+ * places a stranger can put a row in it. They were verified by hand when built;
+ * this is what keeps them verified.
+ * ------------------------------------------------------------------ */
+
+async function testNewsletterAndContact() {
+  const NewsletterSubscriber = require('../src/models/NewsletterSubscriber');
+  const ContactMessage = require('../src/models/ContactMessage');
+  const config = require('../src/config/env');
+
+  const subscriberEmail = `smoke-newsletter-${runId}@example.com`;
+  const contactEmail = `smoke-contact-${runId}@example.com`;
+  const contactSubject = `Smoke contact ${runId}`;
+
+  const messageBody = {
+    name: 'Smoke Sender',
+    email: contactEmail,
+    reason: 'general',
+    subject: contactSubject,
+    message: 'A message long enough to satisfy the validator.',
+  };
+
+  await check('the newsletter accepts a new address', async () => {
+    const { status, json } = await request('POST', '/api/v1/newsletter/subscribe', {
+      body: { email: subscriberEmail },
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.success, true, 'success flag');
+    assertEqual(json.message, "Thanks! You're subscribed.", 'message');
+  });
+
+  await check('subscribing twice is not an error and does not duplicate', async () => {
+    const again = await request('POST', '/api/v1/newsletter/subscribe', {
+      body: { email: subscriberEmail },
+    });
+
+    assertEqual(again.status, 200, 'status');
+    // The same answer as a first-time subscriber, so this endpoint cannot be used
+    // to ask whether a particular address is already on the list.
+    assertEqual(again.json.message, "Thanks! You're subscribed.", 'message');
+    assertEqual(
+      await NewsletterSubscriber.countDocuments({ email: subscriberEmail }),
+      1,
+      'exactly one row'
+    );
+  });
+
+  await check('an address is stored once regardless of casing', async () => {
+    const upper = await request('POST', '/api/v1/newsletter/subscribe', {
+      body: { email: subscriberEmail.toUpperCase() },
+    });
+
+    assertEqual(upper.status, 200, 'status');
+    assertEqual(
+      await NewsletterSubscriber.countDocuments({ email: subscriberEmail }),
+      1,
+      'still one row'
+    );
+
+    const stored = await NewsletterSubscriber.findOne({ email: subscriberEmail });
+    assertEqual(stored.email, subscriberEmail, 'stored lowercased');
+  });
+
+  await check('an invalid newsletter address is refused', async () => {
+    const { status } = await request('POST', '/api/v1/newsletter/subscribe', {
+      body: { email: 'not-an-email' },
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a missing newsletter address is refused', async () => {
+    const { status } = await request('POST', '/api/v1/newsletter/subscribe', { body: {} });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('the contact form accepts a message and stores it', async () => {
+    const { status, json } = await request('POST', '/api/v1/contact', {
+      body: { ...messageBody, reason: 'partnership' },
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.message, "We've received your message.", 'message');
+
+    const stored = await ContactMessage.findOne({ subject: contactSubject });
+    assert(stored, 'the message must be stored, not only emailed');
+    assertEqual(stored.reason, 'partnership', 'reason');
+    assertEqual(stored.email, contactEmail, 'email lowercased');
+  });
+
+  await check('a contact message records whether anybody was told', async () => {
+    /**
+     * `deliver` reports failure rather than throwing — with no provider configured
+     * it returns `{ delivered: false }` and logs instead. The route has to read that
+     * result, and this is the check that catches it not doing so: the field once
+     * said somebody had been told when nothing had been sent.
+     */
+    const stored = await ContactMessage.findOne({ subject: contactSubject });
+
+    if (config.email.enabled) {
+      assert(stored.notifiedAt, 'notifiedAt is set when a provider is configured');
+    } else {
+      assertEqual(stored.notifiedAt, null, 'notifiedAt stays null with no provider');
+    }
+  });
+
+  await check('an invalid contact address is refused', async () => {
+    const { status } = await request('POST', '/api/v1/contact', {
+      body: { ...messageBody, email: 'nope' },
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('an unknown contact reason is refused', async () => {
+    const { status } = await request('POST', '/api/v1/contact', {
+      body: { ...messageBody, reason: 'nonsense' },
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a contact subject that is too short is refused', async () => {
+    const { status } = await request('POST', '/api/v1/contact', {
+      body: { ...messageBody, subject: 'x' },
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a contact message that is too short is refused', async () => {
+    const { status } = await request('POST', '/api/v1/contact', {
+      body: { ...messageBody, message: 'short' },
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+}
+
+/* ------------------------------------------------------------------ *
  * Run
  * ------------------------------------------------------------------ */
 
@@ -3353,6 +3505,9 @@ async function main() {
 
     process.stdout.write('\nAdministrator-issued password replacement\n');
     await testAdminPasswordReset();
+
+    process.stdout.write('\nNewsletter and contact\n');
+    await testNewsletterAndContact();
 
     process.stdout.write('\nCommunity, messaging and sessions\n');
     await testCommunityAndMessaging();
