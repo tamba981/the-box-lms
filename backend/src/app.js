@@ -25,6 +25,7 @@ const liveSessionsRoutes = require('./routes/liveSessions');
 const adminRoutes = require('./routes/admin');
 const paymentsRoutes = require('./routes/payments');
 const dashboardRoutes = require('./routes/dashboard');
+const newsletterRoutes = require('./routes/newsletter');
 
 /**
  * Where the static pages actually are.
@@ -181,6 +182,7 @@ app.use('/api/v1/payments/callback', express.raw({ type: 'application/json', lim
   app.use('/api/v1/admin', adminRoutes);
   app.use('/api/v1/payments', paymentsRoutes);
   app.use('/api/v1/dashboard', dashboardRoutes);
+  app.use('/api/v1/newsletter', newsletterRoutes);
 
   app.get('/api', (req, res) => {
     res.json({

@@ -807,6 +807,34 @@
     @keyframes button-loading-spinner { from{transform:rotate(0)} to{transform:rotate(1turn)} }
     .error-message { color:var(--accent); font-size:14px; display:block; margin-top:5px; }
     .success-message { color:var(--gold); }
+
+    /* Newsletter signup, above the footer. Reuses .glass-card for the surface so
+       it matches every other card on the page, and the existing tokens for
+       colour so both themes work without a second set of rules. */
+    .newsletter { padding:44px 0; }
+    .newsletter-card { max-width:620px; margin:0 auto; text-align:center; padding:28px 24px; }
+    .newsletter-title { font-size:1.5rem; margin-bottom:6px; }
+    .newsletter-text { color:var(--text-light); margin-bottom:18px; }
+    .newsletter-form { display:flex; gap:10px; align-items:stretch; justify-content:center; }
+    .newsletter-input {
+      flex:1 1 auto; min-width:0; padding:12px 14px; font-size:1rem; font-family:inherit;
+      color:var(--text); background:var(--secondary);
+      border:1px solid var(--border); border-radius:6px;
+    }
+    .newsletter-input:focus { outline:2px solid var(--primary-light); outline-offset:1px; }
+    .newsletter-submit { flex:0 0 auto; white-space:nowrap; }
+    .newsletter-status { margin-top:12px; min-height:1.25em; font-size:0.95rem; }
+    .newsletter-status.is-ok { color:var(--success); }
+    .newsletter-status.is-error { color:var(--accent); }
+    /* A translucent surface rather than a new token, so it sits correctly on
+       whatever the dark theme uses behind the card. */
+    body.dark-mode .newsletter-input {
+      background:rgba(255,255,255,0.06); border-color:var(--dark-border); color:var(--dark-text);
+    }
+    @media (max-width:640px) {
+      .newsletter-form { flex-direction:column; }
+      .newsletter-submit { width:100%; }
+    }
   </style>
 </head>
 <body>
@@ -1076,12 +1104,92 @@
   <!-- CTA -->
   <section class="cta"><div class="container"><h2 class="cta-title">Ready to Climb to Your Next Peak?</h2><p class="cta-text">Create a free account and start your first course today</p><a href="/login.html" class="cta-button">Get Started</a></div></section>
 
+  <!-- NEWSLETTER -->
+  <section class="newsletter" aria-labelledby="newsletter-title">
+    <div class="container">
+      <div class="glass-card newsletter-card">
+        <h2 class="newsletter-title" id="newsletter-title">Stay in the loop</h2>
+        <p class="newsletter-text">New courses and updates. No more than once a month.</p>
+        <form class="newsletter-form" id="newsletter-form" novalidate>
+          <input
+            type="email"
+            id="newsletter-email"
+            class="newsletter-input"
+            placeholder="your@email.com"
+            autocomplete="email"
+            aria-label="Email address"
+            required
+          />
+          <button type="submit" class="btn btn-primary newsletter-submit" id="newsletter-submit">Subscribe</button>
+        </form>
+        <p class="newsletter-status" id="newsletter-status" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer><div class="container"><div class="footer-grid"><div class="footer-brand"><h3>WUTEV</h3><p class="footer-description">Wuteve Global Academy offers affordable, self-paced online courses. Completing a course issues a certificate that anyone can verify at a public link.</p><p>Sponsored by Motiva Corporation Group of Companies</p></div><div class="footer-links"><h4 class="footer-heading">Learn</h4><ul><li><a href="/courses.html">All courses</a></li><li><a href="/courses.html?price=free">Free courses</a></li><li><a href="/certificate.html">Verify a certificate</a></li><li><a href="/login.html">Create an account</a></li></ul></div><div class="footer-links"><h4 class="footer-heading">Your account</h4><ul><li><a href="/login.html">Sign in</a></li><li><a href="/forgot-password.html">Forgot password</a></li><li><a href="/student-dashboard.html">My learning</a></li><li><a href="/instructor-dashboard.html">Teach on Wuteve</a></li></ul></div><div class="footer-contact"><h4 class="footer-heading">Contact Us</h4><p><i class="fas fa-map-marker-alt"></i> Monrovia Liberia. P.O.BOX 1000</p><p><i class="fas fa-phone"></i> +231886590302</p><p><i class="fas fa-phone"></i> +231772876644</p><p><i class="fas fa-envelope"></i> <a href="mailto:info@wuteveglobalacademy.com" style="color:inherit;text-decoration:underline;">info@wuteveglobalacademy.com</a></p></div></div><div class="footer-bottom"><p>Copyright © <span id="footerYear">2026</span> Wuteve Global Academy · Sponsored by Motiva Corporation Group of Companies.</p><p style="margin-top:10px;"><a href="/terms.html" style="color:inherit;text-decoration:underline;">Terms of Service</a><span style="opacity:0.5;"> · </span><a href="/privacy.html" style="color:inherit;text-decoration:underline;">Privacy Policy</a></p></div></div></footer>
 
   <!-- ========== JAVASCRIPT ========== -->
   <script src="/assets/js/wga-api.js"></script>
   <script src="/assets/js/wga-ui.js"></script>
+  <script>
+    // Newsletter signup. Placed after wga-api.js because it uses WGA.post - the
+    // project never calls fetch directly, so the base URL and error envelope are
+    // handled in one place.
+    (function () {
+      var form = document.getElementById('newsletter-form');
+      if (!form) return;
+
+      var input = document.getElementById('newsletter-email');
+      var button = document.getElementById('newsletter-submit');
+      var status = document.getElementById('newsletter-status');
+
+      function say(message, kind) {
+        status.textContent = message || '';
+        status.className = 'newsletter-status' + (kind ? ' is-' + kind : '');
+      }
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var email = input.value.trim();
+
+        // Obvious typos are caught here so they do not cost a round trip. The
+        // server validates the address again regardless: this is a courtesy, not
+        // the check.
+        var at = email.indexOf('@');
+        if (!email || at < 1 || email.indexOf('.', at) < 0) {
+          say('Enter a valid email address.', 'error');
+          return;
+        }
+
+        say(null);
+        button.disabled = true;
+        button.textContent = 'Subscribing\u2026';
+
+        WGA.post('/newsletter/subscribe', { email: email, source: 'index' })
+          .then(function () {
+            say("Thanks! You're subscribed.", 'ok');
+            form.reset();
+          })
+          .catch(function (error) {
+            // The server's own wording is kept where it gave one, so a rate limit
+            // or a rejected address explains itself instead of being flattened
+            // into a generic failure.
+            say(
+              error && error.code === 'RATE_LIMITED'
+                ? 'Too many attempts. Please try again in a little while.'
+                : (error && error.message) || 'That did not work. Please try again.',
+              'error'
+            );
+          })
+          .then(function () {
+            button.disabled = false;
+            button.textContent = 'Subscribe';
+          });
+      });
+    })();
+  </script>
   <script>
     // ---- DOM cache ----
     const dom = {
