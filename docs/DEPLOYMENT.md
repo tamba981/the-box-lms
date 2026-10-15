@@ -115,6 +115,21 @@ Add both the apex and `www`. Treat the apex as canonical — that is what
 Stripe returns always land on one hostname instead of two spellings of the same
 site.
 
+Namecheap ships two settings that silently prevent any of this from working, and
+a newly registered domain usually has both switched on:
+
+- **Parking Page** — turn it off. A parked page also claims the root hostname.
+- **URL Redirect on the apex** — delete it. A fresh domain often carries
+  `wuteveglobalacademy.com → http://www.wuteveglobalacademy.com/`, which sends
+  visitors *away* from the server. While it exists the site cannot load on the
+  domain no matter how correct the other records are.
+
+A redirect on `www` is fine and is how you make the apex canonical. A redirect on
+`@` is not — it is the same mistake as the parking page.
+
+The complete record list — website, mailbox, and the app's own sending domain,
+across Railway, Namecheap, Zoho and Resend — is in **`docs/DNS-AND-EMAIL.md`**.
+
 TLS is issued automatically once the records resolve; no certificate needs
 buying. HSTS is already sent in production, so visitors should reach the site over
 `https://` from the first visit.
@@ -134,7 +149,7 @@ useful for confirming a deploy before DNS has propagated.
 | ----------------------- | ---------------------------------------------------------------- |
 | `CORS_ORIGINS`          | Same-origin requests still work. List a host here only if a separate frontend origin needs to call the API |
 | `RESEND_API_KEY`        | Verification and reset links are logged, not emailed             |
-| `EMAIL_FROM`            | Uses a Resend sandbox sender                                     |
+| `EMAIL_FROM`            | Falls back to a Resend **sandbox** sender, so mail arrives from `resend.dev` rather than the academy. Set it to `Wuteve Global Academy <wuteve@wuteveglobalacademy.com>` |
 | `STRIPE_SECRET_KEY`     | Paid courses return a clear 503 on checkout; free courses work   |
 | `STRIPE_WEBHOOK_SECRET` | **Webhooks rejected, so no payment would ever be fulfilled**     |
 | `ORANGE_MONEY_*`        | Orange Money is shown as switched off, naming the absent values, and a charge is refused |

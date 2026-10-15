@@ -367,7 +367,7 @@ repository is quietly false:
 | --- | --- | --- |
 | Database user (Atlas) | `theboxedulr_db_user` | Atlas → **Database Access** → add a new user, point `MONGODB_URI` at it, then delete the old one. A username cannot be edited in place. |
 | Database | `thebox_lms` | Nothing to rename: `wuteve_dev` already exists and holds the content. Just name it in `MONGODB_URI`. `npm run db:inspect` shows what each one contains. |
-| Railway service and domain | `the-box-lms-production.up.railway.app` | Railway → **Settings**. Renaming the service changes the domain, so update `PUBLIC_BASE_URL` in the same pass and redeploy. |
+| Railway service and domain | `the-box-lms-production.up.railway.app` | The public address is now **`wuteveglobalacademy.com`**, attached as a custom domain (Railway → **Settings → Networking**). The generated `*.up.railway.app` host keeps working; renaming the *service* changes it, so set `PUBLIC_BASE_URL` in the same pass. Records: `docs/DNS-AND-EMAIL.md`. |
 | GitHub repository | `tamba981/the-box-lms` | GitHub → **Settings → Rename**. GitHub redirects the old URL, so existing clones keep working. |
 | Local folder | `THE BOX WEBSITE` | Rename it when nothing has it open — the editor, the terminals and the absolute paths in any running session all point at the current name. |
 

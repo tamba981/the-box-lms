@@ -6,7 +6,7 @@
  *
  * Run against the real URL after a deploy:
  *
- *   node scripts/verify-deploy.js https://your-app.up.railway.app
+ *   node scripts/verify-deploy.js https://wuteveglobalacademy.com
  *
  * Why this exists rather than a checklist. The most expensive defect found in
  * this project could not be seen from a terminal: the same-origin guard rejected
@@ -45,7 +45,7 @@ function assertEqual(actual, expected, label) {
 const rawBase = process.argv[2];
 if (!rawBase) {
   process.stderr.write(
-    '\nUsage: node scripts/verify-deploy.js https://your-app.up.railway.app\n\n'
+    '\nUsage: node scripts/verify-deploy.js https://wuteveglobalacademy.com\n\n'
   );
   process.exit(2);
 }

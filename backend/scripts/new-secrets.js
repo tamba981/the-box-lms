@@ -65,14 +65,15 @@ Two values are deliberately left blank:
                     \`wuteve_dev\` this machine uses. Rotate the password first
                     if it has ever been written down anywhere shared.
 
-  PUBLIC_BASE_URL   Your Railway domain, for example
-                    https://your-service.up.railway.app - no trailing slash.
-                    Deploy once to learn the hostname, then set this and
-                    redeploy, or set it up front if you already know it.
+  PUBLIC_BASE_URL   Your public domain, for example
+                    https://wuteveglobalacademy.com - no trailing slash.
+                    It is the link inside every verification and reset email.
+                    The *.up.railway.app address keeps working, so deploy once
+                    to confirm, then set this and redeploy.
 
 Both are checked after you deploy:
 
-  npm run verify:deploy -- https://your-app.up.railway.app
+  npm run verify:deploy -- https://wuteveglobalacademy.com
 
 That command fails if PUBLIC_BASE_URL does not match the host it was given, which
 is worth catching early: it is the link inside every verification and
