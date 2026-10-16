@@ -56,6 +56,28 @@ const ACCOUNTS = [
     role: 'admin',
     headline: 'Registrar, Wuteve Global Academy',
   },
+  /**
+   * A second administrator, on the domain the academy actually owns.
+   *
+   * `wuteve.edu` is not ours, so a password-reset link sent to the account above
+   * goes to an address nobody can read — and with no transactional email
+   * configured, that link would not be sent at all. Keeping an administrator on
+   * `wuteveglobalacademy.com` means recovery is possible the day Resend is
+   * switched on, without leaving the deployment without a way in until then.
+   *
+   * Note on re-seeding: `upsertAccount` only assigns the seed password when it
+   * creates an account. On an account that already exists it refreshes the role
+   * and profile and leaves the password alone, so running the seed again will
+   * not overwrite the password issued by `scripts/create-admin.js`. Running it
+   * with `--fresh` deletes and recreates everything, password included.
+   */
+  {
+    firstName: 'Academy',
+    lastName: 'Administrator',
+    email: 'admin@wuteveglobalacademy.com',
+    role: 'admin',
+    headline: 'Wuteve Global Academy',
+  },
   {
     firstName: 'Isaac',
     lastName: 'Mensah',
