@@ -42,9 +42,29 @@
       --certificate-diploma: #047857;
       --certificate-executive: #b45309;
       --certificate-mba: #b91c1c;
-      --glass-bg: rgba(255, 255, 255, 0.10);
-      --glass-border: rgba(255, 255, 255, 0.15);
-      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      /* Glass surfaces. Every value below is the one the .glass rule was already
+         using, so switching that rule to read these tokens changes nothing on
+         screen - it only means the shared surface can be tuned in one place.
+         The three --glass-* tokens that used to sit here were never referenced
+         by any rule in any page, which is why they were replaced rather than
+         left to disagree with the values actually in use. */
+      --glass-bg: rgba(255, 255, 255, 0.08);
+      --glass-bg-hover: rgba(255, 255, 255, 0.16);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-border-hover: rgba(26, 86, 219, 0.35);
+      --glass-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      --glass-shadow-hover: 0 12px 40px rgba(26, 86, 219, 0.10);
+      /* The desktop blur stays exactly as it was. --glass-blur-sm is the value
+         the media query near the bottom of this sheet uses on narrow screens:
+         a stack of blurred cards under a sticky header is the one thing here
+         that measurably costs a mid-range Android its frame budget. */
+      --glass-blur: 18px;
+      --glass-blur-sm: 10px;
+      --glass-blur-nav: 20px;
+      --glass-bg-dark: rgba(15, 23, 42, 0.45);
+      --glass-bg-dark-hover: rgba(30, 41, 59, 0.65);
+      --glass-border-dark: rgba(255, 255, 255, 0.06);
+      --glass-border-dark-hover: rgba(212, 165, 71, 0.25);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -87,13 +107,16 @@
     .trending-card,
     .partners .glass-card,
     .features .glass-card {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      -webkit-backdrop-filter: blur(var(--glass-blur));
+      border: 1px solid var(--glass-border);
       border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-      transition: all 0.3s ease;
+      box-shadow: var(--glass-shadow);
+      /* Named properties rather than "all": the surface only ever animates its
+         colour and its lift, and transition:all also makes the browser watch
+         every other property on twelve selectors at once. */
+      transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
     .glass-card:hover,
     .stat-card:hover,
@@ -103,9 +126,9 @@
     .feature-card:hover,
     .trending-card:hover {
       transform: translateY(-6px);
-      background: rgba(255, 255, 255, 0.16);
-      border-color: rgba(26, 86, 219, 0.35);
-      box-shadow: 0 12px 40px rgba(26, 86, 219, 0.10);
+      background: var(--glass-bg-hover);
+      border-color: var(--glass-border-hover);
+      box-shadow: var(--glass-shadow-hover);
     }
     body.dark-mode .glass,
     body.dark-mode .glass-card,
@@ -117,8 +140,8 @@
     body.dark-mode .partner-card,
     body.dark-mode .search-filters-enhanced,
     body.dark-mode .trending-card {
-      background: rgba(15, 23, 42, 0.45);
-      border-color: rgba(255, 255, 255, 0.06);
+      background: var(--glass-bg-dark);
+      border-color: var(--glass-border-dark);
     }
     body.dark-mode .glass-card:hover,
     body.dark-mode .stat-card:hover,
@@ -127,8 +150,8 @@
     body.dark-mode .course-card:hover,
     body.dark-mode .feature-card:hover,
     body.dark-mode .trending-card:hover {
-      background: rgba(30, 41, 59, 0.65);
-      border-color: rgba(212, 165, 71, 0.25);
+      background: var(--glass-bg-dark-hover);
+      border-color: var(--glass-border-dark-hover);
     }
 
     .glass-btn {
@@ -149,6 +172,53 @@
       border-color: rgba(212, 165, 71, 0.4);
       transform: translateY(-2px);
       color: white;
+    }
+
+    /*
+     * Opt-in surfaces for elements that are not covered by the grouped rule
+     * above. Neither is applied to this page today: the <header> already
+     * carries the same wash and blur inline, and putting .glass-modal on the
+     * payment modal would mean editing modal markup, which is out of scope for
+     * this change. They exist so the dashboards - which do not load this
+     * stylesheet yet - have something to adopt instead of a fifth copy.
+     */
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(var(--glass-blur-nav));
+      -webkit-backdrop-filter: blur(var(--glass-blur-nav));
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+    }
+    body.dark-mode .glass-nav {
+      background: rgba(15, 23, 42, 0.75);
+      border-bottom-color: rgba(255, 255, 255, 0.04);
+    }
+    .glass-modal {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      box-shadow: var(--glass-shadow-hover);
+    }
+    body.dark-mode .glass-modal {
+      background: rgba(30, 41, 59, 0.88);
+      border-color: var(--glass-border-dark);
+    }
+
+    /*
+     * Scroll reveal. The hidden state only applies once the script has put
+     * .reveal-ready on <html>, so a visitor whose JavaScript never runs sees the
+     * content instead of a section held at opacity 0 forever, waiting for an
+     * observer that is never going to fire.
+     */
+    html.reveal-ready [data-reveal] {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    html.reveal-ready [data-reveal].is-revealed {
+      opacity: 1;
+      transform: none;
     }
 
     /* animations */
@@ -419,14 +489,23 @@
     .carousel-indicator.active { background:var(--gold); }
 
     /* ---------- STATS (glass) ---------- */
-    .stats { padding:60px 0; background:var(--secondary); }
-    body.dark-mode .stats { background-color:var(--dark-bg); }
+    /*
+     * Glass over a flat #ffffff is indistinguishable from a solid card - there
+     * is nothing behind the surface for the blur to pick up. These two sections
+     * therefore carry a very slight blue wash, in the existing primary hue, so
+     * the cards above them read as glass rather than as white boxes. The wash is
+     * deliberately faint: it is a backdrop for the cards, not a feature.
+     */
+    .stats { padding:60px 0; background:linear-gradient(135deg, var(--secondary) 0%, #eef3fd 100%); }
+    body.dark-mode .stats { background:linear-gradient(135deg, var(--dark-bg) 0%, #16233f 100%); }
     .stats-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:30px; }
     .stat-card {
       text-align:center; padding:30px 20px;
       transition:transform 0.3s;
     }
-    .stat-card:hover { transform:translateY(-5px); }
+    /* Was 5px against the group's 6px, so a stat card lifted 1px less than every
+       other card on the page for no reason anyone could point at. */
+    .stat-card:hover { transform:translateY(-6px); }
     .stat-number { font-size:44px; font-weight:800; background:linear-gradient(135deg, var(--primary), var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent; margin-bottom:10px; }
     .stat-label { color:var(--text-light); font-weight:500; }
 
@@ -479,6 +558,19 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .loading-block { animation: none; }
+      /* Everything below is decoration. With the preference set the surfaces
+         stay put on hover, the figures are written straight to their final
+         values rather than counted up, and revealed content is simply present. */
+      .glass, .glass-card, .stat-card, .category-card, .tier-card,
+      .course-card, .feature-card, .partner-card, .search-filters-enhanced,
+      .trending-card { transition: none; }
+      .glass:hover, .glass-card:hover, .stat-card:hover, .category-card:hover,
+      .tier-card:hover, .course-card:hover, .feature-card:hover,
+      .partner-card:hover, .trending-card:hover { transform: none; }
+      html.reveal-ready [data-reveal],
+      html.reveal-ready [data-reveal].is-revealed {
+        opacity: 1; transform: none; transition: none;
+      }
     }
     .trending-rank {
       position: absolute; top:12px; left:12px;
@@ -515,10 +607,11 @@
     /* ---------- EXPLORE COURSES & CALENDAR DOWNLOADS ---------- */
     .explore-section {
       padding: 60px 0;
-      background: var(--secondary);
+      /* See the note on .stats: a wash for the glass to sit on. */
+      background: linear-gradient(180deg, var(--secondary) 0%, #eff4fc 100%);
     }
     body.dark-mode .explore-section {
-      background: var(--dark-bg);
+      background: linear-gradient(180deg, var(--dark-bg) 0%, #141f38 100%);
     }
     .explore-grid {
       display: grid;
@@ -802,6 +895,21 @@
       .partners-blue .partners-grid { grid-template-columns:1fr 1fr; }
     }
 
+    /*
+     * Cheaper blur on narrow screens. Desktop keeps the 18px it has always had;
+     * this is the mobile performance win. .glass-btn is deliberately left out:
+     * it is already at 10px, and taking it lower reads as muddy rather than as
+     * glass.
+     */
+    @media (max-width:768px) {
+      .glass, .glass-card, .stat-card, .category-card, .tier-card,
+      .course-card, .feature-card, .partner-card, .search-filters-enhanced,
+      .trending-card, .partners .glass-card, .features .glass-card {
+        backdrop-filter: blur(var(--glass-blur-sm));
+        -webkit-backdrop-filter: blur(var(--glass-blur-sm));
+      }
+    }
+
     .btn-loading { position:relative; color:transparent !important; }
     .btn-loading::after { content:""; position:absolute; width:20px; height:20px; top:50%; left:50%; margin:-10px 0 0 -10px; border:2px solid transparent; border-top-color:currentColor; border-radius:50%; animation:button-loading-spinner 0.7s linear infinite; }
     @keyframes button-loading-spinner { from{transform:rotate(0)} to{transform:rotate(1turn)} }
@@ -927,7 +1035,7 @@
   </section>
 
   <!-- EXPLORE COURSES & CALENDAR DOWNLOADS -->
-  <section class="explore-section" id="explore">
+  <section class="explore-section" id="explore" data-reveal>
     <div class="container">
       <div class="explore-grid">
         <div class="explore-text">
@@ -943,7 +1051,7 @@
   </section>
 
   <!-- CATEGORIES -->
-  <section class="courses">
+  <section class="courses" data-reveal>
     <div class="container">
       <div class="section-header"><h2 class="section-title">Explore Our <span>Course Categories</span></h2><p>Every category that currently has a published course</p></div>
       <div class="categories-grid" id="landing-categories">
@@ -953,7 +1061,7 @@
   </section>
 
   <!-- POPULAR COURSES -->
-  <section class="courses">
+  <section class="courses" data-reveal>
     <div class="container">
       <div class="section-header"><h2 class="section-title">Popular <span>Courses</span></h2><p>Live from the catalogue — each course shows its own price</p></div>
       <div class="search-filters-enhanced glass">
@@ -1016,7 +1124,7 @@
   </section>
 
   <!-- TRENDING SECTION -->
-  <section class="trending-section">
+  <section class="trending-section" data-reveal>
     <div class="container">
       <div class="section-header">
         <div class="trending-badge"><span class="fire">🔥</span> TRENDING NOW</div>
@@ -1087,7 +1195,7 @@
   </section>
 
   <!-- ===== FEATURES (Blue themed glass) ===== -->
-  <section class="features-blue">
+  <section class="features-blue" data-reveal>
     <div class="container">
       <div class="section-header"><h2 class="section-title">Why Choose <span>Wuteve Global Academy</span></h2></div>
       <div class="features-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;">
@@ -1102,7 +1210,7 @@
   </section>
 
   <!-- CTA -->
-  <section class="cta"><div class="container"><h2 class="cta-title">Ready to Climb to Your Next Peak?</h2><p class="cta-text">Create a free account and start your first course today</p><a href="/login.html" class="cta-button">Get Started</a></div></section>
+  <section class="cta" data-reveal><div class="container"><h2 class="cta-title">Ready to Climb to Your Next Peak?</h2><p class="cta-text">Create a free account and start your first course today</p><a href="/login.html" class="cta-button">Get Started</a></div></section>
 
   <!-- NEWSLETTER -->
   <section class="newsletter" aria-labelledby="newsletter-title">
@@ -1392,13 +1500,25 @@
       document.querySelectorAll('.payment-method').forEach(m => m.addEventListener('click', function() { document.querySelectorAll('.payment-method').forEach(p => p.classList.remove('selected')); this.classList.add('selected'); }));
     }
 
-    // ---- Animated Stats ----
-    function animateCounter(element, target, duration = 2000) {
-      const start = 0;
+    // ---- Animated Stats -------------------------------------------------
+    // These four figures are counted by the API, so they are not known when
+    // this file is written; the markup starts at an em dash and is only
+    // replaced once a real number exists. The count-up is decoration, and
+    // whichever way it fails - the script never runs, the request never
+    // answers, the preference is "reduce motion", or the number is too small
+    // for counting to mean anything - the figure the API returned is what ends
+    // up on screen. A figure that has not arrived yet stays an em dash.
+    //
+    // The previous version of this block observed '.stat-number[data-target]'.
+    // Nothing in the page carried a data-target attribute, so the selector
+    // matched the empty set and the observer never fired once.
+    const STAT_ANIMATE_FROM = 10;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function animateCounter(element, target, duration = 1200) {
       const startTime = performance.now();
       function update(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
+        const progress = Math.min((currentTime - startTime) / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
         const current = Math.round(eased * target);
         if (target >= 1000000) {
@@ -1411,20 +1531,45 @@
       requestAnimationFrame(update);
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-      const statNumbers = document.querySelectorAll('.stat-number[data-target]');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const el = entry.target;
-            const target = parseInt(el.getAttribute('data-target'), 10);
-            animateCounter(el, target);
-            observer.unobserve(el);
-          }
-        });
-      }, { threshold: 0.3 });
-      statNumbers.forEach(el => observer.observe(el));
-    });
+    // Below ten the animation is over before the eye finds it and the digits
+    // visibly jump, which reads as a fault rather than as an effect.
+    function countUp(element, target) {
+      if (reduceMotion.matches || target < STAT_ANIMATE_FROM) {
+        element.textContent = target.toLocaleString();
+        return;
+      }
+      animateCounter(element, target);
+    }
+
+    const statsSeen = new WeakSet();
+    const statsObserver = 'IntersectionObserver' in window
+      ? new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            statsSeen.add(entry.target);
+            statsObserver.unobserve(entry.target);
+            const target = Number(entry.target.dataset.target);
+            if (Number.isFinite(target)) countUp(entry.target, target);
+          });
+        }, { threshold: 0.3 })
+      : null;
+
+    // Called from loadLandingData() with the figure the API just returned.
+    function setStatNumber(id, value) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.dataset.target = String(value);
+      // The real figure goes on screen before anything else, so the element is
+      // never briefly wrong.
+      el.textContent = value.toLocaleString();
+      if (!statsObserver || statsSeen.has(el)) {
+        countUp(el, value);
+      } else {
+        // A fresh observation reports its first intersection a frame or two
+        // from now, which is when the count-up begins.
+        statsObserver.observe(el);
+      }
+    }
 
     // ---- API integration -------------------------------------------------
     // The base URL and session handling live in /assets/js/wga-api.js, which
@@ -1598,10 +1743,6 @@
     }
 
     async function loadLandingData() {
-      const setText = (id, value) => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = value;
-      };
 
       try {
         const [popular, freeCourses, categoryList] = await Promise.all([
@@ -1615,10 +1756,10 @@
         const freeCount = freeCourses.pagination ? freeCourses.pagination.total : 0;
         const categories = categoryList.categories || [];
 
-        setText('stat-courses', total.toLocaleString());
-        setText('stat-free', freeCount.toLocaleString());
-        setText('stat-categories', String(categories.length));
-        setText('stat-paid', (total - freeCount).toLocaleString());
+        setStatNumber('stat-courses', total);
+        setStatNumber('stat-free', freeCount);
+        setStatNumber('stat-categories', categories.length);
+        setStatNumber('stat-paid', total - freeCount);
 
         const subjectFilter = document.getElementById('subject-filter');
         if (subjectFilter) {
@@ -1696,10 +1837,34 @@
     loadLandingData();
 
     // ---- Fade-in for cards ----
-    document.querySelectorAll('.trending-card, .feature-card, .course-card, .tier-card, .category-card, .partner-card').forEach((el, i) => {
-      el.style.opacity = '0';
-      el.style.animation = `fadeInUp 0.6s ease ${i * 0.06}s forwards`;
-    });
+    if (!reduceMotion.matches) {
+      document.querySelectorAll('.trending-card, .feature-card, .course-card, .tier-card, .category-card, .partner-card').forEach((el, i) => {
+        el.style.opacity = '0';
+        el.style.animation = `fadeInUp 0.6s ease ${i * 0.06}s forwards`;
+      });
+    }
+
+    // ---- Scroll reveal ---------------------------------------------------
+    // A second observer, deliberately: the stats observer above watches four
+    // counters and asks for a 30% intersection, this one watches whole sections
+    // and reveals as soon as their leading edge clears the fold. They never
+    // observe the same element. Each section is unchecked once revealed, so
+    // scrolling back up does not replay it.
+    if (!reduceMotion.matches && 'IntersectionObserver' in window) {
+      const revealTargets = document.querySelectorAll('[data-reveal]');
+      if (revealTargets.length) {
+        // Only now is it safe to hide them.
+        document.documentElement.classList.add('reveal-ready');
+        const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-revealed');
+            revealObserver.unobserve(entry.target);
+          });
+        }, { rootMargin: '0px 0px -80px 0px', threshold: 0 });
+        revealTargets.forEach((el) => revealObserver.observe(el));
+      }
+    }
   </script>
   <!-- Structured Data -->
   <script type="application/ld+json">

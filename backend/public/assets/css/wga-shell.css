@@ -34,6 +34,14 @@
      reaches 3.98:1, so links and small blue labels need the lighter one. */
   --dark-link: #60a5fa;
   --dark-link-soft: #93c5fd;
+
+  /* Glass surfaces, matching the landing page. Kept here as well so the two
+     stylesheets can be tuned separately without one dragging the other. */
+  --glass-blur: 18px;
+  --glass-blur-sm: 10px;
+  --glass-blur-nav: 20px;
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-border-dark: rgba(255, 255, 255, 0.07);
 }
 
 * {
@@ -621,4 +629,157 @@ body.dark-mode .wga-footer {
 
 .wga-footer .wga-footer-sep {
   opacity: 0.45;
+}
+/*
+ * ---------- Glass layer ----------
+ *
+ * The surfaces below were flat opaque sheets (var(--surface) is #ffffff, and
+ * the page behind them was #f4f6f9), so a blur on its own would have been
+ * invisible - there is nothing behind a card on a flat background for it to
+ * pick up. body therefore gains a faint wash first, and the surfaces then sit
+ * on it with enough opacity left that their text keeps its contrast: the card
+ * fill is 0.78 white, which lands the page at roughly #f9fbfd inside a card,
+ * still about 14:1 for --text and 4.9:1 for --text-light.
+ *
+ * This block is appended rather than folded into each rule above so the whole
+ * change can be lifted back out in one piece if a page argues with it.
+ */
+
+body {
+  background: linear-gradient(160deg, #e9eef6 0%, var(--bg) 45%, #f7f9fc 100%);
+  background-attachment: fixed;
+}
+
+body.dark-mode {
+  background: linear-gradient(160deg, #0b1220 0%, var(--dark-bg) 45%, #131c2e 100%);
+  background-attachment: fixed;
+}
+
+/* The header keeps its layout exactly as it was - it is not being made sticky.
+   Nothing in this stylesheet is positioned, so the containing block that
+   backdrop-filter creates for positioned descendants has nothing to disturb. */
+.wga-header {
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(var(--glass-blur-nav));
+  -webkit-backdrop-filter: blur(var(--glass-blur-nav));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+body.dark-mode .wga-header {
+  background: rgba(15, 23, 42, 0.6);
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+.wga-card {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-color: var(--glass-border);
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.07);
+}
+
+body.dark-mode .wga-card {
+  background: rgba(30, 41, 59, 0.72);
+  border-color: var(--glass-border-dark);
+  box-shadow: none;
+}
+
+.wga-course-card {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-color: var(--glass-border);
+}
+
+body.dark-mode .wga-course-card {
+  background: rgba(30, 41, 59, 0.72);
+  border-color: var(--glass-border-dark);
+}
+
+/* Form fields keep more opacity than the cards: a field a reader is typing into
+   should look solid, and the blur there is for the surface to belong to the
+   rest of the page rather than to show off. */
+.wga-input,
+.wga-select,
+.wga-textarea {
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-color: rgba(203, 213, 225, 0.9);
+}
+
+body.dark-mode .wga-input,
+body.dark-mode .wga-select,
+body.dark-mode .wga-textarea {
+  background: rgba(15, 23, 42, 0.72);
+  border-color: var(--dark-border);
+}
+
+.wga-btn-ghost {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+body.dark-mode .wga-btn-ghost {
+  background: rgba(30, 41, 59, 0.55);
+  border-color: var(--dark-border);
+}
+
+/*
+ * The pill and the footer are deliberately excluded from the blur above.
+ * A pill is roughly 60px wide: a backdrop-filter there costs a layer for no
+ * visible gain, and the pill's colour is doing real work (green means free).
+ * The footer is text sitting directly on the page, and blurring text against
+ * its own background makes it look smudged rather than designed. Both are
+ * tinted instead, so they read as part of the same surface family.
+ */
+.wga-pill {
+  background: rgba(26, 86, 219, 0.09);
+  border: 1px solid rgba(26, 86, 219, 0.14);
+}
+
+body.dark-mode .wga-pill {
+  background: rgba(59, 130, 246, 0.16);
+  border-color: rgba(59, 130, 246, 0.22);
+}
+
+.wga-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  margin-top: 8px;
+  padding-top: 20px;
+}
+
+body.dark-mode .wga-footer {
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Narrow screens get the cheaper blur, as on the landing page. */
+@media (max-width: 768px) {
+  .wga-header {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .wga-card,
+  .wga-course-card {
+    backdrop-filter: blur(var(--glass-blur-sm));
+    -webkit-backdrop-filter: blur(var(--glass-blur-sm));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wga-course-card,
+  .wga-btn,
+  .wga-theme-toggle {
+    transition: none;
+  }
+
+  .wga-course-card:hover,
+  .wga-btn-primary:not(:disabled):hover,
+  .wga-btn-ghost:not(:disabled):hover,
+  .wga-theme-toggle:hover {
+    transform: none;
+  }
 }
