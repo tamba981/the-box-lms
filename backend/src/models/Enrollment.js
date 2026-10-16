@@ -35,7 +35,7 @@ const enrollmentSchema = new mongoose.Schema(
     // How the student got in. `mobile_money` is separate from `stripe` because
     // the two payment paths are settled by different mechanisms, and an
     // enrolment has to be traceable back to the one that produced it.
-    source: { type: String, enum: ['free', 'stripe', 'mobile_money', 'admin'], default: 'free' },
+    source: { type: String, enum: ['free', 'stripe', 'mobile_money', 'manual', 'admin'], default: 'free' },
     payment: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment', default: null },
 
     /** Denormalised so a student's course list renders in one query. */

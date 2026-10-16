@@ -298,6 +298,27 @@ if (!STORAGE_ENABLED && IS_PRODUCTION) {
  * Tokens
  * ------------------------------------------------------------------ */
 
+/**
+ * Where a student sends a manual payment.
+ *
+ * Settings-backed rather than written into the page, because a wrong digit here
+ * sends a student's money to a stranger — and because correcting one must not
+ * need a deploy. Comma-separated, in PAYMENT_MOBILE_MONEY_NUMBERS; the default
+ * is the pair the academy supplied.
+ */
+const MANUAL_PAYMENT_NUMBERS = String(
+  process.env.PAYMENT_MOBILE_MONEY_NUMBERS || '+231886590302,+231770562292'
+)
+  .split(',')
+  .map((number) => number.trim())
+  .filter(Boolean);
+
+/** How long an unpaid manual order stays open before it is treated as expired. */
+const MANUAL_PAYMENT_EXPIRY_DAYS =
+  Number.parseInt(process.env.PAYMENT_EXPIRY_DAYS, 10) > 0
+    ? Number.parseInt(process.env.PAYMENT_EXPIRY_DAYS, 10)
+    : 7;
+
 const config = {
   env: NODE_ENV,
   isProduction: IS_PRODUCTION,
@@ -346,6 +367,11 @@ const config = {
   },
 
   mobileMoney: MOBILE_MONEY_PROVIDERS,
+
+  manualPayment: {
+    numbers: MANUAL_PAYMENT_NUMBERS,
+    expiryDays: MANUAL_PAYMENT_EXPIRY_DAYS,
+  },
 
   bcryptRounds: IS_TEST ? 4 : 12,
 };

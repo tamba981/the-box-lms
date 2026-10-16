@@ -4,6 +4,7 @@ const crypto = require('crypto');
 
 const config = require('../config/env');
 const logger = require('../lib/logger');
+const { newOrderId } = require('../lib/orderId');
 const Course = require('../models/Course');
 const Enrollment = require('../models/Enrollment');
 const Payment = require('../models/Payment');
@@ -295,7 +296,12 @@ async function settlePayment(
     user: student,
     course,
     // Who took the money, so an enrolment is traceable back to its payment path.
-    source: payment.method === 'mobile_money' ? 'mobile_money' : 'stripe',
+    source:
+      payment.provider === 'manual'
+        ? 'manual'
+        : payment.method === 'mobile_money'
+          ? 'mobile_money'
+          : 'stripe',
     payment,
   });
 
@@ -344,6 +350,191 @@ async function markFailed(session, reason) {
   );
 }
 
+/* ------------------------------------------------------------------ *
+ * Manual, offline orders
+ * ------------------------------------------------------------------ */
+
+/**
+ * The offline path: the student is handed an order reference and the numbers to
+ * send money to, and a person at the academy confirms it arrived.
+ *
+ * This exists because no automated gateway is open to a business registered in
+ * Liberia, and because taking money by mobile money and confirming it by hand is
+ * already how the academy operates. Nothing here moves funds. It records an
+ * intention, then a person's confirmation of it.
+ */
+
+/**
+ * One live order per student per course per five minutes.
+ *
+ * `idempotencyKey` is already unique on this collection, so the rate rule is
+ * carried by the key instead of by a separate check that could race with itself.
+ * The five-minute bucket means a double-tap on the button returns the same order,
+ * while a student whose order was rejected can simply try again — the next bucket
+ * is a different key, so no one is locked out of a course they still want.
+ */
+const MANUAL_ORDER_WINDOW_MS = 5 * 60 * 1000;
+
+function manualIdempotencyKey(studentId, courseId, now) {
+  return `manual:${String(studentId)}:${String(courseId)}:${Math.floor(now / MANUAL_ORDER_WINDOW_MS)}`;
+}
+
+/** What the student is told to do, and where to send it. */
+function manualInstructions() {
+  return {
+    numbers: config.manualPayment.numbers,
+    expiryDays: config.manualPayment.expiryDays,
+    steps: [
+      'Send the exact amount to one of the numbers above.',
+      'Use your order reference as the payment reference.',
+      'Press "I have sent the payment" so we know to look for it.',
+    ],
+  };
+}
+
+async function createManualOrder({ user, course, studentPhone = null }) {
+  if (course.priceCents <= 0) {
+    throw badRequest('This course is free — just enroll directly.', { code: 'COURSE_IS_FREE' });
+  }
+
+  /**
+   * Without a destination there is nothing to tell the student to do, and an
+   * order they cannot pay is worse than a clear refusal.
+   */
+  if (!config.manualPayment.numbers.length) {
+    throw unavailable(
+      'No payment numbers are configured on this deployment, so a manual payment cannot be accepted. Please contact the academy.',
+      { code: 'MANUAL_PAYMENT_UNAVAILABLE' }
+    );
+  }
+
+  const now = Date.now();
+  const idempotencyKey = manualIdempotencyKey(user._id, course._id, now);
+
+  const existing = await Payment.findOne({ idempotencyKey });
+  if (existing) return { payment: existing, reused: true };
+
+  const payment = await Payment.create({
+    student: user._id,
+    course: course._id,
+    amountCents: course.priceCents,
+    currency: course.currency,
+    provider: 'manual',
+    method: 'mobile_money',
+    status: 'pending',
+    orderId: newOrderId(now),
+    studentPhone,
+    expiresAt: new Date(now + config.manualPayment.expiryDays * 24 * 60 * 60 * 1000),
+    idempotencyKey,
+  });
+
+  logger.info('manual order created', {
+    orderId: payment.orderId,
+    studentId: String(user._id),
+    courseId: String(course._id),
+    amountCents: payment.amountCents,
+  });
+
+  return { payment, reused: false };
+}
+
+/** Look an order up by the reference the student was given. */
+async function findManualOrder(orderId) {
+  return Payment.findOne({ orderId: String(orderId || '').trim().toUpperCase(), provider: 'manual' });
+}
+
+/**
+ * The student's side of the confirmation: "I have sent it".
+ *
+ * This is a claim, not evidence, so it moves the order into the queue a person
+ * works through rather than granting anything.
+ */
+async function markManualOrderPaid({ payment, paidToNumber = null, paymentReference = null }) {
+  if (payment.status === 'paid') {
+    throw badRequest('This order has already been confirmed.', { code: 'ORDER_ALREADY_PAID' });
+  }
+
+  if (payment.status === 'rejected') {
+    throw badRequest('This order was declined. Please start a new one.', { code: 'ORDER_REJECTED' });
+  }
+
+  if (payment.isExpired()) {
+    payment.status = 'expired';
+    await payment.save();
+    throw badRequest('This order has expired. Please start a new one.', { code: 'ORDER_EXPIRED' });
+  }
+
+  payment.markedPaidAt = payment.markedPaidAt || new Date();
+  if (paidToNumber) payment.paidToNumber = paidToNumber;
+  if (paymentReference) payment.paymentReference = paymentReference;
+  payment.status = 'awaiting_verification';
+  await payment.save();
+
+  logger.info('manual order marked as sent', { orderId: payment.orderId });
+
+  return { payment };
+}
+
+/**
+ * The academy's side: the money is in the account, so grant access.
+ *
+ * Handing this to `settlePayment` rather than enrolling here is the whole point
+ * of that function existing. A second copy of "mark paid, enrol, notify, receipt"
+ * would eventually disagree with the first about idempotency, and that
+ * disagreement would stay invisible until it cost somebody a course or a
+ * duplicated enrolment.
+ */
+async function confirmManualOrder({ payment, adminUser = null, notes = null }) {
+  if (payment.status === 'paid' && payment.enrollment) {
+    return { handled: true, reason: 'already_fulfilled', paymentId: String(payment._id) };
+  }
+
+  if (payment.status === 'rejected') {
+    throw badRequest('This order was declined and cannot be confirmed.', { code: 'ORDER_REJECTED' });
+  }
+
+  payment.verifiedAt = new Date();
+  payment.verifiedBy = adminUser ? adminUser._id : null;
+  if (notes) payment.notes = notes;
+  await payment.save();
+
+  /**
+   * Close every other live order for the same purchase.
+   *
+   * A student can have a card checkout open and a manual order on the go at the
+   * same time. Once one of them has been settled, leaving the other queued would
+   * put an order in front of an administrator for a course the student already
+   * has, and invite a second confirmation for money that was never sent twice.
+   */
+  await Payment.updateMany(
+    {
+      _id: { $ne: payment._id },
+      student: payment.student,
+      course: payment.course,
+      status: { $in: ['pending', 'awaiting_verification'] },
+    },
+    { $set: { status: 'expired', failureReason: 'Superseded by a confirmed order' } }
+  );
+
+  return settlePayment(payment, { paidAt: new Date() });
+}
+
+async function rejectManualOrder({ payment, adminUser = null, reason }) {
+  if (payment.status === 'paid') {
+    throw badRequest('This order has already been confirmed.', { code: 'ORDER_ALREADY_PAID' });
+  }
+
+  payment.status = 'rejected';
+  payment.rejectedAt = new Date();
+  payment.rejectionReason = reason;
+  payment.verifiedBy = adminUser ? adminUser._id : null;
+  await payment.save();
+
+  logger.info('manual order rejected', { orderId: payment.orderId, reason });
+
+  return { payment };
+}
+
 module.exports = {
   assertConfigured,
   createCheckoutSession,
@@ -351,5 +542,12 @@ module.exports = {
   fulfillCheckoutSession,
   settlePayment,
   markFailed,
+  createManualOrder,
+  findManualOrder,
+  markManualOrderPaid,
+  confirmManualOrder,
+  rejectManualOrder,
+  manualInstructions,
+  MANUAL_ORDER_WINDOW_MS,
   SIGNATURE_TOLERANCE_SECONDS,
 };

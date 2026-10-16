@@ -218,6 +218,51 @@
     body.dark-mode .pay-panel { border-color: var(--dark-border); background: rgba(59,130,246,.1); }
     .pay-panel-wait { background: rgba(212,165,71,.1); }
     body.dark-mode .pay-panel-wait { background: rgba(212,165,71,.14); }
+
+    /*
+     * The manual-order screen. The reference is the one thing on it that the
+     * student has to carry somewhere else — into a mobile money app, or onto the
+     * phone to whoever confirms it — so it gets its own row, large type and a
+     * copy button rather than being buried in a sentence.
+     */
+    .pay-ref {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      margin: 10px 0 4px; padding: 10px 12px;
+      background: var(--surface); border: 1px dashed var(--primary);
+      border-radius: 10px;
+    }
+    .pay-ref-value {
+      flex: 1 1 auto; min-width: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 15px; font-weight: 700; letter-spacing: .4px;
+      overflow-wrap: anywhere;
+    }
+    body.dark-mode .pay-ref { background: var(--dark-bg); border-color: var(--primary-light); }
+
+    .pay-numbers { list-style: none; margin: 9px 0 0; padding: 0; }
+    .pay-numbers li {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 14px;
+    }
+    .pay-numbers li:last-child { border-bottom: 0; }
+    body.dark-mode .pay-numbers li { border-color: var(--dark-border); }
+
+    .pay-copy {
+      flex: 0 0 auto; font: inherit; font-size: 12px; font-weight: 700;
+      padding: 5px 11px; border-radius: 7px; cursor: pointer;
+      background: rgba(26,86,219,.12); color: var(--primary);
+      border: 1px solid rgba(26,86,219,.25);
+    }
+    .pay-copy:hover { background: rgba(26,86,219,.2); }
+    body.dark-mode .pay-copy {
+      background: rgba(59,130,246,.18); color: var(--dark-link-soft);
+      border-color: rgba(59,130,246,.3);
+    }
+
+    .pay-steps { margin: 10px 0 0; padding-left: 20px; font-size: 13px; }
+    .pay-steps li { margin-bottom: 5px; }
   </style>
 </head>
 <body>
@@ -965,9 +1010,16 @@
 
       var PROVIDER_ICONS = {
         card: 'fa-credit-card',
+        manual: 'fa-money-bill-transfer',
         orange_money: 'fa-mobile-screen-button',
         lonestar_momo: 'fa-mobile-screen-button',
       };
+
+      /**
+       * The last method list the server sent, kept so that "choose another
+       * method" can put the picker back without asking the network again.
+       */
+      var lastMethods = [];
 
       /** Operator aid, off by default — open with `?debug=1` to see settings. */
       var SHOW_CONFIG_DETAIL = WGAUI.param('debug') === '1';
@@ -1027,6 +1079,8 @@
       }
 
       function renderMethods(course, methods, panel) {
+        lastMethods = methods;
+
         var usable = methods.filter(function (method) { return method.enabled; });
 
         if (!usable.length) {
@@ -1052,6 +1106,8 @@
             why = method.note || 'This method is not switched on yet.';
           } else if (method.kind === 'card') {
             why = 'You will be taken to a secure payment page to finish.';
+          } else if (method.kind === 'manual') {
+            why = 'Send the amount to one of our numbers. We confirm it by hand.';
           } else {
             why = 'You will get a prompt on your phone to approve the payment.';
           }
@@ -1091,7 +1147,17 @@
         var selected = null;
 
         function labelGo() {
-          var onPhone = Boolean(selected) && selected.kind === 'mobile_money';
+          if (!selected) return;
+
+          // Manual transfer is not a prompt and not a redirect: the next screen
+          // is the instructions, so the button should not promise either.
+          if (selected.kind === 'manual') {
+            go.innerHTML =
+              '<i class="fas fa-money-bill-transfer" aria-hidden="true"></i> Get payment details';
+            return;
+          }
+
+          var onPhone = selected.kind === 'mobile_money';
 
           go.innerHTML =
             '<i class="fas ' + (onPhone ? 'fa-mobile-screen-button' : 'fa-credit-card') + '" ' +
@@ -1113,9 +1179,14 @@
             node.setAttribute('aria-pressed', node === button ? 'true' : 'false');
           });
 
-          var onPhone = selected.kind === 'mobile_money';
+          var onPhone = selected.kind === 'mobile_money' || selected.kind === 'manual';
           phoneField.style.display = onPhone ? '' : 'none';
-          phoneHint.textContent = onPhone ? (selected.phoneHint || '') : '';
+          phoneHint.textContent =
+            selected.kind === 'manual'
+              ? 'Optional. Helps us match your payment.'
+              : onPhone
+                ? (selected.phoneHint || '')
+                : '';
 
           go.disabled = false;
           labelGo();
@@ -1184,6 +1255,139 @@
             .catch(onFailure);
         }
 
+        /*
+         * Manual transfer.
+         *
+         * The academy is given no gateway to integrate with, so the student is
+         * handed a reference and the numbers to send to, and then tells us it is
+         * done. Nothing is charged by this page and nothing is granted by it —
+         * an administrator confirms the money arrived, and that is what enrols
+         * the student.
+         */
+
+        /** The clipboard API needs a secure context; say so rather than fail silently. */
+        function wireCopyButtons(root) {
+          Array.prototype.forEach.call(root.querySelectorAll('[data-copy]'), function (button) {
+            button.addEventListener('click', function () {
+              var value = button.getAttribute('data-copy');
+
+              var showCopied = function () {
+                var was = button.textContent;
+                button.textContent = 'Copied';
+                window.setTimeout(function () { button.textContent = was; }, 1600);
+              };
+
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(value).then(showCopied).catch(function () {
+                  WGAUI.toast('Press and hold to copy: ' + value, 'info');
+                });
+                return;
+              }
+
+              WGAUI.toast('Press and hold to copy: ' + value, 'info');
+            });
+          });
+        }
+
+        function startManual(method) {
+          WGAUI.setBusy(go, true, 'Creating your order…');
+
+          WGA.post('/payments/manual', {
+            courseId: course.id,
+            studentPhone: (phone.value || '').trim() || null,
+          })
+            .then(function (data) { showManualOrder(data || {}); })
+            .catch(onFailure);
+        }
+
+        function showManualOrder(data) {
+          var order = (data && data.order) || {};
+          var instructions = (data && data.instructions) || {};
+          var numbers = instructions.numbers || [];
+          var steps = instructions.steps || [];
+          var reference = order.orderId || '';
+
+          var numberRows = numbers.map(function (number) {
+            return (
+              '<li>' +
+                '<span>' + WGAUI.escapeHtml(number) + '</span>' +
+                '<button type="button" class="pay-copy" data-copy="' +
+                  WGAUI.escapeHtml(number) + '">Copy</button>' +
+              '</li>'
+            );
+          }).join('');
+
+          var stepRows = steps.map(function (step) {
+            return '<li>' + WGAUI.escapeHtml(step) + '</li>';
+          }).join('');
+
+          panel.innerHTML =
+            '<div class="pay-panel">' +
+              '<span class="pay-panel-title">' +
+                '<i class="fas fa-hourglass-half" aria-hidden="true"></i> ' +
+                'Waiting for your payment</span>' +
+              '<p style="margin:0;">Send <strong>' +
+                WGAUI.escapeHtml(order.amountLabel || '') + '</strong> for ' +
+                WGAUI.escapeHtml(course.title) + ', then tell us it is done.</p>' +
+              '<div class="pay-ref">' +
+                '<span class="pay-ref-value">' + WGAUI.escapeHtml(reference) + '</span>' +
+                '<button type="button" class="pay-copy" data-copy="' +
+                  WGAUI.escapeHtml(reference) + '">Copy reference</button>' +
+              '</div>' +
+              '<p class="wga-hint" style="margin:6px 0 0;">Use that as the payment reference, ' +
+                'so we can match your transfer to your account.</p>' +
+              '<p style="margin:13px 0 0;font-weight:700;">Send to</p>' +
+              '<ul class="pay-numbers">' + numberRows + '</ul>' +
+              (stepRows ? '<ol class="pay-steps">' + stepRows + '</ol>' : '') +
+            '</div>' +
+            '<button class="wga-btn wga-btn-primary wga-btn-block" style="margin-top:12px;" ' +
+              'type="button" id="pay-sent">' +
+              '<i class="fas fa-check" aria-hidden="true"></i> I have sent the payment</button>' +
+            '<button class="wga-btn wga-btn-ghost wga-btn-block" style="margin-top:8px;" ' +
+              'type="button" id="pay-back">Choose another method</button>';
+
+          wireCopyButtons(panel);
+
+          panel.querySelector('#pay-sent').addEventListener('click', function () {
+            markManualSent(reference);
+          });
+
+          panel.querySelector('#pay-back').addEventListener('click', function () {
+            renderMethods(course, lastMethods, panel);
+          });
+        }
+
+        function markManualSent(reference) {
+          var button = panel.querySelector('#pay-sent');
+          WGAUI.setBusy(button, true, 'Sending…');
+
+          WGA.post('/payments/manual/' + encodeURIComponent(reference) + '/mark-paid', {})
+            .then(function () { showManualSent(reference); })
+            .catch(function (error) {
+              WGAUI.setBusy(button, false);
+              // An order that was declined or that lapsed cannot be marked sent
+              // again, and the server explains which in its own words.
+              WGAUI.toast(error.message || 'We could not record that. Please try again.', 'error');
+            });
+        }
+
+        function showManualSent(reference) {
+          panel.innerHTML =
+            '<div class="pay-panel pay-panel-wait" role="status">' +
+              '<span class="pay-panel-title">' +
+                '<i class="fas fa-circle-check" aria-hidden="true"></i> Thank you</span>' +
+              '<p style="margin:0 0 8px;">We have recorded your reference and will check the ' +
+                'account. You will get an email either way — usually within 30 minutes.</p>' +
+              '<p style="margin:0;">Nothing is charged until we confirm it, and your enrolment ' +
+                'opens automatically when we do.</p>' +
+              '<p class="wga-hint" style="margin:9px 0 0;">Your reference: ' +
+                WGAUI.escapeHtml(reference) + '</p>' +
+            '</div>' +
+            '<a class="wga-btn wga-btn-ghost wga-btn-block" style="margin-top:12px;" ' +
+              'href="/student-dashboard.html#/courses">' +
+              '<i class="fas fa-arrow-right" aria-hidden="true"></i> Go to my courses</a>';
+        }
+
         Array.prototype.forEach.call(buttons, function (button) {
           button.addEventListener('click', function () {
             select(button);
@@ -1194,6 +1398,11 @@
 
         go.addEventListener('click', function () {
           if (!selected) return;
+
+          if (selected.kind === 'manual') {
+            startManual(selected);
+            return;
+          }
 
           if (selected.kind === 'mobile_money') {
             var number = (phone.value || '').trim();

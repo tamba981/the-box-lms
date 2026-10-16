@@ -78,7 +78,27 @@ const NOTIFICATION_TYPES = Object.freeze([
 
 const LIVE_SESSION_STATUSES = Object.freeze(['scheduled', 'live', 'ended', 'cancelled']);
 
-const PAYMENT_STATUSES = Object.freeze(['pending', 'paid', 'failed', 'refunded']);
+/**
+ * A payment's lifecycle.
+ *
+ * `awaiting_verification` is the manual flow's middle state: the student has said
+ * they sent the money and nobody has confirmed it yet. It is kept apart from
+ * `pending` because the two are waiting on different people — `pending` waits on
+ * the student to pay, `awaiting_verification` waits on the academy to check.
+ *
+ * A manual order that is confirmed ends at `paid`, rather than at a `verified`
+ * status of its own, so that the revenue report — which sums `status: 'paid'` —
+ * counts money that arrived offline without having to know how it arrived.
+ */
+const PAYMENT_STATUSES = Object.freeze([
+  'pending',
+  'awaiting_verification',
+  'paid',
+  'failed',
+  'rejected',
+  'expired',
+  'refunded',
+]);
 
 const TOKEN_TYPES = Object.freeze(['refresh', 'reset', 'verify']);
 

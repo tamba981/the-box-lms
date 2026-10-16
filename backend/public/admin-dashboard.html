@@ -965,6 +965,8 @@
             pendingCourses: [],
             certificates: [],
             payments: [],
+            manualOrders: [],
+            manualStats: null,
             enrollments: [],
             revenue: [],
             recent: { signups: [], enrollments: [] },
@@ -981,7 +983,7 @@
         async function loadAdminData() {
             // WGA.get already unwraps the { success, data } envelope and takes
             // its query string as `query`, not `params`.
-            const [stats, users, courses, pending, certificates, payments, enrollments, notifications] =
+            const [stats, users, courses, pending, certificates, payments, enrollments, notifications, manualOrders, manualStats] =
                 await Promise.all([
                     WGA.get('/admin/stats'),
                     WGA.get('/admin/users', { query: { limit: 50 } }),
@@ -990,7 +992,11 @@
                     WGA.get('/admin/certificates', { query: { limit: 50 } }),
                     WGA.get('/payments', { query: { limit: 50 } }),
                     WGA.get('/admin/enrollments', { query: { limit: 50 } }),
-                    WGA.get('/notifications', { query: { limit: 20 } })
+                    WGA.get('/notifications', { query: { limit: 20 } }),
+                    // Every manual order that is not yet settled, so the queue is
+                    // never hiding one behind a filter the operator forgot about.
+                    WGA.get('/admin/payments/manual', { query: { limit: 50 } }),
+                    WGA.get('/admin/payments/manual/stats')
                 ]);
 
             adminData.user = WGA.getUser();
@@ -1001,6 +1007,8 @@
             adminData.certificates = certificates.items || [];
             adminData.certificateCounts = certificates.counts || { issued: 0, revoked: 0, total: 0 };
             adminData.payments = payments.items || [];
+            adminData.manualOrders = manualOrders.items || [];
+            adminData.manualStats = manualStats || null;
             adminData.enrollments = enrollments.items || [];
             adminData.revenue = stats.revenue || [];
             adminData.recent = stats.recent || { signups: [], enrollments: [] };
@@ -1439,6 +1447,59 @@
             const revenue = adminData.revenue || [];
             const headline = revenueHeadline(revenue);
 
+            /**
+             * The manual queue, kept above the card table rather than behind a
+             * tab. These are the only rows on this screen that are waiting on a
+             * person, and a transfer nobody confirms is a student who paid and
+             * never got in — which is the one failure this page exists to prevent.
+             */
+            const manualOrders = adminData.manualOrders || [];
+            const manualStats = adminData.manualStats || { counts: {}, collectedLabel: '$0.00' };
+            const manualCounts = manualStats.counts || {};
+
+            const manualBadge = (status) => {
+                const map = {
+                    pending: ['inactive', 'Not sent yet'],
+                    awaiting_verification: ['pending', 'Payment received'],
+                    paid: ['active', 'Verified'],
+                    rejected: ['inactive', 'Rejected'],
+                    expired: ['inactive', 'Expired']
+                };
+                const pair = map[status] || ['inactive', status];
+                return `<span class="badge ${pair[0]}">${WGAUI.escapeHtml(pair[1])}</span>`;
+            };
+
+            const manualTable = manualOrders.length === 0
+                ? `<div class="table-container glass-premium" style="padding:26px;text-align:center;color:var(--text-light);">No manual orders. When a student chooses to pay by transfer, the order appears here for you to confirm.</div>`
+                : `<div class="table-container glass-premium">
+                    <table class="data-table">
+                        <thead><tr><th>Order</th><th>Student</th><th>Course</th><th>Amount</th><th>Sent</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${manualOrders.map((order) => `
+                                <tr>
+                                    <td style="font-family:monospace;font-size:12px;">${WGAUI.escapeHtml(order.orderId || '—')}${
+                                        order.paymentReference ? `<div style="font-size:11px;color:var(--text-light);">ref ${WGAUI.escapeHtml(order.paymentReference)}</div>` : ''
+                                    }</td>
+                                    <td>${WGAUI.escapeHtml(order.studentName || '—')}
+                                        <div style="font-size:11px;color:var(--text-light);">${WGAUI.escapeHtml(order.studentEmail || '')}</div>${
+                                        order.studentPhone ? `<div style="font-size:11px;color:var(--text-light);">${WGAUI.escapeHtml(order.studentPhone)}</div>` : ''
+                                    }</td>
+                                    <td>${WGAUI.escapeHtml(order.courseTitle || '—')}</td>
+                                    <td>${WGAUI.escapeHtml(order.amountLabel || '')}</td>
+                                    <td>${order.markedPaidAt ? WGAUI.formatDateTime(order.markedPaidAt) : '—'}</td>
+                                    <td>${manualBadge(order.status)}</td>
+                                    <td style="white-space:nowrap;">${
+                                        order.status === 'awaiting_verification' || order.status === 'pending'
+                                            ? `<button class="action-btn" onclick="verifyManualOrder('${order.orderId}', this)"><i class="fas fa-check"></i> Mark paid</button>
+                                               <button class="action-btn delete" onclick="rejectManualOrder('${order.orderId}', this)"><i class="fas fa-xmark"></i> Reject</button>`
+                                            : '—'
+                                    }</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>`;
+
             return `
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
                     <span style="font-size:24px;font-weight:700;">💳 Payments</span>
@@ -1447,7 +1508,14 @@
                 <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
                     <div class="stat-card glass-premium"><div class="stat-title">Revenue Collected</div><div class="stat-value" style="font-size:24px;">${WGAUI.escapeHtml(headline.value)}</div><div class="stat-change"${headline.mixed ? ' style="color:#b45309;"' : ''}>${WGAUI.escapeHtml(headline.note)}</div></div>
                     <div class="stat-card glass-premium"><div class="stat-title">Paid Transactions</div><div class="stat-value">${adminData.payments.length}</div><div class="stat-change">most recent first</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">Awaiting Verification</div><div class="stat-value">${manualCounts.awaitingVerification || 0}</div><div class="stat-change">${manualCounts.pending || 0} not sent yet</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">Collected Offline</div><div class="stat-value" style="font-size:24px;">${WGAUI.escapeHtml(manualStats.collectedLabel || '$0.00')}</div><div class="stat-change">${manualCounts.confirmed || 0} confirmed transfer${(manualCounts.confirmed || 0) === 1 ? '' : 's'}</div></div>
                 </div>
+                <h3 style="font-size:16px;font-weight:700;margin:26px 0 4px;">Manual transfers</h3>
+                <p style="font-size:13px;color:var(--text-light);margin:0 0 14px;">Check the account, then mark the order paid. That is what enrols the student and emails their receipt.</p>
+                ${manualTable}
+                <h3 style="font-size:16px;font-weight:700;margin:26px 0 4px;">Settled payments</h3>
+                <p style="font-size:13px;color:var(--text-light);margin:0 0 14px;">Everything that has been paid, including transfers confirmed above. This is the ledger, not the queue.</p>
                 <div class="table-container glass-premium">
                     <table class="data-table">
                         <thead><tr><th>Reference</th><th>Course</th><th>Amount</th><th>Paid</th><th>Status</th><th>Actions</th></tr></thead>
@@ -1924,6 +1992,66 @@
                 showToast('Certificate revoked.', 'success');
                 await refresh();
                 await loadPage('certificates');
+            });
+
+        /*
+         * Manual orders.
+         *
+         * Confirming does three things at once — it enrols the student, opens the
+         * course and emails the receipt — so the dialog says so before the button
+         * is pressed, rather than reporting it afterwards.
+         */
+        window.verifyManualOrder = (orderId, button) =>
+            withBusy(button, async () => {
+                if (!window.confirm(
+                    `Confirm payment for order ${orderId}?\n\n` +
+                    'This will:\n' +
+                    '  - enrol the student in the course\n' +
+                    '  - give them access straight away\n' +
+                    '  - email their receipt\n\n' +
+                    'Only do this once you have seen the money in the account.'
+                )) return;
+
+                try {
+                    await WGA.post(`/admin/payments/manual/${encodeURIComponent(orderId)}/verify`, {});
+                    showToast('Payment confirmed. The student is enrolled.', 'success');
+                } catch (error) {
+                    // The server tells "already confirmed" apart from a real
+                    // failure, and its message is more specific than anything
+                    // written here could be.
+                    showToast(error.message || 'We could not confirm that order.', 'error');
+                    return;
+                }
+
+                await refresh();
+                await loadPage('payments');
+            });
+
+        window.rejectManualOrder = (orderId, button) =>
+            withBusy(button, async () => {
+                const reason = window.prompt(
+                    `Why is order ${orderId} being rejected?\n\nThe student is shown this, so say something they can act on.`
+                );
+
+                if (reason === null) return;
+
+                if (!reason.trim()) {
+                    showToast('A reason is required — the student is shown it.', 'error');
+                    return;
+                }
+
+                try {
+                    await WGA.post(`/admin/payments/manual/${encodeURIComponent(orderId)}/reject`, {
+                        reason: reason.trim()
+                    });
+                    showToast('Order rejected. The student can start a new one.', 'success');
+                } catch (error) {
+                    showToast(error.message || 'We could not reject that order.', 'error');
+                    return;
+                }
+
+                await refresh();
+                await loadPage('payments');
             });
 
         window.refundPayment = (id, button) =>

@@ -13,6 +13,7 @@ const enrollmentService = require('../services/enrollmentService');
 const notifications = require('../services/notificationService');
 const certificateService = require('../services/certificateService');
 const tokenService = require('../services/tokenService');
+const paymentService = require('../services/paymentService');
 const email = require('../services/email');
 
 const config = require('../config/env');
@@ -38,6 +39,17 @@ const router = express.Router();
 router.use(authenticate, requireAdmin);
 
 const objectId = z.string().trim().regex(/^[a-f\d]{24}$/i, 'Invalid identifier');
+
+/** A manual order's reference, matched case-insensitively. */
+const orderRef = z
+  .string()
+  .trim()
+  .regex(/^WGA-\d{10,16}-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}$/i, 'That is not an order reference');
+
+/** Escape a user's search text so it cannot act as a regular expression. */
+function escapeRegex(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 const listQuery = z.object({
   status: z.string().trim().max(40).optional(),
@@ -548,6 +560,254 @@ router.post(
     return isNew
       ? created(res, { enrollment: enrollment.toJSONForStudent() }, 'Student enrolled.')
       : ok(res, { enrollment: enrollment.toJSONForStudent() }, 'The student was already enrolled.');
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * Manual payments — the offline queue a person works through
+ * ------------------------------------------------------------------ */
+
+const MANUAL_ORDER_ISSUE_STATUSES = ['pending', 'awaiting_verification'];
+
+/**
+ * Translate a requested status into a query.
+ *
+ * `expired` is not a stored value — an order lapses by passing its deadline, and
+ * this deployment has no scheduler to rewrite the field. So the filter asks for
+ * unpaid orders whose deadline has gone by, and the live statuses ask for the
+ * ones whose deadline has not. Doing it here rather than with a `setInterval`
+ * means the queue cannot show a lapsed order as actionable even if nothing has
+ * run in between.
+ */
+function manualOrderFilter({ status, courseId } = {}) {
+  const now = new Date();
+  const clauses = [{ provider: 'manual' }];
+  const stillLive = { $or: [{ expiresAt: null }, { expiresAt: { $gt: now } }] };
+
+  if (status === 'expired') {
+    clauses.push({ status: { $in: MANUAL_ORDER_ISSUE_STATUSES } });
+    clauses.push({ expiresAt: { $lte: now } });
+  } else if (MANUAL_ORDER_ISSUE_STATUSES.includes(status)) {
+    clauses.push({ status });
+    clauses.push(stillLive);
+  } else if (status) {
+    clauses.push({ status });
+  }
+
+  if (courseId) clauses.push({ course: courseId });
+
+  // Always an $and, including when there is only the one clause, so that the
+  // search below can append to it without having to guess which shape came back.
+  return { $and: clauses };
+}
+
+/** The counts across the top of the Payments screen. */
+router.get(
+  '/payments/manual/stats',
+  asyncHandler(async (req, res) => {
+    const now = new Date();
+
+    const rows = await Payment.aggregate([
+      { $match: { provider: 'manual' } },
+      {
+        $addFields: {
+          effectiveStatus: {
+            $cond: [
+              {
+                $and: [
+                  { $in: ['$status', MANUAL_ORDER_ISSUE_STATUSES] },
+                  { $ne: ['$expiresAt', null] },
+                  { $lte: ['$expiresAt', now] },
+                ],
+              },
+              'expired',
+              '$status',
+            ],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$effectiveStatus',
+          count: { $sum: 1 },
+          totalCents: { $sum: '$amountCents' },
+        },
+      },
+    ]);
+
+    const byStatus = Object.fromEntries(rows.map((row) => [row._id, row.count]));
+    const collected = rows
+      .filter((row) => row._id === 'paid')
+      .reduce((total, row) => total + row.totalCents, 0);
+
+    return ok(res, {
+      counts: {
+        pending: byStatus.pending || 0,
+        awaitingVerification: byStatus.awaiting_verification || 0,
+        confirmed: byStatus.paid || 0,
+        rejected: byStatus.rejected || 0,
+        expired: byStatus.expired || 0,
+        totalOrders: rows.reduce((total, row) => total + row.count, 0),
+      },
+      // Integer cents summed in Mongo, formatted once, never a float.
+      collectedCents: collected,
+      collectedLabel: formatCents(collected, 'usd'),
+      numbers: config.manualPayment.numbers,
+    });
+  })
+);
+
+/** The queue itself. */
+router.get(
+  '/payments/manual',
+  validate({
+    query: listQuery.extend({
+      courseId: objectId.optional(),
+      search: z.string().trim().max(120).optional(),
+    }),
+  }),
+  asyncHandler(async (req, res) => {
+    const { limit, page, skip } = parsePagination(req.valid.query);
+    const { status, courseId, search } = req.valid.query;
+
+    const filter = manualOrderFilter({ status, courseId });
+
+    if (search) {
+      const pattern = new RegExp(escapeRegex(search), 'i');
+
+      /**
+       * An email search has to resolve accounts first, because an order holds a
+       * reference to a student and not an address. Bounded at 50, so a short
+       * substring common to many addresses cannot quietly become a scan of every
+       * account on the platform.
+       */
+      const byEmail = /^WGA-/i.test(search)
+        ? []
+        : await User.find({ email: pattern }).select('_id').limit(50);
+
+      const or = [
+        { orderId: pattern },
+        { studentPhone: pattern },
+        { paymentReference: pattern },
+      ];
+
+      if (byEmail.length) or.push({ student: { $in: byEmail.map((user) => user._id) } });
+
+      filter.$and.push({ $or: or });
+    }
+
+    const [orders, total] = await Promise.all([
+      Payment.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      Payment.countDocuments(filter),
+    ]);
+
+    const [students, courses] = await Promise.all([
+      User.find({ _id: { $in: orders.map((order) => order.student) } }).select('firstName lastName email'),
+      Course.find({ _id: { $in: orders.map((order) => order.course) } }).select('title slug'),
+    ]);
+
+    const studentById = new Map(students.map((student) => [String(student._id), student]));
+    const courseById = new Map(courses.map((course) => [String(course._id), course]));
+
+    return ok(res, {
+      ...paginated(
+        orders.map((order) => {
+          const student = studentById.get(String(order.student));
+          const course = courseById.get(String(order.course));
+          return {
+            ...order.toJSONForOwner(),
+            courseTitle: course ? course.title : null,
+            studentName: student ? `${student.firstName || ''} ${student.lastName || ''}`.trim() : null,
+            studentEmail: student ? student.email : null,
+            studentPhone: order.studentPhone,
+            paidToNumber: order.paidToNumber,
+            paymentReference: order.paymentReference,
+            notes: order.notes,
+            markedPaidAt: order.markedPaidAt,
+            expiresAt: order.expiresAt,
+            createdAt: order.createdAt,
+          };
+        }),
+        total,
+        { page, limit }
+      ),
+    });
+  })
+);
+
+/**
+ * The money is in the account, so let the student in.
+ *
+ * Confirm is a POST rather than a PATCH because it is not idempotent in the
+ * sense that matters: it grants access. Pressing it twice is safe — the service
+ * returns early and the enrolment is not duplicated — but calling it once has a
+ * consequence a caller should have to intend.
+ */
+router.post(
+  '/payments/manual/:orderId/verify',
+  writeLimiter,
+  validate({
+    params: z.object({ orderId: orderRef }),
+    body: z.object({ notes: z.string().trim().max(2000).optional().nullable() }),
+  }),
+  asyncHandler(async (req, res) => {
+    const order = await paymentService.findManualOrder(req.valid.params.orderId);
+    if (!order) throw notFound('That order could not be found.', { code: 'ORDER_NOT_FOUND' });
+
+    const result = await paymentService.confirmManualOrder({
+      payment: order,
+      adminUser: req.user,
+      notes: req.valid.body.notes || null,
+    });
+
+    /**
+     * Anything other than a completed settlement is reported as a failure.
+     * Telling an administrator "confirmed" when the enrolment was not created
+     * would leave a student locked out of a course that has been paid for.
+     */
+    if (!result.handled) {
+      logger.error('manual order could not be confirmed', {
+        orderId: order.orderId,
+        reason: result.reason,
+      });
+      throw conflict(
+        `The order could not be completed (${result.reason}). The student may have been deleted, or the course removed.`,
+        { code: 'CONFIRM_FAILED' }
+      );
+    }
+
+    const fresh = await Payment.findById(order._id);
+
+    return ok(
+      res,
+      { order: fresh.toJSONForOwner() },
+      result.reason === 'already_fulfilled'
+        ? 'That order had already been confirmed. Nothing was changed.'
+        : 'Payment confirmed and the student enrolled.'
+    );
+  })
+);
+
+router.post(
+  '/payments/manual/:orderId/reject',
+  writeLimiter,
+  validate({
+    params: z.object({ orderId: orderRef }),
+    // A reason is required: the student is shown it, and "rejected" with no
+    // explanation generates a support message every time.
+    body: z.object({ reason: z.string().trim().min(3, 'Give a reason').max(500) }),
+  }),
+  asyncHandler(async (req, res) => {
+    const order = await paymentService.findManualOrder(req.valid.params.orderId);
+    if (!order) throw notFound('That order could not be found.', { code: 'ORDER_NOT_FOUND' });
+
+    const { payment } = await paymentService.rejectManualOrder({
+      payment: order,
+      adminUser: req.user,
+      reason: req.valid.body.reason,
+    });
+
+    return ok(res, { order: payment.toJSONForOwner() }, 'Order rejected.');
   })
 );
 

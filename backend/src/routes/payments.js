@@ -20,11 +20,25 @@ const { parsePagination, paginated } = require('../lib/pagination');
 
 const { authenticate, requireAdmin } = require('../middleware/auth');
 const { validate } = require('../middleware/validate');
+const { writeLimiter } = require('../middleware/rateLimit');
 const { paginationQuery } = require('../validators/auth');
 
 const router = express.Router();
 
 const objectId = z.string().trim().regex(/^[a-f\d]{24}$/i, 'Invalid identifier');
+
+/**
+ * The reference written on a manual order.
+ *
+ * Matched case-insensitively because a student reading `WGA-…-H9FU94` off a
+ * screen may type it in either case, and the service upper-cases before looking
+ * it up. Rejecting a correctly-formed reference over its casing would be a
+ * needless dead end.
+ */
+const orderRef = z
+  .string()
+  .trim()
+  .regex(/^WGA-\d{10,16}-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}$/i, 'That is not an order reference');
 
 /* ------------------------------------------------------------------ *
  * GET /api/v1/payments/config — what the front-end should expect
@@ -73,6 +87,20 @@ router.get(
           note: config.stripe.enabled
             ? null
             : 'Card payments need a gateway that supports Liberia.',
+        },
+        {
+          id: 'manual',
+          label: 'Mobile money transfer',
+          kind: 'manual',
+          currency: 'usd',
+          enabled: config.manualPayment.numbers.length > 0,
+          missing: config.manualPayment.numbers.length ? [] : ['PAYMENT_MOBILE_MONEY_NUMBERS'],
+          note: config.manualPayment.numbers.length
+            ? 'Send the amount to one of our numbers. We confirm it by hand, usually within 30 minutes.'
+            : 'Contact the academy to arrange payment.',
+          // Shown on the payment screen. Public like the footer numbers already
+          // are — these are where money is sent, not a secret.
+          numbers: config.manualPayment.numbers,
         },
         ...mobileMoneyService.listProviders(),
       ],
@@ -162,6 +190,130 @@ router.post(
       { payment: payment.toJSONForOwner(), instructions },
       'Approve the prompt on your phone to complete the payment.'
     );
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * Manual orders — paying by transfer, confirmed by hand
+ * ------------------------------------------------------------------ */
+
+/**
+ * Open an order for a paid course.
+ *
+ * The amount is read from the course, never from the request, so a caller
+ * cannot choose what to pay. What comes back is a reference and a set of
+ * numbers — nothing has been charged and nothing has been granted.
+ */
+router.post(
+  '/manual',
+  authenticate,
+  writeLimiter,
+  validate({
+    body: z.object({
+      courseId: objectId,
+      studentPhone: z.string().trim().max(30).optional().nullable(),
+    }),
+  }),
+  asyncHandler(async (req, res) => {
+    const course = await Course.findById(req.valid.body.courseId);
+    if (!course) throw notFound('That course could not be found.', { code: 'COURSE_NOT_FOUND' });
+
+    if (course.status !== 'published') {
+      throw notFound('That course is not open for enrollment.', { code: 'COURSE_NOT_PUBLISHED' });
+    }
+
+    // You cannot buy a course you already have access to.
+    const already = await Enrollment.findOne({
+      student: req.user._id,
+      course: course._id,
+      status: { $ne: 'cancelled' },
+    });
+
+    if (already) {
+      throw forbidden('You are already enrolled in this course.', { code: 'ALREADY_ENROLLED' });
+    }
+
+    const { payment, reused } = await paymentService.createManualOrder({
+      user: req.user,
+      course,
+      studentPhone: req.valid.body.studentPhone || null,
+    });
+
+    const payload = {
+      order: payment.toJSONForOwner({ courseTitle: course.title }),
+      instructions: paymentService.manualInstructions(),
+    };
+
+    // A second press within the window returns the same order rather than a
+    // second one, so the button is safe to double-tap on a slow connection.
+    return reused
+      ? ok(res, payload, 'You already have an order open for this course.')
+      : created(res, payload, 'Order created. Send the payment, then tell us it is done.');
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * POST /api/v1/payments/manual/:orderId/mark-paid
+ * ------------------------------------------------------------------ */
+
+/**
+ * "I have sent the payment."
+ *
+ * This is the student's word, not evidence of anything, so it moves the order
+ * into the queue a person works through rather than granting any access.
+ */
+router.post(
+  '/manual/:orderId/mark-paid',
+  authenticate,
+  writeLimiter,
+  validate({
+    params: z.object({ orderId: orderRef }),
+    body: z.object({
+      paidToNumber: z.string().trim().max(40).optional().nullable(),
+      paymentReference: z.string().trim().max(120).optional().nullable(),
+    }),
+  }),
+  asyncHandler(async (req, res) => {
+    const payment = await paymentService.findManualOrder(req.valid.params.orderId);
+    if (!payment) throw notFound('That order could not be found.', { code: 'ORDER_NOT_FOUND' });
+
+    if (String(payment.student) !== String(req.user._id)) {
+      throw forbidden('That order belongs to somebody else.', { code: 'NOT_YOUR_ORDER' });
+    }
+
+    const { payment: updated } = await paymentService.markManualOrderPaid({
+      payment,
+      paidToNumber: req.valid.body.paidToNumber || null,
+      paymentReference: req.valid.body.paymentReference || null,
+    });
+
+    return ok(
+      res,
+      { order: updated.toJSONForOwner() },
+      'Thank you. We will check and confirm your enrolment, usually within 30 minutes.'
+    );
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * GET /api/v1/payments/manual/:orderId
+ * ------------------------------------------------------------------ */
+
+/** So a student can see where their order has got to without asking. */
+router.get(
+  '/manual/:orderId',
+  authenticate,
+  validate({ params: z.object({ orderId: orderRef }) }),
+  asyncHandler(async (req, res) => {
+    const payment = await paymentService.findManualOrder(req.valid.params.orderId);
+    if (!payment) throw notFound('That order could not be found.', { code: 'ORDER_NOT_FOUND' });
+
+    const isOwner = String(payment.student) === String(req.user._id);
+    if (!isOwner && req.user.role !== 'admin') {
+      throw forbidden('That order belongs to somebody else.', { code: 'NOT_YOUR_ORDER' });
+    }
+
+    return ok(res, { order: payment.toJSONForOwner() });
   })
 );
 

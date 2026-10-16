@@ -15,7 +15,7 @@ const { baseOptions } = require('./common');
  * paymentService, is not available to Liberian businesses. A regional gateway
  * will need adding to this list as well as to the provider registry.
  */
-const PAYMENT_PROVIDERS = ['stripe', 'orange_money', 'lonestar_momo', 'admin'];
+const PAYMENT_PROVIDERS = ['stripe', 'orange_money', 'lonestar_momo', 'manual', 'admin'];
 
 /**
  * A record of money changing hands for a course.
@@ -54,6 +54,45 @@ const paymentSchema = new mongoose.Schema(
 
     idempotencyKey: { type: String, required: true, unique: true, index: true },
 
+    /*
+     * Manual, offline orders.
+     *
+     * `orderId` deliberately has no `default`. A unique index combined with
+     * `default: null` is a trap: a sparse index skips documents that do not have
+     * the field, but `null` is a value, so every card payment would be indexed
+     * as null and the second one would be rejected with a duplicate-key error.
+     * Leaving the field absent keeps it out of the index entirely. The same
+     * pattern on `providerReference` below is harmless only because that index is
+     * not unique.
+     */
+    orderId: { type: String, unique: true, sparse: true, trim: true },
+
+    /** When the student pressed "I have sent the payment". Not proof of anything. */
+    markedPaidAt: { type: Date, default: null },
+    /** Which of the academy's numbers they say they sent it to. */
+    paidToNumber: { type: String, trim: true, maxlength: 40, default: null },
+    /** Whatever reference the student's own receipt shows, if they gave one. */
+    paymentReference: { type: String, trim: true, maxlength: 120, default: null },
+    studentPhone: { type: String, trim: true, maxlength: 30, default: null },
+
+    /** Set when an administrator confirms the money arrived. */
+    verifiedAt: { type: Date, default: null },
+    verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+
+    rejectedAt: { type: Date, default: null },
+    rejectionReason: { type: String, trim: true, maxlength: 500, default: null },
+
+    /** Administrator-only notes about this order. Never shown to the student. */
+    notes: { type: String, trim: true, maxlength: 2000, default: null },
+
+    /**
+     * When an unpaid order stops being worth chasing. Expiry is evaluated when
+     * an order is read rather than by a scheduled job — this deployment is a
+     * single process with no scheduler, and adding one to flip a status flag
+     * would be a moving part that can silently stop.
+     */
+    expiresAt: { type: Date, default: null },
+
     /** Populated once the webhook confirms payment and access is granted. */
     enrollment: { type: mongoose.Schema.Types.ObjectId, ref: 'Enrollment', default: null },
     paidAt: { type: Date, default: null },
@@ -65,17 +104,37 @@ const paymentSchema = new mongoose.Schema(
 
 paymentSchema.index({ student: 1, createdAt: -1 });
 paymentSchema.index({ course: 1, status: 1 });
+/** The administrator's queue: manual orders waiting on a person. */
+paymentSchema.index({ provider: 1, status: 1, createdAt: -1 });
+
+/**
+ * An unpaid order past its deadline.
+ *
+ * Computed rather than stored so that reading the queue cannot show an order as
+ * live when it has lapsed, and so that no scheduled job has to exist for the
+ * rule to hold. A paid order never expires, whatever its timestamp says.
+ */
+paymentSchema.methods.isExpired = function isExpired(now = Date.now()) {
+  if (this.status !== 'pending' && this.status !== 'awaiting_verification') return false;
+  return Boolean(this.expiresAt) && this.expiresAt.getTime() <= now;
+};
 
 paymentSchema.methods.toJSONForOwner = function toJSONForOwner(extra = {}) {
   return {
     id: String(this._id),
+    orderId: this.orderId || null,
     courseId: String(this.course),
     amountCents: this.amountCents,
     currency: this.currency,
     amountLabel: formatCents(this.amountCents, this.currency),
-    status: this.status,
+    status: this.isExpired() ? 'expired' : this.status,
+    method: this.method,
     provider: this.provider,
     checkoutUrl: this.status === 'pending' ? this.checkoutUrl : null,
+    markedPaidAt: this.markedPaidAt,
+    verifiedAt: this.verifiedAt,
+    rejectionReason: this.status === 'rejected' ? this.rejectionReason : null,
+    expiresAt: this.expiresAt,
     paidAt: this.paidAt,
     refundedAt: this.refundedAt,
     createdAt: this.createdAt,

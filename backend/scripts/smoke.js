@@ -1307,6 +1307,335 @@ async function testLearningLoop() {
 }
 
 /**
+ * Manual payments: paying by transfer, confirmed by hand.
+ *
+ * This is the only route to a paid course while no gateway is configured for a
+ * business registered in Liberia, so these are the checks standing between a
+ * student who has sent money and a student who cannot get into the course they
+ * paid for. The two failure modes worth guarding are the ones that cost real
+ * money: confirming an order twice, and granting access without a confirmation.
+ */
+async function testManualPayments() {
+  const Course = require('../src/models/Course');
+  const Enrollment = require('../src/models/Enrollment');
+  const Payment = require('../src/models/Payment');
+  const config = require('../src/config/env');
+
+  const adminEmail = `smoke-manual-admin-${runId}@example.com`;
+  const buyerEmail = `smoke-manual-buyer-${runId}@example.com`;
+  const otherEmail = `smoke-manual-other-${runId}@example.com`;
+  createdEmails.push(adminEmail, buyerEmail, otherEmail);
+
+  let adminToken = null;
+  let buyerToken = null;
+  let otherToken = null;
+  let buyerId = null;
+  let otherId = null;
+  let paidCourse = null;
+  let secondCourse = null;
+  let freeCourse = null;
+  let order = null;
+
+  await check('a manual-payment administrator and two students are provisioned', async () => {
+    const instructor = await User.create({
+      firstName: 'Manual',
+      lastName: 'Instructor',
+      email: `smoke-manual-instructor-${runId}@example.com`,
+      password: PASSWORD,
+      role: 'instructor',
+      emailVerified: true,
+    });
+    createdEmails.push(instructor.email);
+
+    await User.create({
+      firstName: 'Manual',
+      lastName: 'Admin',
+      email: adminEmail,
+      password: PASSWORD,
+      role: 'admin',
+      emailVerified: true,
+    });
+    await User.create({
+      firstName: 'Manual',
+      lastName: 'Buyer',
+      email: buyerEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+    await User.create({
+      firstName: 'Manual',
+      lastName: 'Other',
+      email: otherEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+
+    const makeCourse = (slug, priceCents, title) =>
+      Course.create({
+        title,
+        slug: `${slug}-${runId}`,
+        instructor: instructor._id,
+        instructorName: 'Manual Instructor',
+        priceCents,
+        currency: 'usd',
+        status: 'published',
+        publishedAt: new Date(),
+      });
+
+    paidCourse = await makeCourse('manual-paid', 2999, 'A course bought by transfer');
+    secondCourse = await makeCourse('manual-paid-2', 1999, 'A second course bought by transfer');
+    freeCourse = await makeCourse('manual-free', 0, 'A free course that needs no order');
+
+    /**
+     * The order payload carries a course id but not the student's, so the id
+     * used by the assertions below is taken from the sign-in response rather
+     * than guessed at from the order.
+     */
+    const signIn = async (email) => {
+      const { json } = await request('POST', '/api/v1/auth/login', { body: { email, password: PASSWORD } });
+      return { token: json.data.accessToken, id: json.data.user.id };
+    };
+
+    const adminSession = await signIn(adminEmail);
+    const buyerSession = await signIn(buyerEmail);
+    const otherSession = await signIn(otherEmail);
+
+    adminToken = adminSession.token;
+    buyerToken = buyerSession.token;
+    otherToken = otherSession.token;
+    buyerId = buyerSession.id;
+    otherId = otherSession.id;
+
+    assert(Boolean(adminToken && buyerToken && otherToken && buyerId && otherId), 'three sessions');
+  });
+
+  await check('the manual method is offered, with the numbers to send to', async () => {
+    const { status, json } = await request('GET', '/api/v1/payments/methods');
+
+    assertEqual(status, 200, 'status');
+
+    const manual = (json.data.methods || []).find((method) => method.id === 'manual');
+    assert(Boolean(manual), 'a manual method is listed');
+    assertEqual(manual.enabled, true, 'and is usable without any gateway keyed in');
+    assertEqual(manual.numbers.length, config.manualPayment.numbers.length, 'numbers published');
+  });
+
+  await check('a student can open an order for a paid course', async () => {
+    const { status, json } = await request('POST', '/api/v1/payments/manual', {
+      token: buyerToken,
+      body: { courseId: String(paidCourse._id) },
+    });
+
+    assertEqual(status, 201, 'status');
+    order = json.data.order;
+
+    // The shape is documented, because a student reads this out over the phone.
+    assert(/^WGA-\d{10,16}-[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{6}$/.test(order.orderId), 'order reference');
+    assertEqual(order.status, 'pending', 'status starts pending');
+    assertEqual(json.data.instructions.numbers.length, config.manualPayment.numbers.length, 'instructions carry the numbers');
+  });
+
+  await check('the amount on an order comes from the course, never from the request', async () => {
+    assertEqual(order.amountCents, paidCourse.priceCents, 'amount');
+
+    // A caller who tries to name their own price must not be believed.
+    const { json } = await request('POST', '/api/v1/payments/manual', {
+      token: buyerToken,
+      body: { courseId: String(paidCourse._id), amountCents: 1 },
+    });
+
+    assertEqual(json.data.order.amountCents, paidCourse.priceCents, 'amount despite being told otherwise');
+  });
+
+  await check('pressing the button twice returns the same order, not a second one', async () => {
+    const { status, json } = await request('POST', '/api/v1/payments/manual', {
+      token: buyerToken,
+      body: { courseId: String(paidCourse._id) },
+    });
+
+    assertEqual(status, 200, 'the second request is not a creation');
+    assertEqual(json.data.order.orderId, order.orderId, 'same order reference');
+
+    // The point of the idempotency key: a double tap on a slow connection must
+    // not leave two orders for one purchase waiting in the administrator's queue.
+    const count = await Payment.countDocuments({ student: buyerId, course: paidCourse._id });
+    assertEqual(count, 1, 'exactly one order exists');
+  });
+
+  await check('a free course cannot be bought', async () => {
+    const { status, json } = await request('POST', '/api/v1/payments/manual', {
+      token: buyerToken,
+      body: { courseId: String(freeCourse._id) },
+    });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'COURSE_IS_FREE', 'code');
+  });
+
+  await check('the student can say they have sent the payment', async () => {
+    const { status, json } = await request('POST', `/api/v1/payments/manual/${order.orderId}/mark-paid`, {
+      token: buyerToken,
+      body: { paymentReference: 'SMOKE-REF-1' },
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.order.status, 'awaiting_verification', 'status moves to the queue');
+  });
+
+  await check('saying so does not grant access on its own', async () => {
+    const enrollment = await Enrollment.findOne({ student: buyerId, course: paidCourse._id });
+    const stillPending = await Payment.findOne({ orderId: order.orderId });
+
+    assertEqual(stillPending.status, 'awaiting_verification', 'the order is not paid yet');
+    // A claim is not evidence. Only an administrator's confirmation enrols.
+    assert(!enrollment, 'no enrolment exists yet');
+  });
+
+  await check('another student cannot mark somebody else\'s order as sent', async () => {
+    const { status } = await request('POST', `/api/v1/payments/manual/${order.orderId}/mark-paid`, {
+      token: otherToken,
+      body: {},
+    });
+
+    assertEqual(status, 403, 'status');
+  });
+
+  await check('another student cannot read somebody else\'s order', async () => {
+    const { status } = await request('GET', `/api/v1/payments/manual/${order.orderId}`, { token: otherToken });
+    assertEqual(status, 403, 'status');
+  });
+
+  await check('the order waits in the administrator queue, with the student named', async () => {
+    const { status, json } = await request('GET', '/api/v1/admin/payments/manual?status=awaiting_verification', {
+      token: adminToken,
+    });
+
+    assertEqual(status, 200, 'status');
+
+    const row = (json.data.items || []).find((item) => item.orderId === order.orderId);
+    assert(Boolean(row), 'the order is listed');
+    assertEqual(row.studentEmail, buyerEmail, 'the student email is on the row');
+    assertEqual(row.amountLabel, '$29.99', 'the amount is labelled, not raw cents');
+  });
+
+  await check('the queue statistics count it as awaiting verification', async () => {
+    const { status, json } = await request('GET', '/api/v1/admin/payments/manual/stats', { token: adminToken });
+
+    assertEqual(status, 200, 'status');
+    assert(json.data.counts.awaitingVerification >= 1, 'awaiting count');
+    // Money is summed in integer cents and formatted once, never as a float.
+    assert(Number.isInteger(json.data.collectedCents), 'collected total is an integer number of cents');
+  });
+
+  await check('a student cannot read the administrator queue', async () => {
+    const { status } = await request('GET', '/api/v1/admin/payments/manual', { token: buyerToken });
+    assertEqual(status, 403, 'status');
+  });
+
+  await check('a student cannot confirm their own order', async () => {
+    const { status } = await request('POST', `/api/v1/admin/payments/manual/${order.orderId}/verify`, {
+      token: buyerToken,
+      body: {},
+    });
+
+    assertEqual(status, 403, 'status');
+  });
+
+  await check('an administrator can confirm the payment', async () => {
+    const { status, json } = await request('POST', `/api/v1/admin/payments/manual/${order.orderId}/verify`, {
+      token: adminToken,
+      body: {},
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.order.status, 'paid', 'the order is settled');
+  });
+
+  await check('confirming enrols the student and records where the money came from', async () => {
+    const enrollment = await Enrollment.findOne({ student: buyerId, course: paidCourse._id });
+    assert(Boolean(enrollment), 'an enrolment exists');
+    assertEqual(enrollment.source, 'manual', 'source');
+  });
+
+  await check('the confirmed order is the payment record, with its reference', async () => {
+    const payment = await Payment.findOne({ orderId: order.orderId });
+
+    assertEqual(payment.status, 'paid', 'status');
+    assertEqual(payment.amountCents, paidCourse.priceCents, 'amount');
+    assertEqual(payment.provider, 'manual', 'provider');
+    assert(Boolean(payment.verifiedBy), 'the administrator who confirmed it is recorded');
+    assert(Boolean(payment.verifiedAt), 'and when');
+  });
+
+  await check('confirming the same order twice does not enrol twice', async () => {
+    const { status } = await request('POST', `/api/v1/admin/payments/manual/${order.orderId}/verify`, {
+      token: adminToken,
+      body: {},
+    });
+
+    assertEqual(status, 200, 'the repeat is answered, not errored');
+    const count = await Enrollment.countDocuments({ course: paidCourse._id });
+    assertEqual(count, 1, 'exactly one enrolment');
+  });
+
+  await check('a student who is already enrolled cannot open a second order', async () => {
+    const { status, json } = await request('POST', '/api/v1/payments/manual', {
+      token: buyerToken,
+      body: { courseId: String(paidCourse._id) },
+    });
+
+    assertEqual(status, 403, 'status');
+    assertEqual(json.code, 'ALREADY_ENROLLED', 'code');
+  });
+
+  await check('an administrator can reject an order, and rejection needs a reason', async () => {
+    const opened = await request('POST', '/api/v1/payments/manual', {
+      token: otherToken,
+      body: { courseId: String(secondCourse._id) },
+    });
+    const reference = opened.json.data.order.orderId;
+
+    await request('POST', `/api/v1/payments/manual/${reference}/mark-paid`, { token: otherToken, body: {} });
+
+    const noReason = await request('POST', `/api/v1/admin/payments/manual/${reference}/reject`, {
+      token: adminToken,
+      body: {},
+    });
+    assertEqual(noReason.status, 400, 'a rejection with no reason is refused');
+
+    const { status, json } = await request('POST', `/api/v1/admin/payments/manual/${reference}/reject`, {
+      token: adminToken,
+      body: { reason: 'No matching transfer was found.' },
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.order.status, 'rejected', 'status');
+    assertEqual(json.data.order.rejectionReason, 'No matching transfer was found.', 'the student is told why');
+  });
+
+  await check('a rejected order grants nothing and cannot be marked sent again', async () => {
+    const payment = await Payment.findOne({ status: 'rejected', course: secondCourse._id });
+    const enrollment = await Enrollment.findOne({ student: otherId, course: secondCourse._id });
+
+    assert(!enrollment, 'no enrolment');
+
+    const { status } = await request('POST', `/api/v1/payments/manual/${payment.orderId}/mark-paid`, {
+      token: otherToken,
+      body: {},
+    });
+
+    assertEqual(status, 400, 'marking a rejected order sent is refused');
+  });
+
+  await check('a malformed order reference is refused before any lookup', async () => {
+    const { status } = await request('GET', '/api/v1/payments/manual/WGA-not-a-reference', { token: buyerToken });
+    assertEqual(status, 400, 'status');
+  });
+}
+
+/**
  * Community and messaging, exercised as two different students so that the
  * isolation between them is actually tested.
  */
@@ -2212,7 +2541,10 @@ async function testMobileMoney() {
     assertEqual(status, 200, 'status');
 
     const ids = json.data.methods.map((m) => m.id).sort();
-    assertEqual(ids.join(','), 'card,lonestar_momo,orange_money', 'every known method is listed');
+    // `manual` is listed alongside the gateways because it is a real way to pay
+    // here: it needs no provider key, only the numbers to send to, which is why
+    // it is the one method that reports itself usable on this deployment.
+    assertEqual(ids.join(','), 'card,lonestar_momo,manual,orange_money', 'every known method is listed');
 
     json.data.methods.forEach((method) => {
       assertEqual(typeof method.enabled, 'boolean', `${method.id} reports whether it is usable`);
@@ -3508,6 +3840,9 @@ async function main() {
 
     process.stdout.write('\nNewsletter and contact\n');
     await testNewsletterAndContact();
+
+    process.stdout.write('\nManual payments\n');
+    await testManualPayments();
 
     process.stdout.write('\nCommunity, messaging and sessions\n');
     await testCommunityAndMessaging();

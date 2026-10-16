@@ -282,11 +282,17 @@ function certificateEmail({ user, certificate }) {
 
 function paymentReceiptEmail({ user, course, payment, nextUrl }) {
   const amount = formatCents(payment.amountCents, payment.currency);
+  /**
+   * A manual order has a reference the student was told to write on their
+   * payment, and that is the number they will quote back to us. Showing the
+   * database id here instead would be a number they have never seen.
+   */
+  const reference = payment.orderId || payment.id;
   const text = [
     `Hello ${user.firstName || 'there'},`,
     '',
     `Payment received: ${amount} for "${course.title}".`,
-    `Reference: ${payment.id}`,
+    `Reference: ${reference}`,
     '',
     `${config.publicBaseUrl}${nextUrl}`,
   ].join('\n');
@@ -299,7 +305,7 @@ function paymentReceiptEmail({ user, course, payment, nextUrl }) {
       heading: 'Payment received',
       bodyHtml: `<p style="margin:0 0 12px;">Hello ${firstNameOf(user)},</p>
         <p style="margin:0 0 12px;">We received <strong>${escapeHtml(amount)}</strong> for <strong>${escapeHtml(course.title)}</strong>.</p>
-        <p style="margin:0;font-size:13px;color:#8792a2;">Reference ${escapeHtml(String(payment.id))}</p>`,
+        <p style="margin:0;font-size:13px;color:#8792a2;">Reference ${escapeHtml(String(reference))}</p>`,
       ctaText: 'Go to my course',
       ctaUrl: `${config.publicBaseUrl}${nextUrl}`,
     }),
