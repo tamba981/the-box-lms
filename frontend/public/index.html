@@ -175,12 +175,15 @@
     }
 
     /*
-     * Opt-in surfaces for elements that are not covered by the grouped rule
-     * above. Neither is applied to this page today: the <header> already
-     * carries the same wash and blur inline, and putting .glass-modal on the
-     * payment modal would mean editing modal markup, which is out of scope for
-     * this change. They exist so the dashboards - which do not load this
-     * stylesheet yet - have something to adopt instead of a fifth copy.
+     * Reserved for future dashboard adoption.
+     *
+     * Neither class is applied to this page. The <header> already carries the
+     * same wash and blur inline, and the payment modal's .modal-content already
+     * has its own blur(30px) - putting these on either would redeclare a surface
+     * that already works, which is the mistake this change exists to avoid. They
+     * are here so admin-dashboard, instructor-dashboard, student-dashboard and
+     * login, each of which hand-rolls its own copy of the same surface, have
+     * something to adopt rather than being copied a fifth time.
      */
     .glass-nav {
       background: rgba(255, 255, 255, 0.75);
@@ -558,9 +561,10 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .loading-block { animation: none; }
-      /* Everything below is decoration. With the preference set the surfaces
-         stay put on hover, the figures are written straight to their final
-         values rather than counted up, and revealed content is simply present. */
+      /* The preference is about movement, not about information. Every figure on
+         the page still appears - the cost of this block is the count-up, the
+         fade and the lift, and nothing here hides a number or withholds
+         content. */
       .glass, .glass-card, .stat-card, .category-card, .tier-card,
       .course-card, .feature-card, .partner-card, .search-filters-enhanced,
       .trending-card { transition: none; }
@@ -672,8 +676,17 @@
     .category-icon { width:60px; height:60px; background:rgba(26,86,219,0.10); border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; color:var(--gold); font-size:24px; }
     body.dark-mode .category-icon { background:rgba(255,255,255,0.06); }
 
-    .certificate-tiers { padding:60px 0; background:var(--bg-light); }
-    body.dark-mode .certificate-tiers { background:#0f172a; }
+    /*
+     * This rule named .certificate-tiers, which no page's markup uses, while the
+     * section it was written for carries class="tiers-section" and had no rule at
+     * all - so the pair had come apart and the tier cards sat on the body.
+     * Merging the selector restores the 60px padding it was always meant to have.
+     * That padding is not incidental to the gradient: a background on a section
+     * with no padding starts and ends flush against the heading and the last
+     * card, which looks like a mistake rather than a surface.
+     */
+    .certificate-tiers, .tiers-section { padding:60px 0; background:linear-gradient(135deg, var(--bg-light) 0%, #eef4ff 100%); }
+    body.dark-mode .certificate-tiers, body.dark-mode .tiers-section { background:linear-gradient(135deg, var(--dark-bg) 0%, #1a2744 100%); }
     .tiers-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:25px; margin-top:40px; }
     .tier-card { overflow:hidden; transition:0.3s; }
     .tier-card:hover { transform:translateY(-5px); border-color: var(--gold); }
@@ -691,8 +704,17 @@
     .tier-feature i { color:var(--gold); margin-right:10px; }
     .tier-actions { padding:0 20px 20px; text-align:center; }
 
-    .courses { padding:80px 0; background:var(--bg-light); }
-    body.dark-mode .courses { background:#0f172a; }
+    /*
+     * Two .courses sections sit back to back (categories, then the course grid),
+     * so a straight top-to-bottom wash on each would put the dark end of the
+     * first against the light start of the second and draw a seam across the
+     * page. Each one therefore returns to the page colour by its own end: light,
+     * wash, light, twice, with nothing to see at the join. Same reason as .stats
+     * and .explore-section - the cards are glass, and glass needs something
+     * behind it to blur.
+     */
+    .courses { padding:80px 0; background:linear-gradient(180deg, var(--bg-light) 0%, #e9f1fd 50%, var(--bg-light) 100%); }
+    body.dark-mode .courses { background:linear-gradient(180deg, var(--dark-bg) 0%, #111e3a 50%, var(--dark-bg) 100%); }
     .section-header { text-align:center; margin-bottom:50px; }
     .section-title { font-size:36px; font-weight:800; margin-bottom:15px; color:var(--text); }
     body.dark-mode .section-title { color:var(--dark-text); }
@@ -918,8 +940,12 @@
 
     /* Newsletter signup, above the footer. Reuses .glass-card for the surface so
        it matches every other card on the page, and the existing tokens for
-       colour so both themes work without a second set of rules. */
-    .newsletter { padding:44px 0; }
+       colour so both themes work without a second set of rules. The wash is here
+       for the same reason as the other sections. In the dark theme it finishes on
+       --dark-bg, which is what the footer behind it is painted with, so the two
+       meet without an edge. */
+    .newsletter { padding:44px 0; background:linear-gradient(180deg, #f8fafc 0%, #eef4ff 100%); }
+    body.dark-mode .newsletter { background:linear-gradient(180deg, #141f3a 0%, var(--dark-bg) 100%); }
     .newsletter-card { max-width:620px; margin:0 auto; text-align:center; padding:28px 24px; }
     .newsletter-title { font-size:1.5rem; margin-bottom:6px; }
     .newsletter-text { color:var(--text-light); margin-bottom:18px; }
@@ -1803,6 +1829,11 @@
             ? courses.slice(0, 6).map((course, i) => landingTrendingCard(course, i + 1)).join('')
             : '<p style="color:var(--text-light);">Nothing to show yet.</p>';
         }
+
+        // Now that the catalogue cards exist, they can be faded in too. Called
+        // here rather than beside the static cards because at that point these
+        // three grids were still empty.
+        applyCardFadeIn();
       } catch (error) {
         // Leave the em dashes in place and say why, rather than inventing numbers.
         const grid = document.getElementById('courses-grid');
@@ -1834,15 +1865,29 @@
       navDashboard.textContent = 'My dashboard';
     }
 
-    loadLandingData();
+    // ---- Fade-in for cards -------------------------------------------------
+    // Called twice: once here for the cards already in the markup, and again from
+    // loadLandingData() once it has rendered the course, category and trending
+    // cards. The single call that used to sit here ran before the request had
+    // returned, so it matched the static cards and only those: the cards built
+    // from the catalogue have never faded in at all.
+    const FADE_IN_SELECTOR = '.trending-card, .feature-card, .course-card, .tier-card, .category-card, .partner-card';
 
-    // ---- Fade-in for cards ----
-    if (!reduceMotion.matches) {
-      document.querySelectorAll('.trending-card, .feature-card, .course-card, .tier-card, .category-card, .partner-card').forEach((el, i) => {
+    function applyCardFadeIn() {
+      // The preference is about movement, so the cards are simply already there.
+      if (reduceMotion.matches) return;
+      document.querySelectorAll(FADE_IN_SELECTOR).forEach((el, i) => {
+        // A second pass would restart the cards that have already played, which
+        // reads as the whole page twitching.
+        if (el.dataset.fadeInDone) return;
+        el.dataset.fadeInDone = '1';
         el.style.opacity = '0';
         el.style.animation = `fadeInUp 0.6s ease ${i * 0.06}s forwards`;
       });
     }
+
+    loadLandingData();
+    applyCardFadeIn();
 
     // ---- Scroll reveal ---------------------------------------------------
     // A second observer, deliberately: the stats observer above watches four
