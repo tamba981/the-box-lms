@@ -3,6 +3,7 @@
 const Certificate = require('../models/Certificate');
 const Counter = require('../models/Counter');
 const QuizAttempt = require('../models/QuizAttempt');
+const { renderCertificate, buildVerificationUrl } = require('./certificateRenderer');
 const logger = require('../lib/logger');
 
 /**
@@ -117,6 +118,17 @@ async function issueFor(enrollment, course, student) {
     enrollment.certificate = certificate._id;
     await enrollment.save();
 
+    /**
+     * The printable document.
+     *
+     * It is generated here, as part of issuing, but it is never allowed to fail
+     * the issuance: a student who finished the course has earned the credential
+     * whatever happens to the renderer, and a certificate record without its
+     * PDF can be re-rendered later. A 500 in the completion handler would take
+     * the enrolment down with it.
+     */
+    await attachRenderedPdf(certificate);
+
     logger.info('certificate issued', {
       certificateNumber: certificate.certificateNumber,
       studentId: String(student._id),
@@ -146,4 +158,38 @@ async function revoke(certificateId, reason) {
   );
 }
 
-module.exports = { issueFor, revoke, nextCertificateNumber, quizGradeFor, refreshGrade };
+/**
+ * Render the PDF for a certificate and store it on the document.
+ *
+ * Deliberately swallowing every error: see the call site.
+ */
+async function attachRenderedPdf(certificate) {
+  try {
+    const { buffer } = await renderCertificate({
+      studentName: certificate.studentName,
+      courseName: certificate.courseTitle,
+      certificateNumber: certificate.certificateNumber,
+      credentialType: certificate.credential || 'certificate',
+      issuedAt: certificate.issueDate,
+      // The QR points at the same pretty URL the emails use, so a scanned code
+      // and an emailed link arrive at the same place.
+      verificationUrl: buildVerificationUrl(certificate.verificationCode),
+    });
+
+    await Certificate.updateOne(
+      { _id: certificate._id },
+      { $set: { pdfBase64: buffer.toString('base64'), pdfGeneratedAt: new Date() } }
+    );
+
+    return true;
+  } catch (error) {
+    logger.error('certificate PDF render failed', {
+      certificateNumber: certificate.certificateNumber,
+      error,
+    });
+    return false;
+  }
+}
+
+module.exports = {
+  attachRenderedPdf, issueFor, revoke, nextCertificateNumber, quizGradeFor, refreshGrade };

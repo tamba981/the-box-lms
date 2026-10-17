@@ -37,6 +37,10 @@ npm-debug.log*
 coverage/
 *.tmp
 
+# Scratch output from the certificate layout loop (`npm run certificate:sample`).
+# Test PDFs are for looking at, not for keeping.
+backend/temp/
+
 # The static pages copied beside the app. scripts/stage-pages.js refreshes them
 # from frontend/public on every install, and the copies are committed as well.
 #

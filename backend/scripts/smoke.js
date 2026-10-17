@@ -2119,6 +2119,323 @@ async function testAvatars() {
   });
 }
 
+/**
+ * The printable certificate.
+ *
+ * A PDF is generated for every certificate at issue time, from one of two
+ * template sheets. The tests here are about the things that would actually hurt
+ * a graduate: a document that will not open, a document with the wrong shape, a
+ * document anyone can download, or a document a stranger can download.
+ */
+async function testCertificateDocuments() {
+  const Course = require('../src/models/Course');
+  const Enrollment = require('../src/models/Enrollment');
+  const Certificate = require('../src/models/Certificate');
+  const certificateService = require('../src/services/certificateService');
+  const { renderCertificate, PAGE } = require('../src/services/certificateRenderer');
+
+  const ownerEmail = `smoke-certdoc-owner-${runId}@example.com`;
+  const strangerEmail = `smoke-certdoc-stranger-${runId}@example.com`;
+  createdEmails.push(ownerEmail, strangerEmail);
+
+  let ownerToken = null;
+  let strangerToken = null;
+  let owner = null;
+  let certificate = null;
+
+  await check('a graduate and a stranger are provisioned for the document tests', async () => {
+    owner = await User.create({
+      firstName: 'Document',
+      lastName: 'Owner',
+      email: ownerEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+
+    await User.create({
+      firstName: 'Document',
+      lastName: 'Stranger',
+      email: strangerEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+
+    const instructor = await User.create({
+      firstName: 'Document',
+      lastName: 'Instructor',
+      email: `smoke-certdoc-instructor-${runId}@example.com`,
+      password: PASSWORD,
+      role: 'instructor',
+      emailVerified: true,
+    });
+    createdEmails.push(instructor.email);
+
+    const course = await Course.create({
+      title: `A course with a printable certificate ${runId}`,
+      slug: `certdoc-${runId}`,
+      instructor: instructor._id,
+      instructorName: 'Document Instructor',
+      priceCents: 0,
+      currency: 'usd',
+      status: 'published',
+      publishedAt: new Date(),
+      credential: 'diploma',
+    });
+
+    const enrollment = await Enrollment.create({
+      student: owner._id,
+      course: course._id,
+      status: 'active',
+      completedAt: new Date(),
+      hoursSpent: 9,
+    });
+
+    certificate = await certificateService.issueFor(enrollment, course, owner);
+    assert(certificate, 'the certificate was not issued');
+
+    const signIn = async (email) => {
+      const { json } = await request('POST', '/api/v1/auth/login', { body: { email, password: PASSWORD } });
+      return json.data.accessToken;
+    };
+
+    ownerToken = await signIn(ownerEmail);
+    strangerToken = await signIn(strangerEmail);
+  });
+
+  await check('issuing a certificate renders a PDF and stores it', async () => {
+    const stored = await Certificate.findById(certificate._id).select('+pdfBase64');
+
+    assert(stored.pdfBase64, 'the PDF must be stored on the certificate');
+    assert(stored.pdfGeneratedAt instanceof Date, 'the render time must be recorded');
+
+    const bytes = Buffer.from(stored.pdfBase64, 'base64');
+    assertEqual(bytes.subarray(0, 5).toString('latin1'), '%PDF-', 'the document must be a PDF');
+  });
+
+  await check('the rendered PDF is A4 landscape', async () => {
+    // The document is loaded back rather than pattern-matched: pdf-lib writes
+    // the page dictionary into a compressed object stream, so the MediaBox is
+    // not there to find as plain text. Reading it through a parser is also the
+    // stronger assertion — it proves the file is a valid PDF, not just bytes
+    // that contain the right characters.
+    const { PDFDocument } = require('pdf-lib');
+    const stored = await Certificate.findById(certificate._id).select('+pdfBase64');
+    const bytes = Buffer.from(stored.pdfBase64, 'base64');
+
+    const document = await PDFDocument.load(bytes, { ignoreEncryption: true });
+    const pages = document.getPages();
+
+    assertEqual(pages.length, 1, 'a certificate is a single sheet');
+
+    const { width, height } = pages[0].getSize();
+
+    assertEqual(Math.round(width), PAGE.width, 'page width in points');
+    assertEqual(Math.round(height), PAGE.height, 'page height in points');
+    assert(width > height, 'the sheet must be landscape');
+  });
+
+  await check('both credentials render without error', async () => {
+    for (const credentialType of ['certificate', 'diploma']) {
+      const { buffer, measurements } = await renderCertificate({
+        studentName: 'Test Graduate',
+        courseName: 'A course that has to fit on one line',
+        certificateNumber: 'WGA-TEST-000001',
+        credentialType,
+        issuedAt: new Date(),
+        verificationUrl: 'https://wuteveglobalacademy.com/verify/test-code',
+      });
+
+      assert(buffer.length > 1000, `${credentialType}: the PDF must have content`);
+      assertEqual(measurements.credentialType, credentialType, `${credentialType}: template used`);
+      assertEqual(
+        measurements.template,
+        credentialType === 'diploma' ? 'diploma-template.jpg' : 'certificate-template.jpg',
+        `${credentialType}: the right sheet`
+      );
+    }
+  });
+
+  await check('a very long name is shrunk rather than overflowing', async () => {
+    const { measurements } = await renderCertificate({
+      studentName: 'Nyenpuo Wureh-Gbessageh Kollie-Massaquoi Williams',
+      courseName: 'Financial Literacy for Professionals',
+      certificateNumber: 'WGA-TEST-000002',
+      credentialType: 'certificate',
+      issuedAt: new Date(),
+      verificationUrl: 'https://wuteveglobalacademy.com/verify/test-code',
+    });
+
+    assert(measurements.nameSize < 60, 'a long name must be reduced from the 60pt start');
+    assert(measurements.nameSize >= 40, 'but never below the 40pt floor');
+  });
+
+  await check('the name is centred on the artwork\'s text column, not the page', async () => {
+    // The artwork reserves its left fifth for the gold banner and the seal, and
+    // centres its prose at 61.6% of the width. Centring on 50% put the name
+    // 97pt to the left of the paragraph it belongs to.
+    const target = 0.616 * PAGE.width;
+
+    for (const studentName of ['Bo Kai', 'John Doe', "Mariama O'Neil-Collins", 'Nyenpuo Wureh-Gbessageh']) {
+      const { measurements } = await renderCertificate({
+        studentName,
+        courseName: 'Financial Literacy for Professionals',
+        certificateNumber: 'WGA-TEST-000010',
+        credentialType: 'certificate',
+        issuedAt: new Date(),
+        verificationUrl: 'https://wuteveglobalacademy.com/verify/test-code',
+      });
+
+      const drift = Math.abs(measurements.nameInkCentre - target);
+      assert(drift < 5, `${studentName}: ink centre drifted ${drift.toFixed(2)}pt from the column`);
+    }
+  });
+
+  await check('the course is centred on the same column', async () => {
+    const target = 0.616 * PAGE.width;
+
+    const courses = [
+      'Marketing Management',
+      'Financial Literacy for Professionals',
+      'Advanced Data Analytics and Business Intelligence',
+      'Introduction to Cyber Security Best Practices',
+    ];
+
+    for (const courseName of courses) {
+      const { measurements } = await renderCertificate({
+        studentName: 'John Doe',
+        courseName,
+        certificateNumber: 'WGA-TEST-000011',
+        credentialType: 'diploma',
+        issuedAt: new Date(),
+        verificationUrl: 'https://wuteveglobalacademy.com/verify/test-code',
+      });
+
+      const drift = Math.abs(measurements.courseInkCentre - target);
+      assert(drift < 5, `"${courseName}": ink centre drifted ${drift.toFixed(2)}pt from the column`);
+    }
+  });
+
+  await check('the headings are bold and start at the approved sizes', async () => {
+    const { measurements } = await renderCertificate({
+      studentName: 'Bo Kai',
+      courseName: 'Marketing Management',
+      certificateNumber: 'WGA-TEST-000012',
+      credentialType: 'certificate',
+      issuedAt: new Date(),
+      verificationUrl: 'https://wuteveglobalacademy.com/verify/test-code',
+    });
+
+    assertEqual(measurements.nameFont, 'Times-Bold', 'the heading face');
+    assertEqual(measurements.nameSize, 60, 'a short name stays at the start size');
+    assertEqual(measurements.courseSize, 36, 'a short course stays at the start size');
+  });
+
+  await check('no line can reach past the decorative border', async () => {
+    const { measurements } = await renderCertificate({
+      studentName: 'Nyenpuo Wureh-Gbessageh Kollie-Massaquoi Williams',
+      courseName: 'Advanced Data Analytics and Business Intelligence for Public Sector Managers',
+      certificateNumber: 'WGA-TEST-000013',
+      credentialType: 'certificate',
+      issuedAt: new Date(),
+      verificationUrl: 'https://wuteveglobalacademy.com/verify/test-code',
+    });
+
+    const half = (value, centre) => Math.abs(value - centre) / 2;
+
+    assert(
+      half(measurements.nameWidth, measurements.columnCentre) <= 0.9558 * PAGE.width - measurements.columnCentre + 0.5,
+      'the name must not cross the border'
+    );
+    assert(
+      half(measurements.courseWidth, measurements.columnCentre) <= 0.9558 * PAGE.width - measurements.columnCentre + 0.5,
+      'the course must not cross the border'
+    );
+  });
+
+  await check('the QR code points at the public verification page', async () => {
+    const { measurements } = await renderCertificate({
+      studentName: 'Test Graduate',
+      courseName: 'A course',
+      certificateNumber: 'WGA-TEST-000003',
+      credentialType: 'certificate',
+      issuedAt: new Date(),
+      verificationUrl: 'https://wuteveglobalacademy.com/verify/abc123',
+    });
+
+    assert(
+      measurements.target.startsWith('https://wuteveglobalacademy.com/verify/'),
+      'the QR must resolve to the pretty verify URL, not a query string'
+    );
+  });
+
+  await check('the download endpoint refuses an anonymous request', async () => {
+    const { status } = await request('GET', `/api/v1/certificates/${certificate._id}/download`);
+    assertEqual(status, 401, 'status');
+  });
+
+  await check('a stranger cannot download someone else\'s certificate', async () => {
+    const { status } = await request('GET', `/api/v1/certificates/${certificate._id}/download`, {
+      token: strangerToken,
+    });
+
+    // 404 rather than 403: a stranger must not learn that this certificate
+    // exists, which is the same rule the certificate detail route follows.
+    assertEqual(status, 404, 'status');
+  });
+
+  await check('the owner can download their certificate', async () => {
+    const response = await request('GET', `/api/v1/certificates/${certificate._id}/download`, {
+      token: ownerToken,
+    });
+
+    assertEqual(response.status, 200, 'status');
+    assertEqual(response.headers.get('content-type'), 'application/pdf', 'content type');
+    assert(
+      String(response.headers.get('content-disposition') || '').includes('attachment'),
+      'the response must be an attachment'
+    );
+    assert(
+      String(response.headers.get('cache-control') || '').includes('private'),
+      'a personal document must not be cached publicly'
+    );
+    assert(Number(response.headers.get('content-length')) > 1000, 'the body must carry the PDF');
+  });
+
+  await check('an administrator can download any certificate', async () => {
+    const adminEmail = `smoke-certdoc-admin-${runId}@example.com`;
+    createdEmails.push(adminEmail);
+
+    await User.create({
+      firstName: 'Document',
+      lastName: 'Admin',
+      email: adminEmail,
+      password: PASSWORD,
+      role: 'admin',
+      emailVerified: true,
+    });
+
+    const signIn = await request('POST', '/api/v1/auth/login', {
+      body: { email: adminEmail, password: PASSWORD },
+    });
+
+    const { status } = await request('GET', `/api/v1/certificates/${certificate._id}/download`, {
+      token: signIn.json.data.accessToken,
+    });
+
+    assertEqual(status, 200, 'status');
+  });
+
+  await check('an unknown certificate reference cannot be downloaded', async () => {
+    const { status } = await request('GET', '/api/v1/certificates/000000000000000000000000/download', {
+      token: ownerToken,
+    });
+
+    assertEqual(status, 404, 'status');
+  });
+}
+
 async function testCommunityAndMessaging() {  const Course = require('../src/models/Course');
   const CommunityPost = require('../src/models/CommunityPost');
 
@@ -4323,6 +4640,9 @@ async function main() {
 
     process.stdout.write('\nProfile photos\n');
     await testAvatars();
+
+    process.stdout.write('\nCertificate documents\n');
+    await testCertificateDocuments();
 
     process.stdout.write('\nCommunity, messaging and sessions\n');
     await testCommunityAndMessaging();

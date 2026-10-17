@@ -1529,6 +1529,65 @@
             return 'Certificate';
         }
 
+        /**
+         * Download the rendered certificate.
+         *
+         * The endpoint needs the bearer token, so this cannot be a plain link: an
+         * <a> has no way to send an Authorization header. The PDF is fetched as a
+         * blob and handed to a temporary anchor instead.
+         *
+         * The button is disabled while the request is in flight because the first
+         * download of an older certificate also renders it, which takes a moment
+         * on a cold start.
+         */
+        window.downloadCertificate = async function downloadCertificate(certificateId, button) {
+            const target = button || null;
+            const original = target ? target.innerHTML : '';
+
+            if (target) {
+                target.disabled = true;
+                target.innerHTML = '<span class="spinner"></span> Preparing…';
+            }
+
+            try {
+                const response = await fetch(
+                    WGA.API_BASE + '/certificates/' + encodeURIComponent(certificateId) + '/download',
+                    { headers: { Authorization: 'Bearer ' + WGA.getAccessToken() } }
+                );
+
+                if (!response.ok) {
+                    let message = 'We could not prepare that certificate. Please try again.';
+                    try {
+                        const payload = await response.json();
+                        if (payload && payload.message) message = payload.message;
+                    } catch (error) {
+                        // The body was not JSON; the default message stands.
+                    }
+                    throw new Error(message);
+                }
+
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+
+                link.href = url;
+                link.download = 'Wuteve-Certificate.pdf';
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(url);
+
+                WGAUI.toast('Certificate downloaded.', 'success');
+            } catch (error) {
+                WGAUI.toast(error.message || 'We could not download that certificate.', 'error');
+            } finally {
+                if (target) {
+                    target.disabled = false;
+                    target.innerHTML = original;
+                }
+            }
+        };
+
         function renderCertificates() {
             const earned = state.certificates.filter((c) => !c.revoked);
 
@@ -1555,7 +1614,7 @@
                                     <i class="fas fa-link"></i> Publicly verifiable
                                 </div>
                                 <button class="btn-primary" onclick="openCertificate('${c.verificationCode}')">View &amp; Verify</button>
-                                ${c.pdfUrl ? `<a class="btn-primary btn-outline" href="${c.pdfUrl}" target="_blank" rel="noopener">Download PDF</a>` : ''}
+                                <button class="btn-primary btn-outline" onclick="downloadCertificate('${c.id}', this)">Download PDF</button>
                             </div>
                         </div>
                     `).join('')}

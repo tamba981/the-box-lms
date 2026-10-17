@@ -21,7 +21,8 @@
     "db:inspect": "node scripts/db-inspect.js",
     "env:init": "node scripts/init-env.js",
     "seed": "node scripts/seed.js",
-    "smoke": "node scripts/smoke.js"
+    "smoke": "node scripts/smoke.js",
+    "certificate:sample": "node scripts/render-certificate-sample.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1146.0",
@@ -35,6 +36,8 @@
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",
+    "pdf-lib": "^1.17.1",
+    "qrcode": "^1.5.4",
     "zod": "^3.24.1"
   }
 }

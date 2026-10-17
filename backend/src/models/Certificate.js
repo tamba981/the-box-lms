@@ -54,6 +54,20 @@ const certificateSchema = new mongoose.Schema(
 
     pdfUrl: { type: String, trim: true, default: null },
 
+    /**
+     * The rendered, printable certificate.
+     *
+     * `select: false` because a base64 PDF is by far the largest thing on this
+     * document — it would ride along on every list and every verification
+     * request, which never need it. Only the download endpoint opts in.
+     *
+     * Stored in the document rather than object storage because none is
+     * configured on this deployment, and a certificate nobody can download is
+     * not worth more than one that can.
+     */
+    pdfBase64: { type: String, select: false, default: null },
+    pdfGeneratedAt: { type: Date, default: null },
+
     /** Revoked certificates stay resolvable but report as revoked. */
     revokedAt: { type: Date, default: null },
     revokeReason: { type: String, trim: true, maxlength: 500, default: null },

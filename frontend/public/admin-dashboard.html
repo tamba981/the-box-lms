@@ -1411,6 +1411,59 @@
             return 'Certificate';
         }
 
+        /**
+         * Download a certificate's PDF as an administrator.
+         *
+         * Same reason as the student page: the endpoint needs a bearer token, and
+         * an <a> cannot send one, so the file is fetched as a blob. Admins may
+         * download any certificate.
+         */
+        window.downloadCertificate = async function downloadCertificate(certificateId, button) {
+            const target = button || null;
+            const original = target ? target.innerHTML : '';
+
+            if (target) {
+                target.disabled = true;
+                target.innerHTML = '<span class="spinner"></span>';
+            }
+
+            try {
+                const response = await fetch(
+                    WGA.API_BASE + '/certificates/' + encodeURIComponent(certificateId) + '/download',
+                    { headers: { Authorization: 'Bearer ' + WGA.getAccessToken() } }
+                );
+
+                if (!response.ok) {
+                    let message = 'We could not prepare that certificate.';
+                    try {
+                        const payload = await response.json();
+                        if (payload && payload.message) message = payload.message;
+                    } catch (error) {
+                        // Not JSON; the default message stands.
+                    }
+                    throw new Error(message);
+                }
+
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+
+                link.href = url;
+                link.download = 'Wuteve-Certificate.pdf';
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                WGAUI.toast(error.message || 'We could not download that certificate.', 'error');
+            } finally {
+                if (target) {
+                    target.disabled = false;
+                    target.innerHTML = original;
+                }
+            }
+        };
+
         function renderCertificates() {
             const counts = adminData.certificateCounts || { issued: 0, revoked: 0, total: 0 };
 
@@ -1441,6 +1494,7 @@
                                             : '<span class="badge active">valid</span>'}</td>
                                         <td>
                                             <a class="action-btn view" href="/verify/${encodeURIComponent(c.verificationCode)}" target="_blank" rel="noopener" title="Open public verification"><i class="fas fa-eye"></i></a>
+                                            <button class="action-btn view" title="Download PDF" onclick="downloadCertificate('${c.id}', this)"><i class="fas fa-download"></i></button>
                                             ${c.revoked ? '' : `<button class="action-btn delete" onclick="revokeCertificate('${c.id}', '${WGAUI.escapeHtml(c.certificateNumber)}')"><i class="fas fa-ban"></i> Revoke</button>`}
                                         </td>
                                     </tr>
