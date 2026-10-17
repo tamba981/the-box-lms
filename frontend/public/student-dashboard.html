@@ -1122,6 +1122,9 @@
             state.certificates = (overview.certificates || []).map((certificate) => ({
                 id: String(certificate.id),
                 certificateNumber: certificate.certificateNumber,
+                // Carried explicitly: this mapping is an allow-list, so a field
+                // not named here silently disappears from the UI.
+                credential: certificate.credential || 'certificate',
                 verificationCode: certificate.verificationCode,
                 courseTitle: certificate.courseTitle,
                 courseId: String(certificate.courseId || ''),
@@ -1476,6 +1479,13 @@
             `;
         }
 
+        /** The credential a certificate records; older records default to certificate. */
+        function credentialLabel(value) {
+            if (value === 'diploma') return 'Diploma';
+            if (value === 'degree') return 'Degree';
+            return 'Certificate';
+        }
+
         function renderCertificates() {
             const earned = state.certificates.filter((c) => !c.revoked);
 
@@ -1494,9 +1504,9 @@
                             <div class="course-content">
                                 <i class="fas fa-certificate" style="font-size:56px;color:var(--gold);margin-bottom:12px;"></i>
                                 <h3 class="course-title">${c.courseTitle}</h3>
-                                <p>Issued: ${WGAUI.formatDate(c.issueDate)}</p>
+                                <p>${credentialLabel(c.credential)} · Issued: ${WGAUI.formatDate(c.issueDate)}</p>
                                 <p style="font-size:13px;color:var(--text-light);margin-top:6px;">
-                                    Certificate ${c.certificateNumber}${c.hoursCompleted ? ` · ${c.hoursCompleted} hours` : ''}
+                                    ${credentialLabel(c.credential)} ${c.certificateNumber}${c.hoursCompleted ? ` · ${c.hoursCompleted} hours` : ''}
                                 </p>
                                 <div style="display:inline-flex;gap:8px;margin:12px 0;padding:6px 16px;background:rgba(212,165,71,0.08);border-radius:30px;">
                                     <i class="fas fa-link"></i> Publicly verifiable

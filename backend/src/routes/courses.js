@@ -23,6 +23,12 @@ const { parsePagination, paginated } = require('../lib/pagination');
 const { contains } = require('../lib/text');
 const { uniqueSlug } = require('../lib/slug');
 const permissions = require('../lib/permissions');
+const {
+  COURSE_CATEGORIES,
+  LEGACY_CATEGORY_ALIASES,
+  SELECTABLE_CREDENTIALS,
+  CREDENTIAL_LABELS,
+} = require('../lib/constants');
 
 const { authenticate, optionalAuth, requireInstructor } = require('../middleware/auth');
 const { validate } = require('../middleware/validate');
@@ -45,6 +51,20 @@ const SORTS = {
   title: { title: 1 },
 };
 
+/**
+ * Translate a category that predates the current list.
+ *
+ * The catalogue used to be filed under `business`, `data` and `productivity`.
+ * Those addresses are in the wild — bookmarks, the old mega-menu, a link an
+ * instructor pasted into a WhatsApp group — so they are translated rather than
+ * refused. Anything unrecognised is passed through untouched and matches
+ * nothing, which is the answer an unknown category always gave.
+ */
+function resolveCategory(value) {
+  const slug = String(value || '').trim().toLowerCase();
+  return LEGACY_CATEGORY_ALIASES[slug] || slug;
+}
+
 /** Load a course by :courseId and assert the caller may author it. */
 async function loadManagedCourse(req) {
   const course = await Course.findById(req.valid.params.courseId);
@@ -62,7 +82,10 @@ function applyCourseFields(course, fields) {
   if (fields.description !== undefined) course.description = fields.description;
   if (thumbnail !== undefined) course.thumbnail = thumbnail || null;
   if (promoVideoUrl !== undefined) course.promoVideoUrl = promoVideoUrl || null;
-  if (fields.category !== undefined) course.category = fields.category;
+  // Normalised on the way in so the database only ever holds canonical slugs,
+  // however old the client that sent the request.
+  if (fields.category !== undefined) course.category = resolveCategory(fields.category);
+  if (fields.credential !== undefined) course.credential = fields.credential;
   if (fields.tags !== undefined) course.tags = fields.tags;
   if (fields.level !== undefined) course.level = fields.level;
   if (fields.language !== undefined) course.language = fields.language;
@@ -118,7 +141,8 @@ router.get(
       const pattern = contains(query.q);
       filter.$or = [{ title: pattern }, { summary: pattern }, { tags: pattern }, { instructorName: pattern }];
     }
-    if (query.category) filter.category = query.category.toLowerCase();
+    if (query.category) filter.category = resolveCategory(query.category);
+    if (query.credential) filter.credential = query.credential;
     if (query.level) filter.level = query.level;
     if (query.instructor) filter.instructor = query.instructor;
     if (query.price === 'free') filter.priceCents = 0;
@@ -158,8 +182,58 @@ router.get(
 );
 
 /* ------------------------------------------------------------------ *
+ * GET /api/v1/courses/taxonomy — the categories and credentials a course may use
+ * ------------------------------------------------------------------ */
+
+/**
+ * One list, served to every picker and filter.
+ *
+ * The instructor's create-course form used to hard-code three category options,
+ * which meant the four categories the catalogue already used could not be
+ * chosen and any course filed under them was unfixable from the UI. Both the
+ * picker and the catalog filter now read this, so they cannot drift again.
+ *
+ * `selectableCredentials` deliberately omits `degree`: it exists in the model
+ * and is not offered here, so no picker can present a qualification the academy
+ * is not yet able to award.
+ */
+router.get(
+  '/taxonomy',
+  asyncHandler(async (req, res) =>
+    ok(res, {
+      categories: COURSE_CATEGORIES,
+      credentials: SELECTABLE_CREDENTIALS.map((slug) => ({ slug, label: CREDENTIAL_LABELS[slug] })),
+    })
+  )
+);
+
+/* ------------------------------------------------------------------ *
  * GET /api/v1/courses/categories — filter facets
  * ------------------------------------------------------------------ */
+
+const CATEGORY_LABELS = new Map(COURSE_CATEGORIES.map((category) => [category.slug, category.label]));
+
+/**
+ * A display name for any category value found in the database.
+ *
+ * Courses created before the taxonomy existed still hold values like `business`
+ * or `design`. Those resolve through the alias table, anything else is title-
+ * cased from its slug, and an unknown value is shown as-is rather than hidden:
+ * a course the catalog can return but never explain is worse than an odd label.
+ */
+function categoryLabel(slug) {
+  if (!slug) return 'General';
+  if (CATEGORY_LABELS.has(slug)) return CATEGORY_LABELS.get(slug);
+
+  const alias = LEGACY_CATEGORY_ALIASES[slug];
+  if (alias && CATEGORY_LABELS.has(alias)) return CATEGORY_LABELS.get(alias);
+
+  return slug
+    .split('-')
+    .filter(Boolean)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
 
 router.get(
   '/categories',
@@ -172,7 +246,11 @@ router.get(
     ]);
 
     return ok(res, {
-      categories: categories.map((row) => ({ name: row._id || 'general', count: row.count })),
+      categories: categories.map((row) => ({
+        name: row._id || 'general',
+        label: categoryLabel(row._id),
+        count: row.count,
+      })),
     });
   })
 );
@@ -310,6 +388,10 @@ router.post(
       // separate, explicit action with its own endpoint.
       status: 'draft',
     });
+
+    // A legacy category (`business`, `data`, `productivity`) is stored in its
+    // canonical form, so the database never holds two spellings of one subject.
+    if (req.valid.body.category !== undefined) course.category = resolveCategory(req.valid.body.category);
 
     if (course.thumbnail === '') course.thumbnail = null;
     if (course.promoVideoUrl === '') course.promoVideoUrl = null;

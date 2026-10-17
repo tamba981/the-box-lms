@@ -1130,14 +1130,20 @@
          * a full list rather than a summary.
          */
         async function loadInstructorData() {
-            const [dashboard, students, sessions, past, threads, notifications] = await Promise.all([
+            const [dashboard, students, sessions, past, threads, notifications, taxonomy] = await Promise.all([
                 WGA.get('/dashboard/instructor'),
                 WGA.get('/dashboard/instructor/students', { query: { limit: 100 } }),
                 WGA.get('/live-sessions', { query: { scope: 'all', limit: 50 } }),
                 WGA.get('/live-sessions', { query: { scope: 'past', limit: 20 } }),
                 WGA.get('/messages/threads', { query: { limit: 50 } }),
-                WGA.get('/notifications', { query: { limit: 20 } })
+                WGA.get('/notifications', { query: { limit: 20 } }),
+                // The categories and credentials the API will accept. Read rather
+                // than hard-coded: the form used to offer three options and could
+                // not name the two categories four courses were already using.
+                WGA.get('/courses/taxonomy')
             ]);
+
+            instructorData.taxonomy = taxonomy || { categories: [], credentials: [] };
 
             const stats = dashboard.stats || {};
             const revenue = dashboard.revenue || {};
@@ -1468,7 +1474,8 @@
                         </p>
                     </div>
                     <div class="form-group"><label>Price ($)</label><input type="number" id="coursePrice" value="0" /></div>
-                    <div class="form-group"><label>Category</label><select id="courseCat"><option>Technology</option><option>Business</option><option>Design</option></select></div>
+                    <div class="form-group"><label for="courseCat">Category</label><select id="courseCat">${categoryOptions()}</select></div>
+                      <div class="form-group"><label for="courseCredential">Credential</label><select id="courseCredential">${credentialOptions()}</select></div>
                     <div class="form-group"><label>Level</label><select id="courseLevel"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div>
                     <div style="display:flex;gap:12px;flex-wrap:wrap;">
                         <button class="btn-primary" onclick="saveCourse(false)">Save as Draft</button>
@@ -1662,6 +1669,33 @@
 
             return Array.from(byId.entries())
                 .map(([id, name]) => `<option value="${id}">${WGAUI.escapeHtml(name)}</option>`)
+                .join('');
+        }
+
+        /**
+         * The category and credential pickers, built from the API's own list.
+         *
+         * Driven by /courses/taxonomy rather than written into the markup, so
+         * the form can only ever offer values the API will accept. The previous
+         * hard-coded three options sent capitalised labels (`Technology`) which a
+         * slug validator rejects, and omitted two categories the catalogue was
+         * already using.
+         */
+        function categoryOptions() {
+            const list = (instructorData.taxonomy && instructorData.taxonomy.categories) || [];
+            if (!list.length) return '<option value="">Categories unavailable — reload the page</option>';
+
+            return list
+                .map((category) => `<option value="${WGAUI.escapeHtml(category.slug)}">${WGAUI.escapeHtml(category.label)}</option>`)
+                .join('');
+        }
+
+        function credentialOptions() {
+            const list = (instructorData.taxonomy && instructorData.taxonomy.credentials) || [];
+            if (!list.length) return '<option value="certificate">Certificate of Completion</option>';
+
+            return list
+                .map((credential) => `<option value="${WGAUI.escapeHtml(credential.slug)}">${WGAUI.escapeHtml(credential.label)}</option>`)
                 .join('');
         }
 
@@ -2501,10 +2535,18 @@
             const summary = document.getElementById('courseDesc')?.value.trim();
             const price = Number(document.getElementById('coursePrice')?.value || 0);
             const category = document.getElementById('courseCat')?.value;
+            const credential = document.getElementById('courseCredential')?.value || 'certificate';
             const level = (document.getElementById('courseLevel')?.value || 'beginner').toLowerCase();
 
             if (!title || title.length < 4) {
                 showToast('Give the course a title of at least 4 characters.', 'error');
+                return;
+            }
+
+            // The list comes from the API. If it did not load, the select holds no
+            // value — refuse rather than filing the course under the model default.
+            if (!category) {
+                showToast('The category list did not load. Reload the page and try again.', 'error');
                 return;
             }
 
@@ -2515,7 +2557,8 @@
                     title,
                     summary: summary || undefined,
                     priceCents: Math.max(0, Math.round(price * 100)),
-                    category,
+                    category: category || undefined,
+                    credential,
                     level,
                 });
 

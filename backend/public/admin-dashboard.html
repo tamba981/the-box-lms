@@ -1399,6 +1399,13 @@
             `;
         }
 
+        /** The credential a certificate records; older records default to certificate. */
+        function credentialLabel(value) {
+            if (value === 'diploma') return 'Diploma';
+            if (value === 'degree') return 'Degree';
+            return 'Certificate';
+        }
+
         function renderCertificates() {
             const counts = adminData.certificateCounts || { issued: 0, revoked: 0, total: 0 };
 
@@ -1414,12 +1421,13 @@
                 </div>
                 <div class="table-container glass-premium">
                     <table class="data-table">
-                        <thead><tr><th>Number</th><th>Student</th><th>Course</th><th>Issued</th><th>Status</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>Number</th><th>Credential</th><th>Student</th><th>Course</th><th>Issued</th><th>Status</th><th>Actions</th></tr></thead>
                         <tbody>
                             ${adminData.certificates.length > 0
                                 ? adminData.certificates.map((c) => `
                                     <tr>
                                         <td>${WGAUI.escapeHtml(c.certificateNumber)}</td>
+                                        <td>${WGAUI.escapeHtml(credentialLabel(c.credential))}</td>
                                         <td>${WGAUI.escapeHtml(c.studentName)}</td>
                                         <td>${WGAUI.escapeHtml(c.courseTitle)}</td>
                                         <td>${WGAUI.formatDate(c.issueDate)}</td>
@@ -1774,9 +1782,10 @@
         function exportCertificatesCsv() {
             downloadCsv(
                 'wuteve-certificates.csv',
-                ['Number', 'Student', 'Course', 'Issued', 'Status', 'Revoked reason'],
+                ['Number', 'Credential', 'Student', 'Course', 'Issued', 'Status', 'Revoked reason'],
                 adminData.certificates.map((c) => [
                     c.certificateNumber,
+                    credentialLabel(c.credential),
                     c.studentName,
                     c.courseTitle,
                     WGAUI.formatDate(c.issueDate),

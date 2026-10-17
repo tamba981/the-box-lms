@@ -104,6 +104,9 @@ async function issueFor(enrollment, course, student) {
       studentName: student.fullName,
       courseTitle: course.title,
       instructorName: course.instructorName || '',
+      // Copied now rather than joined later: an issued certificate records what
+      // was awarded on the day, so changing the course cannot rewrite it.
+      credential: course.credential || 'certificate',
       certificateNumber: await nextCertificateNumber(),
       completionDate: enrollment.completedAt || new Date(),
       hoursCompleted: enrollment.hoursSpent || 0,

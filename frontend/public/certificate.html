@@ -134,15 +134,28 @@
       }
 
       function render(data) {
+        /**
+         * Name the credential.
+         *
+         * An employer checking a candidate's "Wuteve Diploma" has to see a
+         * diploma here, or the page contradicts the person who sent them. The
+         * issuer is stated on the banner and again in the details, so naming it
+         * is not a claim about accreditation — it is a statement of who awarded
+         * it, which is what this page exists to confirm.
+         */
+        var isDiploma = data.credential === 'diploma';
+        var credentialLabel = isDiploma ? 'Diploma' : 'Certificate of Completion';
+        var credentialNoun = isDiploma ? 'diploma' : 'certificate';
+
         if (data.revoked) {
           banner.className = 'cert-banner cert-revoked';
           banner.querySelector('i').className = 'fas fa-circle-exclamation';
-          bannerTitle.textContent = 'This certificate has been revoked';
+          bannerTitle.textContent = 'This ' + credentialNoun + ' has been revoked';
           bannerSub.textContent = 'It is no longer a valid credential.';
         } else {
           banner.className = 'cert-banner cert-valid';
           banner.querySelector('i').className = 'fas fa-circle-check';
-          bannerTitle.textContent = 'Valid certificate';
+          bannerTitle.textContent = isDiploma ? 'Valid diploma' : 'Valid certificate';
           bannerSub.textContent = 'Issued by Wuteve Global Academy.';
         }
 
@@ -150,6 +163,7 @@
 
         details.innerHTML = [
           row('Awarded to', data.studentName),
+          row('Credential', credentialLabel),
           row('Course', data.courseTitle),
           data.instructorName ? row('Instructor', data.instructorName) : '',
           row('Certificate number', data.certificateNumber),

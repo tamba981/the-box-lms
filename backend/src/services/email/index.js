@@ -255,27 +255,42 @@ function enrollmentEmail({ user, course, free }) {
 
 function certificateEmail({ user, certificate }) {
   const url = `${config.publicBaseUrl}/verify/${certificate.verificationCode}`;
+
+  /**
+   * Name the credential the student actually earned.
+   *
+   * A graduate who paid for a diploma and received an email about a
+   * "certificate" has been told, in writing, that the school disagrees with
+   * them about what they bought. The model defaults to `certificate`, so an
+   * older record still reads correctly.
+   */
+  const credential = certificate.credential === 'diploma' || certificate.credential === 'degree'
+    ? certificate.credential
+    : 'certificate';
+  const noun = credential;
+  const numbered = credential.charAt(0).toUpperCase() + credential.slice(1);
+
   const text = [
     `Congratulations ${user.firstName || 'there'},`,
     '',
-    `You have completed "${certificate.courseTitle}" and your certificate has been issued.`,
-    `Certificate number: ${certificate.certificateNumber}`,
+    `You have completed "${certificate.courseTitle}" and your ${noun} has been issued.`,
+    `${numbered} number: ${certificate.certificateNumber}`,
     '',
     `Verify or download it here: ${url}`,
   ].join('\n');
 
   return {
     to: user.email,
-    subject: `Your certificate for ${certificate.courseTitle}`,
+    subject: `Your ${noun} for ${certificate.courseTitle}`,
     text,
     html: layout({
-      heading: 'Your certificate is ready',
+      heading: `Your ${noun} is ready`,
       bodyHtml: `<p style="margin:0 0 12px;">Congratulations ${firstNameOf(user)},</p>
-        <p style="margin:0 0 12px;">You have completed <strong>${escapeHtml(certificate.courseTitle)}</strong>.</p>
-        <p style="margin:0;">Certificate number <strong>${escapeHtml(certificate.certificateNumber)}</strong>.</p>`,
-      ctaText: 'View and verify certificate',
+        <p style="margin:0 0 12px;">You have completed <strong>${escapeHtml(certificate.courseTitle)}</strong> and your ${noun} has been issued.</p>
+        <p style="margin:0;">${numbered} number <strong>${escapeHtml(certificate.certificateNumber)}</strong>.</p>`,
+      ctaText: `View and verify ${noun}`,
       ctaUrl: url,
-      footnote: 'Anyone can verify this certificate using the link above.',
+      footnote: `Anyone can verify this ${noun} using the link above.`,
     }),
   };
 }

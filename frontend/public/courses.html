@@ -71,6 +71,10 @@
         <option value="">All categories</option>
       </select>
 
+      <select class="wga-select" id="credential" name="credential" aria-label="Filter by credential">
+        <option value="">Any credential</option>
+      </select>
+
       <select class="wga-select" id="level" name="level" aria-label="Filter by level">
         <option value="">All levels</option>
         <option value="beginner">Beginner</option>
@@ -138,6 +142,7 @@
         return {
           q: params.get('q') || '',
           category: params.get('category') || '',
+          credential: params.get('credential') || '',
           level: params.get('level') || '',
           price: params.get('price') || '',
           sort: params.get('sort') || 'newest',
@@ -161,6 +166,7 @@
       function applyFiltersToControls(filters) {
         document.getElementById('q').value = filters.q;
         document.getElementById('category').value = filters.category;
+        document.getElementById('credential').value = filters.credential;
         document.getElementById('level').value = filters.level;
         document.getElementById('price').value = filters.price;
         document.getElementById('sort').value = filters.sort;
@@ -170,6 +176,7 @@
         var filters = readFilters();
         filters.q = document.getElementById('q').value.trim();
         filters.category = document.getElementById('category').value;
+        filters.credential = document.getElementById('credential').value;
         filters.level = document.getElementById('level').value;
         filters.price = document.getElementById('price').value;
         filters.sort = document.getElementById('sort').value;
@@ -178,7 +185,7 @@
       }
 
       function hasActiveFilters(filters) {
-        return Boolean(filters.q || filters.category || filters.level || filters.price);
+        return Boolean(filters.q || filters.category || filters.credential || filters.level || filters.price);
       }
 
       function skeleton() {
@@ -243,6 +250,7 @@
           query: {
             q: filters.q,
             category: filters.category,
+            credential: filters.credential,
             level: filters.level,
             price: filters.price,
             sort: filters.sort,
@@ -255,10 +263,10 @@
 
             if (!data.items.length) {
               results.innerHTML = WGAUI.emptyState(
-                filters.q || filters.category || filters.level || filters.price
+                hasActiveFilters(filters)
                   ? 'No courses match those filters'
                   : 'No courses are published yet',
-                filters.q || filters.category || filters.level || filters.price
+                hasActiveFilters(filters)
                   ? 'Try a different search term, or clear the filters.'
                   : 'Please check back soon.'
               );
@@ -292,27 +300,43 @@
         load(filters);
       }
 
-      // Category options come from the server, so the filter list can never
-      // drift from the courses that actually exist.
-      WGA.get('/courses/categories')
-        .then(function (data) {
-          var select = document.getElementById('category');
-          data.categories.forEach(function (category) {
-            var option = document.createElement('option');
-            option.value = category.name;
-            option.textContent = category.name + ' (' + category.count + ')';
-            select.appendChild(option);
-          });
+      /**
+       * Filter options come from the server, so the lists can never drift from
+       * the courses that actually exist.
+       *
+       * Categories are facets — only the ones with published courses, each with
+       * its count — because offering a category that returns nothing looks like
+       * a broken site. Credentials are the fixed vocabulary, deliberately
+       * without `degree`: the catalog must not imply a qualification the
+       * academy cannot award.
+       */
+      Promise.all([
+        WGA.get('/courses/categories').catch(function () { return { categories: [] }; }),
+        WGA.get('/courses/taxonomy').catch(function () { return { credentials: [] }; })
+      ]).then(function (responses) {
+        var facets = responses[0].categories || [];
+        var taxonomy = responses[1].credentials || [];
 
-          var initial = readFilters();
-          applyFiltersToControls(initial);
-          apply(initial.page);
-        })
-        .catch(function () {
-          var initial = readFilters();
-          applyFiltersToControls(initial);
-          apply(initial.page);
+        var categorySelect = document.getElementById('category');
+        facets.forEach(function (category) {
+          var option = document.createElement('option');
+          option.value = category.name;
+          option.textContent = (category.label || category.name) + ' (' + category.count + ')';
+          categorySelect.appendChild(option);
         });
+
+        var credentialSelect = document.getElementById('credential');
+        taxonomy.forEach(function (credential) {
+          var option = document.createElement('option');
+          option.value = credential.slug;
+          option.textContent = credential.label;
+          credentialSelect.appendChild(option);
+        });
+
+        var initial = readFilters();
+        applyFiltersToControls(initial);
+        apply(initial.page);
+      });
 
       document.getElementById('filters').addEventListener('submit', function (event) {
         event.preventDefault();
@@ -325,13 +349,14 @@
         debounce = setTimeout(function () { apply(1); }, 380);
       });
 
-      ['category', 'level', 'price', 'sort'].forEach(function (id) {
+      ['category', 'credential', 'level', 'price', 'sort'].forEach(function (id) {
         document.getElementById(id).addEventListener('change', function () { apply(1); });
       });
 
       clearButton.addEventListener('click', function () {
         document.getElementById('q').value = '';
         document.getElementById('category').value = '';
+        document.getElementById('credential').value = '';
         document.getElementById('level').value = '';
         document.getElementById('price').value = '';
         document.getElementById('sort').value = 'newest';

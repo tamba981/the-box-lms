@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 
 const { baseOptions } = require('./common');
+const { CREDENTIALS } = require('../lib/constants');
 
 /**
  * A certificate issued on course completion.
@@ -26,6 +27,16 @@ const certificateSchema = new mongoose.Schema(
     studentName: { type: String, required: true, trim: true },
     courseTitle: { type: String, required: true, trim: true },
     instructorName: { type: String, trim: true, default: '' },
+
+    /**
+     * What was awarded, copied from the course at issue time.
+     *
+     * Copied rather than read through the course for the same reason the names
+     * are copied: a certificate is a historical document. If a course is later
+     * upgraded from certificate to diploma, the certificates already issued must
+     * keep saying what they said when they were issued.
+     */
+    credential: { type: String, enum: CREDENTIALS, default: 'certificate', index: true },
 
     certificateNumber: { type: String, required: true, unique: true, index: true },
     verificationCode: {
@@ -63,6 +74,11 @@ certificateSchema.methods.toVerificationJSON = function toVerificationJSON() {
     studentName: this.studentName,
     courseTitle: this.courseTitle,
     instructorName: this.instructorName,
+    // What was awarded. The verification page names it, because an employer
+    // checking a candidate's "Wuteve Diploma" must see a diploma, not something
+    // vaguer — a page that contradicted the student would make the student look
+    // dishonest and the academy look broken.
+    credential: this.credential || 'certificate',
     issueDate: this.issueDate,
     completionDate: this.completionDate,
     hoursCompleted: this.hoursCompleted,

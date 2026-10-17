@@ -11,6 +11,63 @@ const COURSE_LEVELS = Object.freeze(['beginner', 'intermediate', 'advanced']);
 
 const COURSE_STATUSES = Object.freeze(['draft', 'pending', 'published', 'archived']);
 
+/**
+ * Subject categories a course can be filed under.
+ *
+ * Slugs, with the label alongside. `business-management` is stable in a URL,
+ * in an index and in an old bookmark; "Business & Management" is not. Keeping
+ * both here means the API, the instructor picker and the catalog filter read
+ * the same list — which they did not before: the instructor form hard-coded
+ * three options and so could not offer `data` or `productivity`, the two
+ * categories four of the seeded courses were already using.
+ */
+const COURSE_CATEGORIES = Object.freeze([
+  { slug: 'technology', label: 'Technology' },
+  { slug: 'business-management', label: 'Business & Management' },
+  { slug: 'data-analytics', label: 'Data & Analytics' },
+  { slug: 'design', label: 'Design' },
+  { slug: 'health-care', label: 'Health & Care' },
+  { slug: 'education', label: 'Education' },
+  { slug: 'agriculture', label: 'Agriculture' },
+  { slug: 'trades-vocational', label: 'Trades & Vocational' },
+  { slug: 'finance-accounting', label: 'Finance & Accounting' },
+  { slug: 'language', label: 'Language' },
+  { slug: 'professional-development', label: 'Professional Development' },
+  { slug: 'digital-skills', label: 'Digital Skills' },
+]);
+
+const COURSE_CATEGORY_SLUGS = Object.freeze(COURSE_CATEGORIES.map((category) => category.slug));
+
+/**
+ * Categories that predate the list above, and where they now belong.
+ *
+ * Anything arriving with an old value is translated rather than refused, so an
+ * existing bookmark like `?category=business` keeps returning the same courses.
+ */
+const LEGACY_CATEGORY_ALIASES = Object.freeze({
+  business: 'business-management',
+  data: 'data-analytics',
+  productivity: 'digital-skills',
+});
+
+/**
+ * What completing a course awards.
+ *
+ * `degree` is defined and deliberately unselectable. The academy cannot issue
+ * one until it has a partner institution or its own accreditation, so it lives
+ * in the enum — future code and existing data have a value to use — and stays
+ * out of SELECTABLE_CREDENTIALS, which is what the validator reads. Nothing can
+ * set it through any request.
+ */
+const CREDENTIALS = Object.freeze(['certificate', 'diploma', 'degree']);
+const SELECTABLE_CREDENTIALS = Object.freeze(['certificate', 'diploma']);
+
+const CREDENTIAL_LABELS = Object.freeze({
+  certificate: 'Certificate of Completion',
+  diploma: 'Diploma',
+  degree: 'Degree',
+});
+
 const ENROLLMENT_STATUSES = Object.freeze(['active', 'completed', 'cancelled']);
 
 const LESSON_TYPES = Object.freeze(['video', 'text', 'live']);
@@ -118,6 +175,12 @@ module.exports = {
   CONTACT_REASONS,
   COURSE_LEVELS,
   COURSE_STATUSES,
+  COURSE_CATEGORIES,
+  COURSE_CATEGORY_SLUGS,
+  LEGACY_CATEGORY_ALIASES,
+  CREDENTIALS,
+  SELECTABLE_CREDENTIALS,
+  CREDENTIAL_LABELS,
   ENROLLMENT_STATUSES,
   LESSON_TYPES,
   VIDEO_KINDS,

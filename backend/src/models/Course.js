@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 
-const { COURSE_LEVELS, COURSE_STATUSES } = require('../lib/constants');
+const { COURSE_LEVELS, COURSE_STATUSES, CREDENTIALS } = require('../lib/constants');
 const { baseOptions, lowercaseTrim } = require('./common');
 const { formatCentsOrFree } = require('../lib/money');
 const { slugify } = require('../lib/slug');
@@ -36,6 +36,15 @@ const courseSchema = new mongoose.Schema(
     category: { ...lowercaseTrim, default: 'general', index: true },
     tags: { type: [String], default: [] },
     level: { type: String, enum: COURSE_LEVELS, default: 'beginner', index: true },
+
+  /**
+   * What completing this course awards.
+   *
+   * Defaults to `certificate` so every course that existed before this field
+   * keeps issuing exactly what it issued before. `degree` is in the enum but
+   * cannot be set: see SELECTABLE_CREDENTIALS in lib/constants.
+   */
+  credential: { type: String, enum: CREDENTIALS, default: 'certificate', index: true },
     language: { ...lowercaseTrim, default: 'english' },
 
     instructor: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
@@ -109,6 +118,7 @@ courseSchema.methods.toCardJSON = function toCardJSON(extra = {}) {
     thumbnail: this.thumbnail,
     category: this.category,
     level: this.level,
+    credential: this.credential,
     tags: this.tags,
     instructorName: this.instructorName,
     priceCents: this.priceCents,

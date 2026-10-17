@@ -4,7 +4,7 @@ const { z } = require('zod');
 
 const { COURSE_LEVELS, COURSE_STATUSES, LESSON_TYPES } = require('./auth').enums;
 const { objectId, paginationQuery, optionalUrl } = require('./auth');
-const { ALLOWED_VIDEO_MIME, MAX_VIDEO_BYTES, EMBEDDABLE_VIDEO_HOSTS } = require('../lib/constants');
+const { ALLOWED_VIDEO_MIME, MAX_VIDEO_BYTES, EMBEDDABLE_VIDEO_HOSTS, COURSE_CATEGORY_SLUGS, SELECTABLE_CREDENTIALS, CREDENTIALS, LEGACY_CATEGORY_ALIASES } = require('../lib/constants');
 
 /**
  * Course and lesson input schemas.
@@ -35,7 +35,20 @@ const courseFields = {
   description: z.string().trim().max(20000, 'Description is too long').optional(),
   thumbnail: optionalUrl.optional(),
   promoVideoUrl: optionalUrl.optional(),
-  category: z.string().trim().min(2, 'Category is required').max(60).optional(),
+  /**
+   * A slug from COURSE_CATEGORIES.
+   *
+   * A legacy alias is accepted here and normalised in the route, so a client
+   * that still sends `business` or `data` is not told its own catalogue entry
+   * is invalid; the stored value is always canonical. Anything else is refused.
+   */
+  category: z
+    .enum([...COURSE_CATEGORY_SLUGS, ...Object.keys(LEGACY_CATEGORY_ALIASES)], {
+      errorMap: () => ({ message: 'Choose a category' }),
+    })
+    .optional(),
+  /** Only the credentials the academy can actually issue. `degree` is not here. */
+  credential: z.enum(SELECTABLE_CREDENTIALS, { errorMap: () => ({ message: 'Choose a credential' }) }).optional(),
   tags: z.array(z.string().trim().min(1).max(40)).max(15, 'Too many tags').optional(),
   level: z.enum(COURSE_LEVELS).optional(),
   language: z.string().trim().min(2).max(40).optional(),
@@ -51,6 +64,7 @@ const createCourseBody = z.object({
   thumbnail: courseFields.thumbnail,
   promoVideoUrl: courseFields.promoVideoUrl,
   category: courseFields.category,
+  credential: courseFields.credential,
   tags: courseFields.tags,
   level: courseFields.level,
   language: courseFields.language,
@@ -67,6 +81,7 @@ const updateCourseBody = z
     thumbnail: courseFields.thumbnail,
     promoVideoUrl: courseFields.promoVideoUrl,
     category: courseFields.category,
+    credential: courseFields.credential,
     tags: courseFields.tags,
     level: courseFields.level,
     language: courseFields.language,
@@ -78,7 +93,10 @@ const updateCourseBody = z
 
 const listCoursesQuery = z.object({
   q: z.string().trim().max(120).optional(),
+  // A plain string, not the enum: the route translates a legacy alias before
+  // it reaches the query, so `?category=business` keeps working.
   category: z.string().trim().max(60).optional(),
+  credential: z.enum(CREDENTIALS).optional(),
   level: z.enum(COURSE_LEVELS).optional(),
   price: z.enum(['free', 'paid']).optional(),
   instructor: objectId.optional(),

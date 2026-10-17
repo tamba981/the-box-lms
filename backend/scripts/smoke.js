@@ -1639,8 +1639,209 @@ async function testManualPayments() {
  * Community and messaging, exercised as two different students so that the
  * isolation between them is actually tested.
  */
-async function testCommunityAndMessaging() {
+/**
+ * The course taxonomy and the credential a course awards.
+ *
+ * The category list used to be hard-coded in the instructor form while the API
+ * accepted any string, so the picker and the catalogue could disagree without
+ * anything failing. These checks pin one vocabulary, prove the old spellings
+ * still resolve, and prove the qualification a course advertises is the one
+ * printed on the certificate the student receives.
+ */
+async function testTaxonomyAndCredentials() {
   const Course = require('../src/models/Course');
+  const Enrollment = require('../src/models/Enrollment');
+  const certificateService = require('../src/services/certificateService');
+  const { COURSE_CATEGORIES } = require('../src/lib/constants');
+
+  const instructorEmail = `smoke-tax-instructor-${runId}@example.com`;
+  const studentEmail = `smoke-tax-student-${runId}@example.com`;
+  createdEmails.push(instructorEmail, studentEmail);
+
+  let instructorToken = null;
+  let student = null;
+  let diplomaCourse = null;
+
+  const signIn = async (email) => {
+    const { json } = await request('POST', '/api/v1/auth/login', { body: { email, password: PASSWORD } });
+    return json.data.accessToken;
+  };
+
+  await check('a taxonomy instructor and student are provisioned', async () => {
+    await User.create({
+      firstName: 'Taxonomy',
+      lastName: 'Instructor',
+      email: instructorEmail,
+      password: PASSWORD,
+      role: 'instructor',
+      emailVerified: true,
+    });
+
+    student = await User.create({
+      firstName: 'Taxonomy',
+      lastName: 'Student',
+      email: studentEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+
+    instructorToken = await signIn(instructorEmail);
+    assert(instructorToken, 'the instructor could not sign in');
+  });
+
+  await check('the taxonomy endpoint serves one category list with labels', async () => {
+    const { status, json } = await request('GET', '/api/v1/courses/taxonomy');
+    assertEqual(status, 200, 'status');
+
+    const categories = json.data.categories;
+    assert(Array.isArray(categories), 'categories must be an array');
+    assertEqual(categories.length, COURSE_CATEGORIES.length, 'category count');
+
+    categories.forEach((category) => {
+      assert(typeof category.slug === 'string' && category.slug, 'every category needs a slug');
+      assert(typeof category.label === 'string' && category.label, `"${category.slug}" needs a label`);
+    });
+
+    const slugs = new Set(categories.map((category) => category.slug));
+    assertEqual(slugs.size, categories.length, 'category slugs must be unique');
+  });
+
+  await check('the taxonomy offers certificate and diploma but never degree', async () => {
+    const { json } = await request('GET', '/api/v1/courses/taxonomy');
+    const offered = (json.data.credentials || []).map((credential) => credential.slug);
+
+    assertEqual(offered.length, 2, 'selectable credential count');
+    assert(offered.includes('certificate'), 'certificate must be offered');
+    assert(offered.includes('diploma'), 'diploma must be offered');
+    assert(!offered.includes('degree'), 'degree must not be offered: it cannot be awarded yet');
+  });
+
+  await check('category facets carry a display label and a count', async () => {
+    const { status, json } = await request('GET', '/api/v1/courses/categories');
+    assertEqual(status, 200, 'status');
+
+    const facets = json.data.categories || [];
+    assert(facets.length > 0, 'the catalog has published courses, so facets must not be empty');
+
+    facets.forEach((facet) => {
+      assert(typeof facet.name === 'string' && facet.name, 'a facet needs its stored value');
+      assert(typeof facet.label === 'string' && facet.label, `"${facet.name}" needs a display label`);
+      assert(Number.isInteger(facet.count) && facet.count > 0, 'a facet must count at least one course');
+      assert(facet.label !== facet.name, `"${facet.name}" must be shown with a readable label`);
+    });
+  });
+
+  await check('a course cannot claim a degree', async () => {
+    const { status, json } = await request('POST', '/api/v1/courses', {
+      token: instructorToken,
+      body: { title: `A course claiming a degree ${runId}`, credential: 'degree' },
+    });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'VALIDATION_ERROR', 'error code');
+  });
+
+  await check('a course cannot be filed under an unknown category', async () => {
+    const { status } = await request('POST', '/api/v1/courses', {
+      token: instructorToken,
+      body: { title: `A course in a made-up category ${runId}`, category: 'astrology' },
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a legacy category spelling is accepted on write and stored canonically', async () => {
+    const { status, json } = await request('POST', '/api/v1/courses', {
+      token: instructorToken,
+      body: { title: `A course still filed under an old category ${runId}`, category: 'data' },
+    });
+
+    assertEqual(status, 201, 'status');
+
+    const created = json.data.course || {};
+    const stored = await Course.findById(created.id || created._id);
+    assert(stored, 'the course was not persisted');
+    assertEqual(stored.category, 'data-analytics', 'a legacy alias must be stored canonically');
+
+    await Course.deleteOne({ _id: stored._id });
+  });
+
+  await check('a diploma course is created with its credential stored', async () => {
+    const { status, json } = await request('POST', '/api/v1/courses', {
+      token: instructorToken,
+      body: {
+        title: `A diploma course ${runId}`,
+        category: 'business-management',
+        credential: 'diploma',
+        priceCents: 4900,
+      },
+    });
+
+    assertEqual(status, 201, 'status');
+
+    const created = json.data.course || {};
+    const courseId = created.id || created._id;
+    assert(courseId, 'the create response must identify the new course');
+
+    diplomaCourse = await Course.findById(courseId);
+    assert(diplomaCourse, 'the course was not persisted');
+    assertEqual(diplomaCourse.credential, 'diploma', 'stored credential');
+    assertEqual(diplomaCourse.category, 'business-management', 'stored category');
+  });
+
+  await check('the catalogue respects the credential filter', async () => {
+    await Course.updateOne({ _id: diplomaCourse._id }, { $set: { status: 'published', publishedAt: new Date() } });
+
+    const wanted = String(diplomaCourse._id);
+    const identity = (course) => String(course.id || course._id);
+
+    const diploma = await request('GET', '/api/v1/courses?credential=diploma&limit=100');
+    assertEqual(diploma.status, 200, 'status');
+    assert(
+      diploma.json.data.items.some((course) => identity(course) === wanted),
+      'a published diploma course must appear under ?credential=diploma'
+    );
+
+    const certificate = await request('GET', '/api/v1/courses?credential=certificate&limit=100');
+    assert(
+      !certificate.json.data.items.some((course) => identity(course) === wanted),
+      'a diploma course must not appear under ?credential=certificate'
+    );
+  });
+
+  await check('a legacy category filter still resolves to the new category', async () => {
+    const { status, json } = await request('GET', '/api/v1/courses?category=business&limit=100');
+    assertEqual(status, 200, 'status');
+
+    const wanted = String(diplomaCourse._id);
+    assert(
+      json.data.items.some((course) => String(course.id || course._id) === wanted),
+      '?category=business must still find a course filed under business-management'
+    );
+  });
+
+  await check('an issued certificate records the credential its course awards', async () => {
+    const enrollment = await Enrollment.create({
+      student: student._id,
+      course: diplomaCourse._id,
+      status: 'active',
+      completedAt: new Date(),
+      hoursSpent: 12,
+    });
+
+    const certificate = await certificateService.issueFor(enrollment, diplomaCourse, student);
+    assert(certificate, 'the certificate was not issued');
+    assertEqual(certificate.credential, 'diploma', 'stored certificate credential');
+
+    const verification = certificate.toVerificationJSON();
+    assertEqual(verification.credential, 'diploma', 'verification credential');
+    assertEqual(verification.valid, true, 'the certificate must verify as valid');
+    assertEqual(verification.issuedBy, 'Wuteve Global Academy', 'issuer');
+  });
+}
+
+async function testCommunityAndMessaging() {  const Course = require('../src/models/Course');
   const CommunityPost = require('../src/models/CommunityPost');
 
   const peerEmail = `smoke-peer-${runId}@example.com`;
@@ -3843,6 +4044,9 @@ async function main() {
 
     process.stdout.write('\nManual payments\n');
     await testManualPayments();
+
+    process.stdout.write('\nCourse taxonomy and credentials\n');
+    await testTaxonomyAndCredentials();
 
     process.stdout.write('\nCommunity, messaging and sessions\n');
     await testCommunityAndMessaging();
