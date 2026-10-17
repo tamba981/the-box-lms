@@ -1184,8 +1184,15 @@
 
             instructorData.students = (students.items || []).map((student) => ({
                 id: student.id,
+                // `id` is the enrolment, `studentId` the account. They are not
+                // interchangeable: messaging is addressed to a user, so passing
+                // the enrolment id asked the API for a person who does not exist
+                // and came back with "that student could not be found". The
+                // compose picker had the same gap and silently listed nobody.
+                studentId: student.studentId,
                 name: student.name,
                 email: student.email,
+                avatarUrl: student.avatarUrl,
                 courseId: student.courseId,
                 courseTitle: student.courseTitle,
                 progress: student.progress,
