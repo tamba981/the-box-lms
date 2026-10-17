@@ -196,6 +196,15 @@ const updateProfileBody = z
     avatarUrl: optionalUrl.optional(),
     headline: z.string().trim().max(120, 'Headline is too long').optional(),
     expertise: z.array(z.string().trim().min(1).max(60)).max(20, 'Too many expertise tags').optional(),
+    /**
+     * Editable, and held to the same rule as sign-up.
+     *
+     * A minimum age enforced only at registration is a rule anyone can step
+     * around by editing their profile the next day, so this reuses the same
+     * schema rather than a looser one.
+     */
+    dateOfBirth: dateOfBirth.optional(),
+    location: location.optional(),
   })
   .refine((value) => Object.keys(value).length > 0, { message: 'Nothing to update' });
 

@@ -235,7 +235,8 @@ router.patch(
   asyncHandler(async (req, res) => {
     // Whitelisted assignments: `role`, `status` and `emailVerified` are not
     // reachable from this endpoint even if they appear in the body.
-    const { firstName, lastName, phone, bio, avatarUrl, headline, expertise } = req.valid.body;
+    const { firstName, lastName, phone, bio, avatarUrl, headline, expertise, dateOfBirth, location } =
+      req.valid.body;
 
     if (firstName !== undefined) req.user.firstName = firstName;
     if (lastName !== undefined) req.user.lastName = lastName;
@@ -244,6 +245,8 @@ router.patch(
     if (avatarUrl !== undefined) req.user.avatarUrl = avatarUrl || null;
     if (headline !== undefined) req.user.headline = headline || null;
     if (expertise !== undefined) req.user.expertise = expertise;
+    if (dateOfBirth !== undefined) req.user.dateOfBirth = dateOfBirth;
+    if (location !== undefined) req.user.location = location;
 
     await req.user.save();
 

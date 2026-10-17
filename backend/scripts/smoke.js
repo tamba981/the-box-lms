@@ -498,6 +498,38 @@ async function testRegistration() {
     });
     assertEqual(status, 400, 'status');
   });
+
+  /**
+   * A minimum age that only applies at sign-up is not a minimum age: it is one
+   * profile edit away from being ignored. The edit path is held to the same
+   * rule, and says the same thing when it refuses.
+   */
+  await check('an edit that would make the student too young is refused', async () => {
+    const tooYoung = new Date();
+    tooYoung.setUTCFullYear(tooYoung.getUTCFullYear() - 15);
+
+    const { status, json } = await request('PATCH', '/api/v1/auth/me', {
+      token: primaryUser.accessToken,
+      body: { dateOfBirth: tooYoung.toISOString().slice(0, 10) },
+    });
+
+    assertEqual(status, 400, 'status');
+    assert(
+      (json.details || []).some((detail) => String(detail.message).includes('at least 16 years old')),
+      'the refusal must repeat the age rule'
+    );
+  });
+
+  await check('a corrected date of birth and location are saved', async () => {
+    const { status, json } = await request('PATCH', '/api/v1/auth/me', {
+      token: primaryUser.accessToken,
+      body: { dateOfBirth: ADULT_DATE_OF_BIRTH, location: 'Paynesville, Monrovia' },
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.user.dateOfBirth, ADULT_DATE_OF_BIRTH, 'date of birth');
+    assertEqual(json.data.user.location, 'Paynesville, Monrovia', 'location');
+  });
 }
 
 async function testLogin() {
