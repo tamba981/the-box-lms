@@ -58,6 +58,58 @@ const listQuery = z.object({
 });
 
 /* ------------------------------------------------------------------ *
+ * GET /api/v1/admin/system — what this deployment is actually configured to do
+ * ------------------------------------------------------------------ */
+
+/**
+ * Integration status, for an administrator.
+ *
+ * The deployment has several features that are present in the code and inert
+ * until they are configured: email until a provider key exists, uploads until
+ * storage exists, card and mobile-money payments until their credentials are
+ * set. Each degrades quietly by design — a student finishing a course must not
+ * get a 500 because the mail provider is down.
+ *
+ * The cost of degrading quietly is that a broken integration looks exactly like
+ * a working one. This endpoint answers "is it on?" from outside the server, so
+ * nobody has to read Railway's variables or a log file to find out.
+ *
+ * It deliberately reports only booleans and addresses the operator already
+ * knows. No API key, secret or connection string is included, and none can be
+ * added here by accident: every field below is computed, not copied.
+ */
+router.get(
+  '/system',
+  asyncHandler(async (req, res) => {
+    const mobileMoney = {};
+
+    for (const provider of config.mobileMoney || []) {
+      mobileMoney[provider.id] = Boolean(provider.configured);
+    }
+
+    return ok(res, {
+      email: {
+        enabled: config.email.enabled,
+        // The address mail is sent from. Not a secret, and the single most
+        // common cause of "it says sent but nothing arrived": a From on a
+        // domain the provider has not verified.
+        from: config.email.from,
+        inbox: config.email.inbox,
+      },
+      publicBaseUrl: config.publicBaseUrl,
+      storage: { enabled: config.storage.enabled },
+      payments: {
+        manual: (config.manualPayment.numbers || []).length > 0,
+        card: config.stripe.enabled,
+        orangeMoney: Boolean(mobileMoney.orange_money),
+        lonestar: Boolean(mobileMoney.lonestar_momo),
+      },
+      nodeEnv: config.env,
+    });
+  })
+);
+
+/* ------------------------------------------------------------------ *
  * GET /api/v1/admin/stats
  * ------------------------------------------------------------------ */
 

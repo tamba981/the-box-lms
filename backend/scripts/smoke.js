@@ -2436,6 +2436,102 @@ async function testCertificateDocuments() {
   });
 }
 
+/**
+ * The deployment's configuration status, as an administrator sees it.
+ *
+ * Every integration here is inert until it is configured, and inert quietly —
+ * which is correct behaviour and also means a broken integration is
+ * indistinguishable from a working one. These checks pin the payload that makes
+ * the difference visible, and that it stays free of secrets.
+ */
+async function testAdminSystemStatus() {
+  const adminEmail = `smoke-system-admin-${runId}@example.com`;
+  const studentEmail = `smoke-system-student-${runId}@example.com`;
+  createdEmails.push(adminEmail, studentEmail);
+
+  let adminToken = null;
+  let studentToken = null;
+
+  await check('an administrator and a student are provisioned for the system check', async () => {
+    await User.create({
+      firstName: 'System',
+      lastName: 'Admin',
+      email: adminEmail,
+      password: PASSWORD,
+      role: 'admin',
+      emailVerified: true,
+    });
+
+    await User.create({
+      firstName: 'System',
+      lastName: 'Student',
+      email: studentEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+
+    const signIn = async (email) => {
+      const { json } = await request('POST', '/api/v1/auth/login', { body: { email, password: PASSWORD } });
+      return json.data.accessToken;
+    };
+
+    adminToken = await signIn(adminEmail);
+    studentToken = await signIn(studentEmail);
+  });
+
+  /**
+   * The shape is the point. Each field answers "is this integration on?" for a
+   * feature that is otherwise inert and silent when it is not configured.
+   */
+  await check('an administrator can read the deployment configuration', async () => {
+    const { status, json } = await request('GET', '/api/v1/admin/system', { token: adminToken });
+
+    assertEqual(status, 200, 'status');
+
+    const data = json.data || {};
+
+    assertEqual(typeof data.email.enabled, 'boolean', 'email.enabled');
+    assertEqual(typeof data.email.from, 'string', 'email.from');
+    assert(data.publicBaseUrl, 'publicBaseUrl must be reported');
+
+    assertEqual(typeof data.storage.enabled, 'boolean', 'storage.enabled');
+
+    for (const key of ['manual', 'card', 'orangeMoney', 'lonestar']) {
+      assertEqual(typeof data.payments[key], 'boolean', `payments.${key}`);
+    }
+
+    assertEqual(typeof data.nodeEnv, 'string', 'nodeEnv');
+
+    // The whole reason this endpoint is worth having: a base URL of localhost
+    // in production puts a dead link inside every email and every certificate
+    // QR code, and nothing else in the system would report it.
+    assert(
+      data.publicBaseUrl.startsWith('http'),
+      'publicBaseUrl must be an absolute URL'
+    );
+  });
+
+  await check('the configuration is never readable by a student', async () => {
+    const { status } = await request('GET', '/api/v1/admin/system', { token: studentToken });
+    assertEqual(status, 403, 'status');
+  });
+
+  await check('the configuration leaks no secret material', async () => {
+    const { json } = await request('GET', '/api/v1/admin/system', { token: adminToken });
+    const serialised = JSON.stringify(json);
+
+    // It reports whether a thing is configured, never what it is configured
+    // with. If a key ever reaches this payload, this fails.
+    for (const forbidden of ['apiKey', 'api_key', 'secretKey', 'secret', 'password', 'mongoUri', 'mongodb+srv']) {
+      assert(
+        !serialised.toLowerCase().includes(forbidden.toLowerCase()),
+        `the payload must not contain "${forbidden}"`
+      );
+    }
+  });
+}
+
 async function testCommunityAndMessaging() {  const Course = require('../src/models/Course');
   const CommunityPost = require('../src/models/CommunityPost');
 
@@ -4643,6 +4739,9 @@ async function main() {
 
     process.stdout.write('\nCertificate documents\n');
     await testCertificateDocuments();
+
+    process.stdout.write('\nDeployment configuration\n');
+    await testAdminSystemStatus();
 
     process.stdout.write('\nCommunity, messaging and sessions\n');
     await testCommunityAndMessaging();
