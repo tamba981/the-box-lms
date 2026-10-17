@@ -149,6 +149,22 @@ const loginBody = z.object({
   password: z.string({ required_error: 'Password is required' }).min(1, 'Password is required').max(72),
 });
 
+/**
+ * An uploaded avatar, as a data URL.
+ *
+ * The upper bound is generous relative to the 120 KB image limit because base64
+ * inflates by a third and the client may send slightly more than it needs to.
+ * It exists so an oversized body is refused here, by a cheap string comparison,
+ * rather than being base64-decoded first.
+ */
+const avatarBody = z.object({
+  image: z
+    .string({ required_error: 'Choose an image to upload', invalid_type_error: 'Choose an image to upload' })
+    .trim()
+    .min(1, 'Choose an image to upload')
+    .max(400000, 'That image is too large. Choose one under 120 KB.'),
+});
+
 const refreshBody = z.object({
   // Optional: the browser client may instead send the token as a cookie.
   refreshToken: z.string().trim().min(20).max(500).optional(),
@@ -220,6 +236,7 @@ module.exports = {
   // auth
   registerBody,
   loginBody,
+  avatarBody,
   refreshBody,
   logoutBody,
   forgotPasswordBody,

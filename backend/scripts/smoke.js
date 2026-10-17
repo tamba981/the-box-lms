@@ -1961,6 +1961,132 @@ async function testTaxonomyAndCredentials() {
   });
 }
 
+/**
+ * Profile photos.
+ *
+ * The interesting part is not that a picture can be uploaded, it is that only a
+ * picture can. The bytes are sniffed rather than trusted, so a zip renamed to
+ * `photo.png` and an SVG carrying a script are both refused — the second
+ * especially, because serving an SVG from this origin would make a profile
+ * picture into stored cross-site scripting.
+ */
+async function testAvatars() {
+  const { sniffImageType } = require('../src/lib/avatar');
+
+  const memberEmail = `smoke-avatar-${runId}@example.com`;
+  createdEmails.push(memberEmail);
+
+  // Signature bytes only. The server sniffs the header and stores the rest
+  // untouched; decoding the pixels is the browser's job, not ours.
+  const PNG = Buffer.from('89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c489', 'hex');
+  const ZIP = Buffer.from('504b0304' + '00'.repeat(24), 'hex');
+  const SVG = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>');
+
+  const dataUrl = (buffer, label = 'image/png') => `data:${label};base64,${buffer.toString('base64')}`;
+
+  let token = null;
+  let firstUrl = null;
+
+  await check('a member registers for the avatar tests', async () => {
+    const { status, json } = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({ email: memberEmail, firstName: 'Photo', lastName: 'Tester' }),
+    });
+
+    assertEqual(status, 201, 'status');
+    token = json.data.accessToken;
+    assertEqual(json.data.user.avatarUrl, null, 'a new account has no picture');
+  });
+
+  await check('an uploaded photo becomes the account avatar', async () => {
+    const { status, json } = await request('PUT', '/api/v1/auth/me/avatar', {
+      token,
+      body: { image: dataUrl(PNG) },
+    });
+
+    assertEqual(status, 200, 'status');
+
+    firstUrl = json.data.user.avatarUrl;
+    assert(typeof firstUrl === 'string' && firstUrl.startsWith('/api/v1/avatars/'), 'the avatar URL is returned');
+    assert(/^\/api\/v1\/avatars\/[a-f0-9]{32}$/.test(firstUrl), 'the address is a random key, not a user id');
+  });
+
+  await check('the photo loads without a session, so an img tag can show it', async () => {
+    const response = await request('GET', firstUrl);
+
+    assertEqual(response.status, 200, 'status');
+    assertEqual(response.headers.get('content-type'), 'image/png', 'content type');
+    assertEqual(response.headers.get('x-content-type-options'), 'nosniff', 'the browser must not re-decide the type');
+    // The body arrives as text and binary does not survive a UTF-8 round trip,
+    // so the length is read off the header the server set from the buffer.
+    assertEqual(response.headers.get('content-length'), String(PNG.length), 'byte length');
+  });
+
+  await check('a non-image labelled as a PNG is refused', async () => {
+    const { status, json } = await request('PUT', '/api/v1/auth/me/avatar', {
+      token,
+      body: { image: dataUrl(ZIP) },
+    });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'INVALID_AVATAR', 'error code');
+  });
+
+  await check('an SVG is refused even though it is an image', async () => {
+    const { status } = await request('PUT', '/api/v1/auth/me/avatar', {
+      token,
+      body: { image: dataUrl(SVG, 'image/svg+xml') },
+    });
+
+    assertEqual(status, 400, 'status — an SVG can carry script');
+  });
+
+  await check('an image over the size limit is refused', async () => {
+    const oversized = Buffer.concat([PNG, Buffer.alloc(130 * 1024)]);
+
+    const { status, json } = await request('PUT', '/api/v1/auth/me/avatar', {
+      token,
+      body: { image: dataUrl(oversized) },
+    });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'INVALID_AVATAR', 'error code');
+  });
+
+  await check('replacing the photo mints a new address and retires the old one', async () => {
+    const { status, json } = await request('PUT', '/api/v1/auth/me/avatar', {
+      token,
+      body: { image: dataUrl(PNG) },
+    });
+
+    assertEqual(status, 200, 'status');
+    assert(json.data.user.avatarUrl !== firstUrl, 'a new upload must not reuse the old address');
+
+    const retired = await request('GET', firstUrl);
+    assertEqual(retired.status, 404, 'the replaced address must stop resolving');
+  });
+
+  await check('an unknown avatar key is a 404, not an account probe', async () => {
+    const missing = await request('GET', `/api/v1/avatars/${'0'.repeat(32)}`);
+    assertEqual(missing.status, 404, 'status');
+
+    const malformed = await request('GET', '/api/v1/avatars/not-a-real-key');
+    assertEqual(malformed.status, 404, 'status');
+  });
+
+  await check('removing the photo returns the account to initials', async () => {
+    const { status, json } = await request('DELETE', '/api/v1/auth/me/avatar', { token });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.user.avatarUrl, null, 'the avatar is gone');
+  });
+
+  await check('the sniffing helper agrees with the endpoint', async () => {
+    assertEqual(sniffImageType(PNG), 'image/png', 'png');
+    assertEqual(sniffImageType(ZIP), null, 'zip');
+    assertEqual(sniffImageType(SVG), null, 'svg');
+  });
+}
+
 async function testCommunityAndMessaging() {  const Course = require('../src/models/Course');
   const CommunityPost = require('../src/models/CommunityPost');
 
@@ -4162,6 +4288,9 @@ async function main() {
 
     process.stdout.write('\nCourse taxonomy and credentials\n');
     await testTaxonomyAndCredentials();
+
+    process.stdout.write('\nProfile photos\n');
+    await testAvatars();
 
     process.stdout.write('\nCommunity, messaging and sessions\n');
     await testCommunityAndMessaging();

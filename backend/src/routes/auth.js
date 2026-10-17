@@ -1,6 +1,7 @@
 'use strict';
 
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const express = require('express');
 
 const Enrollment = require('../models/Enrollment');
@@ -11,6 +12,7 @@ const email = require('../services/email');
 const tokens = require('../services/tokenService');
 
 const config = require('../config/env');
+const { decodeAvatar } = require('../lib/avatar');
 const logger = require('../lib/logger');
 const { asyncHandler } = require('../lib/asyncHandler');
 const { ok, created, noContent } = require('../lib/respond');
@@ -246,6 +248,57 @@ router.patch(
     await req.user.save();
 
     return ok(res, { user: req.user.toPublicJSON({ includePrivate: true }) }, 'Profile updated.');
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * PUT /api/v1/auth/me/avatar — replace your photo
+ * ------------------------------------------------------------------ */
+
+router.put(
+  '/me/avatar',
+  authenticate,
+  sensitiveLimiter,
+  validate({ body: schemas.avatarBody }),
+  asyncHandler(async (req, res) => {
+    const decoded = decodeAvatar(req.valid.body.image);
+
+    if (!decoded.ok) {
+      throw badRequest(decoded.message, {
+        code: 'INVALID_AVATAR',
+        details: [{ field: 'image', message: decoded.message }],
+      });
+    }
+
+    // A new key on every upload: the old address stops resolving, and no cache
+    // anywhere can serve the previous picture under the new one.
+    req.user.avatarImage = decoded.buffer;
+    req.user.avatarContentType = decoded.contentType;
+    req.user.avatarKey = crypto.randomBytes(16).toString('hex');
+
+    await req.user.save();
+
+    return ok(res, { user: req.user.toPublicJSON({ includePrivate: true }) }, 'Your photo has been updated.');
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * DELETE /api/v1/auth/me/avatar — go back to initials
+ * ------------------------------------------------------------------ */
+
+router.delete(
+  '/me/avatar',
+  authenticate,
+  sensitiveLimiter,
+  asyncHandler(async (req, res) => {
+    await User.updateOne(
+      { _id: req.user._id },
+      { $unset: { avatarImage: '', avatarContentType: '', avatarKey: '' } }
+    );
+
+    const user = await User.findById(req.user._id);
+
+    return ok(res, { user: user.toPublicJSON({ includePrivate: true }) }, 'Your photo has been removed.');
   })
 );
 

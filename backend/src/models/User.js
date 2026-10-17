@@ -55,6 +55,26 @@ const userSchema = new mongoose.Schema(
     emailVerifiedAt: { type: Date, default: null },
 
     avatarUrl: { type: String, trim: true, default: null },
+
+    /**
+     * An uploaded avatar, stored in the document as bytes.
+     *
+     * `select: false` because it is by far the largest field on the document and
+     * almost no query needs it — only the image endpoint does, and it opts in.
+     * A profile picture at 120 KB would otherwise ride along on every user list.
+     */
+    avatarImage: { type: Buffer, select: false, default: undefined },
+    avatarContentType: { type: String, default: null },
+
+    /**
+     * The address the image is served at.
+     *
+     * A random key rather than the user id, so the URL cannot be used to walk
+     * the user table, and regenerated on every upload so a replaced picture is
+     * never served from a cache under the old one.
+     */
+    avatarKey: { type: String, default: null, index: true },
+
     bio: { type: String, trim: true, maxlength: 600, default: null },
 
     // Instructor profile fields (empty for students).
@@ -72,6 +92,20 @@ userSchema.index({ createdAt: -1 });
 userSchema.virtual('fullName').get(function fullName() {
   return `${this.firstName} ${this.lastName}`.trim();
 });
+
+/**
+ * The address a browser should load for this person's picture.
+ *
+ * An uploaded image wins over a profile URL. The upload is the more recent
+ * intent, and a student who replaced a broken link with a real photograph
+ * should not still be shown the broken link.
+ *
+ * Every caller keeps reading `avatarUrl`, so nothing downstream had to change.
+ */
+userSchema.methods.avatarLink = function avatarLink() {
+  if (this.avatarKey) return `/api/v1/avatars/${this.avatarKey}`;
+  return this.avatarUrl || null;
+};
 
 /**
  * Hash on the way to the database. `isModified` keeps this idempotent: a
@@ -113,7 +147,7 @@ userSchema.methods.toPublicJSON = function toPublicJSON(options = {}) {
     lastName: this.lastName,
     fullName: this.fullName,
     role: this.role,
-    avatarUrl: this.avatarUrl,
+    avatarUrl: this.avatarLink(),
     bio: this.bio,
     headline: this.headline,
     expertise: this.expertise,
@@ -143,7 +177,7 @@ userSchema.methods.toAuthorJSON = function toAuthorJSON() {
     lastName: this.lastName,
     fullName: this.fullName,
     role: this.role,
-    avatarUrl: this.avatarUrl,
+    avatarUrl: this.avatarLink(),
     headline: this.headline,
   };
 };

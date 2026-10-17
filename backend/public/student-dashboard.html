@@ -1161,13 +1161,56 @@
             state.user = { ...state.user, ...user };
 
             const nameEl = document.getElementById('user-name');
-            const avatarEl = document.getElementById('userAvatar');
-
             if (nameEl) nameEl.textContent = user.firstName || 'Student';
-            if (avatarEl) avatarEl.textContent = (user.firstName || 'S')[0].toUpperCase();
+
+            renderHeaderAvatar();
 
             updateNotifBadge();
             return true;
+        }
+
+        /**
+         * The header avatar: the uploaded photo when there is one, initials
+         * otherwise. Clicking it is how a photo is set — asking a student to
+         * hunt through settings to put a face on their own account is a step
+         * nobody takes.
+         */
+        async function renderHeaderAvatar() {
+            const avatarEl = document.getElementById('userAvatar');
+            if (!avatarEl) return;
+
+            const user = state.user || WGA.getUser() || {};
+            avatarEl.innerHTML = WGAUI.avatar(user, 40);
+            avatarEl.style.cursor = 'pointer';
+            avatarEl.title = 'Change your photo';
+            avatarEl.setAttribute('role', 'button');
+            avatarEl.setAttribute('tabindex', '0');
+            avatarEl.setAttribute('aria-label', 'Change your photo');
+
+            const changePhoto = async (event) => {
+                if (event) event.preventDefault();
+
+                const dataUrl = await WGAUI.pickAvatar({ size: 256 });
+                if (!dataUrl) return;
+
+                try {
+                    const result = await WGA.put('/auth/me/avatar', { image: dataUrl });
+                    state.user = Object.assign({}, state.user, result.user);
+                    renderHeaderAvatar();
+                    WGAUI.toast('Your photo has been updated.', 'success');
+                } catch (error) {
+                    const details = Array.isArray(error.details) ? error.details : [];
+                    WGAUI.toast(
+                        (details[0] && details[0].message) || error.message || 'We could not save that photo.',
+                        'error'
+                    );
+                }
+            };
+
+            avatarEl.onclick = changePhoto;
+            avatarEl.onkeydown = (event) => {
+                if (event.key === 'Enter' || event.key === ' ') changePhoto(event);
+            };
         }
 
         function updateNotifBadge() {
@@ -1621,7 +1664,7 @@
                 WGA.setSession({ user: data.user });
 
                 document.getElementById('user-name').textContent = data.user.firstName || 'Student';
-                document.getElementById('userAvatar').textContent = (data.user.firstName || 'S')[0].toUpperCase();
+                document.getElementById('userAvatar').innerHTML = WGAUI.avatar(data.user, 40);
 
                 showToast('Your profile has been saved.', 'success');
             } catch (error) {

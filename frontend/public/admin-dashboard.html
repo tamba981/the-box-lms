@@ -1033,7 +1033,12 @@
             adminData.user = user;
             const avatar = document.getElementById('userAvatar');
             if (avatar) {
-                avatar.textContent = (user.firstName || 'A')[0].toUpperCase();
+                // The photo replaces the initial, but the element still carries
+                // its own click handler (the account menu), so nothing here
+                // takes over the click.
+                avatar.innerHTML = WGAUI.avatar(user, 40);
+                avatar.style.padding = '0';
+                avatar.style.overflow = 'hidden';
 
                 // It is a div styled as a button, so give it the keyboard
                 // behaviour a real button would have had.

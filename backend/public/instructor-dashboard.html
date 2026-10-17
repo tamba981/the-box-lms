@@ -1256,6 +1256,52 @@
         }
 
         /**
+         * The header avatar: the uploaded photo when there is one, initials
+         * otherwise. Clicking it is how a photo is set, because an instructor
+         * with twenty students in front of them should not have to go looking
+         * for a settings page to look like themselves.
+         */
+        async function renderHeaderAvatar() {
+            const avatarEl = document.getElementById('userAvatar');
+            if (!avatarEl) return;
+
+            const user = (typeof instructorData !== 'undefined' && instructorData.user) || WGA.getUser() || {};
+            avatarEl.innerHTML = WGAUI.avatar(user, 40);
+            avatarEl.style.cursor = 'pointer';
+            avatarEl.title = 'Change your photo';
+            avatarEl.setAttribute('role', 'button');
+            avatarEl.setAttribute('tabindex', '0');
+            avatarEl.setAttribute('aria-label', 'Change your photo');
+
+            const changePhoto = async (event) => {
+                if (event) event.preventDefault();
+
+                const dataUrl = await WGAUI.pickAvatar({ size: 256 });
+                if (!dataUrl) return;
+
+                try {
+                    const result = await WGA.put('/auth/me/avatar', { image: dataUrl });
+                    if (typeof instructorData !== 'undefined') {
+                        instructorData.user = Object.assign({}, instructorData.user, result.user);
+                    }
+                    renderHeaderAvatar();
+                    WGAUI.toast('Your photo has been updated.', 'success');
+                } catch (error) {
+                    const details = Array.isArray(error.details) ? error.details : [];
+                    WGAUI.toast(
+                        (details[0] && details[0].message) || error.message || 'We could not save that photo.',
+                        'error'
+                    );
+                }
+            };
+
+            avatarEl.onclick = changePhoto;
+            avatarEl.onkeydown = (event) => {
+                if (event.key === 'Enter' || event.key === ' ') changePhoto(event);
+            };
+        }
+
+        /**
          * The session and the role are verified by /assets/js/wga-guard.js before
          * this page is revealed, so there is nothing to decide here. The previous
          * version read the role out of localStorage, which the visitor controls.
@@ -1263,10 +1309,10 @@
         function checkAuth() {
             const user = WGA.getUser() || {};
             const nameEl = document.getElementById('user-name');
-            const avatarEl = document.getElementById('userAvatar');
 
             if (nameEl) nameEl.textContent = user.firstName || 'Instructor';
-            if (avatarEl) avatarEl.textContent = (user.firstName || 'I')[0].toUpperCase();
+
+            renderHeaderAvatar();
 
             updateNotifBadge();
             return true;
@@ -1502,7 +1548,7 @@
                         <tbody id="studentsBody">
                             ${instructorData.students.length > 0 ? instructorData.students.map(s => `
                                 <tr class="student-row" data-name="${WGAUI.escapeHtml(s.name)} " data-email="${WGAUI.escapeHtml(s.email)}">
-                                    <td>${WGAUI.escapeHtml(s.name)}</td>
+                                    <td><div style="display:flex;align-items:center;gap:10px;">${WGAUI.avatar({ fullName: s.name, avatarUrl: s.avatarUrl }, 32)}<span>${WGAUI.escapeHtml(s.name)}</span></div></td>
                                     <td>${WGAUI.escapeHtml(s.email)}</td>
                                     <td>${WGAUI.escapeHtml(s.courseTitle)}</td>
                                     <td><div style="width:80px;background:rgba(0,0,0,0.06);border-radius:4px;height:6px;"><div style="width:${s.progress}%;height:6px;background:var(--primary);border-radius:4px;"></div></div> ${s.progress}%</td>

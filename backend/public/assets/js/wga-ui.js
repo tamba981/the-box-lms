@@ -290,6 +290,104 @@
     );
   }
 
+  /**
+   * A person's picture, or their initials when there is none.
+   *
+   * Returns markup rather than an element so it drops into the existing
+   * template strings. The image is lazy and has an empty `alt` — the name is
+   * always written next to it, so announcing it twice would be noise.
+   */
+  function avatar(user, size) {
+    var pixels = Number(size) || 40;
+    var person = user || {};
+    var name = person.fullName || ((person.firstName || '') + ' ' + (person.lastName || '')).trim();
+
+    var frame =
+      'width:' + pixels + 'px;height:' + pixels + 'px;border-radius:50%;' +
+      'display:inline-flex;align-items:center;justify-content:center;' +
+      'flex:0 0 auto;overflow:hidden;background:var(--gold,#d4a547);' +
+      'color:#fff;font-weight:600;font-size:' + Math.max(10, Math.round(pixels * 0.38)) + 'px;' +
+      'line-height:1;user-select:none;';
+
+    if (person.avatarUrl) {
+      return (
+        '<span style="' + frame + '">' +
+        '<img src="' + escapeHtml(person.avatarUrl) + '" alt="" loading="lazy" ' +
+        'style="width:100%;height:100%;object-fit:cover;display:block;" ' +
+        // A dead or blocked image must not leave a broken-image icon inside a
+        // circle. Falling back to the initials keeps the row readable.
+        'onerror="this.parentNode.textContent=this.parentNode.getAttribute(\'data-initials\')||\'\';" ' +
+        'data-initials="' + escapeHtml(initials(name)) + '" />' +
+        '</span>'
+      );
+    }
+
+    return '<span style="' + frame + '" aria-hidden="true">' + escapeHtml(initials(name)) + '</span>';
+  }
+
+  /**
+   * Ask for a photo and hand back a 256×256 data URL.
+   *
+   * Resizing in the browser is not an optimisation, it is what makes the
+   * feature usable: a phone camera produces 3–5 MB, the server accepts 120 KB,
+   * and no student should have to know what a kilobyte is to set a picture.
+   * `cover` crops from the centre so faces stay in frame.
+   *
+   * Resolves null when the visitor cancels.
+   */
+  function pickAvatar(options) {
+    var settings = options || {};
+    var size = settings.size || 256;
+
+    return new Promise(function (resolve) {
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/png,image/jpeg,image/webp';
+
+      input.onchange = function () {
+        var file = input.files && input.files[0];
+        if (!file) return resolve(null);
+
+        var reader = new FileReader();
+
+        reader.onerror = function () {
+          resolve(null);
+        };
+
+        reader.onload = function () {
+          var image = new Image();
+
+          image.onerror = function () {
+            resolve(null);
+          };
+
+          image.onload = function () {
+            var canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+
+            var context = canvas.getContext('2d');
+            var scale = Math.max(size / image.width, size / image.height);
+            var width = image.width * scale;
+            var height = image.height * scale;
+
+            context.drawImage(image, (size - width) / 2, (size - height) / 2, width, height);
+
+            // JPEG at 0.85 lands around 8–20 KB for a portrait, comfortably
+            // inside the limit with no visible loss at this size.
+            resolve(canvas.toDataURL('image/jpeg', 0.85));
+          };
+
+          image.src = reader.result;
+        };
+
+        reader.readAsDataURL(file);
+      };
+
+      input.click();
+    });
+  }
+
   /** Inject the spinner keyframes once. */
   function injectBaseStyles() {
     if (document.getElementById('wga-ui-styles')) return;
@@ -314,6 +412,8 @@
     formatDateTime: formatDateTime,
     formatRelative: formatRelative,
     initials: initials,
+    avatar: avatar,
+    pickAvatar: pickAvatar,
     toast: toast,
     setBusy: setBusy,
     showFieldErrors: showFieldErrors,
