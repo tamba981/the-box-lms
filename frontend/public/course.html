@@ -8,7 +8,7 @@
   <meta name="description" content="Course details, syllabus and enrolment." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="/assets/css/wga-shell.css" />
+  <link rel="stylesheet" href="/assets/css/wga-shell.css?v=20261017" />
   <style>
     .hero {
       display: grid; grid-template-columns: 1.6fr 1fr; gap: 30px;
@@ -86,7 +86,32 @@
     }
     .viewer-media video,
     .viewer-media iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
-    .viewer-body { font-size: 16px; line-height: 1.8; white-space: pre-line; }
+    .viewer-body { font-size: 16px; line-height: 1.8; }
+    /* Older lessons are plain text; `pre-line` keeps their paragraph breaks. */
+    .viewer-body.is-plain { white-space: pre-line; }
+    .viewer-body.is-rich > :first-child { margin-top: 0; }
+    .viewer-body.is-rich p { margin: 0 0 14px; }
+    .viewer-body.is-rich h2 { font-size: 21px; margin: 22px 0 8px; }
+    .viewer-body.is-rich h3 { font-size: 18px; margin: 18px 0 6px; }
+    .viewer-body.is-rich h4 { font-size: 16px; margin: 14px 0 6px; }
+    .viewer-body.is-rich ul,
+    .viewer-body.is-rich ol { margin: 0 0 14px; padding-left: 24px; }
+    .viewer-body.is-rich li { margin-bottom: 6px; }
+    .viewer-body.is-rich blockquote {
+      margin: 14px 0; padding: 2px 0 2px 16px;
+      border-left: 3px solid rgba(26, 86, 219, .3); color: #4a5568;
+    }
+    .viewer-body.is-rich a { color: var(--primary, #1a56db); text-decoration: underline; }
+    .viewer-body.is-rich pre {
+      background: #0f172a; color: #e2e8f0; padding: 14px 16px; border-radius: 10px;
+      overflow-x: auto; font-size: 13.5px; line-height: 1.6;
+    }
+    .viewer-body.is-rich code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .92em;
+    }
+    .viewer-body.is-rich .ql-align-center { text-align: center; }
+    .viewer-body.is-rich .ql-align-right { text-align: right; }
+    .viewer-body.is-rich .ql-align-justify { text-align: justify; }
     .viewer-nav { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
     .viewer-nav .spacer { flex: 1 1 auto; }
     .resource-list { list-style: none; margin: 10px 0 0; padding: 0; }
@@ -287,8 +312,8 @@
     </div>
   </main>
 
-  <script src="/assets/js/wga-api.js"></script>
-  <script src="/assets/js/wga-ui.js"></script>
+  <script src="/assets/js/wga-api.js?v=20261017"></script>
+  <script src="/assets/js/wga-ui.js?v=20261017"></script>
   <script>
     (function () {
       'use strict';
@@ -441,6 +466,42 @@
         }
 
         return '';
+      }
+
+      /** Does this look like HTML rather than the plain text older lessons use? */
+      function looksLikeHtml(value) {
+        return /<([a-z][a-z0-9]*)\b[^>]*>/i.test(String(value || ''));
+      }
+
+      /*
+       * Lesson bodies are HTML now that the editor writes them. They are
+       * sanitized on the server as they are saved, so the markup can be inserted
+       * as-is; the plain-text branch stays escaped because a lesson written
+       * before the editor may genuinely contain a "<" the author meant literally.
+       */
+      /**
+       * Turn the five basic entities back into characters.
+       *
+       * The server escapes text when it sanitizes a lesson body, so a lesson that
+       * says "less than < 5" comes back as "less than &lt; 5". Without this the
+       * plain-text branch would escape the ampersand again and the student would
+       * read "&lt;" on the page.
+       */
+      function unescapeBasic(value) {
+        return String(value || '').replace(/&(amp|lt|gt|quot|#39);/g, function (entity, name) {
+          return { amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'" }[name];
+        });
+      }
+
+      function lessonBodyBlock(lesson) {
+        var content = lesson.content;
+        if (!content) return '';
+
+        if (looksLikeHtml(content)) {
+          return '<div class="viewer-body is-rich">' + content + '</div>';
+        }
+
+        return '<div class="viewer-body is-plain">' + WGAUI.escapeHtml(unescapeBasic(content)) + '</div>';
       }
 
       function resourcesBlock(lesson) {
@@ -731,9 +792,7 @@
                   '<button type="button" class="wga-btn wga-btn-ghost" id="close-lesson">Close</button>' +
                 '</div>' +
                 mediaBlock(lesson) +
-                (lesson.content
-                  ? '<div class="viewer-body">' + WGAUI.escapeHtml(lesson.content) + '</div>'
-                  : '') +
+                lessonBodyBlock(lesson) +
                 resourcesBlock(lesson) +
                 '<div id="lesson-quiz"></div>' +
                 '<div class="viewer-nav">' +

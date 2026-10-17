@@ -1030,6 +1030,130 @@ async function testLearningLoop() {
     assertEqual(lessonB.order, 2, 'second lesson order');
   });
 
+  /*
+   * Lesson bodies became HTML when the editor shipped. These checks go through
+   * the API rather than calling the sanitizer directly, because the interesting
+   * failure is not "the sanitizer is wrong" but "the sanitizer was never called"
+   * — a route that forgets it looks exactly like a route that works.
+   */
+  let dirtyLessonId = null;
+  let plainLessonId = null;
+
+  const lessonBody = async (id) => {
+    const read = await request('GET', `/api/v1/courses/${course.id}/lessons/${id}`, {
+      token: instructorSession.accessToken,
+    });
+    assertEqual(read.status, 200, 'read back');
+    return read.json.data.lesson.content || '';
+  };
+
+  await check('a lesson body is sanitized when it is saved', async () => {
+    const created = await request('POST', `/api/v1/courses/${course.id}/lessons`, {
+      token: instructorSession.accessToken,
+      body: {
+        title: 'Formatting',
+        type: 'text',
+        content:
+          '<h2>Week one</h2><p>Read <strong>carefully</strong>.</p>' +
+          '<script>steal()</script><img src=x onerror="steal()">' +
+          '<iframe src="https://evil.example"></iframe>' +
+          '<p style="color:red" onclick="steal()">Styled</p>',
+      },
+    });
+
+    assertEqual(created.status, 201, 'create');
+    dirtyLessonId = created.json.data.lesson.id;
+
+    const body = created.json.data.lesson.content;
+    assert(!/<script/i.test(body), `script tag survived: ${body}`);
+    assert(!/onerror/i.test(body), `event handler survived: ${body}`);
+    assert(!/<iframe/i.test(body), `iframe survived: ${body}`);
+    assert(!/onclick/i.test(body), `inline handler survived: ${body}`);
+    assert(!/style=/i.test(body), `inline style survived: ${body}`);
+    assert(body.includes('<strong>carefully</strong>'), `formatting was dropped: ${body}`);
+    assert(body.includes('Week one'), `heading text was dropped: ${body}`);
+  });
+
+  await check('an edit cannot put unsafe markup back into a lesson', async () => {
+    assert(dirtyLessonId, 'the previous check must have created the lesson');
+
+    const patched = await request('PATCH', `/api/v1/courses/${course.id}/lessons/${dirtyLessonId}`, {
+      token: instructorSession.accessToken,
+      body: { content: '<p>Kept</p><svg onload="steal()"></svg><a href="javascript:steal()">tap</a>' },
+    });
+
+    assertEqual(patched.status, 200, 'patch');
+
+    const body = await lessonBody(dirtyLessonId);
+    assert(!/<svg/i.test(body), `svg survived: ${body}`);
+    assert(!/onload/i.test(body), `onload survived: ${body}`);
+    assert(!/javascript:/i.test(body), `javascript: href survived: ${body}`);
+    assert(!/<a\b/i.test(body), `unsafe link kept its element: ${body}`);
+    assert(body.includes('Kept'), `text was dropped: ${body}`);
+  });
+
+  await check('a safe link is kept and marked noopener', async () => {
+    assert(dirtyLessonId, 'the previous checks must have created the lesson');
+
+    const patched = await request('PATCH', `/api/v1/courses/${course.id}/lessons/${dirtyLessonId}`, {
+      token: instructorSession.accessToken,
+      body: { content: '<p>See <a href="https://example.com/notes" target="_blank">the notes</a></p>' },
+    });
+
+    assertEqual(patched.status, 200, 'patch');
+
+    const body = await lessonBody(dirtyLessonId);
+    assert(body.includes('href="https://example.com/notes"'), `link lost: ${body}`);
+    assert(/rel="[^"]*noopener/.test(body), `noopener missing: ${body}`);
+  });
+
+  await check('lesson materials must be ordinary web addresses', async () => {
+    for (const url of ['javascript:steal()', 'data:text/html,<b>x</b>', 'ftp://example.com/a.pdf']) {
+      const rejected = await request('POST', `/api/v1/courses/${course.id}/lessons`, {
+        token: instructorSession.accessToken,
+        body: { title: 'Materials', type: 'text', resources: [{ title: 'Sheet', url }] },
+      });
+
+      assertEqual(rejected.status, 400, `status for ${url}`);
+      assertEqual(rejected.json.code, 'VALIDATION_ERROR', `code for ${url}`);
+    }
+
+    const accepted = await request('POST', `/api/v1/courses/${course.id}/lessons`, {
+      token: instructorSession.accessToken,
+      body: {
+        title: 'Materials',
+        type: 'text',
+        resources: [{ title: 'Sheet', url: 'https://example.com/worksheet.pdf' }],
+      },
+    });
+
+    assertEqual(accepted.status, 201, 'https resource');
+    plainLessonId = accepted.json.data.lesson.id;
+  });
+
+  await check('a lesson that is only text is left readable', async () => {
+    const created = await request('POST', `/api/v1/courses/${course.id}/lessons`, {
+      token: instructorSession.accessToken,
+      body: { title: 'Comparison', type: 'text', content: 'Compare a < b and c > d.' },
+    });
+
+    assertEqual(created.status, 201, 'create');
+
+    // "< b" is not a tag, so the text has to survive as text rather than vanish.
+    const body = created.json.data.lesson.content;
+    assert(body.includes('Compare a'), `text was lost: ${body}`);
+    assert(body.includes('c &gt; d') || body.includes('c > d'), `comparison was mangled: ${body}`);
+
+    // Leave the course exactly as the rest of the suite expects it.
+    for (const id of [dirtyLessonId, plainLessonId, created.json.data.lesson.id]) {
+      if (!id) continue;
+      const removed = await request('DELETE', `/api/v1/courses/${course.id}/lessons/${id}`, {
+        token: instructorSession.accessToken,
+      });
+      assert(removed.status < 300, `cleanup ${id} returned ${removed.status}`);
+    }
+  });
+
   await check('publishing an empty course is refused', async () => {
     const empty = await request('POST', '/api/v1/courses', {
       token: instructorSession.accessToken,

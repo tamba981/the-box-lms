@@ -7,6 +7,8 @@
     <title>Instructor Dashboard · Wuteve Global Academy</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Self-hosted: the CSP allows jsdelivr for scripts but not for stylesheets. -->
+    <link rel="stylesheet" href="/assets/vendor/quill/quill.snow.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* ----- CSS Variables & Base ----- */
@@ -967,6 +969,33 @@
         .lesson-video-state.is-upload { color: var(--success); }
         .lesson-video-state.is-link { color: var(--primary); }
 
+        /* The editor sits inside a modal, so it must scroll rather than grow. */
+        .lesson-rich-wrap .ql-toolbar.ql-snow {
+            border-color: var(--border); border-radius: 12px 12px 0 0;
+            background: rgba(255,255,255,.05);
+        }
+        .lesson-rich-wrap .ql-container.ql-snow {
+            border-color: var(--border); border-radius: 0 0 12px 12px;
+            font-family: inherit; font-size: 15px;
+        }
+        .lesson-rich-wrap .ql-editor {
+            min-height: 190px; max-height: 46vh; overflow-y: auto; line-height: 1.7;
+        }
+        .lesson-rich-wrap .ql-editor.ql-blank::before { color: var(--text-light); font-style: normal; }
+        .lesson-rich-wrap .ql-editor h2 { font-size: 20px; margin: 14px 0 8px; }
+        .lesson-rich-wrap .ql-editor h3 { font-size: 17px; margin: 12px 0 6px; }
+        .lesson-rich-wrap .ql-editor h4 { font-size: 15px; margin: 10px 0 6px; }
+        .lesson-rich-wrap .ql-editor blockquote { border-left: 3px solid var(--border); margin: 10px 0; padding-left: 14px; }
+        .lesson-rich-wrap .ql-editor a { color: var(--primary); text-decoration: underline; }
+        /* Quill prints its own icon font colour; the modal is dark-ish. */
+        .lesson-rich-wrap .ql-snow .ql-stroke { stroke: currentColor; }
+        .lesson-rich-wrap .ql-snow .ql-fill { fill: currentColor; }
+        .lesson-rich-wrap .ql-snow .ql-picker { color: inherit; }
+        @media (max-width: 640px) {
+            .lesson-rich-wrap .ql-toolbar.ql-snow { padding: 6px; }
+            .lesson-rich-wrap .ql-editor { min-height: 150px; font-size: 16px; }
+        }
+
         .lesson-form {
             margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border);
         }
@@ -982,9 +1011,10 @@
       revealed. This replaces the previous check, which treated the presence of
       any string in localStorage as proof of sign-in.
     -->
-    <script src="/assets/js/wga-api.js"></script>
-    <script src="/assets/js/wga-ui.js"></script>
-    <script src="/assets/js/wga-guard.js" data-roles="instructor,admin"></script>
+    <script src="/assets/js/wga-api.js?v=20261017"></script>
+    <script src="/assets/js/wga-ui.js?v=20261017"></script>
+    <script src="/assets/js/wga-guard.js?v=20261017" data-roles="instructor,admin"></script>
+    <script src="/assets/vendor/quill/quill.js"></script>
 </head>
 <body>
 
@@ -1853,6 +1883,18 @@
          * ============================================================ */
         const lessonState = { courseId: null, title: '', items: [], editing: null, storage: null, draft: null };
 
+        /*
+         * Which `editing` object the form currently on screen was built from.
+         *
+         * The whole modal is redrawn from state on nearly every action, which
+         * throws the inputs away. Reading them back before a redraw keeps what
+         * the instructor typed, but only when the form really is theirs — after
+         * "Edit" on a different lesson the old markup is still in the DOM for a
+         * moment, and copying that into the new lesson would be worse than losing
+         * it. Object identity tells the two apart with no extra bookkeeping.
+         */
+        let lessonFormOwner = null;
+
         function lessonVideoLabel(lesson) {
             if (lesson.videoType === 'upload') {
                 return '<span class="lesson-video-state is-upload"><i class="fas fa-circle-check"></i> Uploaded video</span>';
@@ -1864,11 +1906,13 @@
         }
 
         function refreshLessonModal() {
+            captureLessonForm();
             openModal(lessonState.title, lessonModalBody());
             bindLessonModal();
         }
 
         function lessonModalBody() {
+            lessonFormOwner = lessonState.editing;
             const storage = lessonState.storage || { enabled: false, missing: [] };
             const editing = lessonState.editing;
 
@@ -1917,7 +1961,12 @@
                                 <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="lessonPublished" ${editing.published !== false ? 'checked' : ''} /> Visible to students</label>
                             </div>
                         </div>
-                        <div class="form-group"><label>Lesson notes</label><textarea id="lessonContent" rows="5" placeholder="What this lesson covers. Shown under the video.">${WGAUI.escapeHtml(editing.content || '')}</textarea></div>
+                        <div class="form-group">
+                            <label>Lesson notes</label>
+                            <div class="lesson-rich-wrap"><div id="lessonRichEditor"></div></div>
+                            <input type="hidden" id="lessonContent" value="${WGAUI.escapeHtml(editing.content || '')}" />
+                            <p class="lesson-hint">Bold, headings, lists, quotes and links. Shown to students under the video.</p>
+                        </div>
 
                         <div class="form-group">
                             <label>Video</label>
@@ -2077,6 +2126,7 @@
         function captureLessonForm() {
             const editing = lessonState.editing;
             if (!editing) return;
+            if (lessonFormOwner !== editing) return;
 
             const val = (id) => { const el = document.getElementById(id); return el ? el.value : undefined; };
             const on = (id) => { const el = document.getElementById(id); return el ? el.checked : undefined; };
@@ -2276,6 +2326,63 @@
         function bindLessonModal() {
             const modal = document.getElementById('modalBody') || document;
             if (modal.querySelector && modal.querySelector('input[name="lessonVideoMode"]')) setLessonVideoMode();
+            mountLessonEditor();
+        }
+
+        /*
+         * The rich-text editor.
+         *
+         * Quill writes into a hidden `#lessonContent`, so everything downstream —
+         * captureLessonForm, the redraws, lessonSave — keeps reading one plain
+         * input and none of it had to change.
+         *
+         * The toolbar is deliberately only the formats the server keeps. Offering
+         * a button whose output the sanitizer strips would let an instructor watch
+         * their formatting disappear on save with no explanation.
+         */
+        const LESSON_TOOLBAR = [
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ header: [2, 3, 4] }],
+            [{ list: 'ordered' }, { list: 'bullet' }],
+            [{ align: [] }],
+            ['blockquote', 'code-block'],
+            ['link'],
+            ['clean']
+        ];
+
+        function mountLessonEditor() {
+            const host = document.getElementById('lessonRichEditor');
+            const field = document.getElementById('lessonContent');
+            if (!host || !field) return;
+
+            lessonState.editor = null;
+
+            // If the vendored script did not load, writing notes still has to work.
+            if (typeof window.Quill !== 'function') {
+                const area = document.createElement('textarea');
+                area.rows = 8;
+                area.value = field.value;
+                area.addEventListener('input', () => { field.value = area.value; });
+                host.replaceWith(area);
+                return;
+            }
+
+            const quill = new window.Quill(host, {
+                theme: 'snow',
+                placeholder: 'What this lesson covers. Shown under the video.',
+                modules: { toolbar: LESSON_TOOLBAR }
+            });
+
+            if (field.value) quill.clipboard.dangerouslyPasteHTML(field.value);
+
+            quill.on('text-change', () => {
+                // An empty Quill document is a single empty paragraph, which would
+                // be saved as "<p><br></p>" and then render as a stray blank block.
+                const html = quill.root.innerHTML.trim();
+                field.value = html === '<p><br></p>' ? '' : html;
+            });
+
+            lessonState.editor = quill;
         }
 
         /** "Title | URL" per line, which is one less control than a repeatable row. */
@@ -2329,7 +2436,15 @@
                 }
 
                 const id = lesson.id || editing.id;
-                lessonState.editing = Object.assign({}, editing, { isNew: false, id: id, isUploaded: lesson.videoType === 'upload' });
+                // The redraw below builds from this object, so it has to carry what
+                // was just saved — otherwise saving an upload wipes the notes field.
+                lessonState.editing = Object.assign({}, editing, {
+                    isNew: false,
+                    id: id,
+                    isUploaded: lesson.videoType === 'upload',
+                    content: payload.content,
+                    resourcesText: document.getElementById('lessonResources')?.value || ''
+                });
                 // A lesson that has just been created can now carry a quiz, so the
                 // editor stops saying "save the lesson first".
                 if (!quizState.lessonId) quizState.lessonId = id;

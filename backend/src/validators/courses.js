@@ -4,7 +4,23 @@ const { z } = require('zod');
 
 const { COURSE_LEVELS, COURSE_STATUSES, LESSON_TYPES } = require('./auth').enums;
 const { objectId, paginationQuery, optionalUrl } = require('./auth');
+
+/**
+ * `z.string().url()` only checks syntax, and `javascript:alert(1)` is
+ * syntactically valid — so is `data:text/html,...`. Both execute if they ever
+ * reach an href. Lesson resources are also sent by email and could be shown
+ * anywhere, so the scheme is refused here instead of relying on every reader
+ * remembering to filter it.
+ */
+const httpUrl = (label) =>
+  z
+    .string()
+    .trim()
+    .max(2000, 'URL is too long')
+    .url(`${label} is invalid`)
+    .refine((value) => /^https?:\/\//i.test(value), `${label} must start with http:// or https://`);
 const { ALLOWED_VIDEO_MIME, MAX_VIDEO_BYTES, EMBEDDABLE_VIDEO_HOSTS, COURSE_CATEGORY_SLUGS, SELECTABLE_CREDENTIALS, CREDENTIALS, LEGACY_CATEGORY_ALIASES } = require('../lib/constants');
+const { sanitizeLessonHtml } = require('../lib/sanitizeHtml');
 
 /**
  * Course and lesson input schemas.
@@ -115,14 +131,27 @@ const lessonFields = {
   title: z.string().trim().min(2, 'Lesson title is required').max(200, 'Lesson title is too long'),
   summary: z.string().trim().max(400, 'Summary is too long').optional(),
   type: z.enum(LESSON_TYPES).optional(),
-  content: z.string().trim().max(100000, 'Lesson body is too long').optional(),
+  /**
+   * The lesson body is HTML once the editor is used, so it is sanitized here —
+   * the one place both create and update pass through.
+   *
+   * Doing it in the validator rather than in each route means a future endpoint
+   * that accepts a lesson body cannot forget: the value is already clean by the
+   * time any handler sees it, and a test can call the schema directly.
+   */
+  content: z
+    .string()
+    .trim()
+    .max(100000, 'Lesson body is too long')
+    .transform(sanitizeLessonHtml)
+    .optional(),
   videoUrl: optionalUrl.optional(),
   order: z.coerce.number().int().min(1).max(10000).optional(),
   durationMinutes: z.coerce.number().min(0).max(100000).optional(),
   isPreview: z.coerce.boolean().optional(),
   published: z.coerce.boolean().optional(),
   resources: z
-    .array(z.object({ title: z.string().trim().min(1).max(200), url: z.string().trim().url('Resource URL is invalid').max(2000) }))
+    .array(z.object({ title: z.string().trim().min(1).max(200), url: httpUrl('Resource URL') }))
     .max(30, 'Too many resources')
     .optional(),
 };

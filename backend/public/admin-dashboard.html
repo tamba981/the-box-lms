@@ -852,9 +852,9 @@
       any string in localStorage as proof of sign-in — typing anything into that
       key was enough to open the administrator panel.
     -->
-    <script src="/assets/js/wga-api.js"></script>
-    <script src="/assets/js/wga-guard.js" data-roles="admin"></script>
-    <script src="/assets/js/wga-ui.js"></script>
+    <script src="/assets/js/wga-api.js?v=20261017"></script>
+    <script src="/assets/js/wga-guard.js?v=20261017" data-roles="admin"></script>
+    <script src="/assets/js/wga-ui.js?v=20261017"></script>
 </head>
 <body>
     <!-- ===== HEADER ===== -->
@@ -1570,7 +1570,7 @@
             return `
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
                     <span style="font-size:24px;font-weight:700;">💳 Payments</span>
-                    <button class="btn-primary btn-outline" onclick="loadPayments()">Refresh</button>
+                    <button class="btn-primary btn-outline" onclick="refreshPage(this)">Refresh</button>
                 </div>
                 <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
                     <div class="stat-card glass-premium"><div class="stat-title">Revenue Collected</div><div class="stat-value" style="font-size:24px;">${WGAUI.escapeHtml(headline.value)}</div><div class="stat-change"${headline.mixed ? ' style="color:#b45309;"' : ''}>${WGAUI.escapeHtml(headline.note)}</div></div>
@@ -2025,6 +2025,19 @@
                 showToast('Account updated.', 'success');
                 await refresh();
                 await loadPage('users');
+            });
+
+        /**
+         * Re-fetch and redraw whatever page is on screen.
+         *
+         * The buttons on a page only re-fetch after they change something, so a
+         * Refresh control has to do both halves itself: `refresh()` fills the data
+         * and `loadPage()` draws it. Calling only the second would redraw stale data.
+         */
+        window.refreshPage = (button) =>
+            withBusy(button, async () => {
+                await refresh();
+                await loadPage(state.currentPage);
             });
 
         window.approveCourse = (id, button) =>
