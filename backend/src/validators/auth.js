@@ -3,6 +3,14 @@
 const { z } = require('zod');
 
 const { ROLES, COURSE_LEVELS, COURSE_STATUSES, LESSON_TYPES } = require('../lib/constants');
+const {
+  MINIMUM_AGE,
+  MAXIMUM_AGE,
+  EARLIEST_DATE_OF_BIRTH,
+  MINIMUM_AGE_MESSAGE,
+  ageInYears,
+  parseDateOfBirth,
+} = require('../lib/age');
 
 /**
  * Reusable field schemas.
@@ -38,6 +46,56 @@ const password = z
   .max(72, 'Password must be at most 72 characters')
   .regex(/[A-Za-z]/, 'Password must contain at least one letter')
   .regex(/[0-9]/, 'Password must contain at least one number');
+
+/**
+ * Date of birth, validated and converted to a Date in one pass.
+ *
+ * The client sends `YYYY-MM-DD` — a calendar date, with no time and no zone —
+ * because that is what a date input produces and what a birthday means. Sending
+ * it as a timestamp would let a timezone move it to the previous day.
+ *
+ * The minimum age is enforced here, where the value is first trusted. It is
+ * re-checked on any later edit for the same reason: a rule that only applies at
+ * sign-up is a rule anyone can step around by editing their profile.
+ */
+const dateOfBirth = z
+  .string({ required_error: 'Date of birth is required', invalid_type_error: 'Enter your date of birth' })
+  .trim()
+  .min(1, 'Date of birth is required')
+  .transform((value, ctx) => {
+    const parsed = parseDateOfBirth(value);
+
+    if (!parsed) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Enter a valid date of birth' });
+      return z.NEVER;
+    }
+
+    if (parsed.toISOString().slice(0, 10) < EARLIEST_DATE_OF_BIRTH) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Enter a valid date of birth' });
+      return z.NEVER;
+    }
+
+    const age = ageInYears(parsed);
+
+    if (age === null || age > MAXIMUM_AGE) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'Enter a valid date of birth' });
+      return z.NEVER;
+    }
+
+    if (age < MINIMUM_AGE) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, message: MINIMUM_AGE_MESSAGE });
+      return z.NEVER;
+    }
+
+    return parsed;
+  });
+
+/** Where the student is. Free text, but it must actually say something. */
+const location = z
+  .string({ required_error: 'Location is required', invalid_type_error: 'Enter your location' })
+  .trim()
+  .min(2, 'Enter your city and country')
+  .max(100, 'Location is too long');
 
 const phone = z
   .string()
@@ -77,6 +135,8 @@ const registerBody = z.object({
   email,
   password,
   phone: phone.optional(),
+  dateOfBirth,
+  location,
   /**
    * `role` is intentionally absent. The previous API read a role straight from
    * the request body, which let anyone create an administrator account. Zod
@@ -153,6 +213,8 @@ module.exports = {
   name,
   password,
   phone,
+  dateOfBirth,
+  location,
   optionalUrl,
   paginationQuery,
   // auth

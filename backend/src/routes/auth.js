@@ -77,7 +77,7 @@ router.post(
   authLimiter,
   validate({ body: schemas.registerBody }),
   asyncHandler(async (req, res) => {
-    const { firstName, lastName, email: address, password, phone } = req.valid.body;
+    const { firstName, lastName, email: address, password, phone, dateOfBirth, location } = req.valid.body;
 
     const existing = await User.findOne({ email: address }).select('_id');
     if (existing) {
@@ -98,6 +98,10 @@ router.post(
       email: address,
       password,
       phone: phone || undefined,
+      // The schema has already proved this is a real date and that the student
+      // is old enough; storing the date rather than the age keeps it true.
+      dateOfBirth,
+      location,
       role: 'student',
     });
 

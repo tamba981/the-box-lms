@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 
 const config = require('../config/env');
 const { ROLES } = require('../lib/constants');
+const { formatDateOfBirth } = require('../lib/age');
 const { baseOptions, lowercaseTrim } = require('./common');
 
 const userSchema = new mongoose.Schema(
@@ -27,6 +28,19 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true, select: false },
 
     phone: { type: String, trim: true, maxlength: 32 },
+
+    /**
+     * A calendar date, never an age. See lib/age.js for why.
+     *
+     * Not `required` at the schema level on purpose: accounts created before
+     * sign-up asked for it (and every admin or instructor made by a script)
+     * would start failing their own saves. Registration requires it — see the
+     * register validator — and a profile can supply it later.
+     */
+    dateOfBirth: { type: Date, default: null },
+
+    /** Where the student is, as they would write it: "Paynesville, Monrovia". */
+    location: { type: String, trim: true, maxlength: 100, default: null },
 
     /**
      * Role is NEVER taken from a request body. It starts as 'student' and can
@@ -112,6 +126,10 @@ userSchema.methods.toPublicJSON = function toPublicJSON(options = {}) {
     payload.status = this.status;
     payload.emailVerified = this.emailVerified;
     payload.lastLoginAt = this.lastLoginAt;
+    // Sent as a date-only string: a browser input needs `YYYY-MM-DD`, and a
+    // full timestamp would drift a day across timezones for no benefit.
+    payload.dateOfBirth = formatDateOfBirth(this.dateOfBirth);
+    payload.location = this.location;
   }
 
   return { ...payload, ...extra };

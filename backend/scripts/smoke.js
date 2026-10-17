@@ -156,6 +156,32 @@ const PASSWORD = 'SmokeTest12345';
 
 let primaryUser = null;
 
+/**
+ * A birthday that is always old enough.
+ *
+ * Computed from today rather than written down, so the suite does not start
+ * failing in a few years for the unrelated reason that a fixed date is no
+ * longer the age it used to be.
+ */
+const ADULT_DATE_OF_BIRTH = (() => {
+  const date = new Date();
+  date.setUTCFullYear(date.getUTCFullYear() - 30);
+  return date.toISOString().slice(0, 10);
+})();
+
+/** A sign-up body the API should accept, with any field overridden. */
+function signupBody(overrides = {}) {
+  return {
+    firstName: 'Smoke',
+    lastName: 'Tester',
+    email: primaryEmail,
+    password: PASSWORD,
+    dateOfBirth: ADULT_DATE_OF_BIRTH,
+    location: 'Monrovia, Liberia',
+    ...overrides,
+  };
+}
+
 async function cleanup() {
   const Course = require('../src/models/Course');
   const Lesson = require('../src/models/Lesson');
@@ -300,7 +326,7 @@ async function testInfrastructure() {
 async function testRegistration() {
   await check('registration creates an account and returns a session', async () => {
     const { status, json } = await request('POST', '/api/v1/auth/register', {
-      body: { firstName: 'Smoke', lastName: 'Tester', email: primaryEmail, password: PASSWORD },
+      body: signupBody(),
     });
 
     assertEqual(status, 201, 'status');
@@ -320,13 +346,7 @@ async function testRegistration() {
     createdEmails.push(email);
 
     const { status, json } = await request('POST', '/api/v1/auth/register', {
-      body: {
-        firstName: 'Escalate',
-        lastName: 'Attempt',
-        email,
-        password: PASSWORD,
-        role: 'admin',
-      },
+      body: signupBody({ firstName: 'Escalate', lastName: 'Attempt', email, role: 'admin' }),
     });
 
     assertEqual(status, 201, 'status');
@@ -345,7 +365,7 @@ async function testRegistration() {
 
   await check('a duplicate email is rejected', async () => {
     const { status, json } = await request('POST', '/api/v1/auth/register', {
-      body: { firstName: 'Dup', lastName: 'Licate', email: primaryEmail, password: PASSWORD },
+      body: signupBody({ firstName: 'Dup', lastName: 'Licate' }),
     });
     assertEqual(status, 409, 'status');
     assertEqual(json.success, false, 'success flag');
@@ -353,7 +373,7 @@ async function testRegistration() {
 
   await check('a weak password is rejected with field details', async () => {
     const { status, json } = await request('POST', '/api/v1/auth/register', {
-      body: { firstName: 'Weak', lastName: 'Password', email: `smoke-weak-${runId}@example.com`, password: 'short' },
+      body: signupBody({ firstName: 'Weak', lastName: 'Password', email: `smoke-weak-${runId}@example.com`, password: 'short' }),
     });
 
     assertEqual(status, 400, 'status');
@@ -363,9 +383,109 @@ async function testRegistration() {
 
   await check('a malformed email is rejected', async () => {
     const { status } = await request('POST', '/api/v1/auth/register', {
-      body: { firstName: 'Bad', lastName: 'Email', email: 'not-an-email', password: PASSWORD },
+      body: signupBody({ firstName: 'Bad', lastName: 'Email', email: 'not-an-email' }),
     });
     assertEqual(status, 400, 'status');
+  });
+
+  /**
+   * The minimum age is a rule the academy has to be able to state and defend,
+   * so it is enforced where the account is created rather than only in the
+   * form. A fifteen-year-old gets the reason in words, not "invalid date".
+   */
+  await check('a sign-up without a date of birth is refused', async () => {
+    const body = signupBody({ email: `smoke-nodob-${runId}@example.com` });
+    delete body.dateOfBirth;
+
+    const { status, json } = await request('POST', '/api/v1/auth/register', { body });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'VALIDATION_ERROR', 'error code');
+    assert(
+      (json.details || []).some((detail) => /date of birth/i.test(String(detail.message))),
+      'the refusal must name the date of birth'
+    );
+  });
+
+  await check('a fifteen-year-old is refused, and told why', async () => {
+    const almost = new Date();
+    almost.setUTCFullYear(almost.getUTCFullYear() - 15);
+
+    const { status, json } = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({
+        email: `smoke-tooyoung-${runId}@example.com`,
+        dateOfBirth: almost.toISOString().slice(0, 10),
+      }),
+    });
+
+    assertEqual(status, 400, 'status');
+    assert(
+      (json.details || []).some((detail) => String(detail.message).includes('at least 16 years old')),
+      'the refusal must state the age rule'
+    );
+    assert(
+      (json.details || []).some((detail) =>
+        String(detail.message).includes('info@wuteveglobalacademy.com')
+      ),
+      'the refusal must give the student a way to reach a person'
+    );
+  });
+
+  await check('a future date of birth is refused', async () => {
+    const future = new Date();
+    future.setUTCFullYear(future.getUTCFullYear() + 1);
+
+    const { status } = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({
+        email: `smoke-future-${runId}@example.com`,
+        dateOfBirth: future.toISOString().slice(0, 10),
+      }),
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  /**
+   * `new Date('2010-02-30')` does not fail, it becomes 2 March. Without a
+   * round-trip check a mistyped February birthday would be silently rewritten.
+   */
+  await check('an impossible date is refused rather than rolled forward', async () => {
+    const { status } = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({ email: `smoke-feb30-${runId}@example.com`, dateOfBirth: '2010-02-30' }),
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a sign-up without a location is refused', async () => {
+    const body = signupBody({ email: `smoke-nolocation-${runId}@example.com` });
+    delete body.location;
+
+    const { status } = await request('POST', '/api/v1/auth/register', { body });
+    assertEqual(status, 400, 'status');
+  });
+
+  /**
+   * A date of birth is stored, an age is not. An age column would be quietly
+   * wrong within a year and would have to be rewritten for every student.
+   */
+  await check('the profile returns a date of birth, never a stored age', async () => {
+    const email = `smoke-dob-${runId}@example.com`;
+    createdEmails.push(email);
+
+    const registered = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({ email }),
+    });
+    assertEqual(registered.status, 201, 'registration status');
+
+    const { status, json } = await request('GET', '/api/v1/auth/me', {
+      token: registered.json.data.accessToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.user.dateOfBirth, ADULT_DATE_OF_BIRTH, 'the date of birth comes back unchanged');
+    assertEqual(json.data.user.location, 'Monrovia, Liberia', 'the location is stored');
+    assert(json.data.user.age === undefined, 'no age may be stored or returned');
   });
 
   /**
@@ -1854,7 +1974,7 @@ async function testCommunityAndMessaging() {  const Course = require('../src/mod
 
   await check('a second student can register', async () => {
     const { status, json } = await request('POST', '/api/v1/auth/register', {
-      body: { firstName: 'Peer', lastName: 'Student', email: peerEmail, password: PASSWORD },
+      body: signupBody({ firstName: 'Peer', lastName: 'Student', email: peerEmail }),
     });
 
     assertEqual(status, 201, 'status');
@@ -1923,12 +2043,7 @@ async function testCommunityAndMessaging() {  const Course = require('../src/mod
 
   await check('a post cannot be posted to a course the author cannot see', async () => {
     const outsider = await request('POST', '/api/v1/auth/register', {
-      body: {
-        firstName: 'Out',
-        lastName: 'Sider',
-        email: `smoke-outsider2-${runId}@example.com`,
-        password: PASSWORD,
-      },
+      body: signupBody({ firstName: 'Out', lastName: 'Sider', email: `smoke-outsider2-${runId}@example.com` }),
     });
 
     createdEmails.push(`smoke-outsider2-${runId}@example.com`);
@@ -1977,7 +2092,7 @@ async function testCommunityAndMessaging() {  const Course = require('../src/mod
     createdEmails.push(intruderEmail);
 
     const registered = await request('POST', '/api/v1/auth/register', {
-      body: { firstName: 'In', lastName: 'Truder', email: intruderEmail, password: PASSWORD },
+      body: signupBody({ firstName: 'In', lastName: 'Truder', email: intruderEmail }),
     });
 
     await request('POST', `/api/v1/courses/${peerCourse.id}/enroll`, {
@@ -2040,7 +2155,7 @@ async function testCommunityAndMessaging() {  const Course = require('../src/mod
     createdEmails.push(strangerEmail);
 
     const registered = await request('POST', '/api/v1/auth/register', {
-      body: { firstName: 'Stran', lastName: 'Ger', email: strangerEmail, password: PASSWORD },
+      body: signupBody({ firstName: 'Stran', lastName: 'Ger', email: strangerEmail }),
     });
 
     const { status } = await request('GET', `/api/v1/messages/threads/${threadId}`, {
@@ -2055,7 +2170,7 @@ async function testCommunityAndMessaging() {  const Course = require('../src/mod
     createdEmails.push(strangerEmail);
 
     const registered = await request('POST', '/api/v1/auth/register', {
-      body: { firstName: 'Stran', lastName: 'Ger2', email: strangerEmail, password: PASSWORD },
+      body: signupBody({ firstName: 'Stran', lastName: 'Ger2', email: strangerEmail }),
     });
 
     const { status } = await request('POST', `/api/v1/messages/threads/${threadId}`, {
@@ -2153,7 +2268,7 @@ async function testCommunityAndMessaging() {  const Course = require('../src/mod
     createdEmails.push(outsiderEmail);
 
     const registered = await request('POST', '/api/v1/auth/register', {
-      body: { firstName: 'Live', lastName: 'Outsider', email: outsiderEmail, password: PASSWORD },
+      body: signupBody({ firstName: 'Live', lastName: 'Outsider', email: outsiderEmail }),
     });
 
     const sessions = await request('GET', '/api/v1/live-sessions?courseId=000000000000000000000000', {
