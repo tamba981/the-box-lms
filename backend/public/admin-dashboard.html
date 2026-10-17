@@ -2249,7 +2249,7 @@
         // ============================================================
         //  INIT
         // ============================================================
-        async function init() {
+        async function initBody() {
             if (!checkAuth()) return;
 
             // Theme toggle
@@ -2329,13 +2329,43 @@
                 updateNotifBadge();
                 await loadPage('overview');
             } catch (error) {
-                document.getElementById('main-content').innerHTML = `
-                    <div class="glass-premium" style="padding:40px;text-align:center;max-width:560px;margin:60px auto;">
-                        <h2 style="margin-bottom:10px;">We could not load the dashboard</h2>
-                        <p style="color:var(--text-light);margin-bottom:20px;">${WGAUI.escapeHtml(error.message || 'Unexpected error')}</p>
-                        <button class="btn-primary" onclick="window.location.reload()">Try again</button>
-                    </div>
-                `;
+                showFatal(error);
+            }
+        }
+
+        /**
+         * One failure path for the whole page.
+         *
+         * A single exception during setup used to leave the loading state on
+         * screen for ever, because the only handler guarded the data load and
+         * the throw happened before it. A dashboard that hangs is
+         * indistinguishable from a slow network, so nobody reports it; a
+         * dashboard that says what went wrong gets fixed.
+         */
+        function showFatal(error) {
+            const message = WGAUI.escapeHtml((error && error.message) || 'Unexpected error');
+            const card =
+                '<div class="glass-premium" style="padding:40px;text-align:center;max-width:560px;margin:60px auto;">' +
+                '<h2 style="margin-bottom:10px;">We could not load the dashboard</h2>' +
+                '<p style="color:var(--text-light);margin-bottom:20px;">' + message + '</p>' +
+                '<button class="btn-primary" onclick="window.location.reload()">Try again</button>' +
+                '</div>';
+
+            const main = document.getElementById('main-content');
+
+            if (main) {
+                main.innerHTML = card;
+                return;
+            }
+
+            if (document.body) document.body.innerHTML = card;
+        }
+
+        async function init() {
+            try {
+                await initBody();
+            } catch (error) {
+                showFatal(error);
             }
         }
 

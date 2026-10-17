@@ -212,9 +212,26 @@ app.use('/api/v1/avatars', avatarRoutes);
         etag: true,
         lastModified: true,
         setHeaders(res, filePath) {
-          // Pages must be revalidated so a deploy is picked up immediately;
-          // images, fonts and stylesheets are content-stable and cached hard.
-          if (filePath.endsWith('.html')) {
+          /**
+           * Three kinds of file, three caching rules.
+           *
+           * Pages, scripts and stylesheets must be revalidated. They are NOT
+           * content-stable, whatever this comment used to claim: a deploy
+           * routinely changes a script at the same time as the page that uses
+           * it. Caching them immutably for a week meant a returning browser ran
+           * the new page against the old script — which threw inside the
+           * dashboard's setup, before its error handler existed, and left the
+           * loading state on screen forever.
+           *
+           * A revalidation is a conditional request answered 304, a couple of
+           * hundred bytes. The whole of these assets is under 40 KB; correctness
+           * is worth more than the round trip.
+           *
+           * Images and fonts really are content-stable and are still cached
+           * hard. If a versioned URL is ever introduced, scripts can move back
+           * to `immutable`.
+           */
+          if (/\.(html|js|css)$/i.test(filePath)) {
             res.setHeader('Cache-Control', 'no-cache, must-revalidate');
           } else {
             res.setHeader('Cache-Control', 'public, max-age=604800, immutable');
