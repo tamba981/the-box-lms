@@ -13,13 +13,15 @@ const tokens = require('../services/tokenService');
 
 const config = require('../config/env');
 const { decodeAvatar } = require('../lib/avatar');
+const { decodeCv, sanitiseFilename } = require('../lib/document');
+const { sendCv } = require('../lib/cvDownload');
 const logger = require('../lib/logger');
 const { asyncHandler } = require('../lib/asyncHandler');
 const { ok, created, noContent } = require('../lib/respond');
-const { conflict, unauthorized, badRequest } = require('../lib/errors');
+const { conflict, unauthorized, badRequest, forbidden, notFound } = require('../lib/errors');
 const { validate } = require('../middleware/validate');
 const { authenticate, extractBearerToken } = require('../middleware/auth');
-const { authLimiter, sensitiveLimiter } = require('../middleware/rateLimit');
+const { authLimiter, sensitiveLimiter, writeLimiter } = require('../middleware/rateLimit');
 const schemas = require('../validators/auth');
 
 const router = express.Router();
@@ -248,6 +250,12 @@ router.patch(
     if (dateOfBirth !== undefined) req.user.dateOfBirth = dateOfBirth;
     if (location !== undefined) req.user.location = location;
 
+    const { videoIntroUrl, qualifications, yearsExperience, languages } = req.valid.body;
+    if (videoIntroUrl !== undefined) req.user.videoIntroUrl = videoIntroUrl;
+    if (qualifications !== undefined) req.user.qualifications = qualifications || null;
+    if (yearsExperience !== undefined) req.user.yearsExperience = yearsExperience;
+    if (languages !== undefined) req.user.languages = languages;
+
     await req.user.save();
 
     return ok(res, { user: req.user.toPublicJSON({ includePrivate: true }) }, 'Profile updated.');
@@ -302,6 +310,76 @@ router.delete(
     const user = await User.findById(req.user._id);
 
     return ok(res, { user: user.toPublicJSON({ includePrivate: true }) }, 'Your photo has been removed.');
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * PUT /api/v1/auth/me/cv â€” replace your CV
+ *
+ * Uploading always returns the CV to `pending`: a document that was approved is
+ * a different document once it is replaced, and it must be read again.
+ * ------------------------------------------------------------------ */
+
+router.put(
+  '/me/cv',
+  authenticate,
+  /**
+   * The write limiter, not the sensitive one.
+   *
+   * `sensitiveLimiter` is keyed on the email in the body, and this request has
+   * none — so every CV upload from an office behind one address would share a
+   * single ten-per-hour bucket with password changes and photo uploads. Sixty a
+   * minute against an authenticated account, on top of the global API limiter,
+   * is the right shape for a file upload.
+   */
+  writeLimiter,
+  validate({ body: schemas.cvBody }),
+  asyncHandler(async (req, res) => {
+    if (req.user.role !== 'instructor' && req.user.role !== 'admin') {
+      throw forbidden('Only instructors can upload a CV.', { code: 'CV_INSTRUCTOR_ONLY' });
+    }
+
+    const decoded = decodeCv(req.valid.body.image);
+
+    if (!decoded.ok) {
+      throw badRequest(decoded.message, {
+        code: 'INVALID_CV',
+        details: [{ field: 'image', message: decoded.message }],
+      });
+    }
+
+    req.user.cvImage = decoded.buffer;
+    req.user.cvContentType = 'application/pdf';
+    req.user.cvOriginalFilename = sanitiseFilename(req.valid.body.filename);
+    req.user.cvStatus = 'pending';
+    req.user.cvUploadedAt = new Date();
+    // A new document has not been reviewed by anyone, whatever the old one said.
+    req.user.cvReviewedBy = null;
+    req.user.cvReviewedAt = null;
+    req.user.cvRejectionReason = null;
+
+    await req.user.save();
+
+    return ok(res, { user: req.user.toPublicJSON({ includePrivate: true }) }, 'Your CV has been sent for review.');
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * GET /api/v1/auth/me/cv â€” download your own CV
+ * ------------------------------------------------------------------ */
+
+router.get(
+  '/me/cv',
+  authenticate,
+  asyncHandler(async (req, res) => {
+    const user = await User.findById(req.user._id).select('+cvImage');
+
+    // No CV, and no way to tell whether one ever existed.
+    if (!user || !user.cvImage || user.cvImage.length === 0) {
+      throw notFound('You have not uploaded a CV yet.', { code: 'CV_NOT_FOUND' });
+    }
+
+    sendCv(res, user);
   })
 );
 

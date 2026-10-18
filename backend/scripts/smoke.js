@@ -975,6 +975,312 @@ async function testEmailTemplates() {
 }
 
 /**
+ * An instructor's CV, and the credentials shown on the course page.
+ *
+ * A CV is a document full of personal data, so most of these checks are about
+ * who cannot reach it: a student, a colleague, a stranger with the URL. The file
+ * itself travels as base64 inside JSON because this deployment has no multipart
+ * parser, which is why the size ceiling is asserted rather than assumed.
+ */
+async function testInstructorCv() {
+  const instructorEmail = `smoke-cv-instructor-${runId}@example.com`;
+  const studentEmail = `smoke-cv-student-${runId}@example.com`;
+  const adminEmail = `smoke-cv-admin-${runId}@example.com`;
+
+  createdEmails.push(instructorEmail, studentEmail, adminEmail);
+
+  let instructor = null;
+  let instructorToken = null;
+  let studentToken = null;
+  let adminToken = null;
+
+  const signIn = async (email) => {
+    const { json } = await request('POST', '/api/v1/auth/login', { body: { email, password: PASSWORD } });
+    return json.data.accessToken;
+  };
+
+  /** A real, minimal PDF — signature, some content, trailer. */
+  const pdfDataUrl = (padding = 40) =>
+    `data:application/pdf;base64,${Buffer.from(
+      `%PDF-1.4\n1 0 obj\n<<>>\nendobj\n${'x'.repeat(padding)}\n%%EOF\n`
+    ).toString('base64')}`;
+
+  /** The raw response, for the two endpoints that return a file rather than JSON. */
+  const download = async (path, token) => {
+    const response = await fetch(`${baseUrl}${path}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    return {
+      status: response.status,
+      contentType: response.headers.get('content-type') || '',
+      disposition: response.headers.get('content-disposition') || '',
+      cacheControl: response.headers.get('cache-control') || '',
+      buffer: Buffer.from(await response.arrayBuffer()),
+    };
+  };
+
+  await check('an instructor CV fixture is provisioned', async () => {
+    instructor = await User.create({
+      firstName: 'Cv',
+      lastName: 'Instructor',
+      email: instructorEmail,
+      password: PASSWORD,
+      role: 'instructor',
+      emailVerified: true,
+    });
+
+    await User.create({
+      firstName: 'Cv',
+      lastName: 'Student',
+      email: studentEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+
+    await User.create({
+      firstName: 'Cv',
+      lastName: 'Admin',
+      email: adminEmail,
+      password: PASSWORD,
+      role: 'admin',
+      emailVerified: true,
+    });
+
+    instructorToken = await signIn(instructorEmail);
+    studentToken = await signIn(studentEmail);
+    adminToken = await signIn(adminEmail);
+
+    assert(instructorToken && studentToken && adminToken, 'all three sessions must exist');
+  });
+
+  await check('an instructor can upload a PDF CV', async () => {
+    const { status, json } = await request('PUT', '/api/v1/auth/me/cv', {
+      token: instructorToken,
+      body: { image: pdfDataUrl(), filename: 'my cv.pdf' },
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.user.cvStatus, 'pending', 'a new CV waits for review');
+    assert(json.data.user.cvUploadedAt, 'the upload time must be recorded');
+    // The file itself must never ride along in a user payload.
+    assert(!JSON.stringify(json.data.user).includes('JVBERi'), 'the CV bytes leaked into the response');
+  });
+
+  await check('a CV that is not a PDF is refused', async () => {
+    const { status, json } = await request('PUT', '/api/v1/auth/me/cv', {
+      token: instructorToken,
+      body: {
+        image: `data:image/png;base64,${Buffer.from(`%PDF-1.4 but declared as png ${'y'.repeat(120)}`).toString('base64')}`,
+      },
+    });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'INVALID_CV', 'code');
+  });
+
+  await check('a file with a PDF name but no PDF inside is refused', async () => {
+    const { status, json } = await request('PUT', '/api/v1/auth/me/cv', {
+      token: instructorToken,
+      body: {
+        image: `data:application/pdf;base64,${Buffer.from(`this is plainly not a PDF ${'z'.repeat(120)}`).toString('base64')}`,
+      },
+    });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'INVALID_CV', 'code');
+  });
+
+  await check('a truncated PDF is refused', async () => {
+    const { status, json } = await request('PUT', '/api/v1/auth/me/cv', {
+      token: instructorToken,
+      body: {
+        image: `data:application/pdf;base64,${Buffer.from(`%PDF-1.4 with no trailer ${'w'.repeat(120)}`).toString('base64')}`,
+      },
+    });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'INVALID_CV', 'code');
+  });
+
+  await check('a CV larger than 500 KB is refused', async () => {
+    // Valid signature and trailer, but 600 KB of content.
+    const big = `data:application/pdf;base64,${Buffer.from(
+      `%PDF-1.4\n${'x'.repeat(600 * 1024)}\n%%EOF\n`
+    ).toString('base64')}`;
+
+    const { status } = await request('PUT', '/api/v1/auth/me/cv', { token: instructorToken, body: { image: big } });
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a student cannot upload a CV', async () => {
+    const { status } = await request('PUT', '/api/v1/auth/me/cv', {
+      token: studentToken,
+      body: { image: pdfDataUrl(), filename: 'cv.pdf' },
+    });
+
+    assertEqual(status, 403, 'status');
+  });
+
+  await check('the instructor can download their own CV', async () => {
+    const response = await download('/api/v1/auth/me/cv', instructorToken);
+
+    assertEqual(response.status, 200, 'status');
+    assert(response.contentType.includes('application/pdf'), `content type was ${response.contentType}`);
+    assert(response.buffer.subarray(0, 5).toString() === '%PDF-', 'the body must be the PDF');
+    assert(/instructor-cv\.pdf/i.test(response.disposition), `filename was ${response.disposition}`);
+    // Personal document: not for any cache to keep.
+    assert(/no-store/i.test(response.cacheControl), `cache control was ${response.cacheControl}`);
+  });
+
+  await check('an administrator can download an instructor CV', async () => {
+    const response = await download(`/api/v1/admin/instructors/${instructor.id}/cv`, adminToken);
+
+    assertEqual(response.status, 200, 'status');
+    assert(response.buffer.subarray(0, 5).toString() === '%PDF-', 'the body must be the PDF');
+  });
+
+  await check('a student cannot download an instructor CV', async () => {
+    const response = await download(`/api/v1/admin/instructors/${instructor.id}/cv`, studentToken);
+    assertEqual(response.status, 403, 'status');
+  });
+
+  await check('the administrator sees the pending queue without the files', async () => {
+    const { status, json } = await request('GET', '/api/v1/admin/instructors/cv?status=pending', {
+      token: adminToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    const row = json.data.instructors.find((entry) => entry.id === String(instructor._id));
+    assert(row, 'the instructor must be in the pending queue');
+    assertEqual(row.cvStatus, 'pending', 'the row status');
+    assert(row.cvUploadedAt, 'the row must carry the upload time');
+    assert(!JSON.stringify(json.data).includes('JVBERi'), 'the queue must not carry file bytes');
+  });
+
+  await check('an administrator can approve a CV', async () => {
+    const { status, json } = await request('POST', `/api/v1/admin/instructors/${instructor.id}/cv/approve`, {
+      token: adminToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.instructor.cvStatus, 'approved', 'status after approval');
+
+    const mine = await request('GET', '/api/v1/auth/me', { token: instructorToken });
+    assertEqual(mine.json.data.user.cvStatus, 'approved', 'the instructor must see the approval');
+  });
+
+  await check('a rejection requires a reason', async () => {
+    // The CV must be back in play first; the fixture below re-uploads it.
+    const upload = await request('PUT', '/api/v1/auth/me/cv', {
+      token: instructorToken,
+      body: { image: pdfDataUrl(80), filename: 'cv-v2.pdf' },
+    });
+    assertEqual(upload.status, 200, 're-upload');
+
+    const { status } = await request('POST', `/api/v1/admin/instructors/${instructor.id}/cv/reject`, {
+      token: adminToken,
+      body: {},
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a replacement CV goes back to pending', async () => {
+    const { status, json } = await request('GET', '/api/v1/auth/me', { token: instructorToken });
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.user.cvStatus, 'pending', 'a replaced CV must be reviewed again');
+  });
+
+  await check('an administrator can reject a CV with a reason', async () => {
+    const reason = 'Please include your teaching experience.';
+
+    const { status, json } = await request('POST', `/api/v1/admin/instructors/${instructor.id}/cv/reject`, {
+      token: adminToken,
+      body: { reason },
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.instructor.cvStatus, 'rejected', 'status after rejection');
+
+    const mine = await request('GET', '/api/v1/auth/me', { token: instructorToken });
+    assertEqual(mine.json.data.user.cvRejectionReason, reason, 'the instructor must see the reason');
+  });
+
+  await check('an instructor cannot approve their own CV', async () => {
+    const approve = await request('POST', `/api/v1/admin/instructors/${instructor.id}/cv/approve`, {
+      token: instructorToken,
+    });
+    assertEqual(approve.status, 403, 'approve status');
+
+    const reject = await request('POST', `/api/v1/admin/instructors/${instructor.id}/cv/reject`, {
+      token: instructorToken,
+      body: { reason: 'A sufficiently long reason.' },
+    });
+    assertEqual(reject.status, 403, 'reject status');
+  });
+
+  await check('the video introduction must be an embeddable address', async () => {
+    const good = await request('PATCH', '/api/v1/auth/me', {
+      token: instructorToken,
+      body: { videoIntroUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
+    });
+    assertEqual(good.status, 200, 'a YouTube link must be accepted');
+
+    const bad = await request('PATCH', '/api/v1/auth/me', {
+      token: instructorToken,
+      body: { videoIntroUrl: 'https://example.com/not-a-video' },
+    });
+    assertEqual(bad.status, 400, 'a foreign host must be refused');
+
+    // The lookalike that defeats a substring check.
+    const lookalike = await request('PATCH', '/api/v1/auth/me', {
+      token: instructorToken,
+      body: { videoIntroUrl: 'https://youtube.com.evil.example/watch' },
+    });
+    assertEqual(lookalike.status, 400, 'a lookalike host must be refused');
+  });
+
+  await check('the credentials save and come back on the author card', async () => {
+    const saved = await request('PATCH', '/api/v1/auth/me', {
+      token: instructorToken,
+      body: {
+        qualifications: 'MSc Statistics, University of Liberia',
+        yearsExperience: '12',
+        languages: 'English, French , Kpelle',
+      },
+    });
+
+    assertEqual(saved.status, 200, 'status');
+
+    const mine = await request('GET', '/api/v1/auth/me', { token: instructorToken });
+    const user = mine.json.data.user;
+    assertEqual(user.yearsExperience, 12, 'years of experience');
+    assert(Array.isArray(user.languages), 'languages must be a list');
+    assertEqual(user.languages.join(','), 'English,French,Kpelle', 'languages, trimmed');
+    assertEqual(user.qualifications, 'MSc Statistics, University of Liberia', 'qualifications');
+
+    await User.updateOne({ _id: instructor._id }, { $set: { cvStatus: 'approved' } });
+    const author = await User.findById(instructor._id);
+    const card = author.toAuthorJSON();
+
+    assertEqual(card.credentials.cvApproved, true, 'the public card reports approval');
+    assertEqual(card.credentials.yearsExperience, 12, 'the public card carries the years');
+    assert(!('cvStatus' in card), 'the public card must not expose the raw status');
+    assert(!('cvImage' in card), 'the public card must never carry the file');
+  });
+
+  await check('an out-of-range years of experience is refused', async () => {
+    const { status } = await request('PATCH', '/api/v1/auth/me', {
+      token: instructorToken,
+      body: { yearsExperience: '120' },
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+}
+
+/**
  * The core product path, end to end: an instructor is given an account, writes
  * a course, an admin approves it, a student enrols, works through it, and is
  * issued a verifiable certificate.
@@ -982,8 +1288,7 @@ async function testEmailTemplates() {
  * This is the suite that answers "does the thing actually work", as opposed to
  * "are the doors locked".
  */
-async function testLearningLoop() {
-  const Course = require('../src/models/Course');
+async function testLearningLoop() {  const Course = require('../src/models/Course');
   const Lesson = require('../src/models/Lesson');
   const Enrollment = require('../src/models/Enrollment');
   const Certificate = require('../src/models/Certificate');
@@ -4963,6 +5268,9 @@ async function main() {
 
     process.stdout.write('\nEmail templates\n');
     await testEmailTemplates();
+
+    process.stdout.write('\nInstructor CVs\n');
+    await testInstructorCv();
 
     process.stdout.write('\nMoney formatting\n');
     await testMoneyFormatting();

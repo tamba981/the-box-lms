@@ -504,6 +504,57 @@
         return '<div class="viewer-body is-plain">' + WGAUI.escapeHtml(unescapeBasic(content)) + '</div>';
       }
 
+      /**
+       * Who is teaching this, and what they bring to it.
+       *
+       * Only credentials the instructor chose to publish appear here. The CV
+       * itself never does — the most a stranger learns is that it was checked.
+       */
+      function instructorBlock(instructor) {
+        if (!instructor || !instructor.firstName) return '';
+
+        var credentials = instructor.credentials || {};
+        var facts = [];
+
+        if (credentials.qualifications) {
+          facts.push('<p style="margin:0 0 8px;"><strong>Qualifications:</strong> ' + WGAUI.escapeHtml(credentials.qualifications) + '</p>');
+        }
+
+        if (typeof credentials.yearsExperience === 'number' && credentials.yearsExperience >= 0) {
+          facts.push('<p style="margin:0 0 8px;"><strong>Experience:</strong> ' + credentials.yearsExperience +
+            (credentials.yearsExperience === 1 ? ' year' : ' years') + ' teaching and working in this field</p>');
+        }
+
+        if (Array.isArray(credentials.languages) && credentials.languages.length) {
+          facts.push('<p style="margin:0 0 8px;"><strong>Languages:</strong> ' + WGAUI.escapeHtml(credentials.languages.join(', ')) + '</p>');
+        }
+
+        var intro = safeUrl(credentials.videoIntroUrl);
+        if (intro) {
+          facts.push('<p style="margin:10px 0 0;"><a class="wga-btn wga-btn-ghost" href="' + WGAUI.escapeHtml(intro) +
+            '" target="_blank" rel="noopener noreferrer"><i class="fas fa-play"></i> Watch their introduction</a></p>');
+        }
+
+        var verified = credentials.cvApproved
+          ? '<span class="wga-pill wga-pill-free" style="margin-left:8px;"><i class="fas fa-check"></i> Credentials verified</span>'
+          : '';
+
+        return '<h2 class="section-title">Your instructor</h2>' +
+          '<div class="glass-premium" style="padding:20px;display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;">' +
+            '<div style="flex:0 0 auto;">' + WGAUI.avatar(instructor, 72) + '</div>' +
+            '<div style="flex:1 1 260px;min-width:0;">' +
+              '<p style="margin:0 0 2px;font-weight:700;font-size:17px;">' + WGAUI.escapeHtml(instructor.fullName || '') + verified + '</p>' +
+              (instructor.headline
+                ? '<p style="margin:0 0 10px;color:var(--text-light);">' + WGAUI.escapeHtml(instructor.headline) + '</p>'
+                : '') +
+              (instructor.bio
+                ? '<p style="margin:0 0 10px;line-height:1.7;">' + WGAUI.escapeHtml(instructor.bio) + '</p>'
+                : '') +
+              facts.join('') +
+            '</div>' +
+          '</div>';
+      }
+
       function resourcesBlock(lesson) {
         var resources = lesson.resources || [];
         var usable = resources.filter(function (resource) {
@@ -983,6 +1034,8 @@
           (course.description
             ? '<h2 class="section-title">About this course</h2><p class="desc pre">' + WGAUI.escapeHtml(course.description) + '</p>'
             : '') +
+
+          instructorBlock(course.instructor) +
 
           '<section class="viewer" id="viewer" hidden></section>' +
           '<h2 class="section-title">Syllabus</h2>' +

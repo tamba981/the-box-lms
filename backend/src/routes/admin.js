@@ -24,6 +24,7 @@ const { notFound, badRequest, conflict } = require('../lib/errors');
 const { parsePagination, paginated } = require('../lib/pagination');
 const { contains } = require('../lib/text');
 const { formatCents } = require('../lib/money');
+const { sendCv } = require('../lib/cvDownload');
 const { ROLES, COURSE_STATUSES } = require('../lib/constants');
 const { generatePassword } = require('../lib/generatePassword');
 
@@ -293,13 +294,131 @@ router.post(
   })
 );
 
+/* ------------------------------------------------------------------ *
+ * Instructor CVs
+ *
+ * An instructor uploads a CV from their own profile; an administrator reads it
+ * here and either approves it or sends it back with a reason. The file itself is
+ * never part of any JSON payload — only the review state is.
+ * ------------------------------------------------------------------ */
+
+const CV_STATUSES = ['pending', 'approved', 'rejected'];
+
+router.get(
+  '/instructors/cv',
+  validate({ query: z.object({ status: z.enum(CV_STATUSES).optional() }) }),
+  asyncHandler(async (req, res) => {
+    // Pending is the queue an administrator is actually working through, so it
+    // is the default rather than "everything".
+    const status = req.valid.query.status || 'pending';
+
+    const instructors = await User.find({ role: 'instructor', cvStatus: status })
+      .sort({ cvUploadedAt: 1 })
+      .limit(200)
+      .select('firstName lastName email cvStatus cvUploadedAt cvOriginalFilename');
+
+    return ok(res, {
+      status,
+      instructors: instructors.map((instructor) => ({
+        id: String(instructor._id),
+        name: `${instructor.firstName} ${instructor.lastName}`.trim(),
+        email: instructor.email,
+        cvStatus: instructor.cvStatus,
+        cvUploadedAt: instructor.cvUploadedAt,
+        cvOriginalFilename: instructor.cvOriginalFilename,
+      })),
+    });
+  })
+);
+
+router.get(
+  '/instructors/:id/cv',
+  validate({ params: z.object({ id: objectId }) }),
+  asyncHandler(async (req, res) => {
+    // `+cvImage` because the field is excluded from every query by default.
+    const instructor = await User.findById(req.valid.params.id).select('+cvImage');
+
+    // One answer for "no such person", "not an instructor" and "never uploaded":
+    // an administrator does not need to be told which.
+    if (!instructor || !instructor.cvImage || instructor.cvImage.length === 0) {
+      throw notFound('That CV could not be found.', { code: 'CV_NOT_FOUND' });
+    }
+
+    sendCv(res, instructor);
+  })
+);
+
+router.post(
+  '/instructors/:id/cv/approve',
+  writeLimiter,
+  validate({ params: z.object({ id: objectId }) }),
+  asyncHandler(async (req, res) => {
+    const instructor = await User.findById(req.valid.params.id);
+
+    // `cvStatus` is set when a CV is uploaded and cleared nowhere else, so its
+    // presence answers "is there something to review" without loading the file.
+    if (!instructor || !instructor.cvStatus) {
+      throw notFound('That CV could not be found.', { code: 'CV_NOT_FOUND' });
+    }
+
+    instructor.cvStatus = 'approved';
+    instructor.cvReviewedBy = req.user._id;
+    instructor.cvReviewedAt = new Date();
+    // Approving supersedes an earlier refusal; leaving the old reason attached
+    // would show the instructor a rejection note on an approved CV.
+    instructor.cvRejectionReason = null;
+
+    await instructor.save();
+
+    return ok(
+      res,
+      { instructor: instructor.toPublicJSON({ includePrivate: true }) },
+      'CV approved.'
+    );
+  })
+);
+
+router.post(
+  '/instructors/:id/cv/reject',
+  writeLimiter,
+  validate({
+    params: z.object({ id: objectId }),
+    body: z.object({
+      reason: z
+        .string({ required_error: 'Give the instructor a reason' })
+        .trim()
+        .min(10, 'Give a reason of at least 10 characters')
+        .max(500, 'That reason is too long'),
+    }),
+  }),
+  asyncHandler(async (req, res) => {
+    const instructor = await User.findById(req.valid.params.id);
+
+    if (!instructor || !instructor.cvStatus) {
+      throw notFound('That CV could not be found.', { code: 'CV_NOT_FOUND' });
+    }
+
+    instructor.cvStatus = 'rejected';
+    instructor.cvRejectionReason = req.valid.body.reason;
+    instructor.cvReviewedBy = req.user._id;
+    instructor.cvReviewedAt = new Date();
+
+    await instructor.save();
+
+    return ok(
+      res,
+      { instructor: instructor.toPublicJSON({ includePrivate: true }) },
+      'CV sent back to the instructor.'
+    );
+  })
+);
+
 router.get(
   '/users/:id',
   validate({ params: z.object({ id: objectId }) }),
   asyncHandler(async (req, res) => {
     const user = await User.findById(req.valid.params.id);
     if (!user) throw notFound('That account could not be found.', { code: 'USER_NOT_FOUND' });
-
     const [enrollments, certificates, payments] = await Promise.all([
       Enrollment.find({ student: user._id, status: { $ne: 'cancelled' } })
         .sort({ createdAt: -1 })

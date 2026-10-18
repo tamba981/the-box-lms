@@ -81,6 +81,33 @@ const userSchema = new mongoose.Schema(
     headline: { type: String, trim: true, maxlength: 120, default: null },
     expertise: { type: [String], default: [] },
 
+    /**
+     * Instructor credentials. Shown on the course page and the profile, so they
+     * are part of the public author card rather than private data.
+     */
+    videoIntroUrl: { type: String, trim: true, maxlength: 500, default: null },
+    qualifications: { type: String, trim: true, maxlength: 500, default: null },
+    yearsExperience: { type: Number, min: 0, max: 80, default: null },
+    languages: { type: [String], default: [] },
+
+    /**
+     * An uploaded CV, stored as bytes for the same reason as `avatarImage`:
+     * `select: false` keeps half a megabyte off every user query, and BSON
+     * binary holds it in roughly the space of the file rather than the 4/3 that
+     * base64 costs. Only the CV endpoints opt in.
+     *
+     * A CV is personal data, so it is never serialised into any payload. The
+     * public side learns one bit about it — whether it was approved.
+     */
+    cvImage: { type: Buffer, select: false, default: undefined },
+    cvContentType: { type: String, default: null },
+    cvOriginalFilename: { type: String, trim: true, maxlength: 200, default: null },
+    cvStatus: { type: String, enum: ['pending', 'approved', 'rejected'], default: null, index: true },
+    cvUploadedAt: { type: Date, default: null },
+    cvReviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+    cvReviewedAt: { type: Date, default: null },
+    cvRejectionReason: { type: String, trim: true, maxlength: 500, default: null },
+
     lastLoginAt: { type: Date, default: null },
     passwordChangedAt: { type: Date, default: null },
   },
@@ -164,6 +191,30 @@ userSchema.methods.toPublicJSON = function toPublicJSON(options = {}) {
     // full timestamp would drift a day across timezones for no benefit.
     payload.dateOfBirth = formatDateOfBirth(this.dateOfBirth);
     payload.location = this.location;
+
+    /**
+     * The instructor's own credentials, so the profile form can repopulate.
+     *
+     * These are public on a course page, but only through the author card's
+     * `credentials` object — this copy exists so an instructor editing their
+     * profile sees what is currently saved.
+     */
+    payload.videoIntroUrl = this.videoIntroUrl;
+    payload.qualifications = this.qualifications;
+    payload.yearsExperience = this.yearsExperience;
+    payload.languages = this.languages;
+
+    /**
+     * The CV review state, for the person themselves and for administrators.
+     *
+     * The rejection reason is only sent while the CV is actually rejected — a
+     * later approval would otherwise leave a stale explanation of a refusal
+     * sitting in the payload.
+     */
+    payload.cvStatus = this.cvStatus;
+    payload.cvUploadedAt = this.cvUploadedAt;
+    payload.cvOriginalFilename = this.cvOriginalFilename;
+    if (this.cvStatus === 'rejected') payload.cvRejectionReason = this.cvRejectionReason;
   }
 
   return { ...payload, ...extra };
@@ -179,6 +230,20 @@ userSchema.methods.toAuthorJSON = function toAuthorJSON() {
     role: this.role,
     avatarUrl: this.avatarLink(),
     headline: this.headline,
+    /**
+     * Only what a stranger may see about an instructor's credentials.
+     *
+     * `cvApproved` is a single boolean: the course page can say the CV has been
+     * checked without revealing that one exists, was rejected, or is awaiting
+     * review. The file itself is never public.
+     */
+    credentials: {
+      videoIntroUrl: this.videoIntroUrl,
+      qualifications: this.qualifications,
+      yearsExperience: this.yearsExperience,
+      languages: this.languages,
+      cvApproved: this.cvStatus === 'approved',
+    },
   };
 };
 

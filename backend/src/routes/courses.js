@@ -314,8 +314,14 @@ router.get(
   asyncHandler(async (req, res) => {
     const course = await permissions.loadVisibleCourse(req.params.slug, req.user);
 
-    // Populate the instructor so the page can show a real author card.
-    await course.populate({ path: 'instructor', select: 'firstName lastName role avatarUrl headline' });
+    // Populate the instructor so the page can show a real author card. `avatarKey`
+    // is needed for the photo URL; the credential fields are what the course page
+    // shows a prospective student about who is teaching them.
+    await course.populate({
+      path: 'instructor',
+      select:
+        'firstName lastName role avatarUrl avatarKey headline bio videoIntroUrl qualifications yearsExperience languages cvStatus',
+    });
 
     const lessons = await Lesson.find({ course: course._id })
       .sort({ order: 1 })

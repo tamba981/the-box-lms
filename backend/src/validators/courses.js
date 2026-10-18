@@ -19,8 +19,9 @@ const httpUrl = (label) =>
     .max(2000, 'URL is too long')
     .url(`${label} is invalid`)
     .refine((value) => /^https?:\/\//i.test(value), `${label} must start with http:// or https://`);
-const { ALLOWED_VIDEO_MIME, MAX_VIDEO_BYTES, EMBEDDABLE_VIDEO_HOSTS, COURSE_CATEGORY_SLUGS, SELECTABLE_CREDENTIALS, CREDENTIALS, LEGACY_CATEGORY_ALIASES } = require('../lib/constants');
+const { ALLOWED_VIDEO_MIME, MAX_VIDEO_BYTES, COURSE_CATEGORY_SLUGS, SELECTABLE_CREDENTIALS, CREDENTIALS, LEGACY_CATEGORY_ALIASES } = require('../lib/constants');
 const { sanitizeLessonHtml } = require('../lib/sanitizeHtml');
+const { isEmbeddableVideoUrl } = require('../lib/videoUrl');
 
 /**
  * Course and lesson input schemas.
@@ -258,15 +259,7 @@ const videoLinkBody = z.object({
     .max(2000, 'That address is too long')
     .url('Paste the full address, starting with https://')
     .refine(
-      (value) => {
-        try {
-          const { hostname } = new URL(value);
-          const bare = hostname.replace(/^www\./, '');
-          return EMBEDDABLE_VIDEO_HOSTS.includes(bare);
-        } catch (_) {
-          return false;
-        }
-      },
+      (value) => isEmbeddableVideoUrl(value),
       { message: 'Only YouTube and Vimeo addresses can be embedded. Paste the video\'s own address.' }
     ),
 });

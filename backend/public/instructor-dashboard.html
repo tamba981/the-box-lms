@@ -950,6 +950,37 @@
             }
         }
 
+        /* ---- Profile ------------------------------------------------- */
+        .profile-avatar-row {
+            display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+            margin-bottom: 22px;
+        }
+        .profile-avatar { flex: 0 0 auto; line-height: 0; }
+        .profile-subhead {
+            font-size: 15px; font-weight: 700; margin: 26px 0 12px;
+            padding-top: 18px; border-top: 1px solid var(--border);
+        }
+        .cv-card {
+            border: 1px solid var(--border); border-radius: 14px;
+            padding: 16px 18px; margin: 6px 0 18px;
+            background: rgba(255,255,255,.04);
+        }
+        .cv-card-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .cv-badge {
+            font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+            white-space: nowrap;
+        }
+        .cv-badge.cv-approved { background: rgba(22,163,74,.14); color: #15803d; }
+        .cv-badge.cv-pending { background: rgba(217,119,6,.16); color: #b45309; }
+        .cv-badge.cv-rejected { background: rgba(220,38,38,.14); color: #b91c1c; }
+        .cv-badge.cv-none { background: rgba(107,114,128,.16); color: #4b5563; }
+        .cv-reason {
+            font-size: 13.5px; margin: 10px 0 0; padding: 9px 12px;
+            border-left: 3px solid #dc2626; background: rgba(220,38,38,.07);
+            border-radius: 0 8px 8px 0;
+        }
+        .lesson-hint-warn { color: #b45309; }
+
         /* ---- Lesson authoring ------------------------------------- */
         .lesson-admin-row {
             display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
@@ -1697,19 +1728,89 @@
             `;
         }
 
+        function cvCard(u) {
+            const status = u.cvStatus || null;
+
+            const badge = status === 'approved'
+                ? '<span class="cv-badge cv-approved"><i class="fas fa-check"></i> Approved</span>'
+                : status === 'pending'
+                    ? '<span class="cv-badge cv-pending">Pending review</span>'
+                    : status === 'rejected'
+                        ? '<span class="cv-badge cv-rejected">Rejected</span>'
+                        : '<span class="cv-badge cv-none">Not uploaded</span>';
+
+            const when = u.cvUploadedAt
+                ? 'Uploaded ' + new Date(u.cvUploadedAt).toLocaleDateString() + ' \u00b7 '
+                : '';
+
+            const reason = status === 'rejected' && u.cvRejectionReason
+                ? `<p class="cv-reason">${WGAUI.escapeHtml(u.cvRejectionReason)}</p>`
+                : '';
+
+            return `
+                <div class="cv-card">
+                    <div class="cv-card-head"><strong>CV</strong>${badge}</div>
+                    ${reason}
+                    <p class="lesson-hint">${when}PDF, up to 500 KB.</p>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+                        <button class="btn-primary btn-sm" id="cvUploadBtn" onclick="uploadCv(this)">${status ? 'Upload a replacement' : 'Upload your CV'}</button>
+                        ${status ? '<button class="btn-primary btn-outline btn-sm" onclick="downloadMyCv(this)">Download</button>' : ''}
+                    </div>
+                    ${status ? '' : '<p class="lesson-hint">A CV is recommended before your course goes live. You can still publish without one.</p>'}
+                </div>
+            `;
+        }
+
         function renderProfile() {
             const u = instructorData.user;
             const expertise = Array.isArray(u.expertise) ? u.expertise.join(', ') : '';
+            const languages = Array.isArray(u.languages) ? u.languages.join(', ') : '';
+            const years = u.yearsExperience === null || u.yearsExperience === undefined ? '' : u.yearsExperience;
 
             return `
-                <div class="section-title">👤 Profile Settings</div>
-                <div class="glass-premium" style="padding:24px;max-width:600px;">
+                <div class="section-title">Profile Settings</div>
+                <div class="glass-premium" style="padding:24px;max-width:720px;">
+                    <div class="profile-avatar-row">
+                        <div class="profile-avatar" id="profileAvatar">${WGAUI.avatar(u, 96)}</div>
+                        <div>
+                            <button class="btn-primary btn-outline btn-sm" onclick="changeProfilePhoto(this)">Change photo</button>
+                            <p class="lesson-hint">JPG or PNG, up to 120 KB. Shown on your courses.</p>
+                        </div>
+                    </div>
+
                     <div class="form-group"><label>First Name</label><input type="text" id="pFirstName" value="${WGAUI.escapeHtml(u.firstName || '')}" /></div>
                     <div class="form-group"><label>Last Name</label><input type="text" id="pLastName" value="${WGAUI.escapeHtml(u.lastName || '')}" /></div>
                     <div class="form-group"><label>Email</label><input type="email" value="${WGAUI.escapeHtml(u.email || '')}" disabled /></div>
                     <div class="form-group"><label>Headline</label><input type="text" id="pHeadline" value="${WGAUI.escapeHtml(u.headline || '')}" placeholder="e.g. Data analyst and lecturer" /></div>
                     <div class="form-group"><label>Bio</label><textarea id="pBio" rows="4">${WGAUI.escapeHtml(u.bio || '')}</textarea></div>
                     <div class="form-group"><label>Expertise</label><input type="text" id="pExpertise" value="${WGAUI.escapeHtml(expertise)}" placeholder="Comma separated, e.g. Statistics, Spreadsheets" /></div>
+
+                    <h3 class="profile-subhead">Credentials</h3>
+
+                    <div class="form-group">
+                        <label>Video introduction</label>
+                        <input type="url" id="pVideoIntro" value="${WGAUI.escapeHtml(u.videoIntroUrl || '')}" placeholder="https://www.youtube.com/watch?v=..." onblur="checkIntroUrl()" />
+                        <p class="lesson-hint" id="pVideoIntroNote">A YouTube or Vimeo link where you introduce yourself. Shown on your course pages.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Qualifications</label>
+                        <textarea id="pQualifications" rows="2" maxlength="500" placeholder="Degrees, certifications, awards">${WGAUI.escapeHtml(u.qualifications || '')}</textarea>
+                    </div>
+
+                    <div style="display:flex;gap:14px;flex-wrap:wrap;">
+                        <div class="form-group" style="flex:1 1 160px;">
+                            <label>Years of experience</label>
+                            <input type="number" id="pYears" min="0" max="80" value="${WGAUI.escapeHtml(String(years))}" />
+                        </div>
+                        <div class="form-group" style="flex:2 1 260px;">
+                            <label>Languages</label>
+                            <input type="text" id="pLanguages" value="${WGAUI.escapeHtml(languages)}" placeholder="English, French, Kpelle" />
+                        </div>
+                    </div>
+
+                    ${cvCard(u)}
+
                     <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">Your email address is used to sign in and cannot be changed here.</p>
                     <button class="btn-primary" onclick="updateProfile()">Update Profile</button>
                     <button class="btn-primary btn-outline" style="margin-left:12px;" onclick="openChangePassword()">Change Password</button>
@@ -1717,7 +1818,7 @@
             `;
         }
 
-        // ============================================================
+// ============================================================
         //  ACTION HANDLERS
         // ============================================================
         // These were placeholders: they showed a success toast and changed
@@ -2954,6 +3055,10 @@
             const headline = document.getElementById('pHeadline')?.value.trim();
             const bio = document.getElementById('pBio')?.value.trim();
             const expertiseRaw = document.getElementById('pExpertise')?.value || '';
+            const videoIntroUrl = (document.getElementById('pVideoIntro')?.value || '').trim();
+            const qualifications = (document.getElementById('pQualifications')?.value || '').trim();
+            const yearsRaw = (document.getElementById('pYears')?.value || '').trim();
+            const languages = (document.getElementById('pLanguages')?.value || '').trim();
 
             const expertise = expertiseRaw
                 .split(',')
@@ -2961,7 +3066,18 @@
                 .filter(Boolean);
 
             try {
-                const data = await WGA.patch('/auth/me', { firstName, lastName, headline, bio, expertise });
+                const data = await WGA.patch('/auth/me', {
+                    firstName,
+                    lastName,
+                    headline,
+                    bio,
+                    expertise,
+                    // An empty string clears the field; null clears the number.
+                    videoIntroUrl,
+                    qualifications,
+                    yearsExperience: yearsRaw === '' ? null : Number(yearsRaw),
+                    languages,
+                });
 
                 instructorData.user = { ...instructorData.user, ...data.user };
                 WGA.setSession({ user: data.user });
@@ -2977,6 +3093,162 @@
                 }
                 showToast(error.message || 'We could not save your profile.', 'error');
             }
+        };
+
+        /**
+         * The profile photo control.
+         *
+         * Same flow as the header avatar — crop to a square, send as a data URL —
+         * because the profile page is where an instructor looks for it and the
+         * header was the only entry point before.
+         */
+        window.changeProfilePhoto = async function changeProfilePhoto(button) {
+            const dataUrl = await WGAUI.pickAvatar({ size: 256 });
+            if (!dataUrl) return;
+
+            if (button) WGAUI.setBusy(button, true, 'Saving...');
+
+            try {
+                const result = await WGA.put('/auth/me/avatar', { image: dataUrl });
+                instructorData.user = Object.assign({}, instructorData.user, result.user);
+
+                const avatarEl = document.getElementById('profileAvatar');
+                if (avatarEl) avatarEl.innerHTML = WGAUI.avatar(instructorData.user, 96);
+                renderHeaderAvatar();
+
+                showToast('Your photo has been updated.', 'success');
+            } catch (error) {
+                const details = Array.isArray(error.details) ? error.details : [];
+                showToast((details[0] && details[0].message) || error.message || 'We could not save that photo.', 'error');
+            } finally {
+                if (button) WGAUI.setBusy(button, false);
+            }
+        };
+
+        /**
+         * A CV is read in the browser and sent as a data URL, which is how every
+         * other upload on this deployment travels: there is no multipart parser.
+         * The server checks the bytes; these checks exist to fail fast with a
+         * useful message rather than after half a megabyte has gone up.
+         */
+        window.uploadCv = function uploadCv(button) {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'application/pdf,.pdf';
+
+            input.addEventListener('change', async () => {
+                const file = input.files && input.files[0];
+                if (!file) return;
+
+                if (file.type && file.type !== 'application/pdf') {
+                    showToast('Choose a PDF file. Other formats are not accepted.', 'error');
+                    return;
+                }
+
+                if (file.size > 500 * 1024) {
+                    showToast('That file is too large. Keep the CV under 500 KB.', 'error');
+                    return;
+                }
+
+                if (button) WGAUI.setBusy(button, true, 'Uploading...');
+
+                try {
+                    const dataUrl = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(String(reader.result || ''));
+                        reader.onerror = () => reject(new Error('That file could not be read.'));
+                        reader.readAsDataURL(file);
+                    });
+
+                    const result = await WGA.put('/auth/me/cv', { image: dataUrl, filename: file.name });
+                    instructorData.user = Object.assign({}, instructorData.user, result.user);
+
+                    showToast('CV sent for review.', 'success');
+                    loadPage('profile');
+                } catch (error) {
+                    const details = Array.isArray(error.details) ? error.details : [];
+                    showToast(
+                        (details[0] && details[0].message) || error.message || 'We could not upload that CV.',
+                        'error'
+                    );
+                    if (button) WGAUI.setBusy(button, false);
+                }
+            });
+
+            input.click();
+        };
+
+        /** The owner's copy of their own CV. */
+        window.downloadMyCv = async function downloadMyCv(button) {
+            if (button) WGAUI.setBusy(button, true, '...');
+
+            try {
+                const response = await fetch(WGA.API_BASE + '/auth/me/cv', {
+                    headers: { Authorization: 'Bearer ' + WGA.getAccessToken() },
+                });
+
+                if (!response.ok) {
+                    let message = 'We could not fetch your CV.';
+                    try {
+                        const payload = await response.json();
+                        if (payload && payload.message) message = payload.message;
+                    } catch (error) {
+                        /* not json */
+                    }
+                    throw new Error(message);
+                }
+
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+
+                link.href = url;
+                link.download = 'my-cv.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            } catch (error) {
+                showToast(error.message || 'We could not fetch your CV.', 'error');
+            } finally {
+                if (button) WGAUI.setBusy(button, false);
+            }
+        };
+
+        /**
+         * A friendly hint while typing the introduction link.
+         *
+         * It only recognises the two families by name and never claims a link is
+         * valid — the server holds the real allowlist, and saying "looks good"
+         * about something it will refuse would be worse than saying nothing.
+         */
+        window.checkIntroUrl = function checkIntroUrl() {
+            const input = document.getElementById('pVideoIntro');
+            const note = document.getElementById('pVideoIntroNote');
+            if (!input || !note) return;
+
+            const value = (input.value || '').trim();
+            const defaultText = 'A YouTube or Vimeo link where you introduce yourself. Shown on your course pages.';
+
+            if (!value) {
+                note.textContent = defaultText;
+                note.classList.remove('lesson-hint-warn');
+                return;
+            }
+
+            let looksRight = false;
+            try {
+                const url = new URL(value);
+                const host = url.hostname.toLowerCase();
+                looksRight = /^https?:$/.test(url.protocol) && (host.includes('youtube') || host.includes('youtu.be') || host.includes('vimeo'));
+            } catch (error) {
+                looksRight = false;
+            }
+
+            note.textContent = looksRight
+                ? 'That looks like a video link. It is checked again when you save.'
+                : 'Use a YouTube or Vimeo link. Other addresses cannot be embedded.';
+            note.classList.toggle('lesson-hint-warn', !looksRight);
         };
 
         window.openChangePassword = function openChangePassword() {

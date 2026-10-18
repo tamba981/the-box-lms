@@ -3,6 +3,7 @@
 const { z } = require('zod');
 
 const { ROLES, COURSE_LEVELS, COURSE_STATUSES, LESSON_TYPES } = require('../lib/constants');
+const { isEmbeddableVideoUrl } = require('../lib/videoUrl');
 const {
   MINIMUM_AGE,
   MAXIMUM_AGE,
@@ -165,6 +166,23 @@ const avatarBody = z.object({
     .max(400000, 'That image is too large. Choose one under 120 KB.'),
 });
 
+/**
+ * A CV, as a data URL plus its original name.
+ *
+ * The length ceiling here is only a first gate: `lib/document.js` decodes the
+ * bytes and checks the PDF signature, the trailer and the real 500 KB limit.
+ * The number is deliberately above 500 KB so an oversized file reaches that
+ * check and gets a readable message rather than a generic validation failure.
+ */
+const cvBody = z.object({
+  image: z
+    .string({ required_error: 'Choose a PDF to upload', invalid_type_error: 'Choose a PDF to upload' })
+    .trim()
+    .min(100, 'Choose a PDF to upload')
+    .max(700000, 'That file is too large. The CV must be a PDF under 500 KB.'),
+  filename: z.string().trim().max(200, 'That filename is too long').optional(),
+});
+
 const refreshBody = z.object({
   // Optional: the browser client may instead send the token as a cookie.
   refreshToken: z.string().trim().min(20).max(500).optional(),
@@ -205,6 +223,65 @@ const updateProfileBody = z
      */
     dateOfBirth: dateOfBirth.optional(),
     location: location.optional(),
+
+    /**
+     * Instructor credentials.
+     *
+     * `videoIntroUrl` is held to the same embed allowlist as lesson videos,
+     * because it ends up in an iframe on the course page. An empty string means
+     * "remove it", which is different from a field that was not sent at all.
+     */
+    videoIntroUrl: z
+      .union([z.literal(''), z.string().trim().url('Enter a valid link').max(500), z.null()])
+      .optional()
+      .transform((value) => (value === '' ? null : value))
+      .refine(
+        (value) => value === undefined || value === null || isEmbeddableVideoUrl(value),
+        'Only YouTube and Vimeo links can be embedded. Paste the video\'s own address.'
+      ),
+
+    qualifications: z.string().trim().max(500, 'Qualifications are too long').optional().nullable(),
+
+    /**
+     * Accepts a number or the text of a number input. `''` and null both clear
+     * it, because an emptied field must not be stored as 0.
+     */
+    yearsExperience: z.preprocess(
+      (value) => {
+        if (value === undefined) return undefined;
+        if (value === null || value === '') return null;
+        return typeof value === 'string' ? Number(value) : value;
+      },
+      z
+        .number({ invalid_type_error: 'Years of experience must be a number' })
+        .int('Years of experience must be a whole number')
+        .min(0, 'Years of experience cannot be negative')
+        .max(80, 'Years of experience must be 80 or less')
+        .nullable()
+        .optional()
+    ),
+
+    /**
+     * "English, French, Kpelle" from one input, stored as an array.
+     *
+     * The same field accepts an array so a client that already has one is not
+     * forced to join it first. An empty string clears the list.
+     */
+    languages: z
+      .union([z.string().max(500), z.array(z.string().trim().min(2).max(30)), z.null()])
+      .optional()
+      .transform((value) => {
+        if (value === undefined) return undefined;
+        if (value === null) return [];
+        const list = Array.isArray(value) ? value : value.split(',');
+        return list.map((item) => item.trim()).filter(Boolean);
+      })
+      .pipe(
+        z
+          .array(z.string().min(2, 'Each language needs at least 2 characters').max(30, 'That language name is too long'))
+          .max(20, 'List at most 20 languages')
+          .optional()
+      ),
   })
   .refine((value) => Object.keys(value).length > 0, { message: 'Nothing to update' });
 
@@ -246,6 +323,7 @@ module.exports = {
   registerBody,
   loginBody,
   avatarBody,
+  cvBody,
   refreshBody,
   logoutBody,
   forgotPasswordBody,

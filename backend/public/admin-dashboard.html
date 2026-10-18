@@ -901,6 +901,7 @@
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="users"><i class="fas fa-users"></i> Users</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> Courses</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="instructors"><i class="fas fa-chalkboard-user"></i> Instructors</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="instructor-cvs"><i class="fas fa-file-pdf"></i> Instructor CVs</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="certificates"><i class="fas fa-certificate"></i> Certificates</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="payments"><i class="fas fa-credit-card"></i> Payments</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="reports"><i class="fas fa-chart-line"></i> Reports</a></li>
@@ -1360,6 +1361,167 @@
             `;
         }
 
+        /*
+         * Instructor CVs.
+         *
+         * Its own page rather than a column on the Instructors page: reviewing a
+         * document is a queue — read, approve or send back — and mixing it into a
+         * roster of everyone makes both jobs worse. The queue is fetched per tab
+         * because it changes as instructors upload, which is the one thing the
+         * summary payload cannot know.
+         */
+        state.cvStatus = state.cvStatus || 'pending';
+
+        function cvTabStyle(active) {
+            return `padding:9px 18px;border-radius:999px;border:1px solid var(--border);` +
+                `background:${active ? 'var(--primary)' : 'transparent'};` +
+                `color:${active ? '#fff' : 'inherit'};font-weight:600;font-size:14px;cursor:pointer;`;
+        }
+
+        function renderInstructorCvs() {
+            const tabs = ['pending', 'approved', 'rejected'];
+
+            return `
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                    <span style="font-size:24px;font-weight:700;">Instructor CVs</span>
+                </div>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
+                    ${tabs
+                        .map(
+                            (tab) =>
+                                `<button class="cv-tab" data-status="${tab}" style="${cvTabStyle(state.cvStatus === tab)}" onclick="loadCvQueue('${tab}')">${tab.charAt(0).toUpperCase() + tab.slice(1)}</button>`
+                        )
+                        .join('')}
+                </div>
+                <div id="cvBody"><div style="text-align:center;padding:40px;"><div class="loading-spinner"></div></div></div>
+            `;
+        }
+
+        function renderCvRows(instructors) {
+            if (!instructors.length) {
+                const empty = {
+                    pending: 'No CVs are waiting. When an instructor uploads one it appears here.',
+                    approved: 'No CVs have been approved yet.',
+                    rejected: 'No CVs have been sent back yet.',
+                };
+
+                return `<div class="stat-card glass-premium"><div class="stat-title">Nothing ${state.cvStatus}</div><div style="font-size:14px;color:var(--text-light);margin-top:6px;">${empty[state.cvStatus] || ''}</div></div>`;
+            }
+
+            const rows = instructors
+                .map((instructor) => {
+                    const submitted = instructor.cvUploadedAt
+                        ? new Date(instructor.cvUploadedAt).toLocaleDateString()
+                        : '-';
+
+                    return `
+                        <tr>
+                            <td>
+                                ${WGAUI.escapeHtml(instructor.name)}
+                                <div style="font-size:12px;color:var(--text-light);">${WGAUI.escapeHtml(instructor.cvOriginalFilename || '')}</div>
+                            </td>
+                            <td>${WGAUI.escapeHtml(instructor.email)}</td>
+                            <td>${submitted}</td>
+                            <td style="white-space:nowrap;">
+                                <button class="btn-primary btn-outline btn-sm" onclick="downloadInstructorCv('${instructor.id}', this)">Download</button>
+                                ${state.cvStatus === 'approved' ? '' : `<button class="btn-primary btn-sm" onclick="approveCv('${instructor.id}', this)">Approve</button>`}
+                                ${state.cvStatus === 'rejected' ? '' : `<button class="btn-primary btn-outline btn-sm" onclick="rejectCv('${instructor.id}', this)">Reject</button>`}
+                            </td>
+                        </tr>
+                    `;
+                })
+                .join('');
+
+            return `
+                <table class="data-table">
+                    <thead><tr><th>Name</th><th>Email</th><th>Submitted</th><th>Actions</th></tr></thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            `;
+        }
+
+        window.loadCvQueue = async function loadCvQueue(status) {
+            state.cvStatus = status || 'pending';
+
+            document.querySelectorAll('.cv-tab').forEach((tab) => {
+                tab.style.cssText = cvTabStyle(tab.dataset.status === state.cvStatus);
+            });
+
+            const body = document.getElementById('cvBody');
+            if (!body) return;
+
+            body.innerHTML = '<div style="text-align:center;padding:40px;"><div class="loading-spinner"></div></div>';
+
+            try {
+                const data = await WGA.get('/admin/instructors/cv?status=' + encodeURIComponent(state.cvStatus));
+                body.innerHTML = renderCvRows(data.instructors || []);
+            } catch (error) {
+                body.innerHTML = `<p>${WGAUI.escapeHtml(error.message || 'Could not load the queue.')}</p>`;
+            }
+        };
+
+        window.downloadInstructorCv = (id, button) =>
+            withBusy(button, async () => {
+                const response = await fetch(WGA.API_BASE + '/admin/instructors/' + encodeURIComponent(id) + '/cv', {
+                    headers: { Authorization: 'Bearer ' + WGA.getAccessToken() },
+                });
+
+                if (!response.ok) {
+                    let message = 'That CV could not be downloaded.';
+                    try {
+                        const payload = await response.json();
+                        if (payload && payload.message) message = payload.message;
+                    } catch (error) {
+                        /* not json */
+                    }
+                    throw new Error(message);
+                }
+
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+
+                link.href = url;
+                link.download = 'instructor-cv.pdf';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            });
+
+        window.approveCv = (id, button) =>
+            withBusy(button, async () => {
+                await WGA.post('/admin/instructors/' + encodeURIComponent(id) + '/cv/approve');
+                showToast('CV approved.', 'success');
+                await loadCvQueue(state.cvStatus);
+            });
+
+        window.rejectCv = (id) => {
+            openModal(
+                'Reject CV',
+                `
+                    <div class="form-group"><label>Reason</label><textarea id="cvRejectReason" rows="4" maxlength="500" placeholder="What needs adding or changing?"></textarea></div>
+                    <p style="font-size:12.5px;color:var(--text-light);">The instructor sees this, so be specific. At least 10 characters.</p>
+                    <button class="btn-primary" onclick="confirmRejectCv('${id}', this)">Send back to instructor</button>
+                `
+            );
+        };
+
+        window.confirmRejectCv = (id, button) =>
+            withBusy(button, async () => {
+                const reason = (document.getElementById('cvRejectReason')?.value || '').trim();
+
+                if (reason.length < 10) {
+                    showToast('Give a reason of at least 10 characters.', 'error');
+                    return;
+                }
+
+                await WGA.post('/admin/instructors/' + encodeURIComponent(id) + '/cv/reject', { reason });
+                closeModal();
+                showToast('CV sent back to the instructor.', 'success');
+                await loadCvQueue(state.cvStatus);
+            });
+
         function renderInstructors() {
             const instructors = adminData.users.filter((u) => u.role === 'instructor');
 
@@ -1722,6 +1884,9 @@
                 case 'instructors':
                     html = renderInstructors();
                     break;
+                case 'instructor-cvs':
+                    html = renderInstructorCvs();
+                    break;
                 case 'certificates':
                     html = renderCertificates();
                     break;
@@ -1740,6 +1905,10 @@
 
             content.innerHTML = html;
             observeCounters();
+
+            // The CV queue is a separate fetch: it changes as instructors upload,
+            // and it is the only page whose contents are not in the summary payload.
+            if (page === 'instructor-cvs') await loadCvQueue(state.cvStatus || 'pending');
 
             document.querySelectorAll('.sidebar-link').forEach((link) => {
                 link.classList.toggle('active', link.getAttribute('data-page') === page);
