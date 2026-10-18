@@ -1975,6 +1975,9 @@
                                 <label><input type="radio" name="lessonVideoMode" value="link" ${editing.videoMode === 'link' ? 'checked' : ''} onchange="setLessonVideoMode()" /> Paste a YouTube or Vimeo link</label>
                                 <label class="${storage.enabled ? '' : 'is-disabled'}"><input type="radio" name="lessonVideoMode" value="upload" ${editing.videoMode === 'upload' ? 'checked' : ''} ${storage.enabled ? '' : 'disabled'} onchange="setLessonVideoMode()" /> Upload a video file</label>
                             </div>
+                            ${storage.enabled
+                                ? ''
+                                : `<p class="lesson-hint lesson-hint-warn" style="margin-top:8px;"><i class="fas fa-info-circle"></i> Uploading is not available yet on this deployment. Use a YouTube or Vimeo link for now.${storage.missing && storage.missing.length ? ' Waiting on: ' + WGAUI.escapeHtml(storage.missing.join(', ')) + '.' : ''}</p>`}
 
                             <div id="lessonLinkPane" style="display:none;margin-top:10px;">
                                 <input type="text" id="lessonVideoUrl" value="${WGAUI.escapeHtml(editing.videoUrl || '')}" placeholder="https://www.youtube.com/watch?v=..." />
@@ -1982,12 +1985,10 @@
                             </div>
 
                             <div id="lessonUploadPane" style="display:none;margin-top:10px;">
-                                ${storage.enabled
-                                    ? `<input type="file" id="lessonVideoFile" accept="video/mp4,video/webm" />
-                                       <div class="upload-bar" id="lessonUploadBar" style="display:none;"><span></span></div>
-                                       <p class="lesson-hint" id="lessonUploadNote">Up to ${Math.round((storage.videoMaxBytes || 0) / (1024 * 1024))} MB. MP4 or WebM — not MOV, because iPhones record it in a format browsers cannot play.</p>
-                                       <button class="btn-primary btn-sm" id="lessonUploadBtn" style="margin-top:8px;" onclick="uploadLessonVideo()">Upload video</button>`
-                                    : `<p class="lesson-hint">Uploads are switched off on this deployment — no storage is configured. Use a YouTube or Vimeo link instead. Missing: ${WGAUI.escapeHtml((storage.missing || []).join(', ')) || 'storage settings'}.</p>`}
+                                <input type="file" id="lessonVideoFile" accept="video/mp4,video/webm" />
+                                <div class="upload-bar" id="lessonUploadBar" style="display:none;"><span></span></div>
+                                <p class="lesson-hint" id="lessonUploadNote">Up to ${Math.round((storage.videoMaxBytes || 0) / (1024 * 1024))} MB. MP4 or WebM, not MOV — iPhones record in a format browsers cannot play.</p>
+                                <button class="btn-primary btn-sm" id="lessonUploadBtn" style="margin-top:8px;" onclick="uploadLessonVideo()">Upload video</button>
                             </div>
                         </div>
 

@@ -43,7 +43,7 @@ router.post(
           reason,
           subject,
           message,
-          inbox: config.contactInbox,
+          inbox: config.email.inbox,
         })
       );
 
@@ -72,7 +72,7 @@ router.post(
       logger.error('contact notification threw', {
         error,
         contactMessageId: String(stored._id),
-        inbox: config.contactInbox,
+        inbox: config.email.inbox,
       });
     }
 

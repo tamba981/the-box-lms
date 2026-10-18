@@ -884,6 +884,94 @@ async function testEmailTemplates() {
       assert(!JSON.stringify(message).includes('undefined'), 'no field may render as undefined');
     });
   }
+
+  await check('the certificate email carries the document as an attachment', async () => {
+    const certificate = {
+      courseTitle: 'A Course',
+      verificationCode: 'code123',
+      certificateNumber: 'WGA-2026/000001',
+      pdfBase64: 'JVBERi0xLjQK',
+    };
+
+    const message = email.certificateEmail({ user, certificate });
+
+    assert(Array.isArray(message.attachments), 'an attachment was expected');
+    assertEqual(message.attachments.length, 1, 'exactly one attachment');
+    assertEqual(message.attachments[0].content, certificate.pdfBase64, 'the attachment content');
+    assert(message.attachments[0].filename.endsWith('.pdf'), 'the filename must end .pdf');
+    // The number contains a slash; a filename must not.
+    assert(!/[\\/:*?"<>|]/.test(message.attachments[0].filename), `unsafe filename: ${message.attachments[0].filename}`);
+  });
+
+  await check('a certificate with no rendered document still sends', async () => {
+    const message = email.certificateEmail({
+      user,
+      certificate: { courseTitle: 'A Course', verificationCode: 'c', certificateNumber: 'WGA-1' },
+    });
+
+    assert(!message.attachments || message.attachments.length === 0, 'no attachment expected');
+    assert(!JSON.stringify(message).includes('undefined'), 'no field may render as undefined');
+  });
+
+  await check('the transport forwards attachments to the provider', async () => {
+    const config = require('../src/config/env');
+    const originalFetch = global.fetch;
+    const originalEnabled = config.email.enabled;
+    let captured = null;
+
+    global.fetch = async (url, options) => {
+      captured = JSON.parse(options.body);
+      return { ok: true, json: async () => ({ id: 'test-message' }) };
+    };
+    config.email.enabled = true;
+
+    try {
+      await email.deliver({
+        to: 'recipient@example.com',
+        subject: 'An attachment',
+        text: 'See attached.',
+        html: '<p>See attached.</p>',
+        attachments: [{ filename: 'a.pdf', content: 'JVBERi0=' }],
+      });
+    } finally {
+      global.fetch = originalFetch;
+      config.email.enabled = originalEnabled;
+    }
+
+    assert(captured, 'the provider was never called');
+    assert(Array.isArray(captured.attachments), 'attachments were not forwarded');
+    assertEqual(captured.attachments[0].filename, 'a.pdf', 'the forwarded filename');
+  });
+
+  /**
+   * The contact notification addressed `config.contactInbox`, a key that does not
+   * exist, so `deliver` refused it with `no_recipient` and every enquiry was
+   * stored without anyone being told. Nothing threw and nothing looked wrong,
+   * which is exactly why this is asserted against the source rather than trusted.
+   */
+  await check('the contact route addresses a config key that exists', async () => {
+    const fs = require('fs');
+    const path = require('path');
+    const source = fs.readFileSync(path.join(__dirname, '..', 'src', 'routes', 'contact.js'), 'utf8');
+
+    assert(!source.includes('config.contactInbox'), 'contact.js reads config.contactInbox, which is not defined');
+    assert(source.includes('config.email.inbox'), 'contact.js does not address the configured inbox');
+  });
+
+  await check('the contact notification is addressed to the inbox', async () => {
+    const config = require('../src/config/env');
+    const message = email.contactMessageEmail({
+      name: 'A Person',
+      email: 'sender@example.com',
+      reason: 'general',
+      subject: 'Hello',
+      message: 'A question.',
+      inbox: config.email.inbox,
+    });
+
+    assertEqual(message.to, config.email.inbox, 'the notification recipient');
+    assert(message.to.includes('@'), 'the inbox must look like an address');
+  });
 }
 
 /**

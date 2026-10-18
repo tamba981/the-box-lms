@@ -176,10 +176,22 @@ async function attachRenderedPdf(certificate) {
       verificationUrl: buildVerificationUrl(certificate.verificationCode),
     });
 
+    const base64 = buffer.toString('base64');
+
     await Certificate.updateOne(
       { _id: certificate._id },
-      { $set: { pdfBase64: buffer.toString('base64'), pdfGeneratedAt: new Date() } }
+      { $set: { pdfBase64: base64, pdfGeneratedAt: new Date() } }
     );
+
+    /**
+     * Kept on the in-memory document as well as in the database.
+     *
+     * `pdfBase64` is `select: false`, so the certificate the caller is holding
+     * would otherwise look like it has no document — and the email that is built
+     * moments later in the same request would go out without its attachment.
+     */
+    certificate.pdfBase64 = base64;
+    certificate.pdfGeneratedAt = new Date();
 
     return true;
   } catch (error) {

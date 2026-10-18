@@ -19,7 +19,7 @@ const logger = require('../../lib/logger');
 
 const RESEND_ENDPOINT = 'https://api.resend.com/emails';
 
-async function deliver({ to, subject, html, text, replyTo }) {
+async function deliver({ to, subject, html, text, replyTo, attachments }) {
   /**
    * Refuse to send without a recipient.
    *
@@ -65,6 +65,10 @@ async function deliver({ to, subject, html, text, replyTo }) {
         // replying in a mail client answers the person who wrote in, rather than
         // the platform.
         ...(replyTo ? { reply_to: replyTo } : {}),
+        // Base64 attachments, in the shape Resend expects. Only the certificate
+        // email uses this, so that a graduate gets the document itself rather
+        // than a link they must remember to open.
+        ...(attachments && attachments.length ? { attachments } : {}),
       }),
     });
 
@@ -276,18 +280,33 @@ function certificateEmail({ user, certificate }) {
     `You have completed "${certificate.courseTitle}" and your ${noun} has been issued.`,
     `${numbered} number: ${certificate.certificateNumber}`,
     '',
-    `Verify or download it here: ${url}`,
+    `The PDF is attached to this email.`,
+    `Verify it here: ${url}`,
   ].join('\n');
+
+  /**
+   * Attached rather than merely linked.
+   *
+   * `issueFor` renders the document as the certificate is created, so it is in
+   * practice always present. The guard covers a record issued before documents
+   * existed, which would otherwise attach the string "undefined".
+   */
+  const safeNumber = String(certificate.certificateNumber || 'document').replace(/[^A-Za-z0-9._-]/g, '-');
+  const attachments = certificate.pdfBase64
+    ? [{ filename: `${noun}-${safeNumber}.pdf`, content: certificate.pdfBase64 }]
+    : undefined;
 
   return {
     to: user.email,
     subject: `Your ${noun} for ${certificate.courseTitle}`,
     text,
+    attachments,
     html: layout({
       heading: `Your ${noun} is ready`,
       bodyHtml: `<p style="margin:0 0 12px;">Congratulations ${firstNameOf(user)},</p>
         <p style="margin:0 0 12px;">You have completed <strong>${escapeHtml(certificate.courseTitle)}</strong> and your ${noun} has been issued.</p>
-        <p style="margin:0;">${numbered} number <strong>${escapeHtml(certificate.certificateNumber)}</strong>.</p>`,
+        <p style="margin:0 0 12px;">${numbered} number <strong>${escapeHtml(certificate.certificateNumber)}</strong>.</p>
+        <p style="margin:0;">Your ${noun} is attached to this email as a PDF.</p>`,
       ctaText: `View and verify ${noun}`,
       ctaUrl: url,
       footnote: `Anyone can verify this ${noun} using the link above.`,
