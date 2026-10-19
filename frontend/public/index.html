@@ -25,7 +25,7 @@
   href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
   rel="stylesheet"
 />
-<link rel="stylesheet" href="/assets/css/wga-public.css?v=20261020" />
+<link rel="stylesheet" href="/assets/css/wga-public.css?v=20261021" />
 
 <!-- The moment the page started, so the loading screen can be shown for a
      minimum time without overstaying when the page was already cached. -->
@@ -166,31 +166,59 @@
 
 <main id="main">
   <!-- ============================ HERO ============================ -->
-  <section class="hero">
-    <div class="wrap hero-grid">
-      <div>
-        <span class="eyebrow">Wuteve Global Academy</span>
-        <h1 class="hero-title">Courses that finish with something an employer can <em>check</em>.</h1>
-        <p class="hero-lede">
-          Self-paced courses in business, technology and data, taught by instructors whose names are
-          on the page. Finish one and you get a certificate carrying your name, the course and a code
-          that anyone can verify on this site.
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary btn-lg" href="/courses.html">Browse the catalog</a>
-          <a class="btn btn-ghost btn-lg" href="/for-individuals.html">How it works</a>
-        </div>
-        <p class="hero-note">
-          <span>Free and paid courses</span>
-          <span aria-hidden="true">&middot;</span>
-          <span>Learn at your own pace</span>
-          <span aria-hidden="true">&middot;</span>
-          <a href="/certificate.html">Verify a certificate</a>
-        </p>
-      </div>
+  <!--
+    The video is decoration, so it is muted, looping, `aria-hidden` and has no
+    controls: it carries nothing the headline does not already say.
 
-      <!-- A certificate, drawn from the product's own parts. No stock photograph
-           of learners who do not exist. -->
+    It is not in the markup as a `src`. The script at the foot of this page
+    attaches it only to a wide screen that has not asked for reduced motion and
+    is not on a metered connection, so a phone never spends 4.8 MB on it. Until
+    it can play, the poster beneath it is what the visitor sees - which is a real
+    frame from the video, not a stock photograph of somebody else's learners.
+  -->
+  <section class="hero hero--media">
+    <div class="hero-bg" aria-hidden="true">
+      <img class="hero-poster" src="/Images/hero/hero-poster.jpg" alt="" width="1600" height="900" fetchpriority="high" />
+      <video
+        class="hero-video"
+        muted
+        loop
+        playsinline
+        preload="none"
+        poster="/Images/hero/hero-poster.jpg"
+        data-src="/Images/hero/hero.mp4"
+      ></video>
+      <div class="hero-scrim"></div>
+    </div>
+
+    <div class="wrap hero-content">
+      <span class="eyebrow">Wuteve Global Academy</span>
+      <h1 class="hero-title">Affordable, Self-Paced Courses with Verifiable Certificates</h1>
+      <p class="hero-lede">
+        Learn at your own pace, in your own time. Some courses are free; every one of them ends with a
+        certificate in your name &mdash; and a code any employer can check.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="/login.html?tab=signup">Join for free</a>
+        <a class="btn btn-ghost btn-lg" href="/courses.html">Explore courses</a>
+      </div>
+      <p class="hero-note">
+        <span>Free and paid courses</span>
+        <span aria-hidden="true">&middot;</span>
+        <span>Learn at your own pace</span>
+        <span aria-hidden="true">&middot;</span>
+        <a href="/certificate.html">Verify a certificate</a>
+      </p>
+    </div>
+  </section>
+
+  <!--
+    The certificate panel overlaps the hero. It is the same panel as before and
+    is replaced by the three-slide carousel in 5b-0b; keeping it here means the
+    video change can be judged on its own.
+  -->
+  <section class="hero-panel" aria-label="What a Wuteve certificate contains">
+    <div class="wrap">
       <div class="credential" role="img" aria-label="Example of a Wuteve Global Academy certificate">
         <div class="credential-top">
           <div>
@@ -511,9 +539,9 @@
   </div>
 </footer>
 
-<script src="/assets/js/wga-api.js?v=20261020"></script>
-<script src="/assets/js/wga-ui.js?v=20261020"></script>
-<script src="/assets/js/wga-public.js?v=20261020"></script>
+<script src="/assets/js/wga-api.js?v=20261021"></script>
+<script src="/assets/js/wga-ui.js?v=20261021"></script>
+<script src="/assets/js/wga-public.js?v=20261021"></script>
 <script>
   /* ------------------------------------------------------------------ *
    * Homepage only: the catalog preview, the live counts, and the subject
@@ -716,6 +744,70 @@
     else window.addEventListener('load', dismissWhenReady);
 
     window.setTimeout(dismiss, CEILING);
+  })();
+</script>
+<script>
+  /* ------------------------------------------------------------------ *
+   * Hero background video.
+   *
+   * Restored from the version that was removed on 2026-10-02 because the
+   * file had never been committed. The guards are the reason it is worth
+   * restoring rather than rewriting:
+   *
+   *   - wider than 900px, so a phone never downloads 4.8 MB for decoration
+   *   - not `prefers-reduced-motion`, because a looping video is exactly what
+   *     that setting asks you not to do
+   *   - not `saveData`, for somebody who has said data costs them money
+   *
+   * Failing any of those, nothing is fetched at all: the `data-src` stays put
+   * and the poster image underneath is what is seen. If the browser then
+   * declines to autoplay, `play()` rejects, the class is never added, and the
+   * poster stays. Every path ends on an image, never on a black rectangle.
+   * ------------------------------------------------------------------ */
+  (function () {
+    'use strict';
+
+    var video = document.querySelector('.hero-video[data-src]');
+    if (!video) return;
+
+    var wideEnough = window.matchMedia('(min-width: 901px)');
+    var prefersLessMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var savingData = Boolean(navigator.connection && navigator.connection.saveData);
+
+    function eligible() {
+      return wideEnough.matches && !prefersLessMotion.matches && !savingData;
+    }
+
+    function load() {
+      if (!eligible() || video.dataset.loaded === 'true') return;
+
+      video.src = video.dataset.src;
+      video.removeAttribute('data-src');
+      video.dataset.loaded = 'true';
+      video.load();
+
+      // Fade in only when frames exist, not when the request was accepted.
+      video.addEventListener(
+        'playing',
+        function () {
+          video.classList.add('is-playing');
+        },
+        { once: true }
+      );
+
+      var started = video.play();
+      if (started && started.catch) {
+        started.catch(function () {
+          video.classList.remove('is-playing');
+        });
+      }
+    }
+
+    load();
+
+    if (wideEnough.addEventListener) {
+      wideEnough.addEventListener('change', load);
+    }
   })();
 </script>
 </body>

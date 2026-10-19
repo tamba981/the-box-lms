@@ -51,16 +51,15 @@ backend/temp/
 # the host decides to include. Locally nothing changes: the app prefers
 # frontend/public whenever it exists, so editing the originals works as before.
 #
-# The hero video is excluded on purpose. It is a 49 MB file awaiting a lighter
-# encode, and it must not enter the repository through either route: the staging
-# step copies the whole of frontend/public, and any broad `git add` of the pages
-# sweeps up whatever sits beside them.
+# The hero video is tracked. It used to be excluded: at 49 MB it was too heavy
+# to commit, and the markup that referenced it was removed rather than shipping
+# a page pointing at a file no clone would have. It is now a 4.8 MB encode with
+# faststart, which is a normal size for a hero, so it lives in the repository in
+# both places - the staging step copies the whole of frontend/public, and the
+# deployable copy has to contain the file or production would 404 it.
 #
-# Both paths are listed because ignoring only the generated copy is not enough.
-# That is not hypothetical: `git add frontend/public` committed the 49 MB video
-# once, and only the push failing kept it off the remote.
-frontend/public/Images/hero/
-backend/public/Images/hero/
+# The old encode, if it is ever restored locally, should not come back in:
+backend/public/Images/hero/*-49mb.mp4
 .idea/
 *.swp
 
