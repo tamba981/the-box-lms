@@ -25,7 +25,7 @@
   href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
   rel="stylesheet"
 />
-<link rel="stylesheet" href="/assets/css/wga-public.css?v=20261021" />
+<link rel="stylesheet" href="/assets/css/wga-public.css?v=20261022" />
 
 <!-- The moment the page started, so the loading screen can be shown for a
      minimum time without overstaying when the page was already cached. -->
@@ -213,28 +213,107 @@
   </section>
 
   <!--
-    The certificate panel overlaps the hero. It is the same panel as before and
-    is replaced by the three-slide carousel in 5b-0b; keeping it here means the
-    video change can be judged on its own.
+    Three highlights, one at a time. Slides are stacked in a grid cell rather
+    than absolutely positioned, so the band is as tall as the tallest slide and
+    nothing is clipped at a narrow width.
+
+    The counts on slide two are filled from the catalog after it loads; the
+    dashes are what a visitor sees for the first few hundred milliseconds.
   -->
-  <section class="hero-panel" aria-label="What a Wuteve certificate contains">
+  <section class="hero-panel" aria-label="What Wuteve gives you">
     <div class="wrap">
-      <div class="credential" role="img" aria-label="Example of a Wuteve Global Academy certificate">
-        <div class="credential-top">
-          <div>
-            <div class="credential-label">Certificate of completion</div>
-            <div class="credential-name">Your name here</div>
-            <div class="credential-course">Business &amp; Management &middot; 8 lessons</div>
-          </div>
-          <div class="credential-seal" aria-hidden="true">WGA</div>
+      <div class="slidebar" id="slidebar" role="region" aria-roledescription="carousel" aria-label="Platform highlights">
+        <div class="slidebar-track">
+          <article class="slidebar-slide is-active" role="group" aria-roledescription="slide" aria-label="1 of 3">
+            <div class="slide-visual" aria-hidden="true">
+              <div class="mini-cert">
+                <div class="mini-cert-top">
+                  <span class="mini-cert-label">Certificate of completion</span>
+                  <span class="mini-seal">WGA</span>
+                </div>
+                <p class="mini-cert-name">Your name here</p>
+                <p class="mini-cert-course">Business &amp; Management &middot; 8 lessons</p>
+                <p class="mini-cert-code">WGA-2026-000123</p>
+              </div>
+            </div>
+            <div class="slide-copy">
+              <h2>Your certificate</h2>
+              <p>
+                Every course ends with a verifiable certificate. It carries your name, the course title,
+                the date you finished, and a code. Nothing to apply for once the last lesson is done.
+              </p>
+              <ul class="slide-facts">
+                <li>Your name and the course that issued it</li>
+                <li>A verification code on every certificate</li>
+                <li>A PDF you can download and keep</li>
+              </ul>
+              <a class="slide-link" href="/for-individuals.html">How learning works &rarr;</a>
+            </div>
+          </article>
+
+          <article class="slidebar-slide" role="group" aria-roledescription="slide" aria-label="2 of 3">
+            <div class="slide-visual" aria-hidden="true">
+              <div class="mini-cards">
+                <div class="mini-card">
+                  <div class="wga-course-cover tone-business-management"><span>BM</span></div>
+                  <span class="mini-card-label">Business</span>
+                </div>
+                <div class="mini-card">
+                  <div class="wga-course-cover tone-technology"><span>TE</span></div>
+                  <span class="mini-card-label">Technology</span>
+                </div>
+                <div class="mini-card">
+                  <div class="wga-course-cover tone-data-analytics"><span>DA</span></div>
+                  <span class="mini-card-label">Data</span>
+                </div>
+              </div>
+            </div>
+            <div class="slide-copy">
+              <h2><span id="slide-courses">&mdash;</span>, <span id="slide-instructors">&mdash;</span></h2>
+              <p class="slide-stats">
+                <span id="slide-lessons">&mdash;</span>
+                <span aria-hidden="true">&middot;</span>
+                <span id="slide-hours">&mdash;</span> of content
+                <span aria-hidden="true">&middot;</span>
+                <span id="slide-free">&mdash;</span>
+              </p>
+              <ul class="slide-facts">
+                <li>Business, technology and data</li>
+                <li>Every lesson listed before you enrol</li>
+                <li>No scheduled class times</li>
+              </ul>
+              <a class="slide-link" href="/courses.html">Browse all courses &rarr;</a>
+            </div>
+          </article>
+
+          <article class="slidebar-slide" role="group" aria-roledescription="slide" aria-label="3 of 3">
+            <div class="slide-visual" aria-hidden="true">
+              <div class="mini-verify">
+                <span class="mini-verify-label">Verification code</span>
+                <div class="mini-verify-field">WGA-2026-000123</div>
+                <div class="mini-verify-result">Valid certificate found</div>
+              </div>
+            </div>
+            <div class="slide-copy">
+              <h2>Anyone can verify</h2>
+              <p>
+                Enter the code from any Wuteve certificate and the record appears: the student, the
+                course and the date. No account, and nothing about the learner's account either.
+              </p>
+              <ul class="slide-facts">
+                <li>Open to employers and admissions offices</li>
+                <li>No login required</li>
+                <li>The result is the certificate record itself</li>
+              </ul>
+              <a class="slide-link" href="/certificate.html">Verify a certificate &rarr;</a>
+            </div>
+          </article>
         </div>
-        <div class="credential-foot">
-          <div>
-            <div class="credential-label" style="margin-bottom: 4px">Verification code</div>
-            <div class="credential-code">WGA-2026-000123</div>
-            <div style="margin-top: 10px">Anyone can check this record</div>
-          </div>
-          <div class="qr" aria-hidden="true"></div>
+
+        <div class="slidebar-dots" role="group" aria-label="Choose a highlight">
+          <button class="slidebar-dot is-active" type="button" aria-label="Slide 1: every course ends with a certificate" aria-current="true"></button>
+          <button class="slidebar-dot" type="button" aria-label="Slide 2: the catalog"></button>
+          <button class="slidebar-dot" type="button" aria-label="Slide 3: anyone can check a certificate"></button>
         </div>
       </div>
     </div>
@@ -628,10 +707,54 @@
       if (trustStrip) trustStrip.setAttribute('aria-busy', 'false');
     }
 
+    /**
+     * The second slide states the size of the catalog: courses, instructors,
+     * lessons, hours and free courses. Every figure comes from the same response
+     * the grid is built from, so the slide cannot disagree with the page, and
+     * the instructor count is the number of people with at least one published
+     * course - not everyone with an instructor account, which was three while
+     * only two of them taught anything a visitor could enrol in.
+     */
+    function renderSlideStats() {
+      var courses = all.length;
+      var lessons = all.reduce(function (sum, course) {
+        return sum + (Number(course.lessonCount) || 0);
+      }, 0);
+      var hours = all.reduce(function (sum, course) {
+        return sum + (Number(course.durationHours) || 0);
+      }, 0);
+      var free = all.filter(function (course) {
+        return course.isFree;
+      }).length;
+      var instructors = Object.keys(
+        all.reduce(function (set, course) {
+          if (course.instructorName) set[course.instructorName] = true;
+          return set;
+        }, {})
+      ).length;
+
+      function put(id, text) {
+        var node = document.getElementById(id);
+        if (node) node.textContent = text;
+      }
+
+      put('slide-courses', courses + (courses === 1 ? ' course' : ' courses'));
+      put('slide-instructors', instructors + (instructors === 1 ? ' instructor' : ' instructors'));
+      put('slide-lessons', lessons + (lessons === 1 ? ' lesson' : ' lessons'));
+      put('slide-hours', Math.round(hours) + (Math.round(hours) === 1 ? ' hour' : ' hours'));
+      put('slide-free', free === 1 ? '1 free course' : free + ' free courses');
+    }
+
     function loadCatalog() {
       WGA.get('/courses', { query: { limit: 100, sort: 'popular' } })
         .then(function (data) {
           all = (data && data.items) || [];
+
+          // The slidebar's second slide states the size of the catalog. It is
+          // read from the same response the grid uses, so the two cannot
+          // disagree, and it counts only instructors who have a published
+          // course rather than everyone with the role.
+          renderSlideStats();
 
           // `pagination.total` can exceed what one request returns. If it does,
           // the counts would be undercounts, so only the course total is shown
@@ -651,9 +774,9 @@
     }
 
     function loadCategories() {
-      if (!categoryList) return;
+      if (!categoryList) return Promise.resolve();
 
-      WGA.get('/courses/categories')
+      return WGA.get('/courses/categories')
         .then(function (data) {
           var categories = (data && data.categories) || [];
 
@@ -696,8 +819,121 @@
       });
     });
 
-    loadCatalog();
-    loadCategories();
+    // Categories first: the card prints a category label, and rendering before
+    // the labels arrive printed the slug humanised by guesswork instead - the
+    // catalog came back faster than the taxonomy, so "Business & Management"
+    // sometimes appeared as "Business Management".
+    loadCategories().then(loadCatalog);
+  })();
+</script>
+<script>
+  /* ------------------------------------------------------------------ *
+   * Slidebar.
+   *
+   * Three highlights, one at a time, advancing every five seconds. Written
+   * by hand rather than pulled in: it is one timer and a class toggle, and a
+   * carousel library would have been larger than the page it sits on.
+   *
+   * It stops while the pointer is over it and while focus is inside it, which
+   * is what makes the links in a slide reachable: an auto-advancing carousel
+   * that steals the element you were about to click is a known way to make a
+   * page unusable with a keyboard.
+   * ------------------------------------------------------------------ */
+  (function () {
+    'use strict';
+
+    var root = document.getElementById('slidebar');
+    if (!root) return;
+
+    var slides = Array.prototype.slice.call(root.querySelectorAll('.slidebar-slide'));
+    var dots = Array.prototype.slice.call(root.querySelectorAll('.slidebar-dot'));
+    if (slides.length < 2) return;
+
+    var calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var index = 0;
+    var timer = null;
+    var paused = false;
+
+    function show(next) {
+      index = (next + slides.length) % slides.length;
+
+      slides.forEach(function (slide, position) {
+        var active = position === index;
+        slide.classList.toggle('is-active', active);
+        slide.setAttribute('aria-hidden', String(!active));
+      });
+
+      dots.forEach(function (dot, position) {
+        var active = position === index;
+        dot.classList.toggle('is-active', active);
+        if (active) dot.setAttribute('aria-current', 'true');
+        else dot.removeAttribute('aria-current');
+      });
+    }
+
+    function start() {
+      if (calm.matches || timer) return;
+      timer = window.setInterval(function () {
+        if (!paused) show(index + 1);
+      }, 5000);
+    }
+
+    function stop() {
+      if (!timer) return;
+      window.clearInterval(timer);
+      timer = null;
+    }
+
+    dots.forEach(function (dot, position) {
+      dot.addEventListener('click', function () {
+        show(position);
+      });
+    });
+
+    root.addEventListener('mouseenter', function () {
+      paused = true;
+    });
+
+    root.addEventListener('mouseleave', function () {
+      paused = false;
+    });
+
+    root.addEventListener('focusin', function () {
+      paused = true;
+    });
+
+    root.addEventListener('focusout', function (event) {
+      if (!root.contains(event.relatedTarget)) paused = false;
+    });
+
+    root.addEventListener('keydown', function (event) {
+      if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+      paused = true;
+      show(index + (event.key === 'ArrowRight' ? 1 : -1));
+    });
+
+    // Swipe. A pointer that travels less than 40px is a tap, not a swipe.
+    var originX = null;
+    root.addEventListener('pointerdown', function (event) {
+      originX = event.clientX;
+    });
+    root.addEventListener('pointerup', function (event) {
+      if (originX === null) return;
+      var travelled = event.clientX - originX;
+      originX = null;
+      if (Math.abs(travelled) < 40) return;
+      show(index + (travelled < 0 ? 1 : -1));
+    });
+
+    show(0);
+    start();
+
+    if (calm.addEventListener) {
+      calm.addEventListener('change', function () {
+        if (calm.matches) stop();
+        else start();
+      });
+    }
   })();
 </script>
 <script>
