@@ -1054,7 +1054,9 @@
             background: rgba(26,86,219,.14); color: var(--primary);
             text-transform: none; letter-spacing: 0;
         }
-        .lesson-title-input {
+        /* Specific enough to beat the generic input rule, which is what made the
+           title look like every other field. */
+        .lesson-form .form-group input.lesson-title-input {
             font-size: 17px; font-weight: 600; padding: 13px 15px;
         }
         .lesson-grid { display: flex; gap: 14px; flex-wrap: wrap; }
@@ -2103,6 +2105,18 @@
 
         function refreshLessonModal() {
             captureLessonForm();
+            redrawLessonModal();
+        }
+
+        /**
+         * Redraw without reading the form back first.
+         *
+         * `refreshLessonModal` captures the inputs before drawing, which is right
+         * after an unrelated action but wrong when the caller has just changed
+         * state on purpose — adding a material row would be captured away by the
+         * empty DOM before it ever reached the screen.
+         */
+        function redrawLessonModal() {
             openModal(lessonState.title, lessonModalBody());
             bindLessonModal();
         }
@@ -2122,7 +2136,7 @@
                                 ${WGAUI.escapeHtml(lesson.type)}
                                 ${lesson.durationMinutes ? ' · ' + lesson.durationMinutes + ' min' : ''}
                                 ${lesson.isPreview ? ' · <span style="color:var(--primary);">Preview</span>' : ''}
-                                ${lesson.published ? '' : ' · <span style="color:var(--text-light);">Hidden</span>'}
+                                ${lesson.published ? '' : ' · <span style="color:var(--text-light);">Draft</span>'}
                                 · ${lessonVideoLabel(lesson)}
                             </div>
                         </div>
@@ -2553,12 +2567,31 @@ return `<div class="lesson-admin">${list}${form}</div>`;
         };
 
         window.lessonEdit = async function lessonEdit(id) {
-            const lesson = lessonState.items.find((l) => String(l.id) === String(id));
-            if (!lesson) return;
+            const summary = lessonState.items.find((l) => String(l.id) === String(id));
+            if (!summary) return;
 
             lessonState.quizOpen = false;
+
+            /**
+             * The syllabus list is a summary: it carries no notes, no video
+             * address and no materials, only a resource count. Building the form
+             * from it showed those fields empty, and saving wrote the emptiness
+             * back over the real lesson — silently deleting them.
+             */
+            let lesson = summary;
+            try {
+                const full = await WGA.get(
+                    '/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(id)
+                );
+                if (full && full.lesson) lesson = Object.assign({}, summary, full.lesson);
+            } catch (error) {
+                showToast(error.message || 'That lesson could not be loaded in full.', 'error');
+            }
+
             lessonState.editing = Object.assign({}, lesson, {
                 isNew: false,
+                content: lesson.content || '',
+                videoUrl: lesson.videoUrl || (lesson.video && lesson.video.url) || '',
                 videoMode: lesson.videoType === 'upload' ? 'upload' : (lesson.videoType === 'link' ? 'link' : 'none'),
                 isUploaded: lesson.videoType === 'upload',
                 materials: (lesson.resources || []).map((resource) => ({
@@ -2683,7 +2716,7 @@ return `<div class="lesson-admin">${list}${form}</div>`;
             const editing = lessonState.editing;
             if (!editing) return;
             editing.materials = (editing.materials || []).concat({ title: '', url: '' });
-            refreshLessonModal();
+            redrawLessonModal();
         };
 
         window.removeMaterial = function removeMaterial(index) {
@@ -2691,7 +2724,7 @@ return `<div class="lesson-admin">${list}${form}</div>`;
             const editing = lessonState.editing;
             if (!editing) return;
             editing.materials = (editing.materials || []).filter((_, position) => position !== index);
-            refreshLessonModal();
+            redrawLessonModal();
         };
 
         /** The quiz is a lot of form for something most lessons do not have. */
@@ -2699,7 +2732,7 @@ return `<div class="lesson-admin">${list}${form}</div>`;
             captureLessonForm();
             captureQuizForm();
             lessonState.quizOpen = !lessonState.quizOpen;
-            refreshLessonModal();
+            redrawLessonModal();
         };
 
         /**

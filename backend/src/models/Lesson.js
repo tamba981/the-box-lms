@@ -120,6 +120,14 @@ lessonSchema.methods.toSummaryJSON = function toSummaryJSON(extra = {}) {
     order: this.order,
     durationMinutes: this.durationMinutes,
     isPreview: this.isPreview,
+    /**
+     * Whether students can see this lesson.
+     *
+     * Without it the syllabus list had no way to tell a draft from a published
+     * lesson, so it labelled every one of them "Draft" — a lie an instructor
+     * acts on, because that list is the only place they check.
+     */
+    published: this.published,
     // Guarded: a query that projects a subset of fields leaves an unselected
     // array path undefined, and reading `.length` off it would throw.
     resourceCount: Array.isArray(this.resources) ? this.resources.length : 0,
