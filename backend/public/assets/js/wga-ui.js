@@ -388,6 +388,148 @@
     });
   }
 
+  /* ---------------------------------------------------------------- *
+   * Course card
+   *
+   * One renderer, used by the homepage preview, the catalog and the audience
+   * pages. There used to be two - `landingCourseCard` on the homepage and
+   * `courseCard` on /courses.html - which drifted: one showed a rating the other
+   * did not, and a change to either only reached half the site.
+   *
+   * Only fields the course payload actually carries are printed. There is no
+   * rating, because nothing has been reviewed yet, and the card says "New"
+   * instead of showing an empty row of stars.
+   *
+   * Both stylesheets know these class names: wga-shell.css for the signed-in
+   * catalog and wga-public.css for the marketing pages.
+   * ---------------------------------------------------------------- */
+
+  function courseCard(course, options) {
+    options = options || {};
+    var course_ = course || {};
+
+    var key = course_.slug || course_.id || '';
+    var href = options.href || '/course.html?course=' + encodeURIComponent(key);
+
+    var thumb = course_.thumbnail
+      ? '<img class="wga-course-thumb" src="' + escapeHtml(course_.thumbnail) + '" alt="" loading="lazy" decoding="async" />'
+      : '<div class="wga-course-thumb-fallback" aria-hidden="true">' + escapeHtml(glyphFor(course_.title)) + '</div>';
+
+    var level = course_.level
+      ? '<span class="card-locked">' + escapeHtml(course_.level) + '</span>'
+      : '';
+
+    var tags =
+      '<div class="wga-course-tags">' +
+      (course_.category ? '<span class="wga-pill">' + escapeHtml(categoryLabel(course_.category)) + '</span>' : '') +
+      (Number(course_.ratingCount) === 0 ? '<span class="wga-pill wga-pill-new">New</span>' : '') +
+      '</div>';
+
+    var progress = Number(course_.myProgress);
+    var progressMarkup =
+      course_.isEnrolled && !isNaN(progress)
+        ? '<div class="wga-progress" role="progressbar" aria-label="Your progress" aria-valuenow="' +
+          Math.max(0, Math.min(100, progress)) +
+          '" aria-valuemin="0" aria-valuemax="100"><span style="width:' +
+          Math.max(0, Math.min(100, progress)) +
+          '%"></span></div>' +
+          '<p class="wga-course-note">You are enrolled - ' +
+          Math.max(0, Math.min(100, progress)) +
+          '% complete</p>'
+        : '';
+
+    var price = course_.isFree
+      ? '<span class="wga-course-price is-free">Free</span>'
+      : '<span class="wga-course-price">' +
+        escapeHtml(course_.priceLabel || formatMoney(course_.priceCents, course_.currency)) +
+        '</span>';
+
+    var lessons = Number(course_.lessonCount) || 0;
+    var enrolled = Number(course_.enrolledCount) || 0;
+
+    return (
+      '<a class="wga-course-card" href="' +
+      escapeHtml(href) +
+      '">' +
+      '<div class="thumb-wrap">' +
+      thumb +
+      level +
+      '</div>' +
+      '<div class="wga-course-body">' +
+      tags +
+      '<h3 class="wga-course-title">' +
+      escapeHtml(course_.title || 'Untitled course') +
+      '</h3>' +
+      '<p class="wga-course-summary">' +
+      escapeHtml(course_.summary || '') +
+      '</p>' +
+      progressMarkup +
+      '<div class="wga-course-meta">' +
+      '<span>' +
+      lessons +
+      (lessons === 1 ? ' lesson' : ' lessons') +
+      '</span>' +
+      (course_.credential ? '<span>' + escapeHtml(credentialLabel(course_.credential)) + '</span>' : '') +
+      (enrolled > 0 ? '<span>' + enrolled + ' enrolled</span>' : '<span>Open for enrolment</span>') +
+      '</div>' +
+      '<div class="wga-course-foot">' +
+      price +
+      '<span class="wga-course-instructor">' +
+      escapeHtml(course_.instructorName ? 'with ' + course_.instructorName : '') +
+      '</span>' +
+      '</div>' +
+      '</div>' +
+      '</a>'
+    );
+  }
+
+  /*
+   * Categories are slugs (`business-management`) in the course payload, and a
+   * slug printed on a card reads like a variable name. A page that has already
+   * fetched /courses/categories hands the labels over with setCategoryLabels;
+   * anything else gets the slug tidied up rather than shown raw.
+   */
+  var categoryLabels = {};
+
+  function setCategoryLabels(categories) {
+    (categories || []).forEach(function (category) {
+      if (!category) return;
+      var key = category.name || category.slug;
+      if (key) categoryLabels[key] = category.label || humanise(key);
+    });
+  }
+
+  function humanise(slug) {
+    var words = String(slug || '').split(/[-_]+/).filter(Boolean);
+    return words
+      .map(function (word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+      })
+      .join(' ');
+  }
+
+  function categoryLabel(slug) {
+    return categoryLabels[slug] || humanise(slug);
+  }
+
+  function credentialLabel(credential) {
+    if (credential === 'diploma') return 'Diploma';
+    if (credential === 'degree') return 'Degree';
+    return 'Certificate';
+  }
+
+  /** Two letters from a course title, for the thumbnail a course has not got. */
+  function glyphFor(title) {
+    var words = String(title || '')
+      .replace(/[^A-Za-z0-9 ]/g, ' ')
+      .split(/\s+/)
+      .filter(Boolean);
+
+    if (!words.length) return 'WGA';
+    if (words.length === 1) return words[0].slice(0, 2);
+    return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
+  }
+
   /** Inject the spinner keyframes once. */
   function injectBaseStyles() {
     if (document.getElementById('wga-ui-styles')) return;
@@ -424,6 +566,8 @@
     qs: qs,
     qsa: qsa,
     param: param,
+    courseCard: courseCard,
+    setCategoryLabels: setCategoryLabels,
     emptyState: emptyState,
     injectBaseStyles: injectBaseStyles
   };

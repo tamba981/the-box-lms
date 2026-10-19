@@ -733,8 +733,8 @@
         </div>
     </div>
 
-    <script src="/assets/js/wga-api.js?v=20261017"></script>
-    <script src="/assets/js/wga-ui.js?v=20261017"></script>
+    <script src="/assets/js/wga-api.js?v=20261019"></script>
+    <script src="/assets/js/wga-ui.js?v=20261019"></script>
     <script>
         // ============================================================
         //  API CONFIG & HELPERS
@@ -1096,6 +1096,14 @@
                 if (user && user.role) {
                     window.location.replace(WGA.homeForRole(user.role));
                 }
+            }
+
+            // Header and hero links say "Create a free account", so they can
+            // arrive on the sign-up tab rather than asking for one more click.
+            // After the redirect above, so a signed-in visitor is never shown a
+            // create-account form.
+            if (params.get('tab') === 'signup') {
+                setActiveTab('signup');
             }
         })();
 

@@ -1289,6 +1289,208 @@ async function testInstructorCv() {
  * request: the app runs inside this process, so a captured payload is proof the
  * trigger fired and proof of exactly what would have gone out.
  */
+/**
+ * Partnership enquiries - the form on /business.html, /universities.html and
+ * /government.html.
+ *
+ * The important behaviour is not the 201. It is that the enquiry survives even
+ * when the notification cannot be sent, that the notification goes to the
+ * partnerships inbox and not the contact inbox, and that whatever somebody typed
+ * into "organisation" is escaped before it is put in an email.
+ */
+/**
+ * Partnership enquiries - the form on /business.html, /universities.html and
+ * /government.html.
+ *
+ * The behaviour that matters is not the 201. It is that the enquiry survives
+ * when the notification cannot be sent, that the notification goes to the
+ * partnerships inbox rather than the general one, and that whatever somebody
+ * typed into "organisation" is escaped before it is put into an email.
+ */
+async function testBusinessEnquiries() {
+  const mailer = require('../src/services/email');
+  const config = require('../src/config/env');
+  const BusinessLead = require('../src/models/BusinessLead');
+
+  const leadEmail = `smoke-lead-${runId}@example.com`;
+
+  const captureEmail = async (task) => {
+    const original = mailer.deliver;
+    const captured = [];
+
+    mailer.deliver = async (message) => {
+      captured.push(message);
+      return { delivered: true, id: 'captured' };
+    };
+
+    try {
+      await task();
+    } finally {
+      mailer.deliver = original;
+    }
+
+    return captured;
+  };
+
+  const standardLead = {
+    company: 'Acme Trading',
+    contactName: 'Jo Doe',
+    email: 'jo@acme.example',
+    phone: null,
+    audience: 'business',
+    teamSize: '20-49',
+    timeline: '1-3 months',
+    interests: ['Technology & IT'],
+    message: 'We need training for supervisors.',
+  };
+
+  await check('partnership enquiries have an inbox of their own', () => {
+    assert(
+      config.businessInbox === 'partnership@wuteveglobalacademy.com',
+      `enquiries should reach partnership@wuteveglobalacademy.com, got ${config.businessInbox}`
+    );
+    assert(
+      config.businessInbox !== config.email.inbox,
+      'partnership enquiries must not be mixed into the general contact inbox'
+    );
+  });
+
+  await check('the enquiry email is replyable to the person who sent it', () => {
+    const message = mailer.businessEnquiryEmail({ lead: standardLead });
+    assert(message.to === config.businessInbox, 'the notification must be addressed to the partnerships inbox');
+    assertEqual(message.replyTo, standardLead.email, 'reply address');
+  });
+
+  await check('the enquiry subject names the organisation', () => {
+    const message = mailer.businessEnquiryEmail({ lead: standardLead });
+    assert(
+      message.subject.startsWith('Company enquiry') && message.subject.includes('Acme Trading'),
+      `subject should name the company, got "${message.subject}"`
+    );
+  });
+
+  await check('the enquiry email carries the answers that were given', () => {
+    const message = mailer.businessEnquiryEmail({ lead: standardLead });
+    assert(message.text.includes('20-49'), 'the team size must survive into the email');
+    assert(message.text.includes('Technology & IT'), 'the training interests must survive into the email');
+    assert(message.text.includes('We need training for supervisors.'), 'the free-text message must survive');
+  });
+
+  await check('an enquiry is labelled by the page it came from', () => {
+    const university = mailer.businessEnquiryEmail({ lead: { ...standardLead, audience: 'university' } });
+    const government = mailer.businessEnquiryEmail({ lead: { ...standardLead, audience: 'government' } });
+
+    assert(
+      university.subject.startsWith('University or college enquiry'),
+      `a university enquiry should say so, got "${university.subject}"`
+    );
+    assert(
+      government.subject.startsWith('Government or public body enquiry'),
+      `a government enquiry should say so, got "${government.subject}"`
+    );
+  });
+
+  await check('an organisation name is escaped in the notification email', () => {
+    const message = mailer.businessEnquiryEmail({
+      lead: { ...standardLead, company: '<script>alert(1)</script>' },
+    });
+
+    assert(!message.html.includes('<script>'), 'a raw script tag must never reach the email body');
+    assert(message.html.includes('&lt;script&gt;'), 'the organisation name must be escaped');
+  });
+
+  let response = null;
+  let stored = null;
+  let captured = [];
+
+  await check('a submitted enquiry is accepted and stored', async () => {
+    captured = await captureEmail(async () => {
+      response = await request('POST', '/api/v1/business/enquiries', {
+        body: {
+          audience: 'business',
+          company: `Smoke Training ${runId}`,
+          contactName: 'Joseph Kollie',
+          email: leadEmail,
+          phone: '+231 770 000 111',
+          teamSize: '20-49',
+          timeline: '1-3 months',
+          interests: ['Technology & IT', 'Data & Analytics'],
+          message: 'Spreadsheets and data literacy for 24 supervisors.',
+        },
+      });
+    });
+
+    assertEqual(response.status, 201, 'an enquiry should be accepted');
+    stored = await BusinessLead.findOne({ email: leadEmail }).lean();
+    assert(Boolean(stored), 'a submitted enquiry must be stored, even before it is emailed');
+  });
+
+  await check('the enquiry keeps the answers that were given', () => {
+    assertEqual(stored.status, 'new', 'a new enquiry starts in the new state');
+    assertEqual(stored.audience, 'business', 'the page it came from');
+    assertEqual(stored.teamSize, '20-49', 'the team size');
+    assertEqual(stored.interests.length, 2, 'the number of training areas');
+    assert(
+      stored.interests.includes('Data & Analytics'),
+      'the selected training areas must be stored with the enquiry'
+    );
+  });
+
+  await check('a delivered notification is recorded on the enquiry', () => {
+    assert(Boolean(stored.notifiedAt), 'notifiedAt should be set once the email is delivered');
+  });
+
+  await check('one enquiry sends exactly one notification', () => {
+    assertEqual(captured.length, 1, 'notifications sent for one enquiry');
+    assertEqual(captured[0] && captured[0].to, config.businessInbox, 'notification recipient');
+    assertEqual(captured[0] && captured[0].replyTo, leadEmail, 'notification reply address');
+  });
+
+  await check('the enquiry response gives a reference and echoes nothing back', () => {
+    const reference = response.json && response.json.data && response.json.data.reference;
+    assert(Boolean(reference), 'the sender should get a reference to quote');
+    assertEqual(String(reference).length, 8, 'reference length');
+    assert(!response.text.includes(leadEmail), 'the response must not echo the address back');
+  });
+
+  await check('an enquiry without an organisation is refused', async () => {
+    const refused = await request('POST', '/api/v1/business/enquiries', {
+      body: { contactName: 'Jo Doe', email: 'jo@acme.example' },
+    });
+
+    assertEqual(refused.status, 400, 'status for a missing organisation');
+    assertEqual(refused.json && refused.json.code, 'VALIDATION_ERROR', 'error code');
+    assert(
+      (refused.json.details || []).some((detail) => detail.field === 'company'),
+      'the refusal should point at the organisation field'
+    );
+  });
+
+  await check('an enquiry with an invalid email is refused', async () => {
+    const refused = await request('POST', '/api/v1/business/enquiries', {
+      body: { company: 'Acme', contactName: 'Jo Doe', email: 'not-an-address' },
+    });
+    assertEqual(refused.status, 400, 'status for an invalid email');
+  });
+
+  await check('an enquiry from an unknown audience is refused', async () => {
+    const refused = await request('POST', '/api/v1/business/enquiries', {
+      body: { company: 'Acme', contactName: 'Jo Doe', email: 'jo@acme.example', audience: 'spy' },
+    });
+    assertEqual(refused.status, 400, 'status for an unknown audience');
+  });
+
+  await check('an over-long message is refused', async () => {
+    const refused = await request('POST', '/api/v1/business/enquiries', {
+      body: { company: 'Acme', contactName: 'Jo Doe', email: 'jo@acme.example', message: 'x'.repeat(2100) },
+    });
+    assertEqual(refused.status, 400, 'status for an over-long message');
+  });
+
+  await BusinessLead.deleteMany({ email: leadEmail });
+}
+
+
 async function testNewNotifications() {
   const mailer = require('../src/services/email');
   const config = require('../src/config/env');
@@ -5583,6 +5785,9 @@ async function main() {
 
     process.stdout.write('\nNotification emails\n');
     await testNewNotifications();
+
+    process.stdout.write('\nPartnership enquiries\n');
+    await testBusinessEnquiries();
 
     process.stdout.write('\nMoney formatting\n');
     await testMoneyFormatting();

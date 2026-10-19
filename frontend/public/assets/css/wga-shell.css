@@ -474,6 +474,70 @@ body.dark-mode .wga-pill-free {
   font-size: 15px;
 }
 
+/* The course card is rendered by WGAUI.courseCard for every page, so the few
+   classes it adds beyond the original markup are declared here as well as in
+   wga-public.css. Same names, same meaning, different variables. */
+.wga-course-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.wga-pill-new {
+  background: rgba(16, 185, 129, 0.13);
+  color: #047857;
+}
+
+body.dark-mode .wga-pill-new {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+}
+
+.wga-course-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.wga-course-price {
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.wga-course-price.is-free {
+  color: #047857;
+}
+
+body.dark-mode .wga-course-price.is-free {
+  color: #6ee7b7;
+}
+
+.wga-course-instructor {
+  font-size: 12.5px;
+  color: var(--text-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 55%;
+  text-align: right;
+}
+
+body.dark-mode .wga-course-instructor {
+  color: var(--dark-muted);
+}
+
+.wga-course-note {
+  font-size: 12.5px;
+  color: var(--text-light);
+  margin: 0;
+}
+
+body.dark-mode .wga-course-note {
+  color: var(--dark-muted);
+}
+
 /* ---------- Progress ---------- */
 
 .wga-progress {

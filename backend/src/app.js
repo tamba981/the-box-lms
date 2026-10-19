@@ -28,6 +28,7 @@ const paymentsRoutes = require('./routes/payments');
 const dashboardRoutes = require('./routes/dashboard');
 const newsletterRoutes = require('./routes/newsletter');
 const contactRoutes = require('./routes/contact');
+const businessRoutes = require('./routes/business');
 
 /**
  * Where the static pages actually are.
@@ -187,6 +188,7 @@ app.use('/api/v1/avatars', avatarRoutes);
   app.use('/api/v1/dashboard', dashboardRoutes);
   app.use('/api/v1/newsletter', newsletterRoutes);
   app.use('/api/v1/contact', contactRoutes);
+  app.use('/api/v1/business', businessRoutes);
 
   app.get('/api', (req, res) => {
     res.json({

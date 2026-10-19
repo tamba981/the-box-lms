@@ -676,8 +676,73 @@ function newsletterWelcomeEmail({ email }) {
   };
 }
 
+/* ------------------------------------------------------------------ *
+ * Partnership enquiries (business, university, government)
+ * ------------------------------------------------------------------ */
+
+const AUDIENCE_LABELS = {
+  business: 'Company',
+  university: 'University or college',
+  government: 'Government or public body',
+};
+
+/**
+ * One enquiry from an organisation, addressed to whoever answers partnerships.
+ *
+ * `replyTo` is the enquirer, so replying is a normal reply rather than a copy
+ * and paste. Every field is optional except the four the form requires, and the
+ * ones that are empty are left out rather than printed as "undefined".
+ */
+function businessEnquiryEmail({ lead, inbox }) {
+  const to = inbox || config.businessInbox;
+  const label = AUDIENCE_LABELS[lead.audience] || 'Enquiry';
+  const rows = [
+    ['Organisation', lead.company],
+    ['Contact', lead.contactName],
+    ['Email', lead.email],
+    ['Phone', lead.phone],
+    ['Team size', lead.teamSize],
+    ['Timeline', lead.timeline],
+    ['Interested in', Array.isArray(lead.interests) && lead.interests.length ? lead.interests.join(', ') : null],
+  ].filter((row) => row[1]);
+
+  const text = [
+    `${label}: ${lead.company}`,
+    '',
+    ...rows.slice(1).map(([name, value]) => `${name}: ${value}`),
+    lead.message ? '' : null,
+    lead.message || null,
+  ].filter((line) => line !== null).join('\n');
+
+  return {
+    to,
+    replyTo: lead.email,
+    subject: `${label} enquiry - ${lead.company}`,
+    text,
+    html: layout({
+      heading: 'New partnership enquiry',
+      bodyHtml: `<p style="margin:0 0 14px;"><strong>${escapeHtml(lead.company)}</strong> sent an enquiry through the ${escapeHtml(
+        (AUDIENCE_LABELS[lead.audience] || 'partnership').toLowerCase()
+      )} page.</p>
+        <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;margin:0 0 14px;">
+          ${rows
+            .map(
+              ([name, value]) =>
+                `<tr><td style="padding:4px 12px 4px 0;color:#6b7280;white-space:nowrap;vertical-align:top;">${escapeHtml(
+                  name
+                )}</td><td style="padding:4px 0;">${escapeHtml(value)}</td></tr>`
+            )
+            .join('')}
+        </table>
+        ${lead.message ? `<p style="margin:0 0 12px;white-space:pre-wrap;">${escapeHtml(lead.message)}</p>` : ''}
+        <p style="margin:0;color:#6b7280;font-size:14px;">Replying to this email reaches the sender directly.</p>`,
+    }),
+  };
+}
+
 module.exports = {
   deliver,
+  businessEnquiryEmail,
   verificationEmail,
   passwordResetEmail,
   passwordChangedEmail,

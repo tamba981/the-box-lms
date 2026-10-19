@@ -8,7 +8,7 @@
   <meta name="description" content="Browse every course at Wuteve Global Academy. Filter by category, level and price." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="/assets/css/wga-shell.css?v=20261017" />
+  <link rel="stylesheet" href="/assets/css/wga-shell.css?v=20261019" />
   <style>
     .catalog-head { padding: 26px 0 22px; }
     .catalog-head h1 { font-size: 32px; font-weight: 900; letter-spacing: -0.8px; margin-bottom: 8px; }
@@ -118,8 +118,8 @@
     </div>
   </main>
 
-  <script src="/assets/js/wga-api.js?v=20261017"></script>
-  <script src="/assets/js/wga-ui.js?v=20261017"></script>
+  <script src="/assets/js/wga-api.js?v=20261019"></script>
+  <script src="/assets/js/wga-ui.js?v=20261019"></script>
   <script>
     (function () {
       'use strict';
@@ -203,42 +203,17 @@
         results.innerHTML = markup;
       }
 
+      /**
+       * The card itself lives in WGAUI.courseCard, shared with the homepage and
+       * the audience pages.
+       *
+       * It used to be written out here as well, and the two copies drifted: this
+       * one showed an enrolled count the homepage did not, the homepage showed a
+       * rating this one could not, and a change made in either place reached only
+       * half the site.
+       */
       function courseCard(course) {
-        var thumb = course.thumbnail
-          ? '<img class="wga-course-thumb" src="' + WGAUI.escapeHtml(course.thumbnail) + '" alt="" loading="lazy" />'
-          : '<div class="wga-course-thumb-fallback"><i class="fas fa-book-open" aria-hidden="true"></i></div>';
-
-        var priceMarkup = course.isFree
-          ? '<span class="wga-pill wga-pill-free">Free</span>'
-          : '<span class="wga-price">' + WGAUI.escapeHtml(course.priceLabel || WGAUI.formatMoney(course.priceCents, course.currency)) + '</span>';
-
-        var enrolledMarkup = course.isEnrolled
-          ? '<div style="margin-top:12px;">' +
-            '<div class="wga-progress"><span style="width:' + Math.max(0, Math.min(100, course.myProgress || 0)) + '%"></span></div>' +
-            '<p class="wga-hint" style="margin-top:6px;">You are enrolled · ' + (course.myProgress || 0) + '% complete</p>' +
-            '</div>'
-          : '';
-
-        return (
-          '<a class="wga-course-card" href="/course.html?course=' + encodeURIComponent(course.slug || course.id) + '">' +
-          '<div class="thumb-wrap">' + thumb +
-          '<span class="card-locked" style="background:rgba(15,23,42,.72);">' +
-          WGAUI.escapeHtml(course.level) + '</span></div>' +
-          '<div class="wga-course-body">' +
-          '<span class="wga-pill" style="align-self:flex-start;">' + WGAUI.escapeHtml(course.category) + '</span>' +
-          '<h2 class="wga-course-title">' + WGAUI.escapeHtml(course.title) + '</h2>' +
-          '<p class="wga-course-summary">' + WGAUI.escapeHtml(course.summary || '') + '</p>' +
-          enrolledMarkup +
-          '<div class="wga-course-meta">' +
-          '<span><i class="fas fa-user-tie" aria-hidden="true"></i> ' + WGAUI.escapeHtml(course.instructorName || 'Instructor') + '</span>' +
-          '<span>' + priceMarkup + '</span>' +
-          '</div>' +
-          '<div class="wga-course-meta" style="border-top:none;padding-top:0;">' +
-          '<span><i class="fas fa-play-circle" aria-hidden="true"></i> ' + (course.lessonCount || 0) + ' lessons</span>' +
-          '<span><i class="fas fa-users" aria-hidden="true"></i> ' + (course.enrolledCount || 0) + ' enrolled</span>' +
-          '</div>' +
-          '</div></a>'
-        );
+        return WGAUI.courseCard(course);
       }
 
       function load(filters) {
@@ -316,6 +291,10 @@
       ]).then(function (responses) {
         var facets = responses[0].categories || [];
         var taxonomy = responses[1].credentials || [];
+
+        // Shared with WGAUI.courseCard, so a card prints the label the filter
+        // prints rather than the slug the course is filed under.
+        WGAUI.setCategoryLabels(facets);
 
         var categorySelect = document.getElementById('category');
         facets.forEach(function (category) {

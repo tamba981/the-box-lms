@@ -164,6 +164,13 @@ const EMAIL_FROM = process.env.EMAIL_FROM || 'Wuteve Global Academy <onboarding@
 const CONTACT_INBOX = process.env.CONTACT_INBOX || 'info@wuteveglobalacademy.com';
 const EMAIL_ENABLED = Boolean(RESEND_API_KEY);
 
+/**
+ * Where enquiries from the business, university and government pages go. It is
+ * separate from the contact inbox on purpose: those enquiries need a person who
+ * can talk about contracts, invoicing and cohort dates, not general support.
+ */
+const BUSINESS_INBOX = process.env.BUSINESS_INBOX || 'partnership@wuteveglobalacademy.com';
+
 if (!EMAIL_ENABLED && IS_PRODUCTION) {
   warnings.push(
     'RESEND_API_KEY is not set. Verification and password-reset emails cannot be delivered; ' +
@@ -373,6 +380,10 @@ const config = {
     from: EMAIL_FROM,
     inbox: CONTACT_INBOX,
   },
+
+  // Read by the partnership enquiry route. Declared next to `email` because it
+  // only ever appears as a delivery address.
+  businessInbox: BUSINESS_INBOX,
 
   stripe: {
     enabled: STRIPE_ENABLED,
