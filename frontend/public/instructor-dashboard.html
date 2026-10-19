@@ -1030,11 +1030,95 @@
         .lesson-form {
             margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border);
         }
-        .lesson-form h4 { font-size: 15px; font-weight: 800; margin-bottom: 14px; }
+        .lesson-form h4 { font-size: 18px; font-weight: 800; margin: 0 0 4px; }
+        .lesson-form-head { margin-bottom: 18px; }
         .lesson-hint { font-size: 12.5px; color: var(--text-light); margin-top: 7px; }
         .lesson-video-choices { display: flex; flex-direction: column; gap: 7px; }
         .lesson-video-choices label { display: flex; align-items: center; gap: 9px; font-size: 14px; }
         .lesson-video-choices label.is-disabled { opacity: .55; }
+
+        /* Sections: one idea at a time, numbered down the form. */
+        .lesson-section {
+            padding: 18px 0; border-top: 1px solid var(--border);
+        }
+        .lesson-section:first-of-type { border-top: 0; padding-top: 4px; }
+        .lesson-section-title {
+            display: flex; align-items: center; gap: 9px;
+            font-size: 13px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: .06em; margin: 0 0 14px;
+        }
+        .lesson-section-title > span,
+        .lesson-step {
+            width: 22px; height: 22px; border-radius: 50%; flex: 0 0 22px;
+            display: inline-grid; place-items: center; font-size: 11px; font-weight: 700;
+            background: rgba(26,86,219,.14); color: var(--primary);
+            text-transform: none; letter-spacing: 0;
+        }
+        .lesson-title-input {
+            font-size: 17px; font-weight: 600; padding: 13px 15px;
+        }
+        .lesson-grid { display: flex; gap: 14px; flex-wrap: wrap; }
+        .lesson-grid > * { flex: 1 1 150px; }
+        .lesson-rich-large .ql-editor { min-height: 260px; }
+
+        /* A switch row: the checkbox and the sentence that explains it. */
+        .lesson-switch {
+            display: flex; align-items: flex-start; gap: 11px;
+            padding: 12px 14px; margin-top: 4px;
+            border: 1px solid var(--border); border-radius: 12px;
+            background: rgba(255,255,255,.03); cursor: pointer;
+        }
+        .lesson-switch input { margin-top: 2px; flex: 0 0 auto; }
+        .lesson-switch strong { display: block; font-size: 14px; }
+        .lesson-switch em { display: block; font-style: normal; font-size: 12.5px; color: var(--text-light); margin-top: 2px; }
+
+        /* Video choices, as cards rather than a cramped radio list. */
+        .lesson-choice {
+            display: flex; align-items: flex-start; gap: 11px;
+            padding: 12px 14px; margin-bottom: 9px;
+            border: 1px solid var(--border); border-radius: 12px;
+            background: rgba(255,255,255,.03); cursor: pointer;
+        }
+        .lesson-choice input { margin-top: 2px; flex: 0 0 auto; }
+        .lesson-choice strong { display: block; font-size: 14px; }
+        .lesson-choice em { display: block; font-style: normal; font-size: 12.5px; color: var(--text-light); margin-top: 2px; }
+        .lesson-choice.is-disabled { opacity: .6; cursor: not-allowed; }
+        .lesson-video-preview img { box-shadow: 0 6px 18px rgba(0,0,0,.14); }
+
+        /* Materials: two inputs and a remove button per row. */
+        .material-row {
+            display: flex; gap: 9px; align-items: center; flex-wrap: wrap;
+            margin-bottom: 9px;
+        }
+        .material-row .material-title { flex: 1 1 160px; min-width: 0; }
+        .material-row .material-url { flex: 2 1 240px; min-width: 0; }
+        .material-remove { flex: 0 0 auto; }
+        @media (max-width: 640px) {
+            .material-row .material-title,
+            .material-row .material-url { flex: 1 1 100%; }
+            .material-remove { margin-left: auto; }
+        }
+
+        .quiz-toggle {
+            display: flex; align-items: center; gap: 11px; width: 100%;
+            padding: 13px 15px; border: 1px solid var(--border); border-radius: 12px;
+            background: rgba(255,255,255,.03); color: inherit;
+            font-size: 13px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: .06em; cursor: pointer; text-align: left;
+        }
+        .quiz-toggle > span { display: flex; align-items: center; gap: 9px; }
+        .quiz-toggle em {
+            margin-left: auto; font-style: normal; text-transform: none;
+            letter-spacing: 0; font-weight: 500; font-size: 12.5px; color: var(--text-light);
+        }
+
+        .lesson-actions {
+            display: flex; gap: 10px; flex-wrap: wrap;
+            padding-top: 18px; border-top: 1px solid var(--border);
+        }
+        @media (max-width: 640px) {
+            .lesson-actions > button { flex: 1 1 100%; }
+        }
     </style>
 
     <!--
@@ -1993,7 +2077,7 @@
          *  rather than a page of its own: an instructor is always editing "the
          *  syllabus of this course", and a course must exist before a lesson can.
          * ============================================================ */
-        const lessonState = { courseId: null, title: '', items: [], editing: null, storage: null, draft: null };
+        const lessonState = { courseId: null, title: '', items: [], editing: null, storage: null, draft: null, quizOpen: false };
 
         /*
          * Which `editing` object the form currently on screen was built from.
@@ -2055,72 +2139,126 @@
             const form = editing
                 ? `
                     <div class="lesson-form">
-                        <h4>${editing.isNew ? 'New lesson' : 'Edit lesson'}</h4>
-                        <div class="form-group"><label>Title</label><input type="text" id="lessonTitle" value="${WGAUI.escapeHtml(editing.title || '')}" placeholder="e.g. Reading a payslip" /></div>
-                        <div class="form-group"><label>Summary</label><input type="text" id="lessonSummary" value="${WGAUI.escapeHtml(editing.summary || '')}" placeholder="One line describing this lesson" /></div>
-                        <div style="display:flex;gap:14px;flex-wrap:wrap;">
-                            <div class="form-group" style="flex:1 1 180px;">
-                                <label>Type</label>
-                                <select id="lessonType">
-                                    <option value="video" ${editing.type === 'video' ? 'selected' : ''}>Video</option>
-                                    <option value="text" ${editing.type === 'text' ? 'selected' : ''}>Text</option>
-                                    <option value="live" ${editing.type === 'live' ? 'selected' : ''}>Live session</option>
-                                </select>
-                            </div>
-                            <div class="form-group" style="flex:1 1 140px;"><label>Length (minutes)</label><input type="number" id="lessonDuration" min="0" value="${editing.durationMinutes || 0}" /></div>
-                            <div class="form-group" style="flex:1 1 140px;display:flex;flex-direction:column;justify-content:center;gap:8px;">
-                                <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="lessonPreview" ${editing.isPreview ? 'checked' : ''} /> Free preview</label>
-                                <label style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="lessonPublished" ${editing.published !== false ? 'checked' : ''} /> Visible to students</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Lesson notes</label>
-                            <div class="lesson-rich-wrap"><div id="lessonRichEditor"></div></div>
-                            <input type="hidden" id="lessonContent" value="${WGAUI.escapeHtml(editing.content || '')}" />
-                            <p class="lesson-hint">Bold, headings, lists, quotes and links. Shown to students under the video.</p>
+                        <div class="lesson-form-head">
+                            <h4>${editing.isNew ? 'New lesson' : 'Edit lesson'}</h4>
+                            <p class="lesson-hint">${editing.isNew
+                                ? 'Fill in what you have. A draft can be finished later.'
+                                : 'Nothing changes for students until you publish.'}</p>
                         </div>
 
-                        <div class="form-group">
-                            <label>Video</label>
-                            <div class="lesson-video-choices">
-                                <label><input type="radio" name="lessonVideoMode" value="none" ${editing.videoMode === 'none' ? 'checked' : ''} onchange="setLessonVideoMode()" /> None</label>
-                                <label><input type="radio" name="lessonVideoMode" value="link" ${editing.videoMode === 'link' ? 'checked' : ''} onchange="setLessonVideoMode()" /> Paste a YouTube or Vimeo link</label>
-                                <label class="${storage.enabled ? '' : 'is-disabled'}"><input type="radio" name="lessonVideoMode" value="upload" ${editing.videoMode === 'upload' ? 'checked' : ''} ${storage.enabled ? '' : 'disabled'} onchange="setLessonVideoMode()" /> Upload a video file</label>
+                        <section class="lesson-section">
+                            <h5 class="lesson-section-title"><span>1</span> Basic info</h5>
+
+                            <div class="form-group">
+                                <label for="lessonTitle">Title</label>
+                                <input class="lesson-title-input" type="text" id="lessonTitle" maxlength="200"
+                                    value="${WGAUI.escapeHtml(editing.title || '')}" placeholder="e.g. Reading a payslip" />
                             </div>
+
+                            <div class="form-group">
+                                <label for="lessonSummary">Summary</label>
+                                <input type="text" id="lessonSummary" maxlength="400"
+                                    value="${WGAUI.escapeHtml(editing.summary || '')}" placeholder="One line describing this lesson" />
+                            </div>
+
+                            <div class="lesson-grid">
+                                <div class="form-group">
+                                    <label for="lessonType">Type</label>
+                                    <select id="lessonType">
+                                        <option value="video" ${editing.type === 'video' ? 'selected' : ''}>Video</option>
+                                        <option value="text" ${editing.type === 'text' ? 'selected' : ''}>Text</option>
+                                        <option value="live" ${editing.type === 'live' ? 'selected' : ''}>Live session</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lessonDuration">Length (minutes)</label>
+                                    <input type="number" id="lessonDuration" min="0" max="100000" value="${editing.durationMinutes || 0}" />
+                                </div>
+                            </div>
+
+                            <label class="lesson-switch">
+                                <input type="checkbox" id="lessonPreview" ${editing.isPreview ? 'checked' : ''} />
+                                <span><strong>Free preview</strong><em>Anyone can open this lesson without paying.</em></span>
+                            </label>
+                        </section>
+
+                        <section class="lesson-section">
+                            <h5 class="lesson-section-title"><span>2</span> Lesson notes</h5>
+                            <div class="lesson-rich-wrap lesson-rich-large"><div id="lessonRichEditor"></div></div>
+                            <input type="hidden" id="lessonContent" value="${WGAUI.escapeHtml(editing.content || '')}" />
+                            <p class="lesson-hint">Bold, headings, lists, quotes and links. Students see this under the video.</p>
+                        </section>
+
+                        <section class="lesson-section">
+                            <h5 class="lesson-section-title"><span>3</span> Video</h5>
+
+                            <label class="lesson-choice">
+                                <input type="radio" name="lessonVideoMode" value="none" ${editing.videoMode === 'none' ? 'checked' : ''} onchange="setLessonVideoMode()" />
+                                <span><strong>No video</strong><em>Notes and materials only.</em></span>
+                            </label>
+
+                            <label class="lesson-choice">
+                                <input type="radio" name="lessonVideoMode" value="link" ${editing.videoMode === 'link' ? 'checked' : ''} onchange="setLessonVideoMode()" />
+                                <span><strong>YouTube or Vimeo link</strong><em>Students watch it inside the lesson page.</em></span>
+                            </label>
+
+                            <label class="lesson-choice ${storage.enabled ? '' : 'is-disabled'}">
+                                <input type="radio" name="lessonVideoMode" value="upload" ${editing.videoMode === 'upload' ? 'checked' : ''} ${storage.enabled ? '' : 'disabled'} onchange="setLessonVideoMode()" />
+                                <span>
+                                    <strong>Upload a video file</strong>
+                                    <em>${storage.enabled
+                                        ? `MP4 or WebM, up to ${Math.round((storage.videoMaxBytes || 0) / (1024 * 1024))} MB.`
+                                        : 'Not available on this deployment yet - use a link for now.'}</em>
+                                </span>
+                            </label>
+
                             ${storage.enabled
                                 ? ''
-                                : `<p class="lesson-hint lesson-hint-warn" style="margin-top:8px;"><i class="fas fa-info-circle"></i> Uploading is not available yet on this deployment. Use a YouTube or Vimeo link for now.${storage.missing && storage.missing.length ? ' Waiting on: ' + WGAUI.escapeHtml(storage.missing.join(', ')) + '.' : ''}</p>`}
+                                : `<p class="lesson-hint lesson-hint-warn"><i class="fas fa-info-circle"></i> Uploading is switched off until storage is configured, so a pasted link is the way to add video today.${storage.missing && storage.missing.length ? ' Waiting on: ' + WGAUI.escapeHtml(storage.missing.join(', ')) + '.' : ''}</p>`}
 
-                            <div id="lessonLinkPane" style="display:none;margin-top:10px;">
-                                <input type="text" id="lessonVideoUrl" value="${WGAUI.escapeHtml(editing.videoUrl || '')}" placeholder="https://www.youtube.com/watch?v=..." />
-                                <p class="lesson-hint">YouTube and Vimeo only. Students watch it inside the lesson page.</p>
+                            <div id="lessonLinkPane" style="display:none;margin-top:12px;">
+                                <input type="text" id="lessonVideoUrl" maxlength="2000"
+                                    value="${WGAUI.escapeHtml(editing.videoUrl || '')}"
+                                    placeholder="https://www.youtube.com/watch?v=..."
+                                    oninput="updateVideoPreview()" onblur="updateVideoPreview()" />
+                                <div id="lessonVideoPreview" class="lesson-video-preview"></div>
+                                <p class="lesson-hint">YouTube and Vimeo only. Other addresses cannot be embedded.</p>
                             </div>
 
-                            <div id="lessonUploadPane" style="display:none;margin-top:10px;">
+                            <div id="lessonUploadPane" style="display:none;margin-top:12px;">
                                 <input type="file" id="lessonVideoFile" accept="video/mp4,video/webm" />
                                 <div class="upload-bar" id="lessonUploadBar" style="display:none;"><span></span></div>
-                                <p class="lesson-hint" id="lessonUploadNote">Up to ${Math.round((storage.videoMaxBytes || 0) / (1024 * 1024))} MB. MP4 or WebM, not MOV — iPhones record in a format browsers cannot play.</p>
+                                <p class="lesson-hint" id="lessonUploadNote">Up to ${Math.round((storage.videoMaxBytes || 0) / (1024 * 1024))} MB. MP4 or WebM - iPhone video files cannot be played by most browsers.</p>
                                 <button class="btn-primary btn-sm" id="lessonUploadBtn" style="margin-top:8px;" onclick="uploadLessonVideo()">Upload video</button>
                             </div>
-                        </div>
+                        </section>
 
-                        <div class="form-group">
-                            <label>Materials (one per line, as <em>Title | https://address</em>)</label>
-                            <textarea id="lessonResources" rows="3" placeholder="Worksheet | https://example.com/worksheet.pdf">${WGAUI.escapeHtml(editing.resourcesText !== undefined ? editing.resourcesText : (editing.resources || []).map((r) => (r.title || '') + ' | ' + (r.url || '')).join('\n'))}</textarea>
-                        </div>
+                        <section class="lesson-section">
+                            <h5 class="lesson-section-title"><span>4</span> Materials</h5>
+                            <p class="lesson-hint" style="margin-top:-4px;">Worksheets, slides or further reading. Links open in a new tab.</p>
+                            <div id="lessonMaterials">${materialRowsHTML(editing)}</div>
+                            <button type="button" class="btn-primary btn-outline btn-sm" onclick="addMaterial()">+ Add material</button>
+                        </section>
 
-                        ${quizEditorHTML()}
+                        <section class="lesson-section">
+                            <button type="button" class="quiz-toggle" onclick="toggleQuizEditor()" aria-expanded="${lessonState.quizOpen ? 'true' : 'false'}">
+                                <i class="fas fa-chevron-${lessonState.quizOpen ? 'down' : 'right'}"></i>
+                                <span><span class="lesson-step">5</span> Quiz</span>
+                                <em>${lessonState.quizOpen ? 'Hide' : (quizState.exists ? 'Edit the quiz' : 'Optional - add one to check understanding')}</em>
+                            </button>
+                            ${lessonState.quizOpen ? quizEditorHTML() : ''}
+                        </section>
 
-                        <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                            <button class="btn-primary" id="lessonSaveBtn" onclick="lessonSave()">${editing.isNew ? 'Add lesson' : 'Save lesson'}</button>
+                        <div class="lesson-actions">
+                            <button class="btn-primary" id="lessonSaveBtn" onclick="lessonSave('publish', this)">${editing.isNew ? 'Publish lesson' : 'Save and publish'}</button>
+                            <button class="btn-primary btn-outline" onclick="lessonSave('draft', this)">Save draft</button>
                             <button class="btn-primary btn-outline" onclick="lessonCancelEdit()">Cancel</button>
                             ${editing.isUploaded ? `<button class="btn-primary btn-outline" onclick="lessonRemoveVideo()">Remove video</button>` : ''}
                         </div>
                     </div>
                 `
                 : '<button class="btn-primary" style="margin-top:16px;" onclick="lessonNew()">+ Add lesson</button>';
-
-            return `<div class="lesson-admin">${list}${form}</div>`;
+return `<div class="lesson-admin">${list}${form}</div>`;
         }
 
         window.manageLessons = async function manageLessons(courseId) {
@@ -2250,9 +2388,16 @@
             if (val('lessonContent') !== undefined) editing.content = val('lessonContent');
             if (val('lessonDuration') !== undefined) editing.durationMinutes = Number(val('lessonDuration') || 0);
             if (on('lessonPreview') !== undefined) editing.isPreview = on('lessonPreview');
-            if (on('lessonPublished') !== undefined) editing.published = on('lessonPublished');
-            if (val('lessonResources') !== undefined) editing.resourcesText = val('lessonResources');
             if (val('lessonVideoUrl') !== undefined) editing.videoUrl = val('lessonVideoUrl');
+
+            // Materials are a list of rows now, so they are read as a list.
+            const rows = [...document.querySelectorAll('#lessonMaterials .material-row')];
+            if (rows.length) {
+                editing.materials = rows.map((row) => ({
+                    title: row.querySelector('.material-title')?.value.trim() || '',
+                    url: row.querySelector('.material-url')?.value.trim() || ''
+                }));
+            }
 
             const mode = document.querySelector('input[name="lessonVideoMode"]:checked');
             if (mode) editing.videoMode = mode.value;
@@ -2401,7 +2546,8 @@
         };
 
         window.lessonNew = function lessonNew() {
-            lessonState.editing = { isNew: true, title: '', summary: '', type: 'video', content: '', durationMinutes: 0, isPreview: false, published: true, videoMode: 'none', resources: [] };
+            lessonState.quizOpen = false;
+            lessonState.editing = { isNew: true, title: '', summary: '', type: 'video', content: '', durationMinutes: 0, isPreview: false, published: true, videoMode: 'none', materials: [] };
             resetQuizState(null);
             refreshLessonModal();
         };
@@ -2410,10 +2556,15 @@
             const lesson = lessonState.items.find((l) => String(l.id) === String(id));
             if (!lesson) return;
 
+            lessonState.quizOpen = false;
             lessonState.editing = Object.assign({}, lesson, {
                 isNew: false,
                 videoMode: lesson.videoType === 'upload' ? 'upload' : (lesson.videoType === 'link' ? 'link' : 'none'),
-                isUploaded: lesson.videoType === 'upload'
+                isUploaded: lesson.videoType === 'upload',
+                materials: (lesson.resources || []).map((resource) => ({
+                    title: resource.title || '',
+                    url: resource.url || ''
+                }))
             });
 
             // Load the existing quiz before drawing the form, so the editor opens
@@ -2439,6 +2590,7 @@
         function bindLessonModal() {
             const modal = document.getElementById('modalBody') || document;
             if (modal.querySelector && modal.querySelector('input[name="lessonVideoMode"]')) setLessonVideoMode();
+            if (document.getElementById('lessonVideoUrl')) updateVideoPreview();
             mountLessonEditor();
         }
 
@@ -2498,34 +2650,137 @@
             lessonState.editor = quill;
         }
 
-        /** "Title | URL" per line, which is one less control than a repeatable row. */
-        function parseLessonResources(value) {
-            return String(value || '')
-                .split('\n')
-                .map((line) => line.trim())
-                .filter(Boolean)
-                .map((line) => {
-                    const at = line.indexOf('|');
-                    if (at === -1) return null;
-                    const title = line.slice(0, at).trim();
-                    const url = line.slice(at + 1).trim();
-                    return title && /^https?:\/\//i.test(url) ? { title: title, url: url } : null;
-                })
-                .filter(Boolean);
+        /* ---- Materials, as rows rather than one textarea ----------------
+         *
+         * "Title | URL" per line was compact to write and impossible to check: a
+         * missing pipe silently dropped a material. A row cannot be misunderstood,
+         * and each half is one input wide, which is what a phone keyboard needs.
+         */
+        function materialRowsHTML(editing) {
+            const materials = (editing && editing.materials) || [];
+
+            if (!materials.length) {
+                return `<p class="lesson-hint" style="margin:0 0 10px;">No materials yet.</p>`;
+            }
+
+            return materials
+                .map(
+                    (material, index) => `
+                    <div class="material-row">
+                        <input type="text" class="material-title" maxlength="200" placeholder="Title, e.g. Worksheet" value="${WGAUI.escapeHtml(material.title || '')}" aria-label="Material title" />
+                        <input type="url" class="material-url" maxlength="2000" placeholder="https://example.com/worksheet.pdf" value="${WGAUI.escapeHtml(material.url || '')}" aria-label="Material address" />
+                        <button type="button" class="btn-primary btn-outline btn-sm material-remove" onclick="removeMaterial(${index})" title="Remove">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `
+                )
+                .join('');
         }
 
-        window.lessonSave = async function lessonSave() {
-            const button = document.getElementById('lessonSaveBtn');
+        window.addMaterial = function addMaterial() {
+            captureLessonForm();
             const editing = lessonState.editing;
             if (!editing) return;
+            editing.materials = (editing.materials || []).concat({ title: '', url: '' });
+            refreshLessonModal();
+        };
+
+        window.removeMaterial = function removeMaterial(index) {
+            captureLessonForm();
+            const editing = lessonState.editing;
+            if (!editing) return;
+            editing.materials = (editing.materials || []).filter((_, position) => position !== index);
+            refreshLessonModal();
+        };
+
+        /** The quiz is a lot of form for something most lessons do not have. */
+        window.toggleQuizEditor = function toggleQuizEditor() {
+            captureLessonForm();
+            captureQuizForm();
+            lessonState.quizOpen = !lessonState.quizOpen;
+            refreshLessonModal();
+        };
+
+        /**
+         * Show the video's own thumbnail once the address is recognisably one.
+         *
+         * Only YouTube can be looked up without a third party: the thumbnail is
+         * served from a fixed path. Vimeo needs an API call, so it gets a plain
+         * confirmation instead of an invented image.
+         */
+        window.updateVideoPreview = function updateVideoPreview() {
+            const field = document.getElementById('lessonVideoUrl');
+            const holder = document.getElementById('lessonVideoPreview');
+            if (!field || !holder) return;
+
+            const value = (field.value || '').trim();
+            if (!value) {
+                holder.innerHTML = '';
+                return;
+            }
+
+            let host = '';
+            let id = '';
+
+            try {
+                const url = new URL(value);
+                host = url.hostname.toLowerCase().replace(/^www\./, '');
+
+                if (host === 'youtu.be') {
+                    id = url.pathname.slice(1).split('/')[0];
+                } else if (host === 'youtube.com' || host === 'm.youtube.com') {
+                    if (url.pathname === '/watch') id = url.searchParams.get('v') || '';
+                    else if (url.pathname.startsWith('/embed/')) id = url.pathname.split('/')[2] || '';
+                    else if (url.pathname.startsWith('/shorts/')) id = url.pathname.split('/')[2] || '';
+                }
+            } catch (error) {
+                holder.innerHTML = '';
+                return;
+            }
+
+            if (id && /^[A-Za-z0-9_-]{6,20}$/.test(id)) {
+                holder.innerHTML =
+                    '<img src="https://img.youtube.com/vi/' + encodeURIComponent(id) + '/mqdefault.jpg" alt="" ' +
+                    'style="width:100%;max-width:260px;border-radius:10px;display:block;margin-top:10px;" ' +
+                    'onerror="this.remove()" />';
+                return;
+            }
+
+            holder.innerHTML = host.includes('vimeo')
+                ? '<p class="lesson-hint" style="margin:8px 0 0;"><i class="fas fa-check"></i> Vimeo link recognised.</p>'
+                : '<p class="lesson-hint lesson-hint-warn" style="margin:8px 0 0;">That is not a YouTube or Vimeo address.</p>';
+        };
+
+        window.lessonSave = async function lessonSave(action, source) {
+            const button = source || document.getElementById('lessonSaveBtn');
+            const editing = lessonState.editing;
+            if (!editing) return;
+
+            // "Publish" and "Save draft" are the same write with one flag, so the
+            // lesson cannot end up visible after somebody chose draft.
+            const publish = action !== 'draft';
 
             const title = (document.getElementById('lessonTitle')?.value || '').trim();
             if (title.length < 2) { showToast('Give the lesson a title.', 'error'); return; }
 
-            const mode = (document.querySelector('input[name="lessonVideoMode"]:checked') || {}).value || 'none';
+            const videoMode = (document.querySelector('input[name="lessonVideoMode"]:checked') || {}).value || 'none';
             const videoUrl = (document.getElementById('lessonVideoUrl')?.value || '').trim();
 
-            if (mode === 'link' && !videoUrl) { showToast('Paste a YouTube or Vimeo address, or choose None.', 'error'); return; }
+            if (videoMode === 'link' && !videoUrl) { showToast('Paste a YouTube or Vimeo address, or choose No video.', 'error'); return; }
+
+            const materials = [...document.querySelectorAll('#lessonMaterials .material-row')]
+                .map((row) => ({
+                    title: row.querySelector('.material-title')?.value.trim() || '',
+                    url: row.querySelector('.material-url')?.value.trim() || ''
+                }))
+                .filter((item) => item.title || item.url);
+
+            const incomplete = materials.find((item) => !item.title || !/^https?:\/\//i.test(item.url));
+            if (incomplete) {
+                showToast('Each material needs a title and an address starting with http:// or https://.', 'error');
+                return;
+            }
 
             const payload = {
                 title: title,
@@ -2534,8 +2789,8 @@
                 content: document.getElementById('lessonContent')?.value || '',
                 durationMinutes: Number(document.getElementById('lessonDuration')?.value || 0),
                 isPreview: Boolean(document.getElementById('lessonPreview')?.checked),
-                published: Boolean(document.getElementById('lessonPublished')?.checked),
-                resources: parseLessonResources(document.getElementById('lessonResources')?.value)
+                published: publish,
+                resources: materials
             };
 
             WGAUI.setBusy(button, true, 'Saving…');
@@ -2556,7 +2811,7 @@
                     id: id,
                     isUploaded: lesson.videoType === 'upload',
                     content: payload.content,
-                    resourcesText: document.getElementById('lessonResources')?.value || ''
+                    materials: materials
                 });
                 // A lesson that has just been created can now carry a quiz, so the
                 // editor stops saying "save the lesson first".
@@ -2568,21 +2823,26 @@
                  * has to land in a bucket. Switching between them replaces the
                  * other, which is why this runs after the lesson itself exists.
                  */
-                if (mode === 'none') {
+                if (videoMode === 'none') {
                     if (lesson.videoType !== 'none') {
                         await WGA.del('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(id) + '/video');
                         lessonState.editing.isUploaded = false;
                     }
-                } else if (mode === 'link') {
+                } else if (videoMode === 'link') {
                     await WGA.put('/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(id) + '/video/link', { url: videoUrl });
                 }
 
                 await refreshLessons();
-                showToast(editing.isNew ? 'Lesson added.' : 'Lesson saved.', 'success');
+                showToast(
+                    publish
+                        ? (editing.isNew ? 'Lesson published.' : 'Lesson saved and published.')
+                        : 'Draft saved. Students cannot see it yet.',
+                    'success'
+                );
 
                 // An upload needs the lesson to exist first, so the file picker and
                 // progress bar stay on screen for it rather than the modal closing.
-                if (mode === 'upload') {
+                if (videoMode === 'upload') {
                     refreshLessonModal();
                 } else {
                     lessonState.editing = null;
