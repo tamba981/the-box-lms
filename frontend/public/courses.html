@@ -8,7 +8,7 @@
   <meta name="description" content="Browse every course at Wuteve Global Academy. Filter by category, level and price." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="/assets/css/wga-shell.css?v=20261021" />
+  <link rel="stylesheet" href="/assets/css/wga-shell.css?v=20261022" />
   <style>
     .catalog-head { padding: 26px 0 22px; }
     .catalog-head h1 { font-size: 32px; font-weight: 900; letter-spacing: -0.8px; margin-bottom: 8px; }
@@ -55,12 +55,15 @@
     </div>
   </header>
 
-  <main class="wga-main">
-    <div class="catalog-head">
+  <header class="page-header">
+    <img class="page-header-bg" src="/Images/hero/hero-poster.jpg" alt="" aria-hidden="true" />
+    <div class="page-header-inner">
       <h1>Course catalog</h1>
       <p>Every published course, taught by our instructors. Free courses start immediately.</p>
     </div>
+  </header>
 
+  <main class="wga-main">
     <form class="filters" id="filters">
       <div class="grow">
         <input class="wga-input" type="search" id="q" name="q" placeholder="Search courses, topics or instructors…"
