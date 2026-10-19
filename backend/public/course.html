@@ -342,7 +342,7 @@
           ? '<span class="tag"><i class="fas fa-lock" aria-hidden="true"></i> Locked</span>'
           : lesson.isPreview
             ? '<span class="tag tag-preview">Preview</span>'
-            : '<span class="tag">' + WGAUI.escapeHtml(lesson.type) + '</span>';
+: '<span class="tag">' + WGAUI.escapeHtml(lessonTypeLabel(lesson.type)) + '</span>';
 
         var inner =
           '<div class="num">' + icon + '</div>' +
@@ -553,6 +553,12 @@
               facts.join('') +
             '</div>' +
           '</div>';
+      }
+
+      /** A label for the lesson type, rather than the stored value. */
+      function lessonTypeLabel(type) {
+        var labels = { video: 'Video', text: 'Text', pdf: 'PDF document', mixed: 'Mixed', live: 'Live session' };
+        return labels[type] || type || '';
       }
 
       function resourcesBlock(lesson) {
@@ -839,7 +845,7 @@
               '<div class="viewer">' +
                 '<div class="viewer-head">' +
                   '<h2>' + WGAUI.escapeHtml(lesson.title) + '</h2>' +
-                  '<span class="tag">' + WGAUI.escapeHtml(lesson.type) + '</span>' +
+                  '<span class="tag">' + WGAUI.escapeHtml(lessonTypeLabel(lesson.type)) + '</span>' +
                   '<button type="button" class="wga-btn wga-btn-ghost" id="close-lesson">Close</button>' +
                 '</div>' +
                 mediaBlock(lesson) +

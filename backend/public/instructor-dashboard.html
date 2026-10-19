@@ -2093,14 +2093,19 @@
          */
         let lessonFormOwner = null;
 
-        function lessonVideoLabel(lesson) {
-            if (lesson.videoType === 'upload') {
+        function lessonVideoLabel(lesson) {            if (lesson.videoType === 'upload') {
                 return '<span class="lesson-video-state is-upload"><i class="fas fa-circle-check"></i> Uploaded video</span>';
             }
             if (lesson.videoType === 'link') {
                 return '<span class="lesson-video-state is-link"><i class="fas fa-link"></i> Video link</span>';
             }
             return '<span class="lesson-video-state"><i class="fas fa-video-slash"></i> No video</span>';
+        }
+
+        /** The type as a reader would say it, not as it is stored. */
+        function lessonTypeLabel(type) {
+            const labels = { video: 'Video', text: 'Text', pdf: 'PDF document', mixed: 'Mixed', live: 'Live session' };
+            return labels[type] || type || '';
         }
 
         function refreshLessonModal() {
@@ -2133,7 +2138,7 @@
                         <div class="lesson-admin-main">
                             <strong>${WGAUI.escapeHtml(lesson.title)}</strong>
                             <div class="lesson-admin-meta">
-                                ${WGAUI.escapeHtml(lesson.type)}
+                                ${WGAUI.escapeHtml(lessonTypeLabel(lesson.type))}
                                 ${lesson.durationMinutes ? ' · ' + lesson.durationMinutes + ' min' : ''}
                                 ${lesson.isPreview ? ' · <span style="color:var(--primary);">Preview</span>' : ''}
                                 ${lesson.published ? '' : ' · <span style="color:var(--text-light);">Draft</span>'}
@@ -2181,6 +2186,8 @@
                                     <select id="lessonType">
                                         <option value="video" ${editing.type === 'video' ? 'selected' : ''}>Video</option>
                                         <option value="text" ${editing.type === 'text' ? 'selected' : ''}>Text</option>
+                                        <option value="pdf" ${editing.type === 'pdf' ? 'selected' : ''}>PDF document</option>
+                                        <option value="mixed" ${editing.type === 'mixed' ? 'selected' : ''}>Mixed - video and notes</option>
                                         <option value="live" ${editing.type === 'live' ? 'selected' : ''}>Live session</option>
                                     </select>
                                 </div>

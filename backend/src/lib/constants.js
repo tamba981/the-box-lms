@@ -70,7 +70,15 @@ const CREDENTIAL_LABELS = Object.freeze({
 
 const ENROLLMENT_STATUSES = Object.freeze(['active', 'completed', 'cancelled']);
 
-const LESSON_TYPES = Object.freeze(['video', 'text', 'live']);
+/**
+ * What kind of lesson this is. Descriptive, not structural.
+ *
+ * The body, the video and the materials are separate fields that any lesson may
+ * have; `type` is the label a student sees and filters by. `pdf` and `mixed` were
+ * added later and need no migration: older lessons keep the value they were
+ * saved with, and nothing in the API reads `type` to decide what to send.
+ */
+const LESSON_TYPES = Object.freeze(['video', 'text', 'pdf', 'mixed', 'live']);
 
 /**
  * How a lesson's video is supplied. `link` is a YouTube/Vimeo URL the instructor

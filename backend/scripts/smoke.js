@@ -1524,6 +1524,26 @@ async function testLearningLoop() {  const Course = require('../src/models/Cours
     plainLessonId = accepted.json.data.lesson.id;
   });
 
+  await check('the newer lesson types are accepted', async () => {
+    // `type` is a label, not a structure: pdf and mixed were added after lessons
+    // already existed, so the only thing to prove is that they can be stored.
+    for (const type of ['pdf', 'mixed']) {
+      // eslint-disable-next-line no-await-in-loop
+      const created = await request('POST', `/api/v1/courses/${course.id}/lessons`, {
+        token: instructorSession.accessToken,
+        body: { title: `A ${type} lesson`, type },
+      });
+
+      assertEqual(created.status, 201, `status for ${type}`);
+      assertEqual(created.json.data.lesson.type, type, `stored type for ${type}`);
+
+      // eslint-disable-next-line no-await-in-loop
+      await request('DELETE', `/api/v1/courses/${course.id}/lessons/${created.json.data.lesson.id}`, {
+        token: instructorSession.accessToken,
+      });
+    }
+  });
+
   await check('a lesson that is only text is left readable', async () => {
     const created = await request('POST', `/api/v1/courses/${course.id}/lessons`, {
       token: instructorSession.accessToken,
