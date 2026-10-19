@@ -411,19 +411,43 @@
     var key = course_.slug || course_.id || '';
     var href = options.href || '/course.html?course=' + encodeURIComponent(key);
 
-    var thumb = course_.thumbnail
+    /*
+     * Five of the six courses have no thumbnail, and a stock photograph of
+     * strangers learning would be a lie about what this course looks like.
+     * Instead the cover is a gradient chosen by subject, with the initials in
+     * large type: distinctive per category, and obviously a design rather than
+     * a broken image.
+     */
+    var cover = course_.thumbnail
       ? '<img class="wga-course-thumb" src="' + escapeHtml(course_.thumbnail) + '" alt="" loading="lazy" decoding="async" />'
-      : '<div class="wga-course-thumb-fallback" aria-hidden="true">' + escapeHtml(glyphFor(course_.title)) + '</div>';
+      : '<div class="wga-course-cover ' + escapeHtml(toneFor(course_.category)) + '" aria-hidden="true">' +
+        '<span>' + escapeHtml(glyphFor(course_.title)) + '</span></div>';
 
-    var level = course_.level
-      ? '<span class="card-locked">' + escapeHtml(course_.level) + '</span>'
+    var categoryPill = course_.category
+      ? '<span class="wga-pill wga-pill-cat">' + escapeHtml(categoryLabel(course_.category)) + '</span>'
       : '';
 
-    var tags =
-      '<div class="wga-course-tags">' +
-      (course_.category ? '<span class="wga-pill">' + escapeHtml(categoryLabel(course_.category)) + '</span>' : '') +
-      (Number(course_.ratingCount) === 0 ? '<span class="wga-pill wga-pill-new">New</span>' : '') +
-      '</div>';
+    var levelPill = course_.level
+      ? '<span class="wga-pill wga-pill-level">' + escapeHtml(course_.level) + '</span>'
+      : '';
+
+    var credentialPill = course_.credential
+      ? '<span class="wga-pill wga-pill-cred">' +
+        '<span aria-hidden="true">&#10003;</span> ' +
+        escapeHtml(credentialLabel(course_.credential)) +
+        '</span>'
+      : '';
+
+    /* The rating does not exist yet, so the card says New rather than showing
+     * an empty row of stars or a number nobody earned. */
+    var badge =
+      Number(course_.ratingCount) > 0
+        ? '<span class="wga-pill wga-pill-rating"><span aria-hidden="true">&#9733;</span> ' +
+          escapeHtml(String(course_.rating)) +
+          ' (' +
+          escapeHtml(String(course_.ratingCount)) +
+          ')</span>'
+        : '<span class="wga-pill wga-pill-new">New</span>';
 
     var progress = Number(course_.myProgress);
     var progressMarkup =
@@ -445,18 +469,35 @@
         '</span>';
 
     var lessons = Number(course_.lessonCount) || 0;
-    var enrolled = Number(course_.enrolledCount) || 0;
+    var facts = [];
+
+    if (lessons > 0) facts.push(lessons + (lessons === 1 ? ' lesson' : ' lessons'));
+    var length = durationLabel(course_.durationHours);
+    if (length) facts.push(length);
+
+    var instructorName = course_.instructorName || '';
+    var instructor = instructorName
+      ? '<span class="wga-course-instructor">' +
+        '<span class="wga-card-avatar" aria-hidden="true">' +
+        escapeHtml(initials(instructorName)) +
+        '</span>' +
+        '<span class="wga-course-instructor-name">' +
+        escapeHtml(instructorName) +
+        '</span>' +
+        '</span>'
+      : '<span class="wga-course-instructor"></span>';
 
     return (
       '<a class="wga-course-card" href="' +
       escapeHtml(href) +
       '">' +
       '<div class="thumb-wrap">' +
-      thumb +
-      level +
+      cover +
+      categoryPill +
+      levelPill +
+      credentialPill +
       '</div>' +
       '<div class="wga-course-body">' +
-      tags +
       '<h3 class="wga-course-title">' +
       escapeHtml(course_.title || 'Untitled course') +
       '</h3>' +
@@ -465,22 +506,58 @@
       '</p>' +
       progressMarkup +
       '<div class="wga-course-meta">' +
-      '<span>' +
-      lessons +
-      (lessons === 1 ? ' lesson' : ' lessons') +
+      '<span class="wga-course-facts">' +
+      escapeHtml(facts.join(' · ')) +
       '</span>' +
-      (course_.credential ? '<span>' + escapeHtml(credentialLabel(course_.credential)) + '</span>' : '') +
-      (enrolled > 0 ? '<span>' + enrolled + ' enrolled</span>' : '<span>Open for enrolment</span>') +
+      badge +
       '</div>' +
       '<div class="wga-course-foot">' +
+      instructor +
       price +
-      '<span class="wga-course-instructor">' +
-      escapeHtml(course_.instructorName ? 'with ' + course_.instructorName : '') +
-      '</span>' +
       '</div>' +
       '</div>' +
       '</a>'
     );
+  }
+
+  /*
+   * The cover gradient is chosen by subject, so every Technology course looks
+   * related to every other one. Unknown subjects fall back to the brand tint;
+   * the class name is built from a whitelist rather than from the raw value, so
+   * a category can never inject markup.
+   */
+  var COVER_TONES = [
+    'technology',
+    'business-management',
+    'data-analytics',
+    'design',
+    'digital-skills',
+    'health-care',
+    'education',
+    'agriculture',
+    'trades-vocational',
+    'finance-accounting',
+    'language',
+    'professional-development'
+  ];
+
+  function toneFor(category) {
+    var slug = String(category || '');
+    return COVER_TONES.indexOf(slug) === -1 ? 'tone-default' : 'tone-' + slug;
+  }
+
+  /** `4.6` reads as "4h 36m" on a card, and 0 is left out rather than shown. */
+  function durationLabel(hours) {
+    var value = Number(hours);
+    if (!value || value <= 0) return '';
+
+    var total = Math.round(value * 60);
+    var whole = Math.floor(total / 60);
+    var minutes = total % 60;
+
+    if (!whole) return minutes + 'm';
+    if (!minutes) return whole + 'h';
+    return whole + 'h ' + minutes + 'm';
   }
 
   /*

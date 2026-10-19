@@ -401,6 +401,154 @@ body.dark-mode .wga-course-card {
   background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
 }
 
+/* Gradient cover with the course initials, for a course with no photograph.
+   Same class names and same idea as wga-public.css, different variables. */
+.wga-course-cover {
+  aspect-ratio: 16 / 9;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-light));
+}
+
+.wga-course-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 15% 0%, rgba(255, 255, 255, 0.24), transparent 60%),
+    radial-gradient(90% 70% at 100% 100%, rgba(0, 0, 0, 0.22), transparent 65%);
+  pointer-events: none;
+}
+
+.wga-course-cover > span {
+  position: relative;
+  z-index: 1;
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-shadow: 0 2px 14px rgba(7, 12, 21, 0.28);
+}
+
+.wga-course-cover.tone-technology {
+  background: linear-gradient(140deg, #0c4a6e, #0284c7 55%, #22d3ee);
+}
+
+.wga-course-cover.tone-business-management {
+  background: linear-gradient(140deg, #7c2d12, #ea580c 55%, #fbbf24);
+}
+
+.wga-course-cover.tone-data-analytics {
+  background: linear-gradient(140deg, #3b0764, #7c3aed 55%, #c084fc);
+}
+
+.wga-course-cover.tone-design {
+  background: linear-gradient(140deg, #831843, #db2777 55%, #f9a8d4);
+}
+
+.wga-course-cover.tone-digital-skills {
+  background: linear-gradient(140deg, #064e3b, #059669 55%, #34d399);
+}
+
+.wga-course-cover.tone-health-care {
+  background: linear-gradient(140deg, #7f1d1d, #dc2626 55%, #fb923c);
+}
+
+.wga-course-cover.tone-education {
+  background: linear-gradient(140deg, #1e3a8a, #4f46e5 55%, #818cf8);
+}
+
+.wga-course-cover.tone-agriculture {
+  background: linear-gradient(140deg, #14532d, #16a34a 55%, #a3e635);
+}
+
+.wga-course-cover.tone-trades-vocational {
+  background: linear-gradient(140deg, #292524, #57534e 55%, #a8a29e);
+}
+
+.wga-course-cover.tone-finance-accounting {
+  background: linear-gradient(140deg, #134e4a, #0d9488 55%, #5eead4);
+}
+
+.wga-course-cover.tone-language {
+  background: linear-gradient(140deg, #4c1d95, #7e22ce 55%, #e879f9);
+}
+
+.wga-course-cover.tone-professional-development {
+  background: linear-gradient(140deg, #0f172a, #334155 55%, #64748b);
+}
+
+.thumb-wrap {
+  position: relative;
+  display: block;
+}
+
+.thumb-wrap .wga-pill {
+  position: absolute;
+  z-index: 2;
+  max-width: calc(100% - 20px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.thumb-wrap .wga-pill-cat {
+  top: 10px;
+  left: 10px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+}
+
+.thumb-wrap .wga-pill-level {
+  top: 10px;
+  right: 10px;
+  background: rgba(15, 23, 42, 0.62);
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.thumb-wrap .wga-pill-cred {
+  bottom: 10px;
+  right: 10px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #fff;
+}
+
+.wga-pill-rating {
+  background: #fffbeb;
+  color: #92400e;
+}
+
+body.dark-mode .wga-pill-rating {
+  background: #2a1e05;
+  color: #fcd34d;
+}
+
+.wga-course-facts {
+  margin-right: auto;
+}
+
+.wga-card-avatar {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(26, 86, 219, 0.1);
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+body.dark-mode .wga-card-avatar {
+  background: rgba(59, 130, 246, 0.18);
+  color: var(--dark-link-soft);
+}
+
 .wga-course-body {
   padding: 18px;
   display: flex;
@@ -414,6 +562,10 @@ body.dark-mode .wga-course-card {
   font-weight: 700;
   line-height: 1.35;
   letter-spacing: -0.2px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .wga-course-summary {
@@ -428,9 +580,9 @@ body.dark-mode .wga-course-summary {
 
 .wga-course-meta {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   font-size: 13px;
   padding-top: 12px;
   border-top: 1px solid var(--border);
@@ -496,7 +648,7 @@ body.dark-mode .wga-pill-new {
 
 .wga-course-foot {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
@@ -515,13 +667,19 @@ body.dark-mode .wga-course-price.is-free {
 }
 
 .wga-course-instructor {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
   font-size: 12.5px;
   color: var(--text-light);
-  white-space: nowrap;
+}
+
+.wga-course-instructor-name {
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 55%;
-  text-align: right;
+  white-space: nowrap;
+  max-width: 16ch;
 }
 
 body.dark-mode .wga-course-instructor {

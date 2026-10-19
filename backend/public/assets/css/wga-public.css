@@ -832,40 +832,142 @@ body.dark-mode .tab[aria-selected='true'] {
   width: 100%;
   object-fit: cover;
   display: block;
-  background: linear-gradient(140deg, color-mix(in srgb, var(--brand) 22%, var(--surface-3)), var(--surface-3));
+  background: var(--surface-3);
 }
 
-.wga-course-thumb-fallback {
+/* A course without a photograph gets a gradient cover and its initials in large
+   type. It reads as a design, not as a missing image. */
+.wga-course-cover {
   aspect-ratio: 16 / 9;
   display: grid;
   place-items: center;
-  font-size: 30px;
+  background: linear-gradient(140deg, #1e3a8a, #2563eb 55%, #0ea5e9);
+  position: relative;
+  overflow: hidden;
+}
+
+.wga-course-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 15% 0%, rgba(255, 255, 255, 0.24), transparent 60%),
+    radial-gradient(90% 70% at 100% 100%, rgba(0, 0, 0, 0.22), transparent 65%);
+  pointer-events: none;
+}
+
+.wga-course-cover > span {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(30px, 5vw, 46px);
   font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--brand) 58%, var(--ink));
-  background: linear-gradient(140deg, color-mix(in srgb, var(--brand) 20%, var(--surface-3)), var(--surface-3));
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-shadow: 0 2px 14px rgba(7, 12, 21, 0.28);
+}
+
+/* One gradient per subject, so courses in a subject look related. */
+.wga-course-cover.tone-technology {
+  background: linear-gradient(140deg, #0c4a6e, #0284c7 55%, #22d3ee);
+}
+
+.wga-course-cover.tone-business-management {
+  background: linear-gradient(140deg, #7c2d12, #ea580c 55%, #fbbf24);
+}
+
+.wga-course-cover.tone-data-analytics {
+  background: linear-gradient(140deg, #3b0764, #7c3aed 55%, #c084fc);
+}
+
+.wga-course-cover.tone-design {
+  background: linear-gradient(140deg, #831843, #db2777 55%, #f9a8d4);
+}
+
+.wga-course-cover.tone-digital-skills {
+  background: linear-gradient(140deg, #064e3b, #059669 55%, #34d399);
+}
+
+.wga-course-cover.tone-health-care {
+  background: linear-gradient(140deg, #7f1d1d, #dc2626 55%, #fb923c);
+}
+
+.wga-course-cover.tone-education {
+  background: linear-gradient(140deg, #1e3a8a, #4f46e5 55%, #818cf8);
+}
+
+.wga-course-cover.tone-agriculture {
+  background: linear-gradient(140deg, #14532d, #16a34a 55%, #a3e635);
+}
+
+.wga-course-cover.tone-trades-vocational {
+  background: linear-gradient(140deg, #292524, #57534e 55%, #a8a29e);
+}
+
+.wga-course-cover.tone-finance-accounting {
+  background: linear-gradient(140deg, #134e4a, #0d9488 55%, #5eead4);
+}
+
+.wga-course-cover.tone-language {
+  background: linear-gradient(140deg, #4c1d95, #7e22ce 55%, #e879f9);
+}
+
+.wga-course-cover.tone-professional-development {
+  background: linear-gradient(140deg, #0f172a, #334155 55%, #64748b);
 }
 
 .thumb-wrap {
   position: relative;
   border-bottom: 1px solid var(--line);
+  display: block;
+}
+
+.thumb-wrap .wga-pill {
+  position: absolute;
+  z-index: 2;
+  max-width: calc(100% - 20px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+}
+
+.thumb-wrap .wga-pill-cat {
+  top: 10px;
+  left: 10px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  border-color: color-mix(in srgb, var(--bg) 60%, var(--line));
+  color: var(--ink);
+}
+
+.thumb-wrap .wga-pill-level {
+  top: 10px;
+  right: 10px;
+  background: rgba(15, 23, 42, 0.62);
+  border-color: transparent;
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.thumb-wrap .wga-pill-cred {
+  bottom: 10px;
+  right: 10px;
+  background: rgba(15, 23, 42, 0.72);
+  border-color: transparent;
+  color: #fff;
 }
 
 .card-locked {
   position: absolute;
   top: 10px;
-  left: 10px;
+  right: 10px;
   font-size: var(--t-xs);
   font-weight: 700;
   text-transform: capitalize;
-  letter-spacing: 0.02em;
   padding: 4px 10px;
   border-radius: var(--r-pill);
-  background: color-mix(in srgb, var(--bg) 86%, transparent);
-  backdrop-filter: blur(6px);
-  color: var(--ink-2);
-  border: 1px solid var(--line);
+  background: rgba(15, 23, 42, 0.72);
+  color: #fff;
+  border: 0;
 }
 
 .wga-course-glyph {
@@ -901,6 +1003,18 @@ body.dark-mode .wga-pill-new {
   color: #6ee7b7;
 }
 
+.wga-pill-rating {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+}
+
+body.dark-mode .wga-pill-rating {
+  background: #2a1e05;
+  border-color: #78350f;
+  color: #fcd34d;
+}
+
 .wga-course-body {
   padding: var(--s-5);
   display: flex;
@@ -927,6 +1041,10 @@ body.dark-mode .wga-pill-new {
   line-height: 1.3;
   letter-spacing: -0.015em;
   font-weight: 750;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .wga-course-title a {
@@ -951,7 +1069,8 @@ body.dark-mode .wga-pill-new {
 .wga-course-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-3);
+  align-items: center;
+  gap: var(--s-2);
   font-size: var(--t-xs);
   color: var(--muted);
   margin-top: auto;
@@ -959,12 +1078,16 @@ body.dark-mode .wga-pill-new {
   border-top: 1px solid var(--line);
 }
 
+.wga-course-facts {
+  margin-right: auto;
+}
+
 .wga-course-foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--s-3);
-  margin-top: var(--s-2);
+  margin-top: var(--s-1);
 }
 
 .wga-course-price {
@@ -983,13 +1106,35 @@ body.dark-mode .wga-course-price.is-free {
 }
 
 .wga-course-instructor {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
   font-size: var(--t-xs);
   color: var(--muted);
-  white-space: nowrap;
+}
+
+.wga-course-instructor-name {
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 55%;
-  text-align: right;
+  white-space: nowrap;
+  max-width: 16ch;
+}
+
+/* Initials stand in for an instructor photograph nobody has supplied. */
+.wga-card-avatar {
+  width: 24px;
+  height: 24px;
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-3);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
 }
 
 .wga-progress {
