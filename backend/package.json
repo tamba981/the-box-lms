@@ -12,8 +12,8 @@
     "dev": "node --watch server.js",
     "postinstall": "node scripts/stage-pages.js",
     "build": "node scripts/check.js",
-    "test": "node scripts/smoke.js",
-    "verify": "npm run build && node scripts/smoke.js",
+    "test": "node --max-old-space-size=8192 scripts/smoke.js",
+    "verify": "npm run build && node --max-old-space-size=8192 scripts/smoke.js",
     "build:deploy": "node scripts/check.js && node scripts/stage-pages.js",
     "verify:deploy": "node scripts/verify-deploy.js",
     "new-secrets": "node scripts/new-secrets.js",
@@ -21,7 +21,7 @@
     "db:inspect": "node scripts/db-inspect.js",
     "env:init": "node scripts/init-env.js",
     "seed": "node scripts/seed.js",
-    "smoke": "node scripts/smoke.js",
+    "smoke": "node --max-old-space-size=8192 scripts/smoke.js",
     "certificate:sample": "node scripts/render-certificate-sample.js"
   },
   "dependencies": {
