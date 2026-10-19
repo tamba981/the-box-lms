@@ -37,6 +37,10 @@
       display: flex; align-items: center; gap: 14px; padding: 13px 16px;
       border: 1px solid var(--border); border-radius: 12px; margin-bottom: 9px;
       background: var(--surface); font-size: 14.5px;
+      /* The expanded body is a second flex child, so the row has to be able to
+         put it on its own line - side by side it squeezed the body to 155px and
+         pushed the page 54px wider than a 375px viewport. */
+      flex-wrap: wrap;
     }
     body.dark-mode .lesson-row { background: var(--dark-surface); border-color: var(--dark-border); }
     .lesson-row .num {
@@ -359,6 +363,79 @@
       outline-offset: 4px;
       border-radius: 6px;
     }
+
+    /* ---------- Syllabus rows that expand in place ---------- */
+    .lesson-chev {
+      flex: 0 0 auto;
+      margin-left: 4px;
+      color: var(--text-light);
+      font-size: 12px;
+      transition: transform 0.18s ease;
+    }
+    .lesson-open[aria-expanded='true'] .lesson-chev { transform: rotate(180deg); }
+
+    .lesson-body {
+      flex: 0 0 100%;
+      min-width: 0;
+      padding: 12px 2px 4px;
+      border-top: 1px solid var(--border);
+      margin-top: 2px;
+    }
+    body.dark-mode .lesson-body { border-color: var(--dark-border); }
+    .lesson-body .viewer-media { margin-top: 12px; }
+    .lesson-body .viewer-body { margin-top: 12px; }
+
+    .lesson-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .lesson-actions .lesson-done {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--success, #047857);
+    }
+
+    /* ---------- What this course covers ---------- */
+    .covers-list {
+      list-style: none;
+      margin: 0 0 14px;
+      padding: 0;
+      display: grid;
+      gap: 9px;
+    }
+    .covers-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    .covers-list i {
+      color: var(--primary);
+      font-size: 12px;
+      margin-top: 5px;
+      flex: 0 0 auto;
+    }
+    body.dark-mode .covers-list i { color: var(--dark-link); }
+
+    .covers-more {
+      border: 0;
+      background: transparent;
+      padding: 0;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    body.dark-mode .covers-more { color: var(--dark-link); }
   </style>
 </head>
 <body>
@@ -397,14 +474,27 @@
         return WGAUI.param('course') || WGAUI.param('slug') || WGAUI.param('id') || '';
       }
 
+/** "12 min" under an hour, "1h 5m" above it. */
+      function durationLabel(minutes) {
+        var total = Math.round(Number(minutes) || 0);
+        if (total <= 0) return '';
+        if (total < 60) return total + ' min';
+        var hours = Math.floor(total / 60);
+        var rest = total % 60;
+        return rest ? hours + 'h ' + rest + 'm' : hours + 'h';
+      }
+
       /**
        * A syllabus row.
        *
-       * A row the reader is allowed to open becomes a real button, so it is
-       * reachable by keyboard and announced as actionable. A row they may not open
-       * stays a plain div rather than a button that silently does nothing.
+       * A row the reader may open is a button that expands the lesson in place,
+       * so several can be open at once and none of them navigates away. A row
+       * they may not open stays a plain div rather than a button that silently
+       * does nothing.
        */
       function lessonRow(lesson, index) {
+        var id = String(lesson.id);
+
         var icon = lesson.completed
           ? '<i class="fas fa-check" aria-hidden="true"></i>'
           : '<span>' + index + '</span>';
@@ -413,23 +503,113 @@
           ? '<span class="tag"><i class="fas fa-lock" aria-hidden="true"></i> Locked</span>'
           : lesson.isPreview
             ? '<span class="tag tag-preview">Preview</span>'
-: '<span class="tag">' + WGAUI.escapeHtml(lessonTypeLabel(lesson.type)) + '</span>';
+            : '<span class="tag">' + WGAUI.escapeHtml(lessonTypeLabel(lesson.type)) + '</span>';
+
+        var meta = durationLabel(lesson.durationMinutes);
 
         var inner =
           '<div class="num">' + icon + '</div>' +
           '<div class="grow">' + WGAUI.escapeHtml(lesson.title) +
-          (lesson.durationMinutes ? ' <span class="tag">· ' + lesson.durationMinutes + ' min</span>' : '') +
-          '</div>' + right;
+          (meta ? ' <span class="tag">· ' + WGAUI.escapeHtml(meta) + '</span>' : '') +
+          '</div>' + right +
+          (lesson.locked ? '' : '<span class="lesson-chev" aria-hidden="true">\u25be</span>');
 
         if (lesson.locked) {
           return '<div class="lesson-row is-locked">' + inner + '</div>';
         }
 
         return (
-          '<div class="lesson-row' + (lesson.completed ? ' done' : '') + '">' +
-          '<button type="button" class="lesson-open" data-lesson-id="' +
-          WGAUI.escapeHtml(String(lesson.id)) + '">' + inner + '</button></div>'
+          '<div class="lesson-row' + (lesson.completed ? ' done' : '') + '" data-lesson-row="' + WGAUI.escapeHtml(id) + '">' +
+          '<button type="button" class="lesson-open" data-lesson-id="' + WGAUI.escapeHtml(id) + '"' +
+          ' aria-expanded="false" aria-controls="lesson-body-' + WGAUI.escapeHtml(id) + '">' + inner + '</button>' +
+          '<div class="lesson-body" id="lesson-body-' + WGAUI.escapeHtml(id) + '" hidden></div>' +
+          '</div>'
         );
+      }
+
+      /* ------------------------------------------------------------- *
+       * Inline lesson expansion
+       *
+       * A row opens in place rather than replacing the syllabus, and several
+       * may be open at once. The body is fetched once per lesson and kept, so
+       * closing and reopening does not re-request it. `Start lesson` opens the
+       * full viewer, which is where completion and the quiz live.
+       * ------------------------------------------------------------- */
+
+      var lessonCache = {};
+
+      function inlineLessonHtml(lesson) {
+        var media = mediaBlock(lesson);
+        var body = lessonBodyBlock(lesson);
+        var materials = resourcesBlock(lesson);
+
+        var parts = [];
+
+        if (!media && !body && !materials) {
+          parts.push('<p class="wga-muted" style="margin-top:14px;">This lesson has no content yet.</p>');
+        } else {
+          parts.push(media, body, materials);
+        }
+
+        parts.push(
+          '<div class="lesson-actions">' +
+            '<button class="wga-btn wga-btn-primary" type="button" data-start-lesson="' +
+              WGAUI.escapeHtml(String(lesson.id)) + '">' +
+              '<i class="fas fa-play" aria-hidden="true"></i> Start lesson</button>' +
+            (lesson.completed
+              ? '<span class="lesson-done"><i class="fas fa-check" aria-hidden="true"></i> Completed</span>'
+              : '') +
+          '</div>'
+        );
+
+        return parts.join('');
+      }
+
+      function toggleLesson(lessonId) {
+        var id = String(lessonId);
+        var row = document.querySelector('[data-lesson-row="' + id + '"]');
+        if (!row) return;
+
+        var button = row.querySelector('.lesson-open');
+        var body = row.querySelector('.lesson-body');
+        if (!button || !body) return;
+
+        var expanded = button.getAttribute('aria-expanded') === 'true';
+
+        if (expanded) {
+          button.setAttribute('aria-expanded', 'false');
+          body.hidden = true;
+          body.innerHTML = '';
+          row.classList.remove('is-open');
+          return;
+        }
+
+        button.setAttribute('aria-expanded', 'true');
+        body.hidden = false;
+        row.classList.add('is-open');
+
+        if (lessonCache[id]) {
+          body.innerHTML = lessonCache[id];
+          return;
+        }
+
+        body.innerHTML =
+          '<div style="padding-top:16px;">' +
+          '<div class="wga-skeleton" style="height:16px;width:70%;margin-bottom:10px;"></div>' +
+          '<div class="wga-skeleton" style="height:16px;width:90%;"></div></div>';
+
+        WGA.get('/courses/' + encodeURIComponent(currentCourse.id) + '/lessons/' + encodeURIComponent(id))
+          .then(function (data) {
+            var html = inlineLessonHtml(data.lesson || {});
+            lessonCache[id] = html;
+            // The reader may have closed the row while this was in flight.
+            if (button.getAttribute('aria-expanded') === 'true') body.innerHTML = html;
+          })
+          .catch(function (error) {
+            body.innerHTML =
+              '<p class="wga-hint" style="margin-top:14px;">' +
+              WGAUI.escapeHtml((error && error.message) || 'Could not load this lesson.') + '</p>';
+          });
       }
 
       /* ------------------------------------------------------------- *
@@ -1128,6 +1308,29 @@
             ? '<p class="desc pre">' + WGAUI.escapeHtml(course.description) + '</p>'
             : '<p class="wga-muted">No description has been written for this course yet.</p>');
 
+        /*
+         * "What this course covers" is the syllabus in miniature: the first six
+         * lesson titles, or all of them when there are fewer. Nothing is
+         * invented - an empty course says so instead.
+         */
+        if (syllabus.length) {
+          overviewPanel +=
+            '<h2 class="section-title" style="margin-top:30px;">What this course covers</h2>' +
+            '<ul class="covers-list">' +
+            syllabus.slice(0, 6).map(function (lesson) {
+              return '<li><i class="fas fa-check" aria-hidden="true"></i><span>' +
+                WGAUI.escapeHtml(lesson.title) + '</span></li>';
+            }).join('') +
+            '</ul>' +
+            (syllabus.length > 6
+              ? '<button class="covers-more" type="button" id="covers-more">and ' +
+                (syllabus.length - 6) + ' more</button>'
+              : '');
+        } else {
+          overviewPanel +=
+            '<p class="wga-muted" style="margin-top:24px;">This course is being prepared \u2014 check back soon.</p>';
+        }
+
         main.innerHTML =
           breadcrumb +
           '<div class="hero">' +
@@ -1178,9 +1381,19 @@
         bindTabs();
         selectTab(initialTab());
 
+        var coversMore = document.getElementById('covers-more');
+        if (coversMore) {
+          coversMore.addEventListener('click', function () {
+            selectTab('syllabus');
+            var panel = document.getElementById('panel-syllabus');
+            if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        }
+
         /*
          * Honour ?lesson=, so a lesson can be linked to directly and a reload
-         * does not lose the reader's place.
+         * does not lose the reader's place. The lesson opens in place inside the
+         * syllabus tab; the viewer stays for working through it.
          */
         var wanted = WGAUI.param('lesson');
         var isOpenable =
@@ -1189,7 +1402,13 @@
             return String(lesson.id) === String(wanted) && !lesson.locked;
           });
 
-        if (isOpenable) openLesson(wanted);
+        if (isOpenable) {
+          selectTab('syllabus');
+          toggleLesson(wanted);
+
+          var openRow = document.querySelector('[data-lesson-row="' + wanted + '"]');
+          if (openRow) openRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
       }
 
       /* ------------------------------------------------------------- *
@@ -1287,10 +1506,24 @@
       }
 
       function bindActions(course) {
-        document.querySelectorAll('.lesson-open').forEach(function (button) {
-          button.addEventListener('click', function () {
-            openLesson(button.getAttribute('data-lesson-id'));
-          });
+        /*
+         * One delegated listener rather than one per row: the rows are replaced
+         * on every render, and a lesson body is only created after its fetch
+         * returns, so per-button binding would miss most of them.
+         */
+        main.addEventListener('click', function (event) {
+          var start = event.target.closest ? event.target.closest('[data-start-lesson]') : null;
+          if (start) {
+            event.preventDefault();
+            openLesson(start.getAttribute('data-start-lesson'));
+            return;
+          }
+
+          var toggle = event.target.closest ? event.target.closest('.lesson-open') : null;
+          if (toggle) {
+            event.preventDefault();
+            toggleLesson(toggle.getAttribute('data-lesson-id'));
+          }
         });
 
         var resume = document.getElementById('resume');
