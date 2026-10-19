@@ -1326,7 +1326,18 @@
             const avatarEl = document.getElementById('userAvatar');
             if (!avatarEl) return;
 
-            const user = (typeof instructorData !== 'undefined' && instructorData.user) || WGA.getUser() || {};
+            /**
+             * Prefer the loaded profile to whatever is in localStorage.
+             *
+             * `checkAuth` runs before the dashboard data arrives, and
+             * `instructorData.user` starts as an empty object — which is truthy,
+             * so it used to win over the stored user and the initials helper
+             * rendered its "?" placeholder. The header then kept that question
+             * mark for the whole session.
+             */
+            const loaded = (typeof instructorData !== 'undefined' && instructorData.user) || null;
+            const stored = WGA.getUser() || null;
+            const user = (loaded && loaded.firstName ? loaded : stored || loaded || {});
             avatarEl.innerHTML = WGAUI.avatar(user, 40);
             avatarEl.style.cursor = 'pointer';
             avatarEl.title = 'Change your photo';
@@ -3162,6 +3173,7 @@
 
                     const result = await WGA.put('/auth/me/cv', { image: dataUrl, filename: file.name });
                     instructorData.user = Object.assign({}, instructorData.user, result.user);
+                    WGA.setSession({ user: instructorData.user });
 
                     showToast('CV sent for review.', 'success');
                     loadPage('profile');
@@ -3474,6 +3486,10 @@
 
             await loadPage('overview');
             loadNotifications();
+
+            // The header was drawn from the stored user before the profile
+            // arrived; redraw it now that the real name and photo are known.
+            renderHeaderAvatar();
 
             // Sign out through the API so the refresh token is revoked on the
             // server. Clearing localStorage alone leaves a live session that
