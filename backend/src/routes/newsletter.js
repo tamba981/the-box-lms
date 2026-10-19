@@ -4,6 +4,9 @@ const express = require('express');
 
 const NewsletterSubscriber = require('../models/NewsletterSubscriber');
 
+const mailer = require('../services/email');
+const logger = require('../lib/logger');
+
 const { asyncHandler } = require('../lib/asyncHandler');
 const { ok } = require('../lib/respond');
 const { validate } = require('../middleware/validate');
@@ -30,6 +33,10 @@ router.post(
   validate({ body: schemas.subscribeBody }),
   asyncHandler(async (req, res) => {
     const { email, source } = req.valid.body;
+
+    // Whether this address is new, so a double-click or a re-submit does not
+    // send a second welcome to somebody who already got one.
+    const wasNew = !(await NewsletterSubscriber.exists({ email }));
 
     let subscriber = null;
 
@@ -63,6 +70,16 @@ router.post(
       subscriber.unsubscribedAt = null;
       subscriber.subscribedAt = new Date();
       await subscriber.save();
+    }
+
+    if (wasNew) {
+      setImmediate(async () => {
+        try {
+          await mailer.deliver(mailer.newsletterWelcomeEmail({ email }));
+        } catch (error) {
+          logger.error('newsletter welcome email failed', { error });
+        }
+      });
     }
 
     return ok(res, null, "Thanks! You're subscribed.");

@@ -165,6 +165,11 @@ async function completeLesson({ user, course, lessonId }) {
   const lesson = await Lesson.findOne({ _id: lessonId, course: course._id });
   if (!lesson) throw notFound('That lesson could not be found.', { code: 'LESSON_NOT_FOUND' });
 
+  // Captured before the update: `state.finished` stays true on every later visit
+  // to a finished lesson, and a congratulation on each visit is not a
+  // congratulation.
+  const wasFinished = enrollment.status === 'completed';
+
   await Enrollment.updateOne(
     { _id: enrollment._id },
     {
@@ -184,6 +189,18 @@ async function completeLesson({ user, course, lessonId }) {
     fresh.certificate = certificate._id;
 
     if (certificate && certificate.issueDate.getTime() > Date.now() - 60000) {
+      // Before the certificate mail, so the two arrive in the order they happened:
+      // you finished the course, and here is the document.
+      if (!wasFinished) {
+        setImmediate(async () => {
+          try {
+            await email.deliver(email.courseCompletedEmail({ user: student, course, certificate }));
+          } catch (error) {
+            logger.error('course completion email failed', { error });
+          }
+        });
+      }
+
       notifications
         .onCertificate(user._id, certificate, `/student-dashboard.html#/certificates`)
         .catch((error) => logger.error('certificate notification failed', { error }));

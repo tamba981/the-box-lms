@@ -290,6 +290,18 @@ router.post(
       emailVerifiedAt: new Date(),
     });
 
+    // An instructor created here has no other way of learning the account exists:
+    // their administrator chose the password and has to pass it on out of band.
+    if (user.role === 'instructor') {
+      setImmediate(async () => {
+        try {
+          await email.deliver(email.instructorAccountEmail({ user }));
+        } catch (error) {
+          logger.error('instructor account email failed', { error, userId: String(user._id) });
+        }
+      });
+    }
+
     return created(res, { user: user.toPublicJSON({ includePrivate: true }) }, 'Account created.');
   })
 );
@@ -370,6 +382,14 @@ router.post(
 
     await instructor.save();
 
+    setImmediate(async () => {
+      try {
+        await email.deliver(email.cvApprovedEmail({ user: instructor }));
+      } catch (error) {
+        logger.error('CV approved email failed', { error, instructorId: String(instructor._id) });
+      }
+    });
+
     return ok(
       res,
       { instructor: instructor.toPublicJSON({ includePrivate: true }) },
@@ -404,6 +424,16 @@ router.post(
     instructor.cvReviewedAt = new Date();
 
     await instructor.save();
+
+    setImmediate(async () => {
+      try {
+        await email.deliver(
+          email.cvRejectedEmail({ user: instructor, reason: req.valid.body.reason })
+        );
+      } catch (error) {
+        logger.error('CV rejected email failed', { error, instructorId: String(instructor._id) });
+      }
+    });
 
     return ok(
       res,
@@ -982,6 +1012,20 @@ router.post(
   })
 );
 
+/**
+ * Turn an announcement link into something clickable.
+ *
+ * The address was built by appending whatever was typed to the base URL, so an
+ * absolute link became `https://sitehttps://example.com` — a dead button in every
+ * recipient's inbox. An absolute address is now passed through, and a path is
+ * resolved against the site.
+ */
+function announcementLink(link) {
+  if (!link) return undefined;
+  if (/^https?:\/\//i.test(link)) return link;
+  return `${config.publicBaseUrl}${link.startsWith('/') ? '' : '/'}${link}`;
+}
+
 /* ------------------------------------------------------------------ *
  * Announcements
  * ------------------------------------------------------------------ */
@@ -996,7 +1040,20 @@ router.post(
       audience: z.enum(['all', 'students', 'instructors', 'course']).default('all'),
       courseId: objectId.optional(),
       sendEmail: z.coerce.boolean().optional().default(false),
-      link: z.string().trim().max(500).optional(),
+      /**
+       * A link people will click in an email, so it must be one of two shapes:
+       * an absolute http(s) address, or a path on this site. Anything else —
+       * `javascript:`, a bare word — is refused here rather than delivered.
+       */
+      link: z
+        .string()
+        .trim()
+        .max(500)
+        .refine(
+          (value) => value === '' || /^https?:\/\//i.test(value) || value.startsWith('/'),
+          'Use a full address starting with http:// or https://, or a path starting with /'
+        )
+        .optional(),
     }),
   }),
   asyncHandler(async (req, res) => {
@@ -1035,6 +1092,8 @@ router.post(
     if (body.sendEmail && recipients.length > 0) {
       // Bounded: an announcement to the whole platform should not open
       // thousands of simultaneous connections to the mail provider.
+      const linkUrl = announcementLink(body.link);
+
       setImmediate(async () => {
         const users = await User.find({ _id: { $in: recipients.slice(0, 500) } });
 
@@ -1046,7 +1105,7 @@ router.post(
                 user,
                 title: body.title,
                 message: body.message,
-                url: body.link ? `${config.publicBaseUrl}${body.link}` : undefined,
+                url: linkUrl,
               })
             );
           } catch (error) {

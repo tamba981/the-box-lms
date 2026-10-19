@@ -472,6 +472,25 @@ async function markManualOrderPaid({ payment, paidToNumber = null, paymentRefere
 
   logger.info('manual order marked as sent', { orderId: payment.orderId });
 
+  // The student has said they paid. Tell them it arrived, so the silence that
+  // follows a manual transfer does not read as "nothing happened".
+  setImmediate(async () => {
+    try {
+      const student = await User.findById(payment.student);
+      if (student) {
+        await email.deliver(
+          email.manualPaymentSubmittedEmail({
+            user: student,
+            course: { title: payment.courseTitle },
+            payment,
+          })
+        );
+      }
+    } catch (error) {
+      logger.error('manual payment submitted email failed', { error, orderId: payment.orderId });
+    }
+  });
+
   return { payment };
 }
 
@@ -531,6 +550,26 @@ async function rejectManualOrder({ payment, adminUser = null, reason }) {
   await payment.save();
 
   logger.info('manual order rejected', { orderId: payment.orderId, reason });
+
+  // The alternative is a student refreshing a dashboard wondering why nothing
+  // opened. The reason is included because it is the only actionable part.
+  setImmediate(async () => {
+    try {
+      const student = await User.findById(payment.student);
+      if (student) {
+        await email.deliver(
+          email.manualPaymentRejectedEmail({
+            user: student,
+            course: { title: payment.courseTitle },
+            payment,
+            reason,
+          })
+        );
+      }
+    } catch (error) {
+      logger.error('manual payment rejected email failed', { error, orderId: payment.orderId });
+    }
+  });
 
   return { payment };
 }

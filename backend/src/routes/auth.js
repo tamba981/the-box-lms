@@ -360,6 +360,10 @@ router.put(
 
     await req.user.save();
 
+    // Uploading twice should not read as two submissions, so this is the
+    // acknowledgement, not a queue-position update.
+    sendLater('cv-submitted', () => email.cvSubmittedEmail({ user: req.user }));
+
     return ok(res, { user: req.user.toPublicJSON({ includePrivate: true }) }, 'Your CV has been sent for review.');
   })
 );

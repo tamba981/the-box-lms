@@ -103,6 +103,13 @@ function escapeHtml(value) {
 
 const BRAND_NAVY = '#0f2b4c';
 
+/**
+ * TODO(marketing): add a `marketingOptOut` flag, a tokenised unsubscribe link and
+ * a List-Unsubscribe header when a campaign/marketing feature is built. Every
+ * message in this file is currently transactional or an account notice
+ * (announcements included), which is why none of them carries an unsubscribe
+ * link.
+ */
 function layout({ heading, bodyHtml, ctaText, ctaUrl, footnote }) {
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -120,7 +127,7 @@ function layout({ heading, bodyHtml, ctaText, ctaUrl, footnote }) {
       ${footnote ? `<p style="margin:22px 0 0;padding-top:18px;border-top:1px solid #eceef1;font-size:13px;line-height:1.5;color:#8792a2;">${footnote}</p>` : ''}
     </td></tr>
     <tr><td style="padding:16px 28px;background:#fafbfc;font-size:12px;color:#8792a2;border-top:1px solid #eceef1;">
-      Wuteve Global Academy &middot; You are receiving this because you have an account with us.
+      Wuteve Global Academy &middot; You are receiving this email because you have an account with Wuteve Global Academy.
     </td></tr>
   </table>
 </body></html>`;
@@ -397,6 +404,278 @@ function contactMessageEmail({ name, email: address, reason, subject, message, i
   };
 }
 
+/* ------------------------------------------------------------------ *
+ * Notifications about progress, payments and account state
+ * ------------------------------------------------------------------ */
+
+/** Sent once, when the final lesson is completed. */
+function courseCompletedEmail({ user, course, certificate }) {
+  const dashboardUrl = `${config.publicBaseUrl}/student-dashboard.html`;
+  const hours = Number(course.durationHours) > 0 ? `${course.durationHours} hours of material` : null;
+  const credential = certificate && certificate.certificateNumber
+    ? `Your ${certificate.credential === 'diploma' ? 'diploma' : 'certificate'} has been issued - number ${certificate.certificateNumber}.`
+    : null;
+
+  const text = [
+    `Congratulations ${user.firstName || 'there'},`,
+    '',
+    `You have completed "${course.title}".`,
+    hours ? `That is ${hours}, finished.` : '',
+    credential || '',
+    '',
+    `Your dashboard: ${dashboardUrl}`,
+  ].filter((line) => line !== '').join('\n');
+
+  return {
+    to: user.email,
+    subject: `You have completed "${course.title}"`,
+    text,
+    html: layout({
+      heading: 'You finished the course',
+      bodyHtml: `<p style="margin:0 0 12px;">Congratulations ${firstNameOf(user)},</p>
+        <p style="margin:0 0 12px;">You have completed <strong>${escapeHtml(course.title)}</strong>.</p>
+        ${credential ? `<p style="margin:0 0 12px;">${escapeHtml(credential)}</p>` : ''}
+        <p style="margin:0;">Everything you worked through stays available from your dashboard.</p>`,
+      ctaText: 'Go to your dashboard',
+      ctaUrl: dashboardUrl,
+    }),
+  };
+}
+
+/** The student said they have sent the money; a person still has to check. */
+function manualPaymentSubmittedEmail({ user, course, payment }) {
+  const amount = formatCents(payment.amountCents, payment.currency);
+  const dashboardUrl = `${config.publicBaseUrl}/student-dashboard.html`;
+  const inbox = config.email.inbox;
+
+  const text = [
+    `Hello ${user.firstName || 'there'},`,
+    '',
+    `We have your note that the payment for "${course.title}" has been sent.`,
+    `Order:  ${payment.orderId}`,
+    `Amount: ${amount}`,
+    '',
+    'Someone will check it by hand, usually within 30 minutes during working hours.',
+    'You will get another email as soon as it is confirmed, and your place on the course opens then.',
+    '',
+    `If you have not heard from us within an hour, write to ${inbox} with the order number.`,
+    '',
+    `Your dashboard: ${dashboardUrl}`,
+  ].join('\n');
+
+  return {
+    to: user.email,
+    subject: `We have received your payment - ${payment.orderId}`,
+    text,
+    html: layout({
+      heading: 'Payment received - being checked',
+      bodyHtml: `<p style="margin:0 0 12px;">Hello ${firstNameOf(user)},</p>
+        <p style="margin:0 0 12px;">We have your note that the payment for <strong>${escapeHtml(course.title)}</strong> has been sent.</p>
+        <p style="margin:0 0 4px;">Order <strong>${escapeHtml(payment.orderId)}</strong></p>
+        <p style="margin:0 0 12px;">Amount <strong>${escapeHtml(amount)}</strong></p>
+        <p style="margin:0 0 12px;">Someone will check it by hand, usually within 30 minutes during working hours. You will get another email when it is confirmed, and your place opens then.</p>
+        <p style="margin:0;">If you have not heard from us within an hour, write to ${escapeHtml(inbox)} with the order number.</p>`,
+      ctaText: 'View your dashboard',
+      ctaUrl: dashboardUrl,
+    }),
+  };
+}
+
+/** A person looked at the payment and could not match it. */
+function manualPaymentRejectedEmail({ user, course, payment, reason }) {
+  const amount = formatCents(payment.amountCents, payment.currency);
+  const inbox = config.email.inbox;
+
+  const text = [
+    `Hello ${user.firstName || 'there'},`,
+    '',
+    `We could not confirm the payment for "${course.title}".`,
+    `Order:  ${payment.orderId}`,
+    `Amount: ${amount}`,
+    '',
+    `Reason: ${reason}`,
+    '',
+    'The order has been cancelled. Nothing has been charged by us for it.',
+    `If you believe this is wrong, write to ${inbox} with the order number and your payment receipt.`,
+  ].join('\n');
+
+  return {
+    to: user.email,
+    subject: `Payment verification failed - ${payment.orderId}`,
+    text,
+    html: layout({
+      heading: 'We could not confirm that payment',
+      bodyHtml: `<p style="margin:0 0 12px;">Hello ${firstNameOf(user)},</p>
+        <p style="margin:0 0 12px;">We could not confirm the payment for <strong>${escapeHtml(course.title)}</strong>.</p>
+        <p style="margin:0 0 4px;">Order <strong>${escapeHtml(payment.orderId)}</strong></p>
+        <p style="margin:0 0 14px;">Amount <strong>${escapeHtml(amount)}</strong></p>
+        <p style="margin:0 0 14px;padding:10px 14px;background:#fdf2f2;border-left:3px solid #c0392b;">${escapeHtml(reason)}</p>
+        <p style="margin:0 0 12px;">The order has been cancelled, and nothing has been charged by us for it.</p>
+        <p style="margin:0;">If you believe this is wrong, write to ${escapeHtml(inbox)} with the order number and your payment receipt.</p>`,
+    }),
+  };
+}
+
+function cvSubmittedEmail({ user }) {
+  const profileUrl = `${config.publicBaseUrl}/instructor-dashboard.html`;
+
+  const text = [
+    `Hello ${user.firstName || 'there'},`,
+    '',
+    'We have your CV. Our team will review it within 48 hours.',
+    'You can keep building your lessons meanwhile - nothing is blocked while it is reviewed.',
+    '',
+    'You will get an email when the review is finished.',
+    '',
+    `Your profile: ${profileUrl}`,
+  ].join('\n');
+
+  return {
+    to: user.email,
+    subject: 'We have received your CV - review within 48 hours',
+    text,
+    html: layout({
+      heading: 'CV received',
+      bodyHtml: `<p style="margin:0 0 12px;">Hello ${firstNameOf(user)},</p>
+        <p style="margin:0 0 12px;">We have your CV. Our team will review it within 48 hours.</p>
+        <p style="margin:0 0 12px;">You can keep building your lessons meanwhile - nothing is blocked while it is reviewed.</p>
+        <p style="margin:0;">You will get an email when the review is finished.</p>`,
+      ctaText: 'View your profile',
+      ctaUrl: profileUrl,
+    }),
+  };
+}
+
+function cvApprovedEmail({ user }) {
+  const profileUrl = `${config.publicBaseUrl}/instructor-dashboard.html`;
+
+  const text = [
+    `Hello ${user.firstName || 'there'},`,
+    '',
+    'Your CV has been reviewed and approved.',
+    'It is now shown on your course pages as a verified credential.',
+    '',
+    `Your dashboard: ${profileUrl}`,
+  ].join('\n');
+
+  return {
+    to: user.email,
+    subject: 'Your CV has been approved',
+    text,
+    html: layout({
+      heading: 'Your CV is approved',
+      bodyHtml: `<p style="margin:0 0 12px;">Hello ${firstNameOf(user)},</p>
+        <p style="margin:0 0 12px;">Your CV has been reviewed and approved.</p>
+        <p style="margin:0;">Course pages now mark your credentials as verified.</p>`,
+      ctaText: 'Go to your dashboard',
+      ctaUrl: profileUrl,
+    }),
+  };
+}
+
+function cvRejectedEmail({ user, reason }) {
+  const profileUrl = `${config.publicBaseUrl}/instructor-dashboard.html`;
+  const inbox = config.email.inbox;
+
+  const text = [
+    `Hello ${user.firstName || 'there'},`,
+    '',
+    'Our team reviewed your CV and needs a change before it can be approved.',
+    '',
+    `Reason: ${reason}`,
+    '',
+    'Upload an updated CV from your profile and it will be reviewed again.',
+    '',
+    `Your profile: ${profileUrl}`,
+    `Questions: ${inbox}`,
+  ].join('\n');
+
+  return {
+    to: user.email,
+    subject: 'Your CV requires attention',
+    text,
+    html: layout({
+      heading: 'Your CV needs a change',
+      bodyHtml: `<p style="margin:0 0 12px;">Hello ${firstNameOf(user)},</p>
+        <p style="margin:0 0 14px;">Our team reviewed your CV and needs a change before it can be approved.</p>
+        <p style="margin:0 0 14px;padding:10px 14px;background:#fdf6ec;border-left:3px solid #b7791f;">${escapeHtml(reason)}</p>
+        <p style="margin:0 0 12px;">Upload an updated CV from your profile and it will be reviewed again.</p>
+        <p style="margin:0;">Questions? Write to ${escapeHtml(inbox)}.</p>`,
+      ctaText: 'Update your CV',
+      ctaUrl: profileUrl,
+    }),
+  };
+}
+
+/**
+ * An account an administrator created.
+ *
+ * The password is deliberately absent: an administrator chooses it and tells the
+ * instructor out of band. Emailing a password would put it in an inbox, in a
+ * backup and in whatever forwards that mail next.
+ */
+function instructorAccountEmail({ user }) {
+  const dashboardUrl = `${config.publicBaseUrl}/instructor-dashboard.html`;
+  const forgotUrl = `${config.publicBaseUrl}/forgot-password.html`;
+
+  const text = [
+    `Hello ${user.firstName || 'there'},`,
+    '',
+    'An instructor account has been created for you at Wuteve Global Academy.',
+    '',
+    `Sign in with this address: ${user.email}`,
+    'Use the password your administrator gave you. If you do not have one,',
+    `set your own here: ${forgotUrl}`,
+    '',
+    `Your dashboard: ${dashboardUrl}`,
+  ].join('\n');
+
+  return {
+    to: user.email,
+    subject: 'Your Wuteve Global Academy instructor account is ready',
+    text,
+    html: layout({
+      heading: 'Your instructor account is ready',
+      bodyHtml: `<p style="margin:0 0 12px;">Hello ${firstNameOf(user)},</p>
+        <p style="margin:0 0 12px;">An instructor account has been created for you at Wuteve Global Academy.</p>
+        <p style="margin:0 0 4px;">Sign in with <strong>${escapeHtml(user.email)}</strong></p>
+        <p style="margin:0 0 12px;">Use the password your administrator gave you, or set your own with <a href="${escapeHtml(forgotUrl)}" style="color:#0f2b4c;">forgot password</a>.</p>
+        <p style="margin:0;">From your dashboard you can write lessons, add a video and publish a course.</p>`,
+      ctaText: 'Open your dashboard',
+      ctaUrl: dashboardUrl,
+    }),
+  };
+}
+
+function newsletterWelcomeEmail({ email }) {
+  const coursesUrl = `${config.publicBaseUrl}/courses.html`;
+  const inbox = config.email.inbox;
+
+  const text = [
+    'Welcome to the Wuteve Global Academy community.',
+    '',
+    'You will be the first to hear about new courses and updates.',
+    'You can leave the list at any time by replying to any of our emails.',
+    '',
+    `Browse the catalog: ${coursesUrl}`,
+    `Questions: ${inbox}`,
+  ].join('\n');
+
+  return {
+    to: email,
+    subject: 'Welcome to the Wuteve Global Academy community',
+    text,
+    html: layout({
+      heading: 'You are on the list',
+      bodyHtml: `<p style="margin:0 0 12px;">Welcome to the Wuteve Global Academy community.</p>
+        <p style="margin:0 0 12px;">You will be the first to hear about new courses and updates.</p>
+        <p style="margin:0;">You can leave the list at any time by replying to any of our emails, or writing to ${escapeHtml(inbox)}.</p>`,
+      ctaText: 'Browse the catalog',
+      ctaUrl: coursesUrl,
+    }),
+  };
+}
+
 module.exports = {
   deliver,
   verificationEmail,
@@ -408,6 +687,14 @@ module.exports = {
   paymentReceiptEmail,
   announcementEmail,
   contactMessageEmail,
+  courseCompletedEmail,
+  manualPaymentSubmittedEmail,
+  manualPaymentRejectedEmail,
+  cvSubmittedEmail,
+  cvApprovedEmail,
+  cvRejectedEmail,
+  instructorAccountEmail,
+  newsletterWelcomeEmail,
   layout,
   escapeHtml,
 };

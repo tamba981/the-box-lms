@@ -1281,6 +1281,295 @@ async function testInstructorCv() {
 }
 
 /**
+ * The emails added after the first audit: progress, payments and account state.
+ *
+ * Two kinds of check. The templates are built directly and inspected, so a
+ * missing field or a link pointing somewhere unreachable fails without sending
+ * anything. The wiring is checked by replacing `deliver` for the duration of one
+ * request: the app runs inside this process, so a captured payload is proof the
+ * trigger fired and proof of exactly what would have gone out.
+ */
+async function testNewNotifications() {
+  const mailer = require('../src/services/email');
+  const config = require('../src/config/env');
+  const Course = require('../src/models/Course');
+  const Lesson = require('../src/models/Lesson');
+
+  const instructorEmail = `smoke-notify-instructor-${runId}@example.com`;
+  const studentEmail = `smoke-notify-student-${runId}@example.com`;
+  const adminEmail = `smoke-notify-admin-${runId}@example.com`;
+  createdEmails.push(instructorEmail, studentEmail, adminEmail);
+
+  let instructorToken = null;
+  let studentToken = null;
+  let adminToken = null;
+  let course = null;
+  let lesson = null;
+
+  const signIn = async (email) => {
+    const { json } = await request('POST', '/api/v1/auth/login', { body: { email, password: PASSWORD } });
+    return json.data.accessToken;
+  };
+
+  /** Run `task` with every outgoing message captured instead of delivered. */
+  const captureEmail = async (task) => {
+    const original = mailer.deliver;
+    const captured = [];
+
+    mailer.deliver = async (message) => {
+      captured.push(message);
+      return { delivered: true, id: 'captured' };
+    };
+
+    try {
+      await task();
+      // Fire-and-forget sends run on setImmediate; give them a turn (and the
+      // certificate path a moment to render its PDF) before looking.
+      await new Promise((resolve) => setTimeout(resolve, 400));
+    } finally {
+      mailer.deliver = original;
+    }
+
+    return captured;
+  };
+
+  /** Every address a message points at must be one this site can serve. */
+  const assertLinksAreOurs = (message, label) => {
+    const body = `${message.text || ''}\n${message.html || ''}`;
+    const urls = body.match(/https?:\/\/[^\s"'<>]+/g) || [];
+
+    urls.forEach((url) => {
+      const clean = url.replace(/[.,)]+$/, '');
+      assert(
+        clean.startsWith(config.publicBaseUrl),
+        `${label} links to ${clean}, which is not under ${config.publicBaseUrl}`
+      );
+    });
+  };
+
+  const user = { firstName: 'Test', lastName: 'Person', email: 'recipient@example.com' };
+  const courseCard = { title: 'A Course', durationHours: 4 };
+  const payment = { orderId: 'WGA-2026-000123', amountCents: 5000, currency: 'usd' };
+
+  const templates = [
+    ['course completed', () => mailer.courseCompletedEmail({ user, course: courseCard, certificate: { certificateNumber: 'WGA-1', credential: 'diploma' } }), 'You have completed'],
+    ['manual payment submitted', () => mailer.manualPaymentSubmittedEmail({ user, course: courseCard, payment }), 'We have received your payment'],
+    ['manual payment rejected', () => mailer.manualPaymentRejectedEmail({ user, course: courseCard, payment, reason: 'No matching transfer.' }), 'Payment verification failed'],
+    ['CV submitted', () => mailer.cvSubmittedEmail({ user }), 'We have received your CV'],
+    ['CV approved', () => mailer.cvApprovedEmail({ user }), 'Your CV has been approved'],
+    ['CV rejected', () => mailer.cvRejectedEmail({ user, reason: 'Add your teaching certificate.' }), 'Your CV requires attention'],
+    ['instructor account', () => mailer.instructorAccountEmail({ user }), 'instructor account is ready'],
+    ['newsletter welcome', () => mailer.newsletterWelcomeEmail({ email: 'list@example.com' }), 'Welcome to the Wuteve'],
+  ];
+
+  for (const [label, build, subjectFragment] of templates) {
+    // eslint-disable-next-line no-await-in-loop
+    await check(`the ${label} email is complete and points at this site`, async () => {
+      const message = build();
+
+      assert(message.to, 'a recipient is required');
+      assert(message.subject.includes(subjectFragment), `subject was "${message.subject}"`);
+      assert(message.text && message.html, 'both a text and an html body are required');
+      assert(!JSON.stringify(message).includes('undefined'), 'no field may render as undefined');
+      assertLinksAreOurs(message, label);
+    });
+  }
+
+  await check('a notification fixture is provisioned', async () => {
+    const instructor = await User.create({
+      firstName: 'Notify',
+      lastName: 'Instructor',
+      email: instructorEmail,
+      password: PASSWORD,
+      role: 'instructor',
+      emailVerified: true,
+    });
+
+    await User.create({
+      firstName: 'Notify',
+      lastName: 'Student',
+      email: studentEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+
+    await User.create({
+      firstName: 'Notify',
+      lastName: 'Admin',
+      email: adminEmail,
+      password: PASSWORD,
+      role: 'admin',
+      emailVerified: true,
+    });
+
+    instructorToken = await signIn(instructorEmail);
+    studentToken = await signIn(studentEmail);
+    adminToken = await signIn(adminEmail);
+
+    course = await Course.create({
+      title: `Notification course ${runId}`,
+      slug: `notify-${runId}`,
+      instructor: instructor._id,
+      instructorName: 'Notify Instructor',
+      priceCents: 0,
+      currency: 'usd',
+      status: 'published',
+      publishedAt: new Date(),
+      credential: 'certificate',
+    });
+
+    lesson = await Lesson.create({
+      course: course._id,
+      title: 'The only lesson',
+      type: 'text',
+      order: 1,
+      published: true,
+      content: 'Short.',
+    });
+
+    assert(instructorToken && studentToken && adminToken, 'all three sessions must exist');
+  });
+
+  await check('the student enrols so the course can be finished', async () => {
+    const { status } = await request('POST', `/api/v1/courses/${course.id}/enroll`, { token: studentToken });
+    assert(status === 200 || status === 201, `enrol returned ${status}`);
+  });
+
+  await check('finishing a course prepares the completion email', async () => {
+    const captured = await captureEmail(async () => {
+      const { status } = await request(
+        'POST',
+        `/api/v1/courses/${course.id}/lessons/${lesson.id}/complete`,
+        { token: studentToken }
+      );
+      assertEqual(status, 200, 'complete status');
+    });
+
+    const completion = captured.find((message) => /You have completed/.test(message.subject));
+
+    assert(completion, `no completion email was prepared (got: ${captured.map((m) => m.subject).join(' | ')})`);
+    assertEqual(completion.to, studentEmail, 'the recipient');
+    assertLinksAreOurs(completion, 'course completed');
+  });
+
+  await check('finishing the course again does not repeat the congratulations', async () => {
+    const captured = await captureEmail(async () => {
+      await request('POST', `/api/v1/courses/${course.id}/lessons/${lesson.id}/complete`, {
+        token: studentToken,
+      });
+    });
+
+    assert(
+      !captured.some((message) => /You have completed/.test(message.subject)),
+      'a second completion email was sent'
+    );
+  });
+
+  await check('uploading a CV prepares the acknowledgement', async () => {
+    const pdf = `data:application/pdf;base64,${Buffer.from(
+      `%PDF-1.4\n${'x'.repeat(60)}\n%%EOF\n`
+    ).toString('base64')}`;
+
+    const captured = await captureEmail(async () => {
+      const { status } = await request('PUT', '/api/v1/auth/me/cv', {
+        token: instructorToken,
+        body: { image: pdf, filename: 'cv.pdf' },
+      });
+      assertEqual(status, 200, 'upload status');
+    });
+
+    const acknowledgement = captured.find((message) => /received your CV/.test(message.subject));
+    assert(acknowledgement, 'no CV acknowledgement was prepared');
+    assertEqual(acknowledgement.to, instructorEmail, 'the recipient');
+  });
+
+  await check('approving a CV prepares the approval email', async () => {
+    const instructor = await User.findOne({ email: instructorEmail }).select('_id');
+
+    const captured = await captureEmail(async () => {
+      const { status } = await request('POST', `/api/v1/admin/instructors/${instructor._id}/cv/approve`, {
+        token: adminToken,
+      });
+      assertEqual(status, 200, 'approve status');
+    });
+
+    const approval = captured.find((message) => /CV has been approved/.test(message.subject));
+    assert(approval, 'no approval email was prepared');
+    assertEqual(approval.to, instructorEmail, 'the recipient');
+  });
+
+  await check('rejecting a CV sends the reason', async () => {
+    const instructor = await User.findOne({ email: instructorEmail }).select('_id');
+    const reason = 'Please include your teaching certificate.';
+
+    const captured = await captureEmail(async () => {
+      const { status } = await request('POST', `/api/v1/admin/instructors/${instructor._id}/cv/reject`, {
+        token: adminToken,
+        body: { reason },
+      });
+      assertEqual(status, 200, 'reject status');
+    });
+
+    const rejection = captured.find((message) => /CV requires attention/.test(message.subject));
+    assert(rejection, 'no rejection email was prepared');
+    assert(
+      `${rejection.text} ${rejection.html}`.includes(reason),
+      'the reason must appear in the email'
+    );
+  });
+
+  await check('creating an instructor prepares the account email', async () => {
+    const email = `smoke-notify-new-${runId}@example.com`;
+    createdEmails.push(email);
+
+    const captured = await captureEmail(async () => {
+      const { status } = await request('POST', '/api/v1/admin/users', {
+        token: adminToken,
+        body: {
+          firstName: 'New',
+          lastName: 'Instructor',
+          email,
+          password: 'SmokeTest123!aA',
+          role: 'instructor',
+        },
+      });
+      assertEqual(status, 201, 'create status');
+    });
+
+    const account = captured.find((message) => /instructor account is ready/.test(message.subject));
+    assert(account, 'no account email was prepared');
+    assertEqual(account.to, email, 'the recipient');
+    // The password an administrator chose must never be in an email.
+    assert(!`${account.text} ${account.html}`.includes('SmokeTest123'), 'the password leaked into the email');
+  });
+
+  await check('a new newsletter subscriber gets one welcome', async () => {
+    const address = `smoke-notify-list-${runId}@example.com`;
+
+    const first = await captureEmail(async () => {
+      const { status } = await request('POST', '/api/v1/newsletter/subscribe', { body: { email: address } });
+      assertEqual(status, 200, 'subscribe status');
+    });
+
+    const welcome = first.find((message) => /Welcome to the Wuteve/.test(message.subject));
+    assert(welcome, 'no welcome email was prepared');
+    assertEqual(welcome.to, address, 'the recipient');
+
+    // Re-submitting the same address must not send a second welcome.
+    const second = await captureEmail(async () => {
+      await request('POST', '/api/v1/newsletter/subscribe', { body: { email: address } });
+    });
+
+    assert(!second.some((message) => /Welcome to the Wuteve/.test(message.subject)), 'a second welcome was sent');
+  });
+
+  // Leave nothing behind; the global cleanup removes users, not courses.
+  await Lesson.deleteMany({ course: course._id });
+  await Course.deleteOne({ _id: course._id });
+}
+
+/**
  * The core product path, end to end: an instructor is given an account, writes
  * a course, an admin approves it, a student enrols, works through it, and is
  * issued a verifiable certificate.
@@ -5291,6 +5580,9 @@ async function main() {
 
     process.stdout.write('\nInstructor CVs\n');
     await testInstructorCv();
+
+    process.stdout.write('\nNotification emails\n');
+    await testNewNotifications();
 
     process.stdout.write('\nMoney formatting\n');
     await testMoneyFormatting();

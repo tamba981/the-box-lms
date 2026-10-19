@@ -108,6 +108,20 @@ if (!MONGODB_URI) {
 const PUBLIC_BASE_URL = (process.env.PUBLIC_BASE_URL || `http://localhost:${PORT}`).replace(/\/+$/, '');
 
 /**
+ * A production deploy with the local default here is silent and expensive: every
+ * verification, reset and receipt email goes out with an unreachable link, and
+ * the only symptom is other people saying "the link does not work". Loud, once,
+ * at boot.
+ */
+if (process.env.NODE_ENV === 'production' && /localhost|127\.0\.0\.1/.test(PUBLIC_BASE_URL)) {
+  // eslint-disable-next-line no-console
+  console.warn(
+    `WARNING: PUBLIC_BASE_URL is "${PUBLIC_BASE_URL}" in production. ` +
+      'Every link in every email will be unreachable. Set PUBLIC_BASE_URL to the public address.'
+  );
+}
+
+/**
  * Comma-separated allowlist. Falls back to local development origins only —
  * never to "reflect whatever Origin the caller sent", which is what the
  * previous `cors({ origin: true })` configuration did.
