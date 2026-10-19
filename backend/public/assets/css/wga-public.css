@@ -1702,6 +1702,119 @@ body.dark-mode .form-status.is-error {
   border: 0;
 }
 
+/* ---------------------------------------------------------------- *
+   13. Loading screen - homepage only
+
+   A brand moment, not a progress indicator for something the page is still
+   fetching: the homepage renders its own content from the API, and this sits
+   over it until that has had a moment to arrive. It lives in the markup rather
+   than being injected, so it paints with the first frame instead of appearing
+   after the thing it is meant to cover.
+   * ---------------------------------------------------------------- */
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-5);
+  background: var(--bg);
+  transition: opacity 0.5s ease-out;
+}
+
+.loading-screen.is-hiding {
+  opacity: 0;
+}
+
+/* The world map is the copy already in assets/img, not a request to a
+   third-party host - it is 83 KB, it is ours, and it cannot go away. */
+.loading-screen-map {
+  position: absolute;
+  inset: 0;
+  background-image: url('/assets/img/world-map.svg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+/* Where west Africa sits on the map, marking home. */
+.loading-screen-pulse {
+  position: absolute;
+  left: 45.5%;
+  top: 46%;
+  width: 26vmin;
+  height: 26vmin;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--brand) 60%, transparent), transparent 68%);
+  animation: loadingPulse 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* A ring turns around the emblem rather than the emblem turning: the crest is
+   the brand mark and spinning it reads as a mistake. */
+.loading-screen-logo {
+  position: relative;
+  z-index: 1;
+  width: 92px;
+  height: 92px;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  box-shadow: var(--shadow-lg);
+  padding: 14px;
+}
+
+.loading-screen-logo img {
+  width: 100%;
+  height: auto;
+}
+
+.loading-screen-logo::after {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: var(--brand);
+  animation: loadingSpin 1.6s linear infinite;
+}
+
+.loading-screen-text {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: var(--t-sm);
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
+}
+
+@keyframes loadingSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loadingPulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.55;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.18);
+    opacity: 0.9;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -1719,6 +1832,16 @@ body.dark-mode .form-status.is-error {
 
   .wga-course-card:hover {
     transform: none;
+  }
+
+  /* The screen still appears - it is the brand moment - but nothing moves. */
+  .loading-screen-logo::after,
+  .loading-screen-pulse {
+    animation: none;
+  }
+
+  .loading-screen {
+    transition: none;
   }
 }
 

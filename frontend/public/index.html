@@ -27,6 +27,12 @@
 />
 <link rel="stylesheet" href="/assets/css/wga-public.css?v=20261020" />
 
+<!-- The moment the page started, so the loading screen can be shown for a
+     minimum time without overstaying when the page was already cached. -->
+<script>
+  window.__pageStart = Date.now();
+</script>
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -50,6 +56,25 @@
 </head>
 
 <body>
+<!--
+  Loading screen. Homepage only: the other pages are a form or a list and would
+  only feel slower for it.
+
+  It is in the markup rather than injected by script so that it paints with the
+  first frame - a spinner that appears after the content it covers has already
+  been useful for nobody. The text is a live region, so a screen reader hears
+  "Loading Wuteve Global Academy" rather than nothing at all.
+-->
+<div class="loading-screen" id="loading-screen" role="status" aria-live="polite">
+  <div class="loading-screen-map" aria-hidden="true"></div>
+  <div class="loading-screen-pulse" aria-hidden="true"></div>
+  <div class="loading-screen-logo">
+    <img src="/Images/Brand/wuteve-emblem.png" alt="" width="62" height="62" />
+  </div>
+  <p class="loading-screen-text">Loading Wuteve Global Academy&hellip;</p>
+</div>
+<noscript><style>#loading-screen{display:none}</style></noscript>
+
 <a class="skip-link" href="#main">Skip to content</a>
 
 <!-- ============================ HEADER ============================ -->
@@ -645,6 +670,52 @@
 
     loadCatalog();
     loadCategories();
+  })();
+</script>
+<script>
+  /* ------------------------------------------------------------------ *
+   * Loading screen dismissal.
+   *
+   * Two reasons to wait for `load` rather than a fixed delay: the page is
+   * ready when it says it is, and a visitor on a slow connection sees the
+   * screen until the content behind it has actually arrived. The minimum
+   * keeps the brand moment from flashing past on a cached visit.
+   *
+   * 6 seconds is a hard stop, not a nicety. If an image or the hero video
+   * never finishes, `load` never fires, and without this the page would stay
+   * covered for ever - a blank screen with a spinner, which is the worst
+   * possible failure for a website.
+   * ------------------------------------------------------------------ */
+  (function () {
+    'use strict';
+
+    var screen = document.getElementById('loading-screen');
+    if (!screen) return;
+
+    var MINIMUM = 2000;
+    var CEILING = 6000;
+    var started = window.__pageStart || Date.now();
+    var dismissed = false;
+
+    function dismiss() {
+      if (dismissed) return;
+      dismissed = true;
+
+      screen.classList.add('is-hiding');
+      window.setTimeout(function () {
+        if (screen.parentNode) screen.parentNode.removeChild(screen);
+      }, 500);
+    }
+
+    function dismissWhenReady() {
+      var elapsed = Date.now() - started;
+      window.setTimeout(dismiss, Math.max(0, MINIMUM - elapsed));
+    }
+
+    if (document.readyState === 'complete') dismissWhenReady();
+    else window.addEventListener('load', dismissWhenReady);
+
+    window.setTimeout(dismiss, CEILING);
   })();
 </script>
 </body>
