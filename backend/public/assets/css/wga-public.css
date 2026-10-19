@@ -614,6 +614,42 @@ body.dark-mode .pill-new {
   transition: opacity 0.45s ease, visibility 0s;
 }
 
+/* The About slide trades the 220px icon column for photographs, so it asks for
+   more of the row. Below 720px the single-column rule further down wins and the
+   image simply sits on top of the copy. */
+.slidebar-slide--about {
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+}
+
+.about-media {
+  position: relative;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.about-media img {
+  display: block;
+  width: 100%;
+  /* The markup carries width/height attributes so the box is reserved before
+     the file arrives. Without this the height attribute wins over
+     aspect-ratio and the photograph is squashed to its full pixel height. */
+  height: auto;
+  aspect-ratio: 1400 / 788;
+  object-fit: cover;
+}
+
+.about-media .about-media-inset {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 40%;
+  height: auto;
+  border: 3px solid var(--surface);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+}
+
 .slide-copy h2 {
   font-size: var(--t-xl);
   margin-bottom: var(--s-2);
