@@ -1110,6 +1110,13 @@ body.dark-mode .mini-verify-result::before {
   background: rgba(255, 255, 255, 0.14);
 }
 
+/* An address has no spaces to break at, and the partnership address is 33
+   characters - wider than a 375px column once the container padding is taken
+   off. Without this it pushed the whole page 4px wider than the viewport. */
+a[href^='mailto:'] {
+  overflow-wrap: anywhere;
+}
+
 /* ---------------------------------------------------------------- *
    6. Trust strip and figures
  * ---------------------------------------------------------------- */

@@ -1086,3 +1086,45 @@ body.dark-mode .wga-footer {
     max-width: none;
   }
 }
+
+/* The header is brand + tools in one row. Signed out the tools are "Sign in" and
+   a toggle; signed in the label becomes "Hi, <name>" or "My dashboard", which
+   is long enough to push the toggle past the right edge at 375px. Long names
+   make that worse, and the label is not ours to shorten - so the row wraps
+   instead of clipping. The !important declarations are there to beat two inline
+   styles in courses.html; remove them when that page is rebuilt in 5b-2. */
+@media (max-width: 560px) {
+  .wga-header {
+    flex-wrap: wrap;
+    gap: 6px 10px;
+    padding: 14px 16px 6px;
+  }
+
+  .wga-brand {
+    min-width: 0;
+    font-size: 15px;
+  }
+
+  .wga-brand .brand-mark {
+    flex: 0 0 30px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .wga-header > div {
+    margin-left: auto;
+    min-width: 0;
+    gap: 6px !important;
+  }
+
+  .wga-header .wga-btn {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+  }
+
+  .wga-header .wga-theme-toggle {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+  }
+}
