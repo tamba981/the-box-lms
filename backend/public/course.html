@@ -288,6 +288,77 @@
 
     .pay-steps { margin: 10px 0 0; padding-left: 20px; font-size: 13px; }
     .pay-steps li { margin-bottom: 5px; }
+
+    /* ---------- Breadcrumb ---------- */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 18px 0 4px;
+      font-size: 13.5px;
+      color: var(--text-light);
+    }
+    body.dark-mode .breadcrumb { color: var(--dark-muted); }
+    .breadcrumb a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+    .breadcrumb a:hover { color: var(--primary); border-bottom-color: currentColor; }
+    body.dark-mode .breadcrumb a:hover { color: var(--dark-link); }
+    .breadcrumb [aria-current='page'] {
+      color: inherit;
+      font-weight: 600;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ---------- Tabs ---------- */
+    .course-tabs {
+      display: flex;
+      gap: 4px;
+      margin: 26px 0 22px;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    body.dark-mode .course-tabs { border-color: var(--dark-border); }
+    .course-tabs::-webkit-scrollbar { display: none; }
+
+    .course-tab {
+      appearance: none;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      background: transparent;
+      padding: 11px 14px;
+      font-family: inherit;
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text-light);
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    body.dark-mode .course-tab { color: var(--dark-muted); }
+    .course-tab:hover { color: var(--primary); }
+    body.dark-mode .course-tab:hover { color: var(--dark-link); }
+    .course-tab[aria-selected='true'] {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+    body.dark-mode .course-tab[aria-selected='true'] {
+      color: var(--dark-link);
+      border-bottom-color: var(--dark-link);
+    }
+
+    .course-panel:focus-visible {
+      outline: 3px solid var(--brand);
+      outline-offset: 4px;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
@@ -296,8 +367,8 @@
       <img class="brand-mark" src="/Images/Brand/wuteve-emblem.png" alt="" width="34" height="34" />
       Wuteve <span class="accent">Global Academy</span>
     </a>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <a class="wga-btn wga-btn-ghost" href="/courses.html" style="padding:10px 18px;font-size:14px;">
+    <div class="header-tools">
+      <a class="wga-btn wga-btn-ghost" href="/courses.html">
         <i class="fas fa-arrow-left" aria-hidden="true"></i> Catalog
       </a>
       <button class="wga-theme-toggle" data-theme-toggle type="button" aria-label="Toggle colour theme">🌙</button>
@@ -816,6 +887,10 @@
         var viewer = document.getElementById('viewer');
         if (!viewer || !currentCourse || !lessonId) return;
 
+        // The viewer lives inside the syllabus panel, so a lesson opened from
+        // the buy card or a deep link has to bring its panel into view first.
+        selectTab('syllabus');
+
         openLessonId = lessonId;
         rememberLesson(lessonId);
 
@@ -1010,7 +1085,51 @@
           ? '<img src="' + WGAUI.escapeHtml(course.thumbnail) + '" alt="" style="width:100%;border-radius:16px;margin-bottom:24px;" />'
           : '';
 
+        var instructorHtml = instructorBlock(course.instructor);
+
+        /*
+         * The breadcrumb carries the course name, so the page says where it sits
+         * even when it is reached from a search engine rather than the catalog.
+         * Long titles are cut at 40 characters - the full name is the <h1>
+         * immediately below.
+         */
+        var crumbTitle = course.title || 'Course';
+        if (crumbTitle.length > 40) crumbTitle = crumbTitle.slice(0, 39).replace(/\s+$/, '') + '\u2026';
+
+        var breadcrumb =
+          '<nav class="breadcrumb" aria-label="Breadcrumb">' +
+            '<a href="/">Home</a>' +
+            '<span aria-hidden="true">/</span>' +
+            '<a href="/courses.html">Courses</a>' +
+            '<span aria-hidden="true">/</span>' +
+            '<span aria-current="page">' + WGAUI.escapeHtml(crumbTitle) + '</span>' +
+          '</nav>';
+
+        var tabList = [{ id: 'overview', label: 'Overview' }, { id: 'syllabus', label: 'Syllabus' }];
+        if (instructorHtml) tabList.push({ id: 'instructor', label: 'Instructor' });
+
+        var tabBar =
+          '<nav class="course-tabs" role="tablist" aria-label="Course sections">' +
+          tabList.map(function (tab, index) {
+            return (
+              '<button class="course-tab" type="button" role="tab" id="tab-' + tab.id + '"' +
+              ' aria-controls="panel-' + tab.id + '" data-tab="' + tab.id + '"' +
+              ' aria-selected="' + (index === 0 ? 'true' : 'false') + '"' +
+              ' tabindex="' + (index === 0 ? '0' : '-1') + '">' +
+              WGAUI.escapeHtml(tab.label) +
+              '</button>'
+            );
+          }).join('') +
+          '</nav>';
+
+        var overviewPanel =
+          '<h2 class="section-title">About this course</h2>' +
+          (course.description
+            ? '<p class="desc pre">' + WGAUI.escapeHtml(course.description) + '</p>'
+            : '<p class="wga-muted">No description has been written for this course yet.</p>');
+
         main.innerHTML =
+          breadcrumb +
           '<div class="hero">' +
             '<div>' +
               thumb +
@@ -1037,19 +1156,27 @@
             '</aside>' +
           '</div>' +
 
-          (course.description
-            ? '<h2 class="section-title">About this course</h2><p class="desc pre">' + WGAUI.escapeHtml(course.description) + '</p>'
-            : '') +
+          tabBar +
 
-          instructorBlock(course.instructor) +
-
-          '<section class="viewer" id="viewer" hidden></section>' +
-          '<h2 class="section-title">Syllabus</h2>' +
-          (syllabus.length
-            ? syllabus.map(function (lesson, index) { return lessonRow(lesson, index + 1); }).join('')
-            : WGAUI.emptyState('No lessons published yet', 'The instructor has not published the syllabus for this course.'));
+          '<div class="course-panel" id="panel-overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0">' +
+            overviewPanel +
+          '</div>' +
+          '<div class="course-panel" id="panel-syllabus" role="tabpanel" aria-labelledby="tab-syllabus" tabindex="0" hidden>' +
+            '<section class="viewer" id="viewer" hidden></section>' +
+            '<h2 class="section-title">Syllabus</h2>' +
+            (syllabus.length
+              ? syllabus.map(function (lesson, index) { return lessonRow(lesson, index + 1); }).join('')
+              : WGAUI.emptyState('No lessons published yet', 'The instructor has not published the syllabus for this course.')) +
+          '</div>' +
+          (instructorHtml
+            ? '<div class="course-panel" id="panel-instructor" role="tabpanel" aria-labelledby="tab-instructor" tabindex="0" hidden>' +
+              instructorHtml +
+              '</div>'
+            : '');
 
         bindActions(course);
+        bindTabs();
+        selectTab(initialTab());
 
         /*
          * Honour ?lesson=, so a lesson can be linked to directly and a reload
@@ -1063,6 +1190,100 @@
           });
 
         if (isOpenable) openLesson(wanted);
+      }
+
+      /* ------------------------------------------------------------- *
+       * Tabs
+       *
+       * The ARIA tabs pattern: one tab in the tab order at a time, arrow keys
+       * move between them, and an unselected panel is `hidden` so its controls
+       * - and the lesson viewer inside the syllabus panel - are out of the tab
+       * order as well.
+       * ------------------------------------------------------------- */
+
+      function availableTabs() {
+        return Array.prototype.slice.call(document.querySelectorAll('.course-tab')).map(function (button) {
+          return button.getAttribute('data-tab');
+        });
+      }
+
+      /** Keep the address shareable: ?tab=syllabus reopens on that tab. */
+      function rememberTab(name) {
+        if (!window.history || !window.history.replaceState) return;
+        try {
+          var url = new URL(window.location.href);
+          if (name && name !== 'overview') url.searchParams.set('tab', name);
+          else url.searchParams.delete('tab');
+          if (/^#tab-/.test(url.hash)) url.hash = '';
+          window.history.replaceState({}, '', url);
+        } catch (error) {
+          /* not worth failing over */
+        }
+      }
+
+      function selectTab(name, focus) {
+        var tabs = availableTabs();
+        if (tabs.indexOf(name) === -1) name = tabs[0] || 'overview';
+
+        tabs.forEach(function (tabName) {
+          var button = document.getElementById('tab-' + tabName);
+          var panel = document.getElementById('panel-' + tabName);
+          var selected = tabName === name;
+
+          if (button) {
+            button.setAttribute('aria-selected', selected ? 'true' : 'false');
+            button.setAttribute('tabindex', selected ? '0' : '-1');
+          }
+          if (panel) panel.hidden = !selected;
+        });
+
+        rememberTab(name);
+
+        if (focus) {
+          var target = document.getElementById('tab-' + name);
+          if (target) target.focus();
+        }
+
+        return name;
+      }
+
+      function initialTab() {
+        var wanted = String(WGAUI.param('tab') || '').toLowerCase();
+        if (wanted && availableTabs().indexOf(wanted) !== -1) return wanted;
+
+        var hash = String(window.location.hash || '').replace(/^#/, '');
+        if (hash.indexOf('tab-') === 0) {
+          var byHash = hash.slice(4);
+          if (availableTabs().indexOf(byHash) !== -1) return byHash;
+        }
+
+        return 'overview';
+      }
+
+      function bindTabs() {
+        var list = document.querySelector('.course-tabs');
+        if (!list) return;
+
+        var tabs = Array.prototype.slice.call(list.querySelectorAll('.course-tab'));
+
+        tabs.forEach(function (button, index) {
+          button.addEventListener('click', function () {
+            selectTab(button.getAttribute('data-tab'), false);
+          });
+
+          button.addEventListener('keydown', function (event) {
+            var next = null;
+
+            if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
+            else if (event.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
+            else if (event.key === 'Home') next = 0;
+            else if (event.key === 'End') next = tabs.length - 1;
+            else return;
+
+            event.preventDefault();
+            selectTab(tabs[next].getAttribute('data-tab'), true);
+          });
+        });
       }
 
       function bindActions(course) {
