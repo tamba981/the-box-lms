@@ -8,37 +8,312 @@
   <meta name="description" content="Browse every course at Wuteve Global Academy. Filter by category, level and price." />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="/assets/css/wga-shell.css?v=20261023" />
+  <link rel="stylesheet" href="/assets/css/wga-shell.css?v=20261024" />
   <style>
-    .catalog-head { padding: 26px 0 22px; }
-    .catalog-head h1 { font-size: 32px; font-weight: 900; letter-spacing: -0.8px; margin-bottom: 8px; }
-    .catalog-head p { color: var(--text-light); font-size: 15.5px; }
-    body.dark-mode .catalog-head p { color: var(--dark-muted); }
+    /* `.pager` and `.filter-chips` set display, which would beat the browser's
+       own rule for [hidden] and leave an empty bar on screen. */
+    [hidden] { display: none !important; }
 
-    .filters {
-      display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
-      padding: 16px; margin-bottom: 26px;
-      background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    /* ---------- Search, inside the page-header band ---------- */
+    .catalog-search {
+      position: relative;
+      display: flex;
+      align-items: center;
+      max-width: 520px;
+      margin-top: 22px;
     }
-    body.dark-mode .filters { background: var(--dark-surface); border-color: var(--dark-border); }
-    .filters .grow { flex: 1 1 240px; min-width: 200px; }
-    .filters select { flex: 0 1 170px; }
-    .filters .wga-input, .filters .wga-select { padding: 11px 13px; }
-
-    .results-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 12px; margin-bottom: 16px; font-size: 14px; color: var(--text-light);
+    .catalog-search .wga-input {
+      width: 100%;
+      padding: 13px 46px 13px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.96);
+      color: #0f172a;
+      font-size: 15px;
     }
-    body.dark-mode .results-bar { color: var(--dark-muted); }
+    .catalog-search .wga-input::placeholder { color: #64748b; }
+    .catalog-search .wga-input:focus-visible {
+      outline: 3px solid rgba(191, 215, 255, 0.85);
+      outline-offset: 2px;
+    }
+    .search-clear {
+      position: absolute;
+      right: 8px;
+      width: 32px;
+      height: 32px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: #475569;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    .search-clear:hover { background: #e2e8f0; color: #0f172a; }
 
+    /* ---------- Layout: sidebar + results ---------- */
+    .catalog-layout {
+      display: grid;
+      grid-template-columns: 240px minmax(0, 1fr);
+      gap: 28px;
+      align-items: start;
+      padding-top: 26px;
+    }
+
+    .catalog-results { min-width: 0; }
+
+    .catalog-sidebar {
+      position: sticky;
+      top: 18px;
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+    body.dark-mode .catalog-sidebar { background: var(--dark-surface); border-color: var(--dark-border); }
+
+    .sidebar-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .sidebar-head h2 { font-size: 16px; font-weight: 800; letter-spacing: -0.2px; }
+    .sidebar-close {
+      display: none;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: transparent;
+      color: inherit;
+      font-size: 19px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    body.dark-mode .sidebar-close { border-color: var(--dark-border); }
+
+    .filter-group {
+      border: 0;
+      padding: 0;
+      margin: 0 0 18px;
+    }
+    .filter-group legend {
+      padding: 0;
+      margin-bottom: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+    body.dark-mode .filter-group legend { color: var(--dark-muted); }
+
+    .filter-option {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 6px 0;
+      font-size: 14.5px;
+      color: inherit;
+      cursor: pointer;
+    }
+    .filter-option input {
+      width: 17px;
+      height: 17px;
+      accent-color: var(--primary);
+      flex: 0 0 17px;
+      cursor: pointer;
+    }
+    .filter-option span { min-width: 0; }
+    .filter-option .filter-count-label {
+      margin-left: auto;
+      font-size: 12.5px;
+      color: var(--text-light);
+    }
+    body.dark-mode .filter-option .filter-count-label { color: var(--dark-muted); }
+
+    .sidebar-clear { width: 100%; padding: 10px 14px; font-size: 13.5px; }
+
+    /* Only useful while the sidebar is a drawer: ticking several boxes keeps it
+       open, so there has to be one obvious way back to the results. */
+    .drawer-footer { display: none; margin-top: 10px; }
+    .drawer-footer .wga-btn { width: 100%; }
+
+    /* ---------- Toolbar: count, sort, mobile filter button ---------- */
+    .catalog-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .catalog-count {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-light);
+    }
+    body.dark-mode .catalog-count { color: var(--dark-muted); }
+
+    .catalog-sort {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-light);
+    }
+    body.dark-mode .catalog-sort { color: var(--dark-muted); }
+    .catalog-sort .wga-select { padding: 8px 11px; font-size: 14px; }
+
+    .catalog-filter-btn {
+      display: none;
+      padding: 9px 14px;
+      font-size: 13.5px;
+      gap: 7px;
+    }
+    .filter-count {
+      min-width: 20px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* ---------- Active filter chips ---------- */
+    .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 8px 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface);
+      font-size: 13px;
+      color: inherit;
+    }
+    body.dark-mode .filter-chip { background: var(--dark-surface); border-color: var(--dark-border); }
+    .filter-chip button {
+      display: grid;
+      place-items: center;
+      width: 19px;
+      height: 19px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.08);
+      color: inherit;
+      font-size: 13px;
+      line-height: 1;
+      cursor: pointer;
+    }
+    body.dark-mode .filter-chip button { background: rgba(255, 255, 255, 0.14); }
+    .filter-chip button:hover { background: var(--primary); color: #fff; }
+    .chips-clear {
+      border: 0;
+      background: transparent;
+      padding: 4px 2px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    body.dark-mode .chips-clear { color: var(--dark-link); }
+
+    /* ---------- Results, pager, empty state ---------- */
     .pager { display: flex; justify-content: center; align-items: center; gap: 14px; margin-top: 34px; }
 
-    .card-locked {
-      position: absolute; top: 10px; right: 10px;
-      background: rgba(15,23,42,.72); color: #fff; font-size: 11px;
-      padding: 4px 10px; border-radius: 999px; font-weight: 600;
+    .catalog-empty {
+      grid-column: 1 / -1;
+      padding: 44px 24px;
+      text-align: center;
+      border: 1px dashed var(--border);
+      border-radius: 14px;
     }
-    .thumb-wrap { position: relative; }
+    body.dark-mode .catalog-empty { border-color: var(--dark-border); }
+    .catalog-empty h3 { font-size: 19px; font-weight: 800; margin-bottom: 8px; }
+    .catalog-empty p { color: var(--text-light); font-size: 14.5px; margin-bottom: 20px; }
+    body.dark-mode .catalog-empty p { color: var(--dark-muted); }
+    .catalog-empty-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+    /* ---------- Mobile: drawer ---------- */
+    .filter-scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      background: rgba(2, 6, 23, 0.55);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .filter-scrim.is-open { opacity: 1; pointer-events: auto; }
+
+    @media (max-width: 900px) {
+      .catalog-layout { grid-template-columns: minmax(0, 1fr); padding-top: 18px; }
+      .catalog-filter-btn { display: inline-flex; }
+      .catalog-sort { margin-left: 0; }
+
+      .catalog-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 41;
+        width: min(86vw, 320px);
+        height: 100%;
+        max-height: 100%;
+        overflow-y: auto;
+        border-radius: 0;
+        border-left: 0;
+        border-top: 0;
+        border-bottom: 0;
+        padding: 20px 18px calc(20px + env(safe-area-inset-bottom));
+        transform: translateX(-102%);
+        transition: transform 0.22s ease;
+        display: block;
+        visibility: hidden;
+      }
+      .catalog-sidebar.is-open { transform: translateX(0); visibility: visible; }
+      .sidebar-close { display: grid; place-items: center; }
+      .sidebar-clear { margin-bottom: 8px; }
+      .drawer-footer { display: block; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .catalog-sidebar, .filter-scrim { transition: none; }
+    }
+
+    /* ---------- Back to top (mobile only) ---------- */
+    .to-top {
+      position: fixed;
+      right: 16px;
+      bottom: calc(16px + env(safe-area-inset-bottom));
+      z-index: 30;
+      width: 44px;
+      height: 44px;
+      display: none;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--surface);
+      color: inherit;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.18);
+    }
+    body.dark-mode .to-top { background: var(--dark-surface); border-color: var(--dark-border); }
+    .to-top.is-visible { display: grid; }
+    @media (min-width: 901px) { .to-top { display: none !important; } }
   </style>
 </head>
 <body>
@@ -47,8 +322,8 @@
       <img class="brand-mark" src="/Images/Brand/wuteve-emblem.png" alt="" width="34" height="34" />
       Wuteve <span class="accent">Global Academy</span>
     </a>
-    <div style="display:flex;align-items:center;gap:10px;">
-      <a class="wga-btn wga-btn-ghost" id="dashboard-link" href="/login.html" style="padding:10px 18px;font-size:14px;">
+    <div class="header-tools">
+      <a class="wga-btn wga-btn-ghost" id="dashboard-link" href="/login.html">
         <i class="fas fa-right-to-bracket" aria-hidden="true"></i> <span id="dashboard-label">Sign in</span>
       </a>
       <button class="wga-theme-toggle" data-theme-toggle type="button" aria-label="Toggle colour theme">🌙</button>
@@ -56,70 +331,102 @@
   </header>
 
   <header class="page-header">
-    <img class="page-header-bg" src="/Images/hero/hero-poster.jpg?v=20261023" alt="" aria-hidden="true" />
+    <img class="page-header-bg" src="/Images/hero/hero-poster.jpg?v=20261024" alt="" aria-hidden="true" />
     <div class="page-header-inner">
       <h1>Course catalog</h1>
       <p>Every published course, taught by our instructors. Free courses start immediately.</p>
+      <div class="catalog-search">
+        <input class="wga-input" type="search" id="q" name="q" placeholder="Search courses, topics or instructors…"
+               autocomplete="off" aria-label="Search courses" />
+        <button class="search-clear" id="q-clear" type="button" aria-label="Clear search" hidden>&times;</button>
+      </div>
     </div>
   </header>
 
   <main class="wga-main">
-    <form class="filters" id="filters">
-      <div class="grow">
-        <input class="wga-input" type="search" id="q" name="q" placeholder="Search courses, topics or instructors…"
-               autocomplete="off" aria-label="Search courses" />
+    <div class="catalog-layout">
+      <aside class="catalog-sidebar" id="catalog-sidebar" aria-label="Filter courses">
+        <div class="sidebar-head">
+          <h2>Filters</h2>
+          <button class="sidebar-close" id="filter-close" type="button" aria-label="Close filters">&times;</button>
+        </div>
+
+        <fieldset class="filter-group">
+          <legend>Category</legend>
+          <div id="category-options"></div>
+        </fieldset>
+
+        <fieldset class="filter-group">
+          <legend>Level</legend>
+          <label class="filter-option"><input type="checkbox" name="level" value="beginner" /><span>Beginner</span></label>
+          <label class="filter-option"><input type="checkbox" name="level" value="intermediate" /><span>Intermediate</span></label>
+          <label class="filter-option"><input type="checkbox" name="level" value="advanced" /><span>Advanced</span></label>
+        </fieldset>
+
+        <fieldset class="filter-group">
+          <legend>Price</legend>
+          <label class="filter-option"><input type="radio" name="price" value="" checked /><span>Any price</span></label>
+          <label class="filter-option"><input type="radio" name="price" value="free" /><span>Free only</span></label>
+          <label class="filter-option"><input type="radio" name="price" value="paid" /><span>Paid</span></label>
+        </fieldset>
+
+        <fieldset class="filter-group">
+          <legend>Credential</legend>
+          <div id="credential-options"></div>
+        </fieldset>
+
+        <button class="wga-btn wga-btn-ghost sidebar-clear" id="clear-all" type="button">Clear all filters</button>
+
+        <div class="drawer-footer">
+          <button class="wga-btn" id="drawer-done" type="button">Show results</button>
+        </div>
+      </aside>
+
+      <div class="catalog-results">
+        <div class="catalog-toolbar">
+          <button class="wga-btn wga-btn-ghost catalog-filter-btn" id="filter-toggle" type="button"
+                  aria-expanded="false" aria-controls="catalog-sidebar">
+            <i class="fas fa-sliders" aria-hidden="true"></i> Filters
+            <span class="filter-count" id="filter-count" hidden>0</span>
+          </button>
+
+          <p class="catalog-count" id="count" role="status" aria-live="polite">Loading courses…</p>
+
+          <label class="catalog-sort" for="sort">
+            <span>Sort:</span>
+            <select class="wga-select" id="sort" name="sort" aria-label="Sort courses by">
+              <option value="newest">Newest first</option>
+              <option value="popular">Most popular</option>
+              <option value="rating">Highest rated</option>
+              <option value="price_asc">Price: low to high</option>
+              <option value="price_desc">Price: high to low</option>
+              <option value="title">Title: A to Z</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="filter-chips" id="chips" hidden></div>
+
+        <div class="wga-grid wga-grid-cards" id="results"></div>
+
+        <div class="pager" id="pager" hidden>
+          <button class="wga-btn wga-btn-ghost" type="button" id="prev">
+            <i class="fas fa-chevron-left" aria-hidden="true"></i> Previous
+          </button>
+          <span id="page-label" class="wga-muted"></span>
+          <button class="wga-btn wga-btn-ghost" type="button" id="next">
+            Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
+          </button>
+        </div>
       </div>
-
-      <select class="wga-select" id="category" name="category" aria-label="Filter by category">
-        <option value="">All categories</option>
-      </select>
-
-      <select class="wga-select" id="credential" name="credential" aria-label="Filter by credential">
-        <option value="">Any credential</option>
-      </select>
-
-      <select class="wga-select" id="level" name="level" aria-label="Filter by level">
-        <option value="">All levels</option>
-        <option value="beginner">Beginner</option>
-        <option value="intermediate">Intermediate</option>
-        <option value="advanced">Advanced</option>
-      </select>
-
-      <select class="wga-select" id="price" name="price" aria-label="Filter by price">
-        <option value="">Any price</option>
-        <option value="free">Free</option>
-        <option value="paid">Paid</option>
-      </select>
-
-      <select class="wga-select" id="sort" name="sort" aria-label="Sort results">
-        <option value="newest">Newest first</option>
-        <option value="popular">Most popular</option>
-        <option value="rating">Highest rated</option>
-        <option value="price_asc">Price: low to high</option>
-        <option value="price_desc">Price: high to low</option>
-        <option value="title">Title A–Z</option>
-      </select>
-    </form>
-
-    <div class="results-bar">
-      <span id="count">Loading courses…</span>
-      <button class="wga-btn wga-btn-ghost" type="button" id="clear" style="display:none;padding:8px 15px;font-size:13px;">
-        <i class="fas fa-xmark" aria-hidden="true"></i> Clear filters
-      </button>
-    </div>
-
-    <div class="wga-grid wga-grid-cards" id="results" aria-live="polite"></div>
-
-    <div class="pager" id="pager" style="display:none;">
-      <button class="wga-btn wga-btn-ghost" type="button" id="prev">
-        <i class="fas fa-chevron-left" aria-hidden="true"></i> Previous
-      </button>
-      <span id="page-label" class="wga-muted"></span>
-      <button class="wga-btn wga-btn-ghost" type="button" id="next">
-        Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
-      </button>
     </div>
   </main>
+
+  <div class="filter-scrim" id="filter-scrim"></div>
+
+  <button class="to-top" id="to-top" type="button" aria-label="Back to top">
+    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+  </button>
 
   <script src="/assets/js/wga-api.js?v=20261021"></script>
   <script src="/assets/js/wga-ui.js?v=20261021"></script>
@@ -129,24 +436,58 @@
 
       WGAUI.initTheme();
 
+      var PAGE_SIZE = 12;
+      var DEBOUNCE_MS = 300;
+      // One fetch, filtered in the browser. Multi-select needs it: the list
+      // endpoint takes a single category, so asking it for "business OR
+      // technology" is not expressible there. The cap keeps that honest - if
+      // the catalog ever passes it, the count below would be a lie, so it is
+      // reported rather than hidden.
+      var FETCH_LIMIT = 100;
+
       var results = document.getElementById('results');
       var count = document.getElementById('count');
       var pager = document.getElementById('pager');
       var pageLabel = document.getElementById('page-label');
       var prev = document.getElementById('prev');
       var next = document.getElementById('next');
-      var clearButton = document.getElementById('clear');
+      var chips = document.getElementById('chips');
+      var sortSelect = document.getElementById('sort');
+      var searchInput = document.getElementById('q');
+      var searchClear = document.getElementById('q-clear');
+      var filterToggle = document.getElementById('filter-toggle');
+      var filterClose = document.getElementById('filter-close');
+      var filterScrim = document.getElementById('filter-scrim');
+      var sidebar = document.getElementById('catalog-sidebar');
+      var filterCount = document.getElementById('filter-count');
+      var toTop = document.getElementById('to-top');
+      var drawerDone = document.getElementById('drawer-done');
 
-      var state = { page: 1, limit: 12, totalPages: 1 };
+      var state = {
+        courses: [],
+        facets: [],
+        credentials: [],
+        ratingsAvailable: false,
+        truncated: false
+      };
+
+      /* ---------------- URL state ---------------- */
+
+      function readList(params, key) {
+        return (params.get(key) || '')
+          .split(',')
+          .map(function (value) { return value.trim(); })
+          .filter(Boolean);
+      }
 
       /** Keep the URL in step with the filters, so a result set is shareable. */
       function readFilters() {
         var params = new URLSearchParams(window.location.search);
         return {
           q: params.get('q') || '',
-          category: params.get('category') || '',
-          credential: params.get('credential') || '',
-          level: params.get('level') || '',
+          category: readList(params, 'category'),
+          credential: readList(params, 'credential'),
+          level: readList(params, 'level'),
           price: params.get('price') || '',
           sort: params.get('sort') || 'newest',
           page: Math.max(1, parseInt(params.get('page'), 10) || 1)
@@ -155,41 +496,114 @@
 
       function writeFilters(filters) {
         var params = new URLSearchParams();
-        Object.keys(filters).forEach(function (key) {
-          var value = filters[key];
-          if (value && !(key === 'sort' && value === 'newest') && !(key === 'page' && value === 1)) {
-            params.set(key, value);
-          }
-        });
+        if (filters.q) params.set('q', filters.q);
+        if (filters.category.length) params.set('category', filters.category.join(','));
+        if (filters.credential.length) params.set('credential', filters.credential.join(','));
+        if (filters.level.length) params.set('level', filters.level.join(','));
+        if (filters.price) params.set('price', filters.price);
+        if (filters.sort && filters.sort !== 'newest') params.set('sort', filters.sort);
+        if (filters.page && filters.page > 1) params.set('page', filters.page);
 
         var query = params.toString();
         window.history.replaceState({}, '', query ? '/courses.html?' + query : '/courses.html');
       }
 
-      function applyFiltersToControls(filters) {
-        document.getElementById('q').value = filters.q;
-        document.getElementById('category').value = filters.category;
-        document.getElementById('credential').value = filters.credential;
-        document.getElementById('level').value = filters.level;
-        document.getElementById('price').value = filters.price;
-        document.getElementById('sort').value = filters.sort;
+      function checkedValues(name) {
+        return Array.prototype.slice
+          .call(document.querySelectorAll('input[name="' + name + '"]:checked'))
+          .map(function (input) { return input.value; });
       }
 
       function currentControls(page) {
-        var filters = readFilters();
-        filters.q = document.getElementById('q').value.trim();
-        filters.category = document.getElementById('category').value;
-        filters.credential = document.getElementById('credential').value;
-        filters.level = document.getElementById('level').value;
-        filters.price = document.getElementById('price').value;
-        filters.sort = document.getElementById('sort').value;
-        filters.page = page || 1;
-        return filters;
+        var price = document.querySelector('input[name="price"]:checked');
+        return {
+          q: searchInput.value.trim(),
+          category: checkedValues('category'),
+          credential: checkedValues('credential'),
+          level: checkedValues('level'),
+          price: price ? price.value : '',
+          sort: sortSelect.value,
+          page: page || 1
+        };
+      }
+
+      function applyFiltersToControls(filters) {
+        searchInput.value = filters.q;
+        searchClear.hidden = !filters.q;
+
+        Array.prototype.forEach.call(document.querySelectorAll('input[name="category"]'), function (input) {
+          input.checked = filters.category.indexOf(input.value) !== -1;
+        });
+        Array.prototype.forEach.call(document.querySelectorAll('input[name="credential"]'), function (input) {
+          input.checked = filters.credential.indexOf(input.value) !== -1;
+        });
+        Array.prototype.forEach.call(document.querySelectorAll('input[name="level"]'), function (input) {
+          input.checked = filters.level.indexOf(input.value) !== -1;
+        });
+
+        var price = document.querySelector('input[name="price"][value="' + filters.price + '"]');
+        if (price) price.checked = true;
+        sortSelect.value = filters.sort;
+      }
+
+      function activeFilterCount(filters) {
+        return filters.category.length + filters.credential.length + filters.level.length + (filters.price ? 1 : 0);
       }
 
       function hasActiveFilters(filters) {
-        return Boolean(filters.q || filters.category || filters.credential || filters.level || filters.price);
+        return Boolean(filters.q || activeFilterCount(filters));
       }
+
+      /* ---------------- Filtering and sorting ---------------- */
+
+      function matches(course, filters) {
+        var term = filters.q.toLowerCase();
+        if (term) {
+          var haystack = [
+            course.title,
+            course.summary,
+            course.category,
+            course.level,
+            course.credential,
+            course.instructorName,
+            (course.tags || []).join(' ')
+          ].join(' ').toLowerCase();
+          if (haystack.indexOf(term) === -1) return false;
+        }
+        if (filters.category.length && filters.category.indexOf(course.category) === -1) return false;
+        if (filters.credential.length && filters.credential.indexOf(course.credential) === -1) return false;
+        if (filters.level.length && filters.level.indexOf(course.level) === -1) return false;
+        if (filters.price === 'free' && !course.isFree) return false;
+        if (filters.price === 'paid' && course.isFree) return false;
+        return true;
+      }
+
+      function publishedAt(course) {
+        return new Date(course.publishedAt || course.createdAt || 0).getTime() || 0;
+      }
+
+      function sortCourses(courses, sort) {
+        var copy = courses.slice();
+        copy.sort(function (a, b) {
+          switch (sort) {
+            case 'popular':
+              return (b.enrolledCount || 0) - (a.enrolledCount || 0) || publishedAt(b) - publishedAt(a);
+            case 'rating':
+              return (b.rating || 0) - (a.rating || 0) || publishedAt(b) - publishedAt(a);
+            case 'price_asc':
+              return (a.priceCents || 0) - (b.priceCents || 0) || a.title.localeCompare(b.title);
+            case 'price_desc':
+              return (b.priceCents || 0) - (a.priceCents || 0) || a.title.localeCompare(b.title);
+            case 'title':
+              return a.title.localeCompare(b.title);
+            default:
+              return publishedAt(b) - publishedAt(a) || a.title.localeCompare(b.title);
+          }
+        });
+        return copy;
+      }
+
+      /* ---------------- Rendering ---------------- */
 
       function skeleton() {
         var markup = '';
@@ -206,152 +620,333 @@
         results.innerHTML = markup;
       }
 
-      /**
-       * The card itself lives in WGAUI.courseCard, shared with the homepage and
-       * the audience pages.
-       *
-       * It used to be written out here as well, and the two copies drifted: this
-       * one showed an enrolled count the homepage did not, the homepage showed a
-       * rating this one could not, and a change made in either place reached only
-       * half the site.
-       */
-      function courseCard(course) {
-        return WGAUI.courseCard(course);
+      function labelForCategory(slug) {
+        for (var index = 0; index < state.facets.length; index += 1) {
+          if (state.facets[index].name === slug) {
+            return state.facets[index].label || state.facets[index].name;
+          }
+        }
+        return slug;
       }
 
-      function load(filters) {
-        skeleton();
-        count.textContent = 'Loading courses…';
-        pager.style.display = 'none';
+      function labelForCredential(slug) {
+        for (var index = 0; index < state.credentials.length; index += 1) {
+          if (state.credentials[index].slug === slug) return state.credentials[index].label;
+        }
+        return slug;
+      }
 
-        WGA.get('/courses', {
-          query: {
-            q: filters.q,
-            category: filters.category,
-            credential: filters.credential,
-            level: filters.level,
-            price: filters.price,
-            sort: filters.sort,
-            page: filters.page,
-            limit: state.limit
-          }
-        })
-          .then(function (data) {
-            state.totalPages = data.pagination.totalPages;
+      function titleCase(value) {
+        return value.charAt(0).toUpperCase() + value.slice(1);
+      }
 
-            if (!data.items.length) {
-              results.innerHTML = WGAUI.emptyState(
-                hasActiveFilters(filters)
-                  ? 'No courses match those filters'
-                  : 'No courses are published yet',
-                hasActiveFilters(filters)
-                  ? 'Try a different search term, or clear the filters.'
-                  : 'Please check back soon.'
-              );
+      function renderChips(filters) {
+        var items = [];
+
+        filters.category.forEach(function (value) {
+          items.push({ key: 'category', value: value, text: 'Category: ' + labelForCategory(value) });
+        });
+        filters.credential.forEach(function (value) {
+          items.push({ key: 'credential', value: value, text: 'Credential: ' + labelForCredential(value) });
+        });
+        filters.level.forEach(function (value) {
+          items.push({ key: 'level', value: value, text: 'Level: ' + titleCase(value) });
+        });
+        if (filters.price) {
+          items.push({ key: 'price', value: filters.price, text: 'Price: ' + (filters.price === 'free' ? 'Free' : 'Paid') });
+        }
+
+        if (!items.length) {
+          chips.hidden = true;
+          chips.innerHTML = '';
+          return;
+        }
+
+        chips.hidden = false;
+        chips.innerHTML =
+          items.map(function (item) {
+            return (
+              '<span class="filter-chip">' + WGAUI.escapeHtml(item.text) +
+              '<button type="button" data-chip-key="' + item.key + '" data-chip-value="' + WGAUI.escapeHtml(item.value) +
+              '" aria-label="Remove ' + WGAUI.escapeHtml(item.text) + '">&times;</button></span>'
+            );
+          }).join('') +
+          '<button type="button" class="chips-clear" id="chips-clear">Clear all</button>';
+
+        chips.querySelectorAll('[data-chip-key]').forEach(function (button) {
+          button.addEventListener('click', function () {
+            var key = button.getAttribute('data-chip-key');
+            var value = button.getAttribute('data-chip-value');
+            var filters2 = currentControls(1);
+
+            if (key === 'price') {
+              filters2.price = '';
+            } else if (key === 'category') {
+              filters2.category = filters2.category.filter(function (item) { return item !== value; });
+            } else if (key === 'credential') {
+              filters2.credential = filters2.credential.filter(function (item) { return item !== value; });
             } else {
-              results.innerHTML = data.items.map(courseCard).join('');
+              filters2.level = filters2.level.filter(function (item) { return item !== value; });
             }
 
-            count.textContent =
-              data.pagination.total === 1
-                ? '1 course'
-                : data.pagination.total + ' courses';
-
-            clearButton.style.display = hasActiveFilters(filters) ? '' : 'none';
-
-            if (state.totalPages > 1) {
-              pager.style.display = '';
-              pageLabel.textContent = 'Page ' + data.pagination.page + ' of ' + data.pagination.totalPages;
-              prev.disabled = !data.pagination.hasPrevPage;
-              next.disabled = !data.pagination.hasNextPage;
-            }
-          })
-          .catch(function (error) {
-            results.innerHTML = WGAUI.emptyState('We could not load the catalog', error.message || 'Please try again.');
-            count.textContent = '';
+            applyFiltersToControls(filters2);
+            apply(1);
           });
+        });
+
+        var clearChips = document.getElementById('chips-clear');
+        if (clearChips) clearChips.addEventListener('click', clearEverything);
+      }
+
+      function renderEmpty(filters) {
+        if (!hasActiveFilters(filters)) {
+          results.innerHTML = WGAUI.emptyState('No courses are published yet', 'Please check back soon.');
+          return;
+        }
+
+        results.innerHTML =
+          '<div class="catalog-empty">' +
+          '<h3>No courses match your filters</h3>' +
+          '<p>Try removing some filters, or browse all courses.</p>' +
+          '<div class="catalog-empty-actions">' +
+          '<button class="wga-btn" type="button" id="empty-clear">Clear all filters</button>' +
+          '<a class="wga-btn wga-btn-ghost" href="/courses.html">Browse all</a>' +
+          '</div></div>';
+
+        var emptyClear = document.getElementById('empty-clear');
+        if (emptyClear) emptyClear.addEventListener('click', clearEverything);
+      }
+
+      function render(filters) {
+        var filtered = sortCourses(state.courses.filter(function (course) {
+          return matches(course, filters);
+        }), filters.sort);
+
+        var totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+        var page = Math.min(Math.max(1, filters.page), totalPages);
+        var start = (page - 1) * PAGE_SIZE;
+        var pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+        if (!pageItems.length) {
+          renderEmpty(filters);
+        } else {
+          results.innerHTML = pageItems.map(function (course) {
+            return WGAUI.courseCard(course);
+          }).join('');
+        }
+
+        var shown = pageItems.length;
+        count.textContent =
+          shown === 0
+            ? 'No courses'
+            : 'Showing ' + shown + ' of ' + filtered.length + (filtered.length === 1 ? ' course' : ' courses');
+
+        pager.hidden = totalPages <= 1;
+        if (totalPages > 1) {
+          pageLabel.textContent = 'Page ' + page + ' of ' + totalPages;
+          prev.disabled = page <= 1;
+          next.disabled = page >= totalPages;
+        }
+
+        var activeCount = activeFilterCount(filters);
+        filterCount.textContent = String(activeCount);
+        filterCount.hidden = activeCount === 0;
+
+        drawerDone.textContent =
+          shown === 0 ? 'Show results' : 'Show ' + shown + (shown === 1 ? ' result' : ' results');
+
+        renderChips(filters);
+
+        // The visible count is the live region; this keeps the announcement
+        // accurate even when the phrasing above changes.
+        count.setAttribute('aria-label', count.textContent);
       }
 
       function apply(page) {
         var filters = currentControls(page);
         writeFilters(filters);
-        load(filters);
+        render(filters);
       }
 
-      /**
-       * Filter options come from the server, so the lists can never drift from
-       * the courses that actually exist.
-       *
-       * Categories are facets — only the ones with published courses, each with
-       * its count — because offering a category that returns nothing looks like
-       * a broken site. Credentials are the fixed vocabulary, deliberately
-       * without `degree`: the catalog must not imply a qualification the
-       * academy cannot award.
-       */
-      Promise.all([
-        WGA.get('/courses/categories').catch(function () { return { categories: [] }; }),
-        WGA.get('/courses/taxonomy').catch(function () { return { credentials: [] }; })
-      ]).then(function (responses) {
-        var facets = responses[0].categories || [];
-        var taxonomy = responses[1].credentials || [];
-
-        // Shared with WGAUI.courseCard, so a card prints the label the filter
-        // prints rather than the slug the course is filed under.
-        WGAUI.setCategoryLabels(facets);
-
-        var categorySelect = document.getElementById('category');
-        facets.forEach(function (category) {
-          var option = document.createElement('option');
-          option.value = category.name;
-          option.textContent = (category.label || category.name) + ' (' + category.count + ')';
-          categorySelect.appendChild(option);
+      function clearEverything() {
+        searchInput.value = '';
+        searchClear.hidden = true;
+        Array.prototype.forEach.call(document.querySelectorAll('input[type="checkbox"]'), function (input) {
+          input.checked = false;
         });
-
-        var credentialSelect = document.getElementById('credential');
-        taxonomy.forEach(function (credential) {
-          var option = document.createElement('option');
-          option.value = credential.slug;
-          option.textContent = credential.label;
-          credentialSelect.appendChild(option);
-        });
-
-        var initial = readFilters();
-        applyFiltersToControls(initial);
-        apply(initial.page);
-      });
-
-      document.getElementById('filters').addEventListener('submit', function (event) {
-        event.preventDefault();
+        var anyPrice = document.querySelector('input[name="price"][value=""]');
+        if (anyPrice) anyPrice.checked = true;
+        sortSelect.value = 'newest';
         apply(1);
+        closeDrawer();
+      }
+
+      /* ---------------- Drawer ---------------- */
+
+      function isMobile() {
+        return window.matchMedia('(max-width: 900px)').matches;
+      }
+
+      function openDrawer() {
+        sidebar.classList.add('is-open');
+        filterScrim.classList.add('is-open');
+        filterToggle.setAttribute('aria-expanded', 'true');
+        var focusable = sidebar.querySelector('input, button, [href]');
+        if (focusable) focusable.focus();
+      }
+
+      function closeDrawer(returnFocus) {
+        if (!isMobile()) return;
+        if (!sidebar.classList.contains('is-open')) return;
+        sidebar.classList.remove('is-open');
+        filterScrim.classList.remove('is-open');
+        filterToggle.setAttribute('aria-expanded', 'false');
+        if (returnFocus) filterToggle.focus();
+      }
+
+      filterToggle.addEventListener('click', function () {
+        if (sidebar.classList.contains('is-open')) closeDrawer(true);
+        else openDrawer();
+      });
+      drawerDone.addEventListener('click', function () { closeDrawer(true); });
+      filterClose.addEventListener('click', function () { closeDrawer(true); });
+      filterScrim.addEventListener('click', function () { closeDrawer(true); });
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') closeDrawer(true);
       });
 
-      var debounce = null;
-      document.getElementById('q').addEventListener('input', function () {
-        clearTimeout(debounce);
-        debounce = setTimeout(function () { apply(1); }, 380);
+      /* ---------------- Back to top ---------------- */
+
+      function updateToTop() {
+        toTop.classList.toggle('is-visible', window.scrollY > 500 && isMobile());
+      }
+      window.addEventListener('scroll', updateToTop, { passive: true });
+      window.addEventListener('resize', updateToTop);
+      toTop.addEventListener('click', function () {
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+        var first = sidebar.querySelector('input');
+        if (isMobile() && first) first.focus({ preventScroll: true });
       });
 
-      ['category', 'credential', 'level', 'price', 'sort'].forEach(function (id) {
-        document.getElementById(id).addEventListener('change', function () { apply(1); });
+      /* ---------------- Controls ---------------- */
+
+      searchInput.addEventListener('input', function () {
+        searchClear.hidden = !searchInput.value;
+        clearTimeout(searchInput.debounce);
+        searchInput.debounce = setTimeout(function () { apply(1); }, DEBOUNCE_MS);
       });
 
-      clearButton.addEventListener('click', function () {
-        document.getElementById('q').value = '';
-        document.getElementById('category').value = '';
-        document.getElementById('credential').value = '';
-        document.getElementById('level').value = '';
-        document.getElementById('price').value = '';
-        document.getElementById('sort').value = 'newest';
+      searchClear.addEventListener('click', function () {
+        searchInput.value = '';
+        searchClear.hidden = true;
         apply(1);
+        searchInput.focus();
       });
+
+      sortSelect.addEventListener('change', function () { apply(1); });
+
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="category"], input[name="credential"], input[name="level"], input[name="price"]'), function (input) {
+        input.addEventListener('change', function () { apply(1); });
+      });
+
+      document.getElementById('clear-all').addEventListener('click', clearEverything);
 
       prev.addEventListener('click', function () {
-        if (state.totalPages > 1) apply(Math.max(1, parseInt(readFilters().page, 10) - 1));
+        var current = readFilters().page;
+        if (current > 1) apply(current - 1);
       });
 
       next.addEventListener('click', function () {
-        var current = parseInt(readFilters().page, 10);
-        if (current < state.totalPages) apply(current + 1);
+        var filters = currentControls(1);
+        var filtered = state.courses.filter(function (course) { return matches(course, filters); });
+        var totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+        var current = readFilters().page;
+        if (current < totalPages) apply(current + 1);
+      });
+
+      /* ---------------- Boot ---------------- */
+
+      function option(value, label, count) {
+        return (
+          '<label class="filter-option"><input type="checkbox" name="__NAME__" value="' +
+          WGAUI.escapeHtml(value) + '" /><span>' + WGAUI.escapeHtml(label) + '</span>' +
+          (typeof count === 'number' ? '<span class="filter-count-label">' + count + '</span>' : '') +
+          '</label>'
+        );
+      }
+
+      function buildFacetOptions() {
+        var categories = document.getElementById('category-options');
+        categories.innerHTML = state.facets.map(function (facet) {
+          return option(facet.name, facet.label || facet.name, facet.count).replace('__NAME__', 'category');
+        }).join('') || '<p class="wga-muted" style="font-size:13.5px;">No categories yet.</p>';
+
+        var credentials = document.getElementById('credential-options');
+        credentials.innerHTML = state.credentials.map(function (credential) {
+          return option(credential.slug, credential.label).replace('__NAME__', 'credential');
+        }).join('');
+
+        // The new inputs need the same handler the static ones got above.
+        Array.prototype.forEach.call(categories.querySelectorAll('input'), function (input) {
+          input.addEventListener('change', function () { apply(1); });
+        });
+        Array.prototype.forEach.call(credentials.querySelectorAll('input'), function (input) {
+          input.addEventListener('change', function () { apply(1); });
+        });
+      }
+
+      function prepareSort() {
+        state.ratingsAvailable = state.courses.some(function (course) {
+          return (course.ratingCount || 0) > 0;
+        });
+
+        var ratingOption = sortSelect.querySelector('option[value="rating"]');
+        if (ratingOption) {
+          ratingOption.disabled = !state.ratingsAvailable;
+          if (!state.ratingsAvailable) {
+            ratingOption.title = 'No ratings yet';
+            sortSelect.setAttribute('title', 'Highest rated is unavailable until a course has been rated');
+          }
+        }
+
+        // A shared URL can still name a sort that the data does not support.
+        if (!state.ratingsAvailable && sortSelect.value === 'rating') {
+          sortSelect.value = 'newest';
+        }
+      }
+
+      skeleton();
+
+      Promise.all([
+        WGA.get('/courses', { query: { page: 1, limit: FETCH_LIMIT } }),
+        WGA.get('/courses/categories').catch(function () { return { categories: [] }; }),
+        WGA.get('/courses/taxonomy').catch(function () { return { credentials: [] }; })
+      ]).then(function (responses) {
+        var catalog = responses[0];
+
+        state.courses = catalog.items || [];
+        state.facets = responses[1].categories || [];
+        state.credentials = responses[2].credentials || [];
+        state.truncated = Boolean(catalog.pagination && catalog.pagination.total > state.courses.length);
+
+        // Shared with WGAUI.courseCard, so a card prints the label the filter
+        // prints rather than the slug the course is filed under.
+        WGAUI.setCategoryLabels(state.facets);
+
+        buildFacetOptions();
+        prepareSort();
+
+        var initial = readFilters();
+        applyFiltersToControls(initial);
+        render(initial);
+
+        if (state.truncated) {
+          count.textContent = count.textContent + ' — showing the first ' + state.courses.length;
+        }
+      }).catch(function (error) {
+        results.innerHTML = WGAUI.emptyState('We could not load the catalog', error.message || 'Please try again.');
+        count.textContent = 'Could not load courses';
       });
 
       // Point the header button at the right place for whoever is reading.
@@ -360,6 +955,8 @@
         document.getElementById('dashboard-link').href = WGA.homeForRole(user && user.role);
         document.getElementById('dashboard-label').textContent = 'My dashboard';
       }
+
+      updateToTop();
     })();
   </script>
   <footer class="wga-footer">

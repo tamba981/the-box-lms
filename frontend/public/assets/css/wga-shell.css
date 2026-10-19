@@ -1091,8 +1091,14 @@ body.dark-mode .wga-footer {
    a toggle; signed in the label becomes "Hi, <name>" or "My dashboard", which
    is long enough to push the toggle past the right edge at 375px. Long names
    make that worse, and the label is not ours to shorten - so the row wraps
-   instead of clipping. The !important declarations are there to beat two inline
-   styles in courses.html; remove them when that page is rebuilt in 5b-2. */
+   instead of clipping. */
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
 @media (max-width: 560px) {
   .wga-header {
     flex-wrap: wrap;
@@ -1111,15 +1117,14 @@ body.dark-mode .wga-footer {
     height: 30px;
   }
 
-  .wga-header > div {
+  .header-tools {
     margin-left: auto;
-    min-width: 0;
-    gap: 6px !important;
+    gap: 6px;
   }
 
-  .wga-header .wga-btn {
-    padding: 8px 12px !important;
-    font-size: 13px !important;
+  .header-tools .wga-btn {
+    padding: 8px 12px;
+    font-size: 13px;
   }
 
   .wga-header .wga-theme-toggle {
