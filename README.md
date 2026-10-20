@@ -412,22 +412,55 @@ npm run verify:deploy -- https://wuteveglobalacademy.com   # after deploying
 The second one fails if a same-origin write is refused, which is the failure that
 would otherwise take the whole site down while every health check still passed.
 
-### `www.wuteveglobalacademy.com` is intentionally unsupported
+### DNS: the apex CNAME shadows the mail records
 
-Only the apex domain is served. `www` is **not** a supported hostname and no
-redirect is issued, so links must always use `https://wuteveglobalacademy.com`.
+Verified on 2026-10-20 with `Resolve-DnsName` against `8.8.8.8`, `1.1.1.1`
+and the authoritative `dns1.registrar-servers.com`:
 
-Why this is accepted rather than fixed:
+- **Nameservers are Namecheap** (`dns1`/`dns2.registrar-servers.com`). An
+  earlier note in this file said the zone was delegated to Railway and that
+  Namecheap was never consulted. That was wrong — the Namecheap zone is
+  authoritative and every record below lives in it.
+- The apex holds **both** `CNAME -> leddkd3y.up.railway.app` **and** the Zoho
+  MX records (`mx.zoho.com` 10, `mx2` 20, `mx3` 50), plus SPF and a Zoho
+  verification TXT.
 
-- The apex domain's NS records point at Railway (`leddkd3y.up.railway.app`), not
-  at the registrar. The Namecheap Advanced DNS zone for this domain is stored but
-  never consulted, so editing it has no effect.
-- Adding `www` therefore means either a Railway plan upgrade (the current plan
-  allows a limited number of custom domains, and the apex already uses one) or a
-  full DNS migration back to Namecheap.
-- `www` currently resolves to a registrar parking IP with port 80 open and 443
-  closed, which is why it shows nothing useful.
+A CNAME cannot coexist with other data at the same name (RFC 2181 §10.3), and
+resolvers disagree about which to return:
 
-Do not "fix" this by adding a `www` record in Namecheap — it will do nothing until
-the nameservers move. Every internal link, `PUBLIC_BASE_URL` and canonical tag
-uses the apex domain for this reason.
+| resolver | MX query returns |
+| -------- | ---------------- |
+| `1.1.1.1` | the three Zoho MX records |
+| authoritative Namecheap | the three Zoho MX records |
+| `8.8.8.8` | the CNAME, and no MX at all |
+
+So inbound mail to `info@wuteveglobalacademy.com` depends on the *sender's*
+resolver. It will appear to work from some senders and fail from others, which
+is worse than failing consistently — a single successful test proves nothing.
+Google's public resolver is the failing case, so mail sent from Gmail is the
+one to test.
+
+**Outbound is unaffected, and that is why sending works while receiving does
+not:** DKIM lives at `resend._domainkey.send` and `zmail._domainkey`, which are
+different names and therefore not shadowed, and `_dmarc` publishes
+`v=DMARC1; p=none; rua=mailto:wuteve@wuteveglobalacademy.com`. Resend can sign
+and send; the conflict only breaks delivery *to* the domain.
+
+The fix is to remove the apex CNAME. Railway needs the apex pointed at
+`leddkd3y.up.railway.app`, and Namecheap BasicDNS cannot flatten a CNAME, so
+the options are:
+
+1. **Move the zone to Cloudflare** (free) and use its CNAME flattening at the
+   apex. `CNAME` and `MX` then coexist legitimately and both the site and the
+   mailbox work. This is the correct fix.
+2. Serve the site on `www` and let the apex hold only MX — but that changes
+   every published URL, `PUBLIC_BASE_URL` and the canonical tags, so it is a
+   site-wide change rather than a DNS one.
+
+`www` is **not** a dead hostname either: `http://www.wuteveglobalacademy.com/`
+answers `302 -> https://wuteveglobalacademy.com/` and following it reaches the
+site with 200. Only HTTPS fails, because the redirector at `162.255.119.228`
+accepts port 80 and not 443. A visitor who types the address and is upgraded to
+`https` first will see an error; one who arrives over `http` is redirected
+correctly.
+
