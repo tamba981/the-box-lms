@@ -618,7 +618,10 @@ body.dark-mode .pill-new {
    more of the row. Below 720px the single-column rule further down wins and the
    image simply sits on top of the copy. */
 .slidebar-slide--about {
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  /* Was 0.95fr / 1.05fr. The posters are portrait, so at the old split each one
+     rendered 176px wide and its lettering was unreadable. 1.15fr gives the pair
+     57% of the row; the copy column still holds the paragraph at this width. */
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
 }
 
 /* Both About images are portrait posters with lettering close to their edges.
@@ -969,6 +972,20 @@ body.dark-mode .mini-verify-result::before {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+/* The video is the hero; the photograph is what shows when it cannot.
+   Hidden by default so a working video is the only thing on screen, and it is
+   only fetched when the script decides it is needed - see .is-fallback below. */
+.hero-poster {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease;
+}
+
+.hero-bg.is-fallback .hero-poster {
+  opacity: 1;
+  visibility: visible;
 }
 
 .hero-video {

@@ -25,7 +25,7 @@
   href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
   rel="stylesheet"
 />
-<link rel="stylesheet" href="/assets/css/wga-public.css?v=20261027" />
+<link rel="stylesheet" href="/assets/css/wga-public.css?v=20261028" />
 
 <!-- The moment the page started, so the loading screen can be shown for a
      minimum time without overstaying when the page was already cached. -->
@@ -189,14 +189,13 @@
   -->
   <section class="hero hero--media">
     <div class="hero-bg" aria-hidden="true">
-      <img class="hero-poster" src="/Images/hero/hero-poster.jpg?v=20261026" alt="" width="1264" height="848" fetchpriority="high" />
+      <img class="hero-poster" data-src="/Images/hero/hero-poster.jpg?v=20261026" alt="" width="1264" height="848" />
       <video
         class="hero-video"
         muted
         loop
         playsinline
         preload="none"
-        poster="/Images/hero/hero-poster.jpg?v=20261026"
         data-src="/Images/hero/hero.mp4"
       ></video>
       <div class="hero-scrim"></div>
@@ -1007,15 +1006,23 @@
    *   - not `saveData`, for somebody who has said data costs them money
    *
    * Failing any of those, nothing is fetched at all: the `data-src` stays put
-   * and the poster image underneath is what is seen. If the browser then
-   * declines to autoplay, `play()` rejects, the class is never added, and the
-   * poster stays. Every path ends on an image, never on a black rectangle.
+   * and the poster is what is seen. If the browser then declines to autoplay,
+   * `play()` rejects, the class is never added, and the poster is shown.
+   *
+   * The poster is the fallback rather than the opening frame. It is hidden by
+   * CSS and carries only a `data-src`, so it is not requested unless it is
+   * actually needed - a visitor whose video plays never downloads the 640 KB
+   * still. And the <video> no longer carries a `poster` attribute, because that
+   * would paint the photograph inside the video box while the file loads,
+   * which is the same "map, then video" swap this was meant to remove.
    * ------------------------------------------------------------------ */
   (function () {
     'use strict';
 
     var video = document.querySelector('.hero-video[data-src]');
-    if (!video) return;
+    var poster = document.querySelector('.hero-poster');
+    var bg = document.querySelector('.hero-bg');
+    if (!video || !bg) return;
 
     var wideEnough = window.matchMedia('(min-width: 901px)');
     var prefersLessMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1025,27 +1032,47 @@
       return wideEnough.matches && !prefersLessMotion.matches && !savingData;
     }
 
+    /** Reveal the photograph, fetching it only at the moment it is wanted. */
+    function showPoster() {
+      bg.classList.add('is-fallback');
+      if (poster && poster.dataset.src) {
+        poster.src = poster.dataset.src;
+        poster.removeAttribute('data-src');
+      }
+    }
+
     function load() {
-      if (!eligible() || video.dataset.loaded === 'true') return;
+      if (!eligible()) {
+        showPoster();
+        return;
+      }
+      if (video.dataset.loaded === 'true') return;
 
       video.src = video.dataset.src;
       video.removeAttribute('data-src');
       video.dataset.loaded = 'true';
-      video.load();
 
       // Fade in only when frames exist, not when the request was accepted.
       video.addEventListener(
         'playing',
         function () {
           video.classList.add('is-playing');
+          bg.classList.remove('is-fallback');
         },
         { once: true }
       );
+
+      // A source that 404s or will not decode never fires `playing`, so without
+      // this the hero would stay on the gradient for ever.
+      video.addEventListener('error', showPoster, { once: true });
+
+      video.load();
 
       var started = video.play();
       if (started && started.catch) {
         started.catch(function () {
           video.classList.remove('is-playing');
+          showPoster();
         });
       }
     }
@@ -1053,7 +1080,9 @@
     load();
 
     if (wideEnough.addEventListener) {
-      wideEnough.addEventListener('change', load);
+      wideEnough.addEventListener('change', function () {
+        if (eligible()) load();
+      });
     }
   })();
 </script>
