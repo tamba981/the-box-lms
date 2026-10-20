@@ -5698,6 +5698,169 @@ async function testNewsletterAndContact() {
 }
 
 /* ------------------------------------------------------------------ *
+ * The enquiry queue and the subscriber list
+ * ------------------------------------------------------------------ */
+
+/**
+ * Both public forms had always written to the database while nothing read either
+ * collection back. These checks exist so the read paths stay read: an endpoint
+ * that silently reverts to 404 would otherwise be invisible, because the form
+ * would keep accepting messages and returning 200.
+ */
+async function testAdminEnquiries() {
+  const adminEmail = `smoke-enq-admin-${runId}@example.com`;
+  const studentEmail = `smoke-enq-student-${runId}@example.com`;
+  const enquiryEmail = `smoke-enq-${runId}@example.com`;
+  const subscriberEmail = `smoke-sub-${runId}@example.com`;
+
+  /* Each suite that needs a session defines its own, matching the others in this
+   * file. A helper shared across suites would be one more thing that can be
+   * changed in a way that quietly affects a dozen unrelated checks. */
+  const signIn = async (email) => {
+    const { json } = await request('POST', '/api/v1/auth/login', { body: { email, password: PASSWORD } });
+    return json.data.accessToken;
+  };
+
+  let adminToken = null;
+  let studentToken = null;
+  let enquiryId = null;
+
+  await check('an administrator can sign in to read the enquiry queue', async () => {
+    await User.create({
+      firstName: 'Enquiry',
+      lastName: 'Admin',
+      email: adminEmail,
+      password: PASSWORD,
+      role: 'admin',
+      emailVerified: true,
+    });
+    await User.create({
+      firstName: 'Enquiry',
+      lastName: 'Student',
+      email: studentEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+    createdEmails.push(adminEmail, studentEmail);
+
+    adminToken = await signIn(adminEmail);
+    studentToken = await signIn(studentEmail);
+
+    assert(adminToken && studentToken, 'both sessions must exist');
+  });
+
+  await check('a message left on the public form is readable by an administrator', async () => {
+    const posted = await request('POST', '/api/v1/contact', {
+      body: {
+        name: 'Smoke Enquirer',
+        email: enquiryEmail,
+        subject: 'Enquiry queue visibility',
+        message: 'This message exists to prove the queue can be read back.',
+      },
+    });
+    assertEqual(posted.status, 200, 'contact form status');
+
+    const { status, json } = await request('GET', '/api/v1/admin/enquiries?state=all&limit=100', {
+      token: adminToken,
+    });
+    assertEqual(status, 200, 'status');
+
+    const found = (json.data.items || []).find((item) => item.email === enquiryEmail);
+    assert(found, 'the message just posted must appear in the administrator list');
+    assertEqual(found.handledAt, null, 'a new enquiry must start unhandled');
+    enquiryId = found.id;
+  });
+
+  await check('an enquiry records whether its notification email went out', async () => {
+    const { json } = await request('GET', '/api/v1/admin/enquiries?state=all&limit=100', {
+      token: adminToken,
+    });
+    const found = (json.data.items || []).find((item) => item.email === enquiryEmail);
+    assert(found, 'the enquiry must still be listed');
+
+    // No provider is configured for the suite, so the send is a recorded
+    // no-op. What matters is that the field distinguishes "not told" from
+    // "told", rather than both reading as success.
+    assert('notifiedAt' in found, 'the record must expose notifiedAt');
+  });
+
+  await check('marking an enquiry handled takes it out of the open queue', async () => {
+    const marked = await request('PATCH', `/api/v1/admin/enquiries/${enquiryId}`, {
+      token: adminToken,
+      body: { handled: true },
+    });
+    assertEqual(marked.status, 200, 'status');
+    assert(marked.json.data.handledAt, 'handledAt must be set');
+
+    const open = await request('GET', '/api/v1/admin/enquiries?state=open&limit=100', { token: adminToken });
+    const stillOpen = (open.json.data.items || []).some((item) => item.id === enquiryId);
+    assertEqual(stillOpen, false, 'a handled enquiry must leave the open queue');
+
+    const handled = await request('GET', '/api/v1/admin/enquiries?state=handled&limit=100', { token: adminToken });
+    const nowHandled = (handled.json.data.items || []).some((item) => item.id === enquiryId);
+    assertEqual(nowHandled, true, 'it must appear under handled');
+  });
+
+  await check('reopening an enquiry puts it back', async () => {
+    const reopened = await request('PATCH', `/api/v1/admin/enquiries/${enquiryId}`, {
+      token: adminToken,
+      body: { handled: false },
+    });
+    assertEqual(reopened.status, 200, 'status');
+    assertEqual(reopened.json.data.handledAt, null, 'handledAt must be cleared');
+
+    const open = await request('GET', '/api/v1/admin/enquiries?state=open&limit=100', { token: adminToken });
+    assert(
+      (open.json.data.items || []).some((item) => item.id === enquiryId),
+      'a reopened enquiry must be back in the open queue'
+    );
+  });
+
+  await check('an enquiry id that is not an id is refused, not passed to the database', async () => {
+    const bad = await request('PATCH', '/api/v1/admin/enquiries/not-an-id', {
+      token: adminToken,
+      body: { handled: true },
+    });
+    assertEqual(bad.status, 400, 'status');
+
+    const missing = await request('PATCH', '/api/v1/admin/enquiries/6ad7a1b74c2c1a1119cb1a9b', {
+      token: adminToken,
+      body: { handled: true },
+    });
+    assertEqual(missing.status, 404, 'a well-formed id that matches nothing is a 404');
+  });
+
+  await check('the enquiry queue is not readable by a student or by nobody', async () => {
+    const asStudent = await request('GET', '/api/v1/admin/enquiries', { token: studentToken });
+    assertEqual(asStudent.status, 403, 'a student must be refused');
+
+    const anonymous = await request('GET', '/api/v1/admin/enquiries');
+    assertEqual(anonymous.status, 401, 'an anonymous caller must be refused');
+  });
+
+  await check('a newsletter subscriber is visible to an administrator', async () => {
+    const subscribed = await request('POST', '/api/v1/newsletter/subscribe', {
+      body: { email: subscriberEmail, source: 'smoke' },
+    });
+    assertEqual(subscribed.status, 200, 'subscribe status');
+
+    const { status, json } = await request('GET', '/api/v1/admin/subscribers?limit=100', { token: adminToken });
+    assertEqual(status, 200, 'status');
+
+    const found = (json.data.items || []).find((item) => item.email === subscriberEmail);
+    assert(found, 'the address just subscribed must be listed');
+    assert(json.data.total >= 1, 'the total must count it');
+    assert(json.data.active >= 1, 'a new subscriber must count as active');
+  });
+
+  await check('the subscriber list is administrator-only', async () => {
+    const asStudent = await request('GET', '/api/v1/admin/subscribers', { token: studentToken });
+    assertEqual(asStudent.status, 403, 'a student must be refused');
+  });
+}
+
+/* ------------------------------------------------------------------ *
  * Run
  * ------------------------------------------------------------------ */
 
@@ -5788,6 +5951,9 @@ async function main() {
 
     process.stdout.write('\nPartnership enquiries\n');
     await testBusinessEnquiries();
+
+    process.stdout.write('\nEnquiry queue\n');
+    await testAdminEnquiries();
 
     process.stdout.write('\nMoney formatting\n');
     await testMoneyFormatting();
