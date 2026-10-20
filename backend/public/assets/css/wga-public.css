@@ -2215,7 +2215,14 @@ body.dark-mode .form-status.is-error {
   align-items: center;
   justify-content: center;
   gap: var(--s-5);
-  background: var(--bg);
+  /* Fixed deep blue rather than var(--bg). The screen used to be white, so the
+     map painted first and the hero's blue then appeared to slide over it - two
+     looks of the same map within a second. Painting blue from the first frame
+     means the map is only ever seen on blue, and the fade reveals a hero of the
+     same family rather than a colour change. It is also identical in both
+     themes, so nothing here depends on a token that flips. */
+  background: linear-gradient(160deg, #1d4ed8 0%, #16306b 55%, #0b1220 100%);
+  color: #eef4ff;
   transition: opacity 0.5s ease-out;
 }
 
@@ -2224,14 +2231,18 @@ body.dark-mode .form-status.is-error {
 }
 
 /* The world map is the copy already in assets/img, not a request to a
-   third-party host - it is 83 KB, it is ours, and it cannot go away. */
+   third-party host - it is 83 KB, it is ours, and it cannot go away.
+
+   Inverted to render light, because it now sits on a deep blue background
+   where the original dark strokes would disappear. */
 .loading-screen-map {
   position: absolute;
   inset: 0;
   background-image: url('/assets/img/world-map.svg');
   background-size: cover;
   background-position: center;
-  opacity: 0.14;
+  filter: brightness(0) invert(1);
+  opacity: 0.22;
   pointer-events: none;
 }
 
@@ -2258,8 +2269,10 @@ body.dark-mode .form-status.is-error {
   height: 92px;
   display: grid;
   place-items: center;
-  background: var(--bg);
-  border: 1px solid var(--line);
+  /* White chip, not var(--bg): the emblem is navy and needs a light disc
+     behind it now that the background is blue in both themes. */
+  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 50%;
   box-shadow: var(--shadow-lg);
   padding: 14px;
@@ -2287,7 +2300,7 @@ body.dark-mode .form-status.is-error {
   font-size: var(--t-sm);
   font-weight: 650;
   letter-spacing: 0.02em;
-  color: var(--ink-2);
+  color: #eef4ff;
 }
 
 @keyframes loadingSpin {
