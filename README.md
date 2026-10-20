@@ -396,3 +396,23 @@ npm run verify:deploy -- https://wuteveglobalacademy.com   # after deploying
 
 The second one fails if a same-origin write is refused, which is the failure that
 would otherwise take the whole site down while every health check still passed.
+
+### `www.wuteveglobalacademy.com` is intentionally unsupported
+
+Only the apex domain is served. `www` is **not** a supported hostname and no
+redirect is issued, so links must always use `https://wuteveglobalacademy.com`.
+
+Why this is accepted rather than fixed:
+
+- The apex domain's NS records point at Railway (`leddkd3y.up.railway.app`), not
+  at the registrar. The Namecheap Advanced DNS zone for this domain is stored but
+  never consulted, so editing it has no effect.
+- Adding `www` therefore means either a Railway plan upgrade (the current plan
+  allows a limited number of custom domains, and the apex already uses one) or a
+  full DNS migration back to Namecheap.
+- `www` currently resolves to a registrar parking IP with port 80 open and 443
+  closed, which is why it shows nothing useful.
+
+Do not "fix" this by adding a `www` record in Namecheap — it will do nothing until
+the nameservers move. Every internal link, `PUBLIC_BASE_URL` and canonical tag
+uses the apex domain for this reason.
