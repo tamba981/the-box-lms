@@ -855,6 +855,9 @@
     <script src="/assets/js/wga-api.js?v=20261021"></script>
     <script src="/assets/js/wga-guard.js?v=20261021" data-roles="admin"></script>
     <script src="/assets/js/wga-ui.js?v=20261021"></script>
+  <!-- Not a page to be found by accident: signed-in areas and pages that
+       only exist to carry a one-time token. -->
+  <meta name="robots" content="noindex, follow" />
 </head>
 <body>
     <!-- ===== HEADER ===== -->
@@ -904,6 +907,7 @@
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="instructor-cvs"><i class="fas fa-file-pdf"></i> Instructor CVs</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="certificates"><i class="fas fa-certificate"></i> Certificates</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="payments"><i class="fas fa-credit-card"></i> Payments</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="enquiries"><i class="fas fa-inbox"></i> Enquiries</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="reports"><i class="fas fa-chart-line"></i> Reports</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="announcements"><i class="fas fa-bullhorn"></i> Announcements</a></li>
             </ul>
@@ -1893,6 +1897,9 @@
                 case 'payments':
                     html = renderPayments();
                     break;
+                case 'enquiries':
+                    html = renderEnquiries();
+                    break;
                 case 'reports':
                     html = renderReports();
                     break;
@@ -1910,9 +1917,162 @@
             // and it is the only page whose contents are not in the summary payload.
             if (page === 'instructor-cvs') await loadCvQueue(state.cvStatus || 'pending');
 
+            // Enquiries are fetched on demand too. They arrive without warning, so a
+            // count baked into the summary payload at sign-in would be stale by the
+            // time anyone looked at it.
+            if (page === 'enquiries') await loadEnquiries();
+
             document.querySelectorAll('.sidebar-link').forEach((link) => {
                 link.classList.toggle('active', link.getAttribute('data-page') === page);
             });
+        }
+
+        // ============================================================
+        //  ENQUIRIES
+        // ============================================================
+
+        /**
+         * The contact form and the newsletter form have always written to the
+         * database. Nothing read either of them back, so an enquiry whose
+         * notification email failed sat where only database access could find
+         * it. `notifiedAt` says whether the email actually went out; this screen
+         * is how somebody notices the ones that did not.
+         */
+        function renderEnquiries() {
+            const filter = state.enquiryFilter || 'open';
+            const option = (value, label) =>
+                `<option value="${value}"${filter === value ? ' selected' : ''}>${label}</option>`;
+
+            return `
+                <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                    <span style="font-size:24px;font-weight:700;">📥 Enquiries</span>
+                    <select id="enquiryState" onchange="loadEnquiries(this.value)" style="padding:10px 14px;border-radius:10px;">
+                        ${option('open', 'Open')}
+                        ${option('handled', 'Handled')}
+                        ${option('all', 'All')}
+                    </select>
+                </div>
+                <div class="table-container glass-premium">
+                    <div id="enquiriesList">
+                        <p style="padding:24px;color:var(--text-light);">Loading enquiries…</p>
+                    </div>
+                </div>
+
+                <div style="margin-top:28px;">
+                    <h3 style="font-weight:700;margin-bottom:16px;">✉️ Newsletter subscribers</h3>
+                    <div class="table-container glass-premium">
+                        <div id="subscribersList">
+                            <p style="padding:24px;color:var(--text-light);">Loading subscribers…</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadEnquiries(value) {
+            const filter = value || state.enquiryFilter || 'open';
+            state.enquiryFilter = filter;
+
+            const list = document.getElementById('enquiriesList');
+            if (!list) return;
+            list.innerHTML = '<p style="padding:24px;color:var(--text-light);">Loading enquiries…</p>';
+
+            try {
+                const data = await WGA.get('/admin/enquiries', { query: { state: filter, limit: 50 } });
+                const items = data.items || [];
+
+                if (!items.length) {
+                    list.innerHTML = `<p style="padding:24px;color:var(--text-light);">${
+                        filter === 'open'
+                            ? 'Nothing outstanding. Messages from the contact form appear here.'
+                            : 'Nothing in this view.'
+                    }</p>`;
+                } else {
+                    list.innerHTML = items
+                        .map(
+                            (item) => `
+                        <div style="border-bottom:1px solid rgba(148,163,184,0.28);padding:18px;">
+                            <div style="display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+                                <div style="min-width:0;">
+                                    <div style="font-weight:700;margin-bottom:4px;">${WGAUI.escapeHtml(item.subject)}</div>
+                                    <div style="font-size:13px;color:var(--text-light);">
+                                        ${WGAUI.escapeHtml(item.name)} ·
+                                        <a href="mailto:${WGAUI.escapeHtml(item.email)}">${WGAUI.escapeHtml(item.email)}</a> ·
+                                        ${WGAUI.formatDate(item.createdAt)}
+                                    </div>
+                                </div>
+                                <div style="display:flex;gap:8px;align-items:flex-start;flex-shrink:0;">
+                                    ${
+                                        item.handledAt
+                                            ? `<button class="btn-primary btn-outline" onclick="markEnquiryHandled('${item.id}', false)">Reopen</button>`
+                                            : `<button class="btn-primary" onclick="markEnquiryHandled('${item.id}', true)">Mark handled</button>`
+                                    }
+                                </div>
+                            </div>
+                            <p style="margin-top:12px;white-space:pre-wrap;line-height:1.6;">${WGAUI.escapeHtml(item.message)}</p>
+                            ${
+                                item.notifiedAt
+                                    ? ''
+                                    : '<p style="margin-top:10px;font-size:13px;color:#b45309;">No notification email was delivered for this enquiry — nobody was told it arrived.</p>'
+                            }
+                        </div>
+                    `
+                        )
+                        .join('');
+                }
+            } catch (error) {
+                list.innerHTML = `<p style="padding:24px;color:#b91c1c;">${WGAUI.escapeHtml(
+                    error.message || 'Could not load enquiries.'
+                )}</p>`;
+            }
+
+            await loadSubscribers();
+        }
+
+        async function loadSubscribers() {
+            const list = document.getElementById('subscribersList');
+            if (!list) return;
+
+            try {
+                const data = await WGA.get('/admin/subscribers', { query: { limit: 20 } });
+                const items = data.items || [];
+                const total = Number(data.total) || 0;
+
+                if (!items.length) {
+                    list.innerHTML = '<p style="padding:24px;color:var(--text-light);">Nobody has subscribed yet.</p>';
+                    return;
+                }
+
+                list.innerHTML = `
+                    <p style="padding:14px 18px 0;color:var(--text-light);font-size:13px;">
+                        ${total} subscriber${total === 1 ? '' : 's'} in total, ${Number(data.active) || 0} still subscribed.
+                    </p>
+                    <ul style="padding:10px 18px 18px;line-height:1.9;">
+                        ${items
+                            .map(
+                                (subscriber) =>
+                                    `<li>${WGAUI.escapeHtml(subscriber.email)} <span style="color:var(--text-light);font-size:13px;">· ${WGAUI.formatDate(
+                                        subscriber.subscribedAt
+                                    )}</span></li>`
+                            )
+                            .join('')}
+                    </ul>
+                `;
+            } catch (error) {
+                list.innerHTML = `<p style="padding:24px;color:#b91c1c;">${WGAUI.escapeHtml(
+                    error.message || 'Could not load subscribers.'
+                )}</p>`;
+            }
+        }
+
+        async function markEnquiryHandled(id, handled) {
+            try {
+                await WGA.patch('/admin/enquiries/' + encodeURIComponent(id), { handled });
+                showToast(handled ? 'Marked as handled.' : 'Reopened.', 'success');
+                await loadEnquiries(state.enquiryFilter || 'open');
+            } catch (error) {
+                showToast(error.message || 'Could not update that enquiry.', 'error');
+            }
         }
 
         // ============================================================

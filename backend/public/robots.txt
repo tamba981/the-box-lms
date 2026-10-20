@@ -1,0 +1,19 @@
+# Wuteve Global Academy
+#
+# Only the apex domain is served. www.wuteveglobalacademy.com is intentionally
+# unsupported - see the Deployment section of README.md.
+#
+# The signed-in areas and the one-time-token pages are also marked noindex in
+# their own markup. They are listed here as well so a crawler is told before it
+# fetches them, not after.
+
+User-agent: *
+Allow: /
+
+Disallow: /admin-dashboard.html
+Disallow: /instructor-dashboard.html
+Disallow: /student-dashboard.html
+Disallow: /reset-password.html
+Disallow: /verify-email.html
+
+Sitemap: https://wuteveglobalacademy.com/sitemap.xml

@@ -203,12 +203,27 @@ Base path `/api/v1`. All responses use `{ success, message, data }`.
 | Study groups   | list, create, one, `join`, `leave`, delete                                   |
 | Live sessions  | list, `upcoming`, one, create, update, `attend`, cancel                      |
 | Dashboard      | `student`, `instructor`, `activity`                                          |
-| Admin          | `stats`, users, create user, one user, update, courses, `approve`, `reject`, enrolments, `announcements`, certificate revoke |
+| Admin          | `stats`, users, create user, one user, update, courses, `approve`, `reject`, enrolments, `announcements`, certificate revoke, `enquiries`, `subscribers` |
 | Payments       | `config`, `checkout/:courseId`, `webhook`, `me`, admin list, refund          |
 
 Two endpoints are deliberately public: the course catalog and certificate
 verification. Verification exposes only what is printed on the certificate — a
 name, a course title and a date. No email, no account id.
+
+### Enquiries and newsletter subscribers
+
+`GET /admin/enquiries?state=open|handled|all` and
+`PATCH /admin/enquiries/:id` with `{ handled: true|false }`, plus
+`GET /admin/subscribers`.
+
+These exist because both public forms had always written to the database and
+nothing read either collection back — the contact form and the newsletter form
+were write-only from the product's point of view, reachable only with direct
+database access. Each contact message also records `notifiedAt`: the time the
+notification email was actually accepted, or null if it was not. The admin
+**Enquiries** screen highlights the nulls, because a message that arrived while
+the mail provider was failing is exactly the one nobody would otherwise know to
+look for.
 
 ---
 

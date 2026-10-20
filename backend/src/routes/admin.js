@@ -5,7 +5,9 @@ const { z } = require('zod');
 
 const Course = require('../models/Course');
 const Certificate = require('../models/Certificate');
+const ContactMessage = require('../models/ContactMessage');
 const Enrollment = require('../models/Enrollment');
+const NewsletterSubscriber = require('../models/NewsletterSubscriber');
 const Payment = require('../models/Payment');
 const User = require('../models/User');
 
@@ -1197,6 +1199,118 @@ router.post(
     const updated = await certificateService.revoke(certificate._id, req.valid.body.reason);
 
     return ok(res, { certificate: updated.toJSONForOwner() }, 'Certificate revoked.');
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * Enquiries and newsletter subscribers — the two things the public pages
+ * collect that nothing could read
+ * ------------------------------------------------------------------ */
+
+/**
+ * The contact form and the newsletter form have always written to the database,
+ * and the contact form also tries to send a notification email. Until now there
+ * was no endpoint and no screen that read either collection back: the records
+ * accumulated where only somebody with direct database access could find them.
+ *
+ * That is survivable while email delivery works and both forms copy the academy,
+ * and it is not survivable when it does not. `notifiedAt` on each message records
+ * whether the email actually went out; this endpoint is how an administrator
+ * finds the ones where it did not.
+ */
+
+const enquiryQuery = z.object({
+  state: z.enum(['open', 'handled', 'all']).optional(),
+  page: z.coerce.number().int().min(1).max(10000).optional(),
+  limit: z.coerce.number().int().min(1).max(100).optional(),
+});
+
+router.get(
+  '/enquiries',
+  validate({ query: enquiryQuery }),
+  asyncHandler(async (req, res) => {
+    const { state = 'open' } = req.valid.query;
+    const { limit, page, skip } = parsePagination(req.valid.query);
+
+    // `handledAt: null` matches documents where the field is absent too, which
+    // is what messages written before the field existed look like.
+    const filter = state === 'all' ? {} : { handledAt: state === 'handled' ? { $ne: null } : null };
+
+    const [total, messages] = await Promise.all([
+      ContactMessage.countDocuments(filter),
+      ContactMessage.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+    ]);
+
+    return ok(
+      res,
+      paginated(
+        messages.map((message) => ({
+          id: String(message._id),
+          name: message.name,
+          email: message.email,
+          reason: message.reason,
+          subject: message.subject,
+          message: message.message,
+          createdAt: message.createdAt,
+          notifiedAt: message.notifiedAt,
+          handledAt: message.handledAt,
+        })),
+        total,
+        { page, limit }
+      )
+    );
+  })
+);
+
+router.patch(
+  '/enquiries/:id',
+  validate({
+    params: z.object({ id: objectId }),
+    body: z.object({ handled: z.boolean() }),
+  }),
+  asyncHandler(async (req, res) => {
+    const message = await ContactMessage.findById(req.valid.params.id);
+    if (!message) throw notFound('That enquiry could not be found.', { code: 'ENQUIRY_NOT_FOUND' });
+
+    message.handledAt = req.valid.body.handled ? message.handledAt || new Date() : null;
+    await message.save();
+
+    return ok(
+      res,
+      { id: String(message._id), handledAt: message.handledAt },
+      message.handledAt ? 'Marked as handled.' : 'Reopened.'
+    );
+  })
+);
+
+router.get(
+  '/subscribers',
+  asyncHandler(async (req, res) => {
+    // Read straight from `req.query`: this route takes only page and limit, and
+    // parsePagination already clamps both, so there is nothing to validate.
+    const { limit, page, skip } = parsePagination(req.query);
+
+    const [total, active, subscribers] = await Promise.all([
+      NewsletterSubscriber.countDocuments({}),
+      NewsletterSubscriber.countDocuments({ unsubscribedAt: null }),
+      NewsletterSubscriber.find({}).sort({ subscribedAt: -1 }).skip(skip).limit(limit),
+    ]);
+
+    return ok(res, {
+      ...paginated(
+        subscribers.map((subscriber) => ({
+          id: String(subscriber._id),
+          email: subscriber.email,
+          source: subscriber.source,
+          subscribedAt: subscriber.subscribedAt,
+          unsubscribedAt: subscriber.unsubscribedAt,
+        })),
+        total,
+        { page, limit }
+      ),
+      total,
+      active,
+    });
   })
 );
 

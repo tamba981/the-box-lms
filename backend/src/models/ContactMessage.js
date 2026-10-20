@@ -33,6 +33,15 @@ const contactMessageSchema = new mongoose.Schema(
      * evidence of a failed send is a log line nobody reads.
      */
     notifiedAt: { type: Date, default: null },
+
+    /**
+     * When an administrator marked this enquiry as dealt with.
+     *
+     * A queue nobody can empty is not a queue. Messages are listed newest first
+     * and this is what lets somebody see what is still outstanding rather than
+     * re-reading the same five enquiries every morning. Null means unresolved.
+     */
+    handledAt: { type: Date, default: null },
   },
   baseOptions
 );
