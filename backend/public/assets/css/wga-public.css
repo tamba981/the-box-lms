@@ -621,32 +621,36 @@ body.dark-mode .pill-new {
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
 }
 
+/* Both About images are portrait posters with lettering close to their edges.
+   They are shown as a pair, each in full. This rule used to force a 1400/788
+   landscape box with object-fit: cover, which cropped a 848x1260 poster to its
+   middle third and cut the artwork in half. */
 .about-media {
   position: relative;
-  border-radius: var(--r-xl);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: 10px;
 }
 
 .about-media img {
   display: block;
   width: 100%;
-  /* The markup carries width/height attributes so the box is reserved before
-     the file arrives. Without this the height attribute wins over
-     aspect-ratio and the photograph is squashed to its full pixel height. */
+  /* The markup carries the real width/height so the box is reserved before the
+     file arrives; height:auto keeps those attributes from squashing it. */
   height: auto;
-  aspect-ratio: 1400 / 788;
-  object-fit: cover;
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-md);
 }
 
+/* Still its own class because the markup uses it, but no longer an overlay: an
+   inset covering 40% of a poster hides exactly the part that says what it is. */
 .about-media .about-media-inset {
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  width: 40%;
+  position: static;
+  width: 100%;
   height: auto;
-  border: 3px solid var(--surface);
-  border-radius: 12px;
+  border: 0;
+  border-radius: var(--r-xl);
   box-shadow: var(--shadow-md);
 }
 
