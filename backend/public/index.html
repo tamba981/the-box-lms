@@ -996,25 +996,26 @@
   /* ------------------------------------------------------------------ *
    * Hero background video.
    *
-   * Restored from the version that was removed on 2026-10-02 because the
-   * file had never been committed. The guards are the reason it is worth
-   * restoring rather than rewriting:
+   * Plays on every viewport, phones included - that is a deliberate reversal.
+   * The original guard was `min-width: 901px`, so a phone was shown the
+   * photograph instead; the file is now 2.49 MB rather than the 49 MB it was
+   * first measured at, which makes a phone download reasonable for the hero.
    *
-   *   - wider than 900px, so a phone never downloads 4.8 MB for decoration
-   *   - not `prefers-reduced-motion`, because a looping video is exactly what
-   *     that setting asks you not to do
-   *   - not `saveData`, for somebody who has said data costs them money
+   * Two guards remain, and they are not about screen size:
    *
-   * Failing any of those, nothing is fetched at all: the `data-src` stays put
-   * and the poster is what is seen. If the browser then declines to autoplay,
-   * `play()` rejects, the class is never added, and the poster is shown.
+   *   - `prefers-reduced-motion`, because a looping video is exactly what that
+   *     setting asks you not to do
+   *   - `saveData`, for somebody who has told the browser data costs them money
+   *
+   * Both are requests from the person, not assumptions about their device, so
+   * they win over "play everywhere". When either applies the photograph is
+   * fetched and shown, and nothing is downloaded from the video at all.
    *
    * The poster is the fallback rather than the opening frame. It is hidden by
    * CSS and carries only a `data-src`, so it is not requested unless it is
    * actually needed - a visitor whose video plays never downloads the 640 KB
    * still. And the <video> no longer carries a `poster` attribute, because that
-   * would paint the photograph inside the video box while the file loads,
-   * which is the same "map, then video" swap this was meant to remove.
+   * would paint the photograph inside the video box while the file loads.
    * ------------------------------------------------------------------ */
   (function () {
     'use strict';
@@ -1024,12 +1025,11 @@
     var bg = document.querySelector('.hero-bg');
     if (!video || !bg) return;
 
-    var wideEnough = window.matchMedia('(min-width: 901px)');
     var prefersLessMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     var savingData = Boolean(navigator.connection && navigator.connection.saveData);
 
     function eligible() {
-      return wideEnough.matches && !prefersLessMotion.matches && !savingData;
+      return !prefersLessMotion.matches && !savingData;
     }
 
     /** Reveal the photograph, fetching it only at the moment it is wanted. */
@@ -1078,12 +1078,6 @@
     }
 
     load();
-
-    if (wideEnough.addEventListener) {
-      wideEnough.addEventListener('change', function () {
-        if (eligible()) load();
-      });
-    }
   })();
 </script>
 </body>
