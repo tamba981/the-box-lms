@@ -270,6 +270,36 @@ async function cleanup() {
   }
 }
 
+/**
+ * Remove fixtures a previous run left behind.
+ *
+ * Counted before deleting so the run can say what it repaired. `cleanup()` is the
+ * single implementation of "remove everything this suite creates"; this only
+ * decides whether it needs to run before the suite does.
+ */
+async function sweepFixtures() {
+  const Course = require('../src/models/Course');
+
+  const fixtureUsers = await User.find({
+    email: { $regex: '^smoke-.*@example\\.com$' },
+  }).select('_id');
+
+  if (!fixtureUsers.length) return { users: 0, courses: 0 };
+
+  const courses = await Course.countDocuments({
+    instructor: { $in: fixtureUsers.map((user) => user._id) },
+  });
+
+  await cleanup();
+
+  process.stdout.write(
+    `Swept ${fixtureUsers.length} fixture account(s) and ${courses} course(s) ` +
+      'left behind by a run that did not finish.\n\n'
+  );
+
+  return { users: fixtureUsers.length, courses };
+}
+
 /* ------------------------------------------------------------------ *
  * Suites
  * ------------------------------------------------------------------ */
@@ -6544,6 +6574,21 @@ async function main() {
   process.stdout.write('==================================\n\n');
 
   await db.connect();
+
+  /**
+   * Sweep before the run, not only after it.
+   *
+   * This suite runs against the database the live site serves, and several of its
+   * fixtures have to be *published* to test publishing, the catalog and
+   * enrolment. Teardown removes them, but teardown only runs if the process gets
+   * that far: a Ctrl-C, a killed terminal or a machine going to sleep leaves eight
+   * fixture courses sitting in the public catalog, which is exactly how they were
+   * found on /courses.html.
+   *
+   * Sweeping first means the next run always repairs the previous one. It does
+   * mean two runs must not overlap — they never should; they share one database.
+   */
+  const swept = await sweepFixtures();
 
   const app = createApp();
   await new Promise((resolve) => {

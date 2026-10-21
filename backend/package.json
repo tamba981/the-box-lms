@@ -22,6 +22,7 @@
     "db:backup": "node scripts/backup-db.js",
     "env:init": "node scripts/init-env.js",
     "seed": "node scripts/seed.js",
+    "seed:lse": "node scripts/seed-lse-course.js",
     "smoke": "node --max-old-space-size=8192 scripts/smoke.js",
     "certificate:sample": "node scripts/render-certificate-sample.js"
   },

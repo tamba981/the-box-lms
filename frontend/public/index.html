@@ -333,19 +333,19 @@
     <div class="wrap trust-inner" id="trust-strip" aria-busy="true">
       <div class="trust-item">
         <span class="trust-num" data-stat="courses">&mdash;</span>
-        <span class="trust-label">published courses</span>
+        <span class="trust-label" data-stat-label="courses">published courses</span>
       </div>
       <div class="trust-item">
         <span class="trust-num" data-stat="lessons">&mdash;</span>
-        <span class="trust-label">lessons</span>
+        <span class="trust-label" data-stat-label="lessons">lessons</span>
       </div>
       <div class="trust-item">
         <span class="trust-num" data-stat="subjects">&mdash;</span>
-        <span class="trust-label">subject areas</span>
+        <span class="trust-label" data-stat-label="subjects">subject areas</span>
       </div>
       <div class="trust-item">
         <span class="trust-num" data-stat="free">&mdash;</span>
-        <span class="trust-label">free to take</span>
+        <span class="trust-label" data-stat-label="free">free to take</span>
       </div>
     </div>
   </section>
@@ -655,6 +655,11 @@
       if (node) node.textContent = String(value);
     }
 
+    function label(name, text) {
+      var node = document.querySelector('[data-stat-label="' + name + '"]');
+      if (node) node.textContent = text;
+    }
+
     function matches(course) {
       if (filter === 'free') return Boolean(course.isFree);
       if (filter === 'certificate') return course.credential === 'certificate';
@@ -713,6 +718,28 @@
           return course.isFree;
         }).length
       );
+
+      /**
+       * The label, not just the number.
+       *
+       * The strip was written while the catalog was empty, so "1 published
+       * courses" was never on screen. Singular forms now follow the count.
+       */
+      label(
+        'courses',
+        all.length === 1 ? 'published course' : 'published courses'
+      );
+      var lessonTotal = all.reduce(function (sum, course) {
+        return sum + (Number(course.lessonCount) || 0);
+      }, 0);
+      label('lessons', lessonTotal === 1 ? 'lesson' : 'lessons');
+      var subjectTotal = Object.keys(
+        all.reduce(function (set, course) {
+          if (course.category) set[course.category] = true;
+          return set;
+        }, {})
+      ).length;
+      label('subjects', subjectTotal === 1 ? 'subject area' : 'subject areas');
 
       if (trustStrip) trustStrip.setAttribute('aria-busy', 'false');
     }

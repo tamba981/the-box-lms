@@ -2,10 +2,22 @@
 
 const mongoose = require('mongoose');
 
-const { COURSE_LEVELS, COURSE_STATUSES, CREDENTIALS, CERTIFICATE_FEE_OPTIONS } = require('../lib/constants');
+const { COURSE_LEVELS, COURSE_STATUSES, CREDENTIALS, CERTIFICATE_FEE_OPTIONS, COURSE_CATEGORIES } = require('../lib/constants');
 const { baseOptions, lowercaseTrim } = require('./common');
 const { formatCents, formatCentsOrFree } = require('../lib/money');
 const { slugify } = require('../lib/slug');
+
+/**
+ * Category slug to its label, built once.
+ *
+ * The catalogue page maps labels in the browser because it fetches the taxonomy
+ * anyway. The course page does not, so it printed the raw slug: "finance-accounting"
+ * where every card around it said "Finance & Accounting".
+ * Resolving here means one answer for every caller and no extra request.
+ */
+const CATEGORY_LABELS = Object.fromEntries(
+  COURSE_CATEGORIES.map((category) => [category.slug, category.label])
+);
 
 const courseSchema = new mongoose.Schema(
   {
@@ -147,6 +159,8 @@ courseSchema.methods.toCardJSON = function toCardJSON(extra = {}) {
     summary: this.summary,
     thumbnail: this.thumbnail,
     category: this.category,
+    // The label, so a page without the taxonomy still names the subject.
+    categoryLabel: CATEGORY_LABELS[this.category] || this.category || null,
     level: this.level,
     credential: this.credential,
     tags: this.tags,

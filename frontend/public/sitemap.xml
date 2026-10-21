@@ -2,12 +2,15 @@
 <!--
   Wuteve Global Academy sitemap.
 
-  This is a static file, so the five course URLs below are the catalog as it
-  stands on 2026-10-20. They are not generated from the database: a course added
+  This is a static file, so the single course URL below is the catalog as it
+  stands on 2026-10-21. It is not generated from the database: a course added
   or unpublished later will not appear or disappear here until someone edits
   this file. That is a deliberate trade - a stale entry costs a crawler one 404,
   whereas a sitemap that 500s because the database is unreachable costs every
   page in it.
+
+  The five course URLs that used to sit here were deleted in the launch cleanup
+  and had been returning 404 since.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
@@ -78,32 +81,8 @@
   </url>
 
   <url>
-    <loc>https://wuteveglobalacademy.com/course.html?course=financial-literacy-for-professionals</loc>
-    <lastmod>2026-10-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wuteveglobalacademy.com/course.html?course=spreadsheets-for-real-work</loc>
-    <lastmod>2026-10-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wuteveglobalacademy.com/course.html?course=introduction-to-data-analysis</loc>
-    <lastmod>2026-10-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wuteveglobalacademy.com/course.html?course=project-management-essentials</loc>
-    <lastmod>2026-10-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://wuteveglobalacademy.com/course.html?course=web-development-foundations</loc>
-    <lastmod>2026-10-20</lastmod>
+    <loc>https://wuteveglobalacademy.com/course.html?course=liberia-stock-exchange</loc>
+    <lastmod>2026-10-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
