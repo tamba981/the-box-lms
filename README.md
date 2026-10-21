@@ -412,6 +412,32 @@ npm run verify:deploy -- https://wuteveglobalacademy.com   # after deploying
 The second one fails if a same-origin write is refused, which is the failure that
 would otherwise take the whole site down while every health check still passed.
 
+### Backups — there are none unless you take one
+
+**MongoDB Atlas free and shared tiers do not take automated backups.** Nothing
+in this repository replaces that. Student records, enrolments and certificates
+are not reproducible, and a certificate is only worth something if the record
+behind it survives.
+
+Take a backup before anything destructive — deleting accounts, removing
+courses, changing prices in bulk, or running a migration:
+
+```bash
+cd backend
+npm run db:backup                                  # writes backend/backups/<timestamp>/
+npm run db:backup -- --out D:\wuteve-backups       # or straight to another drive
+```
+
+One JSON file per collection plus `_manifest.json` with the counts and database
+name. Plain JSON rather than `mongodump` so there is no external binary to
+install and a single record can be recovered by hand.
+
+Restoring is deliberately not scripted: a restore command that can be run by
+accident is a way to overwrite live data with a stale copy. `backend/backups/`
+is gitignored, and the folder contains password hashes — treat it as
+confidential and copy it off the project disk, because a backup stored beside
+its source is not a backup.
+
 ### DNS: the apex CNAME shadows the mail records
 
 Verified on 2026-10-20 with `Resolve-DnsName` against `8.8.8.8`, `1.1.1.1`
