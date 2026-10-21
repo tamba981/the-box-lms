@@ -41,6 +41,104 @@ process.env.LONESTAR_MOMO_CALLBACK_SECRET =
   process.env.LONESTAR_MOMO_CALLBACK_SECRET ||
   `test_callback_${crypto.randomBytes(12).toString('hex')}`;
 
+/* ------------------------------------------------------------------ *
+ * Which database this suite writes to
+ * ------------------------------------------------------------------ */
+
+/**
+ * The suite has to *publish* courses to test publishing, the catalog and
+ * enrolment, so whatever database it runs against shows fixture courses on
+ * /courses.html for the length of the run — and if the process is killed,
+ * teardown never runs and they stay there.
+ *
+ * So it prefers a database of its own. Resolution order:
+ *
+ *   1. `TEST_MONGODB_URI`, if set.
+ *   2. `MONGODB_URI` with its database name changed to `<name>_test`. Safe by
+ *      construction: this can never write to the database named in MONGODB_URI,
+ *      and it needs no second copy of the credentials.
+ *   3. `MONGODB_URI` unchanged — only when it carries no database name to
+ *      derive from. That is the shared-database case, and it says so loudly.
+ *
+ * `.env` is read here rather than left to `config/env.js`, because config is
+ * loaded a moment later and by then the connection string has been decided.
+ */
+require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
+
+/** The database name in a connection string, or null. */
+function databaseNameOf(uri) {
+  const beforeQuery = String(uri).split('?')[0];
+  const schemeEnd = beforeQuery.indexOf('://');
+  if (schemeEnd === -1) return null;
+
+  const authority = beforeQuery.slice(schemeEnd + 3);
+  const pathStart = authority.indexOf('/');
+  if (pathStart === -1) return null;
+
+  const name = authority.slice(pathStart + 1);
+  return name || null;
+}
+
+/** The same URI pointed at `<database>_test`. */
+function withTestDatabase(uri) {
+  const name = databaseNameOf(uri);
+  if (!name) return null;
+  if (/_test$/.test(name)) return uri;
+
+  const beforeQuery = uri.split('?')[0];
+  const query = uri.slice(beforeQuery.length);
+
+  return `${beforeQuery.slice(0, beforeQuery.length - name.length)}${name}_test${query}`;
+}
+
+(function redirectToTestDatabase() {
+  const explicit = (process.env.TEST_MONGODB_URI || '').trim();
+  const base = (process.env.MONGODB_URI || '').trim();
+
+  function warnShared() {
+    if (process.env.NODE_ENV === 'production') {
+      process.stderr.write(
+        'ERROR: refusing to run the smoke suite against MONGODB_URI in production without an isolated test database.\n'
+      );
+      process.exit(1);
+    }
+
+    process.stdout.write(
+      '\n!! Smoke test database: the SAME database the site serves (' +
+        `${databaseNameOf(base) || 'unknown'}).\n` +
+        '!! Its fixture courses will be visible on /courses.html for the length of this run.\n' +
+        '!! Set TEST_MONGODB_URI (or put a database name in MONGODB_URI) to isolate it.\n\n'
+    );
+  }
+
+  if (explicit) {
+    // Pointing the suite at the live database explicitly is still pointing it at
+    // the live database, so it gets the same warning rather than a false comfort.
+    if (databaseNameOf(explicit) === databaseNameOf(base)) {
+      process.env.MONGODB_URI = explicit;
+      warnShared();
+      return;
+    }
+
+    process.env.MONGODB_URI = explicit;
+    process.stdout.write(`Smoke test database: ${databaseNameOf(explicit) || '(unknown)'} (isolated, from TEST_MONGODB_URI)\n`);
+    return;
+  }
+
+  const derived = base ? withTestDatabase(base) : null;
+
+  if (derived && derived !== base) {
+    process.env.MONGODB_URI = derived;
+    process.stdout.write(
+      `Smoke test database: ${databaseNameOf(derived)} (isolated from ${databaseNameOf(base)})\n` +
+        'Fixtures therefore cannot appear on the public catalog. Set TEST_MONGODB_URI to choose another.\n'
+    );
+    return;
+  }
+
+  warnShared();
+})();
+
 const db = require('../src/db');
 const User = require('../src/models/User');
 const Token = require('../src/models/Token');
