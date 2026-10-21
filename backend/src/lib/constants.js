@@ -7,6 +7,17 @@
 
 const ROLES = Object.freeze(['student', 'instructor', 'admin']);
 
+/**
+ * Account lifecycle.
+ *
+ * `pending` and `rejected` exist for instructor applications: a self-registered
+ * instructor is not usable until an administrator has looked at the application,
+ * so "exists but cannot sign in yet" has to be a status of its own. Students
+ * never reach either value - `POST /auth/register` hard-codes `student` and
+ * `active`.
+ */
+const USER_STATUSES = Object.freeze(['active', 'suspended', 'pending', 'rejected']);
+
 const COURSE_LEVELS = Object.freeze(['beginner', 'intermediate', 'advanced']);
 
 const COURSE_STATUSES = Object.freeze(['draft', 'pending', 'published', 'archived']);
@@ -180,6 +191,7 @@ const CONTACT_REASONS = Object.freeze(['general', 'partnership', 'support', 'oth
 
 module.exports = {
   ROLES,
+  USER_STATUSES,
   CONTACT_REASONS,
   COURSE_LEVELS,
   COURSE_STATUSES,

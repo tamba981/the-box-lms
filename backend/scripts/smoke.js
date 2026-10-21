@@ -871,6 +871,15 @@ async function testEmailTemplates() {
         }),
     ],
     ['announcement', () => email.announcementEmail({ user, title: 'An update', message: 'Something happened.' })],
+    [
+      'instructor application received',
+      () => email.instructorApplicationReceivedEmail({ user }),
+    ],
+    ['instructor application approved', () => email.instructorApprovedEmail({ user })],
+    [
+      'instructor application rejected',
+      () => email.instructorRejectedEmail({ user, reason: 'The CV could not be verified.' }),
+    ],
   ];
 
   for (const [name, build] of cases) {
@@ -5860,6 +5869,322 @@ async function testAdminEnquiries() {
   });
 }
 
+/**
+ * Instructor applications.
+ *
+ * An instructor account is not something a request may grant itself. The public
+ * application form creates `role: 'instructor'` with `status: 'pending'` — both
+ * decided by the server, never read from the body — and the applicant cannot
+ * sign in until an administrator decides. Most of these checks are about that
+ * boundary: a pending or rejected account has to be inert, and the ordinary
+ * student sign-up has to keep producing students.
+ */
+async function testInstructorApplications() {
+  const mailer = require('../src/services/email');
+
+  const adminEmail = `smoke-app-admin-${runId}@example.com`;
+  const studentEmail = `smoke-app-student-${runId}@example.com`;
+  const cvApplicantEmail = `smoke-app-cv-${runId}@example.com`;
+  const approvedEmail = `smoke-app-approved-${runId}@example.com`;
+  const rejectedEmail = `smoke-app-rejected-${runId}@example.com`;
+  const studentSignupEmail = `smoke-app-signup-${runId}@example.com`;
+  createdEmails.push(adminEmail, studentEmail, cvApplicantEmail, approvedEmail, rejectedEmail, studentSignupEmail);
+
+  let adminToken = null;
+  let studentToken = null;
+  let cvApplicantId = null;
+  let approvedId = null;
+
+  /** Defined per suite, matching the other suites in this file. */
+  const signIn = async (email) => {
+    const { json } = await request('POST', '/api/v1/auth/login', { body: { email, password: PASSWORD } });
+    return json.data.accessToken;
+  };
+
+  /** A real, minimal PDF — signature, some content, trailer. */
+  const pdfDataUrl = (padding = 40) =>
+    `data:application/pdf;base64,${Buffer.from(
+      `%PDF-1.4\n1 0 obj\n<<>>\nendobj\n${'x'.repeat(padding)}\n%%EOF\n`
+    ).toString('base64')}`;
+
+  /** Run `task` with every outgoing message captured instead of delivered. */
+  const captureEmail = async (task) => {
+    const original = mailer.deliver;
+    const captured = [];
+
+    mailer.deliver = async (message) => {
+      captured.push(message);
+      return { delivered: true, id: 'captured' };
+    };
+
+    try {
+      await task();
+      // The acknowledgement is fire-and-forget on setImmediate.
+      await new Promise((resolve) => setTimeout(resolve, 300));
+    } finally {
+      mailer.deliver = original;
+    }
+
+    return captured;
+  };
+
+  const download = async (path, token) => {
+    const response = await fetch(`${baseUrl}${path}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    return {
+      status: response.status,
+      contentType: response.headers.get('content-type') || '',
+      buffer: Buffer.from(await response.arrayBuffer()),
+    };
+  };
+
+  const applicationBody = (overrides = {}) => ({
+    firstName: 'Applicant',
+    lastName: 'Person',
+    email: cvApplicantEmail,
+    password: PASSWORD,
+    dateOfBirth: ADULT_DATE_OF_BIRTH,
+    phone: '+231770000000',
+    location: 'Monrovia, Liberia',
+    credentialSummary: 'BSc Accounting, University of Liberia (2018); CPA (2021).',
+    qualifications: 'Six years teaching financial reporting to public-sector accountants.',
+    yearsExperience: 6,
+    expertise: 'financial management, internal audit, procurement',
+    videoIntroUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    ...overrides,
+  });
+
+  await check('an instructor-application fixture is provisioned', async () => {
+    await User.create({
+      firstName: 'Application',
+      lastName: 'Admin',
+      email: adminEmail,
+      password: PASSWORD,
+      role: 'admin',
+      emailVerified: true,
+    });
+
+    await User.create({
+      firstName: 'Application',
+      lastName: 'Student',
+      email: studentEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+
+    adminToken = await signIn(adminEmail);
+    studentToken = await signIn(studentEmail);
+
+    assert(adminToken && studentToken, 'both sessions must exist');
+  });
+
+  await check('an application creates an instructor account that cannot be used yet', async () => {
+    const messages = await captureEmail(async () => {
+      const { status, json } = await request('POST', '/api/v1/auth/register-instructor', {
+        body: applicationBody({ cvImage: pdfDataUrl(), cvFilename: 'applicant-cv.pdf' }),
+      });
+
+      assertEqual(status, 201, 'status');
+      assertEqual(json.data.status, 'pending', 'the application starts pending');
+      // No session: an applicant holding a token would look signed in while
+      // every role-gated request refused them.
+      assert(!json.data.accessToken, 'no access token may be issued to an applicant');
+      assert(!json.data.refreshToken, 'no refresh token may be issued to an applicant');
+    });
+
+    const created = await User.findOne({ email: cvApplicantEmail });
+    assert(created, 'the applicant must exist');
+    assertEqual(created.role, 'instructor', 'role');
+    assertEqual(created.status, 'pending', 'status');
+    assert(created.appliedAt, 'the application time must be recorded');
+    assertEqual(created.cvStatus, 'pending', 'the attached CV waits for review');
+    assertEqual(created.credentialSummary, applicationBody().credentialSummary, 'the credential summary');
+    assertEqual(created.expertise.length, 3, 'the expertise list');
+    cvApplicantId = String(created._id);
+
+    // The acknowledgement is the only receipt the applicant gets.
+    const acknowledgement = messages.find((message) => message.to === cvApplicantEmail);
+    assert(acknowledgement, 'an acknowledgement email must be sent');
+    assertEqual(acknowledgement.subject, 'We received your instructor application', 'subject');
+    assert(/48 hours/.test(acknowledgement.text), 'the email must say when the decision arrives');
+  });
+
+  await check('a pending applicant cannot sign in', async () => {
+    const { status, json } = await request('POST', '/api/v1/auth/login', {
+      body: { email: cvApplicantEmail, password: PASSWORD },
+    });
+
+    assertEqual(status, 401, 'status');
+    assertEqual(json.code, 'ACCOUNT_PENDING', 'code');
+    assert(!json.data || !json.data.accessToken, 'no session may be issued');
+  });
+
+  await check('an application cannot choose its own role or status', async () => {
+    const { status } = await request('POST', '/api/v1/auth/register-instructor', {
+      body: applicationBody({
+        email: approvedEmail,
+        role: 'admin',
+        status: 'active',
+        reviewedAt: new Date().toISOString(),
+      }),
+    });
+
+    assertEqual(status, 201, 'status');
+
+    const created = await User.findOne({ email: approvedEmail });
+    assert(created, 'the applicant must exist');
+    assertEqual(created.role, 'instructor', 'the body must not select a role');
+    assertEqual(created.status, 'pending', 'the body must not start the account active');
+    assertEqual(created.reviewedAt, null, 'the body must not mark the application reviewed');
+    approvedId = String(created._id);
+  });
+
+  await check('the ordinary sign-up still cannot create an instructor', async () => {
+    const { status, json } = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({ firstName: 'Role', lastName: 'Instructor', email: studentSignupEmail, role: 'instructor' }),
+    });
+
+    assertEqual(status, 201, 'status');
+    assertEqual(json.data.user.role, 'student', 'role must be forced to student');
+    assertEqual(json.data.user.status, 'active', 'a self-registered student is active');
+  });
+
+  await check('the application reaches the administrators with its CV flagged', async () => {
+    const { status, json } = await request(
+      'GET',
+      '/api/v1/admin/users?role=instructor&status=pending&limit=100',
+      { token: adminToken }
+    );
+
+    assertEqual(status, 200, 'status');
+
+    const applicant = (json.data.items || []).find((item) => item.id === cvApplicantId);
+    assert(applicant, 'the application must be in the pending queue');
+    assertEqual(applicant.status, 'pending', 'status');
+    assertEqual(applicant.email, cvApplicantEmail, 'email');
+    assertEqual(applicant.hasCv, true, 'the queue must know a CV is attached');
+    assertEqual(applicant.credentialSummary, applicationBody().credentialSummary, 'the credential summary');
+    assertEqual(applicant.yearsExperience, 6, 'years of experience');
+  });
+
+  await check("the applicant's CV is readable by an administrator and by nobody else", async () => {
+    const asAdmin = await download(`/api/v1/admin/instructors/${cvApplicantId}/cv`, adminToken);
+    assertEqual(asAdmin.status, 200, 'administrator status');
+    assertEqual(asAdmin.contentType, 'application/pdf', 'content type');
+    assert(asAdmin.buffer.subarray(0, 5).toString('latin1') === '%PDF-', 'the bytes must be the uploaded PDF');
+
+    const asStudent = await download(`/api/v1/admin/instructors/${cvApplicantId}/cv`, studentToken);
+    assertEqual(asStudent.status, 403, 'a student must not reach an applicant CV');
+
+    const anonymous = await download(`/api/v1/admin/instructors/${cvApplicantId}/cv`);
+    assertEqual(anonymous.status, 401, 'an anonymous caller must not reach an applicant CV');
+  });
+
+  await check('a rejection needs a reason, and a refused one changes nothing', async () => {
+    const short = await request('POST', `/api/v1/admin/instructors/${cvApplicantId}/reject`, {
+      token: adminToken,
+      body: { reason: 'no' },
+    });
+    assertEqual(short.status, 400, 'a short reason must be refused');
+    assertEqual(short.json.code, 'VALIDATION_ERROR', 'code');
+
+    const still = await User.findById(cvApplicantId);
+    assertEqual(still.status, 'pending', 'a refused rejection must leave the application pending');
+    assertEqual(still.statusReason, null, 'no reason may be stored');
+  });
+
+  await check('only an administrator can decide an application', async () => {
+    const asStudent = await request('POST', `/api/v1/admin/instructors/${approvedId}/approve`, {
+      token: studentToken,
+    });
+    assertEqual(asStudent.status, 403, 'a student must not approve an application');
+
+    const anonymous = await request('POST', `/api/v1/admin/instructors/${approvedId}/approve`);
+    assertEqual(anonymous.status, 401, 'an anonymous caller must not approve an application');
+
+    const studentRejected = await request('POST', `/api/v1/admin/instructors/${approvedId}/reject`, {
+      token: studentToken,
+      body: { reason: 'This should never be accepted.' },
+    });
+    assertEqual(studentRejected.status, 403, 'a student must not reject an application');
+  });
+
+  await check('approval activates the account and the instructor can then sign in', async () => {
+    const messages = await captureEmail(async () => {
+      const { status, json } = await request('POST', `/api/v1/admin/instructors/${approvedId}/approve`, {
+        token: adminToken,
+      });
+
+      assertEqual(status, 200, 'status');
+      assertEqual(json.data.instructor.status, 'active', 'the approved account must be active');
+      assert(json.data.instructor.reviewedAt, 'the review time must be recorded');
+    });
+
+    const approved = await User.findById(approvedId);
+    assertEqual(approved.status, 'active', 'stored status');
+    assert(String(approved.reviewedBy) === String((await User.findOne({ email: adminEmail }))._id), 'who decided');
+
+    const welcome = messages.find((message) => message.to === approvedEmail);
+    assert(welcome, 'the approved instructor must be emailed');
+
+    const token = await signIn(approvedEmail);
+    assert(token, 'the approved instructor must be able to sign in');
+
+    const dashboard = await request('GET', '/api/v1/dashboard/instructor', { token });
+    assertEqual(dashboard.status, 200, 'the instructor dashboard must open');
+  });
+
+  await check('a rejected applicant is told why and still cannot sign in', async () => {
+    const submitted = await request('POST', '/api/v1/auth/register-instructor', {
+      body: applicationBody({ email: rejectedEmail, firstName: 'Rejected', cvImage: undefined }),
+    });
+    assertEqual(submitted.status, 201, 'the application must be accepted first');
+
+    const applicant = await User.findOne({ email: rejectedEmail }).select('_id');
+    const reason = 'The CV could not be verified with the institution named.';
+
+    const messages = await captureEmail(async () => {
+      const { status, json } = await request('POST', `/api/v1/admin/instructors/${applicant._id}/reject`, {
+        token: adminToken,
+        body: { reason },
+      });
+
+      assertEqual(status, 200, 'status');
+      assertEqual(json.data.instructor.status, 'rejected', 'status after rejection');
+      assertEqual(json.data.instructor.statusReason, reason, 'the reason is returned to the administrator');
+    });
+
+    const stored = await User.findById(applicant._id);
+    assertEqual(stored.status, 'rejected', 'stored status');
+    assertEqual(stored.statusReason, reason, 'the reason must be stored');
+
+    const email = messages.find((message) => message.to === rejectedEmail);
+    assert(email, 'the applicant must be emailed');
+    assert(email.text.includes(reason), 'the email must carry the reason given');
+
+    const login = await request('POST', '/api/v1/auth/login', {
+      body: { email: rejectedEmail, password: PASSWORD },
+    });
+    assertEqual(login.status, 401, 'a rejected applicant must not sign in');
+    assertEqual(login.json.code, 'ACCOUNT_REJECTED', 'code');
+  });
+
+  await check('a student account cannot be approved as an instructor', async () => {
+    const student = await User.findOne({ email: studentEmail }).select('_id');
+
+    const approved = await request('POST', `/api/v1/admin/instructors/${student._id}/approve`, {
+      token: adminToken,
+    });
+    assertEqual(approved.status, 400, 'status');
+    assertEqual(approved.json.code, 'NOT_AN_INSTRUCTOR', 'code');
+
+    const still = await User.findById(student._id);
+    assertEqual(still.role, 'student', 'the role must be untouched');
+  });
+}
+
 /* ------------------------------------------------------------------ *
  * Run
  * ------------------------------------------------------------------ */
@@ -5954,6 +6279,9 @@ async function main() {
 
     process.stdout.write('\nEnquiry queue\n');
     await testAdminEnquiries();
+
+    process.stdout.write('\nInstructor applications\n');
+    await testInstructorApplications();
 
     process.stdout.write('\nMoney formatting\n');
     await testMoneyFormatting();

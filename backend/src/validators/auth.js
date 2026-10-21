@@ -2,7 +2,7 @@
 
 const { z } = require('zod');
 
-const { ROLES, COURSE_LEVELS, COURSE_STATUSES, LESSON_TYPES } = require('../lib/constants');
+const { ROLES, USER_STATUSES, COURSE_LEVELS, COURSE_STATUSES, LESSON_TYPES } = require('../lib/constants');
 const { isEmbeddableVideoUrl } = require('../lib/videoUrl');
 const {
   MINIMUM_AGE,
@@ -143,6 +143,54 @@ const registerBody = z.object({
    * the request body, which let anyone create an administrator account. Zod
    * strips unknown keys, so even the new client cannot reintroduce the field.
    */
+});
+
+/**
+ * An instructor application.
+ *
+ * A separate schema because two fields must never be readable from a request:
+ * `role` and the starting `status`. `registerBody` has neither, and neither does
+ * this - both are decided in the route.
+ *
+ * Every shared field reuses the primitive above, so the 16+ age check, the
+ * password rules and the phone format cannot drift between the student form and
+ * this one.
+ */
+const expertiseList = z
+  .union([z.array(z.string().trim().min(1).max(60)), z.string()])
+  .optional()
+  .transform((value) => {
+    if (!value) return [];
+    const parts = Array.isArray(value) ? value : String(value).split(',');
+    return parts
+      .map((item) => String(item).trim())
+      .filter(Boolean)
+      .slice(0, 20);
+  });
+
+const videoIntroUrl = z
+  .string()
+  .trim()
+  .max(500, 'That link is too long')
+  .refine(
+    (value) =>
+      value.length === 0 ||
+      /^https?:\/\/(www\.)?(youtube\.com|youtu\.be|vimeo\.com)\//i.test(value),
+    { message: 'Use a YouTube or Vimeo link' }
+  )
+  .optional();
+
+const registerInstructorBody = registerBody.extend({
+  credentialSummary: z.string().trim().max(500, 'Keep this under 500 characters').optional(),
+  qualifications: z.string().trim().max(500, 'Keep this under 500 characters').optional(),
+  yearsExperience: z.coerce.number().int().min(0).max(80).optional(),
+  expertise: expertiseList,
+  videoIntroUrl,
+  // Same bounds as `cvBody.image`, because it ends up in the same field. A
+  // second, looser limit here would let the application form store a file the
+  // profile form would refuse.
+  cvImage: z.string().trim().min(100, 'Choose a PDF to upload').max(700000, 'That file is too large. The CV must be a PDF under 500 KB.').optional(),
+  cvFilename: z.string().trim().max(200, 'That filename is too long').optional(),
 });
 
 const loginBody = z.object({
@@ -291,7 +339,10 @@ const resendVerificationBody = z.object({ email });
 
 const listUsersQuery = z.object({
   role: z.enum(ROLES).optional(),
-  status: z.enum(['active', 'suspended']).optional(),
+  // `pending` and `rejected` are needed so the admin queue can ask for
+  // "instructor applications awaiting a decision" rather than filtering a full
+  // user list in the browser.
+  status: z.enum(USER_STATUSES).optional(),
   q: z.string().trim().max(120).optional(),
   page: paginationQuery.shape.page,
   limit: paginationQuery.shape.limit,
@@ -321,6 +372,7 @@ module.exports = {
   paginationQuery,
   // auth
   registerBody,
+  registerInstructorBody,
   loginBody,
   avatarBody,
   cvBody,

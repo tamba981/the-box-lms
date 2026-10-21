@@ -119,6 +119,108 @@ router.post(
 );
 
 /* ------------------------------------------------------------------ *
+ * POST /api/v1/auth/register-instructor
+ * ------------------------------------------------------------------ */
+
+/**
+ * An instructor application.
+ *
+ * Deliberately not a variant of `POST /auth/register`. That endpoint exists to
+ * create students, and it hard-codes the role so that no request can choose
+ * one. Here the role and status are fixed by the server - `instructor` and
+ * `pending` - and nothing in the body can reach either.
+ *
+ * No session is issued. A pending applicant cannot sign in, so handing them
+ * tokens would produce an account that looks like it works until the first
+ * request that needs a role. The acknowledgement email is the receipt.
+ */
+router.post(
+  '/register-instructor',
+  authLimiter,
+  validate({ body: schemas.registerInstructorBody }),
+  asyncHandler(async (req, res) => {
+    const {
+      firstName,
+      lastName,
+      email: address,
+      password,
+      phone,
+      dateOfBirth,
+      location,
+      credentialSummary,
+      qualifications,
+      yearsExperience,
+      expertise,
+      videoIntroUrl,
+      cvImage,
+      cvFilename,
+    } = req.valid.body;
+
+    const existing = await User.findOne({ email: address }).select('_id');
+    if (existing) {
+      throw conflict('An account already exists for that email address. Sign in, or apply with another one.', {
+        code: 'EMAIL_IN_USE',
+        details: [{ field: 'email', message: 'Already registered' }],
+      });
+    }
+
+    const user = await User.create({
+      firstName,
+      lastName,
+      email: address,
+      password,
+      phone: phone || undefined,
+      dateOfBirth,
+      location,
+      role: 'instructor',
+      status: 'pending',
+      credentialSummary: credentialSummary || null,
+      qualifications: qualifications || null,
+      yearsExperience: typeof yearsExperience === 'number' ? yearsExperience : null,
+      expertise: Array.isArray(expertise) ? expertise : [],
+      videoIntroUrl: videoIntroUrl || null,
+      appliedAt: new Date(),
+    });
+
+    if (cvImage) {
+      const decoded = decodeCv(cvImage);
+
+      if (!decoded.ok) {
+        /**
+         * The account was created and the CV did not pass. Remove the account
+         * rather than leave a half-finished application: a pending applicant
+         * cannot sign in, so there would be no way for them to attach the file
+         * afterwards.
+         */
+        await User.deleteOne({ _id: user._id });
+        throw badRequest(decoded.message, {
+          code: 'INVALID_CV',
+          details: [{ field: 'cvImage', message: decoded.message }],
+        });
+      }
+
+      user.cvImage = decoded.buffer;
+      user.cvContentType = 'application/pdf';
+      user.cvOriginalFilename = sanitiseFilename(cvFilename);
+      user.cvStatus = 'pending';
+      user.cvUploadedAt = new Date();
+      await user.save();
+    }
+
+    // Fire-and-forget, like every other email in this file: the application is
+    // already stored, and a mail provider that is down must not turn a
+    // successful submission into a 500 the applicant would try again.
+    sendLater('instructor application received', () => email.instructorApplicationReceivedEmail({ user }));
+
+    return created(
+      res,
+      { status: 'pending', email: user.email },
+      'Application received. We review every application within 48 hours.'
+    );
+  })
+);
+
+/* ------------------------------------------------------------------ *
  * POST /api/v1/auth/login
  * ------------------------------------------------------------------ */
 
@@ -146,6 +248,20 @@ router.post(
 
     const matches = await user.comparePassword(password);
     if (!matches) throw invalid();
+
+    if (user.status === 'pending') {
+      throw unauthorized(
+        'Your instructor application is still being reviewed. We will email you as soon as it is decided.',
+        { code: 'ACCOUNT_PENDING' }
+      );
+    }
+
+    if (user.status === 'rejected') {
+      throw unauthorized(
+        'That application was not approved. Reply to the email we sent if you believe that is wrong.',
+        { code: 'ACCOUNT_REJECTED' }
+      );
+    }
 
     if (user.status !== 'active') {
       throw unauthorized('This account has been suspended. Please contact support.', { code: 'ACCOUNT_INACTIVE' });

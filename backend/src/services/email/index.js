@@ -740,6 +740,100 @@ function businessEnquiryEmail({ lead, inbox }) {
   };
 }
 
+/* ------------------------------------------------------------------ *
+ * Instructor applications
+ *
+ * Three separate emails rather than one "application status" message: the
+ * applicant needs to know it arrived, know it succeeded, or know why it did
+ * not. A single template with a status field ends up saying the wrong one.
+ * ------------------------------------------------------------------ */
+
+function instructorApplicationReceivedEmail({ user }) {
+  const text = [
+    `Hello ${user.firstName || 'there'},`,
+    '',
+    'We received your application to teach on Wuteve Global Academy.',
+    '',
+    'Our team reviews every application by hand, and you will hear from us within',
+    '48 hours. You do not need to do anything in the meantime.',
+    '',
+    'If you did not apply, you can ignore this email and the account will not be',
+    'approved.',
+  ].join('\n');
+
+  return {
+    to: user.email,
+    subject: 'We received your instructor application',
+    text,
+    html: layout({
+      heading: 'Application received',
+      bodyHtml: `<p style="margin:0 0 12px;">Hello ${firstNameOf(user)},</p>
+        <p style="margin:0 0 12px;">We received your application to teach on Wuteve Global Academy.</p>
+        <p style="margin:0 0 12px;">Our team reviews every application by hand. You will hear from us within 48 hours, and there is nothing you need to do in the meantime.</p>
+        <p style="margin:0;color:#475569;">If you did not apply, you can ignore this email and the account will not be approved.</p>`,
+    }),
+  };
+}
+
+function instructorApprovedEmail({ user }) {
+  const dashboardUrl = `${config.publicBaseUrl}/instructor-dashboard.html`;
+
+  const text = [
+    `Hello ${user.firstName || 'there'},`,
+    '',
+    'Your application has been approved and your instructor account is active.',
+    '',
+    'You can sign in and start creating courses. Every course you write is yours:',
+    'you set the price, and you decide what it contains.',
+    '',
+    `Your dashboard: ${dashboardUrl}`,
+  ].join('\n');
+
+  return {
+    to: user.email,
+    subject: 'Your Wuteve instructor account is approved',
+    text,
+    html: layout({
+      heading: 'Welcome to Wuteve',
+      bodyHtml: `<p style="margin:0 0 12px;">Hello ${firstNameOf(user)},</p>
+        <p style="margin:0 0 12px;">Your application has been approved and your instructor account is active.</p>
+        <p style="margin:0 0 12px;">You can sign in and start creating courses. Every course you write is yours: you set the price, and you decide what it contains.</p>
+        <p style="margin:0;"><a href="${dashboardUrl}">Open your dashboard</a></p>`,
+    }),
+  };
+}
+
+function instructorRejectedEmail({ user, reason }) {
+  const safeReason = reason ? String(reason).trim() : '';
+
+  const text = [
+    `Hello ${user.firstName || 'there'},`,
+    '',
+    'We have reviewed your application to teach on Wuteve Global Academy and are',
+    'not able to approve it at this time.',
+    '',
+    safeReason ? `Reason: ${safeReason}` : '',
+    '',
+    'If you believe that is wrong, reply to this message and we will look again.',
+    'The certificate courses remain open to you as a student.',
+  ]
+    .filter((line, index, all) => !(line === '' && all[index - 1] === ''))
+    .join('\n');
+
+  return {
+    to: user.email,
+    subject: 'About your Wuteve instructor application',
+    text,
+    html: layout({
+      heading: 'About your application',
+      bodyHtml: `<p style="margin:0 0 12px;">Hello ${firstNameOf(user)},</p>
+        <p style="margin:0 0 12px;">We have reviewed your application to teach on Wuteve Global Academy and are not able to approve it at this time.</p>
+        ${safeReason ? `<p style="margin:0 0 12px;"><strong>Reason given:</strong> ${escapeHtml(safeReason)}</p>` : ''}
+        <p style="margin:0;">If you believe that is wrong, reply to this message and we will look again. The certificate courses remain open to you as a student.</p>`,
+    }),
+  };
+}
+
 module.exports = {
   deliver,
   businessEnquiryEmail,
@@ -759,6 +853,9 @@ module.exports = {
   cvApprovedEmail,
   cvRejectedEmail,
   instructorAccountEmail,
+  instructorApplicationReceivedEmail,
+  instructorApprovedEmail,
+  instructorRejectedEmail,
   newsletterWelcomeEmail,
   layout,
   escapeHtml,

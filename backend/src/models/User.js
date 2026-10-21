@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
 const config = require('../config/env');
-const { ROLES } = require('../lib/constants');
+const { ROLES, USER_STATUSES } = require('../lib/constants');
 const { formatDateOfBirth } = require('../lib/age');
 const { baseOptions, lowercaseTrim } = require('./common');
 
@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema(
      */
     role: { type: String, enum: ROLES, default: 'student', index: true },
 
-    status: { type: String, enum: ['active', 'suspended'], default: 'active', index: true },
+    status: { type: String, enum: USER_STATUSES, default: 'active', index: true },
 
     emailVerified: { type: Boolean, default: false },
     emailVerifiedAt: { type: Date, default: null },
@@ -89,6 +89,28 @@ const userSchema = new mongoose.Schema(
     qualifications: { type: String, trim: true, maxlength: 500, default: null },
     yearsExperience: { type: Number, min: 0, max: 80, default: null },
     languages: { type: [String], default: [] },
+
+    /**
+     * Instructor application material.
+     *
+     * Separate from the profile fields above because these are the *claim* made
+     * at sign-up, reviewed by an administrator, rather than the bio an approved
+     * instructor edits afterwards. `credentialSummary` is deliberately not
+     * called `credentials`: `toAuthorJSON` already emits a `credentials` object
+     * (a bundle of the profile fields), and two different things sharing a name
+     * in the same serialiser is a bug waiting to be reported as "the CV shows
+     * the wrong text".
+     */
+    credentialSummary: { type: String, trim: true, maxlength: 500, default: null },
+    appliedAt: { type: Date, default: null },
+    reviewedAt: { type: Date, default: null },
+    reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+
+    /**
+     * Why an application was refused, and the only place a rejection reason is
+     * kept. `cvRejectionReason` is about one document and stays about that.
+     */
+    statusReason: { type: String, trim: true, maxlength: 500, default: null },
 
     /**
      * An uploaded CV, stored as bytes for the same reason as `avatarImage`:
@@ -215,6 +237,21 @@ userSchema.methods.toPublicJSON = function toPublicJSON(options = {}) {
     payload.cvUploadedAt = this.cvUploadedAt;
     payload.cvOriginalFilename = this.cvOriginalFilename;
     if (this.cvStatus === 'rejected') payload.cvRejectionReason = this.cvRejectionReason;
+
+    /**
+     * The instructor application, for the administrator reviewing it.
+     *
+     * Only under `includePrivate`, which the admin routes opt into: an
+     * applicant's claim about their own experience is not something to publish
+     * on a course page before anybody has checked it.
+     */
+    payload.credentialSummary = this.credentialSummary;
+    payload.appliedAt = this.appliedAt;
+    payload.reviewedAt = this.reviewedAt;
+    // Only while rejected, for the same reason as the CV reason above.
+    if (this.status === 'rejected') payload.statusReason = this.statusReason;
+    // Whether a CV is attached at all, so the queue can link to it.
+    payload.hasCv = Boolean(this.cvOriginalFilename);
   }
 
   return { ...payload, ...extra };

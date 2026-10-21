@@ -693,8 +693,9 @@
                             <span style="opacity:.75;"> — enroll in courses and earn certificates</span>
                         </div>
                         <p style="font-size:12.5px;opacity:.72;margin-top:7px;line-height:1.5;">
-                            Instructor and administrator accounts are created by the academy.
-                            Get in touch if you would like to teach on Wuteve.
+                            Administrator accounts are created by the academy.
+                            To teach on Wuteve, apply at
+                            <a href="/become-instructor.html" style="color:var(--gold);font-weight:500;">Teach on Wuteve</a>.
                         </p>
                     </div>
 
@@ -825,6 +826,16 @@
             e.preventDefault();
             setActiveTab('login');
         });
+
+        /**
+         * `?tab=signup` opens the sign-up form directly.
+         *
+         * The instructor application page sends a student here to create a
+         * student account, and landing on the login tab would read as a broken
+         * link. Anything other than the two real tab names is ignored.
+         */
+        const requestedTab = new URLSearchParams(window.location.search).get('tab');
+        if (requestedTab === 'signup' || requestedTab === 'login') setActiveTab(requestedTab);
 
         // ============================================================
         //  REMEMBER ME

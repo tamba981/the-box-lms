@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/Images/Brand/wuteve-emblem.png" />
+  <title>Teach on Wuteve · Instructor application</title>
+  <meta name="description" content="Apply to teach on Wuteve Global Academy. Tell us what you teach, attach your CV, and our team reviews every application within 48 hours." />
+  <link rel="canonical" href="https://wuteveglobalacademy.com/become-instructor.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Wuteve Global Academy" />
+  <meta property="og:url" content="https://wuteveglobalacademy.com/become-instructor.html" />
+  <meta property="og:title" content="Teach on Wuteve · Instructor application" />
+  <meta property="og:description" content="Apply to teach on Wuteve Global Academy. Our team reviews every application within 48 hours." />
+  <meta property="og:image" content="https://wuteveglobalacademy.com/Images/hero/hero-poster.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/css/wga-shell.css?v=20261028" />
+  <style>
+    /* A 520px column is right for a login form; this one has twelve fields and
+       reads badly when squeezed, so it gets a wider measure. Still 100% on a
+       phone, where `.wga-narrow` stops mattering. */
+    main.wga-main.wga-narrow { max-width: 760px; }
+    /* Two fields side by side on wide screens, stacked on a phone. */
+    .bi-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 560px) { .bi-row { grid-template-columns: 1fr; gap: 0; } }
+    .bi-note { font-size: 13px; color: var(--text-light); margin: -8px 0 14px; }
+    .bi-check { display: flex; gap: 10px; align-items: flex-start; margin: 4px 0 20px; }
+    .bi-check input { margin-top: 3px; }
+    .bi-section { margin: 28px 0 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-light); }
+    .bi-section:first-of-type { margin-top: 8px; }
+    textarea.wga-input { min-height: 92px; resize: vertical; font-family: inherit; line-height: 1.55; }
+    .bi-file { display: block; width: 100%; padding: 12px; border: 1px dashed var(--border); border-radius: 10px; background: transparent; color: inherit; }
+  </style>
+</head>
+<body>
+  <header class="wga-header">
+    <a class="wga-brand" href="/">
+      <img class="brand-mark" src="/Images/Brand/wuteve-emblem.png" alt="" width="34" height="34" />
+      Wuteve <span class="accent">Global Academy</span>
+    </a>
+    <button class="wga-theme-toggle" data-theme-toggle type="button" aria-label="Toggle colour theme">🌙</button>
+  </header>
+
+  <main class="wga-main wga-narrow">
+    <div class="wga-card">
+      <h1>Teach on Wuteve</h1>
+      <p>
+        Tell us what you teach and what you have done. An administrator reads every
+        application by hand, and you will hear back within 48 hours.
+      </p>
+
+      <div class="wga-alert" id="status" role="alert" aria-live="polite"></div>
+
+      <form id="apply-form" novalidate>
+        <p class="bi-section">Your account</p>
+
+        <div class="bi-row">
+          <div class="wga-field">
+            <label class="wga-label" for="firstName">First name</label>
+            <input class="wga-input" id="firstName" name="firstName" autocomplete="given-name" required />
+          </div>
+          <div class="wga-field">
+            <label class="wga-label" for="lastName">Last name</label>
+            <input class="wga-input" id="lastName" name="lastName" autocomplete="family-name" required />
+          </div>
+        </div>
+
+        <div class="wga-field">
+          <label class="wga-label" for="email">Email address</label>
+          <input class="wga-input" type="email" id="email" name="email" autocomplete="email"
+                 placeholder="you@example.com" required />
+        </div>
+
+        <div class="wga-field">
+          <label class="wga-label" for="password">Password</label>
+          <input class="wga-input" type="password" id="password" name="password"
+                 autocomplete="new-password" required />
+          <p class="bi-note">At least 8 characters. You will use this to sign in once approved.</p>
+        </div>
+
+        <div class="bi-row">
+          <div class="wga-field">
+            <label class="wga-label" for="phone">Phone number</label>
+            <input class="wga-input" id="phone" name="phone" autocomplete="tel" placeholder="+231 77 000 0000" />
+          </div>
+          <div class="wga-field">
+            <label class="wga-label" for="location">Location</label>
+            <input class="wga-input" id="location" name="location" placeholder="Monrovia, Liberia" />
+          </div>
+        </div>
+
+        <div class="wga-field">
+          <label class="wga-label" for="dateOfBirth">Date of birth</label>
+          <input class="wga-input" type="date" id="dateOfBirth" name="dateOfBirth" required />
+          <p class="bi-note">You must be at least 16 years old to teach on Wuteve.</p>
+        </div>
+
+        <div class="wga-field">
+          <label class="wga-label" for="accountType">Account type</label>
+          <input class="wga-input" id="accountType" value="Instructor (fixed)" disabled />
+          <p class="bi-note">
+            This form creates an instructor account only. Student accounts are created on the
+            <a href="/login.html?tab=signup">sign-up page</a>.
+          </p>
+        </div>
+
+        <p class="bi-section">Your credentials</p>
+
+        <div class="wga-field">
+          <label class="wga-label" for="credentialSummary">Degrees, certifications and relevant experience</label>
+          <textarea class="wga-input" id="credentialSummary" name="credentialSummary" maxlength="500"
+                    placeholder="e.g. BSc Accounting, University of Liberia (2018); CPA, Liberian Institute of Certified Public Accountants (2021); five years as a finance officer."></textarea>
+          <p class="bi-note">Up to 500 characters.</p>
+        </div>
+
+        <div class="wga-field">
+          <label class="wga-label" for="qualifications">Qualifications</label>
+          <textarea class="wga-input" id="qualifications" name="qualifications" maxlength="500"
+                    placeholder="What makes you qualified to teach the subjects you are applying for?"></textarea>
+          <p class="bi-note">Up to 500 characters.</p>
+        </div>
+
+        <div class="wga-row bi-row">
+          <div class="wga-field">
+            <label class="wga-label" for="yearsExperience">Years of experience</label>
+            <input class="wga-input" type="number" id="yearsExperience" name="yearsExperience" min="0" max="80" step="1" />
+          </div>
+          <div class="wga-field">
+            <label class="wga-label" for="videoIntroUrl">Video introduction (optional)</label>
+            <input class="wga-input" id="videoIntroUrl" name="videoIntroUrl" placeholder="https://youtube.com/watch?v=..." />
+          </div>
+        </div>
+        <p class="bi-note" style="margin-top:-14px;">A YouTube or Vimeo link, if you have one.</p>
+
+        <div class="wga-field">
+          <label class="wga-label" for="expertise">Areas of expertise</label>
+          <input class="wga-input" id="expertise" name="expertise"
+                 placeholder="Financial management, internal audit, procurement" />
+          <p class="bi-note">Separate them with commas. Up to 20.</p>
+        </div>
+
+        <div class="wga-field">
+          <label class="wga-label" for="cv">CV (PDF, up to 500 KB)</label>
+          <input class="bi-file" type="file" id="cv" name="cv" accept="application/pdf,.pdf" />
+          <p class="bi-note" id="cv-note">A PDF only. It is reviewed by the administrator and never shown publicly.</p>
+        </div>
+
+        <div class="bi-check">
+          <input type="checkbox" id="confirm" name="confirm" required />
+          <label for="confirm" style="font-size:14px;line-height:1.5;">
+            I confirm the information above is accurate, and that I am applying as myself.
+          </label>
+        </div>
+
+        <button class="wga-btn wga-btn-primary wga-btn-block" type="submit" id="submit">
+          <i class="fas fa-paper-plane" aria-hidden="true"></i>
+          Submit application
+        </button>
+      </form>
+
+      <p class="wga-divider" style="margin-bottom:0;">
+        Already approved? <a href="/login.html">Sign in</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="wga-footer">
+    <span>© <span id="year">2026</span> Wuteve Global Academy</span>
+    <span class="wga-footer-sep">·</span>
+    <a href="/">Home</a>
+    <a href="/courses.html">Courses</a>
+    <a href="/terms.html">Terms of Service</a>
+    <a href="/privacy.html">Privacy Policy</a>
+  </footer>
+
+  <script src="/assets/js/wga-api.js?v=20261021"></script>
+  <script src="/assets/js/wga-ui.js?v=20261021"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      WGAUI.initTheme();
+
+      var form = document.getElementById('apply-form');
+      var button = document.getElementById('submit');
+      var statusBox = document.getElementById('status');
+      var cvInput = document.getElementById('cv');
+      var cvNote = document.getElementById('cv-note');
+
+      var MAX_CV_BYTES = 500 * 1024;
+
+      function fail(message) {
+        WGAUI.status(statusBox, message, 'error');
+        statusBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
+      /** Read the chosen PDF as a data URL, refusing anything too large first. */
+      function readCv(file) {
+        return new Promise(function (resolve, reject) {
+          if (!file) return resolve(null);
+
+          var looksPdf = file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+          if (!looksPdf) {
+            return reject(new Error('The CV must be a PDF.'));
+          }
+          if (file.size > MAX_CV_BYTES) {
+            return reject(new Error('That file is ' + Math.round(file.size / 1024) + ' KB. The CV must be under 500 KB.'));
+          }
+
+          var reader = new FileReader();
+          reader.onload = function () {
+            resolve({ dataUrl: String(reader.result), filename: file.name });
+          };
+          reader.onerror = function () {
+            reject(new Error('That file could not be read. Try another PDF.'));
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      cvInput.addEventListener('change', function () {
+        var file = cvInput.files && cvInput.files[0];
+        if (!file) {
+          cvNote.textContent = 'A PDF only. It is reviewed by the administrator and never shown publicly.';
+          return;
+        }
+        // Tell them about the size before they fill in the rest of the form.
+        if (file.size > MAX_CV_BYTES) {
+          cvNote.textContent = 'That file is ' + Math.round(file.size / 1024) + ' KB - it must be under 500 KB.';
+          cvNote.style.color = '#b91c1c';
+        } else {
+          cvNote.textContent = file.name + ' (' + Math.max(1, Math.round(file.size / 1024)) + ' KB) ready to attach.';
+          cvNote.style.color = '';
+        }
+      });
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        if (!form.checkValidity()) {
+          var missing = form.querySelector(':invalid');
+          fail('Some details are missing or not valid. Check the field marked in red' + (missing && missing.labels && missing.labels[0] ? ': ' + missing.labels[0].textContent : '.'));
+          return;
+        }
+
+        WGAUI.status(statusBox, null);
+        WGAUI.setBusy(button, true, 'Submitting…');
+
+        readCv(cvInput.files && cvInput.files[0])
+          .then(function (cv) {
+            var payload = {
+              firstName: document.getElementById('firstName').value.trim(),
+              lastName: document.getElementById('lastName').value.trim(),
+              email: document.getElementById('email').value.trim(),
+              password: document.getElementById('password').value,
+              phone: document.getElementById('phone').value.trim() || undefined,
+              location: document.getElementById('location').value.trim() || undefined,
+              dateOfBirth: document.getElementById('dateOfBirth').value,
+              credentialSummary: document.getElementById('credentialSummary').value.trim() || undefined,
+              qualifications: document.getElementById('qualifications').value.trim() || undefined,
+              yearsExperience: document.getElementById('yearsExperience').value || undefined,
+              expertise: document.getElementById('expertise').value.trim() || undefined,
+              videoIntroUrl: document.getElementById('videoIntroUrl').value.trim() || undefined,
+              cvImage: cv ? cv.dataUrl : undefined,
+              cvFilename: cv ? cv.filename : undefined,
+            };
+
+            return WGA.post('/auth/register-instructor', payload);
+          })
+          .then(function () {
+            window.location.href = '/become-instructor-thanks.html';
+          })
+          .catch(function (error) {
+            var detail = error && error.details && error.details.length ? error.details[0].message : null;
+            fail(detail || (error && error.message) || 'We could not submit that application. Please try again.');
+          })
+          .finally(function () {
+            WGAUI.setBusy(button, false);
+          });
+      });
+    })();
+  </script>
+</body>
+</html>

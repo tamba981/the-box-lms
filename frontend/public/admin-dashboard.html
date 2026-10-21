@@ -903,7 +903,7 @@
                 <li class="sidebar-item"><a href="#" class="sidebar-link active" data-page="overview"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="users"><i class="fas fa-users"></i> Users</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> Courses</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="instructors"><i class="fas fa-chalkboard-user"></i> Instructors</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="instructors"><i class="fas fa-chalkboard-user"></i> Instructors <span class="badge pending" id="pendingInstructorCount" style="display:none;margin-left:6px;"></span></a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="instructor-cvs"><i class="fas fa-file-pdf"></i> Instructor CVs</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="certificates"><i class="fas fa-certificate"></i> Certificates</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="payments"><i class="fas fa-credit-card"></i> Payments</a></li>
@@ -968,6 +968,10 @@
             users: [],
             courses: [],
             pendingCourses: [],
+            // Applications waiting on a decision. A separate fetch from `users`
+            // because that list is capped at 50 rows overall, so a waiting
+            // applicant could otherwise sit past the end of it and never be seen.
+            pendingInstructors: [],
             certificates: [],
             payments: [],
             manualOrders: [],
@@ -988,12 +992,13 @@
         async function loadAdminData() {
             // WGA.get already unwraps the { success, data } envelope and takes
             // its query string as `query`, not `params`.
-            const [stats, users, courses, pending, certificates, payments, enrollments, notifications, manualOrders, manualStats] =
+            const [stats, users, courses, pending, pendingInstructors, certificates, payments, enrollments, notifications, manualOrders, manualStats] =
                 await Promise.all([
                     WGA.get('/admin/stats'),
                     WGA.get('/admin/users', { query: { limit: 50 } }),
                     WGA.get('/admin/courses', { query: { limit: 50 } }),
                     WGA.get('/admin/courses', { query: { status: 'pending', limit: 50 } }),
+                    WGA.get('/admin/users', { query: { role: 'instructor', status: 'pending', limit: 50 } }),
                     WGA.get('/admin/certificates', { query: { limit: 50 } }),
                     WGA.get('/payments', { query: { limit: 50 } }),
                     WGA.get('/admin/enrollments', { query: { limit: 50 } }),
@@ -1009,6 +1014,7 @@
             adminData.users = users.items || [];
             adminData.courses = courses.items || [];
             adminData.pendingCourses = pending.items || [];
+            adminData.pendingInstructors = pendingInstructors.items || [];
             adminData.certificates = certificates.items || [];
             adminData.certificateCounts = certificates.counts || { issued: 0, revoked: 0, total: 0 };
             adminData.payments = payments.items || [];
@@ -1528,6 +1534,7 @@
 
         function renderInstructors() {
             const instructors = adminData.users.filter((u) => u.role === 'instructor');
+            const applications = adminData.pendingInstructors || [];
 
             // Course counts are counted from the course list already loaded, not
             // asserted. The previous version printed a `courses` field that only
@@ -1544,10 +1551,12 @@
                     <span style="font-size:24px;font-weight:700;">🧑‍🏫 Instructor Management</span>
                     <button class="btn-primary" onclick="openAddUserModal('instructor')">+ Add Instructor</button>
                 </div>
-                <div class="stats-grid" style="grid-template-columns:repeat(2,1fr);">
+                <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
                     <div class="stat-card glass-premium"><div class="stat-title">Total Instructors</div><div class="stat-value">${instructors.length}</div></div>
                     <div class="stat-card glass-premium"><div class="stat-title">Active</div><div class="stat-value">${instructors.filter((i) => i.status === 'active').length}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">Awaiting review</div><div class="stat-value">${applications.length}</div></div>
                 </div>
+                ${renderPendingApplications(applications)}
                 <div class="table-container glass-premium">
                     <table class="data-table">
                         <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Courses</th><th>Joined</th><th>Actions</th></tr></thead>
@@ -1569,6 +1578,141 @@
                 </div>
             `;
         }
+
+        /**
+         * Applications a person submitted through /become-instructor.html.
+         *
+         * They are accounts in the database from the moment they apply, but they
+         * are `pending` and cannot sign in, so this queue is the only place they
+         * are visible. Everything shown here is the applicant's own claim, not a
+         * verified fact — the CV is attached to the row so it can be checked
+         * before the decision is made.
+         */
+        function renderPendingApplications(applications) {
+            if (!applications.length) {
+                return `
+                    <div class="table-container glass-premium" style="margin-bottom:24px;">
+                        <div style="padding:26px;">
+                            <h3 style="font-weight:700;margin-bottom:6px;">Applications</h3>
+                            <p style="font-size:14px;color:var(--text-light);margin:0;">Nothing is waiting for review. Applications sent through the “Teach on Wuteve” page appear here.</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const rows = applications
+                .map((applicant) => {
+                    const expertise = (applicant.expertise || []).slice(0, 3).join(', ');
+                    const more = (applicant.expertise || []).length > 3 ? ` +${applicant.expertise.length - 3}` : '';
+
+                    return `
+                        <tr>
+                            <td>
+                                ${WGAUI.escapeHtml(applicant.fullName || '—')}
+                                <div style="font-size:12px;color:var(--text-light);">${WGAUI.escapeHtml(applicant.email || '')}</div>
+                            </td>
+                            <td>${applicant.appliedAt ? WGAUI.formatDate(applicant.appliedAt) : WGAUI.formatDate(applicant.createdAt)}</td>
+                            <td>${applicant.yearsExperience === null || applicant.yearsExperience === undefined ? '—' : WGAUI.escapeHtml(String(applicant.yearsExperience))}</td>
+                            <td>${expertise ? WGAUI.escapeHtml(expertise + more) : '—'}</td>
+                            <td>${applicant.hasCv ? '<span class="badge approved">attached</span>' : '<span class="badge inactive">none</span>'}</td>
+                            <td style="white-space:nowrap;">
+                                <button class="action-btn view" title="Read the application" onclick="viewApplication('${applicant.id}')"><i class="fas fa-eye"></i></button>
+                                ${applicant.hasCv ? `<button class="btn-primary btn-outline btn-sm" onclick="downloadInstructorCv('${applicant.id}', this)">CV</button>` : ''}
+                                <button class="btn-primary btn-sm" onclick="approveInstructor('${applicant.id}', this)">Approve</button>
+                                <button class="btn-primary btn-outline btn-sm" onclick="rejectInstructor('${applicant.id}')">Reject</button>
+                            </td>
+                        </tr>
+                    `;
+                })
+                .join('');
+
+            return `
+                <div class="table-container glass-premium" style="margin-bottom:24px;">
+                    <div class="table-header">
+                        <div class="table-toolbar">
+                            <strong style="font-size:16px;">Applications awaiting review (${applications.length})</strong>
+                        </div>
+                    </div>
+                    <p style="padding:0 20px 12px;margin:0;font-size:13px;color:var(--text-light);">
+                        These applicants cannot sign in until you decide. Approving sends a welcome email; rejecting sends the reason you type.
+                    </p>
+                    <table class="data-table">
+                        <thead><tr><th>Applicant</th><th>Applied</th><th>Years</th><th>Expertise</th><th>CV</th><th>Decision</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        /** Everything the applicant claimed, in one place, before a decision. */
+        window.viewApplication = (id) => {
+            const applicant = (adminData.pendingInstructors || []).find((item) => item.id === id);
+            if (!applicant) return;
+
+            const field = (label, value) =>
+                `<div class="form-group"><label>${label}</label><div>${value ? WGAUI.escapeHtml(String(value)) : '—'}</div></div>`;
+
+            openModal(
+                applicant.fullName || 'Application',
+                `
+                    ${field('Email', applicant.email)}
+                    ${field('Phone', applicant.phone)}
+                    ${field('Location', applicant.location)}
+                    ${field('Applied', applicant.appliedAt ? WGAUI.formatDateTime(applicant.appliedAt) : null)}
+                    ${field('Years of experience', applicant.yearsExperience)}
+                    ${field('Areas of expertise', (applicant.expertise || []).join(', '))}
+                    ${field('Degrees, certifications and experience', applicant.credentialSummary)}
+                    ${field('Qualifications', applicant.qualifications)}
+                    ${applicant.videoIntroUrl ? `<div class="form-group"><label>Video introduction</label><div><a href="${WGAUI.escapeHtml(applicant.videoIntroUrl)}" target="_blank" rel="noopener noreferrer">Open link</a></div></div>` : ''}
+                    <div class="form-group"><label>CV</label><div>${applicant.hasCv ? 'Attached. Use the CV button to download it.' : 'Not supplied.'}</div></div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <button class="btn-primary" onclick="approveInstructor('${applicant.id}', this)">Approve</button>
+                        <button class="btn-primary btn-outline" onclick="closeModal(); rejectInstructor('${applicant.id}')">Reject</button>
+                    </div>
+                `
+            );
+        };
+
+        window.approveInstructor = (id, button) =>
+            withBusy(button, async () => {
+                await WGA.post('/admin/instructors/' + encodeURIComponent(id) + '/approve');
+                closeModal();
+                showToast('Instructor approved. They can sign in now.', 'success');
+                await refresh();
+                await loadPage('instructors');
+            });
+
+        window.rejectInstructor = (id) => {
+            const applicant = (adminData.pendingInstructors || []).find((item) => item.id === id) || {};
+
+            openModal(
+                'Reject application',
+                `
+                    <p style="margin:0 0 14px;font-size:14px;">
+                        ${WGAUI.escapeHtml(applicant.fullName || 'This applicant')} will be emailed this reason and will not be able to sign in.
+                    </p>
+                    <div class="form-group"><label>Reason</label><textarea id="instructorRejectReason" rows="4" maxlength="500" placeholder="What was missing, or why the application does not fit?"></textarea></div>
+                    <p style="font-size:12.5px;color:var(--text-light);">At least 10 characters. Be specific — the applicant reads this.</p>
+                    <button class="btn-primary" onclick="confirmRejectInstructor('${id}', this)">Reject application</button>
+                `
+            );
+        };
+
+        window.confirmRejectInstructor = (id, button) =>
+            withBusy(button, async () => {
+                const reason = (document.getElementById('instructorRejectReason')?.value || '').trim();
+
+                if (reason.length < 10) {
+                    showToast('Give a reason of at least 10 characters.', 'error');
+                    return;
+                }
+
+                await WGA.post('/admin/instructors/' + encodeURIComponent(id) + '/reject', { reason });
+                closeModal();
+                showToast('Application rejected and the applicant has been told why.', 'success');
+                await refresh();
+                await loadPage('instructors');
+            });
 
         /** The credential a certificate records; older records default to certificate. */
         function credentialLabel(value) {
@@ -2551,9 +2695,24 @@
             try {
                 await loadAdminData();
                 updateNotifBadge();
+                updatePendingInstructorBadge();
             } catch (error) {
                 showToast(error.message || 'Could not refresh the data.', 'error');
             }
+        }
+
+        /**
+         * How many instructor applications are waiting. Shown on the sidebar so
+         * an application is not invisible until somebody happens to open the
+         * Instructors page — the applicant is promised a decision in 48 hours.
+         */
+        function updatePendingInstructorBadge() {
+            const badge = document.getElementById('pendingInstructorCount');
+            if (!badge) return;
+
+            const count = (adminData.pendingInstructors || []).length;
+            badge.textContent = String(count);
+            badge.style.display = count > 0 ? 'inline-block' : 'none';
         }
 
         function updateNotifBadge() {
@@ -2669,6 +2828,7 @@
             try {
                 await loadAdminData();
                 updateNotifBadge();
+                updatePendingInstructorBadge();
                 await loadPage('overview');
             } catch (error) {
                 showFatal(error);

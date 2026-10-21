@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/Images/Brand/wuteve-emblem.png" />
+  <title>Application received · Wuteve Global Academy</title>
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/css/wga-shell.css?v=20261028" />
+</head>
+<body>
+  <header class="wga-header">
+    <a class="wga-brand" href="/">
+      <img class="brand-mark" src="/Images/Brand/wuteve-emblem.png" alt="" width="34" height="34" />
+      Wuteve <span class="accent">Global Academy</span>
+    </a>
+    <button class="wga-theme-toggle" data-theme-toggle type="button" aria-label="Toggle colour theme">🌙</button>
+  </header>
+
+  <main class="wga-main wga-narrow">
+    <div class="wga-card">
+      <h1>Thank you — we have your application</h1>
+      <p>
+        Your instructor application is now with our team. Every application is read by a
+        person, and you will receive an email at the address you gave us when it has been
+        decided — usually within 48 hours.
+      </p>
+      <p style="margin-bottom:22px;">
+        You cannot sign in until it is approved. That is deliberate: an instructor account
+        that is still under review has nothing to show you yet.
+      </p>
+
+      <div style="display:grid;gap:12px;">
+        <a class="wga-btn wga-btn-primary wga-btn-block" href="/courses.html">Browse the courses</a>
+        <a class="wga-btn wga-btn-block" href="/">Back to the homepage</a>
+      </div>
+
+      <p class="wga-divider" style="margin-bottom:0;">
+        Applied before, with a different address? <a href="/login.html">Sign in</a>
+      </p>
+    </div>
+
+    <p class="wga-muted" style="text-align:center;margin-top:20px;font-size:13px;">
+      If nothing arrives within two working days, write to
+      <a href="mailto:info@wuteveglobalacademy.com">info@wuteveglobalacademy.com</a>.
+    </p>
+  </main>
+
+  <footer class="wga-footer">
+    <span>© <span id="year">2026</span> Wuteve Global Academy</span>
+    <span class="wga-footer-sep">·</span>
+    <a href="/">Home</a>
+    <a href="/courses.html">Courses</a>
+    <a href="/terms.html">Terms of Service</a>
+    <a href="/privacy.html">Privacy Policy</a>
+  </footer>
+
+  <script src="/assets/js/wga-api.js?v=20261021"></script>
+  <script src="/assets/js/wga-ui.js?v=20261021"></script>
+  <script>
+    (function () {
+      'use strict';
+      WGAUI.initTheme();
+    })();
+  </script>
+</body>
+</html>

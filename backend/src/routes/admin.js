@@ -445,6 +445,98 @@ router.post(
   })
 );
 
+/* ------------------------------------------------------------------ *
+ * Instructor applications
+ *
+ * A self-registered instructor is created `pending` and cannot sign in until
+ * one of these decides it. Approval and rejection are separate endpoints rather
+ * than one `PATCH status`, because each has to send a different email and a
+ * rejection has to carry a reason.
+ * ------------------------------------------------------------------ */
+
+router.post(
+  '/instructors/:id/approve',
+  writeLimiter,
+  validate({ params: z.object({ id: objectId }) }),
+  asyncHandler(async (req, res) => {
+    const instructor = await User.findById(req.valid.params.id);
+    if (!instructor) throw notFound('That account could not be found.', { code: 'USER_NOT_FOUND' });
+
+    if (instructor.role !== 'instructor') {
+      throw badRequest('That account is not an instructor.', { code: 'NOT_AN_INSTRUCTOR' });
+    }
+
+    if (instructor.status === 'active') {
+      return ok(res, { instructor: instructor.toPublicJSON({ includePrivate: true }) }, 'That instructor is already active.');
+    }
+
+    instructor.status = 'active';
+    instructor.statusReason = null;
+    instructor.reviewedBy = req.user._id;
+    instructor.reviewedAt = new Date();
+    await instructor.save();
+
+    setImmediate(async () => {
+      try {
+        await email.deliver(email.instructorApprovedEmail({ user: instructor }));
+      } catch (error) {
+        logger.error('Instructor approved email failed', { error, instructorId: String(instructor._id) });
+      }
+    });
+
+    return ok(
+      res,
+      { instructor: instructor.toPublicJSON({ includePrivate: true }) },
+      'Instructor approved. They can sign in now.'
+    );
+  })
+);
+
+router.post(
+  '/instructors/:id/reject',
+  writeLimiter,
+  validate({
+    params: z.object({ id: objectId }),
+    body: z.object({
+      reason: z
+        .string({ required_error: 'Give the applicant a reason' })
+        .trim()
+        .min(10, 'Give a reason of at least 10 characters')
+        .max(500, 'That reason is too long'),
+    }),
+  }),
+  asyncHandler(async (req, res) => {
+    const instructor = await User.findById(req.valid.params.id);
+    if (!instructor) throw notFound('That account could not be found.', { code: 'USER_NOT_FOUND' });
+
+    if (instructor.role !== 'instructor') {
+      throw badRequest('That account is not an instructor.', { code: 'NOT_AN_INSTRUCTOR' });
+    }
+
+    instructor.status = 'rejected';
+    instructor.statusReason = req.valid.body.reason;
+    instructor.reviewedBy = req.user._id;
+    instructor.reviewedAt = new Date();
+    await instructor.save();
+
+    setImmediate(async () => {
+      try {
+        await email.deliver(
+          email.instructorRejectedEmail({ user: instructor, reason: req.valid.body.reason })
+        );
+      } catch (error) {
+        logger.error('Instructor rejected email failed', { error, instructorId: String(instructor._id) });
+      }
+    });
+
+    return ok(
+      res,
+      { instructor: instructor.toPublicJSON({ includePrivate: true }) },
+      'Application rejected and the applicant has been told why.'
+    );
+  })
+);
+
 router.get(
   '/users/:id',
   validate({ params: z.object({ id: objectId }) }),
