@@ -98,6 +98,17 @@ async function issueFor(enrollment, course, student) {
   }
 
   try {
+    /**
+     * What the certificate costs, fixed now.
+     *
+     * Read through `certificateFeeDueCents`, which is zero on a paid course —
+     * buying the course already includes its certificate. Copying the figure
+     * onto the document locks the price at the moment of completion, so an
+     * instructor changing it later cannot move it under a student who has
+     * already finished.
+     */
+    const feeCents = typeof course.certificateFeeDueCents === 'number' ? course.certificateFeeDueCents : 0;
+
     const certificate = await Certificate.create({
       student: student._id,
       course: course._id,
@@ -111,6 +122,11 @@ async function issueFor(enrollment, course, student) {
       certificateNumber: await nextCertificateNumber(),
       completionDate: enrollment.completedAt || new Date(),
       hoursCompleted: enrollment.hoursSpent || 0,
+      // A fee means the document exists but is not awarded yet: the number is
+      // reserved, the PDF is not rendered, and the download endpoint refuses it.
+      status: feeCents > 0 ? 'pending_payment' : 'issued',
+      feeCents,
+      currency: course.currency || 'usd',
       // Null when the course has no quizzes; the certificate simply shows none.
       grade: await quizGradeFor(student._id, course._id),
     });
@@ -126,13 +142,19 @@ async function issueFor(enrollment, course, student) {
      * whatever happens to the renderer, and a certificate record without its
      * PDF can be re-rendered later. A 500 in the completion handler would take
      * the enrolment down with it.
+     *
+     * Skipped entirely while the certificate is waiting to be paid for: a
+     * document that exists is a document somebody will find a way to download,
+     * and the point of withholding it is that it is not awarded yet.
      */
-    await attachRenderedPdf(certificate);
+    if (certificate.status !== 'pending_payment') await attachRenderedPdf(certificate);
 
     logger.info('certificate issued', {
       certificateNumber: certificate.certificateNumber,
       studentId: String(student._id),
       courseId: String(course._id),
+      status: certificate.status,
+      feeCents,
     });
 
     return certificate;
@@ -153,9 +175,54 @@ async function issueFor(enrollment, course, student) {
 async function revoke(certificateId, reason) {
   return Certificate.findByIdAndUpdate(
     certificateId,
-    { $set: { revokedAt: new Date(), revokeReason: reason || 'Revoked by an administrator' } },
+    {
+      $set: {
+        revokedAt: new Date(),
+        revokeReason: reason || 'Revoked by an administrator',
+        // Kept in step with `revokedAt`, which stays the field the rest of the
+        // system reads. Writing only one of the two would leave a document that
+        // is revoked by one measure and issued by the other.
+        status: 'revoked',
+      },
+    },
     { new: true }
   );
+}
+
+/**
+ * Award a certificate whose fee has been confirmed.
+ *
+ * Called from `settlePayment`, never from a route: a certificate becomes
+ * `issued` in exactly one place, the same place every other payment becomes
+ * something real.
+ *
+ * Idempotent. A repeated confirmation finds the certificate already issued and
+ * returns it rather than re-rendering or re-dating it.
+ */
+async function markPaid(certificate, payment = null) {
+  if (!certificate) return null;
+  // Already awarded. A second confirmation must not re-date or re-render it.
+  if (certificate.status === 'issued') return certificate;
+
+  const now = new Date();
+
+  certificate.status = 'issued';
+  certificate.paidAt = certificate.paidAt || now;
+  // The date printed on the document is the date it was awarded, which is now —
+  // not the date the student finished, which is already recorded separately as
+  // `completionDate`.
+  certificate.issueDate = now;
+  if (payment) certificate.payment = payment._id;
+  await certificate.save();
+
+  await attachRenderedPdf(certificate);
+
+  logger.info('certificate issued after payment', {
+    certificateNumber: certificate.certificateNumber,
+    paymentId: payment ? String(payment._id) : null,
+  });
+
+  return certificate;
 }
 
 /**
@@ -204,4 +271,4 @@ async function attachRenderedPdf(certificate) {
 }
 
 module.exports = {
-  attachRenderedPdf, issueFor, revoke, nextCertificateNumber, quizGradeFor, refreshGrade };
+  attachRenderedPdf, issueFor, revoke, markPaid, nextCertificateNumber, quizGradeFor, refreshGrade };

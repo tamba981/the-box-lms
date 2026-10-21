@@ -189,6 +189,17 @@ async function completeLesson({ user, course, lessonId }) {
     fresh.certificate = certificate._id;
 
     if (certificate && certificate.issueDate.getTime() > Date.now() - 60000) {
+      /**
+       * A certificate that has to be paid for has not been awarded yet.
+       *
+       * The record exists and its number is reserved, but no document has been
+       * rendered and nothing has been issued — so there is no certificate email
+       * to attach one to. The student is told the course is finished and that the
+       * certificate is waiting for them, which is true, and the payment flow
+       * takes it from there.
+       */
+      const awaitingPayment = certificate.status === 'pending_payment';
+
       // Before the certificate mail, so the two arrive in the order they happened:
       // you finished the course, and here is the document.
       if (!wasFinished) {
@@ -201,17 +212,23 @@ async function completeLesson({ user, course, lessonId }) {
         });
       }
 
-      notifications
-        .onCertificate(user._id, certificate, `/student-dashboard.html#/certificates`)
-        .catch((error) => logger.error('certificate notification failed', { error }));
+      if (awaitingPayment) {
+        notifications
+          .onCertificateClaim(user._id, certificate, `/student-dashboard.html#/certificates`)
+          .catch((error) => logger.error('certificate claim notification failed', { error }));
+      } else {
+        notifications
+          .onCertificate(user._id, certificate, `/student-dashboard.html#/certificates`)
+          .catch((error) => logger.error('certificate notification failed', { error }));
 
-      setImmediate(async () => {
-        try {
-          await email.deliver(email.certificateEmail({ user: student, certificate }));
-        } catch (error) {
-          logger.error('certificate email failed', { error });
-        }
-      });
+        setImmediate(async () => {
+          try {
+            await email.deliver(email.certificateEmail({ user: student, certificate }));
+          } catch (error) {
+            logger.error('certificate email failed', { error });
+          }
+        });
+      }
     }
   }
 

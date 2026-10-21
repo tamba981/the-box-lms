@@ -61,6 +61,22 @@ const onCertificate = (userId, certificate, link) =>
     meta: { certificateId: String(certificate._id), certificateNumber: certificate.certificateNumber },
   });
 
+/**
+ * The same completion, before the certificate has been paid for.
+ *
+ * Deliberately not `onCertificate`: "your certificate is ready" followed by a
+ * paywall would be the platform telling a student they have something they do
+ * not have yet.
+ */
+const onCertificateClaim = (userId, certificate, link) =>
+  notify(userId, {
+    title: 'Claim your certificate',
+    message: `You completed "${certificate.courseTitle}". Certificate ${certificate.certificateNumber} is reserved — open it to pay and claim.`,
+    type: TYPES.CERTIFICATE,
+    link,
+    meta: { certificateId: String(certificate._id), certificateNumber: certificate.certificateNumber },
+  });
+
 const onLiveSession = (userIds, session, link) =>
   notifyMany(userIds, {
     title: `Live session: ${session.title}`,
@@ -111,6 +127,7 @@ module.exports = {
   notifyMany,
   onEnrollment,
   onCertificate,
+  onCertificateClaim,
   onLiveSession,
   onMessage,
   onCoursePublished,

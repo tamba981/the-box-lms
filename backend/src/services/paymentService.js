@@ -5,11 +5,13 @@ const crypto = require('crypto');
 const config = require('../config/env');
 const logger = require('../lib/logger');
 const { newOrderId } = require('../lib/orderId');
+const Certificate = require('../models/Certificate');
 const Course = require('../models/Course');
 const Enrollment = require('../models/Enrollment');
 const Payment = require('../models/Payment');
 const User = require('../models/User');
 
+const certificateService = require('./certificateService');
 const enrollmentService = require('./enrollmentService');
 const notifications = require('./notificationService');
 const email = require('./email');
@@ -242,8 +244,22 @@ async function settlePayment(
   payment,
   { amountCents, currency, providerPaymentIntentId = null, providerReference = null, paidAt = null } = {}
 ) {
-  // Already settled. A repeated delivery stops here.
-  if (payment.status === 'paid' && payment.enrollment) {
+  const purpose = payment.purpose || 'enrollment';
+
+  /**
+   * Already settled. A repeated delivery stops here.
+   *
+   * What "settled" means depends on what was bought: an enrollment payment has
+   * an enrollment, a certificate payment has a certificate it settled. This
+   * guard read `payment.enrollment` only, and a certificate payment has none —
+   * so a re-delivered callback would have run the second half of this function
+   * again.
+   */
+  const alreadySettled =
+    payment.status === 'paid' &&
+    (purpose === 'certificate' ? Boolean(payment.certificate) : Boolean(payment.enrollment));
+
+  if (alreadySettled) {
     return { handled: true, reason: 'already_fulfilled', paymentId: String(payment._id) };
   }
 
@@ -284,6 +300,22 @@ async function settlePayment(
       paymentId: String(payment._id),
     });
     return { handled: false, reason: 'missing_entities' };
+  }
+
+  /**
+   * A certificate payment awards a document; it must not enrol anybody. The
+   * student is already enrolled — that is what made them eligible to finish the
+   * course and become liable for the fee in the first place.
+   */
+  if (purpose === 'certificate') {
+    return fulfilCertificatePayment({
+      payment,
+      student,
+      course,
+      providerPaymentIntentId,
+      providerReference,
+      paidAt,
+    });
   }
 
   payment.status = 'paid';
@@ -339,6 +371,97 @@ async function settlePayment(
   return { handled: true, reason: 'fulfilled', paymentId: String(payment._id), enrollmentId: String(enrollment._id) };
 }
 
+/**
+ * Award the certificate a confirmed payment bought.
+ *
+ * The student is already enrolled and has already finished; what is being bought
+ * here is the document. So this path awards a certificate and must never create
+ * an enrollment — doing both would put a second enrollment in the table for a
+ * course the student has had for weeks.
+ *
+ * Reached only through `settlePayment`, after the same amount and currency checks
+ * the enrollment path goes through.
+ */
+async function fulfilCertificatePayment({
+  payment,
+  student,
+  course,
+  providerPaymentIntentId = null,
+  providerReference = null,
+  paidAt = null,
+}) {
+  const certificate = payment.certificate ? await Certificate.findById(payment.certificate) : null;
+
+  if (!certificate) {
+    logger.error('cannot fulfil certificate payment: the certificate is missing', {
+      paymentId: String(payment._id),
+      certificateId: payment.certificate ? String(payment.certificate) : null,
+    });
+    return { handled: false, reason: 'missing_certificate' };
+  }
+
+  if (certificate.revokedAt) {
+    logger.error('cannot fulfil certificate payment: the certificate was revoked', {
+      paymentId: String(payment._id),
+      certificateNumber: certificate.certificateNumber,
+    });
+    return { handled: false, reason: 'certificate_revoked' };
+  }
+
+  /**
+   * The order was opened for this document at this price. Comparing the two is
+   * what catches an order built against the wrong certificate — the provider's
+   * figure was already checked against the record by the caller.
+   */
+  if ((certificate.feeCents || 0) !== payment.amountCents) {
+    logger.error('refusing to issue: the certificate fee does not match the order', {
+      paymentId: String(payment._id),
+      certificateNumber: certificate.certificateNumber,
+      feeCents: certificate.feeCents,
+      orderCents: payment.amountCents,
+    });
+    return { handled: false, reason: 'fee_mismatch' };
+  }
+
+  payment.status = 'paid';
+  payment.paidAt = paidAt || new Date();
+  if (providerPaymentIntentId) payment.providerPaymentIntentId = providerPaymentIntentId;
+  if (providerReference) payment.providerReference = providerReference;
+  await payment.save();
+
+  await certificateService.markPaid(certificate, payment);
+
+  notifications
+    .onCertificate(student._id, certificate, '/student-dashboard.html#/certificates')
+    .catch((error) => logger.error('certificate notification failed', { error }));
+
+  // The document, now that it exists. This is the same email the free path
+  // sends; the student is being told the same thing, later.
+  setImmediate(async () => {
+    try {
+      await email.deliver(email.certificateEmail({ user: student, certificate }));
+    } catch (error) {
+      logger.error('certificate email failed', { error });
+    }
+  });
+
+  logger.info('certificate payment fulfilled', {
+    paymentId: String(payment._id),
+    certificateNumber: certificate.certificateNumber,
+    studentId: String(student._id),
+    courseId: String(course._id),
+    amountCents: payment.amountCents,
+  });
+
+  return {
+    handled: true,
+    reason: 'fulfilled',
+    paymentId: String(payment._id),
+    certificateId: String(certificate._id),
+    certificateNumber: certificate.certificateNumber,
+  };
+}
+
 async function markFailed(session, reason) {
   const paymentId = session?.metadata?.paymentId || session?.client_reference_id;
   if (!paymentId) return null;
@@ -375,8 +498,8 @@ async function markFailed(session, reason) {
  */
 const MANUAL_ORDER_WINDOW_MS = 5 * 60 * 1000;
 
-function manualIdempotencyKey(studentId, courseId, now) {
-  return `manual:${String(studentId)}:${String(courseId)}:${Math.floor(now / MANUAL_ORDER_WINDOW_MS)}`;
+function manualIdempotencyKey(studentId, courseId, now, purpose = 'enrollment') {
+  return `manual:${purpose}:${String(studentId)}:${String(courseId)}:${Math.floor(now / MANUAL_ORDER_WINDOW_MS)}`;
 }
 
 /** What the student is told to do, and where to send it. */
@@ -392,7 +515,11 @@ function manualInstructions() {
   };
 }
 
-async function createManualOrder({ user, course, studentPhone = null }) {
+async function createManualOrder({ user, course, purpose = 'enrollment', studentPhone = null }) {
+  if (purpose === 'certificate') {
+    return createManualCertificateOrder({ user, course, studentPhone });
+  }
+
   if (course.priceCents <= 0) {
     throw badRequest('This course is free — just enroll directly.', { code: 'COURSE_IS_FREE' });
   }
@@ -438,6 +565,101 @@ async function createManualOrder({ user, course, studentPhone = null }) {
   return { payment, reused: false };
 }
 
+/**
+ * Buy the certificate itself, on a course that was free to study.
+ *
+ * Nothing here trusts the request: the price is the one fixed on the certificate
+ * when the student finished, the document is found from the enrolment, and an
+ * order is only opened for a certificate that is actually waiting to be paid for.
+ *
+ * A student who has not finished is refused rather than allowed to pay in
+ * advance — money taken for a course they might never complete is money that has
+ * to be given back.
+ */
+async function createManualCertificateOrder({ user, course, studentPhone = null }) {
+  const certificate = await Certificate.findOne({ student: user._id, course: course._id }).sort({
+    issueDate: -1,
+  });
+
+  if (!certificate) {
+    throw badRequest(
+      'Finish every lesson in this course first — its certificate is only offered once the course is complete.',
+      { code: 'COURSE_NOT_COMPLETED' }
+    );
+  }
+
+  if (certificate.revokedAt || certificate.status === 'revoked') {
+    throw badRequest('That certificate was revoked. Please contact the academy.', {
+      code: 'CERTIFICATE_REVOKED',
+    });
+  }
+
+  if ((certificate.status || 'issued') === 'issued') {
+    throw badRequest('This certificate has already been issued — there is nothing to pay.', {
+      code: 'CERTIFICATE_ALREADY_ISSUED',
+    });
+  }
+
+  const feeCents = certificate.feeCents || 0;
+  if (feeCents <= 0) {
+    throw badRequest('This course does not charge for its certificate.', { code: 'NO_CERTIFICATE_FEE' });
+  }
+
+  if (!config.manualPayment.numbers.length) {
+    throw unavailable(
+      'No payment numbers are configured on this deployment, so a manual payment cannot be accepted. Please contact the academy.',
+      { code: 'MANUAL_PAYMENT_UNAVAILABLE' }
+    );
+  }
+
+  /**
+   * An order already open for this certificate is handed back rather than a
+   * second one being created. Unlike a course purchase, the student returns to
+   * this button repeatedly from their dashboard, often days apart, and there is
+   * nothing to be gained by making them start again — least of all a second
+   * transfer of the same fee.
+   */
+  const openOrder = await Payment.findOne({
+    student: user._id,
+    course: course._id,
+    purpose: 'certificate',
+    status: { $in: ['pending', 'awaiting_verification'] },
+  }).sort({ createdAt: -1 });
+
+  if (openOrder && !openOrder.isExpired()) return { payment: openOrder, reused: true };
+
+  const now = Date.now();
+  const idempotencyKey = manualIdempotencyKey(user._id, course._id, now, 'certificate');
+
+  const existing = await Payment.findOne({ idempotencyKey });
+  if (existing) return { payment: existing, reused: true };
+
+  const payment = await Payment.create({
+    student: user._id,
+    course: course._id,
+    purpose: 'certificate',
+    certificate: certificate._id,
+    amountCents: feeCents,
+    currency: certificate.currency || course.currency,
+    provider: 'manual',
+    method: 'mobile_money',
+    status: 'pending',
+    orderId: newOrderId(now),
+    studentPhone,
+    expiresAt: new Date(now + config.manualPayment.expiryDays * 24 * 60 * 60 * 1000),
+    idempotencyKey,
+  });
+
+  logger.info('certificate order created', {
+    orderId: payment.orderId,
+    certificateNumber: certificate.certificateNumber,
+    studentId: String(user._id),
+    amountCents: payment.amountCents,
+  });
+
+  return { payment, reused: false };
+}
+
 /** Look an order up by the reference the student was given. */
 async function findManualOrder(orderId) {
   return Payment.findOne({ orderId: String(orderId || '').trim().toUpperCase(), provider: 'manual' });
@@ -476,12 +698,23 @@ async function markManualOrderPaid({ payment, paidToNumber = null, paymentRefere
   // follows a manual transfer does not read as "nothing happened".
   setImmediate(async () => {
     try {
-      const student = await User.findById(payment.student);
+      const [student, course] = await Promise.all([
+        User.findById(payment.student),
+        Course.findById(payment.course).select('title slug'),
+      ]);
+
       if (student) {
         await email.deliver(
           email.manualPaymentSubmittedEmail({
             user: student,
-            course: { title: payment.courseTitle },
+            /**
+             * The course, actually loaded.
+             *
+             * This used to pass `payment.courseTitle`, a field the Payment model
+             * has never had, so every one of these emails said the payment for
+             * "undefined" had been sent.
+             */
+            course: course || { title: 'your course' },
             payment,
           })
         );
@@ -504,7 +737,12 @@ async function markManualOrderPaid({ payment, paidToNumber = null, paymentRefere
  * duplicated enrolment.
  */
 async function confirmManualOrder({ payment, adminUser = null, notes = null }) {
-  if (payment.status === 'paid' && payment.enrollment) {
+  const purpose = payment.purpose || 'enrollment';
+  const alreadyDone =
+    payment.status === 'paid' &&
+    (purpose === 'certificate' ? Boolean(payment.certificate) : Boolean(payment.enrollment));
+
+  if (alreadyDone) {
     return { handled: true, reason: 'already_fulfilled', paymentId: String(payment._id) };
   }
 
@@ -525,11 +763,21 @@ async function confirmManualOrder({ payment, adminUser = null, notes = null }) {
    * put an order in front of an administrator for a course the student already
    * has, and invite a second confirmation for money that was never sent twice.
    */
+  const supersededPurpose =
+    (payment.purpose || 'enrollment') === 'enrollment'
+      ? // Orders created before `purpose` existed carry no value at all, and a
+        // filter on `purpose: 'enrollment'` would leave them open for ever.
+        { $or: [{ purpose: 'enrollment' }, { purpose: { $exists: false } }] }
+      : { purpose: 'certificate' };
+
   await Payment.updateMany(
     {
       _id: { $ne: payment._id },
       student: payment.student,
       course: payment.course,
+      // Only orders for the same product. Confirming a certificate payment must
+      // not silently expire an enrolment order somebody else is waiting on.
+      ...supersededPurpose,
       status: { $in: ['pending', 'awaiting_verification'] },
     },
     { $set: { status: 'expired', failureReason: 'Superseded by a confirmed order' } }

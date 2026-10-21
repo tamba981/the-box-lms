@@ -82,6 +82,8 @@ router.get(
         .limit(4)
         .populate({ path: 'course' }),
 
+      // The newest handful, whatever their state: a certificate waiting to be
+      // claimed is the most useful thing to show, so it must not be filtered out.
       Certificate.find({ student: studentId }).sort({ issueDate: -1 }).limit(3),
 
       LiveSession.find({
@@ -112,7 +114,13 @@ router.get(
         inProgress: summary.inProgress,
         hoursLearned: Math.round((summary.hours || 0) * 10) / 10,
         averageProgress: Math.round(summary.averageProgress || 0),
-        certificates: await Certificate.countDocuments({ student: studentId, revokedAt: null }),
+        // Earned, not reserved. A certificate behind a paywall is not one the
+        // student has, and counting it would make "0 available" read wrong.
+        certificates: await Certificate.countDocuments({
+          student: studentId,
+          revokedAt: null,
+          status: { $ne: 'pending_payment' },
+        }),
       },
       continueLearning: continueLearning
         .filter((enrollment) => enrollment.course)

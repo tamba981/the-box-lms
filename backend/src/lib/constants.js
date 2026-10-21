@@ -178,6 +178,36 @@ const PAYMENT_STATUSES = Object.freeze([
 
 const TOKEN_TYPES = Object.freeze(['refresh', 'reset', 'verify']);
 
+/**
+ * What a certificate is waiting for.
+ *
+ * `pending_payment` is the only state that is not a finished document: the
+ * student has completed the course and the record exists with its number
+ * reserved, but the certificate has not been issued and cannot be downloaded.
+ * Records created before this field existed have no value stored, so every
+ * read treats a missing status as `issued` — see `isIssued` on the model.
+ */
+const CERTIFICATE_STATUSES = Object.freeze(['pending_payment', 'issued', 'revoked']);
+
+/**
+ * What a payment bought.
+ *
+ * Two products, one payment table, because both are the same act — a person
+ * sends money and a member of staff confirms it arrived. Splitting them into
+ * two collections would mean two settlement paths, and two settlement paths
+ * eventually disagree about idempotency.
+ */
+const PAYMENT_PURPOSES = Object.freeze(['enrollment', 'certificate']);
+
+/**
+ * The certificate fees an instructor may choose, in minor units.
+ *
+ * A fixed list rather than any integer: these are round dollar amounts, they
+ * are what the mobile-money instructions tell a student to send, and a free
+ * text price invites four different spellings of "ten dollars".
+ */
+const CERTIFICATE_FEE_OPTIONS = Object.freeze([0, 1000, 2000, 3000, 4000, 5000]);
+
 const THREAD_TYPES = Object.freeze(['direct', 'group', 'instructor', 'course']);
 
 /** Progress at or above this percentage is treated as course completion. */
@@ -212,6 +242,9 @@ module.exports = {
   NOTIFICATION_TYPES,
   LIVE_SESSION_STATUSES,
   PAYMENT_STATUSES,
+  PAYMENT_PURPOSES,
+  CERTIFICATE_STATUSES,
+  CERTIFICATE_FEE_OPTIONS,
   TOKEN_TYPES,
   THREAD_TYPES,
   COMPLETION_THRESHOLD,

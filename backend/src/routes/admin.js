@@ -134,7 +134,9 @@ router.get(
       Course.aggregate([{ $group: { _id: '$status', count: { $sum: 1 } } }]),
       Enrollment.countDocuments({ status: { $ne: 'cancelled' } }),
       Enrollment.countDocuments({ status: 'completed' }),
-      Certificate.countDocuments({ revokedAt: null }),
+      // Issued, not merely recorded: a certificate waiting to be paid for is not
+      // a certificate the academy has awarded, and the summary card says so.
+      Certificate.countDocuments({ revokedAt: null, status: { $ne: 'pending_payment' } }),
       Course.countDocuments({ status: 'pending' }),
       Payment.aggregate([
         { $match: { status: 'paid' } },
@@ -1073,12 +1075,21 @@ router.post(
 
     const fresh = await Payment.findById(order._id);
 
+    /**
+     * One confirmation, two possible outcomes, and the administrator has to be
+     * told which one happened — "the student enrolled" after issuing a
+     * certificate would leave them unsure whether anything did.
+     */
+    const isCertificate = (order.purpose || 'enrollment') === 'certificate';
+
     return ok(
       res,
-      { order: fresh.toJSONForOwner() },
+      { order: fresh.toJSONForOwner(), outcome: isCertificate ? 'certificate' : 'enrollment' },
       result.reason === 'already_fulfilled'
         ? 'That order had already been confirmed. Nothing was changed.'
-        : 'Payment confirmed and the student enrolled.'
+        : isCertificate
+          ? 'Payment confirmed and the certificate has been issued.'
+          : 'Payment confirmed and the student enrolled.'
     );
   })
 );
@@ -1232,7 +1243,7 @@ router.get(
   '/certificates',
   validate({
     query: z.object({
-      status: z.enum(['issued', 'revoked']).optional(),
+      status: z.enum(['issued', 'revoked', 'pending_payment']).optional(),
       q: z.string().trim().max(120).optional(),
       page: z.coerce.number().int().min(1).max(10000).optional(),
       limit: z.coerce.number().int().min(1).max(100).optional(),
@@ -1242,20 +1253,32 @@ router.get(
     const query = req.valid.query;
     const { limit, page, skip } = parsePagination(query);
 
+    /**
+     * `$ne` rather than `=== 'issued'` on purpose: a certificate created before
+     * this field existed has no stored status, and belongs with the issued ones.
+     */
     const filter = {};
-    if (query.status === 'issued') filter.revokedAt = null;
+    if (query.status === 'issued') {
+      filter.revokedAt = null;
+      filter.status = { $ne: 'pending_payment' };
+    }
     if (query.status === 'revoked') filter.revokedAt = { $ne: null };
+    if (query.status === 'pending_payment') {
+      filter.revokedAt = null;
+      filter.status = 'pending_payment';
+    }
 
     if (query.q) {
       const pattern = contains(query.q);
       filter.$or = [{ certificateNumber: pattern }, { studentName: pattern }, { courseTitle: pattern }];
     }
 
-    const [certificates, total, issued, revoked] = await Promise.all([
+    const [certificates, total, issued, revoked, pendingPayment] = await Promise.all([
       Certificate.find(filter).sort({ issueDate: -1 }).skip(skip).limit(limit),
       Certificate.countDocuments(filter),
-      Certificate.countDocuments({ revokedAt: null }),
+      Certificate.countDocuments({ revokedAt: null, status: { $ne: 'pending_payment' } }),
       Certificate.countDocuments({ revokedAt: { $ne: null } }),
+      Certificate.countDocuments({ revokedAt: null, status: 'pending_payment' }),
     ]);
 
     return ok(res, {
@@ -1269,7 +1292,7 @@ router.get(
         total,
         { page, limit }
       ),
-      counts: { issued, revoked, total: issued + revoked },
+      counts: { issued, revoked, pendingPayment, total: issued + revoked + pendingPayment },
     });
   })
 );

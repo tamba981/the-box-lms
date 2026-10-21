@@ -1481,9 +1481,12 @@
             '<aside class="buy-card">' +
               '<div class="buy-price">' + WGAUI.escapeHtml(priceLabel) + '</div>' +
               '<p class="wga-hint" style="margin-bottom:20px;">' +
-                (course.isFree
-                  ? 'One-time enrollment. Certificate issued when you complete the course.'
-                  : 'One-time payment. Certificate issued when you complete the course.') + '</p>' +
+                (course.certificateFeeLabel
+                  ? 'Free to learn. The certificate is ' + WGAUI.escapeHtml(course.certificateFeeLabel) +
+                    ', paid if you decide to claim it once you have finished.'
+                  : course.isFree
+                    ? 'Free to learn, and the certificate is included when you complete the course.'
+                    : 'One-time payment. Certificate issued when you complete the course.') + '</p>' +
               action +
               '<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);">' +
                 '<p class="wga-hint" style="margin:0 0 4px;font-weight:700;color:inherit;">Instructor</p>' +

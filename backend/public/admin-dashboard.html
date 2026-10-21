@@ -1154,7 +1154,9 @@
             const note =
                 entries.length > 1
                     ? `Across ${entries.length} currencies: ${entries.map((entry) => `${entry.totalLabel} (${entry.payments})`).join(' · ')}`
-                    : `${primary.payments} paid enrolment${primary.payments === 1 ? '' : 's'}`;
+                    // "Paid enrolment" was accurate while a payment could only buy
+                    // a course. A certificate fee is money and is not an enrolment.
+                    : `${primary.payments} paid transaction${primary.payments === 1 ? '' : 's'}`;
 
             return { value: primary.totalLabel, note, mixed: entries.length > 1 };
         }
@@ -1775,17 +1777,51 @@
         };
 
         function renderCertificates() {
-            const counts = adminData.certificateCounts || { issued: 0, revoked: 0, total: 0 };
+            const filter = state.certStatus || '';
+            const option = (value, label) =>
+                `<option value="${value}"${filter === value ? ' selected' : ''}>${label}</option>`;
 
             return `
                 <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
                     <span style="font-size:24px;font-weight:700;">🎓 Certificate Management</span>
-                    <button class="btn-primary btn-outline" onclick="exportCertificatesCsv()">Export CSV</button>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <select id="certStatus" onchange="loadCertificates(this.value)" style="padding:10px 14px;border-radius:10px;">
+                            ${option('', 'All certificates')}
+                            ${option('issued', 'Issued')}
+                            ${option('pending_payment', 'Awaiting payment')}
+                            ${option('revoked', 'Revoked')}
+                        </select>
+                        <button class="btn-primary btn-outline" onclick="exportCertificatesCsv()">Export CSV</button>
+                    </div>
                 </div>
-                <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);">
+                <div id="certBody">${renderCertificateBody()}</div>
+                <p style="margin-top:18px;font-size:13px;color:var(--text-light);">
+                    Certificates are verifiable at a public link and can be revoked here. One can be
+                    reserved without being issued — a free course may charge for its certificate, and
+                    until the fee is confirmed the document stays unissued and cannot be downloaded.
+                </p>
+            `;
+        }
+
+        function renderCertificateBody() {
+            const counts = adminData.certificateCounts || { issued: 0, revoked: 0, pendingPayment: 0, total: 0 };
+
+            const rowStatus = (c) => {
+                if (c.revoked) {
+                    return `<span class="badge inactive" title="${WGAUI.escapeHtml(c.revokedReason || '')}">revoked</span>`;
+                }
+                if (c.status === 'pending_payment') {
+                    return `<span class="badge pending" title="The student has finished; the ${WGAUI.escapeHtml(c.feeLabel || 'fee')} has not been confirmed">awaiting payment</span>`;
+                }
+                return '<span class="badge active">valid</span>';
+            };
+
+            return `
+                <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
                     <div class="stat-card glass-premium"><div class="stat-title">Currently Valid</div><div class="stat-value">${counts.issued}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">Awaiting payment</div><div class="stat-value">${counts.pendingPayment || 0}</div></div>
                     <div class="stat-card glass-premium"><div class="stat-title">Revoked</div><div class="stat-value">${counts.revoked}</div></div>
-                    <div class="stat-card glass-premium"><div class="stat-title">Total Issued</div><div class="stat-value">${counts.total}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">Total</div><div class="stat-value">${counts.total}</div></div>
                 </div>
                 <div class="table-container glass-premium">
                     <table class="data-table">
@@ -1799,26 +1835,45 @@
                                         <td>${WGAUI.escapeHtml(c.studentName)}</td>
                                         <td>${WGAUI.escapeHtml(c.courseTitle)}</td>
                                         <td>${WGAUI.formatDate(c.issueDate)}</td>
-                                        <td>${c.revoked
-                                            ? `<span class="badge inactive" title="${WGAUI.escapeHtml(c.revokedReason || '')}">revoked</span>`
-                                            : '<span class="badge active">valid</span>'}</td>
+                                        <td>${rowStatus(c)}</td>
                                         <td>
                                             <a class="action-btn view" href="/verify/${encodeURIComponent(c.verificationCode)}" target="_blank" rel="noopener" title="Open public verification"><i class="fas fa-eye"></i></a>
-                                            <button class="action-btn view" title="Download PDF" onclick="downloadCertificate('${c.id}', this)"><i class="fas fa-download"></i></button>
+                                            ${c.status === 'pending_payment'
+                                                // Downloading a reserved certificate answers 402 by design, so the
+                                                // button is not offered rather than offered and refused.
+                                                ? '<span style="font-size:12px;color:var(--text-light);">not issued yet</span>'
+                                                : `<button class="action-btn view" title="Download PDF" onclick="downloadCertificate('${c.id}', this)"><i class="fas fa-download"></i></button>`}
                                             ${c.revoked ? '' : `<button class="action-btn delete" onclick="revokeCertificate('${c.id}', '${WGAUI.escapeHtml(c.certificateNumber)}')"><i class="fas fa-ban"></i> Revoke</button>`}
                                         </td>
                                     </tr>
                                 `).join('')
-                                : `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-light);">No certificates have been issued yet.</td></tr>`}
+                                : `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-light);">No certificates in this view.</td></tr>`}
                         </tbody>
                     </table>
                 </div>
-                <p style="margin-top:18px;font-size:13px;color:var(--text-light);">
-                    Certificates are verifiable at a public link and can be revoked here. There is no
-                    blockchain involved — this page previously claimed "Blockchain Verified".
-                </p>
             `;
         }
+
+        window.loadCertificates = async function loadCertificates(status) {
+            state.certStatus = status || '';
+
+            const body = document.getElementById('certBody');
+            if (!body) return;
+
+            body.innerHTML = '<div style="text-align:center;padding:40px;"><div class="loading-spinner"></div></div>';
+
+            try {
+                const query = { limit: 50 };
+                if (state.certStatus) query.status = state.certStatus;
+
+                const data = await WGA.get('/admin/certificates', { query });
+                adminData.certificates = data.items || [];
+                adminData.certificateCounts = data.counts || adminData.certificateCounts;
+                body.innerHTML = renderCertificateBody();
+            } catch (error) {
+                body.innerHTML = `<p style="padding:20px;">${WGAUI.escapeHtml(error.message || 'Could not load certificates.')}</p>`;
+            }
+        };
 
         function renderPayments() {
             const revenue = adminData.revenue || [];
@@ -1850,7 +1905,7 @@
                 ? `<div class="table-container glass-premium" style="padding:26px;text-align:center;color:var(--text-light);">No manual orders. When a student chooses to pay by transfer, the order appears here for you to confirm.</div>`
                 : `<div class="table-container glass-premium">
                     <table class="data-table">
-                        <thead><tr><th>Order</th><th>Student</th><th>Course</th><th>Amount</th><th>Sent</th><th>Status</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>Order</th><th>Student</th><th>Course</th><th>For</th><th>Amount</th><th>Sent</th><th>Status</th><th>Actions</th></tr></thead>
                         <tbody>
                             ${manualOrders.map((order) => `
                                 <tr>
@@ -1862,6 +1917,9 @@
                                         order.studentPhone ? `<div style="font-size:11px;color:var(--text-light);">${WGAUI.escapeHtml(order.studentPhone)}</div>` : ''
                                     }</td>
                                     <td>${WGAUI.escapeHtml(order.courseTitle || '—')}</td>
+                                    <td>${(order.purpose || 'enrollment') === 'certificate'
+                                        ? '<span class="badge approved">certificate</span>'
+                                        : '<span class="badge" style="background:var(--gold);color:#0f172a;">course</span>'}</td>
                                     <td>${WGAUI.escapeHtml(order.amountLabel || '')}</td>
                                     <td>${order.markedPaidAt ? WGAUI.formatDateTime(order.markedPaidAt) : '—'}</td>
                                     <td>${manualBadge(order.status)}</td>
@@ -1889,7 +1947,7 @@
                     <div class="stat-card glass-premium"><div class="stat-title">Collected Offline</div><div class="stat-value" style="font-size:24px;">${WGAUI.escapeHtml(manualStats.collectedLabel || '$0.00')}</div><div class="stat-change">${manualCounts.confirmed || 0} confirmed transfer${(manualCounts.confirmed || 0) === 1 ? '' : 's'}</div></div>
                 </div>
                 <h3 style="font-size:16px;font-weight:700;margin:26px 0 4px;">Manual transfers</h3>
-                <p style="font-size:13px;color:var(--text-light);margin:0 0 14px;">Check the account, then mark the order paid. That is what enrols the student and emails their receipt.</p>
+                <p style="font-size:13px;color:var(--text-light);margin:0 0 14px;">Check the account, then mark the order paid. A course order enrols the student; a certificate order issues the document. Either way the student is emailed.</p>
                 ${manualTable}
                 <h3 style="font-size:16px;font-weight:700;margin:26px 0 4px;">Settled payments</h3>
                 <p style="font-size:13px;color:var(--text-light);margin:0 0 14px;">Everything that has been paid, including transfers confirmed above. This is the ledger, not the queue.</p>
@@ -2551,24 +2609,39 @@
         /*
          * Manual orders.
          *
-         * Confirming does three things at once — it enrols the student, opens the
-         * course and emails the receipt — so the dialog says so before the button
-         * is pressed, rather than reporting it afterwards.
+         * Confirming does one of two different things — it either enrols the
+         * student or issues a certificate — so the dialog says which, before the
+         * button is pressed, rather than reporting it afterwards.
          */
         window.verifyManualOrder = (orderId, button) =>
             withBusy(button, async () => {
+                const order = (adminData.manualOrders || []).find((item) => item.orderId === orderId);
+                const isCertificate = Boolean(order) && (order.purpose || 'enrollment') === 'certificate';
+
+                const consequences = isCertificate
+                    ? 'This will:\n' +
+                      '  - issue the certificate this student finished the course for\n' +
+                      '  - make the PDF downloadable straight away\n' +
+                      '  - email them the document'
+                    : 'This will:\n' +
+                      '  - enrol the student in the course\n' +
+                      '  - give them access straight away\n' +
+                      '  - email their receipt';
+
                 if (!window.confirm(
                     `Confirm payment for order ${orderId}?\n\n` +
-                    'This will:\n' +
-                    '  - enrol the student in the course\n' +
-                    '  - give them access straight away\n' +
-                    '  - email their receipt\n\n' +
+                    `${consequences}\n\n` +
                     'Only do this once you have seen the money in the account.'
                 )) return;
 
                 try {
                     await WGA.post(`/admin/payments/manual/${encodeURIComponent(orderId)}/verify`, {});
-                    showToast('Payment confirmed. The student is enrolled.', 'success');
+                    showToast(
+                        isCertificate
+                            ? 'Payment confirmed. The certificate has been issued.'
+                            : 'Payment confirmed. The student is enrolled.',
+                        'success'
+                    );
                 } catch (error) {
                     // The server tells "already confirmed" apart from a real
                     // failure, and its message is more specific than anything

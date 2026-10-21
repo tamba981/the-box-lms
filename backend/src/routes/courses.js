@@ -91,6 +91,7 @@ function applyCourseFields(course, fields) {
   if (fields.language !== undefined) course.language = fields.language;
   if (fields.priceCents !== undefined) course.priceCents = fields.priceCents;
   if (fields.currency !== undefined) course.currency = fields.currency;
+  if (fields.certificateFeeCents !== undefined) course.certificateFeeCents = fields.certificateFeeCents;
   if (fields.durationHours !== undefined) course.durationHours = fields.durationHours;
 }
 

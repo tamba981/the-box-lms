@@ -3,8 +3,9 @@
 const crypto = require('crypto');
 const mongoose = require('mongoose');
 
-const { baseOptions } = require('./common');
-const { CREDENTIALS } = require('../lib/constants');
+const { baseOptions, lowercaseTrim } = require('./common');
+const { CREDENTIALS, CERTIFICATE_STATUSES } = require('../lib/constants');
+const { formatCents } = require('../lib/money');
 
 /**
  * A certificate issued on course completion.
@@ -71,17 +72,58 @@ const certificateSchema = new mongoose.Schema(
     /** Revoked certificates stay resolvable but report as revoked. */
     revokedAt: { type: Date, default: null },
     revokeReason: { type: String, trim: true, maxlength: 500, default: null },
+
+    /**
+     * Where the document is in its life.
+     *
+     * `pending_payment` means the course is finished and the number is reserved,
+     * but the certificate is not issued and cannot be downloaded until the fee is
+     * confirmed. Certificates created before this field existed have no stored
+     * value and are read as `issued` — see `isIssued` — so nothing already earned
+     * changes state.
+     */
+    status: { type: String, enum: CERTIFICATE_STATUSES, default: 'issued', index: true },
+
+    /**
+     * What the student owes for this certificate, fixed when it is created.
+     *
+     * Copied from the course rather than read from it later: an instructor who
+     * raises the fee after a student has finished must not move that student's
+     * price, and an order already paid at the old amount must still settle.
+     */
+    feeCents: { type: Number, default: 0, min: 0 },
+    currency: { ...lowercaseTrim, default: 'usd' },
+    paidAt: { type: Date, default: null },
+    payment: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment', default: null },
   },
   baseOptions
 );
 
 certificateSchema.index({ student: 1, issueDate: -1 });
 
+/**
+ * Whether the document has actually been awarded.
+ *
+ * A missing `status` is an old record that was issued before certificates could
+ * be withheld for payment, so it counts as issued. Written as a method rather
+ * than a comparison at each call site because two call sites would eventually
+ * disagree about the missing-field case.
+ */
+certificateSchema.methods.isIssued = function isIssued() {
+  return !this.revokedAt && (this.status || 'issued') === 'issued';
+};
+
 /** The public verification payload. Deliberately minimal: no email, no id. */
 certificateSchema.methods.toVerificationJSON = function toVerificationJSON() {
+  const status = this.status || 'issued';
+
   return {
-    valid: !this.revokedAt,
+    // A certificate waiting to be paid for has not been issued, so it does not
+    // verify. Saying it is valid would let an employer accept a document the
+    // academy has not actually awarded.
+    valid: !this.revokedAt && status === 'issued',
     revoked: Boolean(this.revokedAt),
+    status,
     revokedReason: this.revokeReason || null,
     certificateNumber: this.certificateNumber,
     verificationCode: this.verificationCode,
@@ -103,11 +145,20 @@ certificateSchema.methods.toVerificationJSON = function toVerificationJSON() {
 };
 
 certificateSchema.methods.toJSONForOwner = function toJSONForOwner(extra = {}) {
+  const status = this.status || 'issued';
+
   return {
     ...this.toVerificationJSON(),
     id: String(this._id),
     courseId: String(this.course),
     verifyUrl: `/verify/${this.verificationCode}`,
+    // What it costs to claim, and whether claiming is what is missing. The
+    // student dashboard drives its "Pay $X to claim" button from these two
+    // fields rather than inferring them from the status.
+    feeCents: this.feeCents || 0,
+    feeLabel: this.feeCents > 0 ? formatCents(this.feeCents, this.currency) : null,
+    requiresPayment: status === 'pending_payment',
+    paidAt: this.paidAt,
     ...extra,
   };
 };

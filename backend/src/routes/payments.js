@@ -11,6 +11,7 @@ const paymentService = require('../services/paymentService');
 const mobileMoneyService = require('../services/mobileMoneyService');
 
 const config = require('../config/env');
+const { PAYMENT_PURPOSES } = require('../lib/constants');
 const logger = require('../lib/logger');
 const { asyncHandler } = require('../lib/asyncHandler');
 const { ok, created } = require('../lib/respond');
@@ -212,6 +213,8 @@ router.post(
     body: z.object({
       courseId: objectId,
       studentPhone: z.string().trim().max(30).optional().nullable(),
+      /** `enrollment` unless the student is claiming a certificate. */
+      purpose: z.enum(PAYMENT_PURPOSES).optional(),
     }),
   }),
   asyncHandler(async (req, res) => {
@@ -222,20 +225,30 @@ router.post(
       throw notFound('That course is not open for enrollment.', { code: 'COURSE_NOT_PUBLISHED' });
     }
 
-    // You cannot buy a course you already have access to.
-    const already = await Enrollment.findOne({
-      student: req.user._id,
-      course: course._id,
-      status: { $ne: 'cancelled' },
-    });
+    const purpose = req.valid.body.purpose || 'enrollment';
 
-    if (already) {
-      throw forbidden('You are already enrolled in this course.', { code: 'ALREADY_ENROLLED' });
+    /**
+     * You cannot buy a course you already have — but a certificate order is
+     * exactly the case where the student does already have it. The service
+     * checks that they finished the course, and that the certificate is the one
+     * still waiting to be paid for.
+     */
+    if (purpose === 'enrollment') {
+      const already = await Enrollment.findOne({
+        student: req.user._id,
+        course: course._id,
+        status: { $ne: 'cancelled' },
+      });
+
+      if (already) {
+        throw forbidden('You are already enrolled in this course.', { code: 'ALREADY_ENROLLED' });
+      }
     }
 
     const { payment, reused } = await paymentService.createManualOrder({
       user: req.user,
       course,
+      purpose,
       studentPhone: req.valid.body.studentPhone || null,
     });
 
@@ -247,7 +260,7 @@ router.post(
     // A second press within the window returns the same order rather than a
     // second one, so the button is safe to double-tap on a slow connection.
     return reused
-      ? ok(res, payload, 'You already have an order open for this course.')
+      ? ok(res, payload, 'You already have an order open for this. It is below.')
       : created(res, payload, 'Order created. Send the payment, then tell us it is done.');
   })
 );

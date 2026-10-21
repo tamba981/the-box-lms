@@ -6185,6 +6185,356 @@ async function testInstructorApplications() {
   });
 }
 
+/**
+ * Certificate fees.
+ *
+ * A course can be free to study and still charge for its certificate. Finishing
+ * such a course reserves the document — number and all — without issuing it, and
+ * the student pays through the same manual-verification queue a course purchase
+ * goes through. These checks are mostly about what does NOT happen: no download
+ * before the money, no second order, no second certificate, and no fee charged
+ * on a course that was already paid for.
+ */
+async function testCertificateFees() {
+  const Certificate = require('../src/models/Certificate');
+  const Course = require('../src/models/Course');
+  const Lesson = require('../src/models/Lesson');
+
+  const adminEmail = `smoke-fee-admin-${runId}@example.com`;
+  const studentEmail = `smoke-fee-student-${runId}@example.com`;
+  const unpaidEmail = `smoke-fee-unpaid-${runId}@example.com`;
+  createdEmails.push(adminEmail, studentEmail, unpaidEmail);
+
+  let adminToken = null;
+  let studentToken = null;
+  let unpaidToken = null;
+  let feeCourse = null;
+  let freeCourse = null;
+  let paidCourse = null;
+  let certificate = null;
+  let order = null;
+
+  const signIn = async (email) => {
+    const { json } = await request('POST', '/api/v1/auth/login', { body: { email, password: PASSWORD } });
+    return json.data.accessToken;
+  };
+
+  const download = async (path, token) => {
+    const response = await fetch(`${baseUrl}${path}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    return {
+      status: response.status,
+      contentType: response.headers.get('content-type') || '',
+      buffer: Buffer.from(await response.arrayBuffer()),
+    };
+  };
+
+  /** A published, one-lesson course the suite can finish in a single request. */
+  const makeCourse = async (title, extra = {}) => {
+    const course = await Course.create({
+      title,
+      slug: `smoke-fee-${title.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${runId}`,
+      instructor: (await User.findOne({ email: adminEmail }))._id,
+      instructorName: 'FEES Admin',
+      category: 'business-management',
+      level: 'beginner',
+      status: 'published',
+      publishedAt: new Date(),
+      priceCents: 0,
+      ...extra,
+    });
+
+    const lesson = await Lesson.create({
+      course: course._id,
+      title: 'The only lesson',
+      content: 'One lesson, so finishing it finishes the course.',
+      order: 1,
+      published: true,
+    });
+
+    return { course, lesson };
+  };
+
+  const enrolAndFinish = async ({ course, lesson }, token) => {
+    const enrolled = await request('POST', `/api/v1/courses/${course.id}/enroll`, { token });
+    // 201 for a new enrolment, 200 when one already exists.
+    assert(
+      enrolled.status === 200 || enrolled.status === 201,
+      `enrol status: ${enrolled.status} ${enrolled.json && enrolled.json.message}`
+    );
+
+    const finished = await request('POST', `/api/v1/courses/${course.id}/lessons/${lesson.id}/complete`, {
+      token,
+    });
+    assertEqual(finished.status, 200, 'completion status');
+
+    return finished.json.data;
+  };
+
+  await check('certificate-fee fixtures are provisioned', async () => {
+    await User.create({
+      firstName: 'Fees',
+      lastName: 'Admin',
+      email: adminEmail,
+      password: PASSWORD,
+      role: 'admin',
+      emailVerified: true,
+    });
+    await User.create({
+      firstName: 'Fees',
+      lastName: 'Student',
+      email: studentEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+    await User.create({
+      firstName: 'Fees',
+      lastName: 'Unpaid',
+      email: unpaidEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+
+    adminToken = await signIn(adminEmail);
+    studentToken = await signIn(studentEmail);
+    unpaidToken = await signIn(unpaidEmail);
+
+    const fee = await makeCourse('Certificate fee course', { certificateFeeCents: 3000 });
+    const free = await makeCourse('Certificate free course');
+    const paid = await makeCourse('Certificate paid course', { priceCents: 5000, certificateFeeCents: 5000 });
+
+    feeCourse = { course: fee.course.toCardJSON(), lesson: fee.lesson.toFullJSON() };
+    freeCourse = { course: free.course.toCardJSON(), lesson: free.lesson.toFullJSON() };
+    paidCourse = paid.course.toCardJSON();
+
+    assert(adminToken && studentToken && unpaidToken, 'all three sessions must exist');
+    assert(feeCourse.course.id && freeCourse.course.id, 'the courses must be created');
+  });
+
+  await check('a free course with no fee still issues its certificate at completion', async () => {
+    const state = await enrolAndFinish(freeCourse, studentToken);
+
+    assertEqual(state.finished, true, 'the course must be complete');
+    assert(state.certificate, 'a certificate must be issued immediately');
+    assertEqual(state.certificate.status, 'issued', 'status');
+    assertEqual(state.certificate.feeCents, 0, 'no fee is recorded');
+
+    const stored = await Certificate.findById(state.certificate.id).select('+pdfBase64');
+    assert(stored.pdfBase64, 'the document must be rendered at issue time');
+  });
+
+  await check('the certificate fee is part of the course the catalog serves', async () => {
+    const { status, json } = await request('GET', `/api/v1/courses/${feeCourse.course.slug}`);
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.course.certificateFeeCents, 3000, 'stored fee');
+    assertEqual(json.data.course.certificateFeeDueCents, 3000, 'fee actually charged');
+    assertEqual(json.data.course.certificateFeeLabel, '$30.00', 'label');
+  });
+
+  await check('a paid course does not charge a certificate fee on top', async () => {
+    const { json } = await request('GET', `/api/v1/courses/${paidCourse.slug}`);
+
+    assertEqual(json.data.course.priceCents, 5000, 'the course price');
+    // Stored, but not applied: buying the course already includes the certificate.
+    assertEqual(json.data.course.certificateFeeCents, 5000, 'stored fee');
+    assertEqual(json.data.course.certificateFeeDueCents, 0, 'nothing extra is due');
+    assertEqual(json.data.course.certificateFeeLabel, null, 'no label is shown');
+  });
+
+  await check('finishing a course with a fee reserves the certificate without issuing it', async () => {
+    const state = await enrolAndFinish(feeCourse, studentToken);
+
+    assertEqual(state.finished, true, 'the course must be complete');
+    assert(state.certificate, 'the certificate record must exist');
+    assertEqual(state.certificate.status, 'pending_payment', 'status');
+    assertEqual(state.certificate.feeCents, 3000, 'the fee is fixed on the document');
+    assertEqual(state.certificate.requiresPayment, true, 'the student is told it must be claimed');
+    assertEqual(state.certificate.feeLabel, '$30.00', 'the label the dashboard shows');
+
+    certificate = state.certificate;
+
+    const stored = await Certificate.findById(certificate.id).select('+pdfBase64');
+    assertEqual(stored.status, 'pending_payment', 'stored status');
+    assert(!stored.pdfBase64, 'no document may exist before it is paid for');
+  });
+
+  await check('an administrator can list the certificates waiting to be paid for', async () => {
+    const { status, json } = await request(
+      'GET',
+      '/api/v1/admin/certificates?status=pending_payment&limit=100',
+      { token: adminToken }
+    );
+
+    assertEqual(status, 200, 'status');
+    assert(
+      (json.data.items || []).some((item) => item.id === certificate.id),
+      'the reserved certificate must be in the queue'
+    );
+    assert(json.data.counts.pendingPayment >= 1, 'the awaiting-payment count must include it');
+    // The issued list must not claim it.
+    assertEqual(
+      (json.data.items || []).every((item) => item.status === 'pending_payment'),
+      true,
+      'the filter must return only certificates awaiting payment'
+    );
+  });
+
+  await check('a certificate awaiting payment does not verify publicly', async () => {
+    const { status, json } = await request('GET', `/api/v1/certificates/verify/${certificate.verificationCode}`);
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.found, true, 'the reference is known');
+    assertEqual(json.data.valid, false, 'but it is not a valid certificate yet');
+    assertEqual(json.data.status, 'pending_payment', 'the public payload names the state');
+  });
+
+  await check('a certificate awaiting payment cannot be downloaded', async () => {
+    const response = await download(`/api/v1/certificates/${certificate.id}/download`, studentToken);
+
+    assertEqual(response.status, 402, '402, not a 500 and not a document');
+    assert(response.contentType.includes('json'), 'the refusal is a JSON body, not a PDF');
+  });
+
+  await check('a certificate order cannot be opened before the course is finished', async () => {
+    await request('POST', `/api/v1/courses/${feeCourse.course.id}/enroll`, { token: unpaidToken });
+
+    const { status, json } = await request('POST', '/api/v1/payments/manual', {
+      token: unpaidToken,
+      body: { courseId: feeCourse.course.id, purpose: 'certificate' },
+    });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'COURSE_NOT_COMPLETED', 'code');
+  });
+
+  await check('a certificate order is priced by the server, never by the request', async () => {
+    const { status, json } = await request('POST', '/api/v1/payments/manual', {
+      token: studentToken,
+      body: { courseId: feeCourse.course.id, purpose: 'certificate', amountCents: 1 },
+    });
+
+    assertEqual(status, 201, 'status');
+    assertEqual(json.data.order.purpose, 'certificate', 'purpose');
+    assertEqual(json.data.order.amountCents, 3000, 'the amount comes from the certificate');
+    assertEqual(json.data.order.certificateId, certificate.id, 'the order names the document');
+    assert(json.data.order.orderId, 'an order reference is issued');
+    assert(json.data.instructions.numbers.length > 0, 'the numbers to send to are included');
+
+    order = json.data.order;
+  });
+
+  await check('pressing claim twice returns the same order, not a second one', async () => {
+    const { status, json } = await request('POST', '/api/v1/payments/manual', {
+      token: studentToken,
+      body: { courseId: feeCourse.course.id, purpose: 'certificate' },
+    });
+
+    assertEqual(status, 200, 'the second press is not an error');
+    assertEqual(json.data.order.orderId, order.orderId, 'the same reference comes back');
+    assertEqual(
+      await require('../src/models/Payment').countDocuments({
+        student: (await User.findOne({ email: studentEmail }))._id,
+        purpose: 'certificate',
+      }),
+      1,
+      'only one certificate order exists'
+    );
+  });
+
+  await check('a student who is enrolled cannot also buy the course', async () => {
+    const { status, json } = await request('POST', '/api/v1/payments/manual', {
+      token: studentToken,
+      body: { courseId: feeCourse.course.id },
+    });
+
+    assertEqual(status, 403, 'status');
+    assertEqual(json.code, 'ALREADY_ENROLLED', 'code');
+  });
+
+  await check('a student can see the purpose of their own orders', async () => {
+    const { status, json } = await request('GET', '/api/v1/payments/me', { token: studentToken });
+
+    assertEqual(status, 200, 'status');
+    const certificateOrder = (json.data.items || []).find((item) => item.orderId === order.orderId);
+    assert(certificateOrder, 'the certificate order must be listed');
+    assertEqual(certificateOrder.purpose, 'certificate', 'purpose');
+
+    /**
+     * A payment written before this field existed must still read as an
+     * enrollment — the revenue reports and every old receipt depend on it.
+     */
+    const legacy = new (require('../src/models/Payment'))({
+      student: (await User.findOne({ email: studentEmail }))._id,
+      course: feeCourse.course.id,
+      amountCents: 4999,
+      idempotencyKey: `legacy:${runId}`,
+    });
+    assertEqual(legacy.toJSONForOwner().purpose, 'enrollment', 'a payment with no purpose is an enrolment');
+  });
+
+  await check('confirming the order issues the certificate and renders the document', async () => {
+    const { status, json } = await request(
+      'POST',
+      `/api/v1/admin/payments/manual/${order.orderId}/verify`,
+      { token: adminToken, body: {} }
+    );
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.outcome, 'certificate', 'the administrator is told what happened');
+
+    const stored = await Certificate.findById(certificate.id).select('+pdfBase64');
+    assertEqual(stored.status, 'issued', 'the certificate is now issued');
+    assert(stored.paidAt, 'the payment time is recorded');
+    assert(stored.pdfBase64, 'the document is rendered on confirmation');
+
+    const response = await download(`/api/v1/certificates/${certificate.id}/download`, studentToken);
+    assertEqual(response.status, 200, 'the student can now download it');
+    assertEqual(response.contentType, 'application/pdf', 'content type');
+  });
+
+  await check('confirming the same order twice does not issue a second certificate', async () => {
+    const { status, json } = await request(
+      'POST',
+      `/api/v1/admin/payments/manual/${order.orderId}/verify`,
+      { token: adminToken, body: {} }
+    );
+
+    assertEqual(status, 200, 'status');
+    assert(json.message.includes('already'), `message was "${json.message}"`);
+
+    const count = await Certificate.countDocuments({
+      student: (await User.findOne({ email: studentEmail }))._id,
+      course: feeCourse.course.id,
+    });
+    assertEqual(count, 1, 'still exactly one certificate');
+  });
+
+  await check('the course fee can be changed, but only to one of the listed amounts', async () => {
+    const refused = await request('PATCH', `/api/v1/courses/${feeCourse.course.id}`, {
+      token: adminToken,
+      body: { certificateFeeCents: 1500 },
+    });
+
+    assertEqual(refused.status, 400, 'an unlisted amount is refused');
+    assertEqual(refused.json.code, 'VALIDATION_ERROR', 'code');
+
+    const accepted = await request('PATCH', `/api/v1/courses/${feeCourse.course.id}`, {
+      token: adminToken,
+      body: { certificateFeeCents: 2000 },
+    });
+
+    assertEqual(accepted.status, 200, 'status');
+    assertEqual(accepted.json.data.course.certificateFeeCents, 2000, 'the new fee is stored');
+    // The certificate already issued keeps the price it was sold at.
+    const stored = await Certificate.findById(certificate.id);
+    assertEqual(stored.feeCents, 3000, 'the issued certificate keeps its own fee');
+  });
+}
+
 /* ------------------------------------------------------------------ *
  * Run
  * ------------------------------------------------------------------ */
@@ -6282,6 +6632,9 @@ async function main() {
 
     process.stdout.write('\nInstructor applications\n');
     await testInstructorApplications();
+
+    process.stdout.write('\nCertificate fees\n');
+    await testCertificateFees();
 
     process.stdout.write('\nMoney formatting\n');
     await testMoneyFormatting();

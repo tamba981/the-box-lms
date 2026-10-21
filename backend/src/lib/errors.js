@@ -35,6 +35,8 @@ const unauthorized = (message = 'Authentication required', options) =>
 const forbidden = (message = 'You do not have access to this resource', options) =>
   new AppError(403, message, { code: 'FORBIDDEN', ...options });
 const notFound = (message = 'Resource not found', options) => new AppError(404, message, options);
+/** 402: the record exists and the caller may see it, but something has to be paid for first. */
+const paymentRequired = (message = 'Payment required', options) => new AppError(402, message, options);
 const conflict = (message = 'Resource already exists', options) => new AppError(409, message, options);
 const tooMany = (message = 'Too many requests', options) => new AppError(429, message, options);
 const unavailable = (message = 'Service temporarily unavailable', options) =>
@@ -46,6 +48,7 @@ module.exports = {
   unauthorized,
   forbidden,
   notFound,
+  paymentRequired,
   conflict,
   tooMany,
   unavailable,

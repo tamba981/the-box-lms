@@ -412,9 +412,15 @@ function contactMessageEmail({ name, email: address, reason, subject, message, i
 function courseCompletedEmail({ user, course, certificate }) {
   const dashboardUrl = `${config.publicBaseUrl}/student-dashboard.html`;
   const hours = Number(course.durationHours) > 0 ? `${course.durationHours} hours of material` : null;
-  const credential = certificate && certificate.certificateNumber
+  // A certificate that is waiting to be paid for has a number but has not been
+  // issued. Saying "has been issued" here would be the platform congratulating a
+  // student on a document it is withholding.
+  const awaitingPayment = Boolean(certificate) && certificate.status === 'pending_payment';
+  const credential = certificate && certificate.certificateNumber && !awaitingPayment
     ? `Your ${certificate.credential === 'diploma' ? 'diploma' : 'certificate'} has been issued - number ${certificate.certificateNumber}.`
-    : null;
+    : awaitingPayment
+      ? `Your ${certificate.credential === 'diploma' ? 'diploma' : 'certificate'} is reserved as number ${certificate.certificateNumber}. Open your dashboard to pay ${course.certificateFeeLabel || 'the certificate fee'} and claim it.`
+      : null;
 
   const text = [
     `Congratulations ${user.firstName || 'there'},`,
@@ -447,16 +453,23 @@ function manualPaymentSubmittedEmail({ user, course, payment }) {
   const amount = formatCents(payment.amountCents, payment.currency);
   const dashboardUrl = `${config.publicBaseUrl}/student-dashboard.html`;
   const inbox = config.email.inbox;
+  // A certificate payment and a course payment are confirmed the same way but
+  // promise different things, and the student has to know which they bought.
+  const forCertificate = (payment.purpose || 'enrollment') === 'certificate';
 
   const text = [
     `Hello ${user.firstName || 'there'},`,
     '',
-    `We have your note that the payment for "${course.title}" has been sent.`,
+    forCertificate
+      ? `We have your note that the certificate fee of ${amount} for "${course.title}" has been sent.`
+      : `We have your note that the payment for "${course.title}" has been sent.`,
     `Order:  ${payment.orderId}`,
     `Amount: ${amount}`,
     '',
     'Someone will check it by hand, usually within 30 minutes during working hours.',
-    'You will get another email as soon as it is confirmed, and your place on the course opens then.',
+    forCertificate
+      ? 'You will get another email as soon as it is confirmed, and your certificate becomes downloadable then.'
+      : 'You will get another email as soon as it is confirmed, and your place on the course opens then.',
     '',
     `If you have not heard from us within an hour, write to ${inbox} with the order number.`,
     '',
@@ -470,10 +483,10 @@ function manualPaymentSubmittedEmail({ user, course, payment }) {
     html: layout({
       heading: 'Payment received - being checked',
       bodyHtml: `<p style="margin:0 0 12px;">Hello ${firstNameOf(user)},</p>
-        <p style="margin:0 0 12px;">We have your note that the payment for <strong>${escapeHtml(course.title)}</strong> has been sent.</p>
+        <p style="margin:0 0 12px;">We have your note that the ${forCertificate ? 'certificate fee' : 'payment'} for <strong>${escapeHtml(course.title)}</strong> has been sent.</p>
         <p style="margin:0 0 4px;">Order <strong>${escapeHtml(payment.orderId)}</strong></p>
         <p style="margin:0 0 12px;">Amount <strong>${escapeHtml(amount)}</strong></p>
-        <p style="margin:0 0 12px;">Someone will check it by hand, usually within 30 minutes during working hours. You will get another email when it is confirmed, and your place opens then.</p>
+        <p style="margin:0 0 12px;">Someone will check it by hand, usually within 30 minutes during working hours. You will get another email when it is confirmed, and ${forCertificate ? 'your certificate becomes downloadable then' : 'your place opens then'}.</p>
         <p style="margin:0;">If you have not heard from us within an hour, write to ${escapeHtml(inbox)} with the order number.</p>`,
       ctaText: 'View your dashboard',
       ctaUrl: dashboardUrl,

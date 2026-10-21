@@ -8,7 +8,8 @@ const certificateService = require('../services/certificateService');
 
 const { asyncHandler } = require('../lib/asyncHandler');
 const { ok } = require('../lib/respond');
-const { notFound, unavailable } = require('../lib/errors');
+const { notFound, paymentRequired, unavailable } = require('../lib/errors');
+const { formatCents } = require('../lib/money');
 const { parsePagination, paginated } = require('../lib/pagination');
 
 const { authenticate } = require('../middleware/auth');
@@ -128,6 +129,24 @@ router.get(
     const isOwner = String(certificate.student) === String(req.user._id);
     if (!isOwner && req.user.role !== 'admin') {
       throw notFound('That certificate could not be found.', { code: 'CERTIFICATE_NOT_FOUND' });
+    }
+
+    /**
+     * A certificate that still has to be paid for has not been issued.
+     *
+     * 402 rather than 403: the record is this student's, they are allowed to know
+     * it exists, and what is missing is a payment — not permission. Nothing is
+     * rendered on this path either, so the document cannot be produced by asking
+     * for it early.
+     */
+    if (certificate.status === 'pending_payment') {
+      throw paymentRequired(
+        `This certificate has not been issued yet. Pay ${formatCents(
+          certificate.feeCents || 0,
+          certificate.currency
+        )} to claim it from your dashboard.`,
+        { code: 'CERTIFICATE_PAYMENT_REQUIRED' }
+      );
     }
 
     if (!certificate.pdfBase64) {

@@ -19,7 +19,7 @@ const httpUrl = (label) =>
     .max(2000, 'URL is too long')
     .url(`${label} is invalid`)
     .refine((value) => /^https?:\/\//i.test(value), `${label} must start with http:// or https://`);
-const { ALLOWED_VIDEO_MIME, MAX_VIDEO_BYTES, COURSE_CATEGORY_SLUGS, SELECTABLE_CREDENTIALS, CREDENTIALS, LEGACY_CATEGORY_ALIASES } = require('../lib/constants');
+const { ALLOWED_VIDEO_MIME, MAX_VIDEO_BYTES, COURSE_CATEGORY_SLUGS, SELECTABLE_CREDENTIALS, CREDENTIALS, LEGACY_CATEGORY_ALIASES, CERTIFICATE_FEE_OPTIONS } = require('../lib/constants');
 const { sanitizeLessonHtml } = require('../lib/sanitizeHtml');
 const { isEmbeddableVideoUrl } = require('../lib/videoUrl');
 
@@ -71,6 +71,20 @@ const courseFields = {
   language: z.string().trim().min(2).max(40).optional(),
   priceCents: priceCents.optional(),
   currency: z.string().trim().length(3, 'Use a 3-letter currency code').toLowerCase().optional(),
+  /**
+   * The optional charge for the certificate, on a free course.
+   *
+   * An enum rather than any integer: these are the amounts the payment
+   * instructions ask a student to send, and a value outside the list is a client
+   * bug rather than a price nobody meant.
+   */
+  certificateFeeCents: z
+    .coerce
+    .number({ invalid_type_error: 'The certificate fee must be a number' })
+    .refine((value) => CERTIFICATE_FEE_OPTIONS.includes(value), {
+      message: 'Choose one of the listed certificate fees',
+    })
+    .optional(),
   durationHours: z.coerce.number().min(0).max(10000).optional(),
 };
 
@@ -87,6 +101,7 @@ const createCourseBody = z.object({
   language: courseFields.language,
   priceCents: courseFields.priceCents,
   currency: courseFields.currency,
+  certificateFeeCents: courseFields.certificateFeeCents,
   durationHours: courseFields.durationHours,
 });
 
@@ -104,6 +119,7 @@ const updateCourseBody = z
     language: courseFields.language,
     priceCents: courseFields.priceCents,
     currency: courseFields.currency,
+    certificateFeeCents: courseFields.certificateFeeCents,
     durationHours: courseFields.durationHours,
   })
   .refine((value) => Object.keys(value).length > 0, { message: 'Nothing to update' });

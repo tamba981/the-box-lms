@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 
-const { PAYMENT_STATUSES } = require('../lib/constants');
+const { PAYMENT_STATUSES, PAYMENT_PURPOSES } = require('../lib/constants');
 const { formatCents } = require('../lib/money');
 const { baseOptions } = require('./common');
 
@@ -28,6 +28,26 @@ const paymentSchema = new mongoose.Schema(
   {
     student: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true, index: true },
+
+    /**
+     * What this money buys.
+     *
+     * Defaults to `enrollment`, which is what every payment made before this
+     * field existed was. A document with no stored value reads as `enrollment`
+     * too, so old records need no migration and the revenue reports keep
+     * meaning what they meant.
+     */
+    purpose: { type: String, enum: PAYMENT_PURPOSES, default: 'enrollment', index: true },
+
+    /**
+     * The certificate a `certificate` payment settles.
+     *
+     * Stored on the order rather than looked up by (student, course) at
+     * settlement: a student who has the course repeated, or whose certificate was
+     * revoked and reissued, must settle the exact document the order was opened
+     * for.
+     */
+    certificate: { type: mongoose.Schema.Types.ObjectId, ref: 'Certificate', default: null },
 
     amountCents: { type: Number, required: true, min: 0 },
     currency: { type: String, default: 'usd', lowercase: true, trim: true },
@@ -124,6 +144,10 @@ paymentSchema.methods.toJSONForOwner = function toJSONForOwner(extra = {}) {
     id: String(this._id),
     orderId: this.orderId || null,
     courseId: String(this.course),
+    // `enrollment` when the field is absent, which is every payment made before
+    // certificates could be sold separately.
+    purpose: this.purpose || 'enrollment',
+    certificateId: this.certificate ? String(this.certificate) : null,
     amountCents: this.amountCents,
     currency: this.currency,
     amountLabel: formatCents(this.amountCents, this.currency),

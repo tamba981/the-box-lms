@@ -1680,7 +1680,15 @@
                             before upload. Without one the course shows a coloured placeholder.
                         </p>
                     </div>
-                    <div class="form-group"><label>Price ($)</label><input type="number" id="coursePrice" value="0" /></div>
+                    <div class="form-group"><label>Price ($)</label><input type="number" id="coursePrice" value="0" min="0" step="1" oninput="syncCertificateFeeField()" /></div>
+                    <div class="form-group" id="courseCertificateFeeGroup">
+                        <label for="courseCertificateFee">Certificate fee (USD)</label>
+                        <select id="courseCertificateFee">${certificateFeeOptions(0)}</select>
+                        <p style="font-size:12.5px;color:var(--text-light);margin-top:8px;">
+                            Optional. A free course can charge for its certificate, paid when the student
+                            finishes. Leaving it at zero makes the course — and the certificate — completely free.
+                        </p>
+                    </div>
                     <div class="form-group"><label for="courseCat">Category</label><select id="courseCat">${categoryOptions()}</select></div>
                       <div class="form-group"><label for="courseCredential">Credential</label><select id="courseCredential">${credentialOptions()}</select></div>
                     <div class="form-group"><label>Level</label><select id="courseLevel"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select></div>
@@ -1975,6 +1983,42 @@
                 .map((credential) => `<option value="${WGAUI.escapeHtml(credential.slug)}">${WGAUI.escapeHtml(credential.label)}</option>`)
                 .join('');
         }
+
+        /**
+         * The certificate fees an instructor may choose.
+         *
+         * The same six amounts the API accepts, written here as dollars because
+         * that is what the instructor is thinking in. The server stores cents.
+         */
+        const CERTIFICATE_FEES_CENTS = [0, 1000, 2000, 3000, 4000, 5000];
+
+        function certificateFeeOptions(selectedCents) {
+            const selected = Number(selectedCents) || 0;
+
+            return CERTIFICATE_FEES_CENTS.map((cents) => {
+                const label = cents === 0 ? 'None — the certificate is included' : `$${cents / 100}`;
+                return `<option value="${cents}"${cents === selected ? ' selected' : ''}>${label}</option>`;
+            }).join('');
+        }
+
+        /**
+         * The fee only applies to a free course — buying a paid course includes
+         * its certificate. Hiding the field says that without the instructor
+         * having to find out from a support email.
+         */
+        function syncCertificateFeeVisibility(priceInputId, groupId) {
+            const group = document.getElementById(groupId);
+            if (!group) return;
+
+            const price = Number(document.getElementById(priceInputId)?.value || 0);
+            group.style.display = price > 0 ? 'none' : '';
+        }
+
+        window.syncCertificateFeeField = () =>
+            syncCertificateFeeVisibility('coursePrice', 'courseCertificateFeeGroup');
+
+        window.syncEditCertificateFeeField = () =>
+            syncCertificateFeeVisibility('editPrice', 'editCertificateFeeGroup');
 
         /* ------------------------------------------------------------------ *
          * Course cover images
@@ -3011,7 +3055,15 @@ return `<div class="lesson-admin">${list}${form}</div>`;
             openModal('Edit Course', `
                 <div class="form-group"><label>Title</label><input type="text" id="editTitle" value="${WGAUI.escapeHtml(c.title)}" /></div>
                 <div class="form-group"><label>Summary</label><textarea id="editSummary" rows="3">${WGAUI.escapeHtml(c.description)}</textarea></div>
-                <div class="form-group"><label>Price (in ${WGAUI.escapeHtml((instructorData.revenue && instructorData.revenue.currency) || 'usd').toUpperCase()})</label><input type="number" id="editPrice" min="0" step="0.01" value="${c.price}" /></div>
+                <div class="form-group"><label>Price (in ${WGAUI.escapeHtml((instructorData.revenue && instructorData.revenue.currency) || 'usd').toUpperCase()})</label><input type="number" id="editPrice" min="0" step="0.01" value="${c.price}" oninput="syncEditCertificateFeeField()" /></div>
+                <div class="form-group" id="editCertificateFeeGroup">
+                    <label for="editCertificateFee">Certificate fee (USD)</label>
+                    <select id="editCertificateFee">${certificateFeeOptions(c.certificateFeeCents || 0)}</select>
+                    <p style="font-size:12.5px;color:var(--text-light);margin-top:8px;">
+                        Only charged on a free course. A paid course already includes its certificate,
+                        so this is not applied while the price is above zero.
+                    </p>
+                </div>
                 <div class="form-group">
                     <label>Course cover image</label>
                     ${c.thumbnail
@@ -3027,6 +3079,10 @@ return `<div class="lesson-admin">${list}${form}</div>`;
                 </p>
                 <button class="btn-primary" id="editSubmit" onclick="saveCourseChanges('${c.id}')">Save Changes</button>
             `);
+
+            // The modal is what creates the field, so it can only be hidden once
+            // it is on the page.
+            syncEditCertificateFeeField();
         };
 
         window.saveCourseChanges = async function saveCourseChanges(id) {
@@ -3040,6 +3096,7 @@ return `<div class="lesson-admin">${list}${form}</div>`;
                     title: document.getElementById('editTitle')?.value.trim(),
                     summary: document.getElementById('editSummary')?.value.trim(),
                     priceCents: Math.max(0, Math.round(price * 100)),
+                    certificateFeeCents: Number(document.getElementById('editCertificateFee')?.value || 0),
                 });
 
                 // Uploaded before the modal closes, otherwise the preview element
@@ -3134,6 +3191,7 @@ return `<div class="lesson-admin">${list}${form}</div>`;
                     title,
                     summary: summary || undefined,
                     priceCents: Math.max(0, Math.round(price * 100)),
+                    certificateFeeCents: Number(document.getElementById('courseCertificateFee')?.value || 0),
                     category: category || undefined,
                     credential,
                     level,

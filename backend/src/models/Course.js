@@ -2,9 +2,9 @@
 
 const mongoose = require('mongoose');
 
-const { COURSE_LEVELS, COURSE_STATUSES, CREDENTIALS } = require('../lib/constants');
+const { COURSE_LEVELS, COURSE_STATUSES, CREDENTIALS, CERTIFICATE_FEE_OPTIONS } = require('../lib/constants');
 const { baseOptions, lowercaseTrim } = require('./common');
-const { formatCentsOrFree } = require('../lib/money');
+const { formatCents, formatCentsOrFree } = require('../lib/money');
 const { slugify } = require('../lib/slug');
 
 const courseSchema = new mongoose.Schema(
@@ -58,6 +58,18 @@ const courseSchema = new mongoose.Schema(
     priceCents: { type: Number, default: 0, min: 0, max: 100000000 },
     currency: { ...lowercaseTrim, default: 'usd' },
 
+    /**
+     * An optional charge for the certificate, on a course that is otherwise free.
+     *
+     * A paid course already includes its certificate, so the fee is not applied
+     * there. The stored value is NOT zeroed when a course becomes paid: an
+     * instructor who sets $30 and then charges $50 for the course would lose
+     * that decision, and would have to remember it if the course became free
+     * again. `certificateFeeDueCents` below is the figure that actually applies,
+     * and it is what every caller must read.
+     */
+    certificateFeeCents: { type: Number, enum: CERTIFICATE_FEE_OPTIONS, default: 0 },
+
     durationHours: { type: Number, default: 0, min: 0, max: 10000 },
 
     // Denormalised counters, maintained by the services that change them so
@@ -88,6 +100,24 @@ courseSchema.index({ title: 'text', summary: 'text', description: 'text', tags: 
 
 courseSchema.virtual('isFree').get(function isFree() {
   return this.priceCents === 0;
+});
+
+/**
+ * The certificate fee that applies to a student finishing this course.
+ *
+ * Zero on a paid course: the certificate is part of what was bought. Reading the
+ * raw `certificateFeeCents` instead of this is the mistake this virtual exists to
+ * prevent — it would charge a student twice for one course.
+ */
+courseSchema.virtual('certificateFeeDueCents').get(function certificateFeeDueCents() {
+  if (this.priceCents > 0) return 0;
+  return this.certificateFeeCents || 0;
+});
+
+/** "$30.00" while a fee applies, null when the certificate is included. */
+courseSchema.virtual('certificateFeeLabel').get(function certificateFeeLabel() {
+  const due = this.certificateFeeDueCents;
+  return due > 0 ? formatCents(due, this.currency) : null;
 });
 
 courseSchema.virtual('rating').get(function rating() {
@@ -125,6 +155,9 @@ courseSchema.methods.toCardJSON = function toCardJSON(extra = {}) {
     currency: this.currency,
     priceLabel: this.priceLabel,
     isFree: this.isFree,
+    certificateFeeCents: this.certificateFeeCents || 0,
+    certificateFeeDueCents: this.certificateFeeDueCents,
+    certificateFeeLabel: this.certificateFeeLabel,
     durationHours: this.durationHours,
     lessonCount: this.lessonCount,
     enrolledCount: this.enrolledCount,

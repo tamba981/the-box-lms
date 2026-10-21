@@ -1122,21 +1122,7 @@
                 unread: (thread.unreadCount || 0) > 0
             }));
 
-            state.certificates = (overview.certificates || []).map((certificate) => ({
-                id: String(certificate.id),
-                certificateNumber: certificate.certificateNumber,
-                // Carried explicitly: this mapping is an allow-list, so a field
-                // not named here silently disappears from the UI.
-                credential: certificate.credential || 'certificate',
-                verificationCode: certificate.verificationCode,
-                courseTitle: certificate.courseTitle,
-                courseId: String(certificate.courseId || ''),
-                instructorName: certificate.instructorName || '',
-                issueDate: certificate.issueDate,
-                hoursCompleted: certificate.hoursCompleted,
-                pdfUrl: certificate.pdfUrl || null,
-                revoked: Boolean(certificate.revoked)
-            }));
+            state.certificates = (overview.certificates || []).map(mapCertificate);
 
             state.discussions = (activity.posts || []).map((post) => ({
                 id: String(post.id),
@@ -1591,39 +1577,236 @@
             }
         };
 
-        function renderCertificates() {
-            const earned = state.certificates.filter((c) => !c.revoked);
+        /**
+         * One certificate, as this page needs it.
+         *
+         * An allow-list on purpose: a field not named here disappears from the UI
+         * without any error, which is how the dashboard once lost the document
+         * type of every lesson.
+         */
+        function mapCertificate(certificate) {
+            return {
+                id: String(certificate.id),
+                certificateNumber: certificate.certificateNumber,
+                credential: certificate.credential || 'certificate',
+                verificationCode: certificate.verificationCode,
+                courseTitle: certificate.courseTitle,
+                courseId: String(certificate.courseId || ''),
+                instructorName: certificate.instructorName || '',
+                issueDate: certificate.issueDate,
+                hoursCompleted: certificate.hoursCompleted,
+                pdfUrl: certificate.pdfUrl || null,
+                revoked: Boolean(certificate.revoked),
+                revokeReason: certificate.revokedReason || null,
+                // The certificate can exist without having been awarded: a free
+                // course may charge for it, and it waits here until it is paid.
+                status: certificate.status || 'issued',
+                requiresPayment: Boolean(certificate.requiresPayment),
+                feeCents: certificate.feeCents || 0,
+                feeLabel: certificate.feeLabel || null
+            };
+        }
 
-            if (earned.length === 0) {
+        /* ------------------------------------------------------------------ *
+         * Certificates waiting to be paid for
+         *
+         * The order is opened by the API and confirmed by a person, exactly like a
+         * course purchase — the page never chooses the amount, and nothing is
+         * awarded by asking for it.
+         * ------------------------------------------------------------------ */
+
+        /** Every certificate, not just the three the overview summarises. */
+        async function loadAllCertificates() {
+            const data = await WGA.get('/certificates/me', { query: { limit: 100 } });
+            state.certificates = (data.items || []).map(mapCertificate);
+        }
+
+        /**
+         * Certificate orders already opened, so a card can say "we are checking
+         * your payment" instead of asking the student to pay a second time.
+         */
+        async function loadCertificateOrders() {
+            try {
+                const data = await WGA.get('/payments/me', { query: { limit: 100 } });
+                const byCourse = new Map();
+
+                (data.items || [])
+                    .filter((payment) => (payment.purpose || 'enrollment') === 'certificate')
+                    // Newest first from the API, so the first one seen wins.
+                    .forEach((payment) => {
+                        if (!byCourse.has(payment.courseId)) byCourse.set(payment.courseId, payment);
+                    });
+
+                state.certificateOrders = byCourse;
+            } catch (error) {
+                // A missing order list only costs a slightly less precise button.
+                state.certificateOrders = new Map();
+            }
+        }
+
+        window.claimCertificate = function claimCertificate(courseId, button) {
+            if (!courseId) return;
+            WGAUI.setBusy(button, true, 'Opening an order…');
+
+            WGA.post('/payments/manual', { courseId, purpose: 'certificate' })
+                .then(function (data) { showCertificateOrder(data || {}); })
+                .catch(function (error) {
+                    WGAUI.setBusy(button, false);
+                    WGAUI.toast(error.message || 'We could not open that order. Please try again.', 'error');
+                });
+        };
+
+        function showCertificateOrder(data) {
+            const order = data.order || {};
+            const instructions = data.instructions || {};
+            const numbers = instructions.numbers || [];
+            const reference = order.orderId || '';
+
+            const numberRows = numbers
+                .map((number) => `<li style="margin:4px 0;font-weight:600;">${WGAUI.escapeHtml(number)}</li>`)
+                .join('');
+
+            openModal(
+                'Pay for your certificate',
+                `
+                    <p style="margin:0 0 12px;">Send <strong>${WGAUI.escapeHtml(order.amountLabel || '')}</strong>
+                        and tell us when you have. Nothing is charged here, and your certificate is
+                        issued as soon as we confirm it.</p>
+                    <p style="margin:0 0 4px;font-size:13px;color:var(--text-light);">Use this as the payment reference</p>
+                    <p style="margin:0 0 14px;font-weight:700;letter-spacing:0.04em;">${WGAUI.escapeHtml(reference)}</p>
+                    <p style="margin:0 0 4px;font-size:13px;color:var(--text-light);">Send to</p>
+                    <ul style="margin:0 0 18px;padding-left:18px;">${numberRows}</ul>
+                    <button class="btn-primary" style="width:100%;" id="cert-sent">I have sent the payment</button>
+                    <p style="margin:12px 0 0;font-size:12.5px;color:var(--text-light);">
+                        Usually checked within 30 minutes during working hours.
+                    </p>
+                `
+            );
+
+            const sent = document.getElementById('cert-sent');
+            if (sent) sent.addEventListener('click', function () { markCertificatePaymentSent(reference, sent); });
+        }
+
+        function markCertificatePaymentSent(reference, button) {
+            WGAUI.setBusy(button, true, 'Sending…');
+
+            WGA.post('/payments/manual/' + encodeURIComponent(reference) + '/mark-paid', {})
+                .then(function () {
+                    openModal(
+                        'Thank you',
+                        `
+                            <p style="margin:0 0 12px;">We have your note that the payment was sent
+                                and will check it by hand.</p>
+                            <p style="margin:0 0 12px;">Your certificate becomes downloadable as soon as it
+                                is confirmed, and you will get an email either way.</p>
+                            <p style="margin:0;font-size:13px;color:var(--text-light);">Reference: ${WGAUI.escapeHtml(reference)}</p>
+                        `
+                    );
+
+                    // Refresh in the background, so the card behind this dialog
+                    // says "being checked" rather than asking for the fee again.
+                    Promise.all([loadAllCertificates(), loadCertificateOrders()])
+                        .then(function () { loadPage('certificates'); })
+                        .catch(function () {});
+                })
+                .catch(function (error) {
+                    WGAUI.setBusy(button, false);
+                    WGAUI.toast(error.message || 'We could not record that. Please try again.', 'error');
+                });
+        }
+
+        function renderCertificates() {
+            const pending = state.certificates.filter((c) => !c.revoked && c.requiresPayment);
+            const issued = state.certificates.filter((c) => !c.revoked && !c.requiresPayment);
+            const revoked = state.certificates.filter((c) => c.revoked);
+
+            if (!pending.length && !issued.length && !revoked.length) {
                 return `<div class="empty-state"><i class="fas fa-certificate"></i><h3>No certificates yet</h3><p>Finish every lesson in a course and your certificate is issued automatically</p><button class="btn-primary" onclick="loadPage('courses')">View Courses</button></div>`;
             }
 
+            /** One card, differing only in what the student can do with it. */
+            const card = (c, actions, extra) => `
+                <div class="course-card glass-premium" style="text-align:center;">
+                    <div class="course-content">
+                        <i class="fas fa-certificate" style="font-size:56px;color:var(--gold);margin-bottom:12px;"></i>
+                        <h3 class="course-title">${WGAUI.escapeHtml(c.courseTitle)}</h3>
+                        <p>${credentialLabel(c.credential)}${c.issueDate
+                            ? ' · ' +
+                              (c.revoked
+                                  // A reserved certificate has a record date, not an
+                                  // issue date — saying "Issued" would claim an award
+                                  // the academy has not made.
+                                  ? 'Was valid until '
+                                  : c.requiresPayment
+                                      ? 'Course finished '
+                                      : 'Issued: ') +
+                              WGAUI.formatDate(c.issueDate)
+                            : ''}</p>
+                        <p style="font-size:13px;color:var(--text-light);margin-top:6px;">
+                            ${credentialLabel(c.credential)} ${WGAUI.escapeHtml(c.certificateNumber)}${c.hoursCompleted ? ` · ${c.hoursCompleted} hours` : ''}
+                        </p>
+                        ${extra || ''}
+                        <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px;">${actions}</div>
+                    </div>
+                </div>`;
+
+            const section = (title, note, cards) =>
+                cards.length
+                    ? `<h3 style="margin:26px 0 12px;font-weight:700;">${title}</h3>
+                       ${note ? `<p style="margin:0 0 14px;font-size:13.5px;color:var(--text-light);">${note}</p>` : ''}
+                       <div class="courses-grid">${cards.join('')}</div>`
+                    : '';
+
             return `
                 <div class="stats-grid">
-                    <div class="stat-card glass-premium"><div class="stat-title">🎓 Earned</div><div class="stat-value">${earned.length}</div></div>
-                    <div class="stat-card glass-premium"><div class="stat-title">🔗 Verifiable</div><div class="stat-value">${earned.length}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">🎓 Earned</div><div class="stat-value">${issued.length}</div></div>
+                    <div class="stat-card glass-premium"><div class="stat-title">⏳ Waiting to be claimed</div><div class="stat-value">${pending.length}</div></div>
                 </div>
-                <div class="courses-grid">
-                    ${earned.map((c) => `
-                        <div class="course-card glass-premium" style="text-align:center;">
-                            <div class="course-content">
-                                <i class="fas fa-certificate" style="font-size:56px;color:var(--gold);margin-bottom:12px;"></i>
-                                <h3 class="course-title">${c.courseTitle}</h3>
-                                <p>${credentialLabel(c.credential)} · Issued: ${WGAUI.formatDate(c.issueDate)}</p>
-                                <p style="font-size:13px;color:var(--text-light);margin-top:6px;">
-                                    ${credentialLabel(c.credential)} ${c.certificateNumber}${c.hoursCompleted ? ` · ${c.hoursCompleted} hours` : ''}
-                                </p>
-                                <div style="display:inline-flex;gap:8px;margin:12px 0;padding:6px 16px;background:rgba(212,165,71,0.08);border-radius:30px;">
-                                    <i class="fas fa-link"></i> Publicly verifiable
-                                </div>
-                                <button class="btn-primary" onclick="openCertificate('${c.verificationCode}')">View &amp; Verify</button>
-                                <button class="btn-primary btn-outline" onclick="downloadCertificate('${c.id}', this)">Download PDF</button>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
+                ${section(
+                    'Waiting to be claimed',
+                    'You finished these courses. The certificate is reserved until its fee is paid.',
+                    pending.map((c) => {
+                        const order = (state.certificateOrders || new Map()).get(c.courseId);
+                        const sent = Boolean(order) && order.status === 'awaiting_verification';
+
+                        return card(
+                            c,
+                            // Nothing to press once they have said they sent it:
+                            // asking again would invite a second transfer.
+                            sent
+                                ? ''
+                                : `<button class="btn-primary" onclick="claimCertificate('${WGAUI.escapeHtml(c.courseId)}', this)">Pay ${WGAUI.escapeHtml(c.feeLabel || 'the fee')} to claim</button>`,
+                            `<div style="display:inline-flex;gap:8px;margin:12px 0;padding:6px 16px;background:rgba(212,165,71,0.08);border-radius:30px;"><i class="fas ${sent ? 'fa-hourglass-half' : 'fa-lock'}"></i> ${sent ? 'Payment sent — being checked' : 'Certificate reserved'}</div>`
+                        );
+                    })
+                )}
+                ${section(
+                    'Issued',
+                    null,
+                    issued.map((c) =>
+                        card(
+                            c,
+                            `<button class="btn-primary" onclick="openCertificate('${c.verificationCode}')">View &amp; Verify</button>
+                             <button class="btn-primary btn-outline" onclick="downloadCertificate('${c.id}', this)">Download PDF</button>`,
+                            `<div style="display:inline-flex;gap:8px;margin:12px 0;padding:6px 16px;background:rgba(212,165,71,0.08);border-radius:30px;"><i class="fas fa-link"></i> Publicly verifiable</div>`
+                        )
+                    )
+                )}
+                ${section(
+                    'Revoked',
+                    'These were withdrawn by the academy and no longer verify.',
+                    revoked.map((c) =>
+                        card(
+                            c,
+                            '',
+                            c.revokeReason
+                                ? `<p style="font-size:13px;color:#b91c1c;margin-top:8px;">${WGAUI.escapeHtml(c.revokeReason)}</p>`
+                                : `<p style="font-size:13px;color:#b91c1c;margin-top:8px;">Revoked</p>`
+                        )
+                    )
+                )}
                 <p style="text-align:center;margin-top:22px;font-size:13px;color:var(--text-light);">
-                    Anyone can verify a certificate from Wuteve Global Academy — no account needed.
+                    Anyone can verify an issued certificate from Wuteve Global Academy — no account needed.
                 </p>
             `;
         }
@@ -1825,6 +2008,19 @@
             const content = document.getElementById('main-content');
             content.innerHTML = '<div style="text-align:center;padding:60px;"><div class="loading-spinner"></div></div>';
             state.currentPage = page;
+
+            /**
+             * The overview summarises three certificates; this page is where the
+             * whole set belongs, and an unpaid one must not be the one that fell
+             * outside the three.
+             */
+            if (page === 'certificates') {
+                try {
+                    await Promise.all([loadAllCertificates(), loadCertificateOrders()]);
+                } catch (error) {
+                    // Fall back to what the overview already gave us.
+                }
+            }
 
             setTimeout(() => {
                 let html = '';
