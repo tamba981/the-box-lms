@@ -17,43 +17,66 @@ no external DNS provider to log into.
 
 ## Current state — verified 23 October 2026
 
-Read from public resolvers (`8.8.8.8` and `1.1.1.1`), not from the registrar's
-control panel, so this is what the world sees rather than what was intended.
+Read from public resolvers (`8.8.8.8`, `1.1.1.1`, OpenDNS and the local resolver),
+not from the registrar's control panel, so this is what the world sees rather than
+what was intended.
 
 | Record | Host | Value now | Verdict |
 | ------ | ---- | --------- | ------- |
 | `NS` | `@` | `dns1`/`dns2.registrar-servers.com` | Namecheap BasicDNS is authoritative. Railway does **not** host this zone. |
-| `CNAME` | `@` | `leddkd3y.up.railway.app` | Serves the site, but see "the apex problem" below. |
-| `A` | `www` | `162.255.119.228` | Namecheap parking address. `https://www.` times out. |
-| `MX` | `@` | `mx.zoho.com` 10, `mx2.zoho.com` 20, `mx3.zoho.com` 50 | Correct, and visible to both resolvers. |
+| `CNAME` | `@` | `leddkd3y.up.railway.app` | Serves the site. Invalid next to MX — see "the apex problem". |
+| `A` | `www` | `162.255.119.228` | Namecheap's URL Forward server. Port 80 only. |
+| `URL Redirect` | `www` | `https://wuteveglobalacademy.com` | Works over **http only** — see "the www problem". |
+| `MX` | `@` | `mx.zoho.com` 10, `mx2.zoho.com` 20, `mx3.zoho.com` 50 | Correct. Returned by every resolver tested. |
 | `TXT` | `@` | `zoho-verification=zb27672558.zmverify.zoho.com` | Present. |
-| `TXT` | `@` | `v=spf1 include:zoho.com ~all` | Present. |
-| `TXT` | `zoho._domainkey` | *nothing* | **DKIM was never added**, so mail is sent unsigned. |
-| `TXT` | `_dmarc` | *nothing* | No DMARC policy. |
-| `send` | — | *does not exist* | The Resend sending subdomain from step 3 is not in DNS. |
+| `TXT` | `@` | `v=spf1 include:zoho.com ~all` | Present — the only SPF record at the apex. |
+| `TXT` | `zmail._domainkey` | `v=DKIM1; k=rsa; p=MIGfMA0…` | **Present.** Zoho DKIM, 1024-bit. |
+| `TXT` | `_dmarc` | `v=DMARC1; p=none; rua=mailto:wuteve@…` | Present, monitoring only. |
+| `CNAME` | `send.send` | `send.forge.rmta.net` | Present (Resend). |
+| `CNAME` | `rsend.send` | `rsend-euw1.forge.rmta.net` | Present (Resend return-path). |
+| `MX` | `send.send` | `feedback.forge.rmta.net` 10 | Present (Resend feedback). |
+| `TXT` | `send.send` | `v=spf1 ip4:52.3.252.119 ip4:44.222.39.36 ip4:199.249.231.0/24 ~all` | Present (Resend SPF). |
+| `TXT` | `resend._domainkey.send` | `p=MIGfMA0…` | Present (Resend DKIM). |
+| `TXT` | `_railway-verify` | `railway-verify=c50a0bf…` | Present (domain ownership). |
+
+Mail is therefore signed on both paths: Zoho has DKIM **and** DMARC at the apex,
+and Resend has its own SPF, DKIM and feedback MX on the `send.` subdomain. The apex
+carries exactly one SPF record, which is what the rule further down requires.
 
 ### The apex problem, in one paragraph
 
 An apex `CNAME` may not coexist with any other record at the same name. Because
-`wuteveglobalacademy.com` is a CNAME, a resolver is entitled to answer *only*
-with that CNAME and ignore the MX set — and at least one resolver used here does
-exactly that. Google and Cloudflare currently return the Zoho MX records anyway,
-which is why inbound mail sometimes works. It is not stable, and no amount of
-mailbox configuration fixes it; the record type has to change.
+`wuteveglobalacademy.com` is a CNAME, a resolver is entitled to answer *only* with
+that CNAME and drop the MX set. In practice that has not failed yet: on 23 October
+2026, `8.8.8.8`, `1.1.1.1`, OpenDNS and the local resolver all returned the three
+Zoho MX records. It is still invalid, and it is the kind of fault that reads as
+"mail works for most people" until it does not. No mailbox setting compensates for
+it; the record type has to change.
 
-### Two changes are still outstanding
+### Two changes are still outstanding (both need dashboard access)
 
-**1. `www`** — the application side is done: the server now 301s `www` to the apex
-(308 for non-GET requests) whenever `PUBLIC_BASE_URL` names the canonical host. DNS
-is not done. Choose one:
+**1. `www` over HTTPS** — the application side is done: the server 301s `www` to the
+apex (308 for non-GET requests) whenever `PUBLIC_BASE_URL` names the canonical host.
+What is missing is a certificate, because nothing listens on 443 for that name:
+
+| Check | Result, 23 October 2026 |
+| ----- | ----------------------- |
+| `www` resolves to | `162.255.119.228` (Google and Cloudflare agree) |
+| TCP 80 on that address | open |
+| TCP 443 on that address | **closed — connection times out** |
+| `http://www…` | `302 → https://wuteveglobalacademy.com` (`X-Served-By: Namecheap URL Forward`), then `200` |
+| `https://www…` | times out (curl exit 28; browser `ERR_CONNECTION_TIMED_OUT`) |
+
+The URL Redirect record itself is correct. Namecheap's forwarder simply has no TLS
+listener for this host. That matters more than it looks, because the apex sends
+`Strict-Transport-Security: max-age=15552000; includeSubDomains`: a browser that has
+visited the apex will force `https://www.…` on later visits, so the working HTTP
+redirect is invisible to returning visitors.
 
 | Option | Steps | Trade-off |
 | ------ | ----- | --------- |
-| **Serve `www` from Railway** (recommended) | Railway → Settings → Networking → Custom Domain → add `www.wuteveglobalacademy.com`, then in Namecheap Advanced DNS delete the `A` on `www` (`162.255.119.228`) and add `CNAME www → leddkd3y.up.railway.app` | Railway issues the certificate for `www`, and the app redirects to the apex. Needs the Railway dashboard. |
-| **Namecheap URL Redirect** | Advanced DNS → delete the `A` on `www`, add `URL Redirect` on `www` → `https://wuteveglobalacademy.com` | No Railway change, but the redirect is served over plain HTTP by Namecheap; `https://www.…` still fails until a certificate exists for that name. |
-
-Either way the parking `A` record must go first. Leaving it in place is what
-makes `https://www.wuteveglobalacademy.com` hang today.
+| **Serve `www` from Railway** (recommended) | Railway → Settings → Networking → Custom Domain → add `www.wuteveglobalacademy.com`, then in Namecheap Advanced DNS delete the `A` on `www` (`162.255.119.228`) and delete the URL Redirect, and add `CNAME www → leddkd3y.up.railway.app` | Railway issues the certificate, and the deployed app then redirects to the apex over valid TLS. The `_railway-verify` TXT already present covers ownership. |
+| **Keep the URL Redirect** (current) | Nothing to change | Only `http://www` works. Acceptable only if no link, email or printed material ever uses `https://www`. |
 
 **2. The apex CNAME** — the site depends on it, so it cannot simply be deleted.
 Pick one:
@@ -192,7 +215,8 @@ In **Zoho Admin Console → Domains → Email Configuration → DKIM**:
 1. Generate a **1024-bit** key. (2048-bit is stronger, but some DNS hosts reject
    the longer TXT record; 1024-bit is Zoho's supported default and is far better
    than none.)
-2. Zoho shows a hostname (usually `zoho._domainkey`) and a long public key.
+2. Zoho shows a hostname (this account's is `zmail._domainkey`, not the more
+   commonly quoted `zoho._domainkey`) and a long public key.
 3. Add it in Namecheap **Advanced DNS** as a `TXT` record with exactly that
    hostname and value.
 4. Return to Zoho and click **Verify**.
@@ -200,11 +224,12 @@ In **Zoho Admin Console → Domains → Email Configuration → DKIM**:
 Check it resolves, from here:
 
 ```powershell
-Resolve-DnsName -Name zoho._domainkey.wuteveglobalacademy.com -Type TXT -Server 8.8.8.8
+Resolve-DnsName -Name zmail._domainkey.wuteveglobalacademy.com -Type TXT -Server 8.8.8.8
 ```
 
 A long `v=DKIM1; k=rsa; p=…` value means it is in place. **Nothing at all means
-mail is still being sent unsigned**, which is the state this domain is in today.
+mail is still being sent unsigned.** This domain currently returns the key, so
+Zoho DKIM is done.
 
 > ### ⚠️ A domain may have only **one** SPF record
 >
@@ -280,14 +305,15 @@ matches the host being tested, and that a same-origin write is not blocked. Then
 curl https://wuteveglobalacademy.com/health
 ```
 
-`"pages": { "present": true, "htmlFiles": 14 }` means the site is being served.
+`"pages": { "present": true, "htmlFiles": 21 }` means the site is being served.
 
 Mail — check DNS first, because it is faster than waiting for a bounce:
 
 ```powershell
 Resolve-DnsName -Type MX wuteveglobalacademy.com
 Resolve-DnsName -Type TXT wuteveglobalacademy.com
-Resolve-DnsName -Type TXT zoho._domainkey.wuteveglobalacademy.com
+Resolve-DnsName -Type TXT zmail._domainkey.wuteveglobalacademy.com
+Resolve-DnsName -Type TXT _dmarc.wuteveglobalacademy.com
 ```
 
 Then send a message **from an outside address** to `wuteve@wuteveglobalacademy.com`

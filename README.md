@@ -458,13 +458,17 @@ resolvers disagree about which to return:
 | -------- | ---------------- |
 | `1.1.1.1` | the three Zoho MX records |
 | authoritative Namecheap | the three Zoho MX records |
-| `8.8.8.8` | the CNAME, and no MX at all |
+| `8.8.8.8` | the CNAME and no MX on 20 October; the three MX records on 23 October |
+
+A re-check on 2026-10-23 found the MX set from `8.8.8.8`, `1.1.1.1`, OpenDNS
+(`208.67.222.222`) and the local resolver, so the 20 October failure did not
+reproduce that day. That does not make the zone valid — it makes the fault
+intermittent, which is worse.
 
 So inbound mail to `info@wuteveglobalacademy.com` depends on the *sender's*
-resolver. It will appear to work from some senders and fail from others, which
-is worse than failing consistently — a single successful test proves nothing.
-Google's public resolver is the failing case, so mail sent from Gmail is the
-one to test.
+resolver and on what that resolver has cached. It will appear to work from some
+senders and fail from others — a single successful test proves nothing. The
+conflict has to be removed, not tested around.
 
 **Outbound is unaffected, and that is why sending works while receiving does
 not:** DKIM lives at `resend._domainkey.send` and `zmail._domainkey`, which are
