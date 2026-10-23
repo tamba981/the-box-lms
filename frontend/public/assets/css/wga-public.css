@@ -1696,6 +1696,256 @@ body.dark-mode .wga-course-price.is-free {
   border: 1px solid var(--brand-line);
 }
 
+/* ---------------------------------------------------------------- *
+   9b. Why choose Wuteve
+
+   Scoped to `.why` so the brand palette asked for here (navy 073778,
+   royal 1479E8, gold D9AD42, ink 172B4D, pale EEF5FF) cannot leak into
+   the rest of the marketing pages. Text colours are the ones that change
+   in dark mode; the navy surface of the learning-formats card does not.
+ * ---------------------------------------------------------------- */
+
+.why {
+  --why-deep: #073778;
+  --why-royal: #1479e8;
+  --why-gold: #d9ad42;
+  --why-heading: #073778;
+  --why-body: #172b4d;
+  --why-pale: #eef5ff;
+  --why-line: rgba(7, 55, 120, 0.14);
+}
+
+body.dark-mode .why {
+  --why-royal: #8ab8f5;
+  --why-heading: #eef4ff;
+  --why-body: #cdd9ea;
+  --why-pale: rgba(20, 121, 232, 0.16);
+  --why-line: rgba(148, 180, 226, 0.22);
+}
+
+.why-head {
+  max-width: 50rem;
+  margin-bottom: var(--s-12);
+}
+
+.why-sub {
+  margin: 0 0 var(--s-4);
+  font-size: var(--t-lg);
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  color: var(--why-heading);
+}
+
+.why-intro {
+  margin: 0;
+  font-size: var(--t-md);
+  color: var(--why-body);
+}
+
+.why-grid {
+  gap: var(--s-5);
+}
+
+.why-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-3);
+  padding: var(--s-6);
+  border-color: var(--why-line);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.18s var(--ease), box-shadow 0.18s var(--ease), border-color 0.18s var(--ease);
+}
+
+.why-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--why-royal);
+  box-shadow: var(--shadow-md);
+}
+
+.why-card h3 {
+  margin: 0;
+  font-size: var(--t-md);
+  letter-spacing: -0.015em;
+  color: var(--why-heading);
+}
+
+.why-card p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--why-body);
+}
+
+.why-card a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.why-card a:hover {
+  color: var(--why-royal);
+}
+
+.why-icon {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  border: 1px solid var(--why-line);
+  background: var(--why-pale);
+  color: var(--why-deep);
+}
+
+.why-icon svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+body.dark-mode .why-icon {
+  color: var(--why-royal);
+}
+
+/* The one value proposition that names how the academy teaches. It is a
+   deliberate contrast block, not another white card. */
+.why-card--formats {
+  background: var(--why-deep);
+  border-color: var(--why-deep);
+}
+
+body.dark-mode .why-card--formats {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.why-card--formats h3 {
+  color: #ffffff;
+}
+
+.why-card--formats p {
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.why-card--formats .why-icon {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.24);
+  color: var(--why-gold);
+}
+
+.why-formats {
+  list-style: none;
+  margin: var(--s-1) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+.why-formats li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px;
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: var(--t-xs);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.why-formats li::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--why-gold);
+}
+
+.why-closing {
+  margin-top: var(--s-12);
+}
+
+.why-closing-inner {
+  position: relative;
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: var(--s-10) var(--s-6);
+  text-align: center;
+  background: var(--surface-2);
+  border: 1px solid var(--why-line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+/* A gold rule rather than a gold headline: gold text on a pale surface
+   does not reach a readable contrast ratio. */
+.why-closing-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: var(--why-gold);
+}
+
+.why-closing-title {
+  margin: 0 0 var(--s-2);
+  font-size: clamp(1.35rem, 2.2vw, 1.7rem);
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  color: var(--why-heading);
+}
+
+.why-closing-slogan {
+  margin: 0 0 var(--s-6);
+  font-size: var(--t-sm);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--why-body);
+}
+
+.why-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  justify-content: center;
+}
+
+.why-actions .btn {
+  min-width: 190px;
+}
+
+@media (max-width: 560px) {
+  .why-closing-inner {
+    padding: var(--s-8) var(--s-5);
+  }
+
+  .why-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .why-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-card {
+    transition: none;
+  }
+
+  .why-card:hover {
+    transform: none;
+  }
+}
+
 .steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
