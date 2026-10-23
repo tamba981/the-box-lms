@@ -853,6 +853,47 @@ body.dark-mode .wga-footer {
 .wga-footer .wga-footer-sep {
   opacity: 0.45;
 }
+
+/* Social links, pushed to the far end of the footer row.
+   Icon-only, so each carries its own aria-label; the SVG is decorative. */
+.wga-footer-social {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.wga-footer-social a {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-light);
+}
+
+.wga-footer-social a:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  text-decoration: none;
+}
+
+body.dark-mode .wga-footer-social a {
+  border-color: var(--dark-border);
+  color: var(--dark-muted);
+}
+
+body.dark-mode .wga-footer-social a:hover {
+  border-color: var(--primary-light);
+  color: var(--primary-light);
+}
+
+.wga-footer-social svg {
+  width: 15px;
+  height: 15px;
+  display: block;
+}
 /*
  * ---------- Glass layer ----------
  *

@@ -2410,6 +2410,43 @@ body.dark-mode .form-status.is-error {
   max-width: 32ch;
 }
 
+/* Social links sit with the brand rather than as a fifth column: the grid is
+   already four wide at desktop, and a fifth would squeeze the contact list. */
+.footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-top: var(--s-5);
+}
+
+.pub-footer .footer-social a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 13px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: var(--t-sm);
+  font-weight: 650;
+  text-decoration: none;
+  transition: border-color 0.16s var(--ease), color 0.16s var(--ease);
+}
+
+.pub-footer .footer-social a:hover {
+  border-color: var(--brand);
+  color: var(--brand);
+  text-decoration: none;
+}
+
+.footer-social svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex: 0 0 auto;
+}
+
 .footer-bottom {
   margin-top: var(--s-10);
   padding-top: var(--s-5);
