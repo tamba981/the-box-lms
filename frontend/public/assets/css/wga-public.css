@@ -2411,19 +2411,21 @@ body.dark-mode .form-status.is-error {
 }
 
 /* Social links sit with the brand rather than as a fifth column: the grid is
-   already four wide at desktop, and a fifth would squeeze the contact list. */
+   already four wide at desktop, and a fifth would squeeze the contact list.
+   Three labelled pills have to fit the brand column (345px at 1440), so the
+   padding and gap are sized for that; below it they wrap, which is fine. */
 .footer-social {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s-2);
+  gap: 6px;
   margin-top: var(--s-5);
 }
 
 .pub-footer .footer-social a {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 13px;
+  gap: 7px;
+  padding: 6px 9px;
   border: 1px solid var(--line-strong);
   border-radius: var(--r-pill);
   background: var(--surface-2);
