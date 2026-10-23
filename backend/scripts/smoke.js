@@ -6945,6 +6945,146 @@ async function testReviews() {
   });
 }
 
+/**
+ * An instructor with more courses than the dashboard preview shows.
+ *
+ * The overview payload carries the twelve most recently updated courses. Every
+ * figure beside it — courses, published, drafts, students — used to be counted
+ * from those twelve, so an instructor with 47 courses was told they had 12 and a
+ * student enrolled in the thirteenth-oldest course was invisible.
+ */
+async function testInstructorCoursePagination() {
+  const Course = require('../src/models/Course');
+  const Enrollment = require('../src/models/Enrollment');
+
+  const instructorEmail = `smoke-many-instructor-${runId}@example.com`;
+  const studentEmail = `smoke-many-student-${runId}@example.com`;
+  createdEmails.push(instructorEmail, studentEmail);
+
+  const TOTAL = 47;
+  let instructorToken = null;
+  let oldestCourse = null;
+
+  const signIn = async (email) => {
+    const { json } = await request('POST', '/api/v1/auth/login', { body: { email, password: PASSWORD } });
+    return json.data.accessToken;
+  };
+
+  await check('a 47-course instructor fixture is provisioned', async () => {
+    const instructor = await User.create({
+      firstName: 'Many',
+      lastName: 'Courses',
+      email: instructorEmail,
+      password: PASSWORD,
+      role: 'instructor',
+      emailVerified: true,
+    });
+
+    const student = await User.create({
+      firstName: 'Oldest',
+      lastName: 'Course',
+      email: studentEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+
+    const created = await Course.insertMany(
+      Array.from({ length: TOTAL }, (unused, index) => ({
+        title: `Many course ${index + 1}`,
+        slug: `smoke-many-${runId}-${index + 1}`,
+        instructor: instructor._id,
+        instructorName: 'Many Courses',
+        category: 'business-management',
+        level: 'beginner',
+        status: 'published',
+        publishedAt: new Date(),
+        priceCents: 0,
+      }))
+    );
+
+    oldestCourse = created[0];
+
+    // Deterministic ordering: the first course is the oldest, so "the twelve
+    // most recent" is a known set and the oldest can be asserted absent.
+    const base = Date.now() - TOTAL * 60000;
+    await Promise.all(
+      created.map((course, index) =>
+        Course.updateOne(
+          { _id: course._id },
+          { $set: { createdAt: new Date(base + index * 60000), updatedAt: new Date(base + index * 60000) } },
+          { timestamps: false }
+        )
+      )
+    );
+
+    await Enrollment.create({
+      student: student._id,
+      course: oldestCourse._id,
+      courseTitle: oldestCourse.title,
+    });
+
+    instructorToken = await signIn(instructorEmail);
+    assert(instructorToken, 'the instructor must be able to sign in');
+  });
+
+  let dashboard = null;
+
+  await check('the instructor dashboard counts every course it owns', async () => {
+    const { status, json } = await request('GET', '/api/v1/dashboard/instructor', {
+      token: instructorToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    dashboard = json.data;
+
+    assertEqual(dashboard.stats.courses, TOTAL, 'course count');
+    assertEqual(dashboard.stats.published, TOTAL, 'published count');
+    assertEqual(dashboard.stats.drafts, 0, 'draft count');
+  });
+
+  await check('the dashboard still previews only the recent courses', async () => {
+    assertEqual(dashboard.courses.length, 12, 'preview length');
+    assert(
+      dashboard.courses.every((course) => course.id !== String(oldestCourse._id)),
+      'the oldest course should not be in the preview'
+    );
+  });
+
+  await check('a student on a course outside the preview is still counted', async () => {
+    assertEqual(dashboard.stats.students, 1, 'student count');
+    assertEqual(dashboard.stats.completions, 0, 'completion count');
+  });
+
+  await check('the full course list is served in one page when asked for it', async () => {
+    const { status, json } = await request('GET', '/api/v1/courses/mine?limit=100', {
+      token: instructorToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.pagination.total, TOTAL, 'total courses');
+    assertEqual(json.data.items.length, TOTAL, 'courses on the page');
+  });
+
+  await check('the full course list paginates correctly past one page', async () => {
+    const { json } = await request('GET', '/api/v1/courses/mine?limit=20&page=3', {
+      token: instructorToken,
+    });
+
+    assertEqual(json.data.pagination.total, TOTAL, 'total courses');
+    assertEqual(json.data.pagination.totalPages, 3, 'total pages');
+    assertEqual(json.data.items.length, 7, 'the last page holds the remainder');
+    assertEqual(json.data.pagination.hasNextPage, false, 'no page after the last');
+  });
+
+  await check('a student cannot list instructor courses', async () => {
+    const studentToken = await signIn(studentEmail);
+    const { status } = await request('GET', '/api/v1/courses/mine', { token: studentToken });
+
+    assertEqual(status, 403, 'status');
+  });
+}
+
 async function main() {
   process.stdout.write('\nWuteve Global Academy — smoke test\n');
   process.stdout.write('==================================\n\n');
@@ -7059,6 +7199,9 @@ async function main() {
 
     process.stdout.write('\nCourse reviews\n');
     await testReviews();
+
+    process.stdout.write('\nInstructor course list\n');
+    await testInstructorCoursePagination();
 
     process.stdout.write('\nMoney formatting\n');
     await testMoneyFormatting();

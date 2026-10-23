@@ -1263,6 +1263,7 @@
 
         let state = {
             currentPage: 'overview',
+            coursePage: 1,
             charts: {}
         };
 
@@ -1271,6 +1272,36 @@
             return course && course.thumbnail
                 ? `background-image:url('${course.thumbnail}')`
                 : 'background-image:linear-gradient(135deg,#1a3a6b 0%,#2a1a5e 100%)';
+        }
+
+        /**
+         * One shape for a course, whichever endpoint it came from.
+         *
+         * `/dashboard/instructor` returns a 12-row preview and `/courses/mine`
+         * returns a page of the full list. The two carry the live enrolment count
+         * under different names — `enrollmentCount` on the paginated one — so this
+         * is the single place that difference is handled.
+         */
+        function toInstructorCourse(course) {
+            const students = course.enrollmentCount !== undefined && course.enrollmentCount !== null
+                ? course.enrollmentCount
+                : (course.enrolledCount || 0);
+
+            return {
+                id: String(course.id),
+                slug: course.slug,
+                title: course.title,
+                description: course.summary || '',
+                thumbnail: course.thumbnail || '',
+                students,
+                status: course.status,
+                price: (course.priceCents || 0) / 100,
+                priceLabel: course.priceLabel,
+                isFree: course.isFree,
+                rating: course.rating || 0,
+                lessonCount: course.lessonCount || 0,
+                createdAt: course.publishedAt || null
+            };
         }
 
         /**
@@ -1322,21 +1353,7 @@
 
             instructorData.revenue = revenue;
 
-            instructorData.courses = (dashboard.courses || []).map((course) => ({
-                id: String(course.id),
-                slug: course.slug,
-                title: course.title,
-                description: course.summary || '',
-                thumbnail: course.thumbnail || '',
-                students: course.enrolledCount || 0,
-                status: course.status,
-                price: (course.priceCents || 0) / 100,
-                priceLabel: course.priceLabel,
-                isFree: course.isFree,
-                rating: course.rating || 0,
-                lessonCount: course.lessonCount || 0,
-                createdAt: course.publishedAt || null
-            }));
+            instructorData.courses = (dashboard.courses || []).map(toInstructorCourse);
 
             instructorData.students = (students.items || []).map((student) => ({
                 id: student.id,
@@ -1633,37 +1650,96 @@
             `;
         }
 
-        function renderCourses() {
-            if (instructorData.courses.length === 0) {
-                return `
-                    <div class="section-title"><span>📚 My Courses</span><button class="btn-primary" onclick="loadPage('create-course')">+ Create New Course</button></div>
-                    <div class="empty-state"><i class="fas fa-book"></i><h3>No courses yet</h3><p>Your courses appear here once you create one</p><button class="btn-primary" onclick="loadPage('create-course')">Create a Course</button></div>
-                `;
-            }
-
+        function courseCardForDashboard(c) {
             return `
-                <div class="section-title"><span>📚 My Courses (${instructorData.courses.length})</span><button class="btn-primary" onclick="loadPage('create-course')">+ Create New Course</button></div>
-                <div class="courses-grid">
-                    ${instructorData.courses.map(c => `
-                        <div class="course-card glass-premium">
-                            <div class="course-image" style="${courseImageStyle(c)}"><span class="course-badge ${c.status}">${c.status}</span></div>
-                            <div class="course-content">
-                                <h3 class="course-title">${WGAUI.escapeHtml(c.title)}</h3>
-                                <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:var(--gold);"></i> ${c.rating || 'Not rated'}</div>
-                                <div class="course-meta"><span>${WGAUI.escapeHtml(c.priceLabel || 'Free')}</span> · <span>${c.lessonCount} lesson${c.lessonCount === 1 ? '' : 's'}</span></div>
-                                <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
-                                    <button class="btn-primary btn-sm" onclick="editCourse('${c.id}')">Edit</button>
-                                    <button class="btn-primary btn-sm" onclick="manageLessons('${c.id}')">Lessons</button>
-                                    <button class="btn-primary btn-outline btn-sm" onclick="openCourse('${c.slug || c.id}')">View Page</button>
-                                    ${c.status === 'draft' ? `<button class="btn-primary btn-sm" onclick="publishCourse('${c.id}')">Submit</button>` : ''}
-                                    ${c.status === 'published' ? `<button class="btn-primary btn-outline btn-sm" onclick="unpublishCourse('${c.id}')">Unpublish</button>` : ''}
-                                </div>
-                            </div>
+                <div class="course-card glass-premium">
+                    <div class="course-image" style="${courseImageStyle(c)}"><span class="course-badge ${c.status}">${c.status}</span></div>
+                    <div class="course-content">
+                        <h3 class="course-title">${WGAUI.escapeHtml(c.title)}</h3>
+                        <div class="course-meta"><i class="fas fa-users"></i> ${c.students} students · <i class="fas fa-star" style="color:var(--gold);"></i> ${c.rating || 'Not rated'}</div>
+                        <div class="course-meta"><span>${WGAUI.escapeHtml(c.priceLabel || 'Free')}</span> · <span>${c.lessonCount} lesson${c.lessonCount === 1 ? '' : 's'}</span></div>
+                        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+                            <button class="btn-primary btn-sm" onclick="editCourse('${c.id}')">Edit</button>
+                            <button class="btn-primary btn-sm" onclick="manageLessons('${c.id}')">Lessons</button>
+                            <button class="btn-primary btn-outline btn-sm" onclick="openCourse('${c.slug || c.id}')">View Page</button>
+                            ${c.status === 'draft' ? `<button class="btn-primary btn-sm" onclick="publishCourse('${c.id}')">Submit</button>` : ''}
+                            ${c.status === 'published' ? `<button class="btn-primary btn-outline btn-sm" onclick="unpublishCourse('${c.id}')">Unpublish</button>` : ''}
                         </div>
-                    `).join('')}
+                    </div>
                 </div>
             `;
         }
+
+        function renderCourses() {
+            return `
+                <div class="section-title"><span id="myCoursesTitle">📚 My Courses</span><button class="btn-primary" onclick="loadPage('create-course')">+ Create New Course</button></div>
+                <div id="myCoursesBody"><div style="text-align:center;padding:40px;"><div class="loading-spinner"></div></div></div>
+            `;
+        }
+
+        /**
+         * The full course list, page by page.
+         *
+         * The summary payload carries only the twelve most recently updated
+         * courses, which is right for the overview and wrong for this page: the
+         * heading used to read "My Courses (12)" for an instructor with 47. The
+         * list is therefore fetched from /courses/mine, which paginates on the
+         * server, and the heading counts what the server says exists.
+         */
+        window.loadMyCourses = async function loadMyCourses(page) {
+            state.coursePage = Math.max(1, Number(page) || 1);
+
+            const body = document.getElementById('myCoursesBody');
+            if (!body) return;
+
+            body.innerHTML = '<div style="text-align:center;padding:40px;"><div class="loading-spinner"></div></div>';
+
+            try {
+                const data = await WGA.get('/courses/mine', {
+                    query: { page: state.coursePage, limit: 100 }
+                });
+
+                const courses = (data.items || []).map(toInstructorCourse);
+                const paging = data.pagination || { page: 1, limit: 100, total: courses.length, totalPages: 1, hasNextPage: false, hasPrevPage: false };
+
+                const title = document.getElementById('myCoursesTitle');
+                if (title) title.textContent = `📚 My Courses (${paging.total})`;
+
+                if (!courses.length) {
+                    body.innerHTML = `
+                        <div class="empty-state"><i class="fas fa-book"></i><h3>No courses yet</h3><p>Your courses appear here once you create one</p><button class="btn-primary" onclick="loadPage('create-course')">Create a Course</button></div>
+                    `;
+                    return;
+                }
+
+                const start = (paging.page - 1) * paging.limit + 1;
+                const end = start + courses.length - 1;
+
+                const pager = `
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:18px;">
+                        <p style="margin:0;font-size:13.5px;color:var(--text-light);">Showing ${start}–${end} of ${paging.total} course${paging.total === 1 ? '' : 's'}</p>
+                        <div style="display:flex;gap:8px;">
+                            ${paging.hasPrevPage ? `<button class="btn-primary btn-outline btn-sm" onclick="loadMyCourses(${paging.page - 1})">Previous</button>` : ''}
+                            ${paging.hasNextPage ? `<button class="btn-primary btn-outline btn-sm" onclick="loadMyCourses(${paging.page + 1})">Next</button>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                body.innerHTML = `
+                    <div class="courses-grid">${courses.map(courseCardForDashboard).join('')}</div>
+                    ${pager}
+                `;
+            } catch (error) {
+                body.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-triangle-exclamation"></i>
+                        <h3>We could not load your courses</h3>
+                        <p>${WGAUI.escapeHtml(error.message || 'Please try again.')}</p>
+                        <button class="btn-primary" onclick="loadMyCourses(${state.coursePage})">Try again</button>
+                    </div>
+                `;
+            }
+        };
 
         function renderCreateCourse() {
             return `
@@ -3778,6 +3854,11 @@ return `<div class="lesson-admin">${list}${form}</div>`;
                 }
                 content.innerHTML = html;
                 observeCounters();
+
+                // The course list is fetched on demand: the summary payload only
+                // carries the twelve most recent courses, which is not the list
+                // this page is meant to show.
+                if (page === 'courses') loadMyCourses(state.coursePage || 1);
 
                 // Revenue breakdown, drawn from real payment totals per course.
                 if (page === 'earnings') {

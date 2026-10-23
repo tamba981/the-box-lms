@@ -275,16 +275,35 @@ router.get(
       Course.countDocuments(filter),
     ]);
 
-    const items = await Promise.all(
-      courses.map(async (course) => {
-        const [enrollmentCount, completionCount] = await Promise.all([
-          Enrollment.countDocuments({ course: course._id, status: { $ne: 'cancelled' } }),
-          Enrollment.countDocuments({ course: course._id, status: 'completed' }),
-        ]);
+    /**
+     * One aggregation for the whole page, not two counts per course.
+     *
+     * This route used to run `Enrollment.countDocuments` twice inside a loop,
+     * which is 94 round-trips for an instructor with 47 courses — seconds of
+     * spinner on the dashboard page that lists them. The numbers are identical;
+     * only the number of queries changed.
+     */
+    const enrollmentStats = await Enrollment.aggregate([
+      { $match: { course: { $in: courses.map((course) => course._id) } } },
+      {
+        $group: {
+          _id: '$course',
+          enrollmentCount: { $sum: { $cond: [{ $ne: ['$status', 'cancelled'] }, 1, 0] } },
+          completionCount: { $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] } },
+        },
+      },
+    ]);
 
-        return course.toCardJSON({ enrollmentCount, completionCount });
-      })
-    );
+    const statsByCourse = new Map(enrollmentStats.map((row) => [String(row._id), row]));
+
+    const items = courses.map((course) => {
+      const stats = statsByCourse.get(String(course._id)) || { enrollmentCount: 0, completionCount: 0 };
+
+      return course.toCardJSON({
+        enrollmentCount: stats.enrollmentCount,
+        completionCount: stats.completionCount,
+      });
+    });
 
     return ok(res, paginated(items, total, { page, limit }));
   })

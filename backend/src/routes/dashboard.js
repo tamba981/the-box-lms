@@ -156,11 +156,27 @@ router.get(
   asyncHandler(async (req, res) => {
     const instructorId = req.user._id;
 
-    const courses = await Course.find({ instructor: instructorId, status: { $ne: 'archived' } })
-      .sort({ updatedAt: -1 })
-      .limit(12);
+    const courseFilter = { instructor: instructorId, status: { $ne: 'archived' } };
 
-    const courseIds = courses.map((course) => course._id);
+    /**
+     * The list is a preview; the numbers are totals.
+     *
+     * These were one query with a hard `.limit(12)`, and every figure on the page
+     * — courses, published, drafts, students, revenue — was derived from those
+     * twelve rows. An instructor with 47 courses was told they had 12, and a
+     * student enrolled in the thirteenth-oldest course was invisible.
+     */
+    const [courses, ownedCourseIds, courseStatusRows, ownedTitles] = await Promise.all([
+      Course.find(courseFilter).sort({ updatedAt: -1 }).limit(12),
+      Course.distinct('_id', courseFilter),
+      Course.aggregate([{ $match: courseFilter }, { $group: { _id: '$status', count: { $sum: 1 } } }]),
+      // Titles for every owned course: the revenue breakdown below covers all of
+      // them, and a title map built from the preview would name 35 rows "Course".
+      Course.find(courseFilter).select('title'),
+    ]);
+
+    const courseIds = ownedCourseIds;
+    const statusCounts = new Map(courseStatusRows.map((row) => [row._id, row.count]));
 
     // Revenue is summed from completed payments for this instructor's courses.
     // Money is added in integer cents and only formatted at the edge.
@@ -219,7 +235,7 @@ router.get(
         ]),
       ]);
 
-    const titlesById = new Map(courses.map((course) => [String(course._id), course.title]));
+    const titlesById = new Map(ownedTitles.map((course) => [String(course._id), course.title]));
 
     const summary = enrollmentStats[0] || { students: 0, completed: 0, averageProgress: 0 };
     const rating = ratings[0];
@@ -249,9 +265,9 @@ router.get(
       user: req.user.toPublicJSON({ includePrivate: true }),
 
       stats: {
-        courses: courses.length,
-        published: courses.filter((course) => course.status === 'published').length,
-        drafts: courses.filter((course) => course.status === 'draft').length,
+        courses: ownedCourseIds.length,
+        published: statusCounts.get('published') || 0,
+        drafts: statusCounts.get('draft') || 0,
         pending: pendingCount,
         students: summary.students,
         completions: summary.completed,
