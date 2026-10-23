@@ -1,0 +1,325 @@
+{
+  "slug": "advanced-marketing-analytics",
+  "title": "Advanced Marketing Analytics",
+  "program": "CPP",
+  "category": "data-analytics",
+  "level": "intermediate",
+  "credential": "certificate",
+  "priceCents": 3000,
+  "certificateFeeCents": 0,
+  "summary": "Tell the difference between correlation and credit, value a customer honestly, and answer a finance director who asks you to prove a campaign worked.",
+  "description": "Marketing analytics is where a great deal of confident nonsense is produced. A campaign runs, sales rise, and the rise is credited to the campaign, the channel or the creative, when the actual cause may be seasonality, a competitor's stock-out, or a price change that happened in the same month.\n\nThis course is about the discipline of separating credit from coincidence. It covers attribution and its systematic distortions, the difference between correlation and causation in a market where word of mouth dominates and tracking is thin, and why last-click attribution credits the search that came after the decision rather than the conversation that caused it.\n\nIt then works through customer value: lifetime value and the assumptions that make a figure of 340 dollars either useful or fictional, acquisition cost and payback, and the difference between revenue and margin which is where most marketing business cases quietly fail.\n\nLiberian conditions shape the examples: word of mouth as the dominant channel, mobile-first customer behaviour, radio billboards and messaging groups carrying most reach, and small budgets where a misallocated quarter is not recoverable.\n\nThe case study concerns a telecom company that ran three campaigns at once, saw sales rise fifteen percent, and now faces a finance director asking which of the three worked.",
+  "tags": ["marketing analytics", "attribution", "lifetime value", "experimentation", "ROI", "measurement"],
+  "outcomes": [
+    "Distinguish correlation, attribution and causation in a marketing claim",
+    "Explain the systematic distortions of last-click attribution",
+    "Build a lifetime value figure and interrogate its assumptions",
+    "Calculate acquisition cost and payback against margin",
+    "Design a practical test when a controlled experiment is impossible",
+    "Assess what marketing mix modelling can and cannot establish",
+    "Report marketing performance to a finance audience"
+  ],
+  "caseStudy": "A telecom company runs three campaigns simultaneously: radio, billboard and WhatsApp. Post-campaign, sales are up fifteen percent. The marketing director says all three worked. The finance director says prove it. Students must design the analysis, state what can and cannot be determined, and decide what to recommend for the next quarter.",
+  "modules": [
+    {
+      "title": "What attribution can and cannot do",
+      "lessons": [
+        {
+          "title": "Correlation, attribution and causation",
+          "minutes": 20,
+          "teach": [
+            "Correlation is that two things moved together. Attribution is a claim about which one deserves the credit. Causation is a claim that changing one would change the other, and only the third is a basis for a budget decision.",
+            "Marketing reporting routinely presents the first as the third. Sales rose in the months the campaign ran, therefore the campaign worked, and the argument is accepted because nobody has proposed an alternative explanation.",
+            "The alternative explanations are usually available and usually cheaper. Seasonality, a price change, a competitor's stock-out, a new outlet opening, a payday, a public holiday, or a distribution push that happened at the same time.",
+            "Attribution requires a counterfactual: what would have happened without the campaign. Without one, the campaign is merely present in the same period, which is the same evidence a rooster has for the sunrise.",
+            "This is not an argument against measurement, it is an argument about precision. An organisation that knows its claim is weak can test it; one that believes a correlation is proof will keep spending on the same activity for years.",
+            "The practical standard is to state the claim at the strength the evidence supports. The campaign ran and sales rose eleven percent against a flat preceding quarter, and we believe it contributed, is a sentence a finance director can work with."
+          ],
+          "example": "Sales rise 18 percent during a radio campaign. The same months include a price promotion and the start of the school year, and neither is mentioned in the report that credits the radio.",
+          "points": [
+            "Correlation, credit and cause are three different claims",
+            "Name the alternative explanations before claiming credit",
+            "State the claim at the strength the evidence supports"
+          ],
+          "check": "Take your last campaign claim and write the two most plausible alternative explanations."
+        },
+        {
+          "title": "Why attribution is hard here",
+          "minutes": 20,
+          "teach": [
+            "Attribution assumes you can observe who saw what and what they did next. In a market where most influence travels by conversation and radio, neither half of that is observable, and the assumption fails silently.",
+            "A customer who heard about a product from a friend, then saw a billboard, then called a number cannot be attributed to any of those, because nobody recorded the sequence or can verify it afterwards.",
+            "Digital channels look measurable and are partly an illusion. A click is recorded, which does not mean the click caused the purchase, and the person may have decided before the click and used it as a way to order.",
+            "Unique codes and dedicated numbers are the cheapest practical instrument. A separate number for a campaign, a code quoted at purchase, or a specific reply word in a messaging campaign gives a real count without any analytics infrastructure.",
+            "Ask customers directly. A short question at the point of purchase, recorded for a month, produces a distribution of sources that is more honest than any model built on incomplete data, even though it relies on recollection.",
+            "Accept the ceiling. Some influence cannot be attributed at reasonable cost, and an organisation that states this is more credible than one that produces a precise number from data that cannot support it."
+          ],
+          "example": "A business uses a dedicated phone number on a billboard and a reply code in a WhatsApp campaign. Direct attribution becomes possible for those channels, and the remainder is reported as unattributed rather than guessed.",
+          "points": [
+            "Attribution needs observation that often does not exist",
+            "Clicks are recorded, not causal",
+            "Dedicated numbers and codes are the cheapest instrument"
+          ],
+          "check": "Decide which of your channels could carry a dedicated number or code next quarter."
+        },
+        {
+          "title": "Last-click and its distortions",
+          "minutes": 19,
+          "teach": [
+            "Last-click attribution credits the final touchpoint before a purchase. It is popular because it is easy to compute, and misleading because the final touchpoint is frequently the one that least influenced the decision.",
+            "The pattern is systematic rather than random. Channels that people use to complete a decision, such as search, direct calls and a shop visit, receive the credit, while the channels that created awareness, such as radio, billboards and conversation, receive nothing.",
+            "The consequence is budget drift. Investment moves toward channels that capture demand and away from the channels that generate it, and the organisation becomes steadily better at converting demand it no longer creates.",
+            "The drift is slow and therefore invisible. Each quarterly reallocation looks justified by the data, and the decline in new demand appears two years later as an unexplained problem rather than as a consequence.",
+            "Corrections are available without sophisticated modelling: ask new customers how they first heard of you, weight early channels by answers rather than by clicks, and treat the attribution output as a description of the funnel rather than as a valuation of each channel.",
+            "State the bias explicitly in reporting. A report that says last-click overstates search and understates radio is trusted by the people reading it, while one that presents the numbers without that caveat is accepted once and questioned forever after."
+          ],
+          "example": "A business reallocates budget from radio to search because search shows higher return on last-click. New customer numbers fall over the following year while the search return stays strong.",
+          "points": [
+            "Last-click credits completion, not creation",
+            "Budget drifts toward channels that capture demand",
+            "Report the bias, do not hide it"
+          ],
+          "check": "Look at your channel report and identify which channels are being penalised by last-click."
+        }
+      ]
+    },
+    {
+      "title": "Measuring value",
+      "lessons": [
+        {
+          "title": "Customer lifetime value and its assumptions",
+          "minutes": 20,
+          "teach": [
+            "Lifetime value is the margin a customer generates over their relationship, discounted to today. Every number in it is an assumption: how long they stay, how often they buy, how much they spend and what margin the business makes.",
+            "A figure of 340 dollars is therefore not a fact, it is the output of four assumptions. If retention is assumed at three years when the observed figure is eighteen months, the value is roughly halved and any decision based on it is wrong.",
+            "Use observed data where it exists and label the rest. A business with two years of history can measure retention for two years and must assume beyond that, and the assumption should be stated in the report rather than buried in a spreadsheet.",
+            "Discount at a rate the business recognises. Future margin is worth less than present margin, and a lifetime value that ignores discounting overstates the value of long relationships, which are exactly the ones the model is used to justify.",
+            "Segment before averaging. A single lifetime value across all customers describes nobody, while separate figures for two or three acquisition channels show which one is worth more investment and which is buying volume at a loss.",
+            "Use it for comparison rather than for valuation. Lifetime value is most useful as a ratio against acquisition cost by segment, and least useful as a headline number quoted in a board pack without its assumptions."
+          ],
+          "example": "A business reports lifetime value of 340 dollars. Retention is assumed at three years against an observed eighteen months, and recalculating on observed data produces 190 dollars, which changes the acquisition budget it can support.",
+          "points": [
+            "Lifetime value is four assumptions, not a fact",
+            "Use observed retention and label the rest",
+            "Segment before averaging"
+          ],
+          "check": "Recalculate one lifetime value using observed retention rather than the assumed figure."
+        },
+        {
+          "title": "Acquisition cost and payback",
+          "minutes": 19,
+          "teach": [
+            "Customer acquisition cost is total acquisition spend divided by the number of customers acquired, and it is only meaningful against the margin those customers produce and the time it takes to produce it.",
+            "Divide by the right number. Spend divided by enquiries overstates the cost of a customer, while spend divided by customers understates it if many of them buy once and never return.",
+            "Payback period is the more useful measure for a business with limited cash. If acquiring a customer costs the equivalent of eight months of margin, the business must be able to fund eight months of that gap on every customer acquired simultaneously.",
+            "Growth can be a cash problem. A business acquiring customers faster than they repay their acquisition cost grows itself into a funding shortfall, and the faster it grows the worse the shortfall becomes.",
+            "Compare by channel and by segment rather than in aggregate. An aggregate acquisition cost that looks acceptable frequently conceals one channel acquiring cheaply and another acquiring at a loss.",
+            "Include the costs that are usually omitted: staff time spent on follow-up, discounts used to close a sale, and the free service given to people who never buy. Omitting them produces a number that flatters the channel being defended."
+          ],
+          "example": "A business spends 12,000 dollars on a campaign and acquires 300 customers, a cost of 40 dollars each. Including staff follow-up time and closing discounts the true figure is 61 dollars against a first-year margin of 55.",
+          "points": [
+            "Divide by the right denominator",
+            "Payback matters more than cost when cash is tight",
+            "Growth can outrun the ability to fund it"
+          ],
+          "check": "Calculate acquisition cost for one channel including follow-up time and discounts."
+        },
+        {
+          "title": "Margin, not revenue",
+          "minutes": 19,
+          "teach": [
+            "Marketing cases are frequently built on revenue because revenue is larger and easier to obtain. A campaign that generates a million in sales and no margin has consumed cash and returned nothing.",
+            "Use contribution margin: the amount left after the variable cost of delivering what was sold. It is the figure that determines whether additional volume is worth acquiring, and it is usually far smaller than the sales figure in the report.",
+            "Discount-driven campaigns are the common trap. A twenty percent discount on a product with a thirty percent margin removes two thirds of the margin on every unit, so the campaign must generate three times the volume to break even.",
+            "Attribute the cost of serving as well as the cost of acquiring. A campaign that brings customers who call support twice as often has a cost that appears in another department's budget and in nobody's marketing report.",
+            "Report margin by channel and by campaign, not only revenue by campaign. The comparison frequently reverses the ranking, and the reversal is the finding the finance director was asking for.",
+            "Reconcile to the accounts. A marketing report whose revenue does not match the finance system will be discounted entirely once the discrepancy is noticed, whatever the quality of the analysis behind it."
+          ],
+          "example": "A campaign reports 400,000 in sales. At a 26 percent contribution margin, after the 15 percent discount used to close sales, the margin is 65,000 against a campaign cost of 48,000.",
+          "points": [
+            "Use contribution margin, not revenue",
+            "A discount campaign needs volume to break even",
+            "Reconcile your numbers to the finance system"
+          ],
+          "check": "Recompute your last campaign result using contribution margin rather than sales value."
+        }
+      ]
+    },
+    {
+      "title": "Experiments and mixes",
+      "lessons": [
+        {
+          "title": "The experiment is the only clean test",
+          "minutes": 20,
+          "teach": [
+            "An experiment compares two groups that differ only in whether they received the treatment. It is the only design that supports a causal claim, and it is usually cheaper than the modelling organisations commission instead.",
+            "Practical experiments in a low-data market are simple: run the campaign in one region and not in a comparable one, alternate weeks, or give the offer to every other customer on a list. Each produces a comparison without any analytics tooling.",
+            "Choose the comparison carefully. Two districts differ in more than the campaign, so the comparison is imperfect, and stating what differs is part of reporting the result honestly.",
+            "Decide the measure and the duration before starting. A test that runs until the result looks good is not a test, and one that changes the measure halfway has produced two half-tests.",
+            "Sample size matters even for a rough test. Twenty customers in each group will not distinguish a real effect from noise, and a test that small is a way of confirming a prior belief with arithmetic.",
+            "Run the test at a scale where the answer changes something. A test that shows a ten percent difference on a channel too small to matter has consumed the same effort as one that could have reallocated a budget."
+          ],
+          "example": "A business runs a radio campaign in two of four comparable towns for six weeks. Sales rise 14 percent in the campaign towns and 3 percent elsewhere, which is a defensible estimate of the campaign's effect.",
+          "points": [
+            "An experiment compares groups differing only in treatment",
+            "Geographic splits and alternation work without tooling",
+            "Fix the measure and duration before starting"
+          ],
+          "check": "Design a two-region test for your next campaign, including the measure and duration."
+        },
+        {
+          "title": "Marketing mix modelling and its limits",
+          "minutes": 20,
+          "teach": [
+            "Marketing mix modelling uses historical variation in spend across channels to estimate each channel's contribution statistically. It is the standard answer when everything runs at once and no experiment is possible.",
+            "It requires variation to learn from. Where radio spend has been constant for three years, the model has no information about what would happen if it changed, and it will produce an estimate anyway, which is the danger.",
+            "It also requires enough data. Two years of monthly totals gives twenty-four observations to estimate several effects, and the confidence intervals around those estimates are usually far wider than the report presents.",
+            "Models capture correlation across time, so anything else that moved with the spending will be attributed to it. A distribution expansion in the same period will be credited to the advertising that ran alongside it.",
+            "The output is best treated as a hypothesis generator rather than a valuation. A model that says radio contributes more than expected is a reason to run a controlled test on radio, not a reason to move the budget immediately.",
+            "State the uncertainty. A model reporting that radio returns 2.4 times spend should report a range, and if the range crosses one, the honest conclusion is that the effect cannot be distinguished from zero."
+          ],
+          "example": "A mix model attributes 40 percent of sales to billboard, which has run unchanged for four years. The model had no variation to learn from, and the estimate reflects its assumptions rather than the billboard's effect.",
+          "points": [
+            "Modelling needs variation to learn from",
+            "Watch for anything else that moved at the same time",
+            "Treat the output as a hypothesis, not a valuation"
+          ],
+          "check": "Identify one channel whose spend has never varied, and what a model could not learn about it."
+        },
+        {
+          "title": "Case: three campaigns, fifteen percent, and a demand for proof",
+          "minutes": 23,
+          "teach": [
+            "A telecom company runs radio, billboard and WhatsApp campaigns simultaneously. Post-campaign, sales are up fifteen percent. The marketing director says all three worked and the finance director says prove it.",
+            "The first honest statement is that fifteen percent cannot be divided between three channels that ran at the same time with no variation and no comparison group. Any split produced from this data is an assumption dressed as a measurement.",
+            "What can be established is cheaper than what is being asked for. A dedicated number on the billboard, a reply code in the WhatsApp campaign and a question at the point of sale would have produced a real distribution of first contact for a fraction of the media budget.",
+            "The analysis that is possible now separates what moved. Was the increase concentrated in the areas covered by the billboard, in the weeks of the radio flight, or among the numbers reached by WhatsApp? Overlap explains part of it, and the pattern is informative even when it is not conclusive.",
+            "Compare against the counterfactual that exists. The same months last year, the trend in the preceding quarter, and any region or segment not covered by one of the campaigns. Where a comparison exists, use it; where none exists, say so.",
+            "The recommendation for the next quarter is a sequenced test rather than a bigger simultaneous spend: run one channel alone in a comparable region, hold the others constant, and produce a number that can be defended before the budget is increased."
+          ],
+          "example": "A telecom runs radio, billboard and WhatsApp at once, sales rise 15 percent, and the finance director asks which worked. No comparison group exists and no channel varied independently.",
+          "points": [
+            "Simultaneous campaigns cannot be divided without variation",
+            "Use point-of-sale questions and dedicated codes next time",
+            "Recommend a sequenced test rather than a larger simultaneous spend"
+          ],
+          "check": "For this case, list what you can conclude, what you cannot, and the one measurement you would add next quarter."
+        }
+      ]
+    },
+    {
+      "title": "Deciding",
+      "lessons": [
+        {
+          "title": "Reallocating budget under uncertainty",
+          "minutes": 19,
+          "teach": [
+            "Analytics rarely produces certainty, and budget decisions still have to be taken. The practical approach is to move in increments, keep a comparison, and stop moving when the evidence runs out.",
+            "Shift a portion rather than the whole budget. Moving twenty percent of a channel's spend to a test preserves the option to reverse, while moving all of it converts a measurement problem into a strategy.",
+            "Keep one thing constant wherever possible so that something can be compared. An organisation that changes every channel at once has bought itself another year of not knowing.",
+            "Set decision rules in advance: if the tested channel beats the current one by more than a stated margin over a stated period, the budget moves; otherwise it returns. Rules written before the data arrives are believed afterwards.",
+            "Distinguish reversible from irreversible commitments. A media placement can be changed next quarter, while a sponsorship or a distribution investment cannot, and the second deserves a higher standard of evidence.",
+            "Accept the possibility that the answer is no change. A quarter of analysis that concludes the current allocation is defensible is a result, and it is far cheaper than a reallocation made to justify the analysis."
+          ],
+          "example": "A business moves 20 percent of its billboard budget to radio for one quarter with a pre-agreed rule, and reverses it when the measured difference falls inside the stated margin.",
+          "points": [
+            "Move in increments and keep a comparison",
+            "Write the decision rule before seeing the data",
+            "A conclusion of no change is a valid result"
+          ],
+          "check": "Write one decision rule you would commit to before your next reallocation."
+        },
+        {
+          "title": "Reporting to a finance audience",
+          "minutes": 19,
+          "teach": [
+            "A finance director is asking three questions: what did it cost, what did it return, and how confident are you. A report that leads with impressions, reach and engagement answers none of them and is discounted before the first slide.",
+            "Lead with money and uncertainty together. The campaign cost 48,000, generated a contribution of 65,000 within the quarter, and the estimate is based on a two-region comparison with a margin of error of roughly 15 percent.",
+            "Separate what was measured from what was assumed. A table with two columns resolves most of the argument, because the finance director can accept the assumptions once they are visible rather than discovering them later.",
+            "Reconcile to the finance system before presenting. Marketing's sales figure and the accounting system's revenue will differ, and the difference will consume the meeting unless marketing arrives having already explained it.",
+            "State what you would do differently with more budget and with less. That single question tells the finance director whether the marketing function is thinking about allocation, which is the decision actually on the table.",
+            "Avoid the vocabulary of the discipline. Reach, frequency, impressions and engagement describe activity in a language the audience does not use, and translating them into cost per customer and margin per customer is what earns the next meeting."
+          ],
+          "example": "A marketing report is rewritten from reach and engagement to cost, contribution, payback period and a stated confidence, and the finance director approves a test budget that had previously been refused.",
+          "points": [
+            "Lead with cost, return and confidence",
+            "Separate measured from assumed in two columns",
+            "Reconcile to the accounting system first"
+          ],
+          "check": "Rewrite your last campaign summary in three sentences for a finance director."
+        },
+        {
+          "title": "When to stop measuring",
+          "minutes": 18,
+          "teach": [
+            "Measurement has a cost, and beyond a point the cost exceeds the value of the additional certainty. The skill is recognising which decisions need evidence and which are safe without it.",
+            "Stop measuring when the decision is small, reversible and already obviously right. Spending three weeks testing whether to answer the phone more quickly is a misuse of the analysis capability.",
+            "Keep measuring where the spend is large, the commitment is long or the result is surprising. Those are the three conditions under which a wrong belief is expensive and a test is cheap.",
+            "Stop when the answer will not change anything. A study commissioned to confirm a decision already taken produces a document that is filed, and it teaches the organisation that analysis is a formality.",
+            "Watch for measurement becoming avoidance. An organisation that commissions a further study instead of making an uncomfortable reallocation has used analytics to defer a decision, and the pattern is visible in the number of studies about the same question.",
+            "Publish the decision and the evidence together. The value of analytics is in the decision it produced, and an organisation that records both builds a memory of what worked that survives the departure of the people who knew."
+          ],
+          "example": "A business commissions a fourth study on whether to keep a channel. The three previous studies all pointed the same way, and the decision is taken instead of a fourth study being ordered.",
+          "points": [
+            "Stop when the decision is small and reversible",
+            "Keep measuring where the commitment is long",
+            "Measurement can become a way of avoiding a decision"
+          ],
+          "check": "Name one question your organisation has studied more than twice without deciding."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "What is the difference between correlation and attribution, and why does it matter for budget decisions?",
+      "explanation": "Correlation is that two things moved together; attribution is a claim about which deserves credit. Without a counterfactual, attribution is unsupported, and a budget moved on that basis rewards the channel that happened to be present rather than the one that worked.",
+      "options": [
+        { "text": "Correlation is co-movement while attribution assigns credit, and only attribution can justify moving a budget", "correct": true },
+        { "text": "Correlation applies to digital channels and attribution applies to traditional ones", "correct": false },
+        { "text": "They are the same concept expressed at different levels of statistical confidence", "correct": false },
+        { "text": "Attribution measures spend and correlation measures response", "correct": false }
+      ]
+    },
+    {
+      "prompt": "You calculate a customer lifetime value of 340 dollars. Which assumptions should make you suspicious?",
+      "explanation": "Lifetime value is the output of retention, purchase frequency, spend and margin, all projected forward. Where retention is assumed beyond the observed history, the figure is an extrapolation, and small changes in it move the value substantially.",
+      "options": [
+        { "text": "The assumed retention period, especially where it exceeds the observed history, along with frequency and margin", "correct": true },
+        { "text": "The currency used and whether it was converted at the correct rate", "correct": false },
+        { "text": "Whether the figure was calculated monthly or annually", "correct": false },
+        { "text": "The number of customers included in the calculation", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the telecom case, what can actually be concluded from a fifteen percent sales increase across three simultaneous campaigns?",
+      "explanation": "With no independent variation and no comparison group, the increase cannot be divided between the channels. What can be said is that sales rose, and the comparison with prior periods or uncovered areas gives context without settling credit.",
+      "options": [
+        { "text": "That sales rose, without being able to divide the increase between channels", "correct": true },
+        { "text": "That each channel contributed approximately five percent", "correct": false },
+        { "text": "That the campaign with the largest budget caused the largest share", "correct": false },
+        { "text": "That the increase was caused entirely by the WhatsApp campaign", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why does last-click attribution systematically underfund awareness channels?",
+      "explanation": "Last-click credits the final touchpoint, which is usually the one used to complete a decision. Channels that create awareness never appear last, so investment drifts toward capturing demand that is no longer being generated.",
+      "options": [
+        { "text": "Because awareness channels rarely appear last, so budget drifts toward capturing demand rather than creating it", "correct": true },
+        { "text": "Because awareness channels are more expensive per impression", "correct": false },
+        { "text": "Because awareness effects cannot be measured by any method", "correct": false },
+        { "text": "Because last-click requires tracking software that awareness channels cannot use", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A twenty percent discount is applied to a product with a thirty percent contribution margin. What does that mean for the campaign?",
+      "explanation": "The discount removes two thirds of the margin per unit, so the campaign needs roughly three times the volume to produce the same contribution. Discount campaigns are frequently reported as successful on revenue while losing margin.",
+      "options": [
+        { "text": "Two thirds of the margin is gone per unit, so roughly three times the volume is needed to break even", "correct": true },
+        { "text": "The margin falls to ten percent but volume compensates automatically", "correct": false },
+        { "text": "Nothing, because discounts are deducted after the margin is calculated", "correct": false },
+        { "text": "The margin is unaffected as long as the campaign increases revenue", "correct": false }
+      ]
+    }
+  ]
+}

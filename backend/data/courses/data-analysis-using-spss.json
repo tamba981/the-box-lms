@@ -1,0 +1,264 @@
+{
+  "slug": "data-analysis-using-spss",
+  "title": "Data Analysis Using SPSS",
+  "program": "FCP",
+  "category": "data-analytics",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 0,
+  "summary": "Get survey data into SPSS cleanly, describe it honestly, compare groups properly, and report findings somebody can act on.",
+  "description": "Most survey analysis fails before any statistics are run. The data arrives with inconsistent coding, missing values entered as zero, and three spellings of the same district, and every result afterwards is unreliable in a way nobody can see.\n\nThis course is written for the person who has to analyse survey or monitoring data and report it: in an NGO, a ministry, a school or a research team. It covers importing and cleaning data in SPSS, describing a dataset so that the description is honest, comparing groups with cross-tabulations and a chi-square test, and producing tables and charts a reader can understand.\n\nThe emphasis throughout is on judgement rather than menu commands. A mean chosen where a median belongs, a significance test interpreted as proof, or a chart that hides the finding are all failures of reasoning rather than of software, and they are the failures this course is designed to prevent.",
+  "tags": ["spss", "data analysis", "survey", "monitoring and evaluation", "statistics", "data"],
+  "outcomes": [
+    "Import data into SPSS and resolve the coding problems that make results unreliable",
+    "Describe a dataset with frequencies, means and medians, chosen appropriately",
+    "Compare two groups using a cross-tabulation and interpret a chi-square test correctly",
+    "Explain what a p-value does and does not mean",
+    "Produce tables and charts that communicate a finding rather than display data",
+    "Decide which of several findings a report should lead with"
+  ],
+  "caseStudy": "An NGO has 340 household surveys from Lofa County on water access and must decide whether access differs between rural and urban households and between male- and female-headed households, and which finding to lead with.",
+  "modules": [
+    {
+      "title": "Module 1 · Getting data in cleanly",
+      "lessons": [
+        {
+          "title": "Variables, coding and the decisions made before entry",
+          "minutes": 16,
+          "teach": [
+            "Every column in SPSS is a variable with a defined type: numeric, string, or date. Every answer a respondent gave must be translated into one of those before it can be analysed. Those translations are analytical decisions, not clerical ones.",
+            "Coding is where most damage happens. If district is typed as free text, you will have Lofa, lofa and Lofa County, and every count will be wrong. If yes/no is entered as 1/2 in one questionnaire and 0/1 in another, the mean is meaningless.",
+            "Decide the codebook before data collection where possible, write it down, and use the same values throughout. A one-page codebook listing each variable, its values and its labels is the most valuable document in the whole exercise.",
+            "Missing data needs its own code that is not a number anybody could give. Entering a blank as zero turns an unanswered question about income into a household with no income, and that single habit can move an average substantially.",
+            "Once data is entered, check a sample of ten records against the paper questionnaires. It takes twenty minutes and finds the systematic errors that affect everything. An error that appears in ten records in a row is a coding problem, not ten mistakes."
+          ],
+          "example": "A water survey codes access as 1 = improved source, 2 = unimproved, 9 = no answer. Using 9 rather than 0 keeps the missing cases out of the mean and shows how many refused.",
+          "points": ["Variables have types, and the type is a decision", "Free text will fragment your categories", "Missing needs a code that is not zero"],
+          "check": "List three variables from your last dataset. What were their codes, where were they written down, and were they applied consistently?"
+        },
+        {
+          "title": "Importing and the checks that must happen first",
+          "minutes": 15,
+          "teach": [
+            "SPSS will import Excel files, CSV files and text files. Each import has a setting that matters: whether the first row contains variable names, which delimiter is used, and whether a column that looks numeric is being read as text.",
+            "After import, run three checks before any analysis. Count the cases and confirm it matches the number of questionnaires. Run frequencies on every variable and look for impossible values. Check that the percentages sum to about one hundred where they should.",
+            "Impossible values are the fastest diagnostic. An age of 210, a household size of 97 or a district code of 13 where only four exist are all signs of a data entry error or a column shift.",
+            "A column shift is the most damaging and the most common: one row with an extra field pushes every subsequent answer into the wrong column, and the error propagates through every analysis.",
+            "Correct errors against the original questionnaire, not by guessing. Where the original is unavailable, set the value to missing rather than inventing a plausible one. Record every correction in a log, so that a later reader can see what was changed and why."
+          ],
+          "example": "A dataset of 340 records shows 343 cases after import, because three rows contained header text repeated mid-file; frequencies on district reveal them immediately.",
+          "points": ["Check the case count against the questionnaires", "Frequencies expose impossible values", "A column shift corrupts every row after it"],
+          "check": "In your last dataset, what was the case count, and did you verify it against the number of paper forms?"
+        },
+        {
+          "title": "Recoding and computing variables honestly",
+          "minutes": 16,
+          "teach": [
+            "Recoding groups values into categories: ages into bands, income into quintiles, distances into near and far. It simplifies analysis and it can hide variation, so the choice of cut points is a judgement worth stating.",
+            "Where you choose the cut points, say what they are. Age bands of 15 to 24 and 25 to 34 follow convention; bands chosen after looking at the results do not, and choosing them that way is a mild form of fitting the finding to the story.",
+            "Computing new variables means deriving something from existing ones: a total score, a ratio, a flag for whether access improved. Each derivation should be recorded so that another analyst could repeat it.",
+            "Check derived variables against their inputs on a few cases by hand. A total score that is off by one because of a coding inconsistency will look plausible and be wrong throughout.",
+            "Keep the original variables alongside the derived ones rather than overwriting. An overwritten variable cannot be checked later, and somebody will ask. Keep the derivation in a syntax note, even a written one, so it can be repeated next year."
+          ],
+          "example": "Household size recoded into 1 to 3, 4 to 6 and 7 or more produces a table a reader can follow; the exact cut points are stated in the report's footnote.",
+          "points": ["Say what your cut points are and why", "Record every derived variable", "Never overwrite the original column"],
+          "check": "Which of your variables did you recode, and could you explain the cut points to somebody who challenged them?"
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Describing a dataset",
+      "lessons": [
+        {
+          "title": "Frequencies, and what they reveal",
+          "minutes": 15,
+          "teach": [
+            "A frequency table counts how many cases fall into each category of a variable. For categorical data it is the whole description, and it should be the first thing you produce for every category variable.",
+            "Read frequencies as a diagnostic before reading them as a result. A category with two cases cannot support a conclusion, and a category with no cases tells you that something in the questionnaire or the coding did not work.",
+            "Percentages need the denominator stated. Twelve per cent of 25 households is three households, and reporting it as twelve per cent gives it a weight it does not deserve.",
+            "Where a category has very few cases, combine it with a neighbouring category and say you did so. The alternative is a table with a column of zeros and a finding based on four people.",
+            "Keep the frequency tables in an appendix and put the three that matter in the body. A report containing forty tables of frequencies without comment is data rather than analysis. Three tables with a sentence each will be read; forty will be skipped."
+          ],
+          "example": "A water access table shows 41 per cent improved, 52 per cent unimproved and 7 per cent no answer; the seven per cent is reported rather than quietly excluded.",
+          "points": ["Frequencies first, for every category variable", "State the denominator beside every percentage", "Combine tiny categories and say so"],
+          "check": "Take your main variable. How many cases are in its smallest category, and can that number support a conclusion?"
+        },
+        {
+          "title": "Mean, median and choosing between them",
+          "minutes": 16,
+          "teach": [
+            "The mean is the average and it uses every value. The median is the middle value when cases are ordered. Both describe a typical case, and they disagree when the data is skewed.",
+            "Household income is the standard example. A survey with a few very wealthy respondents has a mean pulled upward so that most households are below it. The median describes the typical household; the mean describes the total divided among them.",
+            "Use the median for anything that can take extreme values: income, landholding, business profit. Use the mean when the distribution is reasonably symmetric or when you need a total.",
+            "Report both where the difference is large, and say so. Saying that mean income is 18,000 while median income is 6,000 tells a reader something important about inequality in one sentence.",
+            "Never report a mean for a categorical variable coded as numbers. A mean district code of 2.4 is arithmetic without meaning. If a number needs explaining before it can be averaged, it is a label rather than a quantity."
+          ],
+          "example": "A survey of 340 households reports mean income of 21,400 and median of 6,800. The gap is the finding, not an inconvenience.",
+          "points": ["Mean uses all values; median is the middle", "Skewed data makes the mean misleading", "Never average a category code"],
+          "check": "For your most skewed variable, what are the mean and median? What does the difference tell a reader?"
+        },
+        {
+          "title": "Missing data and what it does to your findings",
+          "minutes": 16,
+          "teach": [
+            "Missing data is rarely random. People who refuse to state income differ systematically from those who do, and people in remote areas are more likely to have incomplete questionnaires. Ignoring this biases results in a direction you cannot see.",
+            "Start by counting. For each important variable, how many cases are missing as a percentage? Under five per cent is usually manageable; over twenty per cent needs to be discussed in the report rather than silently dropped.",
+            "Then ask who is missing. Compare the characteristics of cases with and without the missing value. If the missing cases are concentrated in one district or one group, the finding may describe only the others.",
+            "Do not fill in missing values with a mean unless you can justify it. Mean substitution shrinks variation and makes a dataset look more complete and more certain than it is.",
+            "Report the missing count beside every table. It is one number and it protects both the reader and you. Where missingness is substantial, one short paragraph explaining who is missing is worth more than any footnote."
+          ],
+          "example": "Income is missing for 38 of 340 households, all in two rural districts, so the national average is reported with a note rather than as a complete picture.",
+          "points": ["Missingness is usually not random", "Count it, then ask who is missing", "Report the missing count with the table"],
+          "check": "Which variable in your last analysis had the most missing values, and who were the cases that were missing?"
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Comparing groups",
+      "lessons": [
+        {
+          "title": "Cross-tabulations and what to look for",
+          "minutes": 16,
+          "teach": [
+            "A cross-tabulation counts cases in the intersection of two categorical variables: access to water by rural or urban location, for example. It is the simplest way to compare two groups and the most commonly misread.",
+            "Read row or column percentages rather than raw counts. If you compare rural and urban, percentages within each location let you see whether access differs proportionally; raw counts mostly tell you that towns have more households.",
+            "Look at the pattern before the statistics. Is the difference large, and is it in the direction you expected? A difference of two percentage points between groups of 150 each is unlikely to be interesting, whatever a test says.",
+            "Check the margins. Where a cell has fewer than about five cases, the comparison is fragile and should be collapsed or reported cautiously.",
+            "A cross-tabulation is a description. Choosing to call a difference a finding requires the next step. Write the two percentages down before testing, so the test cannot change what you noticed."
+          ],
+          "example": "Access 48 per cent in urban households and 31 per cent in rural; the seventeen-point gap is visible in the table and is the starting point for testing.",
+          "points": ["Use percentages within groups", "Look at the size of the gap before testing it", "Small cell counts make comparisons unreliable"],
+          "check": "Build one cross-tabulation for your main question. What is the gap between the groups, in percentage points?"
+        },
+        {
+          "title": "The chi-square test and what a p-value means",
+          "minutes": 17,
+          "teach": [
+            "A chi-square test asks whether the pattern in a cross-tabulation could plausibly have arisen by chance if there were no real difference between the groups. It does not tell you how large or how important the difference is.",
+            "The p-value is the probability of seeing a difference at least this large if nothing were going on. A p of 0.03 means that, if there were no real difference, a gap this big would occur three times in a hundred. It is not the probability that your finding is true.",
+            "The conventional threshold is 0.05, chosen by custom. It is not a boundary between true and false, and a result of 0.06 is not evidence of no effect.",
+            "Report the test statistic, the degrees of freedom, the p-value and the group sizes together. A p-value without the underlying numbers cannot be assessed by a reader.",
+            "Above all, do not test everything. Running twenty tests guarantees that one will be significant by chance, and reporting only that one is the most common form of accidental dishonesty in survey analysis. Decide the tests you will run before you run them, and report all of them."
+          ],
+          "example": "Water access by location: chi-square 8.9, 1 degree of freedom, p = 0.003, n = 340. The difference is unlikely to be chance, and the gap is seventeen points.",
+          "points": ["Chi-square tests whether a difference could be chance", "The p-value is not the probability you are right", "Testing twenty things guarantees a false positive"],
+          "check": "Find a p-value in a report you have read or written. Was the group size reported beside it, and could a reader judge the size of the effect?"
+        },
+        {
+          "title": "Case study: which water finding should lead the report?",
+          "minutes": 18,
+          "teach": [
+            "An NGO has 340 completed household surveys from Lofa County on access to improved water sources. They want to know whether access differs between rural and urban households and between male- and female-headed households.",
+            "The rural and urban comparison gives 48 per cent access in urban households and 31 per cent rural, with a chi-square test producing p = 0.003. The gap is substantial and the evidence is strong.",
+            "The male- and female-headed comparison gives 39 per cent and 36 per cent, with p = 0.41. The difference could easily be chance, and there is no basis for claiming a disparity.",
+            "The county health authority has limited attention and will act on one thing. It responds to rural and urban data because it allocates teams by location; a null result on gender, honestly reported, is useful in closing a question people had assumed was settled.",
+            "The NGO's report has to decide what to lead with, how to present the null finding without implying the question does not matter, and what the authority could actually do with the finding. A finding nobody can act on is background, however true it is."
+          ],
+          "example": "The report leads with the location gap of seventeen points, states the gender finding as no difference detected with this sample, and notes that larger samples would be needed to exclude a small effect.",
+          "points": ["Lead with the largest, best-evidenced, actionable difference", "A null result is a finding and should be reported as one", "Match the finding to something the reader can do"],
+          "check": "Which would you lead with, and how would you word the gender finding so that it is neither overstated nor appears to be a cover for a weak analysis?"
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Reporting findings",
+      "lessons": [
+        {
+          "title": "Tables that a reader can use",
+          "minutes": 15,
+          "teach": [
+            "A table should answer one question. If a reader needs the text to understand the table, the table is doing too much; if the text is unnecessary, the table is doing its job.",
+            "Put the comparison in the columns and the categories in the rows, or the reverse, but choose one arrangement and use it throughout. Consistency is what lets a reader scan four tables rather than re-learning each one.",
+            "Every table needs a title stating what it shows, units where relevant, the denominator, and a note for anything a careful reader would question. Four elements, and most tables in most reports are missing two of them.",
+            "Round sensibly. Percentages to whole numbers, money to a consistent unit, and never more decimals than the data supports. A percentage reported to two decimals implies a precision that a sample of 340 does not have.",
+            "Keep the full tables in an appendix. The body should carry three or four tables, each chosen because it carries the argument. If a table is in the body and nothing in the text refers to it, move it to the appendix."
+          ],
+          "example": "Table 2: Access to an improved water source by household location, Lofa County, 2026 (n = 340). Rows: urban, rural, all. One percentage per row.",
+          "points": ["One question per table", "Title, units, denominator, note", "Round to the precision the data supports"],
+          "check": "Take a table you produced. Does its title state what it shows, and does every column have a denominator?"
+        },
+        {
+          "title": "Charts that show the finding",
+          "minutes": 15,
+          "teach": [
+            "A chart earns its space when it makes a comparison visible that a table would make slowly. A bar chart comparing two groups' percentages does that; a three-dimensional pie chart of six categories does not.",
+            "Choose the form from the question. Comparing categories means bars. Change over time means a line. A single proportion is usually better as a sentence than as a chart.",
+            "Label the axis and state the base. A chart without a denominator invites the reader to assume one, and they will assume the wrong one.",
+            "Do not truncate the value axis to exaggerate a difference. If the difference is small, that is the finding, and a chart engineered to make it look large is a misrepresentation whether or not it was intended.",
+            "One annotation on the point that matters is worth more than a legend, gridlines and a title combined, because it tells the reader where to look. Two annotations is usually the right number; ten is a table pretending to be a picture."
+          ],
+          "example": "A bar chart with two bars, urban 48 per cent and rural 31 per cent, axis labelled from zero, annotated with the seventeen-point gap, communicates in three seconds.",
+          "points": ["Bars for comparison, lines for time", "State the base and label the axis", "Never truncate the axis to exaggerate"],
+          "check": "Take the last chart you produced. If the axis started at zero, would it still support the point you made?"
+        },
+        {
+          "title": "Writing the finding, and knowing what it cannot say",
+          "minutes": 16,
+          "teach": [
+            "A finding is a sentence with a number in it: access to improved water is seventeen points higher in urban than in rural households. Anything vaguer is an impression, and anything stronger than the data supports is a claim.",
+            "State the limits in the same paragraph rather than in a caveats annex. A reader who reaches the conclusion and stops should still know the sample size and what it cannot support.",
+            "Be careful with causation. A survey of 340 households can show that two things occur together; it cannot show that one caused the other. The difference matters when somebody uses the report to justify spending.",
+            "Say what would be needed to answer the question properly. A larger sample, a follow-up round, or a different design is a useful recommendation and much better than a vague call for more research.",
+            "Close with the decision the reader faces. A report that ends with findings leaves the reader to work out what to do; one that ends with two options and their costs gets acted on. A report whose last paragraph is a summary of the first is a report that expects nobody to finish it."
+          ],
+          "example": "Access to improved water is seventeen percentage points higher in urban than in rural households (48 per cent against 31 per cent, n = 340, p = 0.003). The survey cannot say why the gap exists.",
+          "points": ["A finding contains a number", "Put the limits where the conclusion is", "Correlation in a survey is not cause"],
+          "check": "Read your last finding aloud. Does it contain a number, a limit and a reason to act?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "You run a chi-square test and get p = 0.03. What does this mean?",
+      "explanation": "It means a difference this large would occur three times in a hundred if there were no real difference. It says nothing about the size or importance of the effect.",
+      "options": [
+        { "text": "If there were no real difference, a gap this large would occur about 3 times in 100", "correct": true },
+        { "text": "There is a 97% chance the finding is true", "correct": false },
+        { "text": "The difference is large enough to act on", "correct": false },
+        { "text": "The result is not significant because it exceeds 0.01", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why use the median rather than the mean for household income in a survey with a few very wealthy respondents?",
+      "explanation": "Extreme values pull the mean upward so that most households sit below it. The median describes the typical household.",
+      "options": [
+        { "text": "Extreme values pull the mean up, so it stops describing a typical household", "correct": true },
+        { "text": "The median is always more accurate than the mean", "correct": false },
+        { "text": "The mean cannot be calculated for income data", "correct": false },
+        { "text": "The median excludes missing values automatically", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A dataset shows an age of 210 and a household size of 97. What should you do first?",
+      "explanation": "These are impossible values, usually entry errors or a column shift. Check against the original questionnaire rather than guessing a plausible number.",
+      "options": [
+        { "text": "Check the original questionnaires and correct or set to missing", "correct": true },
+        { "text": "Delete the rows and continue", "correct": false },
+        { "text": "Replace them with the mean for that variable", "correct": false },
+        { "text": "Leave them; SPSS will handle outliers", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Income is missing for 38 of 340 households, all in two rural districts. What is the correct treatment?",
+      "explanation": "Missingness is concentrated, so results may describe only the districts with data. Report the missing count and note the pattern rather than substituting values.",
+      "options": [
+        { "text": "Report the missing count and note that results may not represent those districts", "correct": true },
+        { "text": "Substitute the mean so the dataset is complete", "correct": false },
+        { "text": "Drop the two districts and report a national figure", "correct": false },
+        { "text": "Ignore it, since 38 of 340 is small", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A report leads with a finding from a group of 25 households out of 340. Why is this a problem?",
+      "explanation": "The denominator is tiny, so the percentage is fragile and cannot carry a conclusion. It should be reported with its base or combined with another category.",
+      "options": [
+        { "text": "The base is too small for the percentage to support a conclusion", "correct": true },
+        { "text": "Twenty-five is a valid sample if the finding is strong", "correct": false },
+        { "text": "It is a problem only if the finding is unexpected", "correct": false },
+        { "text": "It is not a problem as long as the percentage is rounded", "correct": false }
+      ]
+    }
+  ]
+}

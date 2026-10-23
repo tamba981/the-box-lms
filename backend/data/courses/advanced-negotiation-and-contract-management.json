@@ -1,0 +1,326 @@
+{
+  "slug": "advanced-negotiation-and-contract-management",
+  "title": "Advanced Negotiation & Contract Management",
+  "program": "CPP",
+  "category": "professional-development",
+  "level": "intermediate",
+  "credential": "certificate",
+  "priceCents": 2000,
+  "certificateFeeCents": 0,
+  "summary": "Negotiate on interests rather than positions, know your walk-away point before you sit down, and manage the contract long after it is signed.",
+  "description": "Most negotiation training stops at the moment of agreement, which is where most of the value is actually lost. A discount conceded to close a deal, a payment term accepted without pricing it, or a force majeure clause copied from another contract will cost more over the life of the agreement than the meeting ever gained.\n\nThis course works on negotiation and contract management as one discipline. It covers positions and interests, BATNA, the preparation that determines most outcomes, leverage and how to build it before you reach the table, and the cultural and hierarchical dynamics that shape negotiations in West Africa, including the role of respect, seniority and the preservation of face.\n\nIt then moves to the contract itself: what terms actually matter, how payment and delivery terms transfer risk, what remedies are worth having, and how to manage performance, claims and renegotiation after signature.\n\nThe case study concerns a negotiation with a government ministry that wants a thirty percent discount, immediate delivery and ninety-day payment terms against your policy of ninety-day payment and no discount above ten percent. The ministry's deadline is real, and public health goods are involved.\n\nLater lessons deal with a supplier who demands a forty percent price increase mid-delivery, citing currency devaluation, and the sequencing of options when the relationship has to survive the dispute.",
+  "tags": ["negotiation", "contracts", "BATNA", "procurement", "dispute resolution", "risk"],
+  "outcomes": [
+    "Separate positions from interests in a live negotiation",
+    "Establish your BATNA and walk-away point before negotiating",
+    "Build leverage through alternatives rather than through argument",
+    "Recognise hard tactics and respond without escalating",
+    "Read the terms that transfer risk in a contract",
+    "Price concessions such as discounts and extended payment terms",
+    "Manage performance through documentation during delivery",
+    "Handle a mid-contract price demand without losing the relationship"
+  ],
+  "caseStudy": "You are negotiating a contract with a government ministry. It wants a thirty percent discount, immediate delivery and ninety-day payment terms. Your policy permits ninety-day payment and no discount above ten percent, and the ministry's deadline is genuine because the goods are for a public health campaign. Students must decide their move, what to trade, and what to say if the ministry will not move.",
+  "modules": [
+    {
+      "title": "Negotiation fundamentals",
+      "lessons": [
+        {
+          "title": "Positions, interests and why the distinction decides outcomes",
+          "minutes": 20,
+          "teach": [
+            "A position is what a party says it wants: a thirty percent discount. An interest is why: the ministry has a fixed budget and must reach a number of districts within it. Positions collide by definition; interests frequently do not.",
+            "The classic illustration is two people arguing over an orange. One wants the peel for a cake, the other wants the juice, and splitting the fruit satisfies neither completely while the underlying interests were compatible all along.",
+            "Finding interests requires asking why and why not, and listening to the answer rather than preparing your reply. The most productive question in any negotiation is what would this agreement need to do for you to sign it.",
+            "Interests are rarely only financial. Delivery certainty, reputational credit, speed, control, credit terms, warranty length and the visibility of the deal all matter, and each is a currency in which a concession can be paid.",
+            "Once interests are visible, the negotiation becomes a design problem rather than a contest. Can the same total budget buy fewer districts at full price, or the same districts with staged delivery, or a longer warranty in place of a discount?",
+            "A positional negotiator wins arguments and loses value. The discipline is to keep restating your understanding of their interest until they confirm it, then propose terms that serve it without conceding more than it costs you."
+          ],
+          "example": "A client demands a 20 percent discount. Asking why reveals the budget is fixed at the current total, so a smaller scope at the same price with the same revenue serves the interest without a discount.",
+          "points": [
+            "Positions collide, interests often do not",
+            "Ask what the agreement must do for them",
+            "Non-price currencies pay for concessions"
+          ],
+          "check": "Take your last negotiation and write the other party's interest underneath their stated position."
+        },
+        {
+          "title": "BATNA and the walk-away point",
+          "minutes": 19,
+          "teach": [
+            "Your BATNA is your best alternative to a negotiated agreement: what you will actually do if this deal does not happen. It is the source of all your power in the room, because it determines the worst agreement you should accept.",
+            "We have no alternative is almost always false, and it is the most damaging thing to believe. There is always a next-best customer, a later delivery, a smaller scope, or a decision not to proceed, and knowing which one you would choose is preparation rather than pessimism.",
+            "Calculate the BATNA concretely, in money and time. If the ministry does not buy, what do you do with the stock, when, and at what margin? A number, even an approximate one, converts a feeling of pressure into a threshold.",
+            "The reservation point follows from it: the terms at which you are genuinely indifferent between the deal and the alternative. Anything worse should be refused, and refusing needs to be genuinely available or the threshold is theatre.",
+            "The other side's BATNA matters equally. A ministry with a public health deadline and no alternative supplier has a weak one, and understanding that is not an opportunity to exploit but a reason to expect a deal can be reached.",
+            "Improving your BATNA before the meeting is the most reliable form of leverage. A second potential customer, a stock position, a financing line or a partner who can share the delivery all make the walk-away credible without a single word said at the table."
+          ],
+          "example": "Before negotiating, a supplier establishes that unsold stock can be placed with two regional distributors at 8 percent below list within a month, which sets a real floor and removes the need to accept a 30 percent discount.",
+          "points": [
+            "The BATNA determines your worst acceptable deal",
+            "There is always an alternative: quantify it in money and time",
+            "Improve the BATNA before the meeting, not during it"
+          ],
+          "check": "Write your BATNA in one sentence with a number in it, and the terms at which you would walk away."
+        },
+        {
+          "title": "Preparation: the meeting before the meeting",
+          "minutes": 19,
+          "teach": [
+            "Most negotiations are decided before anyone sits down. Preparation determines what you know, who you know and what you can credibly offer, and none of it can be improvised in the room.",
+            "Write three lists: what you must have, what you would like, and what you can give. The first list is small and should be genuinely small, because a must-have list of twelve items leaves nothing to trade.",
+            "Decide the order in which you will concede and what you want in return for each. A concession given without a request in return teaches the other side that pressure works and costs nothing.",
+            "Identify who will be in the room and who decides. In many settings the person negotiating is not the person who signs, and an agreement reached with somebody who cannot commit is a conversation rather than a negotiation.",
+            "Prepare the facts you will need and the ones you will be asked for. Cost breakdowns, delivery schedules, references and the basis of your price convert assertions into positions that can be defended without heat.",
+            "Rehearse the difficult exchange out loud, particularly the refusal. Most negotiators prepare what they will say if things go well and improvise the sentence in which they decline, which is the sentence that decides the outcome."
+          ],
+          "example": "A supplier prepares three lists before a ministry meeting and discovers that only two of eleven desired terms are essential. The remaining nine become the currency that buys the two.",
+          "points": [
+            "Keep the must-have list genuinely short",
+            "Trade every concession for something in return",
+            "Rehearse the refusal, not only the agreement"
+          ],
+          "check": "Write your three lists for an upcoming negotiation and count the must-haves."
+        }
+      ]
+    },
+    {
+      "title": "Power, culture and tactics",
+      "lessons": [
+        {
+          "title": "Where leverage comes from",
+          "minutes": 19,
+          "teach": [
+            "Leverage is not volume or aggression. It is the perception that the other side has more to lose from no agreement than you do, and it comes from alternatives, information, time and the cost of the alternative to them.",
+            "Alternatives are the strongest source and the only one you can build in advance. A second buyer, a substitute input, an alternative route or a financing option all reduce your dependence on this particular deal.",
+            "Information is leverage when it is specific. Knowing the ministry's budget cycle, the timing of its campaign or the fact that its preferred supplier is out of stock changes what is possible, and all of it is legitimately available.",
+            "Time is asymmetric and usually underestimated. A deadline that binds one party and not the other transfers value, and the party under time pressure will pay for speed whether or not it has acknowledged the pressure.",
+            "Borrowed leverage, such as a partner's capacity, a bank's guarantee or a government framework agreement, is legitimate and must be real. Claimed leverage that collapses under a request for evidence destroys credibility permanently.",
+            "Do not confuse leverage with the right to use it harshly. A negotiator who wins by exploiting a deadline wins once, and the counterpart who remembers will be in the next negotiation with a longer memory and a stronger BATNA."
+          ],
+          "example": "A supplier learns the ministry's campaign launches in eight weeks and that its usual supplier has no stock until March. The information does not need to be stated to change the terms on offer.",
+          "points": [
+            "Leverage is the perception of who loses more from no deal",
+            "Build alternatives before you need them",
+            "Exploiting a deadline wins once and costs later"
+          ],
+          "check": "List your four sources of leverage in a current negotiation and mark which are real."
+        },
+        {
+          "title": "Culture, hierarchy and face",
+          "minutes": 20,
+          "teach": [
+            "Negotiation practice is culturally shaped, and importing a technique from a textbook written elsewhere fails in predictable ways. In much of West Africa the relationship precedes the transaction, and a proposal made before trust exists is read as premature.",
+            "Seniority carries decision weight, and the person speaking may not be the person deciding. Addressing the most junior participant as though they were the decision-maker can be read as an insult to the room rather than as efficiency.",
+            "Face matters. A counterpart who is publicly shown to be wrong, or who must concede in front of their own team, will resist an agreement they would privately accept, and the resistance is rational rather than stubborn.",
+            "This is why side conversations and pre-meetings are functional rather than conspiratorial. Establishing the shape of an agreement privately allows it to be presented publicly as a shared conclusion, which is what allows the other side to sign.",
+            "Direct refusal is often avoided, and a soft answer may not mean agreement. Ambiguity, deferral to a higher authority and requests for more information are frequently refusals, and a negotiator who treats them as progress will be surprised at signature.",
+            "Adapt without abandoning your interests. The substance of a good deal does not change with culture; the sequence, the framing and the pace at which it is reached do, and the skilled negotiator adjusts those while holding the terms."
+          ],
+          "example": "A supplier presents a final offer in front of the ministry's full team. The ministry's representative cannot accept without appearing to have lost the exchange, and a deal privately acceptable becomes impossible.",
+          "points": [
+            "Relationship precedes transaction in most settings",
+            "Never make a counterpart concede in front of their own team",
+            "A soft answer is often a refusal"
+          ],
+          "check": "Identify who in your last negotiation needed to be able to present the outcome as their own."
+        },
+        {
+          "title": "Recognising and answering hard tactics",
+          "minutes": 19,
+          "teach": [
+            "Hard tactics work by creating pressure that the other side mistakes for a fact. The classic set includes the false deadline, the absent decision-maker, the exploding offer, the good cop and the escalated demand after agreement.",
+            "The first response is always to slow down and test. A deadline that is real will survive a request for the basis of it, and one that is manufactured will not, and the test costs nothing but a day.",
+            "Name the tactic without accusing. Saying that it seems the decision cannot be taken in this meeting, and asking when the decision-maker is available, converts an absent authority into a scheduling question.",
+            "The escalating demand after agreement is answered by documentation. Where the terms discussed are written down and confirmed after each meeting, a demand that contradicts them is a variation to be negotiated rather than a surprise.",
+            "Anchoring is not a tactic to fear but a fact to use. The first credible number shapes the range, which is why preparation includes a defensible basis for your opening figure rather than a reaction to theirs.",
+            "Keep the option to leave the table. The only reliable answer to a genuinely hard tactic is a BATNA you are willing to use, and the willingness has to be real because it will be tested exactly once."
+          ],
+          "example": "A ministry announces a deadline of Friday and a discount requirement, and the officer adds that the decision is above him. Asking when the decision-maker is available converts the pressure into a meeting that settles both.",
+          "points": [
+            "Slow down and test any pressure presented as fact",
+            "Name the tactic as a scheduling question",
+            "Document terms after every meeting"
+          ],
+          "check": "Recall a hard tactic used on you and write the one question that would have tested it."
+        }
+      ]
+    },
+    {
+      "title": "Contracts",
+      "lessons": [
+        {
+          "title": "What a contract is for, and what it cannot do",
+          "minutes": 19,
+          "teach": [
+            "A contract records what was agreed, allocates the risk of things going wrong, and provides a mechanism for resolving a disagreement without destroying the relationship. It is not a substitute for trust and it cannot specify every situation.",
+            "Its most useful function is the conversation it forces before signature. Deciding who bears the cost of a delay, a currency movement or a failed inspection surfaces disagreements while goodwill is still available.",
+            "A contract cannot make a bad deal good. If the price is below cost, the terms will not save it, and organisations that spend three weeks negotiating liability clauses on a commercially unviable job have the priorities the wrong way round.",
+            "Specificity beats length. A short contract with clear delivery dates, acceptance criteria, payment triggers and remedy provisions is stronger than forty pages that state general intentions, and it is far more likely to be read before signing.",
+            "Write for the person who will enforce it. The operations manager dealing with a late delivery, not the lawyer, is the reader who needs to find the remedy quickly, and index, headings and plain language serve that reader.",
+            "Know what your own law allows. Termination rights, penalty clauses and limitation periods vary, and a clause that would be unenforceable in your jurisdiction provides comfort rather than protection."
+          ],
+          "example": "A services contract of forty pages allocates liability in detail and never states what counts as delivery. Two months of dispute follow over whether partial completion triggered the payment milestone.",
+          "points": [
+            "A contract allocates risk and resolves disputes",
+            "The pre-signature conversation is the real value",
+            "Specificity beats length"
+          ],
+          "check": "Find the clause in one of your contracts that says what counts as delivery, and read it as an operator."
+        },
+        {
+          "title": "Terms that matter: payment, delivery, remedies and termination",
+          "minutes": 20,
+          "teach": [
+            "Payment terms are a price. Ninety days instead of thirty is two months of financing you are providing, and it should be costed at your borrowing rate and reflected in the price rather than absorbed silently.",
+            "Delivery terms determine when risk and cost transfer. Who pays freight, who insures, who clears customs and at what point the goods become the buyer's responsibility are the terms that decide who loses when a shipment is delayed.",
+            "Acceptance criteria turn delivery into a fact rather than an opinion. Who inspects, against what specification, within what period, and what happens if no inspection occurs are the four questions that prevent most disputes about quality.",
+            "Remedies should be proportionate and usable. A right to terminate for any breach is rarely exercised and often worthless; a service credit that accrues automatically, or a right to procure elsewhere and recover the difference, is far more useful.",
+            "Termination provisions need to cover the ordinary case of convenience and the difficult case of insolvency. Rights to unpaid invoices, return of materials and completed work on termination are what determine whether an ending is orderly.",
+            "Force majeure and change of law clauses are where currency and political risk are allocated. Reviewing them requires knowing which events are genuinely unforeseeable in your market, because a clause that lists everything protects nobody."
+          ],
+          "example": "A supplier accepts ninety-day payment as a favour with no price adjustment. Financing the gap costs more than the margin on the contract, and the loss appears only in the cash-flow forecast three months later.",
+          "points": [
+            "Payment terms are a price, so cost them",
+            "Acceptance criteria prevent quality disputes",
+            "Prefer automatic remedies to rights nobody exercises"
+          ],
+          "check": "Price the cost of extending your payment terms from thirty to ninety days on one current contract."
+        },
+        {
+          "title": "Case: the ministry's thirty percent, immediate delivery and ninety days",
+          "minutes": 23,
+          "teach": [
+            "A ministry wants a thirty percent discount, immediate delivery and ninety-day payment. Your policy permits ninety-day terms and no discount above ten percent. The deadline is genuine: the goods are for a public health campaign.",
+            "The first move is to separate the three demands, because they are not equally costly and they are not equally fixed. Payment terms are within policy, so conceding them costs financing rather than margin and should be traded rather than given.",
+            "The discount is the constraint. Ten percent is the policy limit, and a negotiator who breaches it in the room has transferred the problem to the finance director and taught the customer that policy is negotiable under pressure.",
+            "The interest behind the discount is probably a fixed budget. If so, the same money can buy fewer units, a smaller territory, staged delivery, or a reduced specification, and each serves the ministry's interest without breaching the discount policy.",
+            "The delivery demand is where the real value is. Immediate delivery of an available stock position is worth something to a ministry facing a campaign launch, and it is legitimate to charge for speed or to trade speed for a smaller discount.",
+            "If the ministry will not move, say what you can do and let them choose: ten percent with delivery in three weeks, or full price with delivery this week. Declining the whole deal is credible only if your BATNA supports it, and saying so calmly is stronger than matching their pressure."
+          ],
+          "example": "A ministry demands 30 percent, immediate delivery and 90-day payment for public health campaign goods. Policy allows 90 days and a maximum discount of 10 percent, and the launch date is real.",
+          "points": [
+            "Separate the demands: they cost differently and move differently",
+            "Never breach a policy limit in the room",
+            "Trade speed, scope or quantity for the discount"
+          ],
+          "check": "For this case, write the two options you would put on the table and the sentence you would use to decline the third."
+        }
+      ]
+    },
+    {
+      "title": "After signature",
+      "lessons": [
+        {
+          "title": "Managing performance and keeping the record",
+          "minutes": 19,
+          "teach": [
+            "Most contractual disputes are lost on documentation rather than on merit. The party that can produce the delivery note, the inspection report and the email confirming the variation wins arguments that the other party can only describe from memory.",
+            "Set up the record before the first delivery. A file per contract containing the signed agreement, the correspondence, the delivery documents, the inspection records and the invoices is the single most valuable management habit in contract administration.",
+            "Confirm verbal agreements in writing within a day, in a short message that states what was agreed and asks for correction if it is wrong. This is not distrust; it is the only mechanism that prevents two accurate memories diverging.",
+            "Track obligations as well as deliveries. The buyer who must provide site access, approve a drawing or issue a purchase order by a date is also on the critical path, and their delay is your defence when the schedule slips.",
+            "Notice periods are strict. Many contracts require written notice of a delay within a set number of days, and missing the window can extinguish a legitimate claim regardless of its merit.",
+            "Review performance against the contract monthly rather than at the end. A delivery slipping by a week is manageable when noticed in week one and becomes a dispute when discovered at the deadline."
+          ],
+          "example": "A supplier notifies a delay verbally and by phone but not in writing within the contractual seven days. At the end of the project the claim for extension of time is rejected on the notice provision alone.",
+          "points": [
+            "Disputes are won on documents, not on recollection",
+            "Confirm every verbal agreement in writing within a day",
+            "Diarise notice periods and obligations"
+          ],
+          "check": "Check whether your last contract had a notice period and whether you met it."
+        },
+        {
+          "title": "Renegotiation: the demand for forty percent more",
+          "minutes": 20,
+          "teach": [
+            "A supplier delivers half an order and then demands a forty percent price increase, citing currency devaluation. The claim may be genuine, and the demand is still a variation that requires agreement rather than an announcement.",
+            "Start with the contract. Does it contain a price adjustment clause, a currency clause or a force majeure provision that covers this? If it does, the mechanism governs the outcome and the negotiation is about applying it.",
+            "If it does not, the position is the original price. The supplier bears the risk of its own cost movements unless the contract transferred that risk, and accepting the demand immediately establishes that future demands will also be met.",
+            "Establish the facts before deciding anything. What proportion of the supplier's cost is imported, what change in the rate occurred, and what would the new price be relative to the alternatives? The number usually turns out to be smaller than the demand.",
+            "Consider the practical position. If the goods are critical and no alternative exists within the deadline, refusing absolutely may cost more than a partial accommodation, and the decision should be made on that basis rather than on principle.",
+            "The usual solution is a split: accept part of the increase, offset by a quantity commitment, extended delivery, or a lower price on later phases. Concede the amount that keeps the supplier viable and the relationship intact, and record it as a formal variation."
+          ],
+          "example": "A supplier demands 40 percent more mid-delivery after a devaluation. The contract has no adjustment clause, imported content is 55 percent of cost, and the actual cost increase is 18 percent, which is where a documented variation settles.",
+          "points": [
+            "Check for a price adjustment or currency clause first",
+            "Without one, the original price stands unless renegotiated",
+            "Settle on facts and record the change as a variation"
+          ],
+          "check": "Does your standard contract contain a price adjustment clause, and what triggers it?"
+        },
+        {
+          "title": "Dispute resolution and preserving the relationship",
+          "minutes": 19,
+          "teach": [
+            "Disputes are expensive in money and in the relationship, and the sequence in which options are attempted determines how much of each is lost. Escalation is a last resort, not a first response to a disagreement.",
+            "Begin with the operational conversation between the people who manage the contract. Most disputes are misunderstandings about scope or timing, resolvable by the two people closest to the work before either organisation becomes committed to a position.",
+            "Then escalate internally on both sides. A conversation between senior managers who both want the project to succeed can settle what the operational level cannot, and it keeps lawyers out of a commercial discussion.",
+            "Mediation is underused and usually the best value. A neutral third party costs a fraction of arbitration, preserves confidentiality and allows a commercial solution that a tribunal could not order.",
+            "Arbitration or litigation should be a considered choice. Enforcement, cost, time and the effect on the relationship all differ, and the dispute resolution clause you signed determines which is available, which is a reason to read it before rather than after.",
+            "Preserve the relationship deliberately throughout. The counterpart in this dispute is a customer or supplier in the next one, and how the disagreement is conducted is remembered far longer than its outcome."
+          ],
+          "example": "A delivery dispute over an ambiguous specification goes to mediation and settles in six weeks at a shared cost. The same dispute taken to arbitration would have consumed a year and ended the supply relationship.",
+          "points": [
+            "Operational conversation first, escalation second",
+            "Mediation is usually the best value",
+            "Conduct the dispute for the next relationship"
+          ],
+          "check": "Read the dispute resolution clause in one of your contracts and work out what it would actually cost to use."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "What is a BATNA, and why is the claim that we have no alternative usually false?",
+      "explanation": "The BATNA is your best alternative to agreement, and it sets the worst deal you should accept. There is almost always a next-best customer, a later sale, a smaller scope or a decision not to proceed, and naming it converts pressure into a threshold.",
+      "options": [
+        { "text": "Your best alternative to agreement, which sets your walk-away point; an alternative nearly always exists if it is costed honestly", "correct": true },
+        { "text": "The opening offer you make first, which frames the range for the negotiation", "correct": false },
+        { "text": "The other side's best alternative, which you must estimate to set your price", "correct": false },
+        { "text": "The minimum discount your finance director will approve before the meeting", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A supplier demands 40 percent more mid-delivery, citing currency devaluation, and the contract has no adjustment clause. What should you do first?",
+      "explanation": "Establish the facts and the contractual position before deciding. Without an adjustment clause the original price stands, and the true cost impact is usually smaller than the demand, which is the basis for a documented variation.",
+      "options": [
+        { "text": "Establish the actual cost impact and the contractual position, then negotiate a documented variation", "correct": true },
+        { "text": "Pay the increase to protect the relationship and recover it on the next order", "correct": false },
+        { "text": "Terminate immediately for breach and procure from another supplier", "correct": false },
+        { "text": "Refer the matter to arbitration before any further discussion", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the ministry case, why should the ninety-day payment term be traded rather than granted?",
+      "explanation": "Extended payment terms are a real cost: two extra months of financing. Granting them for nothing uses up the concession with no return, whereas trading them for price, quantity or delivery converts a cost into a bargaining asset.",
+      "options": [
+        { "text": "Because longer payment terms cost you financing, so they should buy something in return", "correct": true },
+        { "text": "Because payment terms are the only item the ministry genuinely cares about", "correct": false },
+        { "text": "Because accepting them would breach your company policy on credit", "correct": false },
+        { "text": "Because the ministry will not notice whether they are granted or traded", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A counterpart announces a Friday deadline and says the decision is above them. What is the best response?",
+      "explanation": "Both statements are pressure presented as fact. Testing the deadline for its basis and converting the absent authority into a scheduling question removes the pressure without confrontation or concession.",
+      "options": [
+        { "text": "Ask what the deadline is based on and when the decision-maker is available to meet", "correct": true },
+        { "text": "Concede enough to close before Friday and recover the margin later", "correct": false },
+        { "text": "State that you will not negotiate with anyone who cannot decide", "correct": false },
+        { "text": "Escalate to your own director so both sides are represented at the same level", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What is a contract's most useful function?",
+      "explanation": "The value is in what it forces you to discuss before signature: who carries each risk and what happens when something fails. A contract cannot make an unviable deal viable, and length is not protection.",
+      "options": [
+        { "text": "Forcing the risk allocation conversation before signature, while goodwill is available", "correct": true },
+        { "text": "Providing a document that can be enforced in court if the other side refuses to pay", "correct": false },
+        { "text": "Recording every possible situation that could arise during delivery", "correct": false },
+        { "text": "Demonstrating to a lender that the business has formal agreements in place", "correct": false }
+      ]
+    }
+  ]
+}

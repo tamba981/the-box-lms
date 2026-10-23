@@ -1,0 +1,340 @@
+{
+  "slug": "digital-marketing-and-content-creation",
+  "title": "Digital Marketing & Content Creation",
+  "program": "FCP",
+  "category": "digital-skills",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 2000,
+  "summary": "Find the customers you can actually serve, choose channels where attention really is, and make content you can sustain every week.",
+  "description": "Digital marketing is usually taught as a list of platforms. That is the wrong order. This course starts with the customer and the offer, then asks where those customers already spend attention, and only then chooses channels. A business that skips the first step ends up paying for reach it cannot convert.\n\nIt is written for a West African context rather than translated into one: mobile data that costs money, WhatsApp groups that are the real market square, radio that still reaches further than any feed, and customers who buy from people they have met. Each of those changes what good marketing looks like.\n\nThe course is practical to the end. You will build a message you can repeat, a content calendar you can actually fill, a posting routine that fits in one afternoon, four numbers worth watching, and a rule for what to stop doing.",
+  "tags": ["digital marketing", "content", "social media", "whatsapp", "branding", "digital skills"],
+  "outcomes": [
+    "Describe the customer you can serve better than anyone else, in one paragraph",
+    "Choose marketing channels by evidence rather than by fashion",
+    "Write a message, and repeat it until it is recognised",
+    "Build and sustain a content calendar without a full-time team",
+    "Measure four numbers that tell you whether marketing is working",
+    "Handle public complaints without losing the audience you have"
+  ],
+  "caseStudy": "A hardware and building-supplies shop in Paynesville sells mostly to people who already know it, and cannot tell whether its Facebook page earns anything.",
+  "modules": [
+    {
+      "title": "Module 1 · Who you are talking to",
+      "lessons": [
+        {
+          "title": "The customer you can actually serve",
+          "minutes": 18,
+          "html": [
+            "<p>Marketing starts with a decision most people avoid: who are we for, and who are we not for. A business that is for everybody says nothing to anybody, because every message it could write has to be vague enough to fit a market trader buying in bulk and a student buying one item.</p>",
+            "<p>Start from the customers you already serve well. Who pays on time, comes back, and tells other people about you? Those three behaviours are the definition of a good customer, and they are observable. Ask the ten best ones why they chose you, and listen for the reason they give before they mention price, because the price answer is the polite one.</p>",
+            "<p>Then write a paragraph that could only describe that customer: what they do for a living, what problem brings them to you, what they tried before, and what they are afraid of getting wrong. A supplier who is afraid of buying the wrong cement grade will pay for advice. One who is looking for the cheapest bag will not, whatever you say to them.</p>",
+            "<p>Choosing which customer to lead with is a financial question as much as a marketing one. Count how often each type buys, and how much each spends in a year rather than on one visit. The customer who buys every month at a small margin is usually worth more than the one who buys once at a large one, because the monthly customer is cheaper to reach again. The opposite mistake is choosing the customer who sounds most impressive, such as a large institution or an NGO, without checking whether they actually buy from businesses your size.</p>",
+            "<h3>Two customers, two businesses</h3>",
+            "<p>The same shop can serve contractors and households, but not with one message. The contractor wants bulk availability, credit terms and delivery to site. The household wants advice, small quantities and a guarantee. Trying to address both in one post produces text that persuades neither, and the usual conclusion, that marketing does not work here, is really the conclusion that vague marketing does not work anywhere.</p>",
+            "<p>Pick one to lead with. Serve the other when they arrive. That is not a permanent decision, but it is a decision you have to make to write anything worth reading.</p>",
+            "<p><strong>Check yourself.</strong> Write the paragraph describing your best customer. If it could describe any customer of any business like yours, it is not yet specific enough.</p>"
+          ]
+        },
+        {
+          "title": "Positioning: what you are, and what you are not",
+          "minutes": 17,
+          "html": [
+            "<p>Positioning is the space you occupy in a customer's mind compared with the alternatives. It is not a slogan and it is not a logo. It is the answer to the question, why would I choose you, given that I could go somewhere else.</p>",
+            "<p>There are only a few honest answers: you are cheaper, you are faster, you are more reliable, you have what others do not, you explain things better, or you are closer. Each one costs something to deliver. Cheap means thin margins and volume. Reliable means holding stock you might not sell this month. Better advice means paying for people who know the answer. A positioning statement that costs you nothing is a wish.</p>",
+            "<p>The common failure is claiming several at once. A business that says it is cheapest, fastest and best quality is telling the customer that nobody has decided anything. Choose one to lead with and let the others be discovered.</p>",
+            "<p>Positioning fails most often because it is aspirational rather than true. A business writes that it offers quality and service, then discovers it cannot afford the staff that service requires, and the customer who arrives expecting it leaves disappointed. The claim must be something the business already delivers on its worst week, not its best. If you cannot yet deliver it, the positioning is a plan rather than a position, and advertising it beforehand spends the customer's trust before you have earned the right to it.</p>",
+            "<h3>Test it against a competitor</h3>",
+            "<p>Write your positioning in a sentence of the form: for [customer], we are the [category] that [specific difference], because [proof]. The proof is the part that matters. We are the building supplier that always has cement in stock is a claim a customer can test in one visit. We are committed to excellence is not.</p>",
+            "<p>Then ask whether you could defend that sentence to somebody who has used your competitor for ten years. If the honest answer is that the competitor is equally reliable, your positioning is not a difference yet, and the work is to create one rather than to advertise a fictional one.</p>",
+            "<p><strong>Check yourself.</strong> Complete the sentence for your organisation, including the proof. What would a customer have to observe to believe it?</p>"
+          ]
+        },
+        {
+          "title": "One message, repeated until it is recognised",
+          "minutes": 16,
+          "html": [
+            "<p>Small businesses change their message every week because they are bored of it. Their audience is not. Most people see a fraction of what you publish, and the fraction that sees it does not read carefully, so the message you are tired of has barely reached anybody.</p>",
+            "<p>Repetition is how a message becomes known. A shop that says the same useful thing about the same subject for a year becomes the place people think of when that subject comes up. The variety belongs in the examples and the format, not in the core claim.</p>",
+            "<p>Write your message in one sentence, in the customer's language rather than yours. If your sentence contains the word solutions, replace it with what the thing does. Customers search for what they need, not for how you describe it, and the words they use are the words you should use.</p>",
+            "<p>Write the sentence where it will be tested: on the shop sign, in the WhatsApp description, on a quotation, at the bottom of a receipt. If it does not fit a sign, it is not a message yet, it is a paragraph. A useful test is whether a customer could repeat it to a friend after one visit. Sentences that survive that test are short, concrete and slightly blunt. Sentences that sound impressive rarely do, because the customer has no use for them and so does not remember them.</p>",
+            "<h3>Three ways to say the same thing</h3>",
+            "<p>A message can be repeated through an example, through a question, and through a demonstration. The same claim, that this shop advises honestly on materials, can appear as a story about a customer who was talked out of a purchase, as a question about how much cement a slab really needs, and as a photograph of a delivery being checked before it leaves. Same message, three formats, no repetition the audience notices.</p>",
+            "<p>Keep a note of your sentence where you can see it. Everything you publish should be a version of it. When you cannot connect a post to the sentence, either the post is off-message or the sentence is wrong, and both are worth knowing.</p>",
+            "<p><strong>Check yourself.</strong> Say your message in one sentence, in the words a customer would use. Then name three posts that would each repeat it differently.</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Channels where attention actually is",
+      "lessons": [
+        {
+          "title": "Choosing channels by evidence",
+          "minutes": 17,
+          "html": [
+            "<p>Every channel has a cost, and the cost is not only money. Posting on a platform nobody in your market uses costs the hours you spent making the content, which for a small business is the more expensive currency.</p>",
+            "<p>Choose by asking three questions. Where do my customers already spend time, not where do I enjoy spending time? Can I produce the format that channel requires, repeatedly, with the people I have? And can I tell whether it worked? A channel you cannot measure is a channel you will argue about forever.</p>",
+            "<p>For most businesses in this market the honest list is short: WhatsApp for existing and warm customers, one social platform where your buyers actually are, radio or community channels for reach, and word of mouth, which is not a channel you run but a result you earn. A page on a platform your customers do not use is a hobby.</p>",
+            "<p>Auditing what you already do is the necessary first step, and it takes a week. For each channel, record the hours it consumes, the enquiries that mention it, and the money it costs. Most businesses discover that one channel produces almost everything and one produces almost nothing while consuming the most effort. Knowing that before adding anything new prevents the pattern where a business keeps opening channels and never closes one, so the total effort grows while the results stay flat.</p>",
+            "<h3>The trap of the new platform</h3>",
+            "<p>New platforms arrive with the promise of free reach, and businesses rush to them because the effort feels like progress. The question to ask before adopting one is not how many people are on it, but how many of your customers are, and whether they are there to be sold to or to be entertained.</p>",
+            "<p>Being late to a channel your customers use is a real cost. Being early to one they do not is a larger one, because you will build an audience that cannot buy from you and then conclude that digital marketing does not work.</p>",
+            "<p><strong>Check yourself.</strong> Ask five customers where they found you and where they look when they need what you sell. Compare that with where you currently post.</p>"
+          ]
+        },
+        {
+          "title": "WhatsApp as a business channel",
+          "minutes": 18,
+          "html": [
+            "<p>In much of West Africa, WhatsApp is not a social network; it is the market. Orders arrive there, prices are negotiated there, deliveries are confirmed there. Treating it as informal is a mistake, because it is where the transaction actually happens.</p>",
+            "<p>Business use needs boundaries and a shape. A catalogue that a customer can browse without asking is worth more than twenty status updates, because it answers the question they came with. A broadcast list or group for customers lets you announce stock without spamming people who never asked.</p>",
+            "<p>Set expectations explicitly. Say when you are available, how quickly you reply, and what the payment and delivery arrangements are, in a message you send to every new customer. A business that replies in a day and says so will keep more customers than one that replies in an hour sometimes and never explains the silence.</p>",
+            "<p>Three things make a WhatsApp presence work as a shop rather than a chat. A catalogue, which might be a set of photographed products with prices in one document or a pinned message, so a customer can see what is available without asking. A stated response time, so silence is understood rather than resented. And a payment instruction, written once and reused, because a customer who has to ask how to pay may not bother. Each takes an hour to prepare and saves that hour many times over in the following months.</p>",
+            "<h3>What belongs in a business profile</h3>",
+            "<p>A profile picture that is legible at thumbnail size, a description that says what you sell and where you are, opening hours, and a location pin. That is the whole of it, and most businesses leave all four wrong. The description is not the place for a mission statement; it is the place for the words a customer would type when looking for you.</p>",
+            "<p>Save the number on a device the business controls rather than on a staff member's personal phone. More businesses lose their customer list to a departed employee than to any competitor.</p>",
+            "<p><strong>Check yourself.</strong> Read your business WhatsApp description as a stranger. Would you know what is sold, where, and when somebody will answer?</p>"
+          ]
+        },
+        {
+          "title": "Radio, community and the channels that still reach",
+          "minutes": 16,
+          "html": [
+            "<p>There is a persistent belief that digital replaced everything. It did not. Radio still reaches people who are working with their hands, driving, or far from a reliable connection, and community channels — churches, markets, cooperatives, football teams, town meetings — reach people through relationships rather than through feeds.</p>",
+            "<p>These channels behave differently and should be judged differently. Radio buys reach, not conversation: its purpose is to be recognised and remembered, and its measure is whether people mention it when they arrive. A community channel buys trust, because the recommendation comes from somebody the customer already believes.</p>",
+            "<p>The practical failure with radio is spending the budget on spots without spending the effort on being memorable. A single clear message, repeated in the same slot for long enough that people can say it back, beats scattered appearances in many programmes.</p>",
+            "<p>Radio can be tested rather than assumed. Pick one programme, one slot and one message, run it for a fixed number of weeks, and ask every customer who arrives during that period how they heard of you. If mentions rise, the slot is working and worth extending; if they do not, change the slot before changing the message. The mistake is running a different advertisement in a different programme each month, which produces activity, cost and nothing you can learn from.</p>",
+            "<h3>Working with community channels honestly</h3>",
+            "<p>Community partners do not want to be used. The arrangement that lasts is one where they get something real: a demonstration that teaches people something, a service at a fair price, or a share of value that is stated openly. A one-off payment for a mention is remembered as a transaction, and community memory is long.</p>",
+            "<p>Measure these channels by asking, not by counting. Ask every new customer how they heard of you, record the answer, and review it monthly. That single question will tell you more about channel value than any dashboard, and it costs nothing.</p>",
+            "<p><strong>Check yourself.</strong> Do you record how customers heard of you? If not, what would it take to start asking this week?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Content that earns attention",
+      "lessons": [
+        {
+          "title": "The three jobs of content",
+          "minutes": 17,
+          "html": [
+            "<p>Content that is published without a purpose becomes a diary nobody reads. Every piece should be doing one of three jobs: reaching people who do not know you, building trust with people who do, or asking for a decision from people who are ready.</p>",
+            "<p>Reach content is useful, surprising or specific to a place and a problem. It earns attention rather than demanding it. Trust content shows how you work: what you would refuse to sell, how you handle a complaint, what a fair price looks like and why. Action content is a clear, dated, specific offer, and it should be a small share of what you publish, because a feed of offers is a feed people mute.</p>",
+            "<p>Most small businesses publish only the third kind, which is why their audience stops growing. If every post asks for something, the customer learns to scroll past without reading, and then misses the one that mattered.</p>",
+            "<p>You can tell which job a piece of content did by what came back from it. Reach content produces new followers, shares and the odd question from somebody who had never heard of you. Trust content produces specific questions that show the reader was paying attention, and often a saved message somebody returns to. Action content produces orders, or silence that tells you something about the offer. Recording the response for a month tells you which of the three you are actually good at, and that is usually the one worth doing more of.</p>",
+            "<h3>A workable mix</h3>",
+            "<p>Across ten posts: six that reach, three that build trust, one that asks. That ratio is not sacred, but it keeps the account worth following and keeps the offers meaningful when they appear. A customer who has learned something from you three times is far more likely to buy on the fourth.</p>",
+            "<p>Label each post you write with its job before you publish. If you cannot say which of the three it is, it is probably none of them, and it can be left unwritten without loss.</p>",
+            "<p><strong>Check yourself.</strong> Look at your last ten posts and count them into reach, trust and action. Which is missing?</p>"
+          ]
+        },
+        {
+          "title": "Writing a post that gets a reply",
+          "minutes": 18,
+          "html": [
+            "<p>Attention on a phone is brief and the screen is small. A post earns a reply when the first line names something the reader recognises, and loses it when the first line announces the business.</p>",
+            "<p>The reliable shape is short. A first line that states a problem or a fact a customer has lived through. Two or three lines that give the specific answer, with a number, a place or a step. Then a question or an instruction that takes one action. Everything else belongs in the comments, where the interested person will find it.</p>",
+            "<p>Specificity is what makes text credible. Sold a lot of cement this week says nothing. Three contractors collected 400 bags before 9am on Monday, and the fourth load arrives Thursday says something a customer can act on.</p>",
+            "<p>Test the first line before you commit to the post. Write two versions of it, show both to somebody who fits your customer description, and ask which one they would stop scrolling for. The answer is frequently the opposite of what the writer expected, because the writer knows the subject and the customer does not. This takes ten minutes and improves everything published that month, and it is the single cheapest improvement available to a business that is already producing content.</p>",
+            "<h3>Words that cost you readers</h3>",
+            "<p>Cut anything a customer would never say: solutions, leverage, world-class, cutting-edge, and the passive voice that hides who is responsible. Cut exclamation marks used to create enthusiasm the content has not earned. Cut the greeting, because nobody scrolls for good morning.</p>",
+            "<p>Then read it out loud. If you would not say it to a customer standing in front of you, it is written for the wrong audience: it was written for the brand rather than the buyer.</p>",
+            "<p><strong>Check yourself.</strong> Take your last post and delete every sentence that could have been written by any business. What is left, and is it enough to publish?</p>"
+          ]
+        },
+        {
+          "title": "A content calendar you can actually keep",
+          "minutes": 16,
+          "html": [
+            "<p>Most content plans fail because they assume a level of output the business cannot sustain. Two posts a month maintained for a year is worth more than daily posting for three weeks and then silence, both to the audience and to the platform's own behaviour.</p>",
+            "<p>Set a volume you know you can keep on your worst week rather than your best one. For a small business that is usually two or three useful posts a week, plus replies. Write the plan as a list of subjects rather than finished content, with the date and the job of each, so anybody can pick it up.</p>",
+            "<p>Build the subjects from questions customers actually ask. Every question at the counter is a piece of content somebody else is too shy to ask. Keep a note of them for a month and you will have thirty subjects without inventing any.</p>",
+            "<p>A month of subjects needs about twelve ideas at two or three posts a week, and they come from four places: the questions customers ask, the mistakes you see them make, the work you are doing now, and the things you wish they knew before they arrived. Written down as subjects rather than finished posts, twelve ideas take twenty minutes to find once the collection habit exists. The calendar then becomes an assembly task rather than a creative one, which is what makes it survivable on a busy week.</p>",
+            "<h3>Batching</h3>",
+            "<p>Create in blocks. One afternoon a month to draft, one hour a week to publish and reply. The separation matters because drafting and responding require different attention, and a business that writes a post when it has five minutes writes the post it does not need.</p>",
+            "<p>Leave space in the calendar. Roughly a third of what you publish should be unplanned, because the week's news, a delivery, or a customer's question will often be better than what you planned in advance. A calendar that is full is a calendar that cannot respond.</p>",
+            "<p><strong>Check yourself.</strong> What is the volume you could genuinely sustain in your busiest week, and what is on your list for the next four weeks?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Measuring and spending",
+      "lessons": [
+        {
+          "title": "The four numbers worth watching",
+          "minutes": 17,
+          "html": [
+            "<p>Marketing dashboards offer dozens of numbers, most of which do not change any decision. Four are enough for a small business, and all four should be reviewed monthly rather than daily.</p>",
+            "<p>First, how many people asked something. Enquiries, messages, calls: the clearest sign that content is reaching people who might buy. Second, how many of those bought. That ratio tells you whether the problem is attention or persuasion, and fixing the wrong one wastes money. Third, what a customer costs you to acquire, in money and in hours, compared with what they spend with you. Fourth, how many come back, because a business that must buy every customer again each month is running to stand still.</p>",
+            "<p>Recording the four numbers costs ten minutes a month if the source is the same each time. Take the figures from wherever they already exist: messages received, orders written in the book, money banked, and the customers who returned. Write them in one table with the month at the top. The temptation is to add more numbers as the sheet grows, and every extra column is a reason to stop maintaining it. Four is enough to see a trend, and a trend is what you need in order to change something.</p>",
+            "<h3>Why hours count</h3>",
+            "<p>A campaign that costs nothing in cash but consumes eight hours a week is not free. Price your own time at what you would pay somebody to do the work. Many social media efforts that look cheap are the most expensive marketing a business does, because the same hours spent on following up leads would have returned more.</p>",
+            "<p>Record the four numbers in the same place each month, even if the recording is a page in a notebook. The value is in the trend, and a trend needs a consistent measure more than it needs precision.</p>",
+            "<p><strong>Check yourself.</strong> What were your four numbers last month? If you cannot answer, that is the first thing to fix, before any more content is published.</p>"
+          ]
+        },
+        {
+          "title": "Paid promotion on a small budget",
+          "minutes": 17,
+          "html": [
+            "<p>Paid promotion does one thing that organic content cannot: it buys reach from people who do not already follow you. On a small budget the aim is not a campaign; it is a test, run cheaply, that tells you whether a message converts.</p>",
+            "<p>Promote content that has already worked. If a post earned replies and shares on its own, paying to show it to more people is a sensible bet. Promoting a message nobody engaged with organically is paying to distribute something the audience has already declined.</p>",
+            "<p>Start small and narrow: one place, one audience, one message, a budget you can afford to lose entirely. Then change one thing at a time. Changing the audience and the message together teaches you nothing, because you cannot tell which change produced the result.</p>",
+            "<p>Audience settings reward narrowness more than most businesses expect. A promotion aimed at a whole city competes with everything else in that city's feed, while one aimed at the neighbourhoods a delivery vehicle can reach at a reasonable cost reaches people for whom the offer is practical. Add the constraint that already limits you, whether that is geography, stock or opening hours, and the audience becomes both smaller and more likely to buy, which is the only trade that matters when the budget is small.</p>",
+            "<h3>What to check before spending</h3>",
+            "<p>Can you receive what the promotion sends? A boosted post that generates fifty messages a day to an unmonitored phone number is worse than no promotion, because it teaches fifty people that you do not answer. Set the capacity first, then buy the attention.</p>",
+            "<p>Then judge the spend by customers rather than by impressions. Reach is what you bought; customers are what you wanted. If a promotion produces attention and no enquiries, the message is aimed at the wrong people or asks for nothing.</p>",
+            "<p><strong>Check yourself.</strong> If you spent a small budget this month, what is the most you would be willing to lose to learn whether a message works?</p>"
+          ]
+        },
+        {
+          "title": "Deciding what to stop",
+          "minutes": 16,
+          "html": [
+            "<p>Marketing accumulates. Channels are added and never removed, content formats persist because somebody likes making them, and the effort grows while the results do not. Deciding what to stop is as valuable as deciding what to start.</p>",
+            "<p>Set a review date for anything new, agreed before you begin: three months, say, with a stated measure and a stated threshold. When the date arrives, keep it if it cleared the threshold, change one variable and try again if it was close, and stop it if it did not.</p>",
+            "<p>Stopping needs to be explicit, because otherwise it happens by neglect and nobody learns anything. Write one line explaining why it stopped, so the same idea is not resurrected in a year by somebody who was not there.</p>",
+            "<p>Give anything new a fair trial before judging it, and write the trial terms down on the day you start: the channel, the effort, the measure and the date of the review. Judging a channel in its first two weeks is how good ideas get abandoned, because audience building takes longer than enthusiasm lasts. Judging it after a year of half-effort is the opposite error. A stated review date protects the idea from impatience and protects the business from loyalty to something that has never worked.</p>",
+            "<h3>Protecting what works</h3>",
+            "<p>The counterpart of stopping is protecting. Whatever produces most of your enquiries deserves your best attention and your most reliable effort, even if it is unglamorous: answering WhatsApp quickly, returning calls, keeping the shop front tidy. Businesses often starve the channel that works in order to feed a new one that does not.</p>",
+            "<p>Ask each quarter which single activity produces the most customers. Then ask how much of your time it receives. A gap between those two answers is the most common marketing problem there is, and it is fixed by stopping something else.</p>",
+            "<p><strong>Check yourself.</strong> Name one marketing activity you should stop this month, and one you should give more time to.</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 5 · Consistency and reputation",
+      "lessons": [
+        {
+          "title": "A week of content in one afternoon",
+          "minutes": 17,
+          "html": [
+            "<p>Consistency is a production problem, not a motivation problem. Businesses that post irregularly are not lazy; they are trying to create content at the moment they need it, with no raw material prepared.</p>",
+            "<p>Prepare raw material continuously and assemble it in blocks. Photograph everything as it happens: deliveries, work in progress, a customer's question written on the counter pad, a mistake you corrected. Ten minutes a day of collection makes an afternoon of assembly easy.</p>",
+            "<p>Then assemble in one sitting. Choose the week's subjects, write the text, take the pictures from the collection, schedule what can be scheduled. What cannot be scheduled — replies, questions, the day's news — happens live, and it is a small part of the total effort.</p>",
+            "<p>Collect material while the work is happening, not afterwards. A photograph of a delivery being loaded, a shelf being restocked, a repaired item before and after: these take seconds at the moment and cannot be recreated later. Ask permission before photographing a customer or their property, and keep the answer, because a picture you cannot use is worth less than the goodwill of the person in it. Ten minutes of collection a day produces enough raw material for a month of publishing.</p>",
+            "<h3>The counter pad</h3>",
+            "<p>The cheapest content tool in any business is a pad by the till. Every question asked twice is a post. Every objection raised is a post. Every misunderstanding about price or delivery is a post. After a month the pad contains a list of what customers genuinely do not know, which is exactly what useful content is made of.</p>",
+            "<p>Review your own month this way and you will find that the difficulty was never ideas. It was that nobody wrote down the ones that arrived during the working day.</p>",
+            "<p><strong>Check yourself.</strong> Where do you record the questions customers ask? If nowhere, start a pad today and review it in four weeks.</p>"
+          ]
+        },
+        {
+          "title": "When a complaint happens in public",
+          "minutes": 18,
+          "html": [
+            "<p>A public complaint is not a disaster; a public complaint handled badly is. The audience watching is not judging whether the fault existed. It is judging whether you are the kind of business that behaves well when something goes wrong, because every one of them has been the customer with the problem.</p>",
+            "<p>Answer quickly, in public, without arguing the detail. Acknowledge the experience rather than admitting liability: I am sorry this happened. Then move the specifics to a private channel, in one line, so the conversation has somewhere to go. Then fix it, and return to the public thread to say what you did. The last step is the one businesses skip, and it is the one the audience is waiting for.</p>",
+            "<p>Never delete a complaint. Deletion is visible, it is remembered, and it converts a service failure into a question of honesty. Never reply with a defence of your record; the customer's grievance is not the moment for your statistics.</p>",
+            "<p>Decide in advance who replies to a public complaint, and give them the two sentences they are allowed to use. In a small business that is usually the owner, because a staff member cannot promise a remedy they are not authorised to give. What must never happen is an argument in the comments, a reply written in anger at night, or a defensive account of how long the business has been trading. The audience is not interested in the record; it is interested in whether the next customer will be treated well.</p>",
+            "<h3>The complaint you should publish</h3>",
+            "<p>Once in a while, tell the story of a mistake you made and what you changed because of it. It is the most persuasive content a business can produce, because it demonstrates the one thing advertising cannot: that you can be trusted when things go wrong. It must be a real mistake, told plainly, with the fix named.</p>",
+            "<p>Keep a short note of every complaint and what caused it. Patterns in that note are your operations problem, and fixing them is worth more than any amount of reputation management afterwards.</p>",
+            "<p><strong>Check yourself.</strong> What was your last complaint really about, and what changed in your operation because of it?</p>"
+          ]
+        },
+        {
+          "title": "Building a following that converts",
+          "minutes": 17,
+          "html": [
+            "<p>A large following that never buys is a vanity measurement. What converts is a smaller audience that recognises you when they need what you sell, and that is built by being useful about one subject over a long period.</p>",
+            "<p>Being useful means answering the question a customer has before they are ready to buy. Advice that costs you nothing to give — how to check a bag of cement, how to test a phone battery, what to bring to an interview — earns the right to be considered when the purchase moment arrives. It also filters your audience: people interested in the subject become followers, and people who will never buy drift away, which is a good outcome.</p>",
+            "<p>Then be findable. A customer who remembers your advice must be able to find you later, so the business name, location and what you sell should appear in the profile and in occasional posts, not only in adverts.</p>",
+            "<p>Answer the price question in public and answer it first. A business that hides its prices behind come and ask teaches the customer that the price depends on who is asking, which is a reason to distrust rather than to enquire. Stating a price, or a clear range with what moves it, filters out people who cannot afford it and reassures the ones who can. The enquiries that remain are worth more, because they arrive already knowing what they are buying.</p>",
+            "<h3>Converting without pushing</h3>",
+            "<p>Conversion follows clarity, not pressure. State the price, the location, the delivery arrangement and how to order, plainly, in the places a customer looks. Most lost sales are not lost to a competitor; they are lost to a customer who could not work out how to buy.</p>",
+            "<p>Finally, treat the people who already bought as the audience that matters most. They are the cheapest to reach, the likeliest to return, and the only source of the recommendation that no campaign can buy.</p>",
+            "<p><strong>Check yourself.</strong> Could a customer who saw one of your posts last month find you, learn the price and place an order without asking a question?</p>"
+          ]
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "What makes a description of your target customer useful?",
+      "explanation": "A useful description is specific enough that it could not describe any other business's customer: what they do, the problem that brings them, what they tried before, and what they fear getting wrong.",
+      "options": [
+        { "text": "It is specific enough that it could only describe your customer", "correct": true },
+        { "text": "It covers everybody who might ever buy from you", "correct": false },
+        { "text": "It is based on national statistics rather than individual customers", "correct": false },
+        { "text": "It describes the customer you would like rather than the one you have", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why does changing your core message every week reduce its effect?",
+      "explanation": "Most of the audience sees only a fraction of what is published, so a message must be repeated long after the business is bored of it before it becomes recognised.",
+      "options": [
+        { "text": "Most of the audience has not yet seen it, so repetition is what makes it known", "correct": true },
+        { "text": "Frequent changes confuse the platform's algorithm", "correct": false },
+        { "text": "Audiences prefer businesses that never repeat themselves", "correct": false },
+        { "text": "Change is fine as long as the logo stays the same", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What is the best reason to adopt a new marketing channel?",
+      "explanation": "Channels are chosen because your customers are there and you can produce the format and measure the result, not because the platform is new or popular.",
+      "options": [
+        { "text": "Your customers already spend time there and you can measure results", "correct": true },
+        { "text": "It is new and reach is currently free", "correct": false },
+        { "text": "Competitors have not started using it yet", "correct": false },
+        { "text": "It is popular with young people generally", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Across ten posts, which mix is most likely to keep an audience and still sell?",
+      "explanation": "Mostly reach, some trust, few direct asks. A feed that only asks teaches people to scroll past, and then they miss the post that mattered.",
+      "options": [
+        { "text": "About six that reach, three that build trust, one that asks", "correct": true },
+        { "text": "Ten that ask, because every post should sell", "correct": false },
+        { "text": "Five that ask and five that greet the audience", "correct": false },
+        { "text": "Ten that build trust, with no offers at all", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A customer complains publicly that a delivery was late. What is the strongest response?",
+      "explanation": "Acknowledge in public, move specifics to a private channel, fix it, then return to the thread to say what was done. The audience is watching how you behave, not adjudicating the fault.",
+      "options": [
+        { "text": "Acknowledge publicly, resolve privately, then publicly confirm what was fixed", "correct": true },
+        { "text": "Delete the comment and message the customer privately", "correct": false },
+        { "text": "Reply publicly with your on-time delivery record", "correct": false },
+        { "text": "Wait until the facts are established before responding at all", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why should the hours spent on marketing be counted as a cost?",
+      "explanation": "Time has an alternative use. Eight hours a week that produces nothing would have been better spent following up leads, so free-looking marketing can be the most expensive kind.",
+      "options": [
+        { "text": "Those hours have an alternative use, so free-looking marketing can be the costliest kind", "correct": true },
+        { "text": "Because staff must be paid overtime for social media", "correct": false },
+        { "text": "Because platforms charge for business accounts", "correct": false },
+        { "text": "Only if the business employs more than ten people", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which post is most likely to be promoted successfully with a small budget?",
+      "explanation": "Promote what already worked organically. Paying to distribute a message the audience has already ignored buys reach that does not convert.",
+      "options": [
+        { "text": "One that already earned replies and shares on its own", "correct": true },
+        { "text": "A brand new post nobody has seen yet", "correct": false },
+        { "text": "A post announcing that the business exists", "correct": false },
+        { "text": "The post with the most attractive photograph", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What must be true before you buy attention with a paid promotion?",
+      "explanation": "You must be able to receive what the promotion sends. A promotion that generates enquiries nobody answers teaches customers that you do not respond.",
+      "options": [
+        { "text": "You can respond to the enquiries it will generate", "correct": true },
+        { "text": "You have enough followers to justify the spend", "correct": false },
+        { "text": "The budget is at least a month's revenue", "correct": false },
+        { "text": "The post has been approved by the platform", "correct": false }
+      ]
+    }
+  ]
+}

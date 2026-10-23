@@ -1,0 +1,340 @@
+{
+  "slug": "microsoft-excel-essentials",
+  "title": "Microsoft Excel Essentials",
+  "program": "FCP",
+  "category": "digital-skills",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 0,
+  "summary": "Build a spreadsheet you can trust: clean data, formulas that fill down correctly, summaries in seconds, and a file other people can use.",
+  "description": "Excel is the most widely used analytical tool in the world and the most widely misused. A sheet that looks right and is wrong is more dangerous than no sheet at all, because somebody will make a decision from it. This course is about the difference.\n\nIt begins with the discipline that everything else depends on: one row per record, numbers stored as numbers, dates stored as dates. It then builds up through formulas you can copy without breaking, the handful of functions that do most of the real work, summaries by filter and pivot table, number formats that do not mislead, and finally the protections that let you hand a sheet to a colleague without it collapsing.\n\nEvery lesson uses a small realistic dataset of the kind a programme office, shop or clinic would keep, and every method is one you can reproduce on your own file. No prior formula knowledge is assumed beyond simple arithmetic.",
+  "tags": ["excel", "spreadsheets", "formulas", "pivot tables", "data", "digital skills"],
+  "outcomes": [
+    "Structure a dataset so that sorting, filtering and summarising all work",
+    "Store numbers, dates and text so Excel treats them correctly",
+    "Write formulas with absolute and relative references that fill down safely",
+    "Use IF, SUMIF, COUNTIF and a pivot table to answer real questions",
+    "Format numbers so the sheet cannot be misread",
+    "Protect a sheet so others can enter data without breaking the logic"
+  ],
+  "caseStudy": "A district office tracks two hundred monthly stipend payments in a sheet whose totals stopped matching the bank statement three months ago.",
+  "modules": [
+    {
+      "title": "Module 1 · The data itself",
+      "lessons": [
+        {
+          "title": "One row per record, and why everything depends on it",
+          "minutes": 18,
+          "html": [
+            "<p>Almost every spreadsheet problem traces back to how the data was laid out. Excel's sort, filter and pivot features all assume one thing: that each row is one complete record, and each column is one attribute of that record. Break that assumption and the tools stop working, usually silently.</p>",
+            "<p>A record might be a payment, a student, a stock item or a visit. One row for each, and every column answers one question about it: who, when, how much, which category. If a row contains two payments, sorting by date puts one of them in the wrong place and nothing warns you.</p>",
+            "<p>The other half of the rule is one header row. Merged header cells, a title row above the headers, and blank rows between blocks all look tidy to a human and are invisible barriers to the software. A sheet that begins at A1 with a single row of headers and no gaps will work with every feature in this course.</p>",
+            "<p>Decide where totals live before you start typing, because moving them afterwards is where errors enter. The safest place is a separate summary sheet that refers to the data range by name or by whole column, so adding records never requires editing the total. A total placed directly under the data is not wrong today; it becomes wrong the moment somebody adds a row, and nobody notices because the figure still looks plausible.</p>",
+            "<h3>The totals row that must not exist</h3>",
+            "<p>Never type a total inside the data. A total row becomes a record when you sort, gets counted when you filter, and is summed by your own SUM formula, which then double counts. Keep totals outside the data — on a separate sheet, or clearly below a blank row — and refer to the range, not to whatever the row count happens to be today.</p>",
+            "<p>When a sheet has already been used for a year with merged cells and totals in the middle, the fix is not to repair it line by line. Copy the real data into a clean sheet, leave the old one visible but frozen, and use the new one from then on. It is faster and the audit trail stays.</p>",
+            "<p><strong>Check yourself.</strong> Open the sheet you use most. Does every row describe exactly one record, and is there a single header row with no merges and no blank rows?</p>"
+          ]
+        },
+        {
+          "title": "Getting numbers, dates and text in correctly",
+          "minutes": 17,
+          "html": [
+            "<p>The most expensive spreadsheet error is not a wrong formula. It is a number stored as text, which looks identical on screen and is excluded from every total. The sheet reports 1,980 instead of 2,000 and nobody notices until an audit.</p>",
+            "<p>Numbers arrive as text for predictable reasons: a leading apostrophe, a cell formatted as text before entry, a trailing space, or an import from another system. Excel usually warns with a small green triangle. Ignoring those triangles is how the problem survives.</p>",
+            "<p>Dates have the same failure mode, and it is worse because a date stored as text still looks like a date. Sorting goes alphabetically, and date arithmetic fails. Dates must be entered in a format Excel recognises, and once in, they can be formatted however the reader prefers without changing the underlying value.</p>",
+            "<p>Cleaning an imported column is dull work with a fixed order. Trim the spaces first, with TRIM in a helper column, because a trailing space defeats every comparison and lookup later. Remove the apostrophes that make text of numbers. Then use Text to Columns or a value formula to convert what remains to the right type. Doing this once, deliberately, at the point of import saves the same work repeatedly at the point of reporting, when the pressure to guess is much greater.</p>",
+            "<h3>Currency, decimals and the trap of rounding</h3>",
+            "<p>Store money in the smallest unit you care about, or with full precision, and let formatting decide what the reader sees. A cell displaying 1,234.57 may hold 1,234.5678, and a hundred of those differs from the displayed total by a noticeable amount. Where the displayed figure must equal the stored one, use ROUND explicitly rather than trusting the format.</p>",
+            "<p>Check a new sheet before you trust it: put one value in an empty cell, write =ISNUMBER(A2) beside your first data row and copy it down. Anything returning FALSE is text pretending to be a number, and it is contaminating every total on the sheet.</p>",
+            "<p><strong>Check yourself.</strong> Run that test on your main sheet. How many cells come back FALSE, and what is the effect on your totals?</p>"
+          ]
+        },
+        {
+          "title": "Moving fast: selection, keys and the shortcuts that matter",
+          "minutes": 15,
+          "html": [
+            "<p>Most spreadsheet time is spent moving around, not thinking. A handful of keys will cut that time substantially, and they are worth learning once.</p>",
+            "<p>Ctrl with the arrow keys jumps to the edge of the block of data, which is the fastest way to reach the end of a thousand rows. Ctrl+Shift with the same arrows selects the block. Ctrl+Shift+End selects everything to the last cell that has ever been used, which is how you find the stray value that has made your file enormous.</p>",
+            "<p>F2 edits inside a cell instead of replacing its content. F4 cycles a reference between relative and absolute while you are writing a formula, which is the single most useful key on the keyboard when you are building something that will be copied. Ctrl+Enter fills every selected cell with what you typed.</p>",
+            "<p>Two features repay learning immediately. The name box, at the left of the formula bar, accepts a cell address or range and jumps there, which is far faster than scrolling to row four thousand. Go To Special finds every formula, every constant, or every blank in a selection, which is how you discover the hard-coded number somebody typed over a formula six months ago. Both take a minute to learn and are used every week by anybody who maintains a real workbook.</p>",
+            "<h3>The selection habit that prevents damage</h3>",
+            "<p>Before deleting a column, check what refers to it. Deleting a column silently breaks every formula that pointed at it, changing them to #REF!. Inserting a column does not, because Excel adjusts references, which is why inserting and deleting are not interchangeable.</p>",
+            "<p>Freeze the header row so you can see what you are reading when you scroll. It takes one command and removes the most common cause of entering a figure in the wrong column.</p>",
+            "<p><strong>Check yourself.</strong> Which of the shortcuts above did you not already use? Practise two of them this week on your own file.</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Formulas you can trust",
+      "lessons": [
+        {
+          "title": "References, and the fill that breaks them",
+          "minutes": 18,
+          "html": [
+            "<p>A formula is a statement about relationships. =B2*C2 says that the value in this row's B column is multiplied by this row's C column, and Excel reads it that way relative to where the formula sits. Copy it down a row and it becomes =B3*C3, which is usually exactly what you want.</p>",
+            "<p>Sometimes it is not. If every row must multiply by a single rate held in F2, the copied formula must keep pointing at F2. That is what the dollar sign does: $F$2 fixes both column and row, $F2 keeps the column, F$2 keeps the row.</p>",
+            "<p>The discipline is to say out loud, before copying, which parts should stay put. A formula that is right in row two and wrong in row three is the most common bug in business spreadsheets, and it is invisible unless you test.</p>",
+            "<p>If the data will grow, convert the range to a table before writing any formulas. A table expands its references as rows are added, so a total at the bottom of a table stays correct when somebody appends a record, and a formula referring to a column stays pointing at that column when a new one is inserted. This removes an entire class of maintenance error, and it costs one keystroke to set up. The visible difference is the filter buttons on the header row; the useful difference is never repairing a broken reference again.</p>",
+            "<h3>Testing a fill properly</h3>",
+            "<p>After filling down, click into a cell near the bottom and read the formula bar. If it points at empty cells, the reference moved when it should not have. Then check one result by hand against the source data. Two cells tested this way catch almost everything.</p>",
+            "<p>Structured references — referring to a table's column by name rather than by letter, as in Table1[Amount] — remove the whole class of problem, because a table's references do not shift when rows are added. If you plan to add records, a table is the safer container.</p>",
+            "<p><strong>Check yourself.</strong> Take a formula you have copied down. Does it still produce a correct result at the last row? Verify one by hand.</p>"
+          ]
+        },
+        {
+          "title": "IF, and errors that tell you something",
+          "minutes": 18,
+          "html": [
+            "<p>IF is the function that turns a spreadsheet from a calculator into a decision tool. Its shape is simple: a test, the value if the test is true, and the value if it is false. =IF(D2&gt;0,\"Outstanding\",\"Settled\") labels every row according to its own data.</p>",
+            "<p>The power comes from nesting, and the danger comes from the same place. Three or four levels is readable; ten levels is a formula nobody can maintain. When the logic gets long, use a lookup table with the rules written in rows, which can be read and changed by somebody who did not write the formula.</p>",
+            "<p>Errors are not noise. Each one names its cause. #DIV/0! means a denominator of zero, usually an empty cell where you expected a value. #VALUE! means a number operation on text. #REF! means a reference was deleted. #N/A usually means a lookup could not find what you asked for, which is frequently the most useful information on the sheet.</p>",
+            "<p>When a rule has more than two outcomes, move it out of the formula. Put the thresholds in a small table on the sheet, with the lower bound of each band in one column and its label in the next, and use a lookup to assign the label. Now the rule is readable by anybody, a change is one edit in a visible place, and the formula stays short enough to check. A nested IF five levels deep is not a sign of skill; it is a rule that only its author understands, in a file that will outlive their patience.</p>",
+            "<h3>Handling an error deliberately</h3>",
+            "<p>IFERROR replaces an error with something you choose, which is right when the error is expected and the alternative is clearer: =IFERROR(A2/B2,0) reports no share rather than a wall of #DIV/0!. It is wrong when it hides a real problem, because a sheet full of zeros looks plausible and is not.</p>",
+            "<p>The rule worth keeping: never wrap a whole sheet in IFERROR to make it look tidy. Wrap the specific cases you have thought about, and let the rest shout at you.</p>",
+            "<p><strong>Check yourself.</strong> Find an error value on one of your sheets. What is it telling you, and is it something you want hidden or something you need to fix?</p>"
+          ]
+        },
+        {
+          "title": "The four functions that do most of the work",
+          "minutes": 17,
+          "html": [
+            "<p>Four functions cover a large share of everyday spreadsheet questions: SUM for totals, COUNT for counting, AVERAGE for the middle, and their conditional cousins SUMIF and COUNTIF for totals and counts that meet a test.</p>",
+            "<p>=SUMIF(range, criteria, sum_range) adds only the rows that match. A stipend sheet with categories in column C and amounts in column D answers what did we spend on travel with =SUMIF(C2:C500,\"Travel\",D2:D500). COUNTIF answers the same question about number of records rather than value.</p>",
+            "<p>The criteria are more capable than they look. \">=100\" tests a number, \"Travel\" tests an exact word, and \"*supplier*\" matches any text containing it. Criteria are text strings, including the comparison operators, which is why they are written in quotes.</p>",
+            "<p>Criteria have two traps worth knowing. The first is type: a figure entered as text will not match the same figure stored as a number, so a total of zero often means a criterion type rather than a missing category. The second is wildcards: an asterisk matches any run of characters and a question mark matches one, which makes a search possible but also makes a literal asterisk in a category name match everything. Where a category name might contain such characters, match on an exact cell value rather than a written string.</p>",
+            "<h3>Making the criteria a cell</h3>",
+            "<p>Better than typing a category into the formula is referring to a cell: =SUMIF(C2:C500,F2,D2:D500), where F2 holds the category. Now the summary can be changed by typing in one cell rather than editing formulas, and a small table of categories in column F becomes a report.</p>",
+            "<p>Two habits prevent silent errors. Make the ranges the same size and aligned, because mismatched ranges produce answers rather than complaints. And check one total against a filter: filter the same category, select the amounts, and read the status bar. If the two disagree, the formula is wrong.</p>",
+            "<p><strong>Check yourself.</strong> Build a three-row summary of your data using SUMIF with the category in a cell. Does it match the total when you filter to that category?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Summarising a list",
+      "lessons": [
+        {
+          "title": "Sorting and filtering without breaking the data",
+          "minutes": 16,
+          "html": [
+            "<p>Sorting rearranges records; filtering hides them. Both are essential, and both fail in the same way when the data is not one record per row: rows move independently of each other and the sheet becomes fiction.</p>",
+            "<p>Always sort the whole dataset, not a selected column. Selecting one column and pressing sort produces Excel's most damaging prompt, and answering it wrongly silently scrambles the data. If you are not sure, use a table, where sorting is scoped automatically.</p>",
+            "<p>Filtering is for looking, not for reporting. A filter hides rows from view but changes nothing underneath, so a total you read off a filtered sheet may or may not include the hidden rows depending on how it was calculated. SUBTOTAL counts only visible rows, which is usually what somebody with a filter on actually wants.</p>",
+            "<p>Before you sort anything important, add a column holding the original row number and fill it with a simple sequence. It takes seconds and gives you a way back: sort by that column to restore the original order if a multi-level sort produces something unexpected. Without it, sorting is a one-way operation, and a wrong sort on a sheet with no backup is the moment people learn that Undo has a limit.</p>",
+            "<h3>Sorting with more than one level</h3>",
+            "<p>Multi-level sort is where the feature earns its keep: by category, then by date, then by amount. Set it in the sort dialog rather than clicking a column header, so you control the order of the levels and whether each is ascending or descending.</p>",
+            "<p>Before sorting, make sure the data has no blank rows inside it and no stray values far below the last record. Both make Excel guess the range wrong, and the guess is not always wrong in a way you can see.</p>",
+            "<p><strong>Check yourself.</strong> Sort your sheet by two levels. Do the rows still make sense as records, or has something come apart?</p>"
+          ]
+        },
+        {
+          "title": "A pivot table in ten minutes",
+          "minutes": 18,
+          "html": [
+            "<p>A pivot table takes a list and summarises it by category, by period, or by both, without a single formula. It is the fastest way to answer a question about data, and the reason most people never use one is that they were shown it once, in a version with a confusing interface.</p>",
+            "<p>The method is three steps. Put the cursor in the data and insert a pivot table. Drag the field you want to group by into Rows. Drag the field you want to measure into Values. That is a complete summary, and it took less time than writing one SUMIF.</p>",
+            "<p>Then add a second grouping to Columns to get a cross-tab: categories down the side, months across the top, totals in the body. Percentages, averages and counts are all available by changing the summarise-by setting, which is where most of the analytical value sits.</p>",
+            "<p>Two settings make a pivot table far more useful. Group the date field by month and year rather than leaving hundreds of individual days as rows, which is one right-click and turns a wall of dates into a report. And set the value field to the summarisation you actually mean: a count of records answers a different question from a sum of amounts, and leaving the default can produce a confident figure that means the wrong thing. Check both against a filtered total before the pivot goes into a report.</p>",
+            "<h3>What makes a pivot table agree with reality</h3>",
+            "<p>The pivot reads the source each time it refreshes, so it is only as correct as the data. It will not show records with blank categories as you expect, it will treat text that looks like a number as text, and it will silently ignore rows if the source range was fixed rather than set to the whole column or a table.</p>",
+            "<p>Always cross-check one figure: filter the source to one category and compare its total with the pivot's cell. Then refresh after every data change, because a pivot showing last month's totals is worse than no pivot at all.</p>",
+            "<p><strong>Check yourself.</strong> Build a pivot of your data with one row grouping and one value. Does the total agree with your SUM of the same column?</p>"
+          ]
+        },
+        {
+          "title": "Finding the records that matter",
+          "minutes": 16,
+          "html": [
+            "<p>Most spreadsheet questions are not about totals; they are about which rows. Which payments are overdue? Which items have not moved in ninety days? Which students have not attended?</p>",
+            "<p>Three tools answer that. Conditional formatting highlights rows that meet a rule, so the exceptions are visible without filtering. A helper column with an IF formula labels each row, which can then be filtered or counted. And a filter on a calculated column turns the whole sheet into a worklist.</p>",
+            "<p>The helper column is the underestimated one. Add a column called Status with =IF(D2&gt;30,\"Overdue\",\"Current\") and you have a field you can count, filter and pivot, and one that a colleague can read without understanding the formula behind it.</p>",
+            "<p>Keep the rule and the record separate. The rule belongs in conditional formatting, where it applies itself to every new row and can be read by the next person. The record, meaning the decision taken about a particular row, belongs in a column with a date beside it. Mixing the two is what produces sheets where the colours mean something only to the person who applied them, and where a sort destroys three months of judgement in one keystroke.</p>",
+            "<h3>Do not overwrite the evidence</h3>",
+            "<p>It is tempting to colour the problem rows by hand and move on. Manual formatting is lost the moment the data is sorted, and it records no rule. Conditional formatting carries the rule, so next month's data is reviewed by the same standard without anybody remembering what the colours meant.</p>",
+            "<p>Where a decision is made about a row, record the decision in a column with a date, not by colouring it. A file that records decisions in cells can be audited; one that records them in colours cannot.</p>",
+            "<p><strong>Check yourself.</strong> Which question about your data is really a which rows question, and what column would answer it?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Presenting numbers honestly",
+      "lessons": [
+        {
+          "title": "Number formats that cannot be misread",
+          "minutes": 16,
+          "html": [
+            "<p>A number format changes only what is displayed, never the value. Used well, it makes a sheet readable at a glance; used badly, it makes a sheet say something the data does not.</p>",
+            "<p>The two settings that matter most are decimal places and thousands separators. A financial figure shown with four decimals implies a precision the underlying record does not have. A figure shown without a separator is misread by a factor of ten at a glance: 100000 takes a second, 100,000 does not.</p>",
+            "<p>Currency is not a format, it is a claim. A dollar sign in a cell says these amounts are in dollars, so a sheet holding mixed currencies must show the currency in its own column rather than in the format. Where a currency changes, the format must change with it.</p>",
+            "<p>Custom formats can hide information, which is occasionally useful and usually dangerous. A format that shows zeros as blanks makes a sheet look tidy and hides the difference between a genuine zero and a missing entry. A format that shows negative numbers without a minus sign, or in the same colour, is a misstatement rather than a style choice. Use formats to make values legible, never to make them look better than they are, and keep one column where the true value is visible without any formatting at all.</p>",
+            "<h3>Percentages, dates and the zero that disappears</h3>",
+            "<p>A percentage is a number divided by a hundred, and how it is stored decides how it displays. Entering 12% stores 0.12; entering 12 into a cell formatted as a percentage stores 12, which displays as 1200%. That mismatch has embarrassed a great many reports.</p>",
+            "<p>Dates should display in a form nobody can misread across borders: 04/03/2026 is the fourth of March in one country and the third of April in another. Write the month as a name, or use the international order, and the ambiguity disappears.</p>",
+            "<p><strong>Check yourself.</strong> Look at the number formats in your main report. Which one could a reader misinterpret without noticing?</p>"
+          ]
+        },
+        {
+          "title": "Charts that support a decision",
+          "minutes": 17,
+          "html": [
+            "<p>A chart exists to make a comparison visible. If the reader would draw the same conclusion from a small table, the chart is decoration.</p>",
+            "<p>Choose by question. Comparing categories: a bar chart. Change over time: a line. Showing a single number against a target: a bar or a large figure. Proportions of one whole: at most a handful of slices, and only if the parts add to a meaningful whole.</p>",
+            "<p>Two rules prevent most misleading charts. Start the value axis at zero unless there is a stated reason not to, because a truncated axis exaggerates small movements. Label the axes and units, because a number without a unit is a guess.</p>",
+            "<p>Annotation is what turns a chart into an argument. A single label on the point that matters, such as the month costs jumped, does more than a legend, gridlines and a title combined, because it tells the reader where to look. Two annotations is usually the right number; ten is a table pretending to be a picture. If the chart needs more explanation than that, the finding is not clear enough to chart yet, and the work belongs in the analysis rather than the formatting.</p>",
+            "<h3>Removing what says nothing</h3>",
+            "<p>Gridlines, borders, three-dimensional effects and legends for a single series all consume attention without carrying information. Delete them. A chart with one clear title stating the point, one series, and a labelled axis is harder to make and much easier to read than the default output.</p>",
+            "<p>State the conclusion in the title: Delivery costs rose 18% since March tells the reader what the chart shows. Delivery costs makes them work it out, and some of them will work it out wrongly.</p>",
+            "<p><strong>Check yourself.</strong> Take a chart you have published. If the axis started at zero, would it still support the point you made?</p>"
+          ]
+        },
+        {
+          "title": "Printing, exporting and the PDF check",
+          "minutes": 15,
+          "html": [
+            "<p>Most spreadsheets are read as a PDF or a printout, and most are never checked in that form. What looks orderly on a wide monitor can split across five pages with the header on page one and the figures on page three.</p>",
+            "<p>Set the print area to the range that matters, fit to width rather than fit to page, and repeat the header row on every page so a reader on page four knows what the columns are. Landscape is worth trying before shrinking text to a size nobody can read.</p>",
+            "<p>Where a wide sheet cannot fit, print the summary and keep the detail on screen. A one-page summary that is legible beats eight pages that are not, and the reader who needs the detail will open the workbook.</p>",
+            "<p>Set the page layout before the report is needed, not on the morning it is due. Print titles repeat the header row on every page, the print area excludes the scratch columns, and fit to width keeps the table on one page across. Margins and orientation are worth a minute, because a report that splits a total onto a second page is read as careless even when every figure in it is right. Save the layout with the file so nobody has to rediscover it next month.</p>",
+            "<h3>The check before sending</h3>",
+            "<p>Export to PDF and read it as the recipient will: on a screen, at normal size, without scrolling sideways. Check the totals are visible, the header is repeated, and page numbers exist. Then check the file size and the sheet names, because a workbook named Sheet1 sent to a client tells them what you think of the work.</p>",
+            "<p><strong>Check yourself.</strong> Export your main report to PDF now. Does page one tell the reader what they are looking at and what the total is?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 5 · Sheets that survive other people",
+      "lessons": [
+        {
+          "title": "Separating what people type from what Excel calculates",
+          "minutes": 17,
+          "html": [
+            "<p>The single most robust structural decision in a spreadsheet is to put data entry on one sheet and calculations on another. Then the person entering data cannot overwrite a formula, and the person maintaining formulas cannot corrupt a record.</p>",
+            "<p>Use colour consistently: one colour for cells a user may change, another for cells they must not. State the convention at the top of the sheet. A colleague who sees an unstyled white cell will assume they may type in it, which is how a careful workbook gets destroyed by a helpful one.</p>",
+            "<p>Keep the calculation sheet free of hard-coded numbers. A rate, a threshold or a fee belongs in a labelled input cell, referenced by the formulas, so that changing the fee is a single edit rather than a search for every place the number appears.</p>",
+            "<p>Once the input cells are separated, lock everything else and write the convention where people will see it. Protection is not a security measure in a shared workbook, it is a guard against the accidental edit that breaks a formula nobody knew was there. Where a colleague genuinely needs to change a calculation, they should ask, and the answer should be yes with the formula changed once and tested. What must not happen is a formula being overwritten in place, which leaves no record of the number that was there before.</p>",
+            "<h3>Naming the inputs</h3>",
+            "<p>A sheet called Inputs with five labelled values is self-documenting. If those values have names — vat_rate, fee_per_unit, cutoff_days — the formulas on the calculation sheet read as sentences and can be checked by somebody who is not a spreadsheet expert.</p>",
+            "<p>The test of the structure is simple: hand it to a colleague and ask them to change one input and report the result. If they can, and nothing else breaks, the sheet is built properly.</p>",
+            "<p><strong>Check yourself.</strong> How many numbers are typed directly inside formulas on your main sheet? Each one is a future inconsistency.</p>"
+          ]
+        },
+        {
+          "title": "Validation and protection without locking people out",
+          "minutes": 17,
+          "html": [
+            "<p>Data validation is the cheapest quality control available. It refuses values that cannot be right, at the moment they are typed, when the person who knows the answer is still looking at the screen.</p>",
+            "<p>Use it for the fields that matter. A list validation for category prevents the spelling variants that ruin every summary. A whole-number validation with a minimum of zero prevents a negative quantity. A date validation prevents next year being entered as last year.</p>",
+            "<p>Protection then stops the structure being changed: lock the calculation cells, unlock the input cells, and protect the sheet without a password if the aim is to prevent accidents rather than attack. A password that everybody knows is not security, and one that nobody knows is a future emergency.</p>",
+            "<p>Keep the source of a list validation somewhere visible, such as a short column of categories on a settings sheet. A list typed directly into the validation dialog is invisible to whoever maintains the workbook next, and it will drift from the categories actually in use. With the list on a sheet, adding a category is an edit to one cell, and the validation, the pivot and the summary all follow. It also gives you a place to see, at a glance, whether the categories in the data match the list that is supposed to constrain them.</p>",
+            "<h3>Test it as a stranger</h3>",
+            "<p>A control you have not tried is a control you do not know you have. Open the file, try to type into a locked cell and confirm you cannot, then type an invalid value into an input and confirm it is refused. Then try a valid value and confirm the totals change by the amount you expect.</p>",
+            "<p>Leave a note on the sheet saying which cells may be edited and who to contact if something needs to change. Most requests to unlock a workbook come from somebody unsure rather than somebody malicious, and a note answers them before they ask.</p>",
+            "<p><strong>Check yourself.</strong> On your shared sheet, can a colleague enter a category that does not exist, and does the total still agree afterwards?</p>"
+          ]
+        },
+        {
+          "title": "Handing over a workbook",
+          "minutes": 16,
+          "html": [
+            "<p>A workbook that somebody else must maintain needs three things beyond working formulas: a note saying what it does, a note saying what must not be changed, and a period covered.</p>",
+            "<p>Put a short readme on the first sheet: purpose, who owns it, what the input cells are, what the totals should reconcile to, and what to do when something looks wrong. Five lines is enough, and it will be read more often than any documentation stored elsewhere.</p>",
+            "<p>Name the sheets for what they hold rather than leaving them as Sheet1, Sheet2. Name the file with a date and a status so versions cannot be confused: 2026-10-21 stipend reconciliation FINAL.xlsx. Then remove whatever was only for you — scratch columns, hidden sheets, comments that were notes to self.</p>",
+            "<p>A readme of five lines prevents most of the questions a workbook attracts. State the purpose, the owner, the input cells, the figure the totals should match, and what to do when something looks wrong. Keep it on the first sheet where it cannot be missed, and update the period it covers when the file is refreshed for a new month. A workbook with a stated purpose and a stated reconciliation is trusted on evidence; one with neither is trusted on appearance, which is not the same thing.</p>",
+            "<h3>The reconciliation line</h3>",
+            "<p>Every workbook that matters should state the figure it must agree with: this total must match the bank statement line for October, or this count must equal the number of students on the register. A sheet with a stated reconciliation has a built-in alarm. One without it is trusted on the strength of its layout.</p>",
+            "<p>Finally, keep the previous period's file. When a total looks wrong, the ability to compare with last month is worth more than any amount of memory.</p>",
+            "<p><strong>Check yourself.</strong> What number must your main workbook reconcile to, and is that stated anywhere in the file?</p>"
+          ]
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Why must a dataset have one row per record with a single header row and no merged cells?",
+      "explanation": "Sort, filter and pivot all assume one row is one complete record. Merged cells and extra title rows are invisible to the tools and silently break them.",
+      "options": [
+        { "text": "Because sorting, filtering and pivot tables assume one row is one complete record", "correct": true },
+        { "text": "Because merged cells make the file larger", "correct": false },
+        { "text": "Because Excel refuses to open files with title rows", "correct": false },
+        { "text": "Because headers must always be in bold", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A column of amounts sums to less than the true total. What is the most likely cause?",
+      "explanation": "Numbers stored as text look identical and are excluded from SUM. =ISNUMBER on the column reveals them.",
+      "options": [
+        { "text": "Some amounts are stored as text and excluded from the total", "correct": true },
+        { "text": "The SUM formula is missing a decimal place setting", "correct": false },
+        { "text": "The cells are formatted as currency rather than number", "correct": false },
+        { "text": "The total row is included in the range", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A formula =B2*F2 is filled down and gives wrong answers from row 3. What is the fix?",
+      "explanation": "F2 moves to F3, F4 and so on. A single rate cell must be referenced absolutely: $F$2.",
+      "options": [
+        { "text": "Make the rate reference absolute: =B2*$F$2", "correct": true },
+        { "text": "Make B2 absolute instead", "correct": false },
+        { "text": "Convert the column to a table", "correct": false },
+        { "text": "Paste the results as values", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What does #DIV/0! most often indicate?",
+      "explanation": "A denominator of zero, usually an empty cell where a value was expected. It is information, not noise.",
+      "options": [
+        { "text": "A denominator that is zero or empty", "correct": true },
+        { "text": "A number stored as text", "correct": false },
+        { "text": "A deleted column", "correct": false },
+        { "text": "A circular reference", "correct": false }
+      ]
+    },
+    {
+      "prompt": "You want this month's spend on Travel, where the category is in column C and amounts in column D. Which formula is right?",
+      "explanation": "SUMIF takes the range to test, the criteria, and the range to add: =SUMIF(C2:C500,F2,D2:D500) with the category in F2.",
+      "options": [
+        { "text": "=SUMIF(C2:C500,F2,D2:D500)", "correct": true },
+        { "text": "=SUM(C2:C500,D2:D500)", "correct": false },
+        { "text": "=COUNTIF(C2:C500,F2)", "correct": false },
+        { "text": "=SUMIF(D2:D500,F2,C2:C500)", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why is a pivot table preferable to a hand-written summary?",
+      "explanation": "It summarises the whole source, refreshes when the data changes, and requires no formulas that can drift out of step with the data.",
+      "options": [
+        { "text": "It summarises the whole source and refreshes with the data", "correct": true },
+        { "text": "It stores the numbers so they cannot change", "correct": false },
+        { "text": "It works even when the data is merged and broken", "correct": false },
+        { "text": "It removes the need to check the data at all", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A monthly total is displayed without a thousands separator as 100000. What is the risk?",
+      "explanation": "It is misread at a glance by a factor of ten. Display format changes how the figure is read, even when the stored value is correct.",
+      "options": [
+        { "text": "It may be misread at a glance by a factor of ten", "correct": true },
+        { "text": "The underlying value is wrong", "correct": false },
+        { "text": "The formula will stop working", "correct": false },
+        { "text": "It cannot be sorted correctly", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What is the most reliable way to stop a colleague breaking a shared workbook?",
+      "explanation": "Inputs on one sheet, locked calculation cells, and validation on the fields that matter. Protection prevents accidents; structure prevents the need for it.",
+      "options": [
+        { "text": "Separate inputs from calculations, lock the calculation cells and validate the inputs", "correct": true },
+        { "text": "Password-protect the whole workbook and share the password", "correct": false },
+        { "text": "Ask colleagues not to change anything", "correct": false },
+        { "text": "Send a PDF instead of the workbook", "correct": false }
+      ]
+    }
+  ]
+}

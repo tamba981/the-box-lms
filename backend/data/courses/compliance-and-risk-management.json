@@ -1,0 +1,264 @@
+{
+  "slug": "compliance-and-risk-management",
+  "title": "Compliance & Risk Management",
+  "program": "FCP",
+  "category": "finance-accounting",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 1000,
+  "summary": "Name the risks that can end an organisation, understand what compliance actually protects, and run identity checks that work.",
+  "description": "Compliance is often taught as a list of rules and a set of forms. That version of it produces organisations that are compliant on paper and exposed in practice, because the forms are filled in by people who do not understand what they are preventing.\n\nThis course starts from risk instead: the four categories that account for most losses, how they interact, and how to rank them when everything feels urgent. It then explains what compliance actually does — it reduces the chance of a specific harm and demonstrates to a regulator that the organisation is trying — and why those two purposes produce different requirements.\n\nIt works through anti-money-laundering and identity checks in detail, because that is where a small institution is most likely to be used and most likely to be penalised. It closes on culture, which is the only part of compliance that cannot be bought, and on the uncomfortable situation of a colleague who is breaking the rules.",
+  "tags": ["compliance", "risk", "anti-money laundering", "know your customer", "governance", "finance"],
+  "outcomes": [
+    "Categorise risks as operational, credit, market or reputational",
+    "Distinguish compliance that reduces harm from compliance that only demonstrates effort",
+    "Explain what anti-money-laundering requirements are designed to prevent",
+    "Identify the warning signs of a customer being used to move illicit money",
+    "Describe what makes a compliance culture work and how it fails",
+    "Handle a colleague or superior who is bypassing controls"
+  ],
+  "caseStudy": "A money transfer shop in Paynesville is asked to send 500,000 Liberian dollars a week to Guinea by a customer with valid identification, a plausible explanation, an unusual referral and one document that does not quite match.",
+  "modules": [
+    {
+      "title": "Module 1 · What risk actually means",
+      "lessons": [
+        {
+          "title": "The four categories that account for most losses",
+          "minutes": 16,
+          "teach": [
+            "Operational risk is the risk of doing the work badly: errors, fraud by staff, system failure, a process nobody owns. It is the largest category in most small organisations and the least discussed, because it has no dramatic name.",
+            "Credit risk is the risk that somebody who owes you money does not pay. For a lender it is central; for any business selling on credit it is the reason a good month can become a bad year.",
+            "Market risk is the risk that prices move against you: exchange rates, the cost of your inputs, the price your customers will pay. In an economy with currency movement it is not a theoretical category.",
+            "Reputational risk is what happens after the other three: customers leave, regulators become less accommodating, staff stop referring good people. It is a consequence rather than a cause, and it is why some failures are terminal.",
+            "The categories matter because the treatment differs. Operational risk is reduced by process, credit risk by assessment and limits, market risk by contracts and timing, and reputational risk by how the first three are handled when they go wrong. A failure handled honestly costs less reputation than the same failure concealed."
+          ],
+          "example": "A cooperative loses stock to theft (operational), is owed three months of member contributions by one large buyer (credit), and sees fertiliser costs rise 30 per cent before it can raise prices (market).",
+          "points": ["Operational risk is the biggest and least discussed", "Credit risk begins the moment you sell on credit", "Reputational damage is the multiplier, not the cause"],
+          "check": "List your last three significant losses and label each with one of the four categories. Which category dominates?"
+        },
+        {
+          "title": "Ranking risks when everything feels urgent",
+          "minutes": 16,
+          "teach": [
+            "A risk register with sixty entries has no priorities. Ranking requires two judgements: how likely the event is, and how much it would cost. Both can be estimated roughly, and a rough ranking is far more useful than an unranked list.",
+            "Estimate likelihood in plain bands rather than percentages: has happened here, could plausibly happen this year, unlikely but possible. Estimate impact in money or in the months of disruption it would cause.",
+            "Then look for the two combinations that matter: likely and cheap enough to prevent now, and unlikely but fatal. The first is where most improvement is available, and the second is where insurance, contracts and reserves belong.",
+            "Ignore, deliberately, the risks that are unlikely and minor. Writing down that you have decided to accept them is better than pretending they have been addressed, because it stops the register from growing into something nobody reads.",
+            "Review the ranking quarterly and after any incident. Risk profiles change with growth, with a new customer, with a new member of staff, and mostly with things nobody thought to mention. Put a review date in the calendar rather than waiting for the next crisis to prompt one."
+          ],
+          "example": "A store ranks theft as likely with a moderate cost, fire as unlikely with a fatal cost, and a supplier going out of business as plausible with a severe cost. Each gets a different response.",
+          "points": ["Rank by likelihood and impact, in plain bands", "Likely and cheap to prevent comes first", "Record the risks you deliberately accept"],
+          "check": "Name your two most likely risks and your one fatal risk. What is being done about each, and by whom?"
+        },
+        {
+          "title": "Why small organisations carry more risk than they think",
+          "minutes": 15,
+          "teach": [
+            "In a small organisation the same person often approves a transaction, records it and reconciles it. That is not a character flaw; it is what happens when there are three staff. It removes the check that would catch an error or a fraud.",
+            "Concentration adds to it: one large customer, one supplier, one person who knows how the system works. Each is efficient and each is a single point of failure that a larger competitor could absorb.",
+            "Informality compounds both. Where a decision is made in conversation and recorded nowhere, the organisation cannot detect that it happened twice or that it contradicted a previous decision.",
+            "The mitigations are cheap and unglamorous: a second person reviewing anything above a threshold, a monthly reconciliation done by somebody who did not post the entries, and a written note of significant decisions.",
+            "None of these requires a department. They require a habit and a named person, and they are the difference between an error being found in a week and being found by an auditor two years later. Start with the money, because that is where the habit is easiest to establish and hardest to argue with."
+          ],
+          "example": "A two-person office asks the cleaner's supervisor to initial the daily cash count, which is imperfect but breaks the ability to take cash and record it as a payment.",
+          "points": ["One person cannot check themselves", "Concentration is efficiency and fragility at once", "A second pair of eyes above a threshold is enough to start"],
+          "check": "Who checks the person who handles your organisation's money? If the answer is nobody, what could you change this month?"
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · What compliance actually is",
+      "lessons": [
+        {
+          "title": "Beyond the checkbox",
+          "minutes": 16,
+          "teach": [
+            "Compliance has two purposes that are often confused. The first is to reduce the chance of a specific harm: money laundering, sanctions breaches, unsafe lending. The second is to demonstrate to a regulator that the organisation is trying.",
+            "Both are legitimate. The second protects your licence, your ability to bank, and your access to funding. But an organisation that does only the second is one incident away from discovering that the paperwork described a business that does not exist.",
+            "The test is whether a control would still be applied if it were not required. If identity is verified only because a form demands it, the verification will be perfunctory and the file will contain a photocopy nobody examined.",
+            "Practical compliance therefore starts with the question: what harm does this control prevent, and would I notice if it failed? A control that has never produced a refusal has probably never been tested.",
+            "Where the answer is that nobody could say what the control prevents, the control is ceremony, and the honest options are to understand it or to escalate the question. A control nobody can explain is a control that will be skipped under pressure, by somebody who has no idea what they are skipping."
+          ],
+          "example": "A signature on a due-diligence form proves only that someone signed it. A record of the checks performed, with the result, proves that the check happened.",
+          "points": ["Compliance reduces harm and demonstrates effort", "Doing only the second leaves the harm intact", "Every control should survive the question of what it prevents"],
+          "check": "Take one control you apply repeatedly. What harm does it prevent, and when did it last actually stop something?"
+        },
+        {
+          "title": "Why compliance fails in small institutions",
+          "minutes": 16,
+          "teach": [
+            "The three reasons are cost, expertise and priority, and they are usually all present. Compliance is expensive in staff time, requires knowledge that is not taught locally, and competes with today's cash crisis.",
+            "Cost is real but often overstated. Most of the requirements for a small institution are about records and consistency rather than systems, and the expensive part is usually the audit or certification rather than the practice.",
+            "Expertise is the deeper problem. Where nobody in the organisation has seen a good compliance file, the standard is set by imitation, and imitation of a bad file produces a bad file with more paperwork.",
+            "Priority is where most failures begin. A control that is not measured will not be maintained, and the first busy day will set the precedent for the year.",
+            "The response that works is narrow: three or four controls that genuinely matter, applied every time, measured monthly, and one person accountable. A wide programme applied inconsistently is worse than a narrow one applied without exception. Choose the three controls you would defend to a regulator and apply only those until they are habits."
+          ],
+          "example": "A remittance business that checks identity on every transaction above a threshold, without exception, fares better than one with a comprehensive policy nobody follows.",
+          "points": ["Cost, expertise and priority, usually together", "Narrow and consistent beats broad and occasional", "What is not measured will not be maintained"],
+          "check": "Which of your controls would survive a genuinely busy week? Which would be the first to be skipped?"
+        },
+        {
+          "title": "The difference between compliance and risk management",
+          "minutes": 15,
+          "teach": [
+            "Compliance asks whether you are following the required rules. Risk management asks what could happen and what you are doing about it. An organisation can be fully compliant and still badly exposed, because the rules do not cover everything that can hurt it.",
+            "Compliance is externally defined and largely non-negotiable. Risk management is internally defined and requires judgement about likelihood and impact. One is a floor; the other is the actual management of the business.",
+            "The failure mode is compliance becoming the entire risk function, so that nothing outside the regulatory list is considered. Fraud by a trusted employee, a supplier failing, a flood damaging stock: none may be a regulatory matter and all can end the organisation.",
+            "The second failure is the opposite: a risk process so elaborate that it produces no decisions, while the compliance floor is neglected and a licence is put at risk.",
+            "The practical arrangement is a short risk register reviewed regularly, plus a compliance calendar of mandatory obligations. Two pages, two owners, four meetings a year. Review them together, because a risk register the compliance officer keeps alone is a document rather than a control."
+          ],
+          "example": "A lender is fully compliant on identity checks and has no plan for what happens when its largest borrower defaults, which is the event most likely to end it.",
+          "points": ["Compliance is a floor, not a strategy", "Risk management covers what rules do not", "Two pages and two owners is enough to start"],
+          "check": "Which risk that could end your organisation is outside any regulatory requirement? What is being done about it?"
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Identity checks and suspicious activity",
+      "lessons": [
+        {
+          "title": "What anti-money-laundering rules are for",
+          "minutes": 16,
+          "teach": [
+            "Money laundering is the process of making money from crime appear legitimate. It needs institutions to move it: banks, remittance shops, mobile money agents, sometimes a business that can absorb cash sales.",
+            "The rules exist because institutions are the choke point. Requiring them to know their customers, record transactions and report suspicion makes it harder to move criminal proceeds without being noticed.",
+            "For a small institution the requirements are usually: identify the customer, understand the purpose of the relationship, keep records, watch for unusual patterns, and report suspicion to the financial intelligence unit.",
+            "The obligation to report is the part most often avoided, usually from fear of accusing a customer. It is a report of suspicion, not an accusation, and failing to report is itself an offence in most regimes.",
+            "The practical consequence is that refusing a transaction is not the same as reporting it. A refusal without a record leaves the customer free to try elsewhere, and the intelligence value of the refusal is lost. Keep the report factual: what you saw, what you asked, what you decided, and that you decided it."
+          ],
+          "example": "A remittance agent who refuses an unusual transaction and reports it in writing may prevent that customer trying three other agents the same afternoon.",
+          "points": ["Institutions are the choke point", "Identify, understand, record, watch, report", "Suspicion is reported, not proven"],
+          "check": "Do you know where a suspicious activity report goes in your country, and who signs it?"
+        },
+        {
+          "title": "Reading the warning signs",
+          "minutes": 16,
+          "teach": [
+            "The signals are behavioural rather than demographic. A customer's nationality, age or business do not indicate laundering; how they behave relative to their own pattern does.",
+            "Four patterns cover most cases. Size: an amount far outside the customer's normal activity. Structure: splitting an amount to stay below a reporting threshold. Story: an explanation that does not fit the transaction or changes when questioned. Third parties: money or instructions arriving from somebody who is not the customer.",
+            "Reluctance matters as much as any single signal. A customer who becomes angry when asked for identification, or who offers to pay extra to avoid a record, has told you something more useful than any document.",
+            "No single signal justifies refusal. The judgement is about a combination and about a change in pattern, which is why records of what a customer normally does are the most valuable compliance asset a small institution has.",
+            "Document the decision either way. A file that shows the check was considered and the transaction proceeded is as valuable in a review as one that shows it was blocked. The habit takes a minute per unusual transaction and saves an afternoon of explanation later."
+          ],
+          "example": "A customer who normally sends 8,000 monthly begins sending six transfers of 900 on consecutive days; the pattern, not the amount, is the signal.",
+          "points": ["Behaviour relative to the customer's own pattern", "Size, structure, story, third parties", "Document decisions to proceed as well as refusals"],
+          "check": "What does your normal customer's activity look like, and would you notice if it doubled? Where is that recorded?"
+        },
+        {
+          "title": "Case study: the customer who wants to send 500,000 a week",
+          "minutes": 18,
+          "teach": [
+            "A money transfer shop in Paynesville, normally handling 20,000 to 50,000 per transaction, is approached by a new customer who wants to send 500,000 Liberian dollars a week to Guinea, every week, starting today.",
+            "The identification presented is valid. The explanation is that the customer supplies medical equipment and settles with a Guinean distributor. That is plausible; the shop has no way to verify it.",
+            "Three details do not fit. The amount is ten times the shop's usual transaction. The customer was referred by somebody the owner knows to have a criminal record. One of the documents lists an address that does not match between pages.",
+            "The employee at the counter wants to process it: the identification is valid, the customer is calm and well-spoken, and refusing a large repeat customer feels like turning away the best week the shop has had.",
+            "The owner must decide, and the options are not comfortable. Refusing loses a large customer and may be wrong. Complying creates a weekly record the owner cannot justify later. The decision to be made is not whether the customer is guilty but whether the shop is willing to own this file."
+          ],
+          "example": "The shop's own file shows eleven transactions above 100,000 last year, all from established customers with verified suppliers, and none repeat weekly.",
+          "points": ["Valid identification does not make a transaction normal", "A referral from a known person is information", "The record you create today is what you explain in two years"],
+          "check": "In the owner's position, what would you do first, and what would you write in the file? Would you report it, and on what basis?"
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Building a culture that holds",
+      "lessons": [
+        {
+          "title": "Why culture beats policy",
+          "minutes": 15,
+          "teach": [
+            "A policy is what an organisation says it does. Culture is what it does when nobody is checking, and compliance is almost entirely a matter of that second thing, because the moments that matter are not observable.",
+            "Culture is set by what leaders tolerate. If a senior person's transaction bypasses the identity check and nobody comments, the requirement is understood to be optional, whatever the policy says.",
+            "It is also set by what happens after a refusal. An employee who refuses a transaction and is supported learns that the control is real; one who is criticised for losing a customer learns the opposite and will not do it again.",
+            "Three practices build it: leaders follow the process themselves and are seen to, refusals are supported and discussed, and near misses are reported without blame so that the pattern is visible before it becomes a loss.",
+            "None of these requires a compliance department. They require consistent behaviour from the people whose behaviour others copy. Culture is not a value statement; it is the sum of what has been tolerated."
+          ],
+          "example": "A manager who submits to the identity check in front of staff, without comment, does more for the standard than a training session.",
+          "points": ["Tolerated exceptions become the real policy", "Support refusals publicly", "Report near misses without blame"],
+          "check": "In the last month, did any senior person bypass a control? What did you do, and what did the staff conclude?"
+        },
+        {
+          "title": "Records that would convince a stranger",
+          "minutes": 15,
+          "teach": [
+            "The test of a record is whether somebody who was not there could understand what happened and why, two years later. Most records fail because they record the outcome and not the reasoning.",
+            "For a refused or unusual transaction, four things are needed: what was observed, what was checked, what was concluded, and who decided. Each is a sentence, not a form.",
+            "Keep records for the period the regulator requires, and know what that period is. Storage is cheap; reconstructing is not. A scanned copy in an organised folder is sufficient for most small institutions.",
+            "Write records contemporaneously. A note written the following week is a reconstruction, and a reconstruction that supports the decision looks like justification rather than evidence.",
+            "Where a decision was difficult, say so in the note. A file that records genuine uncertainty is more credible than one that records certainty about everything, because the second is not believable. Write the record as if a sceptical colleague will read it, because eventually one will."
+          ],
+          "example": "Refused 500,000 transfer. Customer's stated purpose was medical supplies but documents showed two different addresses; checked against usual pattern; referred to owner; reported as suspicious activity 14:20.",
+          "points": ["Record the reasoning, not just the outcome", "Contemporaneous or not at all", "Admitting uncertainty makes a record credible"],
+          "check": "Take one recent refusal or exception. Could a stranger reconstruct your reasoning from what you wrote down?"
+        },
+        {
+          "title": "When the person breaking the rules is senior",
+          "minutes": 16,
+          "teach": [
+            "This is the situation compliance training avoids and employees actually face: a colleague or a manager approving what should not be approved. The colleague has twelve years of service, is related to the manager, and everyone knows.",
+            "The first step is not escalation; it is documentation. Record what you observed and when, factually and without interpretation. A record made at the time is the single most useful thing you can have, whatever happens next.",
+            "The second is a direct conversation, if it is safe and appropriate. Many cases end here because the person did not realise the control applied to them, or assumed a shortcut was acceptable for a small amount.",
+            "The third is escalation through the route that exists: an internal audit function, a board member, the regulator's whistleblowing channel, or the financial intelligence unit. Know which of these exists before you need it.",
+            "What is not acceptable is silence combined with private disapproval. It leaves you exposed if the matter is later discovered, and it leaves the organisation running on a control that everyone knows does not work. Silence is a decision, and it is the one most often regretted."
+          ],
+          "example": "An officer notes that a loan was approved without a valuation on a specific date, keeps a copy of the file, raises it with the approver, and escalates in writing when nothing changes.",
+          "points": ["Document factually before you do anything else", "A direct conversation resolves many cases", "Know your escalation route in advance"],
+          "check": "Do you know today which route you would use to report something at your organisation? Name the person or channel."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Which category of risk is largest in most small organisations, and least often discussed?",
+      "explanation": "Operational risk: errors, staff fraud, process failure. It has no dramatic name, which is why it receives less attention than credit or market risk.",
+      "options": [
+        { "text": "Operational risk", "correct": true },
+        { "text": "Market risk", "correct": false },
+        { "text": "Reputational risk", "correct": false },
+        { "text": "Credit risk", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An organisation completes every required form but could not say what harm any control prevents. What is the best description?",
+      "explanation": "This is compliance as ceremony — it demonstrates effort without reducing harm, and the controls will not stop anything because nobody understands them.",
+      "options": [
+        { "text": "Compliance as ceremony: effort demonstrated, harm unreduced", "correct": true },
+        { "text": "Best practice, since regulators only require the forms", "correct": false },
+        { "text": "A sound risk-based approach", "correct": false },
+        { "text": "An acceptable position provided the audit passes", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A customer who normally sends 8,000 monthly makes six transfers of 900 on consecutive days. Which warning sign does this illustrate?",
+      "explanation": "Structuring — splitting amounts to stay below a reporting threshold. The pattern relative to the customer's own history is the signal, not the amount.",
+      "options": [
+        { "text": "Structuring, revealed by a change from the customer's normal pattern", "correct": true },
+        { "text": "Nothing, because each amount is small", "correct": false },
+        { "text": "Market risk, because currency is moving", "correct": false },
+        { "text": "Reputational risk, because the customer is known locally", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why is refusing a suspicious transaction insufficient on its own?",
+      "explanation": "A refusal without a report leaves the customer free to try elsewhere and destroys the intelligence value of what was observed.",
+      "options": [
+        { "text": "The customer will try elsewhere and no report is made", "correct": true },
+        { "text": "Because the institution loses revenue", "correct": false },
+        { "text": "Because only the regulator may refuse a transaction", "correct": false },
+        { "text": "Because the customer is entitled to a written reason", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An employee refuses a large transaction on compliance grounds and the manager criticises her for losing the customer. What is the likely effect on the control?",
+      "explanation": "Culture is set by what happens after a refusal. Criticism teaches staff that the control is optional, and the next refusal will not happen.",
+      "options": [
+        { "text": "Staff learn the control is optional and stop applying it", "correct": true },
+        { "text": "No effect, since the policy remains in force", "correct": false },
+        { "text": "Staff become more rigorous out of caution", "correct": false },
+        { "text": "It improves efficiency by removing unnecessary checks", "correct": false }
+      ]
+    }
+  ]
+}

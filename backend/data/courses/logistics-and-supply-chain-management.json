@@ -1,0 +1,264 @@
+{
+  "slug": "logistics-and-supply-chain-management",
+  "title": "Logistics & Supply Chain Management",
+  "program": "FCP",
+  "category": "business-management",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 2000,
+  "summary": "Understand what goods really cost once they land, manage stock as tied-up cash, choose suppliers who deliver, and survive disruption.",
+  "description": "In a market where almost everything arrives through one port, the difference between a profitable distributor and a struggling one is rarely the selling price. It is the landed cost, the stock they carry, and how many days their capital sits on a dock or on a road.\n\nThis course works through the chain from the supplier's factory to the customer's shelf, with the Liberian conditions treated as normal rather than exceptional: clearance that varies from five days to fifteen, roads that change in the rainy season, cross-border trade with three neighbours, and fuel prices that move without warning.\n\nIt covers cost properly — the total cost of a delivery rather than the supplier's invoice — and it covers inventory as a financial decision rather than a storage decision. It closes on disruption, because a chain that has never been tested by a strike, a bridge failure or a currency movement is a chain whose weaknesses are still unknown.",
+  "tags": ["logistics", "supply chain", "inventory", "procurement", "imports", "business management"],
+  "outcomes": [
+    "Calculate the landed cost of goods rather than comparing supplier prices",
+    "Plan for clearance and transport variability rather than assuming a fixed lead time",
+    "Set reorder points from real lead times and usage",
+    "Decide when holding more stock is cheaper than holding less",
+    "Choose and manage suppliers on reliability rather than price alone",
+    "Respond to a disruption with a decision and a record"
+  ],
+  "caseStudy": "A cooking-oil importer's container is stuck on the dock during a strike, the heat-damage claim window is three days, and the options are a facilitation payment, waiting, or rerouting at great cost.",
+  "modules": [
+    {
+      "title": "Module 1 · What goods really cost",
+      "lessons": [
+        {
+          "title": "Landed cost, and why the invoice lies",
+          "minutes": 16,
+          "teach": [
+            "The price on a supplier's invoice is not what the goods cost you. Between that invoice and your shelf sit freight, insurance, port charges, clearance, transport, and the cost of the money tied up while all of that happens.",
+            "Landed cost adds all of those to the purchase price and divides by the units that actually arrived in saleable condition. That figure, not the invoice, is what your selling price has to cover.",
+            "The difference is often large enough to change a decision. Two suppliers quoting four per cent apart can invert entirely once one of them requires a longer clearance, a second truck, or a shipment that arrives damaged.",
+            "Calculate landed cost for your three largest product lines and keep the calculation. It takes an hour the first time and five minutes each time afterwards, and it turns a guess about margins into a number.",
+            "Compare suppliers on landed cost rather than on quote. A supplier who is cheaper by four per cent but adds ten days is cheaper only if the ten days cost you nothing, and they usually cost you something. Recalculate the comparison whenever a route, a broker or a shipping line changes, because the ranking of suppliers moves with the system rather than with their prices."
+          ],
+          "example": "A carton invoiced at 100 costs 112 once freight, clearance, transport and the delay are counted, so every quotation is recalculated at 1.12 before comparison.",
+          "points": ["Invoice price is not cost", "Landed cost per saleable unit", "Compare suppliers on landed cost, not quotation"],
+          "check": "What is the landed cost of your best-selling item, and how far is it from the invoice price?"
+        },
+        {
+          "title": "The port, the paperwork and the variability",
+          "minutes": 16,
+          "teach": [
+            "Clearance is where most delivery promises die. The nominal time is a number; the real time is a distribution, and planning on the nominal number is how businesses run out of stock they were sure were coming.",
+            "The documents matter more than the cargo. A missing certificate of origin, an inconsistent description of goods, or a valuation query can hold a container for a week, and the cost is charged to you in demurrage rather than to whoever made the error.",
+            "Build a lead-time range rather than a single figure: best case, usual case, worst case. Then plan stock against the usual case and keep a buffer sized for the worst, which is the only honest way to plan in a system with this much variance.",
+            "Track your own clearance times for a year. Your own history is a better planning input than any published average, because it includes the brokers you use, the routes you take and the mistakes you make.",
+            "Where a shipment is time-critical, the cost of an experienced broker is usually smaller than the cost of a week of delay, and the comparison should be made explicitly rather than assumed. Write the comparison down; the decision to pay a broker is easier to defend with two numbers beside it."
+          ],
+          "example": "Last year's twelve shipments cleared in 5, 6, 5, 9, 14, 7, 6, 5, 11, 6, 5 and 8 days, so the plan uses 8 days and the buffer covers 14.",
+          "points": ["Lead time is a range, not a number", "Documentation errors cost demurrage", "Use your own clearance history"],
+          "check": "What was your actual clearance time on each of your last six shipments, and what range does it describe?"
+        },
+        {
+          "title": "Roads, seasons and the transport decision",
+          "minutes": 15,
+          "teach": [
+            "Transport in the rainy season is not the same service as transport in the dry season, and a chain designed for the dry season fails every year in the same month.",
+            "The decision is usually between owning a vehicle, hiring one, and paying a third party per trip. Owning is cheapest at high volume and fixed utilisation; hiring is cheaper at low or unpredictable volume; and a third party transfers the breakdown risk at a price.",
+            "Compute the cost per trip rather than the cost per vehicle. Fuel, maintenance, driver, insurance, tyres and downtime divided by trips actually completed gives a number that can be compared with a haulier's quotation.",
+            "Build in the season explicitly. A route that takes nine hours in the dry season may take two days in the rain, and the plan needs to say so rather than discovering it.",
+            "Keep a second route and a second carrier identified before they are needed. The cheapest insurance against a bridge failure is knowing who to call. Agree the arrangement in the dry season, when both of you have time to discuss it."
+          ],
+          "example": "An owned truck completing 18 trips a month at a total monthly cost of 4,500 runs at 250 a trip, against a haulier quoting 320 for the same route in the dry season and 470 in the rain.",
+          "points": ["Cost per trip, not cost per vehicle", "Plan the season, not the average", "Have a second route identified"],
+          "check": "What does one delivery cost you today, and how does that change in the rainy season?"
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Inventory and the cash it holds",
+      "lessons": [
+        {
+          "title": "Stock is cash you cannot spend",
+          "minutes": 16,
+          "teach": [
+            "Every unit of stock has been paid for and has not yet earned anything. A full warehouse looks like readiness and is in fact a bank account with the money locked inside it.",
+            "The cost of holding stock is larger than the interest on its value. Storage, security, insurance, damage, obsolescence and the simple risk that it does not sell all add to the bill, and together they commonly reach a fifth to a third of the value each year.",
+            "That has a direct consequence for ordering: a discount for volume is only a saving if the extra stock does not cost more to hold than the discount is worth, over the period it takes to sell.",
+            "The test for any purchase is the days of cover it creates. Thirty days is normal for fast-moving goods; ninety days means a third of the year in which a competitor can undercut you while your money is in a container.",
+            "Where stock is old, the honest decision is to release it: discount, return, or write it off. Keeping it costs money every month and postpones a loss that has already happened. Ageing stock is a decision deferred, and the deferral costs money every month it continues."
+          ],
+          "example": "Holding 1,200 cartons of oil worth 14,400 at a 25 per cent annual holding cost is 3,600 a year, or 300 a month, before anything goes unsold.",
+          "points": ["Stock is spent cash", "Holding cost is often a quarter of value a year", "A volume discount must beat the holding cost"],
+          "check": "How many days of cover does your current stock represent, and what is it costing you per month to hold?"
+        },
+        {
+          "title": "Reorder points that reflect reality",
+          "minutes": 16,
+          "teach": [
+            "A reorder point is the stock level at which you order again, set so that the new stock arrives before the old runs out. It is arithmetic, not judgement, once you know two numbers: how much you use each day and how long delivery actually takes.",
+            "Reorder point equals daily usage multiplied by lead time, plus a safety buffer. The buffer exists because both numbers vary: usage rises in a good month, and lead time rises when the port is busy.",
+            "Size the buffer on the worst realistic lead time rather than the average. A buffer sized on the average will run out in half the cycles, which is exactly the half that matters.",
+            "Recalculate at least twice a year, and whenever a supplier or route changes. A reorder point set when you sold twenty a day is actively harmful when you sell forty.",
+            "For items with genuinely unpredictable demand, keep a higher buffer and accept the holding cost as the price of availability. For predictable items, the arithmetic is reliable and the buffer can be small. Where the demand itself is erratic, availability has a price and the price is worth stating openly."
+          ],
+          "example": "Selling 30 cartons a day with a usual 8-day lead time gives a reorder point of 240, plus a buffer of 180 for the 14-day worst case, so ordering begins at 420.",
+          "points": ["Usage times lead time, plus a buffer", "Size the buffer on the worst case", "Recalculate when volumes or suppliers change"],
+          "check": "What is your reorder point for your main product, and which two numbers is it based on?"
+        },
+        {
+          "title": "Holding more can be the right answer",
+          "minutes": 15,
+          "teach": [
+            "Holding more stock is usually described as a failure of discipline. In a chain with variable lead times and seasonal roads, it is frequently the cheaper decision, and treating it as a sin produces stock-outs that cost more.",
+            "The calculation is the cost of holding against the cost of not having. A stock-out costs the margin, the customer's confidence, and sometimes the customer. Against that, an extra month of cover at a quarter of its value per year is small.",
+            "Seasonality makes the case explicitly. Where a road becomes unreliable for three months, buying ahead is not hoarding; it is the only way to keep serving customers through a period in which resupply is not dependable.",
+            "The mistake is applying the same buffer to everything. The right approach is to hold more of what is slow to resupply and high in margin, and less of what is easy to replace locally.",
+            "Say the decision out loud and record the reason, so that a later reader does not reduce the buffer as an obvious inefficiency and cause the stock-out the buffer existed to prevent. Write the reason beside the buffer figure so it survives your departure."
+          ],
+          "example": "A distributor holds 90 days of oil before the rains and 30 days of tinned goods that a local wholesaler always has, spending its holding cost where the risk actually is.",
+          "points": ["A stock-out costs more than the holding cost", "Seasonal cover is a decision, not waste", "Hold more where resupply is slow"],
+          "check": "Which of your products has the highest cost of running out, and is its buffer sized for that?"
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Suppliers and disruption",
+      "lessons": [
+        {
+          "title": "Choosing a supplier on reliability",
+          "minutes": 15,
+          "teach": [
+            "The cheapest supplier is often the most expensive one to deal with. A supplier who is four per cent cheaper and four days slower costs you stock cover, customer goodwill and management attention, none of which appears in the quote.",
+            "Judge suppliers on three things: whether they deliver what was ordered, whether they deliver when they said, and whether they tell you early when they cannot. The third is the most valuable and the rarest.",
+            "Test small before committing. A first order of a modest size reveals the paperwork quality, the communication and the packing, and it costs little to find out.",
+            "Keep a second supplier identified for critical items, even if they are slightly dearer and you rarely use them. The cost of maintaining that relationship is the premium on an occasional small order.",
+            "Record your suppliers' performance as you go. Three late deliveries in a year is a conversation; six is a decision, and it is only visible if somebody wrote them down. Keep the record next to the contact details; both are the relationship."
+          ],
+          "example": "A distributor keeps two oil suppliers, using the second for one order a quarter, and both quote more carefully because neither has the account by default.",
+          "points": ["Judge on delivery, not on quote", "Test small before committing", "Maintain a second source for critical items"],
+          "check": "How many times did each of your main suppliers deliver late last year, and where is that recorded?"
+        },
+        {
+          "title": "Contracts, credit and the terms that matter",
+          "minutes": 15,
+          "teach": [
+            "Most supply disputes are about a term nobody wrote down: who pays for demurrage, what happens when goods arrive damaged, and which date is the delivery date.",
+            "The four terms worth agreeing explicitly are the delivery date and place, the payment terms, who bears the cost of delay, and the inspection and claim procedure. Each is one sentence and each prevents a familiar argument.",
+            "Credit from a supplier is a loan and should be treated as one: it has a value, a duration and a consequence if it is not repaid. Being reliable on payment is worth more than being clever about it, because it buys priority when stock is short.",
+            "Where a supplier offers a discount for early payment, compare it with your cost of funds before accepting. Two per cent for ten days early is a rate in the region of seventy per cent a year, and almost always worth taking.",
+            "Get it in writing, even by message. A written exchange is the difference between a claim and a conversation, and the person you are dealing with will change eventually. A written term survives a change of staff on either side."
+          ],
+          "example": "A purchase agreement records a delivery date, 30-day payment, demurrage shared equally, and claims within 7 days of arrival with photographs.",
+          "points": ["Agree the four terms that cause disputes", "Supplier credit is a loan", "Put it in writing, even by message"],
+          "check": "What are your current payment terms with your two largest suppliers, and are they written anywhere?"
+        },
+        {
+          "title": "Case study: the container on the dock",
+          "minutes": 18,
+          "teach": [
+            "A cooking-oil distributor imports through the Freeport of Monrovia. Clearance normally takes five days; a dock strike has stretched it to twelve, and the container is sitting on the dock in direct heat.",
+            "The insurer's terms allow a heat-damage claim only if the goods are inspected within three days of arrival at the port, and the distributor has not yet been allowed to open the container.",
+            "Three options are on the table. Pay a facilitation fee to expedite clearance, which is illegal and common. Leave the container and hope the oil survives. Or reroute the shipment to another port and truck it back at a cost that would consume the entire margin on this order.",
+            "The distributor's cash position is tight: the goods are already paid for, and a total loss would leave it unable to fund the next order before the rainy season.",
+            "The decision will be judged later by a bank, an insurer and possibly a court, on whatever record exists. What is written down in the next three days is likely to matter more than the option chosen. Photographs, dates, messages and a written note of what you were told are the evidence an insurer will ask for."
+          ],
+          "example": "The order is 1,450 cartons with a margin of about 2,900 dollars; rerouting costs an estimated 3,100, and a total loss would remove 27,000 of stock from the business.",
+          "points": ["Document the delay before choosing an option", "A payment that is illegal is a risk, not a cost", "Decide against the value at risk, not the inconvenience"],
+          "check": "What would you do, and what would you write down first? How would you explain the choice to your insurer?"
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Cost and control",
+      "lessons": [
+        {
+          "title": "Total cost, not purchase price",
+          "minutes": 15,
+          "teach": [
+            "Purchasing decisions are usually made on price, and the costs that follow the purchase are borne by somebody else in the organisation, so nobody compares the two.",
+            "Total cost includes the price, the delivery, the stock held because of the order size, the defects and returns, the administration, and the disruption when something goes wrong. Those belong in the comparison even when they are paid by a different department.",
+            "The most common example is the volume discount. Fifteen per cent off for three months of stock is a gain of fifteen per cent and a cost of holding two extra months, which is often five per cent of value. The comparison is close and must be done rather than assumed.",
+            "Where the cash to buy in bulk must be borrowed, add the interest. A discount funded by expensive credit is frequently a loss.",
+            "Write the total cost down for the three largest purchases you make. The exercise usually changes at least one of them. The exercise is worth repeating whenever a supplier changes their terms or a route changes its cost."
+          ],
+          "example": "A 15 per cent discount on three months of stock saves 4,500 and costs roughly 1,500 in extra holding plus 900 in borrowing, so it is worth taking by a clear margin.",
+          "points": ["The price is one line of the cost", "Volume discounts must beat holding and borrowing", "Compare costs even when different people pay them"],
+          "check": "What is the largest bulk discount you have taken in the last year, and what did the extra stock cost to hold?"
+        },
+        {
+          "title": "Measuring a supply chain",
+          "minutes": 15,
+          "teach": [
+            "Four measures describe most of a supply chain: how long from order to shelf, how many days of stock you hold, how often you cannot fill a customer's order, and what it costs to move a unit.",
+            "Each is simple to collect and each points at a different problem. Long order-to-shelf with low stock suggests clearance or transport. Short order-to-shelf with high stock suggests you are buying too much, too often.",
+            "Stock-out rate is the measure most often missing and the most honest. A business can report healthy stock value while being unable to supply its best-selling item, and only the stock-out count reveals it.",
+            "Review them monthly with the same definition each time. A measure that changes definition is a measure that cannot be compared, which is why a short written definition is worth more than a sophisticated calculation.",
+            "Where one measure improves while another deteriorates, the trade is visible and can be chosen deliberately. That is the whole purpose of measuring a chain. A chain with no measures is managed by anecdote, and anecdotes favour whoever complains loudest."
+          ],
+          "example": "Order-to-shelf 22 days, stock covering 61 days, stock-out rate 4 per cent of order lines, transport 6 dollars a carton: four numbers, reviewed monthly.",
+          "points": ["Four measures, each pointing at a different problem", "Stock-out rate is the honest one", "Keep definitions fixed so comparisons work"],
+          "check": "What is your stock-out rate this month, as a percentage of orders you could not fill fully?"
+        },
+        {
+          "title": "Cross-border trade, briefly",
+          "minutes": 15,
+          "teach": [
+            "Trading with Guinea, Sierra Leone or Côte d'Ivoire adds a set of requirements that domestic trade does not have: customs declarations, rules of origin, differing standards, and payment in a currency that moves.",
+            "The documentation is the constraint rather than the distance. Goods held at a border for a documentation query incur the same cost as goods held at a port, and the fix is the same: correct paperwork prepared before the truck moves.",
+            "Currency exposure is real and often ignored. A sale agreed in one currency and settled in another carries a risk that belongs in the price, and informal arrangements across a border make recovery of a bad debt difficult.",
+            "Choose partners who have done it before. A first cross-border transaction with an unfamiliar counterparty in an unfamiliar system is an expensive education, and paying for experience is usually cheaper.",
+            "Start small, complete the paperwork properly, and treat the first three shipments as a learning cost rather than a profit opportunity. If the first three shipments make money, that is a bonus rather than a plan."
+          ],
+          "example": "A first shipment to Guinea is kept to a value the business can afford to lose, with export documentation prepared by a broker who has completed the route before.",
+          "points": ["Documentation is the constraint, not distance", "Currency risk belongs in the price", "Treat early shipments as learning costs"],
+          "check": "If you sold across a border next month, which documents would you need and who would prepare them?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A supplier quotes 4% cheaper but takes ten days longer. What comparison actually decides this?",
+      "explanation": "Landed cost per saleable unit, including the cost of the extra cover and the delay. A cheaper invoice with a longer lead time can be the dearer option.",
+      "options": [
+        { "text": "Landed cost per unit, including extra stock cover and the delay", "correct": true },
+        { "text": "The quoted price, since freight is the same for both", "correct": false },
+        { "text": "Whichever supplier has been used longest", "correct": false },
+        { "text": "The payment terms alone", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why hold more inventory before the rainy season when holding costs rise?",
+      "explanation": "The cost of a stock-out — lost margin and lost customers — can exceed the holding cost when resupply is unreliable for months. The buffer is sized by the risk, not by a rule.",
+      "options": [
+        { "text": "Because the cost of not being able to supply is higher than the holding cost", "correct": true },
+        { "text": "Because prices always rise during the rains", "correct": false },
+        { "text": "Because stock is cheaper to insure in the wet season", "correct": false },
+        { "text": "Because suppliers give better terms then", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A supplier offers 15% off for ordering three months at once, and you can fund one month. Which factors decide it?",
+      "explanation": "The discount must be compared with the extra holding cost and the cost of the borrowing needed to fund the stock, against the risk that demand falls.",
+      "options": [
+        { "text": "Extra holding cost, borrowing cost and the risk that demand falls", "correct": true },
+        { "text": "The discount percentage alone", "correct": false },
+        { "text": "Whether the supplier is local or foreign", "correct": false },
+        { "text": "The size of your storage room", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why is a reorder point sized on the worst realistic lead time rather than the average?",
+      "explanation": "A buffer sized on the average runs out in roughly half the cycles, and the cycles where it runs out are the ones that cost customers.",
+      "options": [
+        { "text": "Because an average-sized buffer fails in about half the cycles, exactly when it matters", "correct": true },
+        { "text": "Because lead times always increase over time", "correct": false },
+        { "text": "Because averages cannot be calculated reliably", "correct": false },
+        { "text": "Because suppliers prefer larger orders", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the container case, why does writing down the delay matter as much as the option chosen?",
+      "explanation": "The decision will be assessed later by an insurer, a bank or a court on whatever record exists. Evidence created at the time is what makes the choice defensible.",
+      "options": [
+        { "text": "The decision will be judged later on the record created at the time", "correct": true },
+        { "text": "It delays the decision long enough for the strike to end", "correct": false },
+        { "text": "It transfers liability to the port authority automatically", "correct": false },
+        { "text": "It is required by the insurer before any claim is considered", "correct": false }
+      ]
+    }
+  ]
+}

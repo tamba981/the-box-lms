@@ -1,0 +1,327 @@
+{
+  "slug": "research-and-report-writing",
+  "title": "Research & Report Writing",
+  "program": "FCP",
+  "category": "education",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 0,
+  "summary": "Turn a worry into a researchable question, gather the smallest evidence that can answer it, and write a report a busy decision-maker can act on.",
+  "description": "Most organisational reports are accurate and useless. They describe what was counted, in the order it was counted, and leave the reader to work out what it means. This course is about the other kind: a short study, honestly done, written so that the person holding the budget can decide.\n\nYou will work through framing a research question, choosing between records, interviews, surveys, group discussions and observation, sampling so that the people you most need to hear from are not the ones who get left out, and reading numbers with their denominators intact. The writing half of the course covers structure, the executive summary, citing sources without borrowing them, and recommendations that can actually be assigned and costed.\n\nExamples are drawn from Liberian practice: NGO reports to donors, baseline surveys for development projects, policy documents, and the academic writing expected at Liberian universities. The case study concerns a maternal health report built entirely from clinic attendance data, and the district health officer's question that the data could not answer.\n\nNo prior research training is assumed. By the end you will have a method you can apply to a real question in your own organisation within a month.",
+  "tags": ["research methods", "report writing", "executive summary", "evidence", "citation", "analysis"],
+  "outcomes": [
+    "Turn a vague concern into a bounded research question with a decision attached",
+    "Choose the smallest method that can answer the question",
+    "Combine records and interviews so their weaknesses do not overlap",
+    "Describe who your sample leaves out and why it matters",
+    "Read percentages, averages and counts without being misled",
+    "Structure a report so the conclusion arrives early",
+    "Write an executive summary that states the finding and the recommendation",
+    "Cite sources correctly and avoid accidental plagiarism",
+    "Write recommendations that are specific, owned and costed"
+  ],
+  "caseStudy": "An officer is asked to report on a maternal health programme and has only clinic attendance data: visits by month, facility and age band. The report is accurate and shows attendance falling in four of six facilities. The district health officer reads it and says it does not tell him why mothers are not coming. Students must decide what additional research to do, how to integrate it, and how to keep the two kinds of evidence separate in the report.",
+  "modules": [
+    {
+      "title": "Framing the question",
+      "lessons": [
+        {
+          "title": "What research is for in an organisation",
+          "minutes": 16,
+          "teach": [
+            "Research in an organisation is not academic work with a smaller budget. It exists to reduce the uncertainty in a decision, and it is finished when the decision can be taken with fewer assumptions than before.",
+            "That definition sets a boundary. If a question will not change anything the organisation does, it may be interesting, and it is not research the organisation should fund or spend a month completing.",
+            "Most useful organisational research is small. A dozen interviews with people who left a programme, a review of two years of clinic registers, and a comparison with one neighbouring district will settle many questions that a large survey would answer later and less clearly.",
+            "The temptation is to scale up because a small study feels unserious. In practice a small study finished in three weeks changes a decision, while a large one designed over three months arrives after the budget has been committed.",
+            "Research also carries a duty to the people it asks. Someone who gives an hour to an interview is entitled to know what the study is for, and to expect that the findings will not be used against them or their community afterwards.",
+            "So the discipline begins with restraint: a narrow question, the smallest body of evidence that can answer it, a clear account of what remains unknown, and a named decision the work is meant to inform."
+          ],
+          "example": "A health NGO plans a survey of 2,000 households on why mothers miss appointments. A review of the exit register plus eight interviews establishes the same answer in nine days, and the survey is cancelled.",
+          "points": [
+            "Research exists to reduce uncertainty in a decision",
+            "Small and finished beats large and late",
+            "The people you ask are owed an account of the purpose"
+          ],
+          "check": "Name a question your organisation is currently guessing about, and the decision the answer would change."
+        },
+        {
+          "title": "Turning a worry into a research question",
+          "minutes": 17,
+          "teach": [
+            "A worry arrives as a sentence: mothers are not coming to the clinic. That is not yet researchable, because it contains several different questions and no boundary, and the first task is to separate them.",
+            "Is attendance falling, or is it lower than expected, or lower than in other districts? Each is a different question with a different method, and mixing them produces a study that answers none of them properly.",
+            "A usable research question names a population, a time period, a comparison and the decision it serves. Why did attendance at four clinics in Bong County fall between January and June, compared with the same months last year?",
+            "Narrow the population until the study is possible. All mothers in Liberia is not a population you can study. Mothers who delivered at one clinic in the last twelve months and did not return for a follow-up is a group you can find and speak to.",
+            "Write down what you already believe before you start. Stating the assumption makes it testable, and it protects the study from becoming a search for evidence that confirms what the commissioner already suspects.",
+            "Agree with the person who will use the findings what question the study answers, and put it in writing. A question that changes halfway through costs the whole first half of the work."
+          ],
+          "example": "Mothers are not coming becomes attendance at four named Bong County clinics fell between January and June this year against the same months last year, with the finding to be used in the April budget decision.",
+          "points": [
+            "Name the population, the period and the comparison",
+            "Write your assumption down so it can be tested",
+            "Fix the question in writing before collecting anything"
+          ],
+          "check": "Rewrite one current concern in your organisation as a single bounded research question."
+        },
+        {
+          "title": "Deciding what evidence would settle it",
+          "minutes": 17,
+          "teach": [
+            "Before collecting anything, describe what a finding would look like. If the answer is likely to be that mothers stopped coming after the fee was introduced, state what you would expect to see in the data if that were true.",
+            "That expectation is your evidence standard and it usually points at the method. A pattern in the timing of departures points to records. A reason for a decision points to interviews. A prevalence across a district points to a survey.",
+            "Consider the alternatives deliberately. If attendance fell at the same time as a road closed, a harvest, or an outbreak, the plausible explanations multiply, and a study that cannot distinguish them will produce a confident and wrong conclusion.",
+            "Decide in advance what result would make you change your mind, and what result would leave the question open. Most weak reports fail here, presenting every possible outcome as confirmation of the position held at the start.",
+            "Cost the evidence honestly. Interviews take travel and time, records take permission and patience, surveys take enumerators. The method that fits the budget and the deadline is usually the one that gets finished.",
+            "Accept that some questions cannot be settled with the resources available, and say so in the report. Naming limits at the design stage is professional; discovering them at the writing stage looks like an excuse."
+          ],
+          "example": "If the fee caused the fall, attendance should drop sharply in the month the fee started and remain low. If a road closure caused it, attendance should drop in the wet season and recover when the road reopens.",
+          "points": [
+            "State what a finding would look like before you look",
+            "List the alternative explanations and test them",
+            "Name the limits at design stage, not at writing stage"
+          ],
+          "check": "For your question, write the observation that would make you abandon your current explanation."
+        }
+      ]
+    },
+    {
+      "title": "Collecting and reading evidence",
+      "lessons": [
+        {
+          "title": "Documents, interviews and surveys: what each can tell you",
+          "minutes": 18,
+          "teach": [
+            "Records tell you what happened and how often. They are cheap, already collected, and limited to what somebody chose to write down, which is why a register will show that a mother attended but rarely why she stopped.",
+            "Interviews tell you why, in the language of the person concerned. Ten conversations will surface reasons no register contains, and they will not tell you how common those reasons are, because ten people are not a sample.",
+            "Surveys tell you how common something is, at a cost. A well-drawn survey can say that a third of mothers cite transport, and it can only ask the questions somebody thought of in advance, so it rarely produces a surprise.",
+            "Group discussions reveal what is shared and socially acceptable, and they suppress what is individual and embarrassing. A woman may describe cost in a group and describe a husband's refusal only in private, so the two settings give different answers.",
+            "Observation shows what people do rather than what they say they do. Sitting in a clinic for three mornings will tell you more about waiting times than any question about waiting times, and it costs a person and a chair.",
+            "The practical rule is to combine two methods whose weaknesses do not overlap. Records plus interviews, or a survey plus observation, will together answer a question that neither answers on its own."
+          ],
+          "example": "A clinic reports a two-hour wait. The register shows average waiting time is forty minutes; a researcher sitting in the hall for three mornings finds that mothers arrive at dawn and are seen in the order they can afford to pay.",
+          "points": [
+            "Records give frequency, interviews give reasons",
+            "Surveys measure prevalence but cannot surprise you",
+            "Pair methods whose weaknesses do not overlap"
+          ],
+          "check": "Which two methods would you pair to answer your question, and what would each one miss?"
+        },
+        {
+          "title": "Sampling, and who gets left out",
+          "minutes": 18,
+          "teach": [
+            "A sample is only useful if you can say what it represents. Interviewing the mothers who still attend tells you about the ones who stayed, which is precisely the group whose reasons you already understand.",
+            "The people who are hardest to reach are usually the ones the question is about. Women who moved, who delivered at home, who could not pay, or who died, are absent from every clinic record and are frequently the finding.",
+            "Random selection is not a formality. It is the mechanism that stops you choosing people who are easy to reach and pleasant to talk to, and selecting every fifth name on a register is both cheap and defensible.",
+            "Where random selection is impossible, say so and describe who you did speak to. A study of twelve mothers at one clinic is legitimate as long as the report does not present it as representative of the county.",
+            "Watch for the missing middle. A survey conducted by phone reaches those with phones, and in a rural district that excludes the poorest, who are often the intended beneficiaries of the programme being evaluated.",
+            "State the numbers plainly: how many were approached, how many agreed, how many were excluded and why. A refusal rate of forty percent is itself a finding about the programme's reputation in that community."
+          ],
+          "example": "A programme evaluates its own success by surveying current participants and finds 88 percent satisfaction. The 200 people who dropped out during the year are not contacted, and their reasons remain unknown.",
+          "points": [
+            "Ask who your sample leaves out and whether they are the finding",
+            "Random selection prevents choosing the convenient",
+            "Report refusals and exclusions as findings"
+          ],
+          "check": "Who is missing from the group you would naturally ask, and what would it cost to reach them?"
+        },
+        {
+          "title": "Reading numbers honestly",
+          "minutes": 18,
+          "teach": [
+            "A count without a denominator misleads. Forty mothers attending a clinic means one thing in a district of two hundred and another in a district of two thousand, and the raw number cannot distinguish between them.",
+            "Percentages hide their base. A fall from three to two is a thirty-three percent drop and a difference of one person, and a report leading with the percentage invites a response out of proportion to the event.",
+            "Averages conceal the distribution. An average waiting time of forty minutes may describe a clinic where everyone waits forty minutes or one where most wait ten and a few wait three hours, and the two need different fixes.",
+            "Compare like with like. Comparing this quarter with the same quarter last year removes seasonality, and comparing a clinic with a similar clinic removes some of the effect of size and location. A comparison with last month is usually noise.",
+            "Check the data before interpreting it. A sudden doubling of cases often means a new register, a new officer or a changed definition rather than a change in the world, and one phone call will tell you which.",
+            "Present the number with its comparison and its source in the same sentence. That single habit prevents most of the errors above and makes the report much harder to misquote in a meeting."
+          ],
+          "example": "A report states cases rose 300 percent. The register shows eleven cases against four, both under twenty, at a facility that changed its case definition in March. The trend line is an artefact of record-keeping.",
+          "points": [
+            "Every count needs a denominator",
+            "Ask what the base of a percentage is",
+            "Compare the same period and a similar place"
+          ],
+          "check": "Find a percentage in your last report and write down the base it is a percentage of."
+        }
+      ]
+    },
+    {
+      "title": "Writing the report",
+      "lessons": [
+        {
+          "title": "A structure a busy reader can use",
+          "minutes": 18,
+          "teach": [
+            "A report is read in layers. The reader decides from the title whether to read the summary, from the summary whether to read the findings, and only then whether the detail deserves an hour, so the structure should support that sequence.",
+            "Put the conclusion early. A report that builds to its finding on page twenty is written for the author's satisfaction rather than the reader's need, and most readers will never reach the part that matters.",
+            "The standard structure works because it answers the reader's questions in order: what is this about, what did you find, how do you know, what should be done, and what could not be settled. Each section is short enough to read in one sitting.",
+            "Separate findings from interpretation, visually and in the writing. A finding is what the evidence shows; an interpretation is what you think it means. Mixing them lets a reader challenge the conclusion and, with it, the evidence.",
+            "Use headings that say something. Attendance fell after the fee was introduced is a heading; Findings is a label. A reader skimming the headings should absorb the argument without reading a single paragraph.",
+            "Keep the length proportional to the decision. A two-page note that is read beats a forty-page report that is filed, and the appendix exists so the detail can be available without being compulsory."
+          ],
+          "example": "A donor report is restructured from background, methodology, activities, results to question, finding, evidence, recommendation. The country director reads it in eleven minutes and quotes the third page in a meeting.",
+          "points": [
+            "Put the conclusion early, not on page twenty",
+            "Keep findings and interpretation visibly separate",
+            "Write headings that carry the argument"
+          ],
+          "check": "List the headings of your last report and ask what argument a reader would absorb from them alone."
+        },
+        {
+          "title": "The executive summary, written last",
+          "minutes": 17,
+          "teach": [
+            "The executive summary is the most-read and last-written part of any report. It is written after the analysis because only then does the author know which findings were real and which were artefacts of a small sample.",
+            "It is not an introduction. An introduction explains what the report will cover; a summary states what the report found and what should happen, in a form a reader can act on without turning the page.",
+            "Four sentences is a good target: the question, the finding, the evidence in one clause, and the recommendation. If it needs more, the report probably has more than one main finding and the rest should be subordinated.",
+            "Avoid the phrase the report recommends further study unless that is genuinely the advice. It usually signals that the study was too small to answer its own question, which is a finding worth stating plainly instead.",
+            "Do not introduce anything in the summary that is not in the body. A reader who checks a claim and cannot find it loses trust in everything else, and a claim without evidence is an opinion wearing a summary's clothes.",
+            "Test it on somebody who was not involved. If they cannot say what the report found after reading one paragraph, the paragraph is describing the work rather than reporting the result."
+          ],
+          "example": "The summary reads: we asked why attendance fell at four Bong clinics. It fell 31 percent between January and June, beginning in the month the fee was introduced. Mothers cite the fee and transport. We recommend suspending the fee for under-fives from August.",
+          "points": [
+            "Summary last, first impression",
+            "Question, finding, evidence, recommendation",
+            "Never introduce a claim the body cannot support"
+          ],
+          "check": "Write a four-sentence summary of your last report and see whether anybody could act on it."
+        },
+        {
+          "title": "Case: the maternal health report that explained nothing",
+          "minutes": 20,
+          "teach": [
+            "An officer is asked to report on a maternal health programme. The data available is clinic attendance: visits by month, by facility and by age band. The report is written, thorough and accurate, and it shows attendance falling in four of six facilities.",
+            "The district health officer reads it and says the report does not tell him why mothers are not coming. He is right, and the officer's first instinct, to defend the data, would miss the point entirely: the data answers a question nobody asked.",
+            "Attendance data records who came. The question concerns who did not, and why. Those are different populations, and the second is invisible in the records precisely because its members never appear in them.",
+            "The additional research needed is small and qualitative: interviews with mothers who delivered at a facility and did not return, a few with mothers who delivered at home, and one conversation with the midwives about what they hear at the door.",
+            "Integrating it means separating two findings rather than merging them. Attendance fell by a stated amount, established from records. Mothers cite transport cost and staff attitude, established from interviews and not generalisable to the county. Both belong in the report, labelled as what they are.",
+            "The structure follows: what the records show, what the interviews suggest, what this means for the decision, and what remains unknown. A report that keeps those apart is more credible than one that blends them into a single confident conclusion."
+          ],
+          "example": "An M&E officer reports that clinic attendance fell in four of six facilities. The district health officer asks why mothers are not coming, and the attendance data cannot answer, because it records only the mothers who came.",
+          "points": [
+            "Attendance data cannot explain absence",
+            "Keep record-based and interview-based findings separate",
+            "Label what is generalisable and what is not"
+          ],
+          "check": "For this case, name the two additional sources you would use and the sentence in the report each would support."
+        }
+      ]
+    },
+    {
+      "title": "Making it credible",
+      "lessons": [
+        {
+          "title": "Using sources without stealing them",
+          "minutes": 18,
+          "teach": [
+            "A report is judged partly by the company it keeps. Citing a ministry report, a peer-reviewed study and a district register shows the reader where each claim came from and lets them check the ones that matter most.",
+            "Cite when you use a number, a definition, a method or a judgement that is not yours. Common knowledge in your field needs no citation; every figure does, however well known, because the reader cannot verify it otherwise.",
+            "Plagiarism is not only copying whole sentences. Presenting somebody else's structure, argument or data as your own findings is plagiarism even when the words have changed, and it is more likely to be noticed than copied text.",
+            "Keep the source beside the note from the moment you take it. Reconstructing citations at the end of a long report is where errors and accidental plagiarism enter, because the note no longer remembers which document said what.",
+            "Describe the source in the text, not only in the reference list. Writing according to the 2023 Ministry of Health annual report tells the reader more, at the point of the claim, than a bracketed number they must chase to the back.",
+            "Sloppy attribution damages credibility with donors and government far more than a weak finding does. A wrong number can be corrected; a reputation for taking other people's work is not repaired by an erratum."
+          ],
+          "example": "A proposal writer reuses a competitor's needs statement with three words changed. The donor's reviewer recognises the structure and the paragraph, and the application is refused without discussion of its merits.",
+          "points": [
+            "Every figure needs a source",
+            "Reusing structure or argument is also plagiarism",
+            "Record the source when you take the note, not later"
+          ],
+          "check": "Open your last report and check whether every figure in it can be traced to a named source."
+        },
+        {
+          "title": "Recommendations that follow from the findings",
+          "minutes": 17,
+          "teach": [
+            "A recommendation is the part of the report that asks somebody to spend money, change a process or accept a risk. It should be traceable to a finding, and the reader should be able to see the join without being told where to look.",
+            "One recommendation per finding, and no recommendation without one. A report whose recommendations outnumber its findings is a wish list, and the reader will select the cheapest and quietly ignore the rest.",
+            "Make each recommendation specific enough to be scheduled. Train staff is an aspiration; add a second triage desk at the Bong clinic on weekday mornings from March is a recommendation somebody can cost and refuse.",
+            "Assign each one to a role rather than a name where possible, and state the cost and the deadline. Recommendations without an owner and a date are not decisions, they are suggestions that will be minuted and forgotten.",
+            "Separate what should happen from what could happen if more money were available. Mixing the two lets a reader dismiss the whole list as unaffordable, and it obscures the part that could be done within the current budget.",
+            "Say what you would do first. A reader facing six recommendations will act on none of them by default, and naming a sequence is the difference between a report and a decision aid."
+          ],
+          "example": "A report finds that late fee payment drives dropout and recommends improving awareness, strengthening community engagement, enhancing monitoring, and reviewing policy. None of the four can be costed, scheduled or refused.",
+          "points": [
+            "Traceability from finding to recommendation",
+            "Specific enough to schedule and cost",
+            "Name the sequence and the first step"
+          ],
+          "check": "Take one recommendation you have written and add an owner, a cost and a date to it."
+        },
+        {
+          "title": "Reviewing your own draft",
+          "minutes": 16,
+          "teach": [
+            "Leave the draft for a day if the deadline allows. The text you wrote contains your assumptions rather than your sentences, and distance is the cheapest editing tool available to anyone who writes as part of their job.",
+            "Read it once for the argument only, ignoring the prose. Can you follow the path from question to finding to recommendation without detours, and is there any section that exists because it was interesting rather than necessary?",
+            "Read it again for the reader who disagrees. Which claim would they attack first, and is the evidence for it in the report rather than in your head? That question finds the weak joints faster than any grammar check.",
+            "Cut the first paragraph of most sections. Writers warm up before they say the thing, and the warm-up is usually the least useful part of the section, so deleting it makes the report faster without losing content.",
+            "Check every number against its source once, at the end. Transposed digits and copy-paste errors are the most common defect in organisational reports and the most damaging, because one wrong figure discredits all the others.",
+            "Ask one person outside the study to read it and tell you what they think the main point is. If their answer differs from yours, the report says what you meant rather than what you wrote."
+          ],
+          "example": "A writer cuts 1,400 words from a draft by deleting the opening paragraph of each section. A colleague who had not seen the study then reads the report and states the main finding correctly.",
+          "points": [
+            "Read for argument first, prose second",
+            "Delete the warm-up paragraph",
+            "Recruit one reader outside the study"
+          ],
+          "check": "Cut the first paragraph from two sections of your draft and see whether anything is lost."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Why is the executive summary written last when it appears first in the report?",
+      "explanation": "The summary must state what was actually found, and that is only known once the analysis and the drafting are complete. Written first, it becomes an introduction describing the intended work rather than the result.",
+      "options": [
+        { "text": "Because only after the analysis is it known which findings held up and which did not", "correct": true },
+        { "text": "Because it is the least important section and can be left until the end", "correct": false },
+        { "text": "Because the reader reads it last, after the appendix", "correct": false },
+        { "text": "Because donors require it to be dated after the body of the report", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Your data shows a 40 percent drop in clinic attendance and the draft report concludes that the programme is failing. What is wrong with that conclusion?",
+      "explanation": "Attendance measures who came, not why anyone stopped, and a fall can arise from a changed register, a road, a harvest or a fee. The data supports the size and timing of the fall and cannot, by itself, support a judgement about programme performance.",
+      "options": [
+        { "text": "Attendance data establishes the size of the fall but not its cause, so failure is not something it can show", "correct": true },
+        { "text": "The percentage should have been calculated on a monthly basis instead of a quarterly one", "correct": false },
+        { "text": "Forty percent is too small a change to comment on at all", "correct": false },
+        { "text": "The report should have surveyed the mothers who continued attending", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A record shows 40 mothers attended a clinic this month. What must accompany the figure before it can be interpreted?",
+      "explanation": "A count is only meaningful against a denominator and a comparison. Forty attendances in a catchment of 200 and in one of 2,000 support opposite conclusions about coverage.",
+      "options": [
+        { "text": "The denominator it belongs to, and a comparison with the same period and a similar facility", "correct": true },
+        { "text": "The name of the officer who compiled the register", "correct": false },
+        { "text": "A percentage calculated against last month's figure", "correct": false },
+        { "text": "The average age of the mothers attending", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which of these is plagiarism, even though the words are different?",
+      "explanation": "Attribution covers structure, argument and data, not only sentences. Reusing another organisation's needs statement as your own analysis takes their work without credit, however much the wording has changed.",
+      "options": [
+        { "text": "Reusing another organisation's needs statement as your own analysis with three words changed", "correct": true },
+        { "text": "Quoting a ministry report and naming it in the sentence", "correct": false },
+        { "text": "Summarising a published study and citing it in the reference list", "correct": false },
+        { "text": "Using a definition of poverty published by the national statistics office and naming it", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A report contains six recommendations and no owner, cost or date against any of them. What is the likely outcome?",
+      "explanation": "Recommendations that cannot be assigned, costed or scheduled are not decisions. A reader facing an unattributed list will take the cheapest item and let the rest lapse, which is why each one needs an owner, a cost and a date.",
+      "options": [
+        { "text": "The reader will act on the cheapest item and the rest will be minuted and forgotten", "correct": true },
+        { "text": "The donor will fund all six because the report was thorough", "correct": false },
+        { "text": "The recommendations will be stronger because the reader is not constrained", "correct": false },
+        { "text": "The report will be rejected for having too few recommendations", "correct": false }
+      ]
+    }
+  ]
+}

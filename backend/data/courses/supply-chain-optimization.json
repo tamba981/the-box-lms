@@ -1,0 +1,326 @@
+{
+  "slug": "supply-chain-optimization",
+  "title": "Supply Chain Optimization",
+  "program": "CPP",
+  "category": "business-management",
+  "level": "intermediate",
+  "credential": "certificate",
+  "priceCents": 3000,
+  "certificateFeeCents": 0,
+  "summary": "See total landed cost rather than purchase price, find where the time and money leak, and redesign a chain that survives port delays and currency moves.",
+  "description": "Requests to optimise the supply chain usually arrive with a number attached: landed cost is up forty percent in two years. The instinct is to negotiate harder with suppliers, which is the one lever that is already exhausted and the least likely to explain the increase.\n\nThis course is about the analysis that precedes the fix. It covers total landed cost as a whole, mapping the chain from origin to shelf to find where time is actually lost, and understanding that variability, not average cost, is what forces an organisation to hold inventory it cannot afford.\n\nIt then works through design decisions: where to hold stock, how to segment suppliers and treat them differently, when dual sourcing is worth the cost and when it is expensive insurance, and how to forecast without pretending to certainty.\n\nLiberian conditions are central: an import-dependent economy, port and customs processes that dominate lead times, cross-border trade with informal distribution networks, currency volatility on dollar-denominated purchases, and the road season that changes a two-day journey into a week.\n\nThe case study concerns a distributor whose total landed cost has risen forty percent in two years, with freight, duties and delays all up. The chief executive asks for supply chain optimization. Students must decide what to analyse first and what the analysis is likely to reveal.",
+  "tags": ["supply chain", "logistics", "landed cost", "inventory", "forecasting", "procurement"],
+  "outcomes": [
+    "Build a total landed cost model rather than comparing purchase prices",
+    "Map a chain to identify where time and cost actually accumulate",
+    "Explain how variability drives inventory requirements",
+    "Choose where to hold stock and why",
+    "Segment suppliers and treat them differently by criticality",
+    "Decide when dual sourcing is justified",
+    "Forecast honestly and set inventory policy by segment",
+    "Design a chain that remains workable under disruption"
+  ],
+  "caseStudy": "A distributor's total landed cost has increased forty percent in two years. Freight is up, duties are up and delays are up. The chief executive asks for supply chain optimization. Students must decide what to analyse first, what the analysis is likely to reveal, and what the first intervention should be.",
+  "modules": [
+    {
+      "title": "Seeing the whole chain",
+      "lessons": [
+        {
+          "title": "Total landed cost, not purchase price",
+          "minutes": 20,
+          "teach": [
+            "Purchase price is the smallest part of what a product costs to acquire and the only part that most organisations measure. Total landed cost adds freight, insurance, duties, clearing, port charges, inland transport, financing and the cost of the delays along the way.",
+            "The composition matters more than the total. Two suppliers quoting the same price can differ by a third once freight, terms and reliability are included, and the cheaper quote is frequently the more expensive purchase.",
+            "Build the model in one line per cost with a unit basis. Cost per container, per tonne or per unit delivered lets you compare suppliers, routes and modes, and it exposes which element is actually moving when the total rises.",
+            "Include the cost of capital tied up in transit and in stock. A route that takes six weeks instead of three is financing three extra weeks of inventory, and that cost is real even though no invoice carries it.",
+            "Add the cost of quality failures and delays: rework, penalties, lost sales and expediting. These are usually recorded somewhere other than procurement, which is why the true landed cost of an unreliable supplier is invisible to the person choosing them.",
+            "Review the model whenever a rate or a route changes. The ranking of suppliers moves with the system rather than with their prices, and a decision made on last year's freight rates can be reversed by this year's."
+          ],
+          "example": "Two suppliers quote 12 dollars per unit. One ships in three weeks with clearing included; the other takes seven weeks and requires a broker. Landed cost is 15.40 against 18.10, and the cheaper quote is not the cheaper product.",
+          "points": [
+            "Purchase price is the smallest component",
+            "Cost the capital tied up in transit",
+            "Include quality failures and expediting"
+          ],
+          "check": "Calculate the landed cost of one product you buy, line by line, including financing."
+        },
+        {
+          "title": "Mapping the chain and finding where time is lost",
+          "minutes": 19,
+          "teach": [
+            "Map the chain as it actually operates, from the supplier's dispatch to the customer's shelf, with the elapsed time at each step and the time spent waiting between steps. The waiting is usually the larger number.",
+            "Most chains are dominated by a few stages. Clearing, inland transport in the rainy season, or a single approval that takes a week account for most of the total lead time, and improvement effort spent anywhere else changes very little.",
+            "Record the variance at each step as well as the average. A clearing process that takes four days on average and fourteen days occasionally is a different problem from one that always takes five, and it requires a different response.",
+            "Include the information flow. Orders, approvals and payment authorisations often take longer than the physical movement, and a chain that transports in five days and invoices in fifteen is really a fifteen-day chain.",
+            "Walk the chain rather than reading about it. A day at the port, the warehouse or the border will reveal two or three constraints that no process document mentions, usually involving a form, a fee or a person who is not there on Fridays.",
+            "Draw the map with the people who operate it and keep it visible. The map is the shared object that makes a cross-functional conversation possible, and it is the single most useful artefact in any supply chain review."
+          ],
+          "example": "A distributor's chain is mapped end to end. Transport takes four days and clearing takes eleven, of which six are spent waiting for a document that could be prepared in advance.",
+          "points": [
+            "Waiting usually exceeds moving",
+            "One or two stages dominate the lead time",
+            "Record variance, not only the average"
+          ],
+          "check": "Map your chain with elapsed time and waiting time at each step, and find the largest wait."
+        },
+        {
+          "title": "Variability is what costs you money",
+          "minutes": 20,
+          "teach": [
+            "Average lead time does not determine how much stock you must hold. Variability does. A supplier who always delivers in ten days requires less buffer than one who averages ten and sometimes takes twenty-five.",
+            "The buffer exists to cover the difference between the worst realistic case and the expected case, multiplied by the demand during that period. Reducing variability is therefore a direct reduction in working capital.",
+            "Demand variability compounds the problem. Erratic ordering, large batch orders and promotions all create demand swings that the chain must then absorb, and much of the variability a supplier is blamed for originates upstream.",
+            "The practical response is to attack variability before attacking cost. A supplier development conversation, a smaller and more frequent order pattern, or a fixed ordering day often reduces inventory more than any negotiation on price.",
+            "Measure it explicitly. Record actual lead time for every order over six months, then calculate the average and the range, and the size of the problem becomes visible to people who were previously arguing from impressions.",
+            "Be careful about averaging two different things. Averages that combine two suppliers, two routes or two seasons describe nothing that exists, and the resulting inventory policy will be wrong for both."
+          ],
+          "example": "A supplier's average lead time is 18 days with a range from 12 to 34. Rebuilding the reorder point on the average leaves the distributor out of stock in one month of every three.",
+          "points": [
+            "Variability, not average, sets the buffer",
+            "Attack variability before cost",
+            "Never average across different routes or seasons"
+          ],
+          "check": "Find the range of lead times for your most important supplier over the last six orders."
+        }
+      ]
+    },
+    {
+      "title": "Design and sourcing",
+      "lessons": [
+        {
+          "title": "Where to hold stock",
+          "minutes": 19,
+          "teach": [
+            "Inventory can be held at the port, in a central warehouse, in regional depots or at the point of sale, and each position trades transport cost against responsiveness and working capital.",
+            "Centralising reduces total stock because demand variability pools. Ten locations each holding a buffer add up to far more than one location holding a buffer for the combined demand, which is why consolidation is the first lever in most networks.",
+            "Decentralising reduces delivery time and transport cost to the customer. Where the customer will not wait, stock must be near them, and the extra inventory is the price of responsiveness rather than a failure of management.",
+            "Segment by product rather than choosing one policy for the whole range. Fast-moving, predictable items can be held locally, while slow, expensive and unpredictable items belong centrally where they can serve every location.",
+            "Consider the total cost including handling and shrinkage. Every additional stocking point adds a set of controls, a person and a loss rate, and those costs are frequently omitted when a new depot is proposed.",
+            "Review the design when the cost of transport or the pattern of demand changes materially. A network built when fuel was cheap and demand was concentrated can be the most expensive option available under current conditions."
+          ],
+          "example": "A distributor with nine depots consolidates three slow-moving product lines into a central warehouse and holds only fast movers locally. Total inventory falls 22 percent with no measurable fall in service.",
+          "points": [
+            "Pooling reduces total stock",
+            "Proximity costs inventory, and is sometimes worth it",
+            "Every stocking point adds controls and shrinkage"
+          ],
+          "check": "List your stocking points and the total inventory each holds against the demand it serves."
+        },
+        {
+          "title": "Supplier segmentation and relationships",
+          "minutes": 19,
+          "teach": [
+            "Treating every supplier with the same process is the most common procurement error. A supplier of a critical, single-source component and a supplier of stationery require different relationships, contracts and attention.",
+            "Segment by value and by risk of supply failure. The high-value, high-risk quadrant needs partnership, joint planning and visibility of their capacity; the low-value, low-risk quadrant needs a process that costs almost nothing to run.",
+            "Partnership is not friendship. What distinguishes it is information sharing, forecast visibility, agreed service levels and a conversation about capacity before an order is placed rather than after it is late.",
+            "For critical suppliers, understand their constraints. A supplier who is short of working capital before a large order, or who depends on one machine, is a supply risk that no contract term removes and that advance knowledge can mitigate.",
+            "Pay suppliers on time. Late payment is the most common cause of a supplier deprioritising an order, and it is entirely within the buyer's control, which makes it the cheapest reliability improvement available.",
+            "Review the segmentation annually. A supplier that was strategic becomes commodity once an alternative is qualified, and continuing to pay a premium for a relationship that no longer carries risk is a cost with no return."
+          ],
+          "example": "A distributor negotiates hard on price with its only supplier of a critical imported part. The supplier deprioritises its orders during a shortage, and the saving is consumed twice over in lost sales.",
+          "points": [
+            "Segment by value and supply risk",
+            "Partnership means shared information and capacity visibility",
+            "Paying on time is the cheapest reliability lever"
+          ],
+          "check": "Place your five largest suppliers on a value and risk grid and note who receives the most attention."
+        },
+        {
+          "title": "Single sourcing, dual sourcing and resilience",
+          "minutes": 19,
+          "teach": [
+            "Single sourcing concentrates volume and simplifies management, which buys price and attention. It also creates a dependency that becomes catastrophic on the day the supplier fails, strikes, or is hit by a currency event.",
+            "Dual sourcing costs money in lost volume discounts, duplicated qualification and smaller order quantities. It is insurance, and like any insurance it should be bought deliberately for specific exposures rather than universally.",
+            "Buy the insurance where the consequence of failure is severe and the recovery time is long. A critical component with a twelve-week lead time justifies a second qualified source; a commodity available from four traders locally does not.",
+            "A qualified alternative is different from a list of alternatives. Qualification means samples tested, terms agreed and at least one order placed, and a supplier who has never supplied you is an unknown quantity under pressure.",
+            "Partial dual sourcing is often the practical answer: eighty percent with the primary supplier for the volume price and twenty percent with the secondary to keep the relationship live and the capability proven.",
+            "Revisit the decision after each disruption. A supply failure that was survivable because of a second source justifies the premium in a way that no business case written in advance could have demonstrated."
+          ],
+          "example": "After a two-month stock-out on a single-sourced component, a distributor qualifies a second supplier and allocates 20 percent of volume. The premium is 4 percent and the exposure is removed.",
+          "points": [
+            "Single sourcing buys price and creates dependency",
+            "Insure only where failure is severe and recovery slow",
+            "A qualified alternative must have supplied you"
+          ],
+          "check": "Name the component whose supply failure would stop your operations, and whether a second source is qualified."
+        }
+      ]
+    },
+    {
+      "title": "Forecasting and inventory",
+      "lessons": [
+        {
+          "title": "Forecasting honestly",
+          "minutes": 19,
+          "teach": [
+            "A forecast is a guess with a stated range, and the range is more useful than the point estimate. A chain designed for a single number will be wrong in both directions and cannot distinguish between the two.",
+            "Simple methods work well for most organisations. A moving average with a seasonal adjustment, applied consistently, usually beats an elaborate model built on two years of unreliable records.",
+            "Separate the forecast from the plan. The forecast is what you expect demand to be; the plan is what you decide to do given the forecast and the constraints. Mixing them produces a number that is neither and cannot be improved.",
+            "Measure forecast error and report it. An organisation that knows its error is plus or minus thirty percent sets a buffer accordingly, while one that believes its forecast is accurate sets a buffer based on optimism.",
+            "Involve the people closest to demand. Sales staff know that a customer is about to change an order pattern, and that knowledge is not in the historical data for months. A short monthly conversation captures it.",
+            "Beware of forecasting as a political exercise. Where a forecast becomes a commitment used to assess the person who produced it, forecasts become optimistic and the chain absorbs the difference in stock or in stock-outs."
+          ],
+          "example": "A distributor's forecast error is measured at plus or minus 35 percent for the first time. Buffers are rebuilt around that range rather than around the point forecast, and stock-outs fall while total inventory is unchanged.",
+          "points": [
+            "A forecast is a range, not a number",
+            "Simple and consistent beats elaborate and abandoned",
+            "Measure and publish forecast error"
+          ],
+          "check": "Compare last year's forecast with actual demand and calculate the average error."
+        },
+        {
+          "title": "Inventory policy by segment",
+          "minutes": 20,
+          "teach": [
+            "One inventory policy across a whole product range guarantees that some items are overstocked and others are empty. Policy has to differ by how much each item matters and how predictable it is.",
+            "Segment by value and by movement. High-value, fast-moving items justify tight control and frequent review, while low-value consumables can be managed with simple periodic ordering and generous quantities.",
+            "Set the reorder point from the worst realistic lead time, not the average, and from the demand during that lead time. This is the single most common error in small inventory systems and the single largest cause of stock-outs.",
+            "Decide the service level explicitly per category. A hundred percent availability on every item is unaffordable and unnecessary, while ninety-five percent on the items customers expect and eighty percent on slow movers may be entirely rational.",
+            "Review the slow movers and act. Stock that has not moved in a year is a decision being deferred at a monthly cost, and the choice is to discount, return or write off rather than to keep it and hope.",
+            "Count what matters, often. Cycle counting a small number of high-value items weekly detects errors early and is far more effective than an annual count of everything, which is a ritual followed by an adjustment."
+          ],
+          "example": "A distributor holds the same six weeks of cover across 400 products. Segmenting the range and cutting cover to three weeks on the top 40 items releases working capital while availability on those items improves.",
+          "points": [
+            "Set reorder points from the worst lead time",
+            "Choose service levels per category deliberately",
+            "Act on slow movers rather than storing them"
+          ],
+          "check": "Check whether your reorder points use average or worst-case lead time."
+        },
+        {
+          "title": "Case: landed cost up forty percent and a request for optimization",
+          "minutes": 23,
+          "teach": [
+            "A distributor's total landed cost has risen forty percent in two years. Freight is up, duties are up and delays are up. The chief executive asks for supply chain optimization, which usually means negotiating with suppliers.",
+            "The first step is decomposition, not negotiation. How much of the forty percent is freight, how much is duty and clearing, how much is currency, and how much is the cost of the delays themselves? The answer determines everything that follows.",
+            "Freight and duty movements may be largely outside the organisation's control, while the cost of delay and the inventory carried to cover it are almost entirely within it. A forty percent increase with thirty points of currency is a different problem from one with thirty points of delay.",
+            "The delay component is where the leverage sits. Every extra week of lead time finances a week of inventory and increases the buffer needed for variability, so shortening clearing or consolidating shipments addresses two cost lines at once.",
+            "Then the design questions: whether the product range should be segmented, whether slow movers should be stocked at all, and whether the ordering pattern creates variability that is then paid for in freight and inventory.",
+            "The answer to the chief executive is therefore not a negotiation mandate but a ranked set of causes with the controllable portion identified, and a first intervention that is measurable within a quarter."
+          ],
+          "example": "A distributor's landed cost rises 40 percent in two years. Decomposition shows 14 points of currency, 9 of freight, 7 of duty and 10 attributable to longer lead times and the inventory carried to cover them.",
+          "points": [
+            "Decompose the increase before negotiating anything",
+            "Separate uncontrollable cost from controllable cost",
+            "Delay costs appear twice: inventory and variability buffer"
+          ],
+          "check": "For this case, list the four cost components you would quantify first and where you would get each figure."
+        }
+      ]
+    },
+    {
+      "title": "Resilience and improvement",
+      "lessons": [
+        {
+          "title": "Risk, disruption and contingency",
+          "minutes": 19,
+          "teach": [
+            "A supply chain risk is anything that stops goods moving: a port closure, a currency restriction, a road that floods, a supplier that fails, a customs process that changes without notice.",
+            "Rank by time to recover rather than by likelihood. A disruption you can work around in a week is a nuisance, while one that takes three months to replace is an existential exposure, and the second deserves contingency planning regardless of its probability.",
+            "Contingency is specific: a qualified alternative supplier, a stock buffer in a defined category, a route that has been tested, or a financing line that covers an unexpected duty payment. A general statement of resilience is not a contingency.",
+            "Test the plan before it is needed. Placing one order through the alternative route, or running a month's demand through the secondary supplier, converts an assumption into evidence and reveals the cost of the fallback.",
+            "Watch the single points of failure that are not products: one customs broker, one clearing agent, one driver who knows the route, one bank that handles the foreign payment. These are the failures that stop everything at once.",
+            "Review the risk list quarterly with the people who operate the chain. Their knowledge of what nearly went wrong last month is more current than any risk register maintained centrally, and it costs one meeting."
+          ],
+          "example": "A distributor identifies that all foreign payments go through one bank branch. Opening a second facility takes two months and removes a single point of failure that no product-level analysis would have found.",
+          "points": [
+            "Rank disruption by recovery time",
+            "Contingency must be specific and tested",
+            "Watch non-product single points of failure"
+          ],
+          "check": "Name the one failure that would stop every shipment you make, and whether it has a fallback."
+        },
+        {
+          "title": "Measuring the chain",
+          "minutes": 18,
+          "teach": [
+            "Five measures describe most chains: total landed cost per unit, order cycle time, forecast error, stock availability and the proportion of inventory that has not moved in ninety days.",
+            "Measure at the level where action happens. A company-wide availability figure hides that one product line is at seventy percent, and the aggregate looks acceptable because the fast movers are fine.",
+            "Use consistent definitions and keep them stable. Changing the definition of on-time delivery so that a late order counts as on time makes the measure improve and the chain worse, and the change is usually made with good intentions.",
+            "Report leading and lagging measures together. Stock availability is lagging, while supplier lead-time variance and the number of orders expedited are leading, and the leading measures give you time to act.",
+            "Make the measures visible to the people who influence them, not only to management. A warehouse team that can see availability by item behaves differently from one that receives a monthly summary of a figure it cannot affect.",
+            "Review the set annually. Measures accumulate because nobody removes them, and a scorecard of twenty numbers that nobody reads has the same effect as no measurement at all."
+          ],
+          "example": "A distributor replaces a monthly report of eight chain measures with four, segmented by product line, posted weekly where the warehouse team can see them.",
+          "points": [
+            "Five measures describe most chains",
+            "Segment before averaging",
+            "Keep definitions stable or the measure lies"
+          ],
+          "check": "Name the one measure that would tell you earliest that your chain is deteriorating."
+        },
+        {
+          "title": "Improvement that survives the next crisis",
+          "minutes": 18,
+          "teach": [
+            "Most supply chain improvements are undone within a year, because they were a project rather than a change in how the work is done. The new process was implemented and the old habit returned when pressure arrived.",
+            "Embed the improvement in a routine: a fixed ordering day, a weekly review with a standing agenda, a reorder point recorded in the system rather than in somebody's judgement. Routines survive; initiatives do not.",
+            "Change one thing at a time and measure before and after. Organisations that redesign the network, renegotiate suppliers and change the ordering system in the same quarter cannot tell which of the three helped, and cannot defend any of them when costs rise.",
+            "Give the improvement an owner outside the project. If the person who designed the new process returns to their old role and nobody else owns it, the process decays at the speed of the first busy month.",
+            "Expect the pressure to revert. When a stock-out occurs under the new policy, the response will be to increase all buffers, which restores the old cost without restoring the old protection, and the review should anticipate this rather than resist it.",
+            "Record what was tried and what happened. A short log of interventions with the measured effect is the only way an organisation learns about its own chain, and it is what makes the second improvement faster than the first."
+          ],
+          "example": "A distributor fixes its ordering day and records reorder points in the system. Twelve months later, through a currency shock and a port delay, the policy holds because it no longer depends on anyone's memory.",
+          "points": [
+            "Routines survive, initiatives do not",
+            "Change one thing and measure it",
+            "Expect reversion after the first stock-out"
+          ],
+          "check": "Name one improvement in your chain that has already reverted, and why it did not stick."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A supplier quotes a lower price but takes four weeks longer. What comparison is correct?",
+      "explanation": "The comparison is total landed cost including freight, duties, clearing, financing of the extra time in transit and the stock needed to cover the longer lead time. Purchase price alone reverses the ranking.",
+      "options": [
+        { "text": "Total landed cost including financing of the extra transit time and the additional buffer stock required", "correct": true },
+        { "text": "Purchase price plus freight, which is the standard definition of landed cost", "correct": false },
+        { "text": "Purchase price alone, because lead time is a service issue rather than a cost issue", "correct": false },
+        { "text": "Purchase price discounted at the company's cost of capital for the extra four weeks", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why does variability matter more than average lead time?",
+      "explanation": "The buffer must cover the difference between the worst realistic case and the expected case. A supplier averaging ten days but occasionally taking twenty-five forces more stock than one who always takes twelve.",
+      "options": [
+        { "text": "The buffer is sized on the worst realistic case, so a wide range forces more stock than a longer but stable lead time", "correct": true },
+        { "text": "Because variability makes the average meaningless for accounting purposes", "correct": false },
+        { "text": "Because suppliers with variable lead times are usually more expensive", "correct": false },
+        { "text": "Because variability only affects perishable goods", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case study, what should be done before any negotiation with suppliers?",
+      "explanation": "A forty percent rise has several components. Decomposing it into currency, freight, duty and the cost of delay separates what is uncontrollable from what the organisation can act on, and the controllable portion is usually the delay.",
+      "options": [
+        { "text": "Decompose the increase into currency, freight, duty and delay-related costs to find the controllable portion", "correct": true },
+        { "text": "Request quotes from alternative suppliers for the largest product lines", "correct": false },
+        { "text": "Reduce inventory across the range to release working capital immediately", "correct": false },
+        { "text": "Renegotiate freight rates with the shipping line as the largest single line", "correct": false }
+      ]
+    },
+    {
+      "prompt": "When is dual sourcing justified?",
+      "explanation": "Dual sourcing is insurance. It is worth buying where failure would be severe and recovery slow, such as a critical component with a long lead time, and it is waste where alternatives are already available locally.",
+      "options": [
+        { "text": "Where failure would be severe and recovery slow, such as a critical component with a long lead time", "correct": true },
+        { "text": "For every purchased item, because single sourcing is always a risk", "correct": false },
+        { "text": "Only where the second supplier matches the primary supplier's price", "correct": false },
+        { "text": "Where the organisation has more than one warehouse", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A stock-out occurs under a new inventory policy. What is the most likely organisational response, and why is it a problem?",
+      "explanation": "The reflex is to raise all buffers, which restores the old cost without restoring the old protection and undoes the analysis. Anticipating this specific reaction is part of making an improvement last.",
+      "options": [
+        { "text": "Raising all buffers across the range, which restores the cost without addressing the cause", "correct": true },
+        { "text": "Reviewing the forecast error and adjusting only the affected item", "correct": false },
+        { "text": "Requalifying the supplier and renegotiating lead times", "correct": false },
+        { "text": "Returning to the previous policy entirely and abandoning the analysis", "correct": false }
+      ]
+    }
+  ]
+}

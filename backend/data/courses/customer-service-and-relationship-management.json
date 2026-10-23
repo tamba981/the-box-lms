@@ -1,0 +1,261 @@
+{
+  "slug": "customer-service-and-relationship-management",
+  "title": "Customer Service & Relationship Management",
+  "program": "FCP",
+  "category": "business-management",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 0,
+  "summary": "Treat service as the cheapest route to repeat business: handle complaints so they build loyalty, set standards people can keep, and know which customers are worth keeping.",
+  "description": "In a market where everybody sells similar goods at similar prices, service is one of the few things a small business can control. It is also the cheapest form of marketing available, because a customer who returns costs nothing to acquire and a customer who is treated badly tells more people than any advertisement reaches.\n\nThis course is about the practical mechanics rather than the sentiment. It covers what service actually is — the gap between what a customer expected and what happened — and why that gap is usually created before anyone speaks. It works through complaint handling as a procedure, service recovery as the moment loyalty is built or lost, and the harder skill of refusing a request without losing the relationship.\n\nIt closes on service as a system rather than a personality: standards that staff can meet under pressure, the authority to fix a problem on the spot, and a small number of measures that describe what customers actually experience rather than what the business believes it delivers.",
+  "tags": ["customer service", "complaints", "loyalty", "retention", "service recovery", "business management"],
+  "outcomes": [
+    "Explain service as the gap between expectation and experience",
+    "Calculate what a returning customer is worth compared with a new one",
+    "Handle a complaint with a procedure rather than a reaction",
+    "Use service recovery deliberately to build loyalty after a failure",
+    "Refuse a request while keeping the relationship",
+    "Set service standards staff can meet, and measure what customers experience"
+  ],
+  "caseStudy": "A mobile money agent has a failed transaction, an empty float, a customer who needs to collect a sick child, and a queue of twelve people watching.",
+  "modules": [
+    {
+      "title": "Module 1 · Why service is an asset",
+      "lessons": [
+        {
+          "title": "Service is the gap between expectation and experience",
+          "minutes": 16,
+          "teach": [
+            "Service is not friendliness. It is the difference between what a customer expected and what actually happened. A cheerful transaction that took twice as long as promised is bad service, and a brusque one that was faster than expected is good service.",
+            "That definition is useful because it locates the problem. If customers are unhappy, either the experience was poor or the expectation was wrong, and the two need different fixes. A business that apologises for slow service it never warned about is fixing the wrong half.",
+            "Expectations are set before the transaction: by a sign, a price list, a promise from a friend, or the queue at the counter. Most disappointment in small businesses is created in that earlier moment, not in the interaction itself.",
+            "The practical consequence is that managing expectations is cheaper than improving performance. Telling a customer the wait is twenty minutes when it is twenty is better service than a ten-minute wait after being told it would be five.",
+            "This is not an argument for low expectations. It is an argument for accurate ones, because a customer who knows what will happen can decide for themselves and rarely complains about a promise that was kept. Write the promise down; a promise remembered differently by two people is how disputes begin. Put the promise on the receipt, not only in the conversation."
+          ],
+          "example": "A shop that posts waiting times and keeps them is rated better than one that is usually faster but unpredictable, because the second gives customers no basis for planning.",
+          "points": ["Service is expectation versus experience", "Most disappointment is set before the transaction", "Accurate expectations beat optimistic ones"],
+          "check": "What does your business promise, explicitly or by habit, and how often is it met exactly?"
+        },
+        {
+          "title": "What a returning customer is worth",
+          "minutes": 16,
+          "teach": [
+            "A new customer costs money and effort to attract. A returning customer costs almost nothing, because they already know where you are, what you sell and whether to trust you. That difference is why retention is worth more than acquisition for a small business.",
+            "Do the arithmetic on your own business. Take a typical customer's purchase, multiply by how often they buy in a year, and multiply again by how many years they stay. That figure is what you are protecting every time you handle a complaint well.",
+            "The comparison is usually startling. A customer spending 40 dollars a month for four years is worth nearly 2,000 dollars, and losing them over a 5-dollar dispute is a decision no business would make deliberately, though many make it by accident.",
+            "The same arithmetic changes how you treat a refund. A refund that keeps a customer is nearly always cheaper than the alternative, and it is not close once you count the people they tell.",
+            "Write the number down for your three most common customer types. Decisions about a small dispute look different when the value of the relationship is in front of you. Once it is, a refund stops feeling like a loss and starts looking like the cheapest available option."
+          ],
+          "example": "A restaurant customer spending 25 dollars a week for three years is worth 3,900 dollars. Comping a 12-dollar meal after a bad evening is not generosity; it is arithmetic.",
+          "points": ["Returning customers cost nothing to reach", "Value is purchase times frequency times years", "Judge a dispute against the relationship, not the transaction"],
+          "check": "Work out the lifetime value of your best customer type. What did you last argue with a customer about, and how did it compare?"
+        },
+        {
+          "title": "Service in a market where margins are thin",
+          "minutes": 15,
+          "teach": [
+            "Where everybody sells the same goods at nearly the same price, price is a poor basis for competition and service is one of the few differences a small business can create. It costs attention rather than cash, which is precisely what a thin-margin business has available.",
+            "That advantage is fragile in one specific way: it depends on the behaviour of every person who faces a customer, including the one who is tired, the one who is new, and the one who is having a bad day. A single interaction can undo a year of consistency.",
+            "The answer is not to demand cheerfulness, which cannot be enforced, but to make the right behaviour easy. Written standards, visible prices, a named person who can resolve an exception, and enough staff at the busy hour do more for service than any training session.",
+            "Understaffing is the most common cause of poor service in small businesses, and it is invisible in the accounts because its cost appears as lost customers rather than as a line item.",
+            "A business that cannot afford more staff can still choose when to be busy and when to prepare. Service failures cluster in predictable hours, and preparing for them is free. Fifteen minutes of preparation before a known rush is worth more than an hour of apology afterwards. That is a decision about time, and it costs nothing."
+          ],
+          "example": "A market stallholder with one helper prepares change and bags before the mid-morning rush, because that is when the queue forms and tempers shorten.",
+          "points": ["Service is a difference that costs attention, not cash", "Consistency depends on the busiest, worst-staffed hour", "Prepare for predictable peaks instead of hiring for them"],
+          "check": "What hour of your week produces the most complaints? What would it take to be ready for it?"
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Handling complaints",
+      "lessons": [
+        {
+          "title": "A complaint is information, not an attack",
+          "minutes": 16,
+          "teach": [
+            "Most dissatisfied customers say nothing and simply do not return. The one who complains is doing you a favour, because they are telling you what the quiet ones think and giving you a chance to fix it.",
+            "That is difficult to remember while somebody is shouting. The practical technique is to treat the first thirty seconds as information gathering rather than as defence: what happened, when, and what the customer wants now.",
+            "Separate the fault from the person. Most complaints are about a process that failed, not about a malicious employee, and treating the complaint as a question about the process produces a fix that lasts rather than an apology that does not.",
+            "Record complaints, including the ones resolved instantly. Three complaints about the same thing in a month is a signal about the operation, and it is invisible to anyone who handles each complaint as an isolated event.",
+            "The test of a complaint system is whether the second customer with the same problem gets a better experience than the first. That is the only test of a complaint system that means anything."
+          ],
+          "example": "A laundry receives three complaints about shirts returned late; the cause is a single machine with a failing heating element, found only because the complaints were written down together.",
+          "points": ["Silent customers are the real loss", "Gather information in the first thirty seconds", "Record complaints and look for the pattern"],
+          "check": "How many complaints did you receive last month, and where are they written down?"
+        },
+        {
+          "title": "Service recovery: the moment that builds loyalty",
+          "minutes": 16,
+          "teach": [
+            "A customer who experiences a failure and sees it handled well is often more loyal afterwards than one whose purchase went smoothly. The reason is that a smooth purchase proves nothing about what happens when things go wrong, and everybody knows that.",
+            "Recovery has four parts. Acknowledge what happened without arguing about the details. Say what you will do. Do it. And follow up to confirm it is resolved.",
+            "Speed matters more than generosity. A small remedy delivered immediately is remembered better than a large one delivered after a week of correspondence, because the delay is itself a second failure.",
+            "Give the person facing the customer the authority to fix small things on the spot, up to a stated value. A refund that requires two approvals converts a two-minute recovery into a two-day grievance.",
+            "The follow-up is the step most often skipped and the one that lands hardest, because it shows the customer was not simply processed. It also gives you the second chance to find out whether the fix actually worked. Ask the question, and write down the answer."
+          ],
+          "example": "A hardware shop delivers the wrong gauge of wire, sends a replacement by motorcycle the same afternoon, and calls the next day to check the job was finished.",
+          "points": ["Handled failure can build more loyalty than smooth success", "Acknowledge, state, do, follow up", "Speed beats generosity"],
+          "check": "When your business last got something wrong, what did the customer experience over the following 24 hours?"
+        },
+        {
+          "title": "Refusing a request without losing the customer",
+          "minutes": 15,
+          "teach": [
+            "Some requests cannot be met: credit you cannot afford, a return outside your terms, a discount that would make the sale a loss. Refusing badly costs a customer; refusing well costs nothing.",
+            "The sequence is to acknowledge the request, say no clearly, give the reason in one sentence, and offer what you can do. Vagueness is the enemy here: a soft no that sounds like a maybe invites the customer to keep asking and then feel deceived.",
+            "Giving the reason changes the nature of the refusal. A customer told that credit would mean raising prices for everybody understands a policy; one told simply that credit is not available experiences a personal judgement.",
+            "Never blame a head office or a policy that does not exist. If the reason is your own commercial judgement, say so plainly and take the small cost of being the person who said no.",
+            "Then reopen the relationship with what you can offer, even if it is smaller: a smaller quantity, a different date, a referral to somebody who can help. The offer is what distinguishes a refusal from a rejection."
+          ],
+          "example": "A trader asked for 30 days credit is told the shop cannot carry that risk, offered 7 days instead, and continues buying weekly for the next two years.",
+          "points": ["Acknowledge, refuse clearly, give one reason, offer what you can", "Vagueness invites repeat asking and then resentment", "Never invent a policy to hide behind"],
+          "check": "What request do you refuse most often, and what exact words do you use?"
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Building loyalty",
+      "lessons": [
+        {
+          "title": "Knowing your customers as people",
+          "minutes": 15,
+          "teach": [
+            "A small business has an advantage that a large one cannot buy: it can know its customers. Remembering what somebody bought, how they pay and what they complained about last time is a competitive advantage that costs nothing but attention.",
+            "The practical form is a note, not a memory. Recording regular customers and their usual purchase lets a new member of staff serve them as though they had been there for years, which is what customers actually experience as good service.",
+            "Knowing customers also tells you which ones are worth the trouble. A customer who pays late, demands constant changes and negotiates every price is consuming the attention that better customers need.",
+            "Be careful with familiarity. Using a customer's name is service; commenting on their spending is not. The line is whether the observation is useful to them or merely interesting to you.",
+            "Keep customer information confidential. A note that helps you serve somebody is a tool; a note that circulates or is repeated in conversation is a breach of trust that will be remembered. Keep the note where only the staff who need it can see it. Confidentiality is part of the service, not a separate policy."
+          ],
+          "example": "A stationery shop records that a school buys 200 exercise books each term and calls the bursar a week before the order is due, which eliminates a competitive quote entirely.",
+          "points": ["Write it down rather than remembering it", "Some customers are not worth the attention", "Familiarity must serve them, not entertain you"],
+          "check": "Which of your regular customers would you recognise but could not name, and what are they worth over a year?"
+        },
+        {
+          "title": "Consistency is worth more than charm",
+          "minutes": 15,
+          "teach": [
+            "Charm is memorable once. Consistency is what makes a customer stop shopping around. A business that is always good at the same standard becomes the default, and being the default is worth more than being the best on a good day.",
+            "Consistency has to be designed. It requires written standards, stock you can rely on, prices that do not change with the customer's accent, and opening hours that are actually kept.",
+            "The most damaging inconsistency is the one nobody records: the item that is sometimes available, the price that is sometimes negotiable, the promise that is sometimes kept. Customers learn these patterns faster than owners do, and then they plan around them.",
+            "Being consistently good is easier to sustain than being occasionally excellent, because it does not depend on anybody being inspired that morning. Choose the standard you can meet when you are tired and short-staffed."
+          ],
+          "example": "A shop that opens at eight every day for three years is trusted more than one that opens at seven on good days, because customers can plan around the first.",
+          "points": ["Being the default beats being occasionally excellent", "Design consistency; it does not happen by habit", "Customers learn your patterns faster than you do"],
+          "check": "Which of your standards would a customer be unable to predict today?"
+        },
+        {
+          "title": "Case study: the queue, the float and the sick child",
+          "minutes": 18,
+          "teach": [
+            "A mobile money agent with twelve people in the queue processes a withdrawal that fails halfway. The customer's money has left her account at the provider but has not arrived at the agent's till.",
+            "The agent's float is now too low to complete the transaction or to serve the next two customers. The customer has a child to collect from school and begins shouting that the agent is stealing.",
+            "The queue is watching, and two of them are regulars who have been served by this agent every week for a year. The agent has no authority from the provider to issue a manual reversal and no cash to pay her out of the till.",
+            "The options are limited and all are imperfect: ask the customer to wait while the provider is contacted, refund from her own pocket and reclaim later, close the till and lose the queue, or ignore the shouting and process the remaining customers.",
+            "Whichever she chooses, the decision is being made in public, with an audience of people whose opinion of the shop will be formed right now. Decide what you want the queue to conclude about the shop before you say a word."
+          ],
+          "example": "The provider's helpline typically resolves a failed transaction in twenty to forty minutes, and the agent's records show two similar failures in the past month that were refunded the same day.",
+          "points": ["Address the person before the queue", "Decide quickly and say what you are doing", "The audience matters as much as the customer"],
+          "check": "What would you do first, and what would you say to the twelve people waiting? What would repair the relationship afterwards?"
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Service as a system",
+      "lessons": [
+        {
+          "title": "Standards that survive a busy day",
+          "minutes": 15,
+          "teach": [
+            "A service standard is a promise a business makes about something it can control: how long a customer waits, how quickly a message is answered, what happens if an item is out of stock. Standards that cannot be measured are wishes.",
+            "Set few standards and make them modest enough to keep on the worst day. Three standards kept are worth more than ten aspirational ones that fail in the first busy week.",
+            "Standards need an owner and a check. Saying that queries will be answered within a day is meaningless unless somebody reviews whether they were, at least fortnightly.",
+            "Where a standard is broken, treat it as information about capacity rather than as a discipline problem. Most failures are systemic: too few staff at the peak, a process that needs two people, a promise made by somebody who cannot keep it. Fix the capacity before you rewrite the standard."
+          ],
+          "example": "Three standards: every customer greeted within ten seconds; queries answered the same day; out-of-stock items offered a firm date or an alternative.",
+          "points": ["Standards must be measurable and modest", "Few kept beats many aspirational", "Treat a breach as capacity information"],
+          "check": "Write your three service standards. Could a member of staff state them from memory, and could you prove whether they were met?"
+        },
+        {
+          "title": "Giving staff the authority to fix things",
+          "minutes": 15,
+          "teach": [
+            "A customer with a problem does not want an explanation of the approval process. They want it fixed. Every layer of approval adds delay and converts a small problem into a grievance about the organisation rather than the product.",
+            "Give the person facing the customer a stated limit within which they can resolve: a refund, a replacement, a discount, up to a value. The limit should be documented, unambiguous and generous enough to cover the ordinary run of problems.",
+            "This is uncomfortable for owners, who fear abuse. In practice abuse is rare and is visible in the records, while the cost of delay is invisible and continuous.",
+            "Where the value is above the limit, the rule should be that the person still answers the customer with a decision and a time, rather than telling them that somebody will get back to them. The second sentence is how organisations lose customers they could have kept. Give a decision and a time, even when the answer is no."
+          ],
+          "example": "A cashier may authorise a replacement or refund up to 25 dollars without reference, and must record it; anything above goes to the supervisor with a decision promised within two hours.",
+          "points": ["Approval layers turn a problem into a grievance", "State a limit and make it generous enough", "Above the limit, still give a decision and a time"],
+          "check": "What is the largest problem your front-line staff can fix without asking? Is that the right number?"
+        },
+        {
+          "title": "Measuring what customers experience",
+          "minutes": 15,
+          "teach": [
+            "Most service measures describe the business's own activity: calls answered, orders processed, complaints logged. They say nothing about whether the customer was served well, and they improve while service deteriorates.",
+            "Three measures come closer. How many customers return within a stated period? How many complaints were received per hundred transactions? And what do people say when asked one question about their last visit?",
+            "The single question is enough. Asking whether they would recommend the business to a friend, and why, produces more useful information than a survey, and it takes ten seconds at the point of service.",
+            "The reasons matter more than the score. A score tells you whether something is wrong; a reason tells you what, and the reasons cluster quickly into two or three fixable causes.",
+            "Keep the measures together and review them monthly. Separately they can each be gamed; together they describe a business. Review them in ten minutes a month, in the meeting where decisions are actually made."
+          ],
+          "example": "A shop records repeat customers against total customers, complaints per hundred sales, and a Monday count of who was asked and what they said.",
+          "points": ["Activity measures hide the customer's experience", "Repeat rate, complaint rate, one question", "The reasons matter more than the score"],
+          "check": "What is your repeat rate this quarter, and what have customers told you in their own words recently?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A customer is angry that a repair took four days, though the shop had said three to five days. What is the accurate description?",
+      "explanation": "Service is expectation against experience. The promise was three to five days and the wait was within it, so the gap is in the customer's expectation rather than the performance — which is worth understanding, not dismissing.",
+      "options": [
+        { "text": "The experience met the promise, so the gap is in expectation and worth understanding", "correct": true },
+        { "text": "The shop gave bad service and should apologise for the delay", "correct": false },
+        { "text": "The customer is simply unreasonable and should be ignored", "correct": false },
+        { "text": "The promise should have been two days to leave room for error", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A customer spending 40 dollars a month has bought for four years. Why does that change how you handle a 5-dollar dispute?",
+      "explanation": "Lifetime value is purchase times frequency times years — nearly 2,000 dollars here. The dispute is against the relationship, not the transaction.",
+      "options": [
+        { "text": "The relationship is worth far more than the disputed amount", "correct": true },
+        { "text": "It does not; every dispute should be handled the same way", "correct": false },
+        { "text": "Because long-standing customers should always get refunds", "correct": false },
+        { "text": "Because the customer is likely to complain publicly", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why is a customer who complains more useful than one who leaves silently?",
+      "explanation": "The complainer reports what the silent majority thinks and gives a chance to fix it. Silent departures leave the cause invisible.",
+      "options": [
+        { "text": "They reveal what the silent customers think while there is still time to fix it", "correct": true },
+        { "text": "Because they are more likely to become loyal customers", "correct": false },
+        { "text": "Because complaints are required for insurance purposes", "correct": false },
+        { "text": "Because they spend more than average customers", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A customer asks for 30 days credit you cannot afford to give. What is the best refusal?",
+      "explanation": "Acknowledge, refuse clearly, give one real reason, and offer what you can do. Vagueness invites repeat asking and then resentment.",
+      "options": [
+        { "text": "Say clearly that you cannot carry the risk, explain why, and offer 7 days instead", "correct": true },
+        { "text": "Say you will look into it and hope they forget", "correct": false },
+        { "text": "Blame a company policy that does not exist", "correct": false },
+        { "text": "Agree and then refuse when the invoice is due", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the mobile money case, why does addressing the angry customer first matter more than serving the queue?",
+      "explanation": "The queue is watching how the business behaves under pressure, and the customer in front of you is the immediate relationship at risk. The audience forms its opinion from that moment.",
+      "options": [
+        { "text": "The queue forms its opinion from how the difficult case is handled, and the customer is the relationship at risk", "correct": true },
+        { "text": "Because the queue will wait regardless of what happens", "correct": false },
+        { "text": "Because the loudest customer is usually right", "correct": false },
+        { "text": "Because serving the queue first would breach a service standard", "correct": false }
+      ]
+    }
+  ]
+}

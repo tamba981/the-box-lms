@@ -1,0 +1,325 @@
+{
+  "slug": "procurement-and-contract-management",
+  "title": "Procurement & Contract Management",
+  "program": "FCP",
+  "category": "business-management",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 2000,
+  "summary": "Buy well and prove it: write a specification, run a fair competition, choose on more than price, and keep the file that satisfies a donor.",
+  "description": "Procurement is judged twice. Once on whether the organisation got what it needed at a fair price, and again on whether it can prove that it did. Most organisations manage the first and are surprised by the second when a donor or an auditor asks for the file.\n\nThis course works through the cycle from planning to contract administration: deciding what is actually needed, writing a specification a supplier can price, choosing a method proportionate to the value, evaluating bids on more than price, and documenting the decision so that it can be defended two years later by somebody who was not there.\n\nIt covers the constraints that shape procurement in Liberia: the Public Procurement and Concessions Commission framework for public bodies, donor procurement rules that frequently exceed it, small suppliers who cannot produce formal quotations, and the informal arrangements that are efficient and unprovable.\n\nThe case study concerns a small NGO with a fifty thousand dollar grant requiring three quotations for anything above five thousand. A local supplier offers excellent service but cannot produce formal quotations, while a documented supplier is thirty percent more expensive. Students must work out what the NGO can do and what it cannot.\n\nThe course closes on contract administration, records that satisfy an auditor, and what to do when a supplier fails to deliver.",
+  "tags": ["procurement", "tendering", "contracts", "quotation", "donor compliance", "suppliers"],
+  "outcomes": [
+    "Describe what the procurement cycle is trying to achieve",
+    "Write a specification a supplier can price accurately",
+    "Choose a method proportionate to value and risk",
+    "Evaluate bids on criteria other than price",
+    "Document a decision so it can be defended later",
+    "Apply donor rules where they exceed national requirements",
+    "Administer a contract and handle a supplier failure"
+  ],
+  "caseStudy": "A small NGO receives a fifty thousand dollar grant requiring competitive procurement, with a minimum of three quotations for anything above five thousand. A local supplier offers excellent service but cannot produce formal quotations, and a documented supplier is thirty percent more expensive. Students must decide what the NGO can do, what it cannot, and how to document the choice.",
+  "modules": [
+    {
+      "title": "The procurement cycle",
+      "lessons": [
+        {
+          "title": "What procurement is trying to achieve",
+          "minutes": 17,
+          "teach": [
+            "Procurement has three objectives and they trade against each other: getting the right thing, at a fair price, in a way that can be proved fair. An organisation that optimises one of the three usually damages another.",
+            "The cheapest purchase that arrives late and cannot be defended to a donor is not a saving. The most competitive process that takes four months and delivers the wrong specification is not value for money either.",
+            "The purpose of the process is to make the decision defensible rather than to make it difficult. Every step exists because somebody once awarded a contract to a relative or paid twice the market rate, and the record is what prevents a repeat.",
+            "Procurement begins with a need and ends with a delivered item that works. Organisations that treat it as ending at the purchase order discover in month three that nobody checked whether what arrived was what was ordered.",
+            "It is a management responsibility, not a clerical one. The person who signs is accountable for the choice, and delegating the paperwork does not delegate the accountability that comes with the signature.",
+            "Judge the function by outcomes and by its record. Did the organisation get what it needed, and can it produce the file that shows how the decision was taken? A yes to the second and no to the first is a process that has become the purpose."
+          ],
+          "example": "An NGO buys a vehicle through the correct process and discovers on delivery that it is a model with no local spare parts. The process was followed and the purchase was still a failure, because nobody specified the requirement.",
+          "points": [
+            "Right thing, fair price, provable process",
+            "Trading one objective damages another",
+            "It ends with a delivered item that works"
+          ],
+          "check": "Name a purchase your organisation made that followed the process and was still wrong."
+        },
+        {
+          "title": "Planning and specification come before price",
+          "minutes": 18,
+          "teach": [
+            "A specification states what the item must do, in terms that can be measured, without naming a brand unless there is no alternative. It is the document that determines whether the competition is fair and whether the result is usable.",
+            "Specify function rather than preference. A requirement for a vehicle that carries eight people on rural roads for five years is a specification, while a requirement for a Toyota is a brand preference that removes competition and may not serve the need.",
+            "Include the things that are decided after the price and cost more later: delivery to site, installation, training, warranty, spare parts availability, and who pays for transport and clearing.",
+            "Separate must-haves from desirables before going to market. A specification that includes every desirable detail produces one bidder or none, and the process then fails and must be repeated.",
+            "Write it with the person who will use the item. A specification written only by the purchaser produces equipment that the user cannot operate, and the disagreement surfaces after delivery when it can no longer be resolved.",
+            "Keep the specification fixed once bids are invited. Changing requirements during evaluation is the single most common way a procurement becomes indefensible, because the change explains the outcome better than the bids do."
+          ],
+          "example": "A clinic specifies a cold chain requirement as holding two to eight degrees for eighteen hours without power, rather than naming a model. Three suppliers bid and the cheapest meets the requirement.",
+          "points": [
+            "Specify function, not brand",
+            "Include delivery, installation and warranty",
+            "Fix the specification once bids are invited"
+          ],
+          "check": "Write a three-line specification for something your organisation buys regularly."
+        },
+        {
+          "title": "Choosing a method proportionate to value",
+          "minutes": 17,
+          "teach": [
+            "Procurement methods run from direct purchase through three quotations to open tender, and the rule is that the method should match the value and the risk rather than the urgency or the preference of the buyer.",
+            "Set thresholds in a written policy and apply them without exception. Below a small value, a single quote with a receipt is proportionate; above a stated amount, three written quotations; above a higher amount, a competitive tender.",
+            "The threshold should be low enough to catch the purchases where competition matters. In practice the leakage is rarely in the large contracts, which attract attention, but in the steady flow of purchases just under the threshold that requires competition.",
+            "Direct award is legitimate in defined circumstances: sole supplier, emergency, or an extension of existing work. Each requires a written justification, and the justification is what an auditor examines when the pattern looks convenient.",
+            "Do not split a purchase to avoid a threshold. A requirement for eight items bought as four separate orders of two is visible in the file, and it is treated as a deliberate circumvention rather than an oversight.",
+            "Review the thresholds annually against actual prices. A quotation threshold set five years ago now captures purchases so small that the process costs more than the difference between bids."
+          ],
+          "example": "A policy requires three quotations above 5,000 dollars. An office buys 11,000 dollars of furniture as three orders of 3,700, and the pattern is obvious once the invoices are placed side by side.",
+          "points": [
+            "Match the method to value and risk",
+            "Set thresholds in writing and except nothing",
+            "Never split a purchase to avoid a threshold"
+          ],
+          "check": "Read your quotation threshold and check whether any recent purchase sat just below it."
+        }
+      ]
+    },
+    {
+      "title": "Choosing a supplier",
+      "lessons": [
+        {
+          "title": "Inviting competition fairly",
+          "minutes": 17,
+          "teach": [
+            "Fair competition means the same information, the same deadline and the same opportunity to ask questions for every bidder. Anything that gives one supplier more time or more detail produces a result that cannot be defended.",
+            "Invite a realistic number. Three is the standard minimum and five is usually enough; inviting twenty produces a process nobody can evaluate properly, and inviting one disguised as three is worse than either.",
+            "Send the same documents to everyone, note who was invited and when, and record who declined. A file that cannot show who was asked cannot demonstrate that the process was open.",
+            "Set a deadline and keep it. Extending a deadline because a preferred supplier asked for more time is the clearest possible evidence of favouritism, whatever the reason given.",
+            "Answer questions to all bidders, not to the one who asked. A clarification sent privately changes what that bidder knows and therefore changes what the bids mean.",
+            "Declare conflicts before the process begins. A relative, a former employer, a current supplier of another service or a personal friendship with an owner is a conflict, and the declaration is what allows the organisation to manage it rather than discover it later."
+          ],
+          "example": "Three suppliers are invited by email on the same day with identical documents and a common deadline. One declines in writing, and the file shows the invitation, the decline and the two bids received.",
+          "points": [
+            "Same information, same deadline, same opportunity",
+            "Answer questions to all bidders",
+            "Declare conflicts before the process starts"
+          ],
+          "check": "Check whether your last three-quote process can show who was invited and when."
+        },
+        {
+          "title": "Evaluating bids on more than price",
+          "minutes": 18,
+          "teach": [
+            "Price is the easiest criterion to compare and the one most likely to mislead, because the cheapest bid is frequently the one that excludes delivery, warranty or the specification the buyer assumed was included.",
+            "Decide the evaluation criteria and their weights before opening any bids. Criteria chosen after seeing the prices will fit the preferred outcome, and the file will show that they do.",
+            "Use a small number of criteria with stated weights: technical compliance, price, delivery time, relevant experience and after-sales support. Three to five criteria produce a comparison people can follow; fifteen produce a score nobody can explain.",
+            "Score each criterion against the specification rather than against the other bids. A bidder who meets the requirement scores full marks regardless of whether a competitor exceeded it, which keeps the comparison anchored on the need.",
+            "Record the reasoning for any decision to award to a higher bidder. The justification is not that the supplier is known and trusted, which is a preference, but that the bid includes delivery and a two-year warranty that the lower bid excludes, which is a difference the specification can support.",
+            "Keep the scoring sheets, including the unsuccessful scores. The record of how each bid was assessed is what allows the organisation to answer a complaint, and it is the first thing a donor reviewer asks for."
+          ],
+          "example": "A lower bid excludes delivery to site and a warranty, both required by the specification. After adding the excluded items the bids are within three percent, and the higher-priced bid is awarded on compliance.",
+          "points": [
+            "Set criteria and weights before opening bids",
+            "Score against the specification, not against each other",
+            "Record the reasoning whenever price is not decisive"
+          ],
+          "check": "Write the criteria and weights you would use for your most common purchase."
+        },
+        {
+          "title": "The lowest bidder problem",
+          "minutes": 17,
+          "teach": [
+            "The lowest bidder is usually the right answer when the specification is complete and the bidders are comparable. It becomes the wrong answer when the specification is vague, because the cheapest bid is then the one that assumed the least.",
+            "An unusually low bid is information. It may mean the supplier has a genuine cost advantage, or that they have misunderstood the scope, or that they intend to recover the difference through variations once they have the contract.",
+            "Check the arithmetic of a low bid before accepting it. Ask the bidder to confirm what is included and to explain any line that looks below market, and put the confirmation in writing.",
+            "Beware the bid that wins on a comparison the buyer never intended. A supplier quoting a lower price for a smaller quantity, a shorter warranty or without transport has not bid for the same thing, and the comparison is meaningless.",
+            "Where the organisation chooses a higher bid, it must be able to show what the extra money buys. Value for money is a defensible concept, while quality is not a criterion unless it has been defined and scored.",
+            "Accept that sometimes the answer is genuinely the cheapest and the quality is adequate. Choosing a higher bid for comfort rather than for a documented reason is a decision that looks like favouritism to everyone who was not in the room."
+          ],
+          "example": "A building contractor bids 30 percent below the next bidder. Asked to confirm the scope, they exclude foundation works, and the revised comparison places them above the others.",
+          "points": [
+            "Low bids are information, not automatically errors",
+            "Confirm in writing what a low bid includes",
+            "Value for money must be defined to be defensible"
+          ],
+          "check": "Take the lowest bid you have received and list what it might exclude."
+        }
+      ]
+    },
+    {
+      "title": "Contracts and the paper trail",
+      "lessons": [
+        {
+          "title": "What a purchase contract must contain",
+          "minutes": 18,
+          "teach": [
+            "A purchase contract can be short and still complete. It needs a description of what is being bought, the price and payment terms, the delivery date and place, the acceptance criteria, and what happens if either side fails.",
+            "Acceptance criteria are the clause that prevents most disputes. Without them, delivery is a matter of opinion, and the supplier who delivers something close to what was discussed will argue that it is compliant.",
+            "Payment terms should be tied to delivery and acceptance rather than to a calendar date. Paying in advance removes the buyer's leverage entirely, and advancing funds to a new supplier is a risk that requires an explicit decision.",
+            "The warranty period, the response time for a defect and who pays for return are the clauses consulted most often in practice, and they are the ones most often left out of a short purchase order.",
+            "Include the delivery point and who bears transport and clearing. Many disputes about a late delivery are really disputes about who was responsible for moving the goods from the port, and the contract should have settled it.",
+            "Write the contract in language the person who administers it can follow. A contract that only a lawyer can interpret is one that will be interpreted by whoever is most confident rather than most correct."
+          ],
+          "example": "A purchase order states a price and a quantity and nothing else. The goods arrive at the port with no agreement about who clears them, and the delay costs more than the purchase.",
+          "points": [
+            "Acceptance criteria prevent most disputes",
+            "Tie payment to delivery and acceptance",
+            "Name the delivery point and who pays transport"
+          ],
+          "check": "Check whether your standard purchase order states the delivery point and acceptance criteria."
+        },
+        {
+          "title": "Variations, delays and the paper trail",
+          "minutes": 17,
+          "teach": [
+            "A variation is a change to what was agreed, and it must be written, priced and approved before the work is done. A verbal variation accepted on site is discovered at the invoice, when the only evidence is two recollections.",
+            "Most project cost overruns are not caused by a single large change but by many small ones accepted informally. Each seems reasonable and the total arrives as a surprise that nobody authorised.",
+            "Record every request, approval and delivery in a single file per contract. Delivery notes, correspondence, inspection records and signed variations are the documents that decide a dispute, because memory is the weakest evidence available.",
+            "Notice periods matter. Many contracts require written notice of a delay within a stated number of days, and missing the window can end a legitimate claim regardless of its merit.",
+            "Confirm meetings and telephone agreements in a short written message the same day. This is not mistrust, it is the only mechanism that prevents two accurate memories from diverging into a disagreement.",
+            "Keep the file with the contract rather than in somebody's email. Procurement decisions are challenged years later, by a donor, an auditor or a new manager, and the only defence available is the document that can be produced."
+          ],
+          "example": "A supplier requests an extra 4,000 dollars for additional groundwork, agreed verbally on site. The invoice arrives with no variation order, and the organisation has no record of approving the work.",
+          "points": [
+            "No written approval, no variation",
+            "Small informal changes add up to a large overrun",
+            "Confirm verbal agreements in writing the same day"
+          ],
+          "check": "Name one change currently being discussed verbally on a contract you manage."
+        },
+        {
+          "title": "Case: fifty thousand dollars, three quotes and a supplier who cannot quote",
+          "minutes": 22,
+          "teach": [
+            "A small NGO receives a fifty thousand dollar grant requiring competitive procurement, with at least three quotations for anything above five thousand. A local supplier gives excellent service but cannot produce formal quotations, and a documented supplier is thirty percent more expensive.",
+            "The donor rule is a condition of the grant, and breaching it risks the money and the relationship. The first question is therefore what the rule actually requires, which is usually written quotations for comparable specifications, not a particular form.",
+            "The local supplier may be able to comply without knowing it. A written quotation is a document stating scope, price and validity, and a supplier who can write a letter can produce one, particularly if the NGO provides a simple template to complete.",
+            "Helping a supplier understand the requirement is legitimate and helping them falsify a document is not. The distinction is whether the document reflects a genuine offer that the supplier is willing to stand behind.",
+            "If the supplier still cannot comply, the organisation has three defensible options: use the documented supplier, split the requirement so that the smaller part falls below the threshold, or seek the donor's written approval for a sole-source award with a justification.",
+            "The thirty percent difference is not automatically a reason to break the rule. It is a reason to document the comparison, to check whether the documented supplier's price includes items the local one excludes, and to ask the donor whether an exception is possible before the award rather than after."
+          ],
+          "example": "A 50,000 dollar grant requires three quotations above 5,000 dollars. A preferred local supplier cannot produce formal quotations and a documented supplier is 30 percent more expensive.",
+          "points": [
+            "Read what the rule actually requires",
+            "A supplier can often comply with a simple template",
+            "Seek a written exception before the award, never after"
+          ],
+          "check": "For this case, write the three lawful options and the one you would pursue first."
+        }
+      ]
+    },
+    {
+      "title": "Making it work",
+      "lessons": [
+        {
+          "title": "Contract administration for non-lawyers",
+          "minutes": 17,
+          "teach": [
+            "Contract administration is mostly diary-keeping and correspondence. Know what is due, when, from whom, and write to confirm it, and most contracts administer themselves without a legal dispute.",
+            "Keep a simple schedule of obligations: delivery dates, payment dates, inspection dates, warranty expiry and notice deadlines. A one-page schedule per contract prevents the failures that lead to disputes.",
+            "Track the supplier's obligations and your own. A buyer who has not provided site access or approved a drawing is also on the critical path, and their delay is a legitimate answer when the supplier is late.",
+            "Inspect on delivery rather than afterwards. Once the goods are accepted and paid for, the argument about condition becomes one person's word against another, and the inspection record is what settles it.",
+            "Raise problems in writing early and without hostility. A short message identifying the issue and asking for a plan is more effective than waiting for the deadline and then complaining, and it creates the record either way.",
+            "Close the contract deliberately: final acceptance, final payment, warranty dates recorded and the file archived. Contracts that are never closed leave open obligations that surface when nobody remembers the agreement."
+          ],
+          "example": "A contract schedule shows a warranty expiring in March. A defect appears in February and is reported in writing with a photograph, and the supplier repairs it at their own cost.",
+          "points": [
+            "A one-page obligations schedule prevents most disputes",
+            "Track your own obligations too",
+            "Inspect on delivery, not afterwards"
+          ],
+          "check": "Create the obligations schedule for one live contract."
+        },
+        {
+          "title": "Records a donor or auditor will accept",
+          "minutes": 17,
+          "teach": [
+            "A procurement file is judged as complete or not, and the reviewer is checking whether the decision can be reconstructed from the documents rather than whether they trust the person explaining it.",
+            "A complete file contains the requisition, the specification, the invitations sent and the responses, the bids received, the evaluation and scoring, the award decision with its justification, the contract or purchase order, the delivery note, the inspection record and the payment.",
+            "The justification for the award is the document most often missing and most often asked for. Where the lowest bidder was not chosen, the file must show what the chosen bid provided that the others did not.",
+            "Keep the file during the process, not afterwards. Reconstructing a procurement file three weeks before an audit produces documents with inconsistent dates, and the inconsistency is treated as evidence of fabrication.",
+            "Retain the file for the period the donor specifies, which is often several years after the final report. Store it where it can be found, and index it, because a file that exists in a storeroom nobody can search is not available.",
+            "Expect the reviewer to sample. They will select a handful of transactions and ask for the whole file for each, which means one incomplete file is enough to qualify the finding across the sample."
+          ],
+          "example": "A donor review samples eight transactions. Seven files are complete and one is missing the evaluation notes, and the report records a weakness in procurement documentation for the whole programme.",
+          "points": [
+            "The file must reconstruct the decision",
+            "Award justification is the document most often missing",
+            "Build the file during the process, not after"
+          ],
+          "check": "Assemble the file for one completed purchase and see what is absent."
+        },
+        {
+          "title": "When the supplier fails",
+          "minutes": 17,
+          "teach": [
+            "Suppliers fail in ordinary ways: late delivery, partial delivery, wrong specification, poor quality or no response. The response should follow the contract rather than the strength of the relationship.",
+            "Start with a written notice describing the failure against the contract term and asking for a remedy by a date. Most failures are resolved at this point, and the notice is the document that makes every later step possible.",
+            "Escalate in the sequence the contract provides, usually to a senior representative and then to a formal remedy. Skipping to termination for a first delay is expensive, and skipping to forgiveness for a repeated one is worse.",
+            "Protect the organisation's position while remaining commercial. Withholding payment for undelivered goods, requiring replacement at the supplier's cost, or procuring elsewhere and recovering the difference are all normal remedies if the contract provides for them.",
+            "Avoid the two common errors: continuing to accept late delivery while complaining informally, which waives the right to enforce, and terminating abruptly without notice, which may convert a good claim into a liability.",
+            "Record the outcome and use it. A supplier who failed once and remedied properly is a different case from one who failed three times, and the record is what informs the next award."
+          ],
+          "example": "A supplier delivers half an order and promises the rest within two weeks. Written notice is issued, payment is withheld for the undelivered portion, and the balance arrives in ten days.",
+          "points": [
+            "Written notice against the contract term first",
+            "Follow the remedy sequence in the contract",
+            "Informal complaining can waive your rights"
+          ],
+          "check": "Read the remedy clause in one of your contracts and write the first notice you would send."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Why is procurement documentation as important as the purchase decision itself?",
+      "explanation": "The decision is judged later by someone who was not in the room. Without the specification, bids, evaluation and justification, the organisation cannot show the process was fair, and an undocumented fair decision is indistinguishable from a favour.",
+      "options": [
+        { "text": "Because the decision is judged later by someone absent, and an undocumented fair decision looks like a favour", "correct": true },
+        { "text": "Because documentation reduces the price paid by suppliers", "correct": false },
+        { "text": "Because donors require a minimum number of pages per transaction", "correct": false },
+        { "text": "Because the paperwork transfers liability from the signatory to the supplier", "correct": false }
+      ]
+    },
+    {
+      "prompt": "The lowest bid is not always the best choice. What justifies choosing a higher bid?",
+      "explanation": "The justification must be a documented difference the specification supports, such as delivery, warranty or compliance that the lower bid excluded. Trust or familiarity is a preference and cannot be defended.",
+      "options": [
+        { "text": "A documented difference the specification requires, such as delivery or warranty the lower bid excluded", "correct": true },
+        { "text": "The organisation has worked with the supplier before and knows the quality", "correct": false },
+        { "text": "The higher bidder provided a more professional-looking proposal", "correct": false },
+        { "text": "The lower bidder is new and therefore riskier regardless of the bid", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case study, what is the correct first step?",
+      "explanation": "The rule requires comparable written quotations, not a particular form. A supplier who can write a letter can produce a quotation with a template, so the first step is to establish what the rule requires and help the supplier comply.",
+      "options": [
+        { "text": "Establish what the donor rule requires and give the local supplier a simple template to produce a written quotation", "correct": true },
+        { "text": "Award to the local supplier and record the reason as better service", "correct": false },
+        { "text": "Buy from the documented supplier and accept the higher price without question", "correct": false },
+        { "text": "Split the purchase into small orders to stay below the threshold", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A supplier verbally agrees to extra work on site. What should happen?",
+      "explanation": "A variation must be written, priced and approved before the work is done. Verbal agreements produce disputes at invoice stage where the only evidence is two recollections, and most cost overruns are built from small ones.",
+      "options": [
+        { "text": "Price and approve the variation in writing before the work proceeds", "correct": true },
+        { "text": "Allow the work and settle the amount at the final invoice", "correct": false },
+        { "text": "Refuse the variation because the contract has already been signed", "correct": false },
+        { "text": "Record it in the site diary and rely on that as approval", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An organisation complains informally that deliveries are always late, for six months, without writing to the supplier. What is the risk?",
+      "explanation": "Accepting late delivery while complaining informally can be treated as waiving the right to enforce the term. The remedy must be invoked in writing against the contract, or the organisation loses the position it thought it had.",
+      "options": [
+        { "text": "That continuing to accept late delivery may waive the right to enforce the term", "correct": true },
+        { "text": "That the supplier will raise their prices at renewal", "correct": false },
+        { "text": "That the contract will renew automatically without a review", "correct": false },
+        { "text": "That the auditor will require the contract to be retendered", "correct": false }
+      ]
+    }
+  ]
+}

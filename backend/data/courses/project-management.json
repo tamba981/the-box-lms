@@ -1,0 +1,356 @@
+{
+  "slug": "project-management",
+  "title": "Project Management",
+  "program": "FCP",
+  "category": "business-management",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 2000,
+  "summary": "Define done before you start, plan work that survives contact with reality, control scope and risk, and close a project properly.",
+  "description": "A project is work that has a defined end. That single fact separates it from the operations of an organisation and determines almost everything about how it should be managed: a temporary thing needs a definition of done, a plan, a way of tracking progress that does not depend on optimism, and a deliberate closing rather than a gradual fading away.\n\nThis course works through those four in order. It begins with defining the outcome and the constraints honestly, then builds a plan from the work itself rather than from a desired end date. It covers the discipline of tracking without a reporting burden, the controlled handling of scope changes, and the management of risk that is specific to an environment where suppliers slip and transport costs are unpredictable.\n\nIt closes with the part most projects skip: handover, closing out money and contracts, and reviewing what actually happened rather than what was supposed to. The examples are drawn from small and medium projects in Liberia and the wider region, where one person usually holds several roles at once.",
+  "tags": ["project management", "planning", "risk", "stakeholders", "budget", "business management"],
+  "outcomes": [
+    "Write a definition of done that a stranger could test",
+    "Build a plan from the work rather than from the desired end date",
+    "Estimate durations and costs honestly, including the unknowns",
+    "Track progress with a report small enough to maintain",
+    "Control scope change deliberately rather than by drift",
+    "Close a project so that the result keeps working after the team disperses"
+  ],
+  "caseStudy": "A twelve-week project to install a stock system across three branches is two weeks from its end date, with one branch live, no data migrated and the supplier silent.",
+  "modules": [
+    {
+      "title": "Module 1 · What a project is",
+      "lessons": [
+        {
+          "title": "Projects, operations and why the difference matters",
+          "minutes": 17,
+          "html": [
+            "<p>Operations are what an organisation does repeatedly: taking orders, delivering, paying staff, serving customers. Projects are temporary: a defined outcome, a defined end, and usually a defined budget. The distinction matters because the two need different management, and treating one as the other is the source of most project failure.</p>",
+            "<p>Operations are managed by routine: standard procedures, recurring checks, incremental improvement. A project has no routine to fall back on, because it has not been done before in this form. It needs a plan, a definition of done, and somebody accountable for the whole rather than for one part.</p>",
+            "<p>The most common confusion is a project that is really an ongoing operation in disguise. A system that must be maintained forever, a programme with no end date, a change that becomes permanent — these are not projects and should not be managed as if they were, because the closing discipline is what gives a project its shape and its urgency.</p>",
+            "<p>Where a temporary effort is genuinely needed, say so and put an end date on it. A date, even an approximate one, forces the definition of what finishing looks like, and that definition is the thing that keeps a project from becoming a permanent committee.</p>",
+            "<p>If the answer to any of those questions is nobody knows, that is the finding, and it is worth more than a plan built on top of it. Most projects that fail noisily were never properly established, and the failure took months to arrive because nobody asked these three questions on the first day.</p>",
+            "<h3>The three questions to answer before starting</h3>",
+            "<p>What will be different when this is finished? Who has decided that, and can they still be reached? And who will be relieved of their other work to make it happen? A project without an answer to the third question is work added to somebody's existing load, which is the most common reason projects slip while everybody is trying hard.</p>",
+            "<p>A project that cannot answer the first question is a wish. One that cannot answer the second has no authority behind it. One that cannot answer the third has no capacity, and capacity is not a detail that can be resolved later.</p>",
+            "<p><strong>Check yourself.</strong> Take something you are currently calling a project. What will be different when it is finished, and who has agreed that this is the finish line?</p>"
+          ]
+        },
+        {
+          "title": "The constraints you cannot escape",
+          "minutes": 17,
+          "html": [
+            "<p>Every project is governed by three constraints that trade against each other: scope, time and cost. Quality is sometimes named as a fourth, but quality is better understood as the standard within the other three. You can have more scope or a shorter time or a lower cost, and any two can be fixed, but not all three.</p>",
+            "<p>The value of saying this plainly is that it moves the conversation from whether the project can be done to what the organisation is willing to give up. A sponsor who wants the full scope earlier and cheaper is not being unreasonable so much as not being told the arithmetic. Naming the trade is the project manager's job, and repeating it calmly is most of the job.</p>",
+            "<p>In practice one constraint is usually fixed by circumstance. A regulatory deadline fixes time. A donor grant fixes cost. A contract fixes scope. Identify which is fixed before planning, because everything else must flex around it, and a plan built on the wrong assumption is a plan that will be abandoned.</p>",
+            "<p>Record the trade explicitly at the start: this project is fixed on time, and we will reduce scope before we ask for more money. That one sentence, agreed in writing, prevents months of argument later, and it also tells the team what to do when the inevitable happens.</p>",
+            "<p>Say also what the organisation gains by moving the date rather than the scope. A project delivered late but complete may be worth more than one delivered on time without the part that made it useful, and only the owner of the outcome can make that judgement.</p>",
+            "<h3>What happens when the trade is refused</h3>",
+            "<p>When a sponsor insists that all three are fixed, the honest response is to plan the version that is achievable and show the gap: on this date with this money, this is the scope that arrives. That is not defeatism; it is the only version of the project that can be managed. The alternative is a plan nobody believes, and a team that learns to report optimism instead of facts.</p>",
+            "<p>Where the gap is unacceptable, the decision belongs to whoever owns the consequences. Escalate it with numbers, early, while there is still time to choose differently. Escalating a constraint problem at week two is leadership; at week ten it is an excuse.</p>",
+            "<p><strong>Check yourself.</strong> For your current project, which constraint is genuinely fixed, and what has been agreed will flex first when it becomes impossible?</p>"
+          ]
+        },
+        {
+          "title": "Defining done before you start",
+          "minutes": 18,
+          "html": [
+            "<p>Most disputes at the end of a project are not about quality but about what was promised. The deliverable was built, and the person who asked for it expected something else, and neither can point to a document that settles it. The fix is a definition of done written at the start, in language a stranger could test.</p>",
+            "<p>A usable definition names the output, the condition it must be in, and the evidence that it works. Not a new customer system, but new customer records entered for the current year, reconciled to the old system, with three named staff able to create an invoice without help. That second version can be checked, disputed and signed off.</p>",
+            "<p>Write it with the person who will accept the work, not for them. The conversation is where the misunderstandings surface, and it is much cheaper to discover that the finance officer expects a monthly report than to produce the system without one.</p>",
+            "<p>Include what is explicitly out of scope. A list of exclusions feels negative and does more to prevent disappointment than any other part of the document, because the thing that gets argued about is almost always the thing nobody thought to mention.</p>",
+            "<p>Where the acceptance criteria cannot be written, the requirement is not understood yet. That is normal early on, and the honest response is to run a short piece of work to find out, rather than to write a definition that sounds confident and will be argued about later.</p>",
+            "<h3>Acceptance as a scheduled act</h3>",
+            "<p>Decide in advance who signs off each deliverable, what they will check, and how long they have. An acceptance that is nobody's specific job becomes an acceptance that never happens, and the project drifts on because everyone assumes somebody else approved it.</p>",
+            "<p>Build the acceptance into the plan as a task with a date, not as an administrative afterthought. Then a delayed acceptance is visible as a project risk rather than as an unexplained slip, and you can have the conversation while it matters.</p>",
+            "<p><strong>Check yourself.</strong> Write your project's definition of done in three sentences. Could somebody who has never met you test it?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Planning that survives reality",
+      "lessons": [
+        {
+          "title": "Breaking the work down far enough to see it",
+          "minutes": 17,
+          "html": [
+            "<p>A plan is only as good as the size of its pieces. Break a project into a handful of large phases and you cannot see what is happening inside them; break it into hundreds of tasks and the plan becomes a maintenance job nobody keeps. The useful size is the piece one person can complete and report on within a week or two.</p>",
+            "<p>Break work down by deliverable rather than by department. Training materials, data migration, branch installation and acceptance are deliverables. Finance, operations and IT are departments. A plan organised by department hides the dependencies between them, which are exactly the things that cause delay.</p>",
+            "<p>Stop breaking down when you can estimate the piece with some confidence, assign it to one person, and say what finished looks like. Anything vaguer should be broken again; anything smaller is probably a checklist item rather than a plan item.</p>",
+            "<p>Include the work that is not the product: approvals, procurement lead times, transport, training, the acceptance meetings, and the handover. These are the items most often omitted and most often responsible for the slip, because they are invisible until they are late.</p>",
+            "<p>A breakdown that fits on one page is usually the right size for a project of a few months. If it runs to several pages before the work has started, the detail is being used to create the impression of control, and it will not survive the first week of actual work.</p>",
+            "<h3>Involving the people who will do the work</h3>",
+            "<p>Break the work down with the people who will do it, not for them. They will identify steps you did not know existed, and they will believe the plan because they built part of it. A plan handed down is a plan that will be reported against rather than worked to.</p>",
+            "<p>Where a person cannot be involved, have them review the breakdown before it is fixed. Ten minutes of their time at this stage is worth a week of re-planning later, and it is also the moment they become responsible rather than merely assigned.</p>",
+            "<p><strong>Check yourself.</strong> Take your largest plan item. Can one person finish it within two weeks, and can you say what finished looks like?</p>"
+          ]
+        },
+        {
+          "title": "Estimating honestly",
+          "minutes": 18,
+          "html": [
+            "<p>An estimate is a prediction made under uncertainty, not a commitment. Confusing the two is why estimates are inflated by the cautious and ignored by the confident, and why projects are late in a way everybody privately expected.</p>",
+            "<p>Estimate in ranges rather than single figures. A task is likely to take three to five days, with a week if the supplier data needs cleaning. The range carries the uncertainty openly, so the sponsor can see where the risk sits and the team can report against something realistic. A single number invites an argument about whether it is a promise.</p>",
+            "<p>Base estimates on evidence where it exists: how long similar work took last time, how long the supplier actually takes rather than what they say, how many records there are rather than how many you assume. Where there is no evidence, say so, and treat the number as a placeholder to be replaced once the first similar task is done.</p>",
+            "<p>Add contingency deliberately and say what it is for. Ten per cent across the whole plan is a habit, not a judgement. A stated allowance for the risks you identified is a position you can defend when somebody asks why the plan costs more than the sum of its parts.</p>",
+            "<p>Keep a note of estimates against outcomes as the project proceeds. By the third or fourth similar task you will know whether the team estimates high or low, and that correction is worth more than any estimating technique.</p>",
+            "<h3>The estimate that is always wrong</h3>",
+            "<p>Two categories of work are reliably underestimated: anything dependent on another organisation, and anything involving data. A supplier's delivery date, a ministry approval, a partner's sign-off all take longer than the plan assumes. Data that looks clean turns out to have duplicates, missing values and three spellings of the same district.</p>",
+            "<p>Where those appear, plan them as ranges with a stated worst case, and track them as risks rather than tasks. Being explicit about the worst case is not pessimism; it is the only way to have a conversation early enough to influence the outcome.</p>",
+            "<p><strong>Check yourself.</strong> Which estimate in your project has no evidence behind it? What would it cost to get some?</p>"
+          ]
+        },
+        {
+          "title": "Sequencing, dependencies and the critical path",
+          "minutes": 18,
+          "html": [
+            "<p>Most of the length of a project comes from dependencies rather than from the work itself. Two tasks that take a week each can finish in one week if they are independent and two if one must follow the other. The sequence, not the volume of work, is usually what determines the end date.</p>",
+            "<p>The critical path is the longest chain of dependent tasks. Everything on it must happen on time or the end date moves; everything off it has slack. Knowing which is which changes where you spend attention, because chasing a task with two weeks of slack while the critical path slips is effort wasted.</p>",
+            "<p>Identify the dependencies explicitly and ask of each one whether it is real. Many are habits: the training cannot start until the manual is printed, when it could start with a draft. Breaking a false dependency shortens the project without adding resources, and it is the cheapest improvement available.</p>",
+            "<p>Where a dependency crosses organisations, it is not a dependency but an assumption, and assumptions need dates and owners. The data will come from the branch is not a plan; the branch manager will send the export by the twelfth, and Chieh will confirm is.</p>",
+            "<p>Where a dependency looks immovable, ask what it would take to move it and what that would cost. Sometimes the answer is a small payment or a conversation, and sometimes it is genuinely fixed; both are worth knowing before you build a plan around it.</p>",
+            "<h3>Planning for the handoffs</h3>",
+            "<p>Handoffs are where time disappears. One person finishes on Friday and the next picks it up on Wednesday, and nobody records the gap because both did their part. Put the handoffs in the plan as items with a date, and make the criterion for completion the next person starting rather than this person finishing.</p>",
+            "<p>Then protect the critical path in your own behaviour. When a decision is needed to unblock it, that decision goes to the front of your attention, ahead of the work that has slack. That single habit is most of what distinguishes a project that finishes from one that nearly does.</p>",
+            "<p><strong>Check yourself.</strong> What is on your critical path this week, and what are you waiting for that somebody could supply today?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Running the work",
+      "lessons": [
+        {
+          "title": "Tracking progress without a reporting burden",
+          "minutes": 17,
+          "html": [
+            "<p>Progress tracking fails in two directions: so little that nobody knows where the project is, and so much that the team spends its week reporting instead of working. The useful middle is a short weekly update per workstream, collected the same way every week.</p>",
+            "<p>Ask three questions of each workstream: what was finished, what is next, and what is blocking. Finished means the definition of done was met, not that work continued. That distinction is what prevents the familiar progress of ninety per cent complete for two months.</p>",
+            "<p>Track completion of deliverables rather than percentage of effort. Effort percentages are guesses that tend to rise steadily and then stall, and they hide the fact that nothing has actually been accepted. A list of deliverables with dates is a more honest picture, and it can be verified.</p>",
+            "<p>Keep the report to one page and the same shape each week. Consistency is what lets a reader see a trend, and a changing format consumes attention that should go on the content. The sponsor should be able to read it in two minutes and know whether to worry.</p>",
+            "<p>Collect the update in a fixed slot each week rather than chasing it. A team that knows the report is due on Thursday at eleven will bring the information; one that is asked at random will produce it defensively.</p>",
+            "<h3>The status that is true</h3>",
+            "<p>There is pressure to report green. A project manager who reports amber is asked what they are doing about it, and a project that stays green needs no explanation until it fails completely. Resist by making amber normal: report the risk early, with a plan, and the conversation becomes about the plan rather than the colour.</p>",
+            "<p>Where you are unsure, say so. An uncertain status that triggers a conversation is worth more than a confident one that turns out to be wrong, and the credibility you lose by being wrong at the end is much larger than any discomfort now.</p>",
+            "<p><strong>Check yourself.</strong> How many of your current deliverables are finished against their definition of done, as opposed to mostly done?</p>"
+          ]
+        },
+        {
+          "title": "Controlling scope without stopping the project",
+          "minutes": 18,
+          "html": [
+            "<p>Scope change is not a failure of planning; it is normal, because understanding improves as work proceeds. What damages projects is not change but uncontrolled change: a series of small additions, each reasonable on its own, that together make the original commitment impossible.</p>",
+            "<p>The defence is a visible process, not a refusal. Any change is written down, with what it adds, what it displaces, and what it does to the date or the cost. Then the person who owns those constraints decides. That is not bureaucracy; it is the only way to make the trade visible at the moment it is made.</p>",
+            "<p>Most changes are not requests for more scope but requests to solve a problem the change-maker has. Ask what problem they are solving before deciding whether their proposed change is the way to solve it. Half the time a smaller change, or a change to a later phase, addresses it.</p>",
+            "<p>Keep a log of changes, including the ones you absorbed without a formal process. The absorbed ones are the interesting entries, because they explain why the end date moved and nobody remembers agreeing to anything.</p>",
+            "<p>Say yes in writing, including the consequence. Absorbed change with no record is how a project reaches its final month unable to explain why it has three weeks of work left and one week of time.</p>",
+            "<h3>When saying yes is right</h3>",
+            "<p>Not every change should be resisted. If the change is small, if there is slack on the affected path, and if it clearly improves the outcome, absorb it and record it. Refusing everything damages the relationship and the result, and a project manager who is seen as an obstacle is bypassed.</p>",
+            "<p>The test is whether the change can be absorbed without silently moving something else that was promised. If it can, absorb it. If it cannot, it is a decision for the owner of the constraint, and your job is to make the trade clear rather than to decide it alone.</p>",
+            "<p><strong>Check yourself.</strong> What has been added to your project since it started without a decision being recorded? What did it cost?</p>"
+          ]
+        },
+        {
+          "title": "Risks and issues are not the same thing",
+          "minutes": 18,
+          "html": [
+            "<p>A risk might happen. An issue has happened. Keeping them separate matters because they are managed differently: a risk is watched and mitigated, an issue is owned and resolved. Teams that conflate them end up with a risk register full of problems and no sense of what might still go wrong.</p>",
+            "<p>For each real risk, record what could happen, how likely it is, what it would cost if it did, and what you are doing about it now. That last column is the only one that changes anything. A register of risks with no owner and no action is a document produced for a meeting.</p>",
+            "<p>Keep the list short. Ten to fifteen genuine risks that the team discusses is useful; sixty entries imported from a template is noise. Include the unglamorous ones: transport costs, fuel availability, staff being reassigned, a supplier's cash position, the rainy season.</p>",
+            "<p>Review the risks at a fixed interval and at every significant decision. Risks change as the project moves: the risk of unclear requirements falls once the design is signed off, and the risk of poor data quality rises as migration approaches.</p>",
+            "<p>Give each risk a trigger: the observable sign that it is happening. Data has not arrived by the agreed date is a trigger; poor communication is not. A trigger converts watching into a decision that somebody can make without waiting for you.</p>",
+            "<h3>Converting a risk into action</h3>",
+            "<p>When a risk becomes likely enough, act before it happens. Order the spare part now, book the trainer now, run the data test on one branch now. Mitigation is usually cheap while the risk is still a risk and expensive once it is an issue.</p>",
+            "<p>When a risk does happen, convert it into an issue with an owner and a date, and say in the report that it has happened. Silent conversion, where a risk quietly disappears from the register and reappears as a delay, is how projects lose credibility with the people funding them.</p>",
+            "<p><strong>Check yourself.</strong> Name the risk most likely to become an issue in the next month. Is there anything you could do about it this week?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · People on projects",
+      "lessons": [
+        {
+          "title": "Roles, and the absent owner",
+          "minutes": 17,
+          "html": [
+            "<p>Every project needs three things decided at the start: who is accountable for the outcome, who does the work, and who accepts the result. In small organisations these are often the same two people, which is fine, but they must still be named, because unnamed accountability is how a project ends up with nobody responsible for the whole.</p>",
+            "<p>The most damaging gap is an absent sponsor: someone senior who wanted the project, appears at the launch, and is unreachable when a constraint needs deciding. Without them, the project manager either makes decisions beyond their authority or lets the project drift while waiting.</p>",
+            "<p>Make the sponsor's role concrete: which decisions only they can take, how quickly you need an answer, and how you will reach them. A standing twenty-minute fortnightly conversation is usually enough, and it is far more effective than escalating when something has already gone wrong.</p>",
+            "<p>Where the sponsor genuinely cannot engage, say so and get the accountability moved to somebody who will. A project with a distant sponsor and an empowered deputy is workable; one with a distant sponsor and nobody else is a project that will be decided by circumstance.</p>",
+            "<p>Ask for named people rather than departments. A department supplies whoever is available that week, and a project that depends on whoever is available is a project whose productivity varies with somebody else's rota.</p>",
+            "<h3>People who are assigned but not available</h3>",
+            "<p>The second common gap is a team member who is nominally on the project but whose manager still expects their usual work. They will do their best, and the project will slip by exactly the amount of their other job. Raise it early, in writing, with the specific consequence: at this level of availability the data migration moves from week eight to week eleven.</p>",
+            "<p>Availability is a plan assumption like any other. Put it in the plan, so that when it proves false the change is visible as a change rather than as a personal failure by somebody who was set up to fail.</p>",
+            "<p><strong>Check yourself.</strong> Who is accountable for your project's outcome, and when did you last speak to them about it?</p>"
+          ]
+        },
+        {
+          "title": "Stakeholders who can stop you",
+          "minutes": 17,
+          "html": [
+            "<p>Stakeholders are not everyone with an interest. They are the people whose action or refusal can change the outcome. That is a much shorter list, and it is the list worth managing, because a project can satisfy twenty interested parties and still be stopped by one person who was not consulted.</p>",
+            "<p>Identify them by asking who must do something for this to succeed: approve, supply, accept, allocate staff, release funds. For each, decide what they need to know, when, and in what form. A finance officer needs the numbers; a branch manager needs to know what changes on Monday; an approver needs a decision paper, not a status report.</p>",
+            "<p>Talk to the difficult ones early. The stakeholder who is sceptical at the start is much easier to work with than the one who becomes sceptical at the end, when there is no time to adjust. Their objections are usually information about something the plan has missed.</p>",
+            "<p>Keep a short stakeholder list with what each needs and when. It doubles as an agenda for the conversations that prevent surprises, and surprises are what turn a neutral stakeholder into a blocking one.</p>",
+            "<p>Keep a note of who was consulted and when. It is not evidence for a dispute; it is the thing that lets you say honestly that the concern was raised in week three and recorded, rather than discovered in week ten.</p>",
+            "<h3>When a stakeholder blocks deliberately</h3>",
+            "<p>If somebody refuses to cooperate, first establish what they would need in order to agree. Often it is something small and unstated: a credit in the report, a concern about workload, a previous slight. Discovering that is cheaper than escalating.</p>",
+            "<p>Where it is genuinely a conflict of priorities, it belongs to the sponsor, with the consequence stated plainly: without this signature by Friday the installation cannot start. Escalation is not a complaint about a person; it is a decision request about a constraint, and framing it that way keeps it resolvable.</p>",
+            "<p><strong>Check yourself.</strong> Who could stop your project with a single refusal? What have you done about them in the last month?</p>"
+          ]
+        },
+        {
+          "title": "Meetings, decisions and escalation",
+          "minutes": 17,
+          "html": [
+            "<p>Project meetings have one purpose that everything else serves: making decisions and removing blockers. Status can be read. Decisions cannot. A meeting that spends its time going round the table on progress and never decides anything is a meeting the team will start skipping.</p>",
+            "<p>Send the status in writing before the meeting and use the time for the two or three items that need discussion. Name in the invitation what decision is needed for each. Then the meeting is short, the right people attend, and the outcome is recorded.</p>",
+            "<p>Record decisions with the date and the reason, and keep them where the team can find them. Projects accumulate decisions that people later cannot remember making, and the cost is a reopening of settled questions at the least convenient moment.</p>",
+            "<p>Escalation should be normal and early rather than dramatic and late. Define at the start what will be escalated: a slip that affects the end date, a cost overrun beyond a stated amount, a decision needed above the project's authority. Then escalating is a process rather than an accusation.</p>",
+            "<p>Keep escalations out of the status report and in a separate short note. A decision request buried in a weekly update is a decision that will not be made, because the reader is scanning for whether to worry rather than for what to do.</p>",
+            "<h3>Escalating well</h3>",
+            "<p>An escalation should contain four things: what has happened, what it means for the date or cost, what you recommend, and by when a decision is needed. Without a recommendation it is a problem handed upward; with one it is a decision request that a busy person can answer in a minute.</p>",
+            "<p>Escalate to the person who owns the constraint, not to whoever is most senior and available. Sending a cost decision to somebody who does not control the budget produces sympathy and no decision, which is worse than the original silence because now it looks handled.</p>",
+            "<p><strong>Check yourself.</strong> What decision have you been waiting on for more than a week? Who owns it, and what exactly are you asking them to decide?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 5 · Closing and learning",
+      "lessons": [
+        {
+          "title": "Handover that sticks",
+          "minutes": 18,
+          "html": [
+            "<p>A project is not finished when the deliverable exists; it is finished when the people who must live with it can run it without the project team. Handover is the part most often compressed into the final week, and it is the part that determines whether the whole effort was worth making.</p>",
+            "<p>Handover needs three things: trained people, written instructions for the things that will be needed in six months, and a named owner for each element afterwards. Training by demonstration is not training; somebody must do the task themselves while the expert watches, at least twice.</p>",
+            "<p>Write for the person who will be doing this in a year, who was not in the room. That means the exceptions and the workarounds, not only the standard process. The standard process is usually guessable from the system; the exception is what generates the phone call.</p>",
+            "<p>Test the handover the way you test a definition of done: have the new owner perform the task without help and confirm the result. If they cannot, the handover has not happened, whatever the training attendance sheet says.</p>",
+            "<p>Handover also includes the relationships. Introduce the new owner to the supplier's contact, the branch manager and the person in finance who resolves problems. A system handed over without its relationships is a system that will stop working the first time something unexpected happens.</p>",
+            "<h3>The support question</h3>",
+            "<p>Decide in advance what support exists after the project closes and who provides it. A project that ends with no answer to that question creates a permanent informal obligation on whoever built it, which is a cost that never appears in any budget.</p>",
+            "<p>If support is genuinely needed, make it a named arrangement with hours or a contract. If it is not, say so clearly so that the team can disperse without feeling they are abandoning the users. Ambiguity here is what turns a completed project into an endless one.</p>",
+            "<p><strong>Check yourself.</strong> Who will be doing this work in a year, and have they done it once without help?</p>"
+          ]
+        },
+        {
+          "title": "Closing out money and contracts",
+          "minutes": 16,
+          "html": [
+            "<p>Projects end with financial loose ends that nobody enjoys but that affect the organisation long after the team has gone: invoices unpaid, retention held, equipment not returned, a supplier expecting a final meeting. Closing these is part of the project, not an administrative residue after it.</p>",
+            "<p>Start the process weeks before the end date. Compile the list of commitments: what has been ordered and not invoiced, what has been invoiced and not paid, what was bought with project money and belongs to whom. Each item needs an owner and a date, and most of them are quick once they are visible.</p>",
+            "<p>Confirm the final position with finance rather than assuming it. A project reported as within budget while an unpaid invoice sits with the supplier is not within budget, and the discovery comes at the worst moment — usually when the next project asks for money.</p>",
+            "<p>Close the contracts deliberately. Confirm in writing that the supplier's obligations are complete, and get the same confirmation for yours. An unclosed contract keeps a liability open indefinitely, and it is the reason some organisations are still arguing about a project that finished two years ago.</p>",
+            "<p>Where money remains unspent, decide deliberately whether it returns to the funder or is reallocated. Leaving it unresolved is the most expensive option, because unspent money with no decision becomes a question about the project's competence rather than about its planning.</p>",
+            "<h3>Returning what was borrowed</h3>",
+            "<p>Equipment, keys, access cards, vehicles and borrowed staff all need returning as deliberately as they were acquired. An asset that drifts from a project into general use is not a saving; it is an unrecorded transfer that will be discovered as a gap in an audit.</p>",
+            "<p>Keep a closing checklist and work through it before the project is declared complete. The list is short, the items are dull, and doing them is the difference between a project that ends and one that keeps sending emails for a year.</p>",
+            "<p><strong>Check yourself.</strong> Which commitment made by your project is still unpaid, unreturned or unconfirmed?</p>"
+          ]
+        },
+        {
+          "title": "Reviewing what actually happened",
+          "minutes": 17,
+          "html": [
+            "<p>A review is not a post-mortem and not a celebration. It is the only opportunity to convert the experience into something the organisation can use, and it is usually skipped because the team is tired and everybody wants to move to the next thing. The cost of skipping it is that the same mistakes are made with new people and the same optimism.</p>",
+            "<p>Compare the plan with what happened, at the level of individual deliverables rather than overall. Where the estimate was wrong, ask why: unfamiliar work, a dependency that failed, an assumption that did not hold. The pattern across several items is the useful finding, not any single miss.</p>",
+            "<p>Ask what you would do differently, and be specific enough to be repeatable. We would involve the branch managers earlier is useful; we should have communicated better is not. Specific findings can be written down and used next time, which is the whole point.</p>",
+            "<p>Hold the review while people still remember and while they are still on good terms. A review two months later produces summaries of summaries, and a review conducted during an argument about blame produces nothing at all.</p>",
+            "<p>Invite the person who will run the next similar project. Their questions are the ones the review should answer, and their presence is what turns a document into a practice.</p>",
+            "<h3>Writing it down somewhere it will be found</h3>",
+            "<p>A review that lives in one person's notebook has not happened. Write a page: what the project was meant to achieve, what it achieved, what the three biggest variances were, and the three recommendations. Store it where the next project manager will look, and name it so it can be found.</p>",
+            "<p>Then use it. The test of a review is whether a subsequent project starts differently because of it. If the same finding appears in three consecutive reviews, the organisation is not learning; it is documenting.</p>",
+            "<p><strong>Check yourself.</strong> What is the single most useful thing you have learned on your current project, and where could you write it so it is not lost?</p>"
+          ]
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "What distinguishes a project from ongoing operations?",
+      "explanation": "A project is temporary with a defined outcome and end. That is what makes a definition of done and a closing discipline both possible and necessary.",
+      "options": [
+        { "text": "It is temporary, with a defined outcome and an end date", "correct": true },
+        { "text": "It is larger than the usual work of the team", "correct": false },
+        { "text": "It involves people from more than one department", "correct": false },
+        { "text": "It has a budget allocated to it", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A sponsor insists scope, date and budget are all fixed. What is the correct response?",
+      "explanation": "Plan what is achievable within the fixed constraints and show the gap, so the trade becomes a decision for whoever owns the consequences.",
+      "options": [
+        { "text": "Plan what is achievable and show the gap, so the trade becomes an explicit decision", "correct": true },
+        { "text": "Accept all three and plan to work harder", "correct": false },
+        { "text": "Refuse to start until one constraint is relaxed", "correct": false },
+        { "text": "Plan the full scope and report problems as they arise", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What makes a definition of done usable?",
+      "explanation": "It names the output, the condition it must be in, and the evidence it works — specific enough that a stranger could test it.",
+      "options": [
+        { "text": "It names the output, its required condition, and the evidence it works", "correct": true },
+        { "text": "It describes the general purpose of the project", "correct": false },
+        { "text": "It lists the phases of work to be completed", "correct": false },
+        { "text": "It is agreed by the project team rather than the acceptor", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why is a critical path useful?",
+      "explanation": "It shows the longest chain of dependent work, so attention goes where slippage would actually move the end date rather than where there is slack.",
+      "options": [
+        { "text": "It shows where slippage would actually move the end date", "correct": true },
+        { "text": "It identifies the most expensive tasks", "correct": false },
+        { "text": "It lists every task in the order it will be done", "correct": false },
+        { "text": "It shows which team member is busiest", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A workstream reports ninety per cent complete for two months. What is the likely problem?",
+      "explanation": "Percentage of effort hides whether anything has been accepted. Track completed deliverables against a definition of done instead.",
+      "options": [
+        { "text": "Progress is being measured by effort rather than by accepted deliverables", "correct": true },
+        { "text": "The team is working too slowly and needs supervision", "correct": false },
+        { "text": "The remaining work is genuinely difficult", "correct": false },
+        { "text": "The project is over-resourced", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What is the difference between a risk and an issue?",
+      "explanation": "A risk might happen and is watched and mitigated; an issue has happened and is owned and resolved.",
+      "options": [
+        { "text": "A risk might happen; an issue has happened", "correct": true },
+        { "text": "A risk is financial; an issue is operational", "correct": false },
+        { "text": "A risk belongs to the sponsor; an issue belongs to the team", "correct": false },
+        { "text": "They are the same thing recorded at different stages", "correct": false }
+      ]
+    },
+    {
+      "prompt": "How should a scope change be handled?",
+      "explanation": "Write it down with what it adds, what it displaces, and its effect on date or cost, then let the owner of the constraint decide.",
+      "options": [
+        { "text": "Record what it adds, what it displaces and its effect, then let the owner of the constraint decide", "correct": true },
+        { "text": "Refuse all changes after the plan is signed off", "correct": false },
+        { "text": "Absorb small changes without recording them", "correct": false },
+        { "text": "Accept changes and ask for more time at the end", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What makes a project review worth holding?",
+      "explanation": "Specific, repeatable findings compared against the plan deliverable by deliverable, held while memory is fresh and written where the next project manager will find it.",
+      "options": [
+        { "text": "Comparing the plan with what happened and writing specific, repeatable findings where they will be found", "correct": true },
+        { "text": "Recording the team's overall impression of how the project went", "correct": false },
+        { "text": "Holding it two months later once emotions have settled", "correct": false },
+        { "text": "Focusing on individual performance so lessons are personal", "correct": false }
+      ]
+    }
+  ]
+}

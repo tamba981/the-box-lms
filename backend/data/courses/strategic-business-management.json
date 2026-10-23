@@ -1,0 +1,356 @@
+{
+  "slug": "strategic-business-management",
+  "title": "Strategic Business Management",
+  "program": "CPP",
+  "category": "business-management",
+  "level": "intermediate",
+  "credential": "certificate",
+  "priceCents": 4000,
+  "certificateFeeCents": 0,
+  "summary": "Make strategy a set of choices you can defend and fund, read your competitive position honestly, and execute through an organisation that resists.",
+  "description": "Most strategy documents are plans wearing a strategy label: a list of initiatives, a forecast, and a set of aspirations that nobody could disagree with. This course treats strategy as something narrower and harder — the set of choices about where to compete, how to win there, and what to stop doing. Those choices have costs, and a strategy that costs nothing is a wish.\n\nIt works through competitive position with an emphasis on evidence rather than frameworks: where profit actually sits in an industry, which capabilities are genuinely hard to copy, and how a market looks when read from customers rather than from competitors. It then addresses the decisions strategy actually consists of: what to stop, how resources get allocated in practice, and whether to build, buy or partner.\n\nExecution is treated as part of strategy rather than as a separate phase, including the awkward questions of measure alignment, the managers who translate intent into work, and what to do when resources are constrained. It closes on governance and ethics, where the limits of a mandate and the cost of shortcuts are decided.",
+  "tags": ["strategy", "competitive position", "resource allocation", "execution", "governance", "business management"],
+  "outcomes": [
+    "State a strategy as a set of choices with explicit trade-offs rather than as a plan",
+    "Analyse where profit sits in an industry and why it might move",
+    "Distinguish capabilities that are hard to copy from those that only look valuable",
+    "Decide what to stop, and defend the decision to the people affected",
+    "Align measures and resource allocation with the strategy rather than against it",
+    "Recognise when a governance or ethical limit should change a strategic option"
+  ],
+  "caseStudy": "A distribution group earning most of its profit from two inherited contracts must decide whether to enter a third country, and discovers that the decision depends on whether it can stop funding two businesses that have never earned their cost of capital.",
+  "modules": [
+    {
+      "title": "Module 1 · Strategy as choices",
+      "lessons": [
+        {
+          "title": "What strategy is, and what a plan is not",
+          "minutes": 20,
+          "html": [
+            "<p>A plan is a sequence of activities with dates. A strategy is a set of choices about where to compete, how to win there, and what to refuse. The two are different documents, and most organisations have a plan where a strategy should be, which is why they can execute the plan perfectly and still lose position.</p>",
+            "<p>The test of a strategy is whether it could be wrong. If the document says that the organisation will grow, improve service and invest in its people, no competitor would find it difficult to copy and no customer would notice the difference. A strategy that anybody would endorse is a description of good intentions, not a choice about how to win.</p>",
+            "<p>Real strategy contains refusals. We will serve this segment and not that one. We will be fast rather than cheap. We will not enter this market even though it is growing. Each refusal is what makes the remaining commitment credible, because it tells the organisation where to spend and where not to.</p>",
+            "<p>The refusals are also where strategy fails. Organisations rarely suffer from choosing the wrong direction; they suffer from choosing several directions at once because each had a champion. A strategy that funds everything is a strategy that has not been made, whatever the document says.</p>",
+            "<p>A useful discipline is to write the refusals before the commitments. Naming what the organisation will not do forces the argument about priority into the open, at a point where it is still a discussion rather than a budget dispute, and it prevents the commitments from being written first and the refusals quietly omitted.</p>",
+            "<h3>Why the plan is easier</h3>",
+            "<p>Plans are comfortable because they are additive: each department adds its activities and nobody has to be refused. Strategy requires somebody to decide that a plausible initiative will not be funded, and that decision has an owner, a loser and a consequence. That is why strategy documents so often end up as plans, and why the organisations that do it properly are unusual.</p>",
+            "<p>If a strategy has no losers in it, it is not a strategy. Some activity that currently receives money and attention should receive less, and the document should say which. Without that, the strategy is an addition to the existing workload and will be absorbed by the organisation rather than change it.</p>",
+            "<p><strong>Check yourself.</strong> Take your organisation's strategy document. What does it refuse to do, and who inside the organisation loses because of that refusal?</p>"
+          ]
+        },
+        {
+          "title": "Positions you can occupy, and what each costs",
+          "minutes": 20,
+          "html": [
+            "<p>There are only a few durable ways to win, and each carries a cost the organisation must be willing to pay. Being the cheapest requires a structural advantage in cost that a competitor cannot copy, and it requires accepting thin margins and volume dependence. Being differentiated requires something customers value and will pay for, which costs money that a cost leader does not spend.</p>",
+            "<p>A third position is focus: serving a narrow segment better than a generalist can, which is how smaller organisations survive against larger ones. Its cost is that the segment must be genuinely distinct, with needs that force specific investment. A focus that is only a smaller version of the generalist offer has no advantage at all.</p>",
+            "<p>The classic failure is the middle: an organisation that invests for differentiation without charging for it, or cuts cost in ways customers notice without lowering its price. It ends up with the costs of one strategy and the price of the other, and the arithmetic is unforgiving.</p>",
+            "<p>In markets with weak institutions and expensive capital, a fourth position is worth naming: reliability. Where supply is unpredictable and trust is scarce, being the supplier that actually delivers, at a stated price, is a position customers pay for, and it is expensive to build because it requires holding stock and refusing marginal sales.</p>",
+            "<p>Put the position into a sentence and test it against the last five decisions the organisation made. If the decisions were consistent with a different position, the organisation is not where its strategy says it is, and the sentence describes an intention rather than a reality.</p>",
+            "<h3>Choosing with the cost in view</h3>",
+            "<p>The mistake is to choose a position by its advantages and forget its costs. Differentiation sounds attractive and requires sustained investment in quality, people and brand in years when money is short. Cost leadership sounds disciplined and requires accepting that the organisation will always be under pressure on price.</p>",
+            "<p>Choose the position whose cost the organisation will actually keep paying in a bad year. A position abandoned during a downturn is a position the market will not believe again, and customers learn quickly which suppliers can be relied on to stay in their chosen ground.</p>",
+            "<p><strong>Check yourself.</strong> Which position does your organisation claim, and what does that position require it to spend money on in a bad year?</p>"
+          ]
+        },
+        {
+          "title": "Recognising when the strategy has stopped working",
+          "minutes": 19,
+          "html": [
+            "<p>Strategies decay quietly. The assumptions that made a position valuable stop being true, and the organisation continues reporting progress against a plan that no longer describes a winnable position. By the time the decline is visible in results, several years of investment have usually been pointed in the wrong direction.</p>",
+            "<p>Watch for specific symptoms. Margins fall while volumes grow, which means the organisation is buying growth it cannot earn on. The best customers leave and are replaced by more demanding ones. The organisation wins fewer competitive situations against the same competitors. Each is a signal about the position rather than about execution.</p>",
+            "<p>The hardest symptom to act on is success in the old market. A business that is still growing can ignore decay for a long time, and the people who point it out are heard as disloyal. That is why the conversation has to be structured around evidence rather than around warnings.</p>",
+            "<p>Ask, at intervals, which assumption would have to be false for the strategy to fail, and check that assumption specifically. That is a far more efficient use of attention than a general review, because it tests the load-bearing structure rather than the decoration.</p>",
+            "<p>Where the evidence points at decline, write down what the organisation would have to believe for the current strategy still to work. That list is short, testable, and it converts a disagreement about mood into a disagreement about facts, which is the only kind that can be settled.</p>",
+            "<h3>The decision to change position</h3>",
+            "<p>Changing position is expensive and rarely complete. Organisations that attempt to move from cost to differentiation usually arrive with neither, because the old cost structure persists and the new capability takes years to build. Where a change is necessary, run the two businesses separately rather than diluting both.</p>",
+            "<p>Recognise also that some decline is not strategic. A market can shrink for reasons outside any participant's control, and the correct response may be to harvest, or to exit in an orderly way that protects customers and staff. Naming that openly is more honest, and often more profitable, than a strategy document describing a turnaround nobody believes.</p>",
+            "<p><strong>Check yourself.</strong> What single assumption does your current strategy rest on? When was it last tested with evidence rather than with opinion?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Understanding your position",
+      "lessons": [
+        {
+          "title": "Where profit actually sits",
+          "minutes": 20,
+          "html": [
+            "<p>Profit in an industry is rarely spread evenly. It concentrates where bargaining power sits, where switching costs are high, or where a participant controls something scarce. Understanding that distribution is more useful than describing the industry in general terms, because it tells you where an organisation could realistically earn a return.</p>",
+            "<p>Look for the constraints. Who can refuse to sell to you, and who can refuse to buy? Who bears the cost of a delay, and who can pass it on? Where a supplier or customer can dictate terms, profit moves to them, and a strategy that assumes a fair share will disappoint.</p>",
+            "<p>Then look for the things that are genuinely scarce: a licence, a location, a relationship, a skill, a route. Scarcity is where durable profit comes from, and it is more useful to ask what your organisation controls that others find hard to obtain than to assess the attractiveness of an industry in the abstract.</p>",
+            "<p>In markets where formal institutions are weak, informal scarcity matters as much: knowing which official to approach, having a reputation that gets goods released, understanding how credit really works. Those advantages are real and are rarely written down, which is both a risk and an opportunity for whoever recognises them.</p>",
+            "<p>Write the map on one page and date it. A profit map without a date becomes a comfortable assumption within two years, quoted in meetings by people who no longer remember which participants were where when it was drawn.</p>",
+            "<h3>Profit pools move, and the movement is the signal</h3>",
+            "<p>Where profit sits changes over time, usually as regulation, technology or customer expectations shift. The organisation that was positioned well five years ago may now be standing where the profit used to be, and be perfectly executed for a world that has moved.</p>",
+            "<p>Map the profit pool every couple of years, name what has moved, and ask who captured it. That is a more honest strategic conversation than a review of last year's performance, because it asks where the money went rather than why it did not arrive.</p>",
+            "<p><strong>Check yourself.</strong> In your industry, name the three participants with the most bargaining power and what it is that gives it to them.</p>"
+          ]
+        },
+        {
+          "title": "Capabilities that cannot be copied",
+          "minutes": 20,
+          "html": [
+            "<p>Every organisation believes it has capabilities. Most have activities that are currently performed adequately, which is not the same thing. A capability is a way of working that produces a customer-relevant advantage and would take a competitor years to replicate, if they could replicate it at all.</p>",
+            "<p>Three tests help. Does it produce something customers pay for? Can a competitor with money copy it within a year? And does it come from something structural — accumulated relationships, embedded routines, a location, a licence — rather than from the effort of individuals who might leave?</p>",
+            "<p>Most claimed advantages fail the second test. A new system can be bought by anyone; a price list can be matched the same afternoon; a service standard can be copied by anyone willing to pay for the staff. Those things may be necessary, but they are not advantages.</p>",
+            "<p>Genuine advantages are usually unglamorous: a distribution route that took a decade to build, a relationship with a supplier that provides credit nobody else gets, a training system that keeps skilled staff when competitors lose theirs. None of them photographs well, and all of them are hard to take away.</p>",
+            "<p>Test it by asking what would happen if the relationship ended next month. If the answer involves losing a significant share of the business, the capability is a concentration, and the strategy should include a deliberate reduction of that dependence rather than a plan to expand on top of it.</p>",
+            "<h3>The advantage that is really a dependency</h3>",
+            "<p>Be careful to distinguish an advantage from a dependency. One dominant customer, one key individual, one favourable regulation: each looks like strength and is actually exposure. A capability built on a relationship the organisation does not control can disappear with a change of personnel or policy.</p>",
+            "<p>Ask what would have to happen for the advantage to disappear, and how quickly. If the answer is one signature, it is not an advantage; it is a risk wearing good clothes, and the strategy should reduce dependence on it rather than celebrate it.</p>",
+            "<p><strong>Check yourself.</strong> Name one thing your organisation does that a funded competitor could not copy within a year. What is it built on?</p>"
+          ]
+        },
+        {
+          "title": "Reading the market from customers, not competitors",
+          "minutes": 19,
+          "html": [
+            "<p>Competitor-focused strategy produces imitation. Watching what rivals do tells you where they have already been, and following them assumes the market rewards similarity, which it usually does not. Customer-focused strategy produces information about what people are trying to achieve and where current offers fail them.</p>",
+            "<p>Ask customers what they did before they bought from you, what they would have done if you were unavailable, and what they would change about the purchase. Those three questions reveal the real alternatives and the real costs of switching, which the organisation often misunderstands.</p>",
+            "<p>Look for the workarounds. Every workaround a customer has invented describes a need that no supplier is meeting, and those needs are where new positions become available. A customer who keeps a private list because the system cannot produce the report has told you what to build.</p>",
+            "<p>Beware of the average customer. Segments with different needs average into a description that fits none of them, and the organisation then optimises for a customer who does not exist. Break the base by behaviour, not by size or geography, because behaviour is what predicts whether a strategy will land.</p>",
+            "<p>Set a short, fixed ritual for reading it: one person summarises the last quarter's complaints into three patterns, and the leadership team discusses what each implies. Fifteen minutes a quarter, and it generates more strategic insight than most commissioned studies.</p>",
+            "<h3>The information you already have</h3>",
+            "<p>Most organisations have more customer information than they use: complaints, delivery queries, returns, the reasons given when an account is closed. None of it is labelled as research, and all of it is more honest than a survey because it was generated by real transactions.</p>",
+            "<p>Read the complaint log as a strategy document for a quarter. Patterns in it identify what customers need and the business is not providing, and fixing the most expensive pattern is often worth more than any new initiative.</p>",
+            "<p><strong>Check yourself.</strong> What did your last ten lost customers do instead of buying from you? Is that recorded anywhere?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Portfolio and investment choices",
+      "lessons": [
+        {
+          "title": "Deciding what to stop",
+          "minutes": 20,
+          "html": [
+            "<p>Organisations accumulate activities, and the accumulation is rational at each step: a customer request, a regulation, a capable person's enthusiasm. The result, after several years, is a portfolio nobody chose, funded by whatever is left after everything is maintained.</p>",
+            "<p>Stopping is harder than starting because it has identifiable losers and diffuse winners. The people doing the stopped activity lose status, colleagues and sometimes employment; the beneficiaries are future customers who never appear in the argument. That asymmetry is why strategies that require stopping rarely happen without a decision at the top.</p>",
+            "<p>Make the test explicit. For each activity, ask what it would cost to do properly, what it earns, and what else could be done with the same money and attention. The question is not whether it is worthwhile but whether it is the most valuable use of a constrained resource.</p>",
+            "<p>Then decide with a date. A phased withdrawal with a named end date is kinder, more credible and less expensive than a sudden closure, and it allows customers to be moved rather than abandoned.</p>",
+            "<p>Give people time to prepare for a stopping decision. Announcing a withdrawal to customers and staff on the same day it is decided is efficient for the decider and cruel for everybody else, and it produces the departures and disputes that the phased approach was meant to avoid.</p>",
+            "<h3>Saying it in a way people can act on</h3>",
+            "<p>Announce what will be different, why, and what happens to the people and customers affected. Vagueness is read as secrecy, and secrecy produces the worst outcomes: the best people leave first because they have options, and the customers who leave are the ones who were paying attention.</p>",
+            "<p>Expect resistance and treat it as information. Somebody close to the activity usually knows something the analysis does not, and a decision that survives being challenged is stronger than one that was never tested.</p>",
+            "<p><strong>Check yourself.</strong> Which activity in your organisation would you stop if you had to fund one new one? What is stopping you?</p>"
+          ]
+        },
+        {
+          "title": "Resource allocation that follows strategy",
+          "minutes": 19,
+          "html": [
+            "<p>Strategy is revealed by where money and attention actually go, not by what the document says. In most organisations the two diverge because the budget is built from last year's baseline and the strategy arrives as a separate document, and the baseline wins every time.</p>",
+            "<p>Build the budget from the strategy. If the strategy says the organisation will win in a particular segment, the allocation should show money moving towards it, and the amount should be visible. A strategy with no allocation attached is an intention the organisation cannot act on.</p>",
+            "<p>Protect the new from the old. Existing activities have defenders, established reporting and a track record, and new ones have none of those. Without a protected allocation, the new initiative is funded from whatever the existing activities leave over, which in a difficult year is nothing.</p>",
+            "<p>Review at the level of the choice, not the line item. The board should see the three or four decisions the strategy consists of, with the money and the measures attached, rather than two hundred lines with a small increment added to each.</p>",
+            "<p>Watch the language as well as the money. When a strategic priority starts being described as something we are still doing, it has already been demoted, and the people closest to it will have understood that long before anybody says it aloud.</p>",
+            "<h3>The quiet defunding</h3>",
+            "<p>Watch for strategies that are adopted and then defunded slowly: the initiative keeps its name and loses its budget, and everyone learns that the strategy was not serious. That lesson outlasts the initiative and makes the next one harder to launch.</p>",
+            "<p>If a strategic initiative is no longer worth its cost, stop it openly and say why. An honest cancellation preserves credibility; a slow starvation destroys it, and it also consumes the people who were asked to make it work.</p>",
+            "<p><strong>Check yourself.</strong> Compare your strategy's three priorities with the last budget. Did money move towards them, and by how much?</p>"
+          ]
+        },
+        {
+          "title": "Build, buy or partner",
+          "minutes": 20,
+          "html": [
+            "<p>When an organisation needs a capability it does not have, there are three routes, and the choice is usually made on the basis of speed rather than of what each route costs to own afterwards.</p>",
+            "<p>Building is slowest and gives the most control. It works when the capability depends on routines and relationships that must be grown, and it fails when the organisation needs to be credible in the market before it has the skills.</p>",
+            "<p>Buying is fastest and carries the highest risk of overpaying, because the price includes the seller's expectations and the acquirer's optimism. Most acquisitions that destroy value do so because the acquirer paid for synergies it could not deliver, and the case for those synergies was written by people who would not have to implement them.</p>",
+            "<p>Partnering is cheapest and least controllable. It works where the partner's incentive genuinely aligns for the duration, and it fails when the arrangement is really a transfer of knowledge from one party to another, in which case the partner eventually becomes a competitor or loses interest.</p>",
+            "<p>Whichever route is chosen, write down what the organisation will be able to do in three years that it cannot do now. If the answer is the same for all three routes, the choice does not matter and too much time is being spent on it; if it differs sharply, the argument should be about that difference.</p>",
+            "<h3>The question that settles it</h3>",
+            "<p>Ask whether the capability is core to how the organisation intends to win. If it is, owning it matters and the slower route may be justified. If it is not, buying it as a service or a partnership frees attention for what is. Most strategic mistakes come from owning things that were never the source of advantage.</p>",
+            "<p>Then ask what happens when the arrangement ends. A partnership that leaves the organisation intact and functioning has succeeded; one that leaves it dependent has created a capability it does not own. Decide at the start which of those is acceptable, because the answer determines how the contract is written.</p>",
+            "<p><strong>Check yourself.</strong> Name a capability you currently buy as a service. Is it core to how you win, or is owning it an unexamined habit?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Executing through the organisation",
+      "lessons": [
+        {
+          "title": "Measures that pull in the direction of the strategy",
+          "minutes": 19,
+          "html": [
+            "<p>People optimise what is measured, especially when measurement is tied to reward. If the measures were designed before the strategy, they will pull behaviour towards the old position, and no amount of communication will overcome an incentive pointing the other way.</p>",
+            "<p>Test each measure against the strategy. If the strategy is to earn more from existing customers, a measure of new customer acquisition will produce exactly the wrong behaviour. If the strategy is reliability, a measure of cost per delivery will systematically erode it.</p>",
+            "<p>Use few measures. Three or four that the leadership team actually reviews and argues about are worth more than thirty that are reported and ignored. The number of measures is usually inversely related to their use.</p>",
+            "<p>Include a measure of the thing you are choosing not to measure, or the trade will be managed badly. A strategy that prioritises quality over volume needs both numbers visible, or the volume number will win by default because it is easier to produce.</p>",
+            "<p>Review the measures when the strategy changes, and be explicit about which ones are being retired. Measures accumulate silently and are rarely removed, so an organisation three strategies later is still reporting on the priorities of the first one.</p>",
+            "<h3>The measure that becomes the goal</h3>",
+            "<p>Any measure used for long enough will be gamed, and usually in ways that satisfy the number and damage the purpose. That is not a reason to abandon measurement but a reason to change measures periodically and to watch what people are actually doing.</p>",
+            "<p>Where a number improves while the customer experience worsens, the measure has become the goal. Investigate before celebrating, and be willing to retire it publicly rather than let it distort behaviour for another year.</p>",
+            "<p><strong>Check yourself.</strong> Which of your current measures would reward behaviour that undermines the strategy? What would you replace it with?</p>"
+          ]
+        },
+        {
+          "title": "The managers who actually translate",
+          "minutes": 19,
+          "html": [
+            "<p>Strategy is made real by middle managers, and it is lost there too. They translate an intention into the week's decisions, and they are the only people who can reconcile a corporate aim with the reality of a delivery that is late and a customer who is angry.</p>",
+            "<p>A manager who does not understand the strategy will optimise locally and sensibly, and the sum of those local optimisations will not be the strategy. That is not a failure of the manager; it is a failure to explain what the organisation is trying to do and what it is willing to sacrifice.</p>",
+            "<p>Explain it in terms of choices, not aspirations. We will accept longer delivery times to keep our promise rate above ninety per cent is actionable. We will delight customers is not, because it does not tell anybody what to do differently on Thursday.</p>",
+            "<p>Give the middle two things: the reason, and the authority to make the trade in the moment. A manager who understands why can improvise correctly when the situation is unlike anything in the plan, and improvisation is what the plan always requires.</p>",
+            "<p>Where a manager's disagreement turns out to identify a real obstacle, say so publicly and act on it. Nothing improves the credibility of a strategy faster than a senior leader changing something because somebody closer to the work pointed out that it was wrong.</p>",
+            "<h3>The manager who disagrees</h3>",
+            "<p>Some managers will disagree with the strategy, sometimes with good reason. Treat disagreement as information and use it: ask what they would do differently and what they see that you do not. Where the disagreement is about facts, it is resolvable; where it is about values, it is a decision to be made at the top and acknowledged as such.</p>",
+            "<p>Do not ask for enthusiasm that is not there. Ask for implementation and honesty: say so if you think this will not work, and do it properly until the decision changes. That is a workable arrangement and it preserves both the strategy and the relationship.</p>",
+            "<p><strong>Check yourself.</strong> Could one of your middle managers explain the strategy as a choice with a trade-off attached, in a sentence, without notes?</p>"
+          ]
+        },
+        {
+          "title": "Strategy under real constraint",
+          "minutes": 19,
+          "html": [
+            "<p>Strategy in a well-resourced organisation is a problem of coordination. In most organisations it is a problem of constraint: too few people, expensive money, weak infrastructure and demands that exceed capacity. The response is not a smaller ambitions but a narrower scope.</p>",
+            "<p>Doing less, properly, is a strategy. An organisation that picks two things and does them excellently will usually outperform one attempting six, because the six compete for the same scarce attention and none receives enough.</p>",
+            "<p>Sequence rather than parallel. Where everything is necessary, decide the order, and say what has to be finished before the next begins. Sequencing also creates visible progress, which is what sustains support through the middle years when nothing appears to be working.</p>",
+            "<p>Protect the scarce element. In many organisations the constraint is not money but one or two people's time and judgement. A strategy that ignores this constraint is a wish list, and the way to test it is to ask who will do the work and what they will stop doing to make room.</p>",
+            "<p>Where the return is marginal, consider phasing the investment so that the first stage proves the case before the larger commitment is made. Phasing costs time and buys information, and information is usually the cheaper of the two when capital is expensive.</p>",
+            "<h3>Borrowing against a strategy</h3>",
+            "<p>When capital is expensive, the bar for borrowing rises and the strategy must be justified on returns rather than on growth. A strategy that requires debt to execute must show the return on the capital and what happens if the plan is a year late, because the interest does not wait.</p>",
+            "<p>Where the return is not clear, the honest strategy is to improve the current business rather than to expand it. That is less exciting to write and usually correct, and it is the recommendation that a good adviser gives more often than a client wishes to hear.</p>",
+            "<p><strong>Check yourself.</strong> What is your real constraint: money, people, or management attention? Does your strategy reflect it?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 5 · Governance and sustainability",
+      "lessons": [
+        {
+          "title": "Stakeholders, boards and the limits of a mandate",
+          "minutes": 19,
+          "html": [
+            "<p>A strategy is executed under a mandate that is granted by owners, a board, a ministry or a community, and the boundaries of that mandate are real constraints rather than formalities. A strategy that ignores them will be stopped, often late and expensively.</p>",
+            "<p>Know who can withdraw the mandate and on what grounds. For a private company it is owners and lenders; for a public body it is a minister and, ultimately, the public; for a partnership it is the partners. Each has a different test of legitimacy, and the tests are not interchangeable.</p>",
+            "<p>Bring the constraint into the strategy rather than discovering it in implementation. If a particular segment is politically unacceptable, or a pricing approach would breach a lender covenant, those are design constraints, and good strategy treats them as such rather than as obstacles to be overcome later.</p>",
+            "<p>Boards add a specific difficulty: they meet infrequently, they depend on the papers they receive, and they can only make the decisions that are put in front of them. A board that is given a plan cannot choose a strategy, which is why the papers matter as much as the discussion.</p>",
+            "<p>Ask the board, once a year, which decision it would have made differently with better information. Their answer tells you what to put in next year's papers, and it is the most direct feedback available on whether governance is working or merely occurring.</p>",
+            "<h3>Reporting that respects the mandate</h3>",
+            "<p>Report against the choices, not only against the numbers. A board that hears the strategy is on track has learned nothing; a board that hears the third country entry has been deferred and why can exercise judgement. The reporting shape determines the quality of the oversight.</p>",
+            "<p>Say also what you got wrong. Governance fails when the only information reaching a board is favourable, and it fails slowly, until a decision that needed early challenge is discovered too late to change.</p>",
+            "<p><strong>Check yourself.</strong> Who grants your organisation's mandate, and what would cause them to withdraw it? Is that constraint in your strategy?</p>"
+          ]
+        },
+        {
+          "title": "Ethics as a strategic constraint",
+          "minutes": 19,
+          "html": [
+            "<p>Ethical limits are usually presented as compliance, which is why they are underweighted in strategy. Treating them as constraints on the design of a strategy, in the same way as a budget or a deadline, produces better decisions than treating them as a check applied at the end.</p>",
+            "<p>The reason is arithmetic rather than moral. A strategy that depends on a practice which may later be prohibited, exposed or litigated carries a contingent cost that is rarely in the business case. The expected cost of that contingency is often greater than the margin the practice produces.</p>",
+            "<p>Where a practice is legal but questionable, consider who bears the cost. If the benefit accrues to the organisation and the risk to a customer, a supplier or a community, the strategy is borrowing against a future it does not control, and the loan will be called at a moment of somebody else's choosing.</p>",
+            "<p>In markets with weak enforcement, this is not theoretical. A supplier who underpays staff, a distributor who avoids tax, a partner whose licence is discretionary: each is a dependency that can disappear overnight, taking the strategy with it.</p>",
+            "<p>Make the rules visible to the people who will have to apply them, not only to the leadership team. A constraint that is known only at the top is applied inconsistently in the middle, and inconsistency is read by customers as a negotiating opportunity.</p>",
+            "<h3>Making the constraint usable</h3>",
+            "<p>Write the constraints down as rules the organisation will not break, and apply them to options before they are chosen rather than after. A rule that is invoked only when a proposal is already favoured is not a constraint; it is a negotiating position.</p>",
+            "<p>Expect the moment when breaking a rule looks like the only way to save the quarter. That moment is the test of whether the constraint was real, and the answer becomes the organisation's actual policy regardless of what the document says.</p>",
+            "<p><strong>Check yourself.</strong> Name one ethical constraint your organisation would hold to even if it cost a contract. Would everybody in the organisation give the same answer?</p>"
+          ]
+        },
+        {
+          "title": "Reviewing strategy without rebuilding it annually",
+          "minutes": 19,
+          "html": [
+            "<p>An annual strategy cycle produces two failures at once: a document rebuilt each year to justify the budget, and a strategy abandoned each year before it could work. The rhythm is a convention of planning calendars, not a property of markets.</p>",
+            "<p>Review the strategy when its assumptions change, not when the calendar turns. A competitor's move, a regulatory change, a technology shift or a sustained failure to meet a measure are all triggers. Absent a trigger, the strategy should be confirmed rather than rewritten.</p>",
+            "<p>Separate the strategy from the plan. The plan is annual and operational; the strategy should last several years, with its assumptions tested regularly and its choices changed only when evidence demands it. Organisations that rewrite strategy annually are usually expressing a plan and calling it strategy.</p>",
+            "<p>Keep a record of what you expected. A strategy without a record of its predictions cannot be evaluated, and it will be judged instead by whether people liked the year, which is a different question.</p>",
+            "<p>Fix the review to the evidence, not to the mood of the year. A review held after a good quarter confirms the strategy; one held after a bad quarter replaces it. Neither is about the assumptions, and the assumptions are the only thing that should move the strategy.</p>",
+            "<h3>What a review should produce</h3>",
+            "<p>A good review produces one of three conclusions: the strategy is working and continues; one assumption has changed and one choice should be adjusted; or the position is no longer viable and the strategy should change. Three possible outcomes, each actionable.</p>",
+            "<p>A review that produces a new document every time has not reviewed anything. It has restarted, and each restart resets the organisation's memory of what it was trying to do.</p>",
+            "<p><strong>Check yourself.</strong> When did your organisation last change its strategy because of evidence rather than because of a calendar?</p>"
+          ]
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Which statement is a strategy rather than a plan?",
+      "explanation": "A strategy names a choice and its cost. Growth, quality and investment in people are aspirations any organisation would endorse and none would be disadvantaged by copying.",
+      "options": [
+        { "text": "We will serve large institutional clients only, and accept slower growth in the retail market", "correct": true },
+        { "text": "We will grow revenue by 20% and improve customer satisfaction", "correct": false },
+        { "text": "We will invest in our people and our systems", "correct": false },
+        { "text": "We will expand into three new regions over five years", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An organisation invests in service quality but keeps its prices at the level of the cheapest competitor. What is the likely outcome?",
+      "explanation": "It carries the costs of a differentiation position while earning the price of a cost position. This is the stuck-in-the-middle failure, and the arithmetic does not resolve itself.",
+      "options": [
+        { "text": "It carries differentiation costs at cost-leader prices and erodes its margin", "correct": true },
+        { "text": "It will win on both quality and price and take share", "correct": false },
+        { "text": "It will be protected by customer loyalty indefinitely", "correct": false },
+        { "text": "It will reduce its cost base to match the price", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which is most likely to be a genuine, defensible capability rather than an activity?",
+      "explanation": "A capability comes from something structural and slow to replicate. Software, price lists and service standards can be bought or matched quickly.",
+      "options": [
+        { "text": "A distribution route and supplier credit relationships built over a decade", "correct": true },
+        { "text": "A recently purchased inventory management system", "correct": false },
+        { "text": "A published service-level commitment", "correct": false },
+        { "text": "A competitive price list reviewed quarterly", "correct": false }
+      ]
+    },
+    {
+      "prompt": "The strategy requires a capability that is not core to how the organisation wins. What is usually the right route?",
+      "explanation": "Ownership should be reserved for what produces advantage. Buying the capability as a service or via partnership frees attention for what matters.",
+      "options": [
+        { "text": "Obtain it as a service or partnership and keep ownership for what creates advantage", "correct": true },
+        { "text": "Acquire a business that already has it", "correct": false },
+        { "text": "Build it internally to retain full control", "correct": false },
+        { "text": "Delay the strategy until the capability can be owned", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A measure improves while customer complaints rise. What does this suggest?",
+      "explanation": "The measure has become the goal and is being satisfied in ways that damage the purpose. Investigate and be prepared to retire the measure.",
+      "options": [
+        { "text": "The measure is being optimised in a way that damages the purpose it was meant to serve", "correct": true },
+        { "text": "Customers are being unreasonable about the change", "correct": false },
+        { "text": "The measure needs a higher target to restore pressure", "correct": false },
+        { "text": "Complaints are an unreliable indicator compared with measurement", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A strategy is announced and then its budget is progressively reduced over two years. What is the main consequence?",
+      "explanation": "The organisation learns that stated strategy is not serious. That lesson outlasts the initiative and makes future strategies harder to launch.",
+      "options": [
+        { "text": "The organisation learns that announced strategy is not to be taken seriously", "correct": true },
+        { "text": "Little, provided the initiative continues in name", "correct": false },
+        { "text": "Costs are controlled and credibility improves", "correct": false },
+        { "text": "The initiative simply reverts to the previous plan without side effects", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why should ethical limits be treated as design constraints rather than end-of-process checks?",
+      "explanation": "A practice that may later be prohibited or exposed carries a contingent cost that rarely appears in the business case, and can exceed the margin it produces.",
+      "options": [
+        { "text": "Because the contingent cost of exposure can exceed the margin the practice produces", "correct": true },
+        { "text": "Because regulators require a written ethics policy", "correct": false },
+        { "text": "Because customers always prefer ethical suppliers", "correct": false },
+        { "text": "Because it shortens the annual strategy review", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An organisation in a constrained market has six strategic priorities and limited management attention. What is usually the best response?",
+      "explanation": "Narrow scope and sequence. Six priorities competing for the same scarce attention means none receives enough, and progress becomes invisible.",
+      "options": [
+        { "text": "Choose fewer priorities and sequence them, naming what must finish first", "correct": true },
+        { "text": "Obtain additional funding so all six can proceed in parallel", "correct": false },
+        { "text": "Delegate all six to middle managers and review quarterly", "correct": false },
+        { "text": "Reduce the ambition of each priority equally", "correct": false }
+      ]
+    }
+  ]
+}

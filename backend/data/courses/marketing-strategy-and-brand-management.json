@@ -1,0 +1,325 @@
+{
+  "slug": "marketing-strategy-and-brand-management",
+  "title": "Marketing Strategy & Brand Management",
+  "program": "FCP",
+  "category": "business-management",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 1000,
+  "summary": "Choose who you serve and what you compete on, keep a promise customers can rely on, and market without a budget in a market built on trust.",
+  "description": "Most small businesses do not have a marketing problem. They have a positioning problem, and the marketing they attempt is an attempt to compensate for not having decided who they serve or why anyone should choose them.\n\nThis course is about making those decisions before spending anything. It covers what strategy actually is, which is a set of deliberate choices about who to serve and what to be best at, and the corollary that a strategy which serves everyone competes on nothing.\n\nIt then works through brand as a promise kept repeatedly rather than a logo or a slogan, the marketing mix as four decisions that must agree with each other, and the reality of marketing in Liberia: WhatsApp groups and word of mouth as the dominant channels, radio for reach, trust and personal relationships carrying more weight than advertising, and competitors who will always be able to undercut on price.\n\nThe case study concerns a restaurant in Sinkor that has operated for five years with good food and a decent location, facing a new competitor offering similar food more cheaply, with no marketing budget. Students must identify the strategic question the owner should answer before doing anything tactical.\n\nThe course closes on pricing, on measuring marketing when there is no budget for research, and on the difference between being cheaper and being chosen.",
+  "tags": ["marketing", "branding", "positioning", "pricing", "word of mouth", "strategy"],
+  "outcomes": [
+    "Explain strategy as a set of choices including what not to do",
+    "Define a target customer narrowly enough to be useful",
+    "State what the business competes on beyond price",
+    "Distinguish a brand promise from a slogan and a logo",
+    "Check that product, price, place and promotion agree",
+    "Use word of mouth and messaging groups deliberately",
+    "Decide whether to respond to a competitor's price cut"
+  ],
+  "caseStudy": "A restaurant in Sinkor has operated for five years with good food and a decent location. A new restaurant has opened nearby offering similar food at lower prices, and the owner has no marketing budget. Students must identify the strategic question to answer first, and what to do that costs nothing.",
+  "modules": [
+    {
+      "title": "What strategy is",
+      "lessons": [
+        {
+          "title": "Strategy is choosing what not to do",
+          "minutes": 17,
+          "teach": [
+            "A strategy is a set of deliberate choices about who you serve, what you offer them and what you will not do. Its value comes from the last part, because a business that serves everyone has chosen nothing and competes on availability alone.",
+            "The practical test is a refusal. If a business cannot name a customer it would turn away, or a service it would decline to offer, it has a description of its activities rather than a strategy.",
+            "Small businesses resist this because every customer feels necessary. That is true at the start and becomes false quickly, because the customers who are wrong for the business consume the same effort as the ones who are right and pay less.",
+            "Choosing a segment does not mean refusing to serve others. It means deciding where the effort goes, which jobs get scheduled first, which stock is held, and what the business is known for in conversation.",
+            "The choice must be visible in the operations, not only in a document. A restaurant that says it serves families and has no space for a child is not implementing the strategy, and customers notice the difference immediately.",
+            "Review the choice when the market changes, not every quarter. A strategy abandoned every three months is not a strategy, and a strategy never revisited is usually the one the founder chose by accident."
+          ],
+          "example": "A print shop serving everyone with anything is competing against every other shop. Choosing small-business stationery and same-day service gives it a reason to be chosen and a stock list to manage.",
+          "points": [
+            "Name a customer you would turn away",
+            "The strategy must be visible in operations",
+            "Revisit when the market changes, not every quarter"
+          ],
+          "check": "Write the sentence that states who your business is not for."
+        },
+        {
+          "title": "Who your customer actually is",
+          "minutes": 18,
+          "teach": [
+            "Everybody is not a customer description. A useful definition names a group specific enough that you could find ten of them this week and describe what they have in common.",
+            "Define by situation rather than by demographic. People who need a meal between two meetings and people celebrating an anniversary may be the same age and income, and they want completely different things from the same restaurant.",
+            "For each group, understand what they are actually buying. A customer buying a barber's service is buying an hour of feeling presentable, and the conversation, the wait and the mirror matter as much as the cut.",
+            "Ask, do not assume. Ten short conversations with regular customers will overturn the owner's mental model more often than any survey, and they cost a week of attention rather than money.",
+            "Note who is not coming. A restaurant in Sinkor whose customers are all men at lunchtime has a large group within walking distance that has decided, for reasons nobody has asked about, that it is not for them.",
+            "Narrow to two groups at most. A business trying to serve four segments with one location, one price and one offer serves each of them badly, and none of them can describe what the business is for."
+          ],
+          "example": "A barbershop defines its customers as men working nearby who need to be presentable for meetings. It adds a booking slot before eight in the morning and stops opening late on Sundays.",
+          "points": [
+            "Describe a group you could find this week",
+            "Define by situation, not by demographic",
+            "Ask who is not coming and why"
+          ],
+          "check": "Name two customer groups and one thing each wants that the other does not."
+        },
+        {
+          "title": "What you compete on beyond price",
+          "minutes": 17,
+          "teach": [
+            "Every business competes on something, even when it has never decided what. Where the choice is unconscious, the answer is usually price, because that requires no design and no investment.",
+            "The alternatives are reliability, speed, range, quality, location, service, credit terms or the confidence that the thing will work. Each requires the business to be genuinely better at it than the alternative.",
+            "Credibility matters more than ambition. A claim of quality that the product does not support is discovered within one purchase, and the customer does not return to test it again.",
+            "Pick one primary basis and one secondary. A business claiming to be fast, cheap, high quality and friendly is describing a wish list, and customers remember one thing at most.",
+            "The basis of competition determines what the business must protect. If it competes on reliability, it cannot sell stock it does not have; if it competes on price, it cannot carry a wide slow-moving range.",
+            "Check whether customers agree. Asking three regulars why they came back tells you what you are actually competing on, and it is frequently not what the owner believes."
+          ],
+          "example": "A hardware shop believes it competes on price, and customers say they come because it is the only one that reliably has the item in stock. The stock investment is the strategy, and the price cutting is unnecessary.",
+          "points": [
+            "Undecided means competing on price by default",
+            "One primary basis and one secondary",
+            "Ask regulars why they came back"
+          ],
+          "check": "Ask three regular customers why they chose you rather than the alternative."
+        }
+      ]
+    },
+    {
+      "title": "Brand",
+      "lessons": [
+        {
+          "title": "A brand is a promise kept repeatedly",
+          "minutes": 18,
+          "teach": [
+            "A brand is what a customer expects before the transaction and remembers after it. It is built by repetition of an experience, not by a logo or a slogan, and it lives in the customer's expectation rather than in the business's assets.",
+            "The promise must be narrow enough to keep. A restaurant that promises the best food in Monrovia has promised something it cannot control; one that promises the same dish tasting the same every visit has promised something it can.",
+            "Every point of contact either keeps or breaks the promise: the phone call, the wait, the portion, the price charged, the way a complaint is handled. The brand is the weakest of those, not the average.",
+            "Consistency is the whole mechanism. Ten good experiences and one bad one produce a customer who says the place is unreliable, because the promise was about repetition rather than about quality.",
+            "Small businesses have an advantage here that they rarely use. A large chain cannot recognise a regular customer, and a proprietor who remembers an order is delivering a promise the competitor cannot copy.",
+            "Write the promise in one sentence, in the customer's words, and test every change against it. If a decision makes the promise harder to keep, it is a decision about a different business."
+          ],
+          "example": "A barbershop promises the same cut and no wait beyond fifteen minutes. When a queue forms, the promise is the problem, and the owner adds a booking slot rather than apologising at the door.",
+          "points": [
+            "A brand is an expectation, not a logo",
+            "Promise something you control",
+            "The weakest interaction sets the reputation"
+          ],
+          "check": "Write your brand promise in one sentence a customer would recognise as true."
+        },
+        {
+          "title": "Identity: name, look and consistency",
+          "minutes": 16,
+          "teach": [
+            "Visual identity earns its value through repetition. A sign, a colour and a typeface used identically for years become recognisable, and a business that changes its look every year is starting again each time.",
+            "One name, one spelling, one set of colours. The most common branding failure in small businesses is not an ugly logo, it is four slightly different versions of the same logo used in different places.",
+            "The name should be easy to say aloud on radio and easy to spell after hearing it once. A name that requires explanation every time it is mentioned is a cost paid forever.",
+            "A logo must work at the size of a phone screen and in a single colour. Elaborate marks with fine detail disappear in a small format and in photocopies, which is how most small business materials are reproduced.",
+            "Consistency extends to the language. The way the business answers the phone, the words on the price list and the tone of a WhatsApp reply are all identity, and a formal sign with a rude reply is a contradiction the customer resolves against you.",
+            "You do not need a designer to start. One typeface, two colours and a clear rule about how the name is written will carry a business a long way, and a designer can refine it later."
+          ],
+          "example": "A shop uses three versions of its logo across a sign, a receipt book and a Facebook page. Standardising on one file and one spelling makes the business recognisable in a market where nobody has a large advertising budget.",
+          "points": [
+            "Repetition is what makes identity work",
+            "One name, one spelling, one file",
+            "The logo must survive a phone screen and one colour"
+          ],
+          "check": "Collect every version of your logo in use and count how many different ones exist."
+        },
+        {
+          "title": "Trust is the currency",
+          "minutes": 17,
+          "teach": [
+            "In a market where advertising is expensive and reach is limited, trust does more work than promotion. A recommendation from somebody the customer knows outweighs any amount of paid messaging.",
+            "Trust is built by small reliabilities: opening when the sign says, charging the price on the list, delivering when promised, and answering the phone. Each of these is free and each is frequently missed.",
+            "Trust is destroyed faster than it is built. One instance of charging a stranger more than a regular, or of refusing to correct an error, travels through a network in a week and is remembered for years.",
+            "Guarantees are a trust instrument and are underused. A clear, unconditional promise to put something right costs little in practice and removes the customer's main reason to hesitate.",
+            "Being findable is part of being trusted. A business with no address, no working number and no visible presence cannot be checked before a purchase, and customers default to the one they can verify.",
+            "Ask for the recommendation explicitly. Most satisfied customers do not recommend because nobody asked, and a request made at the moment of satisfaction is the cheapest marketing available."
+          ],
+          "example": "A restaurant charges the same price to everyone, replaces a wrong order without argument, and asks regulars to bring a colleague. Its growth comes from conversations rather than from any advertising.",
+          "points": [
+            "Recommendation outperforms promotion",
+            "Reliability in small things builds trust",
+            "Ask for the referral at the point of satisfaction"
+          ],
+          "check": "List three promises your business makes about reliability before a customer can check them."
+        }
+      ]
+    },
+    {
+      "title": "The marketing mix",
+      "lessons": [
+        {
+          "title": "Product and price must agree with the position",
+          "minutes": 18,
+          "teach": [
+            "The mix is product, price, place and promotion, and the value of the framework is that all four must point at the same customer. Three agreeing and one contradicting produces confusion rather than a strategy.",
+            "Price carries a message. A low price tells the customer that cost has been controlled somewhere, and if quality and service are also promised, the customer will test which one gave way.",
+            "Cost-based pricing is the default in small businesses and it is incomplete. It answers what the business needs to survive, not what the customer will pay, and it frequently leaves money on the table for a service that is better than its price suggests.",
+            "Price against the alternative the customer would otherwise choose, which is often not a competitor but doing nothing, cooking at home, or sending a relative to the market.",
+            "Avoid discounting as the standard response to a slow week. A discount teaches customers to wait for the next one, and the price becomes a negotiation rather than a fact.",
+            "Check the arithmetic honestly. A price that does not cover the full cost per unit, including the ones that go unsold, is a business that grows itself into difficulty, and volume rarely fixes that."
+          ],
+          "example": "A restaurant prices a lunch dish by adding a margin to ingredients. Including staff time, power, rent and the meals that go unsold shows the dish loses money at the current price.",
+          "points": [
+            "All four elements must point at the same customer",
+            "Price is a message, not only a number",
+            "Cost the whole unit, including what goes unsold"
+          ],
+          "check": "Calculate the full cost of one product you sell, including unsold stock and overhead."
+        },
+        {
+          "title": "Place, and where customers actually are",
+          "minutes": 16,
+          "teach": [
+            "Place covers where the customer can buy and how they get the product. It includes location, opening hours, delivery, and the channel through which an order arrives.",
+            "Convenience is frequently the deciding factor in a competitive market with similar products. Being open at the hour people need you is worth more than a better sign, and it is decided by the customer's routine rather than by the owner's preference.",
+            "Availability is a marketing decision. A business that is out of stock on its most requested item twice a month has told customers that coming is a gamble, and the alternative becomes the habit.",
+            "Delivery and messaging orders are now normal for small businesses, and they change the calculation. A business can serve customers it cannot physically reach, at the cost of managing a channel that runs all day.",
+            "Distinguish the location that is convenient for the owner from the one convenient for the customer. Many businesses choose premises for rent or familiarity and then wonder why passing trade is thin.",
+            "Review place when behaviour changes. A road closure, a new market, or a shift in when people travel to work can make a good location average within a year."
+          ],
+          "example": "A shop open from nine to five loses the customers who pass at seven in the morning and again at six in the evening, and moving the opening hours costs nothing but a decision.",
+          "points": [
+            "Convenience often decides between similar offers",
+            "Availability is part of marketing",
+            "Choose premises for the customer's routine, not the owner's"
+          ],
+          "check": "Record the hours your customers actually arrive for one week and compare them with your opening hours."
+        },
+        {
+          "title": "Case: the Sinkor restaurant and the cheaper neighbour",
+          "minutes": 21,
+          "teach": [
+            "A restaurant in Sinkor has traded for five years with good food and a decent location. A new restaurant nearby offers similar food at lower prices, and the owner has no marketing budget.",
+            "The first question is not what to do but who the restaurant is for. Five years of trading produces a customer base with a pattern in it, and the pattern is the only evidence available about what the business is actually good at.",
+            "Matching the price is a decision to compete on cost, which the new entrant may be better placed to survive. Before matching, the owner needs to know what the reduction would do to the ability to pay staff and rent.",
+            "The stronger question is what the regulars value that the cheaper competitor does not offer: consistency, a known portion, a relationship, a quieter room, faster service, or the fact that the owner is present.",
+            "The strategic answer is usually a narrower position defended properly. Fewer dishes, executed identically every day, faster service and a visible relationship with regulars is a position a price cutter cannot easily copy.",
+            "The tactical response follows and costs nothing: ask regulars to bring one colleague, fix the two things that most often disappoint, and stop competing on the items where the difference is invisible to the customer."
+          ],
+          "example": "A five-year-old Sinkor restaurant faces a cheaper neighbour. Its regulars come for the same dish, served quickly, at a known price, and the owner's response is a shorter menu and faster service rather than a price cut.",
+          "points": [
+            "Ask who the restaurant is for before reacting",
+            "Price cutting is a choice to compete on cost",
+            "Defend a narrow position the competitor cannot copy"
+          ],
+          "check": "For this case, write the strategic question in one sentence and the first three actions."
+        }
+      ]
+    },
+    {
+      "title": "Making it work",
+      "lessons": [
+        {
+          "title": "Word of mouth and messaging groups",
+          "minutes": 17,
+          "teach": [
+            "Word of mouth is not something that happens to a business, it is something that can be designed. It spreads when the experience contains a detail worth repeating and somebody is asked to repeat it.",
+            "A detail worth repeating is specific: the fastest service in the area, a portion large enough to share, a price that has not changed in three years, or the owner remembering an order.",
+            "WhatsApp groups and status updates are the dominant channel for many Liberian businesses because they reach people who already know the business and cost nothing. The constraint is that the audience is the same people repeatedly.",
+            "Post to be useful rather than to announce. A price list, a new item, opening hours on a public holiday and a photograph of what is available today all earn attention, while a generic promotional message is muted.",
+            "Ask for the forward rather than the purchase. A request to send the message to one person who might need it produces more reach than a request to buy, and it is easier to comply with.",
+            "Respond quickly and in the same channel. In a market where messaging is the main channel, the speed of a reply is part of the product, and an unanswered message is a customer who has already asked somebody else."
+          ],
+          "example": "A restaurant posts its daily dish with a photograph and a price at eleven each morning. Regulars forward it to colleagues, and lunch orders arrive before the kitchen opens.",
+          "points": [
+            "Design the detail worth repeating",
+            "Be useful rather than promotional",
+            "Ask for a forward, not a purchase"
+          ],
+          "check": "Write one message you could send this week that a customer would find useful rather than promotional."
+        },
+        {
+          "title": "Measuring without a budget",
+          "minutes": 16,
+          "teach": [
+            "Measurement without money relies on asking and counting. Ask every new customer how they heard about you, and record the answer in a notebook for a month. That is a survey and it costs nothing.",
+            "Count the things you can count: customers per day, average spend, the proportion who return within a month, and the days when you are full. Four numbers recorded daily will tell you more than any report.",
+            "Distinguish a new customer from a returning one. Growth in a business whose customers never return is not growth, and the distinction is invisible in a daily total.",
+            "Test one change at a time and give it long enough to produce a signal. Changing the price, the menu and the opening hours in the same week produces a result nobody can interpret.",
+            "Watch the complaint pattern rather than the volume. Three complaints about the same thing in a month is a specific problem, and fixing it is cheaper than any marketing activity.",
+            "Keep the record consistently. An owner who measures for three weeks and stops has produced an anecdote rather than a trend, and the habit matters more than the sophistication."
+          ],
+          "example": "A shop records daily customer counts and asks each new customer how they heard about it. Within six weeks it discovers that two thirds arrive by recommendation and its sign contributes almost nothing.",
+          "points": [
+            "Ask new customers how they heard about you",
+            "Count four numbers daily",
+            "Separate new from returning customers"
+          ],
+          "check": "Start a daily count of customers and new customers, and keep it for seven days."
+        },
+        {
+          "title": "Pricing when a competitor undercuts you",
+          "minutes": 17,
+          "teach": [
+            "A competitor's lower price is information, not an instruction. The question is whether the customer compares the two offers directly and whether the difference matters to them.",
+            "Match only if the products are genuinely comparable and the cost base allows it. Where the competitor is smaller, has lower rent, or is buying inferior inputs, matching prices means running their business with your costs.",
+            "A price cut is easy to make and hard to reverse. Customers who have bought at the lower price treat a return to the previous level as an increase, and the business is then permanently below where it started.",
+            "The alternative responses are to change what is compared, to add something the customer values at no cost, or to accept a smaller share of a market that was never the target.",
+            "Check the margin before deciding anything. A cut that converts a profitable business into a marginal one to defend customers who would have stayed anyway is a decision made on fear rather than analysis.",
+            "Decide in advance what you will not do. The businesses that survive a price war are the ones that chose a position before it started, and that can explain in one sentence why their price is different."
+          ],
+          "example": "A restaurant's neighbour cuts prices by 20 percent. The owner calculates that matching it would leave a margin below the rent, and instead shortens the menu, improves speed and keeps the price.",
+          "points": [
+            "A competitor's price is information, not an instruction",
+            "Cutting is easy to do and hard to reverse",
+            "Know your margin before you decide"
+          ],
+          "check": "Calculate the margin you would have left if you matched a 20 percent price cut."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "What is the difference between a brand promise and a slogan?",
+      "explanation": "A promise is an expectation built by repeated experience and something the business controls. A slogan is a phrase. One is tested by every transaction, the other is tested by nothing, which is why the promise matters more.",
+      "options": [
+        { "text": "A promise is an expectation built by repeated experience; a slogan is a phrase that can be ignored", "correct": true },
+        { "text": "A slogan is written for customers and a promise is written for staff", "correct": false },
+        { "text": "They are the same thing, and the difference is only in length", "correct": false },
+        { "text": "A promise appears on the sign and a slogan appears in advertising", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A competitor's prices are 20 percent lower. What determines whether you should lower yours?",
+      "explanation": "The answer depends on whether customers compare the offers directly and whether your cost base supports the lower price. Matching a competitor whose costs are structurally different means running their business on your overheads.",
+      "options": [
+        { "text": "Whether customers compare the two offers directly, and whether your margin survives the cut", "correct": true },
+        { "text": "Whether the competitor is larger than you, since larger businesses set market prices", "correct": false },
+        { "text": "Whether your prices have been unchanged for more than a year", "correct": false },
+        { "text": "Whether your customers have mentioned the competitor at all", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the Sinkor restaurant case, what should the owner answer first?",
+      "explanation": "The tactical question is what to do about the price. The strategic question is who the restaurant is for and what it is chosen for, and only that answer determines whether matching, differentiating or ignoring the competitor is correct.",
+      "options": [
+        { "text": "Who the restaurant is for and what regulars choose it for, before deciding whether to react on price", "correct": true },
+        { "text": "How quickly the owner can reduce prices to match the competitor", "correct": false },
+        { "text": "Whether to advertise on radio to reach more customers", "correct": false },
+        { "text": "Whether the competitor's food is genuinely cheaper to produce", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why is a price cut difficult to reverse?",
+      "explanation": "Customers who have bought at the lower price treat a return to the previous level as an increase. The business is then permanently below where it started, and the original price becomes the discount that was withdrawn.",
+      "options": [
+        { "text": "Because customers treat the return to the old price as an increase, so the cut becomes permanent", "correct": true },
+        { "text": "Because competitors can prevent prices from being raised again", "correct": false },
+        { "text": "Because suppliers raise their prices once they know you have cut yours", "correct": false },
+        { "text": "Because a price increase requires regulatory approval in most markets", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A business claims to be fast, cheap, high quality and friendly. What is the problem?",
+      "explanation": "These claims conflict in practice and customers remember one thing at most. A basis of competition requires a primary choice, and an offer claiming everything communicates nothing and cannot be defended when tested.",
+      "options": [
+        { "text": "The claims conflict and customers will remember at most one, so no position is communicated", "correct": true },
+        { "text": "Four claims are too few for a competitive market", "correct": false },
+        { "text": "The claims are fine if the advertising budget is large enough", "correct": false },
+        { "text": "Only price claims can be verified by a customer", "correct": false }
+      ]
+    }
+  ]
+}

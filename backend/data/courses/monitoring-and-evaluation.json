@@ -1,0 +1,326 @@
+{
+  "slug": "monitoring-and-evaluation",
+  "title": "Monitoring & Evaluation",
+  "program": "FCP",
+  "category": "data-analytics",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 0,
+  "summary": "Build a log frame that means something, collect data you can defend, and make honest claims about what your programme actually caused.",
+  "description": "Monitoring and evaluation is often reduced to a log frame filled in for a donor and a report written at the end of the year. Done properly it is the mechanism by which an organisation learns whether its work is having the effect it intends, and it is the only defence against reporting numbers that flatter rather than inform.\n\nThis course covers the theory of change that sits behind any log frame, the difference between output, outcome and impact indicators, and why counting workshops and manuals tells a donor nothing about whether anything changed. It then works through field data collection in Liberian conditions: facility registers, household surveys, community feedback mechanisms, and verification when a reported figure and the truth diverge.\n\nThe case study concerns an education NGO reporting 92 percent school enrolment in its target district when independent verification found 60 percent. The staff had collected the number from headmasters. Students must diagnose what failed in the system and what to change.\n\nThe course also covers baseline and endline design, the honest difference between attribution and contribution, when a randomised trial is the wrong instrument even when it can be afforded, and how to report to donors without either exaggerating or losing the funding.",
+  "tags": ["monitoring", "evaluation", "log frame", "indicators", "theory of change", "donor reporting"],
+  "outcomes": [
+    "Distinguish monitoring from evaluation and explain what each answers",
+    "Write a theory of change that a log frame can be built from",
+    "Select indicators that measure change rather than activity",
+    "Design field data collection that survives verification",
+    "Explain baseline, endline and what a counterfactual is for",
+    "Distinguish attribution from contribution when claiming results",
+    "Choose an evaluation design appropriate to the question and budget",
+    "Report inconvenient findings without losing donor confidence"
+  ],
+  "caseStudy": "An education NGO reports 92 percent school enrolment in its target district. Independent verification by a visiting team finds actual enrolment at 60 percent. The NGO's staff explain that the figure was collected from headmasters who reported what they expected to be true. Students must identify what failed at each stage of the system and specify the changes needed.",
+  "modules": [
+    {
+      "title": "What monitoring and evaluation is for",
+      "lessons": [
+        {
+          "title": "Monitoring and evaluation are different jobs",
+          "minutes": 17,
+          "teach": [
+            "Monitoring is continuous and internal. It asks whether activities are happening as planned, on time and to standard, and it produces the weekly or monthly information that lets a manager correct course while correction is still possible.",
+            "Evaluation is periodic and independent in spirit. It asks whether the programme worked, for whom, and at what cost, and it is usually done at a defined point rather than continuously, because it needs distance from the delivery team to be credible.",
+            "Confusing the two produces the commonest failure in the field: a monthly report full of activity counts presented as though it demonstrated results. Training delivered is a monitoring figure, and it says nothing about whether anything improved.",
+            "Monitoring data should be used while it can still change something. A monitoring report that is filed and never read is a compliance artefact, and the team learns quickly that collecting it is a ritual rather than a purpose.",
+            "Evaluation needs a question decided in advance. An evaluation commissioned to find out what happened will produce a description, and a description is expensive when the decision needed an answer about whether to continue, expand or stop.",
+            "Monitoring supplies the evidence base the evaluation draws on, and programmes with weak monthly data produce evaluations that reconstruct the past from memory rather than from records."
+          ],
+          "example": "A livelihoods programme monitors attendance at training sessions weekly. Its midterm evaluation asks whether household income rose, using the attendance records to identify who actually completed the course and who dropped out.",
+          "points": [
+            "Monitoring is continuous and internal, evaluation is periodic and independent",
+            "Activity counts are monitoring, not results",
+            "Decide the evaluation question before commissioning it"
+          ],
+          "check": "Name one monitoring report your organisation produces and say what decision it has changed in the last quarter."
+        },
+        {
+          "title": "Theory of change: the story between activity and result",
+          "minutes": 18,
+          "teach": [
+            "A theory of change is a short, honest account of why you believe your activities will produce the result you want. It is written as a chain of if-then statements, and its purpose is to expose the assumptions that the programme depends on.",
+            "If we train teachers in reading instruction, then their classroom practice will change, because they have the skill and the materials. If their practice changes, then children will read better, because time on task is the main constraint on early literacy.",
+            "Each link in that chain is an assumption that may be false. Teachers may be reassigned, materials may not arrive, children may be absent for harvest, and the chain breaks at the weakest link rather than the strongest.",
+            "Writing the chain makes the assumptions testable. The programme can then monitor the assumption rather than only the activity, which is how a manager discovers in month three that the training is not changing practice instead of in year three.",
+            "The theory should be built with the people delivering the work, not by a consultant in an office. Field staff know which link usually breaks, and their knowledge is more valuable than a neat diagram that nobody in the district recognises.",
+            "Keep it to one page. A theory of change that requires a wall to display is a planning document rather than a working tool, and the version people can hold in mind is the one that changes how they collect data."
+          ],
+          "example": "A nutrition programme assumes mothers will attend counselling if it is offered at the clinic they already visit. Attendance data shows they come for weighing only on market days, and the session schedule is moved to match.",
+          "points": [
+            "Write the chain as if-then statements",
+            "Monitor the assumptions, not only the activities",
+            "Build it with the staff who deliver it"
+          ],
+          "check": "Write the if-then chain behind one of your activities and mark the link you trust least."
+        },
+        {
+          "title": "The log frame and what it cannot do",
+          "minutes": 18,
+          "teach": [
+            "A log frame is a table that links activities to outputs, outcomes and impact, with indicators and assumptions for each level. It is a summary of the theory of change and a contract with the donor, and it is not a plan for learning.",
+            "Its strength is discipline. Forcing a programme to state how each level will be measured catches vagueness early, and the assumptions column is where most programmes discover that their design depends on something outside their control.",
+            "Its weakness is that it freezes the design. A log frame signed at the start of a three-year project describes what was believed then, and programmes that treat it as fixed end up measuring the indicators that were convenient to agree rather than the ones that now matter.",
+            "The indicator column is where most log frames go wrong. It fills with counts of things the programme controls, because those are easy to report, and empties of the changes the programme exists to produce, because those are harder to attribute.",
+            "Use the log frame as a summary and keep a separate working document for what you are learning. The distinction allows the log frame to remain stable for the donor while the programme adjusts its understanding of what is actually happening.",
+            "Where an indicator turns out to be unmeasurable or meaningless, say so at a review point rather than reporting against it for three years. Donors generally accept a documented change of indicator; they rarely accept a number everybody knew was fabricated."
+          ],
+          "example": "A log frame commits to measuring the percentage of households with improved dietary diversity. Midway, the survey proves too costly to repeat, and the programme agrees with the donor to substitute a cheaper consumption score with a documented rationale.",
+          "points": [
+            "A log frame is a summary, not a learning plan",
+            "The assumptions column is where design weaknesses show",
+            "Renegotiate an unmeasurable indicator rather than fake it"
+          ],
+          "check": "Take one indicator from your log frame and say what it would take to measure it credibly."
+        }
+      ]
+    },
+    {
+      "title": "Indicators and data",
+      "lessons": [
+        {
+          "title": "What makes an indicator useful",
+          "minutes": 18,
+          "teach": [
+            "An indicator is useful when it can change a decision. It needs a clear definition, a data source that exists, a baseline to compare against and a target somebody believes enough to defend.",
+            "Precision beats ambition. Percentage of grade three pupils reading at grade level, measured by a standard oral reading test in a sample of schools, is measurable. Improved literacy is a wish, and nobody can report against it honestly.",
+            "The indicator should measure something the programme can plausibly influence. A rural school feeding programme cannot be accountable for district employment rates, and including such an indicator guarantees a report that shows no effect and teaches nobody anything.",
+            "Beware indicators that reward the wrong behaviour. Measuring the number of people trained encourages large, cheap sessions. Measuring the share of trainees still applying the skill three months later encourages training that is worth attending.",
+            "Every indicator costs money to collect, and the cost is not only the survey. Time spent filling registers is time not spent teaching, so each indicator should be justified against the decision it informs rather than against the donor's checklist.",
+            "Finally, define who counts. A person reached means something specific: attended once, attended at least three sessions, or received the service. Without that definition two offices will report different numbers for the same programme and both will be right."
+          ],
+          "example": "A programme reports 4,000 people reached. Under the agreed definition, reached means attended at least three sessions, and the true figure is 1,150, which is still a defensible result and a much better basis for planning.",
+          "points": [
+            "An indicator must be able to change a decision",
+            "Measure what the programme can influence",
+            "Define precisely who counts and how often"
+          ],
+          "check": "Take your headline indicator and write its definition in one sentence including who is excluded."
+        },
+        {
+          "title": "Output, outcome and impact indicators",
+          "minutes": 17,
+          "teach": [
+            "Outputs are the things the programme delivers: workshops held, manuals distributed, latrines built, teachers trained. They are within the programme's control, easy to count, and they say nothing about whether anything improved.",
+            "Outcomes are the changes in behaviour, practice or access that the outputs were meant to produce: teachers using the new method, households washing hands at the specified times, patients returning for follow-up. They are what the programme is actually for.",
+            "Impact is the longer-term change in people's lives: literacy rates, child mortality, household income. It is influenced by many things beyond the programme, arrives slowly, and is expensive to measure credibly.",
+            "A log frame that lists nine outputs and one outcome has told you what the programme will do and not what it will achieve. The balance should tilt the other way, with a few outputs tracked because they are the means and outcomes tracked because they are the point.",
+            "Outcome indicators usually need a comparison, because everyone's literacy improves slowly anyway. Without a baseline or a comparison group, an outcome improvement cannot be separated from the general trend, and the claim becomes weaker than the report implies.",
+            "Ask of every output indicator what outcome it is a proxy for. Training delivered proxies for skills acquired, which is testable, and the programme that tests it learns something the count of sessions could never tell it."
+          ],
+          "example": "A water programme reports 40 boreholes drilled as its headline result. A follow-up survey finds 12 are not functioning after one year, which turns an output count of 40 into an outcome figure of 28 working water points.",
+          "points": [
+            "Outputs are delivered, outcomes are changed",
+            "Outcomes need a comparison to be meaningful",
+            "Ask what outcome each output is a proxy for"
+          ],
+          "check": "Sort the indicators in your last report into outputs, outcomes and impact, and count each category."
+        },
+        {
+          "title": "Collecting data in the field",
+          "minutes": 19,
+          "teach": [
+            "Field data collection fails for mundane reasons: a form too long to complete during a consultation, a register with no column for the thing you need, a phone without charge, or a supervisor who is also the person being measured.",
+            "Design the collection around the person doing it. If a nurse must record eight fields during a busy clinic, she will record three and invent five. A form that takes twenty seconds will be completed truthfully; one that takes two minutes will not.",
+            "Verification is not an accusation. A routine practice of re-visiting a small random sample of records, or calling a subsample of respondents, detects both error and invention early and gives the programme a defensible answer when a donor asks how the figure was checked.",
+            "Community feedback mechanisms supply the information that registers cannot. A suggestion box, a monthly meeting with a women's group, or a phone line that actually answers will reveal problems in implementation weeks before the indicator data shows them.",
+            "Digital tools help when they remove a transcription step, and they add failure modes of their own: battery, network, and a data collector who loses a device with a month of records on it. Paper with a photograph of each completed form is a legitimate design choice.",
+            "Train collectors on the definition, not only the form. Most inconsistency comes from two people reading the same question differently, and a half-day with worked examples removes more error than any software."
+          ],
+          "example": "A clinic register records whether a mother returned for postnatal care, but has no column for the reason she did not. Adding one field and a prompt to ask gives the programme its first explanation of dropout within one month.",
+          "points": [
+            "Design collection around the person completing it",
+            "Verify a small random sample as routine practice",
+            "Train collectors on the definition, not the form"
+          ],
+          "check": "Time how long your main field form takes to complete, and ask whether the person completing it would do so honestly."
+        }
+      ]
+    },
+    {
+      "title": "Judgement",
+      "lessons": [
+        {
+          "title": "Baseline, endline and the counterfactual",
+          "minutes": 19,
+          "teach": [
+            "A baseline is the measurement of the same indicator before the programme starts, using the same definition and method that will be used at the end. Without it, an endline figure has nothing to be compared with except somebody's impression.",
+            "The counterfactual is the harder question: what would have happened anyway? Children's literacy, household incomes and clinic attendance all change without any programme, and the programme's effect is the difference between what happened and what would have happened.",
+            "There are cheap ways to approximate it. Compare with similar communities not covered by the programme, or with the same communities before the programme, or with a matched group chosen on characteristics that predict the outcome.",
+            "None of these is perfect, and each has a known weakness. Neighbouring communities may benefit from spillovers. Before-and-after comparisons confuse the programme with the season. Matched groups differ in ways nobody measured.",
+            "Decide the comparison at design stage, because it cannot be added later. A programme that begins collecting after implementation has started has lost its baseline and will spend the rest of its life making weaker claims than the work deserves.",
+            "Where no comparison is possible, describe the change and say plainly that it cannot be attributed. A report that says attendance rose from 40 to 55 percent while a national campaign was also running is more useful than one that claims the programme caused a fifteen point rise."
+          ],
+          "example": "A literacy programme measures reading scores in ten schools before it starts, and in ten comparable schools that will receive the programme the following year. The comparison group provides the counterfactual at almost no extra cost.",
+          "points": [
+            "No baseline means no defensible comparison",
+            "Approximate the counterfactual with a comparison group",
+            "Fix the comparison design before implementation starts"
+          ],
+          "check": "Does your programme have a baseline with the same definition it now uses? If not, what can serve as a comparison?"
+        },
+        {
+          "title": "Attribution, contribution and the honest claim",
+          "minutes": 18,
+          "teach": [
+            "Attribution means the change would not have happened without you. Contribution means your work was one of several things that produced the change. Most development programmes can defend contribution and claim attribution, which is where credibility is lost.",
+            "The honest formulation is usually available: school enrolment in the district rose from 61 to 74 percent while the programme ran, and the programme's bursary scheme accounted for an estimated 200 of the additional children, based on the number of bursaries and their uptake.",
+            "Donors are not uniformly hostile to modest claims. A programme that reports a contribution it can defend tends to survive scrutiny, while one that claims a national trend as its own result becomes the example in somebody's training course on evaluation fraud.",
+            "Language carries the claim, so choose it deliberately. Contributed to is weaker than caused, and both are weaker than was associated with, which claims nothing at all. Reports that use the third when the first is true are being needlessly modest.",
+            "Where a number is an estimate, label it as one and say how it was derived. An estimate with a stated method is evidence; a figure with no method is an assertion the reader cannot distinguish from invention.",
+            "Watch for the temptation that comes at the end of a difficult year. A programme that underperformed on outcomes will be under pressure to emphasise outputs, and the report that does so is read by people who can tell the difference."
+          ],
+          "example": "A health NGO reports that its community health worker network reached 12,000 households, and that facility deliveries rose 9 points in covered districts against 4 points elsewhere, describing the difference as a contribution rather than a proven effect.",
+          "points": [
+            "Contribution is usually defensible, attribution rarely is",
+            "Label estimates and state the method behind them",
+            "Do not trade outcomes for outputs at year end"
+          ],
+          "check": "Rewrite one claim from your last report so that it states the evidence rather than the conclusion you want."
+        },
+        {
+          "title": "Case: 92 percent enrolment that was really 60",
+          "minutes": 21,
+          "teach": [
+            "An education NGO reports 92 percent school enrolment in its target district. Its monitoring system produces the figure monthly, the donor has seen it rise across three quarters, and it appears in the annual report alongside a photograph of a full classroom.",
+            "Independent verification visits twelve schools in the district and finds actual enrolment at 60 percent. The gap is not fraud: staff asked headmasters for enrolment and recorded what they were told, and headmasters reported the number they believed the NGO wanted.",
+            "The first failure is at the source. The definition of enrolment was never fixed as registered and attending in the current term, so headmasters supplied a plausible figure against a vague question, and nobody asked for a register.",
+            "The second failure is verification. A monthly indicator with no independent check and no incentive to find error will drift, and the drift is invisible because the number keeps rising in a way that feels consistent with the programme's story.",
+            "The third failure is the incentive. Field officers were assessed on enrolment increases in their districts, which made an accurate figure a personal cost and an optimistic one a personal benefit, and the system then worked exactly as designed.",
+            "The remedy touches all three: a fixed definition with a register check, a random sample of schools verified against attendance at each reporting period, and a change to staff assessment that credits accurate reporting rather than favourable numbers."
+          ],
+          "example": "An education NGO's monthly enrolment figure reaches 92 percent. Verification by an external team in twelve schools finds 60 percent, because headmasters reported expected rather than actual enrolment to officers assessed on increases.",
+          "points": [
+            "Vague definitions invite the answer you want",
+            "An unverified indicator drifts toward expectation",
+            "Incentives determine whether reports are true"
+          ],
+          "check": "For this case, name the single change that would have caught the gap earliest, and why it would have worked."
+        }
+      ]
+    },
+    {
+      "title": "Using what you learn",
+      "lessons": [
+        {
+          "title": "Reporting to donors without losing the truth",
+          "minutes": 18,
+          "teach": [
+            "Donor reporting is a negotiation between the truth and the format. The format is fixed by the agreement, and the truth is what the programme actually found, and most of the skill lies in fitting one into the other without distortion.",
+            "Report the indicators as agreed, then report what you learned. A short section headed what the data suggests that says the indicator moved partly for reasons outside the programme is read as competence rather than failure by most programme officers.",
+            "Flag problems before the report is due. A donor who hears in month two that a target will be missed can help, adjust or accept; one who reads it in the final report has been managed, and managing a donor is a short-term strategy.",
+            "Use the reporting cycle to ask for changes. Indicator substitution, target revision and design adjustment are all normal, and requests made mid-cycle with evidence attached are far more likely to be granted than requests made in a closing report.",
+            "Write for two readers in every donor report: the programme officer who knows the context and the compliance officer who knows the agreement. The narrative serves the first, and the table with its definitions and sources serves the second.",
+            "Keep every raw record that the report is built from. Disputes about a figure are settled by the register, and a programme that cannot produce the underlying data at short notice has effectively conceded the argument."
+          ],
+          "example": "A programme reports a missed target of 60 percent against 80 percent, explains that two districts were inaccessible during the rains, and proposes revised targets for the remaining period. The donor extends the implementation timeline.",
+          "points": [
+            "Report the agreed indicators, then report what you learned",
+            "Flag problems early, never in the final report",
+            "Keep the raw records behind every figure"
+          ],
+          "check": "Look at your last donor report and find a problem that was softened, then write it plainly."
+        },
+        {
+          "title": "Choosing an evaluation design, and when a trial is wrong",
+          "minutes": 19,
+          "teach": [
+            "A randomised controlled trial is the strongest design for one specific question: whether this intervention caused this change in this population. It answers that question well and answers nothing else, at a cost that is usually large.",
+            "A trial is the wrong instrument when the question is how or why something worked, when the programme is already operating everywhere so no comparison group exists, or when the decision will be taken before the results could arrive.",
+            "It is also wrong when withholding the intervention from a control group would be unethical. Nobody proposes randomising access to emergency obstetric care, and the design must respect that constraint rather than be chosen for its rigour.",
+            "Alternatives answer different questions well. A process evaluation asks whether the programme was implemented as designed. A contribution analysis asks whether the observed change is consistent with the programme's theory. A cost-effectiveness study asks what each unit of result cost.",
+            "Match the design to the decision. A ministry deciding whether to scale up needs effectiveness and cost per unit, while a programme asking why uptake is low in one group needs a process evaluation rather than a trial.",
+            "State the design's limits in the report. An evaluation that names what it cannot conclude is trusted on what it can, and one that implies more certainty than its design supports is discounted entirely once somebody notices."
+          ],
+          "example": "A sanitation programme with national coverage wants to know why latrine use is lower in one region. A trial is impossible because there is no comparison area, and a process evaluation with household interviews answers the question for a fraction of the cost.",
+          "points": [
+            "A trial answers causation in one population, and little else",
+            "Match the design to the decision being taken",
+            "State what the design cannot conclude"
+          ],
+          "check": "Name a decision your organisation must take and the evaluation design that would actually inform it."
+        },
+        {
+          "title": "Learning from findings without punishing them",
+          "minutes": 17,
+          "teach": [
+            "An organisation gets the evaluation findings it rewards. If every disappointing result is met with a demand for explanation and a quiet reassignment of the manager, the next evaluation will be designed to produce better news rather than better understanding.",
+            "Separate the finding from the performance of the person who reported it. A programme that did not work is not the same as a manager who failed, and treating them as identical guarantees that future data arrives filtered.",
+            "Make the discussion of results routine and low-stakes. A quarterly session where findings are presented, including the ones that contradict the design, builds the habit of using evidence before a crisis forces it.",
+            "Close the loop visibly. If a finding leads to a change, say so in the next report and credit the people whose data produced it, because that is how staff learn that reporting accurately has an effect on what the organisation does.",
+            "Protect the space to fail in writing. A section of the report headed what did not work is more useful to the sector than a page of outputs, and it is also the section other programmes actually read.",
+            "Accept that some findings will be unwelcome to a donor, and decide in advance how they will be raised rather than discovering the difficulty while drafting the closing report."
+          ],
+          "example": "A programme reports that its most expensive component had no measurable effect. Rather than defending it, the team proposes reallocating half the budget, and the donor approves, citing the quality of the evidence.",
+          "points": [
+            "Organisations get the findings they reward",
+            "Separate the finding from the person who found it",
+            "Close the loop and credit the data that changed something"
+          ],
+          "check": "Think of the last unwelcome finding in your organisation. What happened to the person who raised it?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A log frame lists as its primary indicators: number of workshops held, number of participants trained, number of manuals distributed. What is wrong with these?",
+      "explanation": "All three are outputs, the things the programme delivered. None measures a change in behaviour or conditions, so the programme cannot report whether anything improved, only that it was busy.",
+      "options": [
+        { "text": "They are all outputs, so they show activity but not whether anything changed", "correct": true },
+        { "text": "They are too difficult to count accurately in a rural district", "correct": false },
+        { "text": "They mix different levels and should all be moved to the impact row", "correct": false },
+        { "text": "There are too few of them for a donor log frame", "correct": false }
+      ]
+    },
+    {
+      "prompt": "When is a randomised controlled trial the wrong evaluation design, even when it is affordable?",
+      "explanation": "A trial answers whether an intervention caused a change, and requires a comparison group and time. It is wrong when the question is how or why, when the decision cannot wait, when coverage leaves no comparison group, or where withholding the service would be unethical.",
+      "options": [
+        { "text": "When the question is why uptake is low, or the decision will be made before results could arrive", "correct": true },
+        { "text": "When the sample size would need to exceed one thousand households", "correct": false },
+        { "text": "When the programme is funded by a bilateral donor rather than a foundation", "correct": false },
+        { "text": "When the outcome can be measured with a household survey", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case study, enrolment was reported at 92 percent and verified at 60 percent. Which change would have caught the gap earliest?",
+      "explanation": "The figure drifted because it was never checked against a source document. A fixed definition requiring the school register, plus routine verification of a random sample, catches the gap in the first reporting period rather than at the end of the year.",
+      "options": [
+        { "text": "Fix the definition as registered and attending, then verify a random sample of schools against the register each period", "correct": true },
+        { "text": "Ask headmasters to sign a declaration that their figure is accurate", "correct": false },
+        { "text": "Increase the reporting frequency from monthly to weekly", "correct": false },
+        { "text": "Commission an independent evaluation at the end of the third year", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In a theory of change, what is the purpose of writing the chain as if-then statements?",
+      "explanation": "Each link states an assumption the programme depends on. Making the assumptions explicit turns them into things that can be monitored, so a broken link is discovered in month three rather than at evaluation.",
+      "options": [
+        { "text": "It exposes the assumptions behind each link so they can be monitored", "correct": true },
+        { "text": "It makes the document acceptable to donors who require a log frame", "correct": false },
+        { "text": "It proves that the programme will produce the intended impact", "correct": false },
+        { "text": "It replaces the need for an evaluation at the end of the project", "correct": false }
+      ]
+    },
+    {
+      "prompt": "School enrolment rose from 61 to 74 percent while your programme ran, and a national campaign also ran. What is the defensible claim?",
+      "explanation": "Without a comparison group the programme cannot separate its effect from the campaign. It can state the rise, describe its own contribution with the basis for the estimate, and say plainly that the two cannot be separated with the available design.",
+      "options": [
+        { "text": "State the rise, describe your contribution and its basis, and say the effects cannot be separated here", "correct": true },
+        { "text": "Claim the full thirteen point rise as the programme's result", "correct": false },
+        { "text": "Report only the number of bursaries awarded and omit the enrolment trend", "correct": false },
+        { "text": "Attribute the rise to the national campaign to appear objective", "correct": false }
+      ]
+    }
+  ]
+}

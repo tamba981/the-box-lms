@@ -1,0 +1,341 @@
+{
+  "slug": "advanced-financial-analysis-and-modeling",
+  "title": "Advanced Financial Analysis & Modeling",
+  "program": "CPP",
+  "category": "finance-accounting",
+  "level": "intermediate",
+  "credential": "certificate",
+  "priceCents": 4000,
+  "certificateFeeCents": 0,
+  "summary": "Build a model whose arithmetic ties, analyse performance with ratios that mean something, forecast from drivers, and value a business in a way you can defend.",
+  "description": "This course assumes you can read a set of accounts and now want to build something that answers questions. It covers the discipline of modelling rather than the features of a spreadsheet: how to structure inputs, calculations and outputs so a reviewer can follow the logic, how to make a model tie to the three statements, and how to build error checks that catch the mistakes you will otherwise not notice.\n\nFrom there it works through analysis that survives scrutiny: which ratios genuinely reveal something and which are decorative, how to decompose return on capital into its drivers, and how to diagnose a cash problem from the statements alone. Forecasting is treated as the construction of drivers rather than the extrapolation of growth, with scenarios and sensitivity used to answer specific questions rather than to decorate a spreadsheet.\n\nIt closes on valuation and communication, including the part practitioners find hardest: telling a decision maker that the analysis does not support the proposal they want. The cases involve multiple decision points and no clean answer, because that is the situation in which this skill is actually used.",
+  "tags": ["financial modelling", "analysis", "valuation", "forecasting", "ratios", "finance"],
+  "outcomes": [
+    "Structure a model so that a reviewer can trace every output back to an input",
+    "Build a model that ties to the three statements and proves it with error checks",
+    "Choose ratios that reveal performance rather than ones that merely look analytical",
+    "Decompose return on capital and explain which driver is doing the work",
+    "Forecast from operating drivers and test the result against scenarios",
+    "Value a business and defend the assumptions the valuation actually rests on"
+  ],
+  "caseStudy": "A logistics group with three subsidiaries, two of which are growing and one of which is quietly consuming the group's cash, is considering a fourth acquisition funded entirely by debt. The board wants a recommendation by Friday and the finance director has already written the conclusion.",
+  "modules": [
+    {
+      "title": "Module 1 · A model that can be trusted",
+      "lessons": [
+        {
+          "title": "Structure before formulas: inputs, calculations, outputs",
+          "minutes": 20,
+          "html": [
+            "<p>Every model that survives review has the same shape, regardless of what it models: a place where assumptions live, a place where calculations happen, and a place where the answer appears. Models that collapse under use are almost always those where a number has been typed directly into a formula in the middle of the calculation, because nobody can tell afterwards whether it was an assumption, a check, or a mistake.</p>",
+            "<p>Put every assumption on one sheet, one per row, with units, a source, and a date. A rate, a growth assumption, a payment term, a tax percentage: each is a decision somebody made, and it should be visible without reading a formula. When the assumption changes, one cell changes, and the effect is the same everywhere it is used.</p>",
+            "<p>Keep calculations on separate sheets, one per topic, each reading only from the inputs sheet and from other calculation sheets in one direction. A model that flows only forwards can be audited; one that loops back on itself cannot be explained to anybody, including its author six months later.</p>",
+            "<p>Colour the sheets consistently: one colour for inputs, another for calculations, another for outputs. This is not decoration. A finance officer opening the model for the first time will type into the wrong place unless the convention is both visible and stated at the top of the sheet.</p>",
+            "<h3>The cost of a model nobody can review</h3>",
+            "<p>A model is a communication device as much as a calculating one. If a reviewer cannot follow it, they will either accept it on trust or reject it on suspicion, and both are bad outcomes. The review that catches the error is the one that can follow the logic in an hour, not the one that takes a week.</p>",
+            "<p>Structure also protects you from yourself. The most expensive modelling errors are not arithmetic mistakes; they are a wrong assumption applied in one place and not another. When every assumption lives in one row, used everywhere it should be, that class of error disappears from the model rather than being hunted for. Time spent on structure is repaid the first time somebody else has to check your work.</p>",
+            "<p><strong>Check yourself.</strong> Open your most important model. How many numbers are typed directly inside formulas, and could a reviewer find the assumptions without reading every cell?</p>"
+          ]
+        },
+        {
+          "title": "Getting the model to tie: three statements that agree",
+          "minutes": 20,
+          "html": [
+            "<p>An operating model is not a forecast of profit. It is a forecast of a business, and a business has a balance sheet. Models that forecast the income statement only will look plausible and be wrong, because growth consumes cash and cash is a balance sheet item, and the two are connected by arithmetic that cannot be avoided.</p>",
+            "<p>Build the three statements from the same drivers so that they tie by construction: revenue drives receivables and cash, purchases drive payables and inventory, capital expenditure drives depreciation and fixed assets, profit drives retained earnings. When each statement is derived from the same activity, the balance sheet balances because it must, and a failure to balance is a signal rather than an inconvenience.</p>",
+            "<p>Force the tie with a check rather than with a plug. A balancing figure typed in at the bottom hides the error and destroys the model's credibility the moment somebody notices. If assets minus liabilities minus equity is not zero, the model is telling you that something upstream is inconsistent, and that is the most useful message it will ever give you.</p>",
+            "<p>Model debt explicitly, with an opening balance, drawdowns, repayments and interest. Interest depends on the debt balance, and the debt balance depends on cash, and cash depends on interest: a circular reference that reflects a real relationship. Handle it deliberately, with an opening balance and iterative calculation switched on and understood, rather than by ignoring interest and hoping.</p>",
+            "<h3>Interest, tax and the order of events</h3>",
+            "<p>The order in which a period is calculated matters and should be explicit: operating cash, then interest, then tax, then debt repayment, then the closing cash. Models that calculate these in a different order are not wrong in themselves, but they must be consistent across periods, because inconsistency creates the appearance of an error where there is only a design choice.</p>",
+            "<p>Tax deserves particular care. A model that applies a percentage to profit before interest and ignores the timing of payments will overstate cash in early periods. Where tax is material, model the payment lag and the assessed basis separately; where it is not, say so in a note so the omission is a decision rather than an oversight. Document the order of calculation at the top of the model; a reviewer should not have to infer it.</p>",
+            "<p><strong>Check yourself.</strong> Does your model produce a balance sheet, and does it balance without a plug? If not, which of the three statements is disconnected?</p>"
+          ]
+        },
+        {
+          "title": "Error checks, and why every model needs them",
+          "minutes": 19,
+          "html": [
+            "<p>Error checks are the difference between a model that is probably right and a model you can defend. They are cheap to write and they catch exactly the mistakes the author cannot see, because the author's eye follows the intended logic rather than what was typed.</p>",
+            "<p>At minimum, check four things: the balance sheet balances, cash on the cash flow statement equals cash on the balance sheet, the sum of the parts equals the whole where a total is calculated, and no required input is blank. Each is a single formula returning a flag, and together they cost ten minutes.</p>",
+            "<p>Put the checks at the top of the output sheet, visible immediately, not buried on a page nobody opens. A model with a green flag at the top is a model whose author has looked. One with no checks is a model whose author finished and moved on, and the reviewer knows the difference.</p>",
+            "<p>Add checks specific to the business: inventory cannot be negative, receivables cannot exceed revenue by a multiple that makes no sense, headcount cannot fall below zero. These are not generic; they encode what you know about this business, and they catch errors that a generic balance check will happily pass.</p>",
+            "<h3>Testing the model against the past</h3>",
+            "<p>The strongest test of a model is to run it on last year's drivers and see whether it reproduces last year's accounts. Where it does not, either the driver logic is wrong or the business changed in a way the model does not represent, and both are worth knowing before you use it to forecast.</p>",
+            "<p>This test is almost never done and almost always revealing. A model that cannot reproduce the past with known inputs has no basis for claiming to predict the future, and finding that out in private is much cheaper than finding it out after a board has relied on it. A model that reproduces a known year is the only model worth extending.</p>",
+            "<p><strong>Check yourself.</strong> What four error checks does your model have, and where are they shown? Have you ever run it against a past year to see whether it reproduces the accounts?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Analysis that survives scrutiny",
+      "lessons": [
+        {
+          "title": "Ratios that reveal something, and ratios that decorate",
+          "minutes": 19,
+          "html": [
+            "<p>A ratio is only useful if it answers a question somebody is actually asking. Most ratio lists found in templates exist because they are conventional, not because they change a decision, and a report full of them signals analysis without performing any.</p>",
+            "<p>Work from the question backwards. If the question is whether the business can survive a bad year, the ratios are interest cover, the maturity profile of debt, and the cash conversion of profit. If the question is whether growth is being paid for, the ratios are receivable days, inventory days, and capital expenditure relative to depreciation. If the question is whether the business earns more than its cost of capital, no ratio answers it: you need a calculation.</p>",
+            "<p>Compare against something. A ratio on its own carries no information: a gross margin of twenty-two per cent is neither good nor bad until it is compared with last year, with the prior three years, with the closest competitor, or with the margin implied by the price list. Choose the comparison before computing the ratio.</p>",
+            "<p>Be careful with averages. Two businesses with identical average receivable days can have very different collection risk: one collects uniformly, the other collects most accounts at ninety days and chases the rest indefinitely. Averages smooth exactly the variation that matters, which is why ageing is more informative than the ratio derived from it.</p>",
+            "<h3>The ratios that mislead most often</h3>",
+            "<p>Current ratio rewards holding stock and punishes paying suppliers promptly, so a business that improves its cash management can appear to weaken. Return on assets falls when a business invests for growth, which is the opposite of the conclusion usually drawn. Earnings per share can be improved by issuing debt to buy back shares, with no improvement in the business itself.</p>",
+            "<p>None of this means the ratios are useless; it means they are descriptive rather than evaluative. Each has conditions under which it means what people assume, and stating those conditions is the analyst's job. A ratio presented without them is a number looking for a conclusion. Name the comparison before you calculate anything.</p>",
+            "<p><strong>Check yourself.</strong> Take three ratios your organisation reports. What question does each answer, and what would have to be true for the ratio to mean what the report implies?</p>"
+          ]
+        },
+        {
+          "title": "Decomposing return on capital",
+          "minutes": 20,
+          "html": [
+            "<p>Return on capital is the single measure that connects profitability, efficiency and leverage, and it is worth understanding as a structure rather than a number. Decomposed, it tells you which of those three is doing the work, and that determines what management should do next.</p>",
+            "<p>The decomposition starts with the return on invested capital as operating profit after tax divided by the capital employed. That splits into margin — operating profit over revenue — and capital turnover, revenue over capital employed. Margin is about pricing and cost; turnover is about how hard the assets work. A supermarket and a jeweller can earn the same return with opposite structures.</p>",
+            "<p>Further down, capital turnover splits into the working capital cycle and fixed asset intensity. A business with a long receivable cycle has to earn a higher margin for the same return, and a business that adds fixed assets faster than revenue falls in return even while it grows. That single mechanism explains a great many acquisitions that looked sensible and destroyed value.</p>",
+            "<p>The value of the decomposition is diagnostic. A falling return with a stable margin means capital is growing faster than revenue: unproductive investment, or working capital absorbing cash. A falling return with stable turnover means margin is eroding: price pressure or cost drift. The remedy for one is not the remedy for the other.</p>",
+            "<h3>Against a cost of capital, not against zero</h3>",
+            "<p>A return on capital of fifteen per cent sounds strong and may be poor, if the capital costs eighteen. Most analysis stops at the trend and never asks whether the return exceeds what the capital costs, which is the only test of whether growth creates value. Estimate the cost of capital honestly, state the range, and compare against it.</p>",
+            "<p>Where the return sits below the cost of capital, growing makes the position worse, and the correct recommendation is often to shrink, sell, or return cash rather than to invest. That conclusion is rarely welcome, which is exactly why the analysis has to be done before the decision rather than after it. Prepare for that conversation in advance, because it will be uncomfortable.</p>",
+            "<p><strong>Check yourself.</strong> Decompose your organisation's return on capital into margin and turnover. Which of the two has moved over three years, and what does that tell you to fix?</p>"
+          ]
+        },
+        {
+          "title": "Diagnosing a cash problem from the statements",
+          "minutes": 20,
+          "html": [
+            "<p>When cash is short, there are only a few possible causes and the statements identify which one. The skill is to distinguish them quickly, because the remedy for a growth problem is the opposite of the remedy for a margin problem, and applying the wrong one makes matters worse.</p>",
+            "<p>Start with the cash conversion of profit: operating cash flow divided by operating profit, across several periods. Consistently below one means profit is being absorbed by working capital or by items that are not cash. Then look at which: receivables growing faster than revenue, inventory growing faster than cost of sales, or payables falling relative to purchases, which usually indicates suppliers losing confidence.</p>",
+            "<p>Next, separate growth from deterioration. If the business is growing and the cash absorption is proportional to growth, the problem is funding growth, and the answer is capital, terms or slower growth. If the business is flat and cash is still consumed, the problem is operational and no amount of funding fixes it.</p>",
+            "<p>Then examine the fixed side. Capital expenditure above depreciation for several years means the business is investing, which consumes cash legitimately. Capital expenditure below depreciation for years means assets are being consumed, and the cash looks better than the business is.</p>",
+            "<h3>The two that are often confused</h3>",
+            "<p>A profitable business with a cash problem is frequently described as overtrading, when the actual issue is that credit terms are being extended to customers who cannot pay on time. Encouraging more sales in that situation deepens the problem. The distinction is visible in the ageing: if the same customers are consistently late, the problem is credit quality, not volume.</p>",
+            "<p>Equally, a business can appear to have a cash problem when its profit is simply overstated by an aggressive accounting policy: capitalising costs that should be expensed, or recognising revenue before the work is done. Look for a receivable or an intangible asset growing faster than the activity that should generate it, and treat that as a question about the accounts rather than about cash. Ask to see the policy note before you accept the profit figure.</p>",
+            "<p><strong>Check yourself.</strong> If your organisation's cash fell this year while profit rose, which of the four causes does the evidence point to, and which remedy would each require?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Forecasting under uncertainty",
+      "lessons": [
+        {
+          "title": "Forecast from drivers, not from growth rates",
+          "minutes": 19,
+          "html": [
+            "<p>A forecast built by applying a growth percentage to last year's revenue is not a forecast; it is an assumption with arithmetic applied. It cannot be interrogated, it cannot be explained to an operator, and when it turns out wrong nobody can say which part was wrong.</p>",
+            "<p>Build instead from the things that cause revenue: volumes, prices, customers, capacity, headcount, stock turn, delivery lead times. Each driver can be discussed with the person who controls it, and each can be wrong in a way you can identify and correct. The output is the same number, but the reasoning is inspectable.</p>",
+            "<p>Drivers also enforce realism. A forecast that requires volume to grow thirty per cent must also show the capacity to produce it, the working capital to fund it and the staff to deliver it. When those are modelled, the growth assumption either survives the test or is quietly reduced to something the business can actually do.</p>",
+            "<p>Keep the number of drivers small. A model with two hundred assumptions is not more accurate than one with twenty; it is less auditable and takes longer to update. Choose the drivers that explain most of the variation and group the rest into a few aggregate assumptions that are stated openly.</p>",
+            "<h3>Where drivers and accounting disagree</h3>",
+            "<p>Some of the most useful findings come from the gap between an operating driver and the accounts. If volumes are forecast to rise ten per cent but revenue is forecast to rise five, either prices are falling or the mix is changing, and both are worth stating rather than leaving implicit in a formula.</p>",
+            "<p>Make that gap explicit in the model as a price or mix assumption. Analysts who bury it inside a blended revenue line lose the ability to explain a forecast that misses, and the explanation is usually the most valuable thing they produce. Write the price or mix assumption as its own line, not inside a blended total.</p>",
+            "<p><strong>Check yourself.</strong> Write your forecast as three or four drivers with numbers attached. Would an operator in the business recognise the business in those drivers?</p>"
+          ]
+        },
+        {
+          "title": "Scenarios, sensitivity, and what each is for",
+          "minutes": 20,
+          "html": [
+            "<p>Scenarios and sensitivity are different tools and are routinely confused. A scenario is a consistent story about how the world turns out: a base case, a downside, an upside. A sensitivity changes one variable at a time to see how much the answer depends on it. One answers which future to plan for; the other answers what to worry about.</p>",
+            "<p>Build three scenarios at most, and make each internally consistent. A downside scenario in which volumes fall but prices hold and costs are unchanged is not a downside scenario; it is a wish. In a genuine downturn, volumes fall, customers pay later, and prices weaken together, because that is what happens.</p>",
+            "<p>Sensitivity is for ranking. Move each key driver by a sensible amount, one at a time, and record the effect on the answer. The result tells you where to spend management attention and where the analysis is fragile. If a one per cent change in a price assumption moves the answer more than a ten per cent change in volume, the whole case rests on pricing, and that is the conversation to have.</p>",
+            "<p>Do not average scenarios. Averaging a good case and a bad case produces a number that describes neither, and it hides the asymmetry that matters: the downside that would breach a covenant is not compensated by an upside that would not be realised anyway.</p>",
+            "<h3>What decision each tool supports</h3>",
+            "<p>Scenarios support decisions about commitment: whether to take on debt, hire, or sign a lease. The question is whether the organisation can survive the downside, not whether the base case is attractive. Sensitivities support decisions about focus: which assumption to verify before proceeding, and which risk to mitigate.</p>",
+            "<p>Where the downside is unsurvivable, the decision is no, regardless of the base case. That conclusion is the single most valuable output of scenario analysis, and it is the one most often softened in presentation because it is unwelcome. State the survivable downside before the attractive base case.</p>",
+            "<p><strong>Check yourself.</strong> Which driver would have to move, and by how much, to make your current plan unviable? Is that a sensitivity you have tested?</p>"
+          ]
+        },
+        {
+          "title": "What breaks a forecast first",
+          "minutes": 19,
+          "html": [
+            "<p>Forecasts rarely fail because of a small error spread evenly. They fail at a specific point, and the same points recur: a large customer's behaviour, a supplier's delivery, a working capital assumption, or a cost that was treated as fixed and turned out to be variable.</p>",
+            "<p>Customer concentration is the most common. A forecast that assumes the largest customer continues at the current level is a forecast about that customer, not about the business. Model concentration explicitly, and test what happens if the largest account halves, because that is a single decision by somebody who is not in the room.</p>",
+            "<p>Working capital assumptions are next. Forecasts routinely assume receivables at a stable number of days while the plan requires doubling sales to new customers, who will pay later than the existing ones. The stable days assumption is a convenience, and it is usually wrong in exactly the direction that hurts.</p>",
+            "<p>Then the costs that are fixed until they are not. Salaried staff become overtime and contractors; a rented facility becomes a second rented facility; a vehicle becomes a maintenance programme. Each step is invisible in a linear cost model and each arrives at the moment the business is least able to absorb it.</p>",
+            "<h3>The forecast that is never tested</h3>",
+            "<p>The most dangerous forecast is the one everybody agrees with, because nobody tests it. Where a plan has been through several revisions and each has converged on the same numbers, ask what would have to be true for it to be wrong, and whether anybody has checked. Consensus is not evidence.</p>",
+            "<p>A useful habit is to write, in the model, the three things that would make this forecast fail. It takes five minutes, it is read by whoever inherits the model, and it converts an optimistic document into a working one. Write them while the assumptions are still fresh in your mind.</p>",
+            "<p><strong>Check yourself.</strong> Which single customer, supplier or assumption would most damage your forecast if it moved? What have you done to reduce dependence on it?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Valuation and investment appraisal",
+      "lessons": [
+        {
+          "title": "Discounting, and choosing a rate you can defend",
+          "minutes": 20,
+          "html": [
+            "<p>Money now is worth more than money later, and discounting is the arithmetic of that fact. The mechanics are simple; the difficulty is the rate, which encodes every judgement about risk in the calculation and is where valuations are won and lost.</p>",
+            "<p>A defensible rate is built from components you can explain: the return available on a safe alternative, a premium for the risk of the business, and an adjustment for how the investment is financed. In a market with limited comparable data, the estimate will be broad, and that is acceptable as long as the range is stated and tested.</p>",
+            "<p>Apply the rate consistently. Using a high rate for a risky project and a lower one for a safe project sounds sensible and is dangerous, because it allows the analyst to make any project attractive by choosing its discount rate. Set the rate by the business or the risk class, and change it only with a reason you would state in writing.</p>",
+            "<p>Be explicit about the horizon. A ten-year explicit forecast followed by a terminal value is a way of saying that most of the value lies beyond what you can see, which is honest. A three-year forecast followed by a multiple is a way of hiding the uncertainty in an assumption nobody examines.</p>",
+            "<h3>The rate as a conversation</h3>",
+            "<p>Present the rate as a range with an explanation of what moves it, rather than as a single figure delivered with confidence. A decision maker can engage with a range: at fourteen per cent this is marginal, at eighteen it is clearly negative. A single number invites either acceptance or rejection of the whole analysis.</p>",
+            "<p>Where the conclusion changes inside the plausible range, say so plainly. That is not weak analysis; it is the most useful finding available, because it tells the decision maker that the decision rests on a judgement rather than on the arithmetic. Say which judgement, and who owns it.</p>",
+            "<p><strong>Check yourself.</strong> What discount rate do you use, and could you explain each component of it to somebody who disagreed with the conclusion?</p>"
+          ]
+        },
+        {
+          "title": "Free cash flow, and why profit is not the answer",
+          "minutes": 20,
+          "html": [
+            "<p>A business is worth the cash it will generate for the people who own it, which is not the same as its profit. Profit is an accounting measure shaped by policy choices; free cash flow is what remains after the business has paid for the investment needed to keep generating it.</p>",
+            "<p>Free cash flow to the firm starts with operating profit after tax, adds back non-cash charges such as depreciation, subtracts the increase in working capital, and subtracts capital expenditure. Two of those four are where valuations go wrong, because both are easy to understate: working capital grows with revenue, and capital expenditure is usually higher than depreciation in a growing business.</p>",
+            "<p>Watch the relationship between depreciation and capital expenditure. A model that assumes capital expenditure equal to depreciation is asserting that the business never grows and never needs to replace assets at rising prices. For a business with older equipment or expansion plans, that assumption alone can double the value it produces.</p>",
+            "<p>Then reconcile to profit. The difference between cumulative free cash flow and cumulative profit over the forecast period should be explainable by growth in working capital, investment, and non-cash items. Where it is not explainable, one of the two is wrong.</p>",
+            "<h3>The working capital trap in valuations</h3>",
+            "<p>Growth requires working capital, and the requirement is often proportional to the revenue growth rather than to the revenue level. A forecast that grows revenue by half must add roughly half the working capital requirement, which reduces free cash flow precisely in the years the valuation depends on most. Omitting it raises the valuation and lowers the credibility.</p>",
+            "<p>Model the working capital as a consequence of the operating plan rather than as an assumption about days. When it is a consequence, growth automatically produces the cash absorption, and the model tells the truth without anyone having to remember. This is also the fastest way to show an operator their own plan.</p>",
+            "<p><strong>Check yourself.</strong> In your valuation, how does capital expenditure compare with depreciation, and what have you assumed about working capital as revenue grows?</p>"
+          ]
+        },
+        {
+          "title": "Terminal value: where valuations are really decided",
+          "minutes": 19,
+          "html": [
+            "<p>In most valuations, the terminal value is the majority of the answer. That is not a flaw in the method; it reflects that a business is expected to continue. It does mean that the smallest, least examined assumption in the model is usually the one that determines the conclusion.</p>",
+            "<p>The two common approaches are a perpetuity growth rate and an exit multiple. Both are dangerous in predictable ways. A perpetuity growth rate above the long-run growth of the economy is impossible to sustain and is nonetheless common. An exit multiple imported from a recent transaction encodes the conditions of that transaction rather than the business being valued.</p>",
+            "<p>Use both, and treat the difference as information. If the implied exit multiple from a perpetuity calculation is far above the multiples at which comparable businesses actually trade, the growth assumption is too high. If it is far below, the assumption is conservative. The cross-check costs two formulas and prevents a great many unrealistic valuations.</p>",
+            "<p>Test the sensitivity of the answer to the terminal assumption explicitly. Show the valuation at two growth rates and at two multiples, and be honest about which the conclusion depends on. In most cases the answer moves by more than the difference between the options being considered, which is itself the finding.</p>",
+            "<h3>Saying what the terminal value means</h3>",
+            "<p>Explain to the decision maker that the terminal value represents everything after the forecast, and that it assumes the business continues profitably and indefinitely. That statement is usually enough to change the conversation from what is the number to how much of it rests on faith.</p>",
+            "<p>Where the business has no reasonable claim to perpetuity — a single contract, a licensed activity, a mine — a terminal value is inappropriate and the valuation should say so. Using a formula because it is the formula is how analysis produces confident nonsense. State the perpetuity assumption in words as well as in a cell.</p>",
+            "<p><strong>Check yourself.</strong> What share of your valuation is terminal value, and does the implied exit multiple match what comparable businesses actually sell for?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 5 · Communicating the analysis",
+      "lessons": [
+        {
+          "title": "The one-page answer and the appendix",
+          "minutes": 18,
+          "html": [
+            "<p>Analysis that changes nothing has failed, and analysis fails most often because the decision maker cannot find the answer inside it. A fifty-page model attached to a two-paragraph email is read as neither, and the decision is taken on whatever the reader already believed.</p>",
+            "<p>Write the answer on one page: what is being decided, what the analysis says, what it depends on, and what you recommend. Four headings, a page, and the model behind it as an appendix for whoever wants to check. The page is not a summary of the model; it is the argument the model supports.</p>",
+            "<p>State the assumptions that matter on that page, not in the appendix. If the conclusion holds only when a customer renews, say so on the first page, because a decision maker who discovers it later will rightly feel misled even though the analysis was accurate.</p>",
+            "<p>Make the recommendation explicit or say plainly that the analysis does not support one. An analysis that presents three options without a recommendation leaves the decision maker doing the work you were asked to do, and it is usually read as a lack of confidence rather than as neutrality.</p>",
+            "<h3>Writing for a reader who will skim</h3>",
+            "<p>Assume the page is read in ninety seconds and the appendix is not read at all. Put the conclusion in the first sentence, the numbers that support it in the next, and the caveat immediately after. A reader who stops after the first sentence should still have the right impression.</p>",
+            "<p>Keep the language plain even when the analysis is technical. The purpose of technical vocabulary is precision between specialists, not authority in front of a board. Where a term is necessary, define it once and then use it consistently. Technical language used to impress is a tell that the argument is weak.</p>",
+            "<p><strong>Check yourself.</strong> Take your last piece of analysis. Could somebody read only the first page and make the decision correctly?</p>"
+          ]
+        },
+        {
+          "title": "Presenting uncertainty without hiding behind it",
+          "minutes": 19,
+          "html": [
+            "<p>Every serious analysis contains uncertainty, and there are two dishonest ways to handle it: pretend there is none, or present so much of it that nothing is concluded. The first produces false confidence, the second produces a decision made without you.</p>",
+            "<p>The honest middle is to name the uncertainty, quantify it where you can, and say what it does to the decision. The valuation is between eleven and fourteen million depending on the renewal; at the bottom of that range the price is still acceptable. That sentence contains a range, a cause and a conclusion, and a decision maker can act on it.</p>",
+            "<p>Distinguish uncertainty that can be reduced from uncertainty that cannot. A customer's intention can be discovered by asking; a construction cost can be firmed up by a quote; an exchange rate cannot be known. Spend effort on the first, and state the second as a risk that is carried rather than managed.</p>",
+            "<p>Where a decision is close to the boundary, say so. A recommendation that rests on a two per cent difference is not the same as one that survives a twenty per cent error, and the reader deserves to know which they are being given.</p>",
+            "<h3>When the analysis says no</h3>",
+            "<p>The hardest part of the work is telling a sponsor that the numbers do not support the proposal. It is easier when the analysis has been structured to make the reason visible: the case fails because the working capital requirement is not funded, or because the return sits below the cost of capital whatever the terminal assumption.</p>",
+            "<p>Give the sponsor the conditions under which the answer would change. If the acquisition works at a lower price, say what price. That converts a refusal into a negotiating position and preserves both the relationship and the integrity of the analysis, which is otherwise the first thing to be sacrificed when a conclusion is unwelcome. Say the threshold out loud and let the decision be made knowingly.</p>",
+            "<p><strong>Check yourself.</strong> When did you last present a conclusion that was unwelcome? Did you give the conditions under which it would change?</p>"
+          ]
+        },
+        {
+          "title": "Defending the model under challenge",
+          "minutes": 18,
+          "html": [
+            "<p>At some point somebody will challenge the analysis, and the challenge is usually aimed at one of three things: an assumption, a methodology, or the conclusion. Answering the wrong one makes you look evasive even when the analysis is sound.</p>",
+            "<p>For an assumption challenge, show the sensitivity. If the objection is that the growth rate is too high, show the answer at a lower rate and say where it stops working. That converts an argument into a shared test, and it is usually settled in one exchange.</p>",
+            "<p>For a methodology challenge, explain the choice and the alternative. Why a discounted cash flow rather than a multiple, why the rate is set as it is, why the horizon is that length. Where the alternative would change the answer materially, say so; the objection may be right.</p>",
+            "<p>For a conclusion challenge, separate the analysis from the decision. The analysis says the return is below the cost of capital; the decision to proceed anyway may be legitimate for reasons outside the model, such as market entry. Making that distinction lets the decision maker own the judgement rather than dispute the arithmetic.</p>",
+            "<h3>Keeping the record</h3>",
+            "<p>Keep the versions. When a model is revised after a challenge, keep the earlier version and note what changed and why. Analysis that changes without a record becomes untrustworthy even when every change was reasonable, because nobody can tell whether the change was a correction or an accommodation.</p>",
+            "<p>Write the assumptions log as you go, not at the end. It takes a line per assumption and it is the document that protects you when the same question is asked in six months by somebody who was not there. An assumptions log written as you go costs a line a day and settles most later disputes.</p>",
+            "<p><strong>Check yourself.</strong> What is the weakest assumption in your analysis, and what would you say if somebody challenged it in a meeting tomorrow?</p>"
+          ]
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A model's balance sheet does not balance, and the author adds a balancing line labelled other. What has happened?",
+      "explanation": "The plug hides an upstream inconsistency. The imbalance is the model's most useful diagnostic, and a plug destroys the evidence while leaving the error in place.",
+      "options": [
+        { "text": "An upstream inconsistency has been concealed and will propagate through every output", "correct": true },
+        { "text": "A standard modelling convention has been applied", "correct": false },
+        { "text": "The model now balances correctly and can be relied upon", "correct": false },
+        { "text": "Rounding has been resolved appropriately", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Return on capital falls while margin is stable and capital turnover falls. What is the most likely explanation?",
+      "explanation": "Stable margin with falling turnover means capital is growing faster than revenue, either through unproductive investment or working capital absorption. Cutting prices would worsen it.",
+      "options": [
+        { "text": "Capital is growing faster than revenue, through investment or working capital", "correct": true },
+        { "text": "Prices are being eroded by competition", "correct": false },
+        { "text": "The cost base has drifted upward", "correct": false },
+        { "text": "The business is benefiting from operating leverage", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A business is growing and its operating cash flow is below operating profit by a widening margin. Which conclusion is best supported?",
+      "explanation": "Cash absorption proportional to growth points to funding growth in working capital. The remedy is terms, capital or slower growth, not more sales effort.",
+      "options": [
+        { "text": "Growth is absorbing working capital and must be funded or slowed deliberately", "correct": true },
+        { "text": "The business is overtrading and should immediately cut sales", "correct": false },
+        { "text": "Profit is overstated by aggressive accounting", "correct": false },
+        { "text": "The business needs to reduce prices to improve cash collection", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A valuation is 75% terminal value, and the implied exit multiple is far above the multiples at which comparable businesses trade. What does this indicate?",
+      "explanation": "The cross-check exposes an unsustainably high perpetuity growth assumption. The conclusion rests on an assumption inconsistent with observable transactions.",
+      "options": [
+        { "text": "The perpetuity growth assumption is too high and the valuation is overstated", "correct": true },
+        { "text": "Terminal value should always exceed explicit period value", "correct": false },
+        { "text": "The discount rate must be too low", "correct": false },
+        { "text": "The forecast period is too long", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why does a forecast that assumes capital expenditure equals depreciation systematically overstate value?",
+      "explanation": "It asserts no growth and no replacement at rising prices. For a growing business or one with ageing assets, investment above depreciation is required, reducing free cash flow.",
+      "options": [
+        { "text": "It assumes no growth and no replacement at rising prices, understating required investment", "correct": true },
+        { "text": "Depreciation is not a real cost and should never be deducted", "correct": false },
+        { "text": "It overstates working capital requirements", "correct": false },
+        { "text": "It ignores tax on capital gains", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A sponsor challenges your growth assumption. What is the most effective response?",
+      "explanation": "Showing where the conclusion stops holding converts an argument into a shared test and identifies the threshold that matters.",
+      "options": [
+        { "text": "Show the result at lower growth rates and the point at which the conclusion changes", "correct": true },
+        { "text": "Explain the methodology in more technical detail", "correct": false },
+        { "text": "Refer to the comparables used to justify the assumption", "correct": false },
+        { "text": "Offer to re-run the model with their assumed figure only", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A business's receivables are growing faster than revenue while its profit is stable. Which action follows from the analysis?",
+      "explanation": "Faster receivable growth indicates collection or credit quality deterioration. The remedy is credit terms and collection, not additional funding or higher sales.",
+      "options": [
+        { "text": "Tighten credit terms and collection, and test whether customers can pay at all", "correct": true },
+        { "text": "Increase borrowing to fund the additional working capital", "correct": false },
+        { "text": "Raise prices to improve margin", "correct": false },
+        { "text": "Reduce inventory holding to release cash", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Your analysis concludes that a proposed acquisition destroys value below a certain price. The board wants to proceed. What is the most professional response?",
+      "explanation": "State the threshold price at which the case turns positive and separate the analysis from the decision, allowing the board to own its judgement openly.",
+      "options": [
+        { "text": "State the price at which the case becomes positive and let the board own the decision", "correct": true },
+        { "text": "Adjust the discount rate so the acquisition appears viable", "correct": false },
+        { "text": "Withdraw the analysis to avoid conflict", "correct": false },
+        { "text": "Recommend proceeding since the board has decided", "correct": false }
+      ]
+    }
+  ]
+}

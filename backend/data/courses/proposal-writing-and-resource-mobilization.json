@@ -1,0 +1,326 @@
+{
+  "slug": "proposal-writing-and-resource-mobilization",
+  "title": "Proposal Writing & Resource Mobilization",
+  "program": "FCP",
+  "category": "business-management",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 3000,
+  "summary": "Find the right funder, write a proposal that answers the question being asked, and build a funding base that survives one donor leaving.",
+  "description": "Most proposals fail for reasons that have nothing to do with the quality of the work. They answer a question the donor did not ask, they arrive from an organisation with no relationship and no visible track record, or they promise delivery on a budget that cannot fund it.\n\nThis course treats resource mobilisation as a discipline rather than a writing exercise. It covers the funding landscape that a Liberian organisation actually faces, grants, contracts and in-kind support, how donor priorities and eligibility rules determine whether an application is worth writing at all, and how to build the relationship before the call for proposals appears.\n\nThe writing half works through the problem statement, the logic linking activities to outcomes, and the budget with its justification, because a budget that cannot be explained line by line is where most technically strong proposals lose points.\n\nThe case study follows a local NGO with three years of solid work whose only funder, a UN agency, is ending support in six months. Its director wants to apply to a bilateral donor that requires a five-year track record, audited financials and a cost-share contribution. Students must work out the realistic path.\n\nThe course closes on sustainability: diversifying income, recovering indirect costs so that the organisation is not permanently short, and recognising the opportunities that should be declined.",
+  "tags": ["proposal writing", "fundraising", "donor relations", "budgeting", "grants", "sustainability"],
+  "outcomes": [
+    "Distinguish grants, contracts and in-kind support and what each demands",
+    "Read donor eligibility rules and decide whether to apply",
+    "Write a problem statement that establishes need without exaggeration",
+    "Link activities to outcomes in a way a reviewer can follow",
+    "Build a budget whose lines can each be justified",
+    "Assemble credible evidence of track record and capacity",
+    "Recover indirect costs rather than subsidising donors",
+    "Recognise and refuse opportunities that would damage the organisation"
+  ],
+  "caseStudy": "A local NGO has operated for three years with a good track record. Its only funder, a UN agency, ends support in six months. The director wants to apply to a bilateral donor for a larger grant, but that donor requires a five-year track record, audited financial statements and a cost-share contribution. Students must identify the realistic path, the interim measures that keep the organisation alive, and what to advise the director.",
+  "modules": [
+    {
+      "title": "The funding landscape",
+      "lessons": [
+        {
+          "title": "Grants, contracts and in-kind support",
+          "minutes": 17,
+          "teach": [
+            "A grant funds an activity the donor wants to see happen and gives the organisation discretion over how. A contract buys a service the donor has specified, and the organisation becomes a supplier with deliverables and penalties attached.",
+            "The distinction changes everything about how the money is managed. A grant tolerates a changed approach with an approved variation. A contract does not, and delivering something different from what was specified can be a breach rather than an innovation.",
+            "In-kind support is frequently overlooked and often the cheapest to obtain. A ministry providing office space, a company providing transport, or a partner providing staff time all reduce the cash the organisation must raise for the same programme.",
+            "Core funding is the rarest and most valuable form. Money the organisation can allocate at its own discretion pays for the finance officer, the audit and the rent, and organisations without it fund their own administration out of programme budgets they then cannot fully spend.",
+            "Each instrument carries a compliance burden proportionate to its size, and small grants are often disproportionately costly. A grant of a few thousand dollars with quarterly narrative and financial reporting can consume more staff time than it releases in resources.",
+            "Know which instrument you are being offered before you write anything. Proposals written as though a contract were a grant are common, and they produce promises of flexibility that the contract will not permit and a relationship that starts with a misunderstanding."
+          ],
+          "example": "An NGO accepts a service contract to deliver teacher training on a fixed curriculum, then changes the curriculum after a participant assessment. The donor rejects the variation as out of scope and withholds the final payment.",
+          "points": [
+            "Grants allow discretion, contracts buy deliverables",
+            "In-kind support is often the cheapest to win",
+            "Match the compliance burden to the grant size"
+          ],
+          "check": "List your current funding by instrument type and note which ones restrict how you spend."
+        },
+        {
+          "title": "How donors decide",
+          "minutes": 18,
+          "teach": [
+            "Donors are not choosing the best organisation in the abstract. They are choosing the applicant that best fits a strategy already written, a budget already allocated, a geography already selected, and a risk appetite already agreed by somebody senior.",
+            "That is why eligibility rules exist and why they are enforced mechanically. A five-year track record requirement is not a judgement about your quality, it is a filter applied by a system that will not read the rest of the application once it fails.",
+            "Inside the eligible set, reviewers score against a published matrix, and the matrix is where the proposal should be written from. If a criterion carries twenty points, it deserves a section; if it carries five, it deserves a sentence or two and no more.",
+            "Relationships decide close calls. A programme officer who knows the organisation's work and has seen it deliver will read an imperfect proposal more generously than a stranger will read a perfect one, which is why the conversation before the call matters.",
+            "Risk assessment has become a real filter. Donors now examine financial systems, safeguarding, procurement and audit history, and an organisation with strong programme work and no financial controls will lose to a weaker programme with better systems.",
+            "Understand what the donor is accountable for. A bilateral agency must show its parliament that money was spent as agreed, so predictability, reporting and audit trail matter to the reviewer as much as impact does, and the proposal should make those easy."
+          ],
+          "example": "Two applications score equally on technical merit. One comes from an organisation the programme officer has visited twice and whose prior grant closed cleanly. It is funded, and the other is held as a reserve.",
+          "points": [
+            "Eligibility rules are mechanical filters, not judgements",
+            "Write to the scoring matrix, section by section",
+            "Financial systems and audit history are scored criteria"
+          ],
+          "check": "Find one donor scoring matrix and map your last application against its points allocation."
+        },
+        {
+          "title": "Knowing which opportunities to refuse",
+          "minutes": 17,
+          "teach": [
+            "Every proposal costs something to write, and the cost is staff time that could have been spent on delivery or on a better-targeted application. An organisation that applies to everything applies well to nothing.",
+            "Refuse when the eligibility rules exclude you, when the geography or sector is a poor fit, when the deadline allows no time to assemble evidence, or when the award could not be absorbed by your current systems without breaking them.",
+            "Size is the most common trap. A grant three times your annual budget requires recruitment, procurement capacity, a finance function and a reporting machine that a small organisation may not have, and the failure is rarely the programme's fault.",
+            "Duration matters as much as value. A nine-month grant for work that needs two years will produce a report explaining why the outcomes were not achieved, and that report will follow the organisation into its next application.",
+            "Consider the strategic cost too. A contract that absorbs all your senior staff for a year may win money and lose the relationships and programme identity that made you fundable in the first place.",
+            "Keep a written set of criteria for what you will apply to, agreed with the board. The criteria make refusal a policy decision rather than a personal one, and they protect the organisation from the enthusiasm of a director who has just returned from a conference."
+          ],
+          "example": "A five-person NGO declines a grant equal to four times its annual budget because the reporting and procurement requirements would need two new staff it cannot recruit in the mobilisation period.",
+          "points": [
+            "Every application has a cost in staff time",
+            "Refuse awards you cannot absorb",
+            "Agree written criteria so refusal is policy, not personality"
+          ],
+          "check": "Write the three conditions under which your organisation will decline a funding opportunity."
+        }
+      ]
+    },
+    {
+      "title": "Building the proposal",
+      "lessons": [
+        {
+          "title": "The problem statement that earns the next page",
+          "minutes": 18,
+          "teach": [
+            "The problem statement has one job: to make a reviewer who knows nothing about your district accept that the situation is bad and that something specific could be done about it.",
+            "It works with evidence rather than adjectives. Not mothers face enormous challenges but 41 percent of deliveries in the district take place at home, against 28 percent nationally, and the nearest facility with a skilled midwife is two hours away in the wet season.",
+            "Name the gap precisely. A problem stated as lack of awareness invites a workshop. A problem stated as women cannot reach a facility within four hours invites transport, outreach or a maternity waiting home, which are the things the proposal can fund.",
+            "Acknowledge what has already been tried and why it did not work. This is the paragraph that separates a serious organisation from an optimistic one, and reviewers read it to judge whether the applicant understands the context.",
+            "Avoid the needs statement that describes the whole country. A proposal to work in two districts that opens with national statistics and no local data reads as though the applicant has not been there.",
+            "End with the specific problem the proposal will address, in one sentence, so that every following section can be traced back to it. Reviewers reward coherence because it makes their scoring easy."
+          ],
+          "example": "A proposal replaces rural communities face severe health challenges with data on home delivery rates, distance to a skilled midwife and wet-season travel time, and the programme design changes from awareness sessions to a maternity waiting home.",
+          "points": [
+            "Evidence, not adjectives",
+            "State the gap so it points at a kind of solution",
+            "Acknowledge what was tried and failed"
+          ],
+          "check": "Write the first sentence of your problem statement with a number and a named location in it."
+        },
+        {
+          "title": "Activities, outcomes and the logic between them",
+          "minutes": 18,
+          "teach": [
+            "Reviewers deduct marks for a proposal where the activities do not add up to the outcome. Train 40 midwives does not become maternal mortality falls unless the midwives are deployed, supervised and supplied, and the proposal should say so.",
+            "Write the logic as short connected statements before filling in the format. We will do this, and that will produce this change, because of this reason. Any link you cannot state plainly is a link the reviewer will question.",
+            "Distinguish what you control from what you influence. Activities and outputs are yours; outcomes are shared with partners, ministries and the economy. Promising an outcome you cannot control is the fastest way to fail your own final report.",
+            "Say who else is involved and what they will do. Proposals that describe a programme entirely delivered by the applicant, in a district where the ministry runs every facility, are treated as unrealistic, and named partners raise the score.",
+            "Include the sustainability answer early rather than in a final paragraph. A reviewer wants to know what remains after the grant ends, and the honest answer is often capacity, relationships or a standing process rather than money.",
+            "Check the arithmetic of ambition against the budget. Forty midwives trained and deployed with supervision in nine months on a small budget invites an experienced reviewer to test the figures, and they will not hold up."
+          ],
+          "example": "A youth employment proposal promises 5,000 jobs on a budget that funds training for 300. The log frame is rewritten to 300 trained, 180 placed in apprenticeships, with the employment rate as the outcome.",
+          "points": [
+            "Every activity must add up to the outcome",
+            "Separate what you control from what you influence",
+            "Answer sustainability early, not in the last paragraph"
+          ],
+          "check": "Write the chain from one activity to one outcome in your proposal, naming the reason for each link."
+        },
+        {
+          "title": "The budget and its justification",
+          "minutes": 19,
+          "teach": [
+            "The budget is read as evidence of whether the applicant understands its own programme. A line for training materials without a number of trainees, or a vehicle without fuel, tells the reviewer that the numbers were assembled to reach a total.",
+            "Cost each activity separately and let the total follow. Building the budget around a grand total, worked backwards, produces the familiar pattern where training is underfunded and administration is inflated to compensate.",
+            "Justify every line in the narrative. Forty thousand for training is a claim; forty thousand for 200 trainees over five days at 40 per trainee per day for venue, materials and facilitator is arithmetic the reviewer can check and trust.",
+            "Be honest about staffing costs. Salaries are the largest line in most budgets and the one applicants most often hide inside activity costs, which then makes the programme look cheaper than it is and the organisation look inexperienced.",
+            "Include indirect costs deliberately. Rent, utilities, audit, insurance and management time are real costs of delivering any programme, and an organisation that recovers none of them is funding the donor out of its own reserves.",
+            "Price in the local currency and state the exchange rate and the date used. Where costs are in dollars and revenue in local currency, an unpriced depreciation can consume a programme's entire contingency in a single quarter."
+          ],
+          "example": "A budget lists training 40,000 with no unit basis. Rebuilt as 200 trainees, five days, 40 per trainee per day, the line is defensible, and the organiser realises the original figure funded only 100 trainees.",
+          "points": [
+            "Build the budget from activities, never backwards from a total",
+            "Show the unit basis for every large line",
+            "Recover indirect costs or you subsidise the donor"
+          ],
+          "check": "Take your largest budget line and write the unit calculation that produces it."
+        }
+      ]
+    },
+    {
+      "title": "Relationships and evidence",
+      "lessons": [
+        {
+          "title": "Track record: what evidence of capacity looks like",
+          "minutes": 18,
+          "teach": [
+            "A track record is not a list of projects. It is evidence that you delivered something comparable, at a similar scale, in a similar place, with money that was accounted for, and that somebody independent has confirmed it.",
+            "The strongest evidence is boring: audited financial statements, a clean grant close-out letter, a reference from a previous donor who will take a phone call, and a report that a third party has read and accepted.",
+            "Registration and legal standing are the first filter and are frequently the obstacle. Articles of incorporation, tax registration, a bank account in the organisation's name and a board that meets are prerequisites, not achievements.",
+            "Where the direct evidence is thin, substitute relevant evidence and say what it is. A consortium partner's track record, a founder's prior delivery in another organisation, or a successful pilot at smaller scale are all legitimate, provided they are described for exactly what they are.",
+            "Build the file before you need it. Organisations that assemble documents in the two weeks before a deadline submit a weaker file than those that maintain a standing folder of registration, audit, policies and references.",
+            "Safeguarding, financial controls and procurement policies are now scored documents. An organisation without them is not merely weaker in the scoring, it is often ineligible, and drafting them takes weeks rather than days."
+          ],
+          "example": "An NGO's capability statement is one page: registration, three years of audited accounts, two close-out letters, a reference contact, and the profile of the finance officer who signs the returns.",
+          "points": [
+            "Track record means comparable delivery plus independent confirmation",
+            "Registration and audit are filters, not achievements",
+            "Maintain a standing evidence folder before you need it"
+          ],
+          "check": "List what is in your evidence folder today and what a donor would find missing."
+        },
+        {
+          "title": "Case: three years of work and six months of funding",
+          "minutes": 21,
+          "teach": [
+            "A local NGO has operated for three years with a good record: on-time reporting, a functioning board and a programme the district health team values. Its only funder, a UN agency, is ending support in six months.",
+            "The director wants to apply to a bilateral donor for a larger multi-year grant. That donor requires a five-year institutional track record, audited financial statements for three years and a cost-share contribution of a stated percentage.",
+            "The eligibility rules are the first fact. If the organisation is three years old, the five-year requirement is not negotiable in this round, and an application will be filtered before a reviewer reads it, however strong the programme.",
+            "The realistic path runs through intermediate funding: a smaller grant or sub-award from an international NGO already holding the bilateral money, a pooled fund with a lower track record threshold, or a foundation that assesses capability rather than age.",
+            "The audit gap is fixable and urgent. Engaging an auditor now, before the UN funding ends, produces statements the organisation will need for every future application, and it should be paid for from a reserve rather than hoped for later.",
+            "The cost-share requirement is a design question. In-kind contribution, staff time, office space and volunteer hours can often count, and the organisation should establish what the donor accepts before promising a cash match it cannot raise."
+          ],
+          "example": "A three-year-old NGO seeks a bilateral multi-year grant requiring five years of track record and three years of audited accounts. It has neither, and its only funder ends in six months.",
+          "points": [
+            "Eligibility rules decide before merit is considered",
+            "Sub-awards and pooled funds are the realistic intermediate step",
+            "Commission the audit before the current funding ends"
+          ],
+          "check": "For this case, name the first application the NGO should make instead, and why it is achievable in six months."
+        },
+        {
+          "title": "Writing to the donor's priorities without distorting the work",
+          "minutes": 18,
+          "teach": [
+            "Donor priorities are legitimate. A donor with a mandate for girls' education funds girls' education, and an organisation that reframes unrelated work to fit will be judged on delivery against a promise it never wanted to make.",
+            "The skill is translation rather than invention. If your programme genuinely contributes to the donor's stated outcome, say how, in the donor's language, without changing what you will actually do.",
+            "Reframing becomes distortion when the log frame changes but the delivery does not. An organisation that adds gender indicators to a proposal and never collects them has created a reporting liability that surfaces at the first review.",
+            "Where the fit is genuinely partial, say so and propose the part you can deliver. A donor will fund a well-described component of its strategy; it will not fund a programme that claims to deliver the whole strategy on a fraction of the budget.",
+            "Read the strategy document, not only the call. The call says what is being bought this year; the strategy says why, and the reasoning tells you which parts of your work will still be fundable in three years.",
+            "Keep the organisation's own strategy as the reference point. An organisation whose programme is entirely shaped by successive calls loses any account of what it exists to do, and that shows in the quality of its work long before it shows in its funding."
+          ],
+          "example": "An organisation working on adolescent health applies to a donor prioritising girls' education. It proposes the school-based health component that genuinely reduces dropout, rather than relabelling its clinic work as education.",
+          "points": [
+            "Translate your work into the donor's language, do not invent it",
+            "Partial fit stated honestly beats a total claim",
+            "Read the strategy, not only the call"
+          ],
+          "check": "Take a donor priority and write two sentences linking your actual work to it without changing the work."
+        }
+      ]
+    },
+    {
+      "title": "Resource mobilisation beyond the proposal",
+      "lessons": [
+        {
+          "title": "Diversification and the danger of one funder",
+          "minutes": 17,
+          "teach": [
+            "An organisation with one funder does not have a funding relationship. It has a single point of failure, and the decision to end support is taken in a room where the organisation is not present and cannot appeal.",
+            "Diversification is a risk strategy before it is a fundraising strategy. Two funders at half the value each is a far stronger position than one at the full value, because losing one leaves an organisation that can still operate and negotiate.",
+            "Diversify across type as well as source. Grants, contracts, earned income and individual giving fail for different reasons, and a mix means a change in one donor's policy does not remove the entire income base.",
+            "Earned income is worth building where the organisation has a sellable capability. Training, consultancy, data services and facility hire can cover core costs that no grant will fund, and they are the only income that arrives without an application.",
+            "Concentration also creates a behavioural problem. An organisation dependent on one funder begins designing its work around that funder's preferences, and the strategic drift is invisible until the money stops.",
+            "Track the concentration ratio and report it to the board. If one source exceeds roughly half of income, the board should be discussing the plan to reduce it at every meeting, not the plan to renew it."
+          ],
+          "example": "A local NGO draws 94 percent of income from one UN agency. When the agency's country programme is restructured, three years of institutional investment end with six months' notice and no appeal route.",
+          "points": [
+            "One funder is a single point of failure",
+            "Diversify across type, not only across name",
+            "Report the concentration ratio to the board"
+          ],
+          "check": "Calculate the share of your income from your largest source, and what you would cut if it ended."
+        },
+        {
+          "title": "Cost recovery: why you are always short",
+          "minutes": 18,
+          "teach": [
+            "Most organisations are permanently short of money for reasons that are structural rather than unlucky. They recover only direct programme costs, so rent, audit, management and business development are paid from whatever is left, which is nothing.",
+            "Indirect cost recovery is the mechanism that fixes this, and it must be negotiated in the proposal rather than assumed. Many donors allow a stated percentage of direct costs, and organisations that never ask are funding the donor's programme with their own reserves.",
+            "Calculate what your overhead actually is before negotiating. Total organisational costs divided by total direct programme spend gives a ratio, and knowing it turns a vague request into a defensible figure with a method behind it.",
+            "Underpricing is the other half of the problem. Organisations routinely quote below the true cost to win the award, then discover the shortfall cannot be recovered, and the programme is delivered badly or subsidised by staff who are not paid on time.",
+            "Price the full cost, including the time spent managing the grant. A programme officer spending two days a month on donor reporting is a cost of that grant, and a budget that ignores it makes every additional grant a further drain.",
+            "Review your cost recovery annually against actual expenditure. The gap between recovered and incurred overhead is the clearest single measure of whether growth is strengthening or weakening the organisation."
+          ],
+          "example": "An NGO recovers no indirect costs across six grants and funds its finance officer, audit and rent from a founder's contribution. Recovering 10 percent on the same portfolio would cover the finance officer entirely.",
+          "points": [
+            "Negotiate indirect cost recovery in the proposal",
+            "Know your real overhead ratio before you ask",
+            "Price in the cost of managing the grant"
+          ],
+          "check": "Work out your organisational overhead as a percentage of direct programme spend."
+        },
+        {
+          "title": "The conversation before the application",
+          "minutes": 17,
+          "teach": [
+            "The most effective resource mobilisation happens before a call for proposals exists. A programme officer who has visited your work and knows your name will advocate for you inside a process you cannot see or influence.",
+            "Build the relationship around information rather than requests. Sending a short, honest update on what your programme learned, twice a year, is more useful to a donor than a request for a meeting when funding is needed.",
+            "Invite donors and ministry officials to see the work. A morning at a clinic or a school changes a reviewer's reading of a proposal more than any log frame, and it costs one vehicle and one lunch.",
+            "Be useful to the donor's own reporting. Sharing data, agreeing to a joint field visit, or contributing to a sector working group makes you part of the machinery rather than an applicant outside it, and the visibility compounds.",
+            "Ask what they are planning before it is published. Programme officers will often say what their next strategy will emphasise, and that conversation is worth more than a week of proposal writing because it lets you prepare instead of react.",
+            "Keep the relationship after a rejection. Organisations that ask for feedback, act on it and reapply in the next round are funded more often than those that disappear, and the reviewer who rejected you is the person who reads the next application."
+          ],
+          "example": "An NGO learns in a routine meeting that a donor's next strategy will prioritise cold chain. It documents its existing cold chain work over six months and applies with evidence already assembled.",
+          "points": [
+            "Relationships are built before the call, not during it",
+            "Send information, not only requests",
+            "Ask for feedback after a rejection and reapply"
+          ],
+          "check": "Name the three donor staff who could advocate for you, and when you last spoke to each."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Your organisation is technically excellent at work that does not match a donor's stated priorities. Should you apply anyway?",
+      "explanation": "Donors fund against strategies already agreed. Technical excellence does not override fit, and reframing unrelated work to match a call creates a promise you will be judged on delivering. The better path is a different donor or an honest partial proposal.",
+      "options": [
+        { "text": "No. Find a donor whose strategy matches the work, or propose only the component that genuinely fits", "correct": true },
+        { "text": "Yes, because a strong technical proposal will always score well regardless of fit", "correct": false },
+        { "text": "Yes, but describe the work using the donor's vocabulary even if the activities differ", "correct": false },
+        { "text": "No, and stop doing the work until a matching call is published", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A donor offers a grant three times your current annual budget with a six-week implementation timeline. What must you establish before accepting?",
+      "explanation": "Absorption capacity is the risk, not the money. Recruitment, procurement, finance systems, reporting and the mobilisation period determine whether the grant can be delivered, and an award that outruns those systems damages the organisation.",
+      "options": [
+        { "text": "Whether you can recruit, procure and report at that scale within six weeks, and what happens if you cannot", "correct": true },
+        { "text": "Whether the donor will allow the grant to be spread over a longer period instead", "correct": false },
+        { "text": "Whether the programme can be subcontracted entirely to another organisation", "correct": false },
+        { "text": "Whether the amount can be reduced to match your current budget", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which is the strongest evidence of institutional track record?",
+      "explanation": "Track record means comparable delivery confirmed by someone independent. Audited accounts and a donor close-out letter demonstrate that money was accounted for and the work was accepted, which is what reviewers are assessing.",
+      "options": [
+        { "text": "Three years of audited financial statements and a clean close-out letter from a previous donor", "correct": true },
+        { "text": "A list of twelve projects delivered since the organisation was founded", "correct": false },
+        { "text": "Photographs of programme activities with captions naming the donors", "correct": false },
+        { "text": "A statement from the founder describing their professional background", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case study, the NGO is three years old and the bilateral donor requires five years of track record. What is the realistic path?",
+      "explanation": "The requirement is a mechanical eligibility filter, so this round is closed regardless of merit. Progress comes through vehicles with lower thresholds, such as sub-awards from an international NGO, pooled funds or foundations, while the audit and systems are built.",
+      "options": [
+        { "text": "Pursue a sub-award or pooled fund now, and commission the audit before current funding ends", "correct": true },
+        { "text": "Apply to the bilateral donor and explain in the cover letter why three years should be sufficient", "correct": false },
+        { "text": "Wait two years without applying anywhere until the five-year threshold is met", "correct": false },
+        { "text": "Register a new organisation with a backdated founding date to satisfy the requirement", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An organisation recovers no indirect costs on any grant. What is the practical consequence?",
+      "explanation": "Rent, audit, management and business development are real costs of delivery. Where no grant recovers them, they are paid from reserves or from staff who are not paid on time, so each additional grant increases the shortfall.",
+      "options": [
+        { "text": "Overheads are funded from reserves or unpaid staff time, so growth deepens the shortfall", "correct": true },
+        { "text": "The organisation appears more competitive and therefore wins more grants", "correct": false },
+        { "text": "Donors automatically add overheads at close-out without being asked", "correct": false },
+        { "text": "There is no consequence, because overheads are not a programme cost", "correct": false }
+      ]
+    }
+  ]
+}

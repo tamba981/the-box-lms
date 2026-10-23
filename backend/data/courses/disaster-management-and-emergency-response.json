@@ -1,0 +1,264 @@
+{
+  "slug": "disaster-management-and-emergency-response",
+  "title": "Disaster Management & Emergency Response",
+  "program": "FCP",
+  "category": "professional-development",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 1000,
+  "summary": "Understand the disaster cycle, prepare before the water rises, act in the first seventy-two hours, and recover in a way that reduces the next one.",
+  "description": "Disaster work is usually discussed in terms of response, because response is what appears on the news. The decisions that determine how many people are harmed are made earlier: in drainage, in where people are allowed to build, in who knows where the vulnerable live, and in whether anyone has agreed who is in charge before the water arrives.\n\nThis course works through the whole cycle. It explains prevention, mitigation, preparedness, response and recovery as connected phases rather than a sequence, and it shows why spending on the first two is chronic underfunded even though it saves far more than it costs.\n\nIt then focuses on the practical: what a community can do before the season, what the first seventy-two hours require, and how to coordinate when several agencies arrive with different mandates. The Liberian case runs throughout, including the lessons of the 2014 Ebola outbreak, the annual flooding of low-lying Monrovia communities, and the role of community structures that exist long before any agency does.",
+  "tags": ["disaster management", "emergency response", "preparedness", "flooding", "coordination", "professional development"],
+  "outcomes": [
+    "Describe the five phases of the disaster cycle and how spending in one reduces cost in another",
+    "Identify the preparedness measures a community can take before a season begins",
+    "Explain what the first seventy-two hours require and why they are decisive",
+    "Describe how coordination works between community structures, agencies and government",
+    "Explain why prevention is chronically underfunded compared with response",
+    "Conduct a review after an event that changes the next one"
+  ],
+  "caseStudy": "During the rainy season a West Point community chairperson must evacuate 200 people with one working truck, an elderly resident who cannot walk, and a school offering space but no water, while the national agency is three hours away.",
+  "modules": [
+    {
+      "title": "Module 1 · The disaster cycle",
+      "lessons": [
+        {
+          "title": "Five phases, and why the order matters",
+          "minutes": 16,
+          "teach": [
+            "Disaster management is usually described in five phases: prevention, mitigation, preparedness, response and recovery. The names vary but the distinction matters, because each phase has a different budget, a different owner and a different timescale.",
+            "Prevention removes the risk: not building in a flood plain, not settling on an unstable slope. Mitigation reduces the damage when the hazard occurs: drainage, raised floors, reinforced roofs, early warning.",
+            "Preparedness is what you do before the event knowing it may happen: plans, stocks, drills, contact lists, agreed roles. Response is what happens in the hours and days afterwards. Recovery is the long work of restoring housing, livelihoods and services.",
+            "The phases are not sequential in practice. Recovery decisions determine future vulnerability, which is why a badly managed recovery plants the next disaster. A community rebuilt in the same flood plain with the same drainage is prepared for a repeat.",
+            "Thinking in phases is useful because it locates responsibility. Most of the harm is determined in the first three, and most of the money and attention goes to the last two. That imbalance is the central fact of the field, and it is visible in almost every community's budget."
+          ],
+          "example": "A community that dredges its drainage channel in April is mitigating; one that stacks sandbags in July is preparing; one that evacuates in August is responding.",
+          "points": ["Prevention removes, mitigation reduces, preparedness readies", "Recovery creates the next vulnerability or reduces it", "Attention follows response; harm is decided earlier"],
+          "check": "For a hazard your community faces, what has actually been done in each of the first three phases this year?"
+        },
+        {
+          "title": "Why prevention is chronically underfunded",
+          "minutes": 16,
+          "teach": [
+            "Prevention produces an absence of events. Nobody photographs the flood that did not happen, and no donor receives credit for drainage that worked quietly for five years. Response produces visible, attributable action.",
+            "The funding cycle reinforces it. Emergency funds are released quickly and generously; maintenance and drainage budgets are contested annually and are the first to be cut when revenue falls.",
+            "Political incentives point the same way. A ribbon on a new school is a visible achievement; a maintained culvert is invisible even when it prevents the school from flooding.",
+            "The economics are not in doubt. Measures taken before an event cost a fraction of the response and recovery afterwards, and the ratio is largest for the cheapest interventions: clearing drains, enforcing building rules, and teaching households what to do.",
+            "The practical implication for a manager or community leader is that prevention has to be argued for in the language of cost avoided, and that the argument has to be made in the quiet season when nobody is frightened. Prepare the two-page argument with the costs on it, and keep it for the meeting where the maintenance budget is decided."
+          ],
+          "example": "Clearing a blocked drain before the rains costs a few days of labour; clearing the flooded market afterwards, replacing stock and repairing stalls costs many times more.",
+          "points": ["Prevention is invisible and therefore underfunded", "Emergency money is easier than maintenance money", "Argue prevention in the quiet season, in costs avoided"],
+          "check": "What preventive work in your area is overdue, and what would it cost compared with the last response you witnessed?"
+        },
+        {
+          "title": "Hazards, vulnerability and exposure",
+          "minutes": 15,
+          "teach": [
+            "A hazard is the event: heavy rain, a disease outbreak, a fire. A disaster is what happens when a hazard meets people who are vulnerable and exposed. The distinction explains why the same rainfall harms one community and not another.",
+            "Exposure is being in the way: houses on the flood plain, markets on low ground, schools beside a swollen creek. Vulnerability is being unable to absorb the impact: poor housing, no savings, no transport, no information, a disability, or a household headed by a child.",
+            "Risk is roughly the combination of the two. That framing is useful because it opens two routes to reducing risk: move people out of the way, or make them better able to cope. Most practical work is the second.",
+            "Vulnerability clusters. The same households appear in every event, and they are usually the ones with least access to information, transport and credit. Knowing who they are before an event is the single most useful piece of preparation available.",
+            "Where a community has never listed its vulnerable households, that list is the first task, and it should be built with the community rather than for it. A list produced by a visiting agency will miss the households that keep to themselves, and those are often the most exposed."
+          ],
+          "example": "Two neighbourhoods receive identical rainfall; the one on low ground with unroofed shelters and no vehicles is flooded and displaced, the other is inconvenienced.",
+          "points": ["Hazard plus vulnerability equals disaster", "Vulnerability clusters in the same households", "List the vulnerable before the season, with them"],
+          "check": "Who in your community would be worst affected by the hazard you face, and is that written down anywhere?"
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Preparedness",
+      "lessons": [
+        {
+          "title": "The plan that exists before the event",
+          "minutes": 16,
+          "teach": [
+            "A preparedness plan is short and specific: who is in charge, who does what, where people go, how they are told, and what is needed. If it runs to forty pages, it will not be read at three in the morning when it is needed.",
+            "Roles must be named as people, with deputies, and written down. In an emergency the first failure is usually that two people assume the same responsibility and a third is unassigned.",
+            "Evacuation needs a destination agreed in advance with the owner of that place, and a route that has been walked. A school that has agreed to shelter people but has no water or latrine is a destination that needs work before the season, not during it.",
+            "Communication needs a method that works when the network is congested: a phone tree with an order, a physical meeting point, and one person responsible for relaying information rather than everyone calling everyone.",
+            "Test the plan once a year with the people in it. A plan that has never been walked through has assumptions in it that nobody has checked, and the walk-through is where they surface. Keep the two-page plan in a place people can reach without a key, a password or a signal."
+          ],
+          "example": "A community plan on two pages: chairperson leads, deputy leads if absent, three zone leaders, two evacuation points, one phone tree, one radio contact, reviewed each May.",
+          "points": ["Short, specific and owned by named people", "Agree destinations with their owners in advance", "Test the plan by walking through it"],
+          "check": "If the event happened tonight, who would be in charge, and would everybody know that?"
+        },
+        {
+          "title": "Stocks, drills and the things that expire",
+          "minutes": 15,
+          "teach": [
+            "Pre-positioned stocks save the hours that matter: water, tarpaulin, rope, torches, batteries, basic medicines, and something to carry a person who cannot walk. The list should follow the plan, not a generic template.",
+            "Stocks decay. Food and medicine expire, batteries leak, tarpaulin perishes, and equipment that has not been tested fails on the day. A stock register with dates and a twice-yearly inspection turns a store room into a resource.",
+            "Drills feel theatrical and they expose problems that no document does: a route blocked by a locked gate, a meeting point nobody can find, a radio that does not reach the next zone.",
+            "The drill should include the difficult cases deliberately: an elderly resident who cannot walk, a household that will not leave without its stock, a child separated from a parent.",
+            "Where a drill reveals a gap, record it and fix one thing before the season. A drill that produces a list of twenty problems and no change is worse than none, because it teaches people that the exercise is a formality. One change, recorded with a date, is a better outcome than a perfect report."
+          ],
+          "example": "A June drill reveals that the agreed evacuation route passes a gate locked at night; the fix is a key held by two zone leaders and a note in the plan.",
+          "points": ["Stock to the plan, not to a template", "Inspect stocks twice a year", "Fix one thing after each drill"],
+          "check": "What is in your store right now, and when did somebody last check whether it still works or has expired?"
+        },
+        {
+          "title": "Early warning that reaches people in time",
+          "minutes": 15,
+          "teach": [
+            "An early warning is only useful if it arrives early enough to act and reaches the people who need to act. A forecast that reaches a district office two hours before flooding does not warn the household on the low ground.",
+            "Effective systems combine a technical signal with a community relay. The technical part may be as simple as a river gauge read each morning in the rainy season, or a radio bulletin; the community part is a named person who passes it on.",
+            "The message must say what to do, not merely what is happening. Heavy rain expected is information; move stock above waist height and send children to the school by four o'clock is an instruction.",
+            "Trust is the limiting factor. People act on warnings from sources that have been right before and fail to act on those that have cried wolf. Issuing a warning that comes to nothing has a cost, which is why thresholds should be set with the community rather than by an agency alone.",
+            "Build the system so it works when the power and the network do not: a whistle, a drum, a runner, a meeting point. Technology should add reach, not become the only channel. Where the network fails, the person with the whistle is the system."
+          ],
+          "example": "A river gauge read at seven each morning during the rains, with three thresholds agreed in advance, triggers a specific set of actions announced by the zone leader.",
+          "points": ["Warn early enough to act", "Say what to do, not just what is coming", "Keep a channel that works without power"],
+          "check": "What is the last warning your community received, and what did people actually do differently because of it?"
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Response",
+      "lessons": [
+        {
+          "title": "The first seventy-two hours",
+          "minutes": 17,
+          "teach": [
+            "The first seventy-two hours decide most of the outcome. They are when lives are saved, when the situation is either contained or becomes chaotic, and when the information that shapes everything afterwards is gathered.",
+            "The priorities are consistent across emergencies. Save lives and prevent further harm. Stabilise the situation: stop the spread, secure the area, account for people. Then establish communication with whoever is coming, and record what happened.",
+            "Triage is unavoidable and must be explicit. With two hundred people and one truck, the order of evacuation is a decision that has to be made deliberately rather than by whoever is nearest the vehicle.",
+            "Coordination arrives late by definition. The community is alone for the first hours, which is why the local structure matters more than any agency's plan, and why an agency that bypasses the local structure on arrival wastes the most valuable hours.",
+            "Record as you go: who was evacuated, where they went, who is missing, what was needed. That record is what prevents duplication and what allows a family to be reunited. Keep the notebook on you, because a record left at the office is a record that floods."
+          ],
+          "example": "A zone leader's notebook listing 200 people by household, 34 evacuated in the first truck, 6 missing and 11 needing medical attention becomes the handover document when help arrives.",
+          "points": ["Lives, stabilisation, communication, record", "Triage must be explicit", "The local structure is the only thing present at first"],
+          "check": "If you had to evacuate your community with one vehicle, in what order would you move people, and who would decide?"
+        },
+        {
+          "title": "Coordinating when several agencies arrive",
+          "minutes": 16,
+          "teach": [
+            "In a significant event, several organisations arrive at once: the national disaster agency, local government, health services, police, community groups, religious organisations and sometimes international agencies. Each has a mandate, a donor and a reporting line.",
+            "The predictable failures are duplication and gaps. Two organisations distribute water to the same shelter while another has none; one collects the same information three times while the list of missing people is never consolidated.",
+            "The mechanism that helps is a single coordination meeting at a fixed time each day, chaired by one person, with a shared sheet of who is doing what and where. Not a committee; a fifteen-minute stand-up with a written record.",
+            "Information should flow to a single collection point so that a shelter, a household and a missing person are not recorded differently by each agency. A shared list gives an agreed picture and makes a request for resources specific.",
+            "Where a national agency is formally in charge, support its coordination rather than replacing it. An outside organisation that starts its own parallel system creates the duplication it then complains about."
+          ],
+          "example": "A daily seven o'clock meeting produces a one-page sheet: shelters open, people in each, distribution completed, gaps outstanding, named owner for each gap.",
+          "points": ["Duplication and gaps are the predictable failures", "One meeting, one chair, one sheet", "Collect information in one place"],
+          "check": "In the last response you were involved in, how many organisations attended and was there one agreed record of who was where?"
+        },
+        {
+          "title": "Case study: 200 people and one truck in West Point",
+          "minutes": 18,
+          "teach": [
+            "It is the rainy season and a low-lying community in West Point is flooding faster than forecast. The community chairperson has 200 people who need to leave, one functioning truck that holds about thirty, and no boat.",
+            "One resident is elderly and cannot walk; her household has four children. The school two streets away has offered its hall but has no water supply and one latrine. The national disaster agency has been contacted and is three hours away.",
+            "Two options are in front of the chairperson: begin moving people now with the single truck, prioritising those who cannot walk and households with small children, or wait for the agency and move everybody together when more transport arrives.",
+            "The residents are divided. Some argue that leaving now means abandoning property that will be looted. Others argue that waiting is what has caused deaths before. The chairperson has no authority to compel anybody to leave.",
+            "The decision has to be made in minutes, with incomplete information, and it will be judged afterwards by people who know how it turned out. Write down the option you rejected and why, in one line, at the time."
+          ],
+          "example": "The truck completes roughly six round trips in three hours if the route stays passable; the water is rising and the school needs water delivered before it can take people.",
+          "points": ["Decide with the information available, and record why", "Triage the movement: those who cannot move themselves first", "Address the objection about property directly rather than dismissing it"],
+          "check": "What would you do first, and what would you say to the residents who want to stay to protect their property?"
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Recovery and learning",
+      "lessons": [
+        {
+          "title": "Recovery is the longer emergency",
+          "minutes": 16,
+          "teach": [
+            "Attention and funding follow the peak of the event and decline while the need peaks afterwards. Shelter, water, livelihoods and schooling take months to restore, and that is the period in which vulnerability is either reduced or rebuilt.",
+            "The decisions taken early in recovery set the community's risk for the next decade. Rebuilding in the same flood plain with the same materials recreates the exposure; rebuilding on higher ground or with raised floors reduces it, at a cost that is easier to fund at the time than to argue for later.",
+            "Livelihoods are the most neglected element. Restoring a market stall, replacing stock or re-establishing a route matters more to a household than the repair of a public building, and it is usually the last thing funded.",
+            "Recovery also has a distribution question. Assistance reaches households with documents, addresses and advocates, which are exactly what the most vulnerable households lack. Building the list during preparedness is what makes recovery equitable.",
+            "Plan the recovery during the response, not after it. The information gathered in the first three days is the basis for who receives what, and it cannot be reconstructed later. Decide in the first week who will receive what, using the list made before the season."
+          ],
+          "example": "A community assisted with housing but not with stock saw its traders borrow at high rates, which turned a disaster into a year of debt repayment.",
+          "points": ["Need peaks after attention declines", "Early recovery decisions set the next decade's risk", "Livelihoods are the most neglected and least funded"],
+          "check": "What did your community's last recovery leave unchanged that should have been changed?"
+        },
+        {
+          "title": "Reviewing while memory is fresh",
+          "minutes": 15,
+          "teach": [
+            "A review held two months after an event produces a summary of a summary. A review held within two weeks, while the detail is still available, produces findings that can be acted on before the next season.",
+            "Ask four questions. What happened, in sequence? What did we do, and on what information? What worked, specifically? And what would we do differently, stated as an action rather than a sentiment?",
+            "Include the people who were affected, not only the people who responded. A review conducted by agencies about agencies misses the parts that mattered most to households: where the information failed, where assistance did not reach, and what people did for themselves.",
+            "Write down what was unexpected. The surprises are where the plan was wrong, and they are the most transferable finding to a different event.",
+            "Then change one or two things before the next season. A review that generates twenty recommendations and no change is a document, and the organisation has learned to produce documents rather than to prepare. Two actions, done before the next season, beat a comprehensive review nobody implements."
+          ],
+          "example": "A review within ten days identified that the agreed meeting point was under water in the actual event, which was corrected before the following season.",
+          "points": ["Review within two weeks", "Include affected people, not only responders", "Change one or two things before the next season"],
+          "check": "When did your organisation last review an emergency, and what changed as a result?"
+        },
+        {
+          "title": "Building a community that is harder to harm",
+          "minutes": 15,
+          "teach": [
+            "The durable work happens between events: drainage maintained, building rules applied, savings groups that let a household absorb a shock, and a community structure that exists for reasons other than disaster.",
+            "Structures created only for emergencies tend to be active only during emergencies. Groups that meet monthly for another purpose, such as a savings group or a market association, can be activated quickly because they already exist and already trust each other.",
+            "Household resilience is worth more than any stockpile. Savings, a second income, documents kept in a sealed bag, a plan for where to go: each costs little and each changes what a household can absorb.",
+            "Institutional memory matters as much. Where the plan, the contact list and the last review live only in one person's head, the capability leaves when that person does. Keep them in a file that a successor can open.",
+            "The test of preparedness is not the plan but the behaviour in the first hour. If people know where to go and who is in charge without being told, the work has been done. That is what a drill is really testing, and it is the only measure that matters."
+          ],
+          "example": "A market association that meets monthly for savings became the fastest channel for warnings and distribution in an area where no disaster committee had ever functioned.",
+          "points": ["Use structures that exist for other reasons", "Household savings beat stockpiles", "Keep the plan where a successor can find it"],
+          "check": "Which existing group in your community could carry a warning tomorrow without being created for the purpose?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Why is the first 72 hours decisive in disaster response, and what should be prioritised?",
+      "explanation": "Lives are saved, the situation is either contained or becomes chaotic, and the information that shapes recovery is gathered. Priorities are lives, stabilisation, communication and record.",
+      "options": [
+        { "text": "Lives, stabilisation, communication and a written record, before outside help arrives", "correct": true },
+        { "text": "Distributing aid equally to all affected households", "correct": false },
+        { "text": "Waiting for the national agency to assume command", "correct": false },
+        { "text": "Assessing damage so that funding can be requested", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A community has avoided major flooding for five years after installing drainage. Which phase of the disaster cycle is this, and why is it underfunded?",
+      "explanation": "Mitigation. It produces an absence of events, so nobody receives credit and the budget is cut first when revenue falls.",
+      "options": [
+        { "text": "Mitigation — it produces no visible event and is cut first when money is short", "correct": true },
+        { "text": "Response — it is part of the emergency effort", "correct": false },
+        { "text": "Recovery — it restores the community afterwards", "correct": false },
+        { "text": "Preparedness — it is funded from the preparedness budget", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A warning arrives two hours before flooding at a district office. Why may it still fail?",
+      "explanation": "It must reach the households who need to act, in time to act, with an instruction rather than a description. A district-level forecast does not warn the household on low ground.",
+      "options": [
+        { "text": "It may not reach the affected households in time or say what to do", "correct": true },
+        { "text": "Two hours is always too short to be useful", "correct": false },
+        { "text": "Because forecasts are unreliable in the rainy season", "correct": false },
+        { "text": "Because only the national agency is permitted to warn", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Several agencies arrive and two distribute water to the same shelter while another has none. What mechanism best prevents this?",
+      "explanation": "One daily coordination meeting with a single chair and one shared sheet of who is doing what and where, with named owners for gaps.",
+      "options": [
+        { "text": "One daily meeting, one chair, one shared record of who is doing what and where", "correct": true },
+        { "text": "Each agency reporting to its own donor separately", "correct": false },
+        { "text": "A written agreement signed before the season", "correct": false },
+        { "text": "Allowing the largest agency to direct the others", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A community is rebuilt in the same flood plain with the same materials after an event. What has happened?",
+      "explanation": "Recovery recreated the exposure. Recovery decisions set the risk for the next decade, and rebuilding identically prepares the next disaster.",
+      "options": [
+        { "text": "Recovery has rebuilt the original vulnerability rather than reducing it", "correct": true },
+        { "text": "Preparedness has been strengthened by restoring normality", "correct": false },
+        { "text": "Nothing of consequence, since the same hazard would occur anyway", "correct": false },
+        { "text": "Mitigation has been achieved through rapid reconstruction", "correct": false }
+      ]
+    }
+  ]
+}

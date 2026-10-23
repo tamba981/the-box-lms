@@ -1,0 +1,326 @@
+{
+  "slug": "data-analytics-and-business-intelligence",
+  "title": "Data Analytics & Business Intelligence",
+  "program": "CPP",
+  "category": "data-analytics",
+  "level": "intermediate",
+  "credential": "certificate",
+  "priceCents": 3500,
+  "certificateFeeCents": 0,
+  "summary": "Turn organisational data into decisions: agree definitions, design reporting people actually use, and judge when analysis, a warehouse or a dashboard is the right instrument.",
+  "description": "Most organisations do not have a data problem. They have a decision problem that reporting has not been designed around. This course works through the practical sequence that turns raw operational records into figures a manager can act on: deciding what question to answer, agreeing a single definition for each measure, moving data out of live systems safely, and presenting it so that a busy reader reaches the right conclusion in seconds.\n\nIt is written for the realities of Liberian institutions, where field data arrives late and by hand, donor reporting cycles do not match internal decision cycles, and a dashboard is often requested when a two-page note would serve better. The course covers business intelligence maturity, operational systems versus a data warehouse, cleaning and deduplication, KPI selection, dashboard design and the discipline of a reporting cadence.\n\nBy the end you will be able to name the decision behind a reporting request, diagnose why a report arrives too late to matter, and defend a design that is smaller, cheaper and more used than the one you were asked for.",
+  "tags": ["business intelligence", "dashboards", "KPIs", "data quality", "reporting", "decision-making"],
+  "outcomes": [
+    "Distinguish reporting from analysis and describe what each can and cannot do",
+    "Place an organisation on the four stages of business intelligence maturity",
+    "Explain when a data warehouse is required and when it is not",
+    "Write a single agreed definition for each headline measure",
+    "Select a small set of KPIs tied to real decisions and counter-measures",
+    "Diagnose a reporting delay and separate process causes from tooling causes",
+    "Design a one-page dashboard that survives black-and-white printing",
+    "Decide when an analysis note is a better answer than a dashboard"
+  ],
+  "caseStudy": "An NGO runs fifteen field offices and reports monthly to a chief executive who needs to act. Three offices submit late, the data cleaner spends three days repairing and combining the rest, and the chief executive sees consolidated figures on day ten. The decisions those figures inform were taken on day five. The chief executive asks for real-time data. Students must identify the real problem and choose the first intervention, with its cost.",
+  "modules": [
+    {
+      "title": "From data to decisions",
+      "lessons": [
+        {
+          "title": "Reporting records the past; analysis changes the next decision",
+          "minutes": 18,
+          "teach": [
+            "Most organisations that ask for analytics want something narrower and more useful: a regular, trustworthy account of what is happening, early enough for a decision to change the outcome.",
+            "A report produced on the fifth of the following month is a record of a period that has closed. Nobody can act on it, because the moment it describes has already passed and the money is spent.",
+            "Analysis begins when you compare: this month against the same month last year, this branch against one of similar size, this district against the national average. Comparison is what turns a number into a finding.",
+            "Producing a report can be scheduled and checked. Producing a finding requires someone who knows the business well enough to be surprised, and being surprised is not a task you can put in a job description.",
+            "Many organisations invest in the first and assume they have the second. They buy a dashboard tool, fill it with figures, and find a year later that meetings still open with somebody asking what the numbers mean.",
+            "A useful test is whether a report has ever changed a decision. If nobody can name an occasion, the reporting is decorative, however polished the charts and however current the data appears to be."
+          ],
+          "example": "A distributor's monthly sales report arrives on the tenth and shows revenue fell. Comparing the same outlets year on year shows revenue fell only in the four outlets that lost their credit facility, while every other outlet grew.",
+          "points": [
+            "Ask what decision the figure will change",
+            "A report without a comparison is a record, not a finding",
+            "Work backwards from the decisions actually taken"
+          ],
+          "check": "Name a report your organisation produces. What decision has it changed in the last six months?"
+        },
+        {
+          "title": "The four stages of business intelligence maturity",
+          "minutes": 19,
+          "teach": [
+            "Organisations pass through recognisable stages in how they use data, and each stage answers a narrower set of questions than the one after it. Knowing your stage prevents buying a solution to a problem you do not yet have.",
+            "At the first stage, data lives in spreadsheets and ledgers held by individuals. Answers depend on who you ask, two people asked for the same figure will often produce different ones, and reconciling them takes a long meeting.",
+            "At the second, the organisation produces standard reports on a schedule. The figures agree because they come from one place, but the questions are fixed in advance and a new question takes weeks to answer.",
+            "At the third, people ask their own questions through a tool and get answers in minutes. Self-service is only safe once definitions are settled, otherwise it multiplies conflicting answers rather than reducing them.",
+            "At the fourth, analysis is embedded in operations: the stock system raises a reorder before the shelf empties, the credit system flags an account before the payment is missed. Most of the value sits here.",
+            "The practical lesson is that stage two done well is worth more than a badly implemented stage four. One agreed monthly figure used in a management meeting beats a live dashboard nobody trusts or opens."
+          ],
+          "example": "A microfinance institution installs a self-service tool while three departments still define active client differently. Six months later the board receives three different client counts in a single pack.",
+          "points": [
+            "Name your stage before choosing tools",
+            "Agreed definitions come before self-service",
+            "Stage two used well beats stage four ignored"
+          ],
+          "check": "Where would you place your organisation on the four stages, and what is the next single step?"
+        },
+        {
+          "title": "Start with the decision, not the dataset",
+          "minutes": 17,
+          "teach": [
+            "The commonest failure in a data project is beginning with what can be counted. Somebody discovers that the till system holds two years of transactions, and a project is launched to analyse them before anyone has named the decision waiting on the answer.",
+            "A decision has an owner, a deadline and options. If you cannot name those three, you do not yet have a decision, and the analysis will arrive without a home, be read with interest, and change nothing at all.",
+            "Working backwards means asking what a manager would do differently depending on the answer. If the answer would not change the course of action, the analysis is curiosity, which is fine provided it is not presented as strategy.",
+            "Take a real example. A school wants to know why enrolment falls in the second term. That is a question, not a decision. The decision is whether to spend next term's budget on fees support, transport or teacher retention.",
+            "That reframing tells you what to measure: the reasons families give for leaving, the distance they travel, and the timing of departures relative to fee deadlines. Each of those figures points at one of three options.",
+            "Analysis scoped this way is smaller than it first appears, and it finishes. The unbounded version, which asks what the data can tell us, has no completion condition and therefore no result."
+          ],
+          "example": "A clinic asks for a dashboard on patient flow. Asked which decision it serves, management says staffing. The scope narrows to arrivals by hour and day, which fits on one page.",
+          "points": [
+            "A decision has an owner, a deadline and options",
+            "If the answer changes nothing, it is curiosity",
+            "Scope the work to the options actually on the table"
+          ],
+          "check": "Write down one decision due this month and the single figure that would change it."
+        }
+      ]
+    },
+    {
+      "title": "Where the numbers live",
+      "lessons": [
+        {
+          "title": "Operational systems and data warehouses do different jobs",
+          "minutes": 20,
+          "teach": [
+            "The system that runs the business, whether a till, a payroll or a clinic register, is built to record single events quickly and correctly. It is not built to answer questions across years and departments, and asking it to do so produces slow, fragile results.",
+            "These operational systems are normalised: a customer's address is stored once and referenced everywhere. That is right for recording, since it stops the same address being entered four different ways, and wrong for analysis, which needs everything in one row.",
+            "A data warehouse copies and restructures that data for questioning. It is denormalised, wide and repetitive, which feels wasteful to a database administrator and is exactly what makes counting and comparing fast.",
+            "The copy also protects the operational system. A long analytical query run against a live register can lock the table while a nurse is trying to save a record, which is a real risk in a busy clinic.",
+            "Warehouses are loaded on a schedule, so they are always slightly behind. A warehouse that refreshes at midnight is a day old by noon, and every report drawn from it must say so rather than implying that it is live.",
+            "The design question is what delay the decision can tolerate. Monthly programme reporting tolerates a day. Fraud detection does not, and needs a different arrangement built much closer to the transaction."
+          ],
+          "example": "A retailer's till system takes eleven minutes to produce a year-on-year comparison by branch and blocks checkout screens while it runs. A nightly copy into a warehouse answers the same question in two seconds.",
+          "points": [
+            "Recording and questioning are different jobs",
+            "Warehouse copies protect the live system",
+            "State the age of the data on every report"
+          ],
+          "check": "Which of your questions currently run against the live system, and what delay could each one tolerate?"
+        },
+        {
+          "title": "Cleaning is most of the work, and it never ends",
+          "minutes": 19,
+          "teach": [
+            "In practice a data project spends far longer cleaning than analysing. Names spelled four ways, dates entered as text, blank districts and duplicate client records each have to be decided, and the decisions need writing down or they will be made differently next month.",
+            "Duplicate records are the most expensive problem in programme data, because they inflate every count that follows. One person registered at two clinics becomes two patients, and the coverage figure reported to a donor is wrong.",
+            "The fix is a rule applied before load, not a correction afterwards. Match on a stable identifier where one exists, and where it does not, on name, date of birth and location, then review the ambiguous matches by hand.",
+            "Missing values are a decision too. Leaving a blank district out of a total silently reduces the denominator and makes performance look better than it is. Better to report the blank as its own line so the gap is visible.",
+            "Cleaning cost falls if data is captured correctly at source. A dropdown list of the fifteen districts, on a form that will not submit without one, removes years of downstream repair for the price of an afternoon's configuration.",
+            "Keep the cleaning steps in a script rather than in a person's habits. A script can be read, corrected and rerun next month, whereas the habits of the one analyst who understands the file leave with that analyst."
+          ],
+          "example": "An NGO's donor report counts 12,400 beneficiaries. Deduplication against national identity numbers, where available, finds 900 repeat registrations across two clinics, and the figure is restated before submission.",
+          "points": [
+            "Duplicate records inflate everything downstream",
+            "Fix at source with controlled entry",
+            "Keep cleaning in a script, not in a habit"
+          ],
+          "check": "What is currently fixed by hand every month, and could a form field prevent it?"
+        },
+        {
+          "title": "One measure, one definition",
+          "minutes": 18,
+          "teach": [
+            "If two departments report the same measure and the numbers differ, the meeting will spend its time on the difference rather than on the decision. Settling definitions is unglamorous work that pays for itself every month afterwards.",
+            "The definition of an active client, an enrolled student or a filled post is not obvious. A client who bought once eighteen months ago is inactive by most standards, active by some, and the choice changes the headline considerably.",
+            "Write definitions in plain language, with inclusions and exclusions spelled out, and say plainly what the measure leaves out. A measure is only as trustworthy as the clarity of what it deliberately does not count.",
+            "Then put the definition somewhere it will be found: a single reference page linked from the report, not a note in somebody's inbox. That page is a living document and should carry a date and the name of its owner.",
+            "Where a definition changes, restate history. A measure redefined in June and applied only from July creates a step in the chart that somebody will later read as a real change in performance.",
+            "Definitions should be owned by the function accountable for the result, not by the data team. The data team implements the measure, and the function answers for whether it captures what they actually mean."
+          ],
+          "example": "Two reports on the finance minister's desk show revenue collection at 61 and 74 percent. Both are correct: one counts gross assessments, the other cash received. Neither report states which.",
+          "points": [
+            "Ambiguous measures start arguments, not decisions",
+            "Publish one reference page and date it",
+            "Restate history whenever a definition changes"
+          ],
+          "check": "Pick your headline measure and write its definition in two sentences, including what it excludes."
+        }
+      ]
+    },
+    {
+      "title": "Designing things people use",
+      "lessons": [
+        {
+          "title": "What a KPI must do to earn its place",
+          "minutes": 18,
+          "teach": [
+            "A key performance indicator is a measure attached to a decision, with a target and an owner. Most things called KPIs are neither: they are figures that appear each month because they always have, and nobody would notice if they stopped appearing.",
+            "The test is failure. If the figure moved twenty percent in the wrong direction, would anybody act, and does anybody know what they would do? A measure that cannot answer that is information, not an indicator.",
+            "Every measure needs a direction and a target. Without them the reader supplies their own, and in a room of twelve people there will be several, most of them anchored on the previous month rather than on the plan.",
+            "Pair every measure with a counter-measure, because any single figure can be improved at the expense of something else. Loan volume improves by lending to anyone; arrears improves by lending to nobody, and neither is management.",
+            "A good portfolio is small. Eight to twelve measures at the top of an organisation is enough to describe health, and a longer list guarantees that attention spreads thinly across items of very unequal importance.",
+            "Review KPIs annually against the strategy and remove those that no longer attach to a live decision. A dashboard that only ever grows becomes a museum of questions somebody once asked and nobody now asks."
+          ],
+          "example": "A programme manager proposes forty KPIs for a quarterly review. Asked to name the five that would change a decision, the list falls to six, and the review finishes inside the time allowed.",
+          "points": [
+            "A KPI has a target, an owner and a decision",
+            "Pair each measure with its counter-measure",
+            "Eight to twelve measures at the top is enough"
+          ],
+          "check": "Take your current report and delete every figure nobody would act on if it moved twenty percent."
+        },
+        {
+          "title": "Dashboard design: hierarchy, comparison and context",
+          "minutes": 20,
+          "teach": [
+            "A dashboard is read in seconds by someone who did not build it. That fact should govern the design: the most important number largest and first, supporting detail beneath it, and nothing on the screen that does not help the reader decide.",
+            "A number alone carries no meaning. Thirty percent is good or alarming depending on whether the target is twenty, the previous figure was thirty, and comparable organisations reach fifty. Supply the comparison or the reader will invent one.",
+            "Show change over time as well as the current position, because a trend tells you whether a problem has just started or has been growing quietly for a year. A single month cannot distinguish the two, and the response differs.",
+            "Keep one message per screen and resist the urge to fill space. Charts added because the canvas looked empty compete for attention with the ones that matter, and the reader cannot tell which were considered essential.",
+            "Colour should mean something and should survive being printed in black and white, which is still how many board packs arrive. Red and green opposite each other, with no labels, are indistinguishable to a colour-blind reader and to a photocopier.",
+            "Label the period, the source and the refresh time. A dashboard without a date is a rumour, and somebody will make a decision on last quarter's figures believing they are looking at yesterday's."
+          ],
+          "example": "A logistics dashboard is redesigned from nine charts to one headline delivery rate, a trend line and two exception lists. Two of the original charts had never been referred to in a meeting.",
+          "points": [
+            "Design for a reader who did not build it",
+            "A number without comparison misleads",
+            "Date every page and name the source"
+          ],
+          "check": "Count the elements on your main dashboard. Which could be removed without losing a decision?"
+        },
+        {
+          "title": "Case: fifteen field offices and a chief executive who sees numbers on day ten",
+          "minutes": 22,
+          "teach": [
+            "When a request arrives as a solution, unpack it into the problem behind it. Real-time is a solution. The problem behind it might be lateness, manual labour, unreliable capture, or a decision cycle that the reporting never suited in the first place.",
+            "Ask when the decision is actually taken and compare that with when the figure arrives. If decisions happen on day five and figures arrive on day ten, no improvement in accuracy will help, because the report answers a question that was already settled.",
+            "Split the delay into its causes and cost each one. Submission lateness, manual repair, waiting for the slowest contributor and approval before release behave differently and respond to different interventions, only some of which require money.",
+            "Look for the free interventions first, since the cheapest fixes are usually about visibility and expectation. Naming the units that submit late, against a published deadline, changes behaviour more reliably than most tool purchases at similar cost.",
+            "Then remove waiting from the process. Processing each submission as it arrives, and reporting the gaps explicitly rather than waiting for completeness, converts a ten-day report into a three-day one without any new technology.",
+            "Only then ask whether capture itself needs changing. If field staff transcribe from paper registers, automating capture is a real project with real costs, and it should be justified by decisions rather than by the word real-time."
+          ],
+          "example": "An NGO with fifteen field offices receives three late submissions each month. Cleaning takes three days, the chief executive sees consolidated figures on day ten, and the decisions those figures inform were taken on day five. The request is for real-time data.",
+          "points": [
+            "Unpack solution requests into the problems behind them",
+            "Compare the decision time with the arrival time",
+            "Remove waiting before buying tools"
+          ],
+          "check": "For this case, name the real problem in one sentence and the first thing you would do, with its cost."
+        }
+      ]
+    },
+    {
+      "title": "Making it stick",
+      "lessons": [
+        {
+          "title": "Data quality is an operating routine, not a project",
+          "minutes": 18,
+          "teach": [
+            "Data quality does not stay fixed. Every new staff member, form change and system upgrade introduces error, so cleaning once and declaring the problem solved guarantees a repeat in a year at greater cost and with less goodwill.",
+            "Treat quality as a small, frequent routine. A weekly check of a handful of rules, covering impossible dates, blank mandatory fields and duplicated identifiers, finds problems while they are small and still attributable to a person or a process.",
+            "Assign each rule an owner in the function that creates the data. The data team can detect a failure but cannot fix a habit, and a rule with no owner in the business produces a monthly complaint rather than a correction.",
+            "Publish the results. A simple score by office or department, shared with the people working in it, does more for quality than a policy document, because it makes the problem visible where the work happens and where reputations sit.",
+            "Distinguish errors that break a decision from errors that only offend the eye. Spending a week correcting district spellings is worthwhile if district is a reporting dimension, and wasted effort if the field is never used.",
+            "Accept a tolerance. Perfect data is not achievable, and pursuing it is how quality programmes lose their support. Decide what error rate the decision can tolerate and stop there, at a level everybody can sustain."
+          ],
+          "example": "A hospital checks three rules weekly: appointments with no patient identifier, consultations dated in the future, and staff records with no assigned clinic. Each rule has a named owner in the relevant department.",
+          "points": [
+            "Quality decays, so check little and often",
+            "Every rule needs an owner in the business",
+            "Set a tolerance and stop there"
+          ],
+          "check": "Write three quality rules for your main dataset and name the person who owns each one."
+        },
+        {
+          "title": "Deliver on a cadence that matches the decision",
+          "minutes": 17,
+          "teach": [
+            "Reporting acquires value through rhythm. A figure delivered on the same day each month, in the same layout, becomes something people plan around, and the meeting builds the habit of acting on it, which is most of the benefit.",
+            "Set the cadence from the decision cycle rather than from what the system can produce. A weekly operations meeting needs a weekly pack that is rough and current; a quarterly board needs a pack that is reconciled and explained.",
+            "Separate the operational and strategic cycles deliberately. Sending a board to a live operational dashboard invites them into decisions that belong to management, and it removes the space in which management can act.",
+            "Give each review a standing shape: exceptions first, then the trend, then the items requiring a decision. That shape trains people to arrive prepared and stops the meeting from becoming a reading of the report aloud.",
+            "Record the decisions taken and the figures that drove them. Over a year that record shows which reports are used and which are ignored, giving you evidence for the next redesign rather than opinions about the layout.",
+            "Guard the cadence against the quarter-end scramble, where reporting slips and then catches up with a double pack. That slip is usually the moment trust in the numbers is lost, and it takes a year to rebuild."
+          ],
+          "example": "A distributor moves its operations review from monthly to fortnightly and shortens the pack from nine pages to two. Attendance rises, and the meeting starts with three overdue deliveries rather than with page one.",
+          "points": [
+            "Rhythm, not volume, creates the value",
+            "Match the pack to the decision cycle",
+            "Log the decisions the numbers produced"
+          ],
+          "check": "When is your next decision review, and what must be ready for it, at what level of accuracy?"
+        },
+        {
+          "title": "When a dashboard is the wrong answer",
+          "minutes": 18,
+          "teach": [
+            "A dashboard solves a specific problem: many people needing the same few figures regularly, without a specialist. Where those conditions do not hold, it becomes an expensive screen that somebody checks once and then stops opening.",
+            "If the answer is needed once, the right instrument is an analysis, not a dashboard. Building permanent infrastructure for a question that will be asked once is a common and costly confusion between a curiosity and a requirement.",
+            "If the question keeps changing, a dashboard freezes it too early. Early-stage organisations often need an analyst who can follow a question through several turns, and a screen would lock in an understanding that is still forming.",
+            "If the audience is one person, a short written note beats a screen. Four sentences carrying the number, the comparison and the recommendation reach a busy reader faster than a link they must remember to open.",
+            "If the problem is accountability rather than information, no dashboard will fix it. Organisations that receive figures and do nothing do not lack reporting; they lack consequence, and adding a chart will not create consequence.",
+            "Where a dashboard is right, keep it small and let demand pull it. Build the two screens people ask for repeatedly, and add the third when somebody requests it, rather than anticipating fifteen that nobody has needed."
+          ],
+          "example": "A donor asks once for a cost-per-beneficiary comparison across three years. The analyst produces a two-page note in a day. A dashboard would have taken three weeks and been opened once.",
+          "points": [
+            "One-off questions need analysis, not tools",
+            "Charts cannot create accountability",
+            "Let demand pull the screens you build"
+          ],
+          "check": "Name something you built that nobody uses, and say which condition above explains why."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Two departments report different active-client counts for the same month. What should be done first?",
+      "explanation": "The numbers disagree because the definition is unsettled. A single agreed definition with a written reference page removes the disagreement; reconciling figures first treats the symptom.",
+      "options": [
+        { "text": "Agree one written definition, publish it, and restate both figures against it", "correct": true },
+        { "text": "Buy a business intelligence tool so both teams use the same software", "correct": false },
+        { "text": "Average the two figures and report the midpoint", "correct": false },
+        { "text": "Report both figures and let the board decide which it prefers", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A programme manager asks for forty KPIs in the quarterly review pack. What is the best first response?",
+      "explanation": "The useful response is not to refuse or to comply, but to test each measure against a decision. Asking which figures would change a decision, and what would be done, separates indicators from information and usually shrinks the list sharply.",
+      "options": [
+        { "text": "Ask which five to eight figures would change a decision if they moved, and what would be done", "correct": true },
+        { "text": "Build all forty so that nothing is lost, and let the manager prune later", "correct": false },
+        { "text": "Refuse the request because forty measures is too many by policy", "correct": false },
+        { "text": "Group the forty into themes and report every theme at equal length", "correct": false }
+      ]
+    },
+    {
+      "prompt": "When is a data warehouse the wrong choice?",
+      "explanation": "A warehouse buys speed and safety for repeated cross-period questioning at the cost of build effort and a refresh delay. Where the question is asked once, or the decision needs second-level freshness, that trade is wrong.",
+      "options": [
+        { "text": "When the question will be asked once, or the decision needs data fresher than the load cycle", "correct": true },
+        { "text": "When the organisation has fewer than one hundred staff", "correct": false },
+        { "text": "When the source data contains duplicate records", "correct": false },
+        { "text": "When the board prefers written reports to screens", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An NGO's chief executive sees consolidated figures on day ten, but decisions are taken on day five, so they ask for real-time data. What is the correct diagnosis?",
+      "explanation": "Real-time is the requester's proposed solution. The actual failure is that reporting is designed for the wrong cycle, and the delay comes from late submissions and a process that waits for the slowest contributor. Fixing the cycle and removing waiting is cheaper and faster than automating capture.",
+      "options": [
+        { "text": "The reporting answers the wrong cycle and waits for the slowest submission, so process and cadence fixes come before tools", "correct": true },
+        { "text": "The database is too slow and requires replacement with a warehouse", "correct": false },
+        { "text": "Field staff are not committed and need stricter discipline before anything else changes", "correct": false },
+        { "text": "Real-time data is impossible in this setting, so the request should be declined", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A dashboard has been built and nobody opens it. Which explanation is most likely?",
+      "explanation": "Dashboards serve recurring questions asked by many readers. An unopened one usually means the underlying need was a one-off analysis, a single reader, or a shifting question that a fixed screen could not follow.",
+      "options": [
+        { "text": "The questions it answers were one-off, single-reader or still changing, so no fixed screen could serve them", "correct": true },
+        { "text": "The charts were not colourful enough to attract attention", "correct": false },
+        { "text": "The data was too accurate and did not reflect reality", "correct": false },
+        { "text": "The screen was not placed on a large enough monitor", "correct": false }
+      ]
+    }
+  ]
+}

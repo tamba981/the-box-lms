@@ -1,0 +1,325 @@
+{
+  "slug": "office-administration-and-management",
+  "title": "Office Administration & Management",
+  "program": "FCP",
+  "category": "business-management",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 0,
+  "summary": "Run an office that can find its own documents: filing systems, correspondence registers, records retention and the small controls that stop supplies vanishing.",
+  "description": "Office administration is the work that nobody notices until it stops. A document cannot be found, a visitor is left standing at the gate, a payment is made twice, and suddenly the whole organisation looks disorganised because one process was never designed.\n\nThis course treats the office as a system rather than a set of chores. It covers filing and naming so that a stranger can retrieve a document, the correspondence register that protects an organisation in a dispute, records retention and what may legally be destroyed, and the small purchasing controls that stop stationery, fuel and airtime from disappearing.\n\nIt is written for the reality of Liberian offices: shared computers, unreliable power, paper records that matter more than the digital copies, ministries and NGOs where the same twelve people do everything, and managers who are frequently travelling.\n\nThe case study concerns a twelve-person NGO office with no filing system where documents go missing weekly. The new office manager has two hundred dollars and a month to make a difference. Students must decide what to fix first and what to leave alone.\n\nThe course also covers coordinating meetings that produce decisions, prioritising when everything is urgent, and handling confidential information when the filing cabinet has one key and three people need it.",
+  "tags": ["office management", "records", "filing", "administration", "procedures", "confidentiality"],
+  "outcomes": [
+    "Explain what office administration is accountable for",
+    "Design a filing and naming system a stranger can use",
+    "Maintain a correspondence register that protects the organisation",
+    "State what records must be kept and for how long",
+    "Control small purchases without creating bureaucracy",
+    "Coordinate meetings that produce recorded decisions",
+    "Handle confidential information with a workable access rule"
+  ],
+  "caseStudy": "A twelve-person NGO office has no filing system. Documents go missing weekly, staff keep their own copies, and the donor's last monitoring visit could not be answered with evidence. The new office manager has two hundred dollars and one month. Students must decide what to fix first, what to spend on, and what to leave alone.",
+  "modules": [
+    {
+      "title": "The office as a system",
+      "lessons": [
+        {
+          "title": "What office administration is accountable for",
+          "minutes": 16,
+          "teach": [
+            "Office administration is accountable for three things: that information can be found, that commitments are recorded, and that the physical and financial resources of the office are not lost through carelessness.",
+            "Those three cover most of the job. Filing, correspondence, procurement, records and reception all reduce to one of them, and knowing which one a task serves tells you how much rigour it deserves.",
+            "The work is mostly invisible when it succeeds. An organisation with a good registry never discusses its registry, and an organisation without one discusses nothing else whenever an auditor arrives.",
+            "Administration is not a junior function. The person who maintains the register, controls the petty cash and knows where the contract is filed has more influence over whether the organisation can prove anything than most of the programme staff.",
+            "The measure of the function is retrieval time. How long does it take to produce the signed copy of last year's agreement with a supplier? Two minutes is a system, two days is a search, and never is a liability.",
+            "Where one person holds all of it in their head, the organisation has an administration risk rather than an administration function, and the risk becomes visible on the day that person is unwell."
+          ],
+          "example": "A donor requests evidence of three payments from eighteen months ago. The office produces the vouchers, approvals and bank statements in under an hour because they were filed by month rather than by project.",
+          "points": [
+            "Information found, commitments recorded, resources protected",
+            "Measure the function by retrieval time",
+            "One person's memory is a risk, not a system"
+          ],
+          "check": "Time how long it takes to produce the signed copy of one contract from last year."
+        },
+        {
+          "title": "A filing system that survives its creator",
+          "minutes": 17,
+          "teach": [
+            "Every office has a filing system. The question is whether it exists on a shelf or only in the head of the person who set it up, and the second kind stops working the week that person travels.",
+            "Start from the questions people ask. Which contract covers this supplier, what did we agree about delivery, what did we report to the donor in March. A filing structure organised around those questions is usable; one organised by document type is not.",
+            "Use one structure for paper and mirror it for digital. If paper files are arranged by project and the shared drive is arranged by year, the same document exists in two places under two names and neither is authoritative.",
+            "Name files so the name answers what, who and when. A convention such as 2026-03-14 Supplier Agreement Transco signed is retrievable by anybody, while scan0043.pdf is retrievable only by the person who scanned it.",
+            "Keep one index, updated weekly, listing what is where. The index is the difference between a system and a pile, and it takes ten minutes a week to maintain and two days to reconstruct.",
+            "Archive rather than delete. A folder marked closed with the year on it costs nothing on a shelf and has saved more organisations than any policy document ever written."
+          ],
+          "example": "An office reorganises its shared drive from folders named after staff members to folders named after projects, with an index sheet at the top level stating where contracts, reports and financial records are held.",
+          "points": [
+            "Organise around the questions people ask",
+            "One structure, mirrored in paper and digital",
+            "Name files so the name answers what, who and when"
+          ],
+          "check": "Ask a colleague to find one document using only the folder names, and see how long it takes."
+        },
+        {
+          "title": "Records you must keep, and for how long",
+          "minutes": 17,
+          "teach": [
+            "Not every document deserves the same treatment. Financial records, contracts, personnel files and land documents carry legal and donor retention requirements, while a two-year-old lunch receipt does not.",
+            "The practical rule is to keep originals of anything that could be disputed. Signed contracts, payment vouchers, bank statements, tax filings and personnel records with signatures are the documents an auditor, a court or a donor will ask for.",
+            "Donor agreements usually specify retention periods, often several years after the final report, and they frequently require records to be available for inspection. Read the clause rather than assuming it matches your national requirement.",
+            "Drafts, duplicates and routine correspondence can be disposed of on a schedule. Storing everything is a decision not to decide, and it makes the important records harder to find precisely because they are surrounded by the unimportant ones.",
+            "Keep at least one backup of digital records off the machine and off the premises, updated on a fixed day. A shared drive in an office that floods is not a backup, it is a second copy of the same loss.",
+            "Write the retention rule down where staff can see it. A schedule that exists only in the manager's understanding is discovered to be wrong on the day somebody destroys the wrong box."
+          ],
+          "example": "An office keeps every document for seven years and can still not find a 2023 contract, because the archive contains 40 boxes of duplicated invoices and no index.",
+          "points": [
+            "Keep originals of anything that could be disputed",
+            "Read the donor's retention clause, do not assume it",
+            "One off-site backup, on a fixed day"
+          ],
+          "check": "Find your donor agreement's retention clause and write the year the records become disposable."
+        }
+      ]
+    },
+    {
+      "title": "Daily operations",
+      "lessons": [
+        {
+          "title": "The correspondence register",
+          "minutes": 17,
+          "teach": [
+            "A correspondence register is a single list of letters, emails and documents sent out and received, with a date, a reference and a subject. It is the cheapest protection an office can buy against being told that something was never sent.",
+            "The register matters most in disputes. When a ministry says it never received the request, the register with a date, a reference and the name of the person who signed is the whole argument, and without it the argument is memory against memory.",
+            "Number outgoing letters sequentially and quote the reference in later correspondence. A sequence number makes it impossible to claim that a document never existed, and it makes a missing item visible immediately.",
+            "Record incoming correspondence too, especially anything that sets a deadline or makes a claim. An unrecorded letter that sat in somebody's tray is indistinguishable from a letter never received, and both look like negligence.",
+            "Keep the register simple enough to be maintained daily. A spreadsheet with five columns will be used; an elaborate system with codes and categories will be abandoned within a month and the organisation will be back to memory.",
+            "Review it monthly against files and email folders. The gaps reveal which staff are bypassing the register, and bypassing is usually the beginning of the problem the register exists to prevent."
+          ],
+          "example": "A supplier claims it never received a cancellation notice. The register shows letter 214 of 12 March, signed and copied to the file, and the dispute ends in one exchange rather than escalating.",
+          "points": [
+            "Date, reference, subject: the whole register",
+            "Number outgoing letters sequentially",
+            "Keep it simple enough to be maintained daily"
+          ],
+          "check": "Create the five columns of a correspondence register and date the first entry."
+        },
+        {
+          "title": "Scheduling, visitors and the front desk",
+          "minutes": 16,
+          "teach": [
+            "The front desk is where an organisation's competence is judged in the first ninety seconds, by a visitor who will remember whether anybody looked up and whether the meeting started on time.",
+            "Keep a single calendar that the office can see. Double-booked rooms, staff who are assumed present and visitors who arrive for a meeting nobody recorded are all symptoms of a calendar held in three separate heads.",
+            "Record visitors in a book: name, organisation, person seen, time in and time out. It costs one exercise book and answers questions about who was in the building on a given day that are otherwise unanswerable.",
+            "Manage the manager's diary deliberately. Block time for work rather than only for meetings, confirm appointments the day before, and hold back a margin around travel because a schedule with no slack fails at the first delay.",
+            "Handle the waiting visitor honestly. If the meeting will start in thirty minutes, say so and offer a seat and water, rather than saying the person will be with you shortly four times in a row.",
+            "Keep a simple enquiry log for anything that arrives by phone or in person and is not resolved immediately. Most lost opportunities in small organisations are requests that nobody wrote down."
+          ],
+          "example": "A ministry official arrives for a meeting that exists only in his own diary. The visitor book and a shared calendar show the officer is in the field, and the meeting is rescheduled in four minutes rather than becoming an incident.",
+          "points": [
+            "One calendar the whole office can see",
+            "Record visitors in a book",
+            "Give waiting visitors an honest estimate"
+          ],
+          "check": "Check whether your office has one calendar or several, and who can see it."
+        },
+        {
+          "title": "Equipment, supplies and the small purchases",
+          "minutes": 18,
+          "teach": [
+            "Small purchases are where most leakage occurs, because the amounts are too small for anyone to investigate and the frequency is high enough to matter. Fuel, airtime, stationery and refreshments are the usual categories.",
+            "Separate the three duties: the person who requests, the person who approves and the person who receives. In a small office one person may do two of them on a quiet week, and never all three on any week.",
+            "Use a simple requisition with a signature and a running register by month. The control is not the form, it is the comparison of what was requested against what was consumed, and that comparison only happens if somebody owns it.",
+            "Set a threshold above which three quotations are required, and apply it without exception including to the manager's own purchases. The exception is what everybody remembers, and one tolerated exception ends the rule.",
+            "Keep a stock card for consumables and count them monthly. The count is the control: a discrepancy between the card and the shelf, explained honestly, tells you more than any policy about what is happening.",
+            "Buy through a small number of known suppliers rather than from whoever is nearest. It reduces price variation, makes invoicing consistent and creates a record that can be reviewed when a pattern of spending looks unusual."
+          ],
+          "example": "An office spends 60 dollars a week on fuel with no register. A single sheet recording vehicle, litres, date and requester reveals that one vehicle accounts for half the consumption while parked.",
+          "points": [
+            "Separate request, approval and receipt",
+            "Set a quotation threshold and never except it",
+            "Count stock monthly and explain differences"
+          ],
+          "check": "List your three largest small-purchase categories and how each is currently recorded."
+        }
+      ]
+    },
+    {
+      "title": "People and coordination",
+      "lessons": [
+        {
+          "title": "Working with a manager who is never in the office",
+          "minutes": 16,
+          "teach": [
+            "In many organisations the person who decides is frequently travelling, and an office that waits for their return accumulates decisions until the queue itself becomes a problem.",
+            "Agree in advance what you may decide alone. A written list of decisions within the office's authority, and the value limits attached to each, removes most of the queue without transferring real risk.",
+            "Send a short daily or weekly summary rather than a stream of individual questions. A manager returning to forty messages answers three and skips the rest, while one page of decisions pending gets read on a phone.",
+            "Batch the questions that genuinely need the manager and mark the deadline attached to each. A question with a date is answered; a question without one becomes part of the background.",
+            "Build the file before it is needed. When the manager asks for the contract or the report, having it indexed means the answer is a link rather than a search, and that reliability is what earns wider authority.",
+            "Escalate early when something is going wrong. An office manager who reports a problem at the point it appears is trusted with more discretion than one who reports it once it is unavoidable."
+          ],
+          "example": "An office manager agrees a list of decisions up to 150 dollars and a weekly one-page summary. The queue of pending approvals falls from thirty items to four within a month.",
+          "points": [
+            "Agree in writing what you may decide alone",
+            "One page of pending decisions beats forty messages",
+            "Escalate at the point the problem appears"
+          ],
+          "check": "Write the three decisions you make daily that technically need approval, and the value limit you would propose."
+        },
+        {
+          "title": "Meetings that produce decisions",
+          "minutes": 17,
+          "teach": [
+            "A meeting exists to decide something or to exchange information that cannot travel in writing. Most recurring meetings do neither, and they survive because cancelling them requires a decision nobody has authority to take.",
+            "Send the papers and the decisions required at least a day ahead. A meeting that reads its own documents aloud wastes the only resource all participants share, which is the time they are in the same room.",
+            "Record decisions and actions, not discussion. Minutes that summarise what everybody said are unusable a month later; minutes that list what was decided, who is doing it and by when are the only part anybody consults.",
+            "Keep the action list as a standing document carried between meetings. Actions that are re-typed each time are actions that are never closed, and the same three items appear on every agenda for a year.",
+            "Invite the people who decide and the people who must act, and not the people who are merely senior. Attendance by seniority lengthens meetings and narrows what can be said in them.",
+            "End on time even when the agenda is unfinished. An organisation that ends late teaches participants that the meeting expands to fill the room, and it will."
+          ],
+          "example": "A weekly coordination meeting is cut from ninety minutes to forty after papers are circulated a day ahead, and the action list is carried forward rather than rewritten each week.",
+          "points": [
+            "Papers a day ahead, decisions stated",
+            "Minute decisions and actions, not discussion",
+            "Carry one action list forward"
+          ],
+          "check": "Look at your last minutes and count how many decisions they actually record."
+        },
+        {
+          "title": "Case: twelve people, no filing system, two hundred dollars",
+          "minutes": 20,
+          "teach": [
+            "A twelve-person NGO has no filing system. Documents go missing weekly, staff keep private copies on their own machines, and the last donor monitoring visit could not be answered with evidence of three payments.",
+            "The new office manager has two hundred dollars and one month. The temptation is to buy a filing cabinet, a scanner and a software subscription, and to reorganise everything at once, which is how reorganisations fail.",
+            "The first question is retrieval, not storage. What did the donor ask for and could not get? That answer identifies the twenty documents that matter, and those twenty are the pilot rather than the whole archive.",
+            "The cheapest first intervention is a naming convention and one index, agreed with the staff in an hour. It costs nothing, it works on the existing shared drive, and it gives an immediate visible win that buys permission for the rest.",
+            "Spend the money on the bottleneck rather than on the vision. If the missing evidence is paper vouchers, the two hundred dollars belongs on box files, labels and a lockable cupboard, not on a scanner nobody has time to operate.",
+            "Accept that some disorder will remain. A system that covers contracts, financial records and donor reports completely is worth more than one that covers everything partially, and the remaining piles can be addressed in month two."
+          ],
+          "example": "A twelve-person NGO cannot evidence three payments to a donor. The office manager spends 200 dollars on box files, labels and a lock, and a week on a file index, before buying any equipment.",
+          "points": [
+            "Start from what could not be produced",
+            "A naming convention and an index cost nothing",
+            "Spend on the bottleneck, not the vision"
+          ],
+          "check": "For this case, name the first three actions in order and what each costs."
+        }
+      ]
+    },
+    {
+      "title": "Improving the office",
+      "lessons": [
+        {
+          "title": "Priorities when everything is urgent",
+          "minutes": 16,
+          "teach": [
+            "In a small office everything arrives marked urgent, and the result is that the genuinely urgent items wait behind the merely loud ones. The skill is distinguishing consequence from volume.",
+            "Sort by what happens if it is not done this week. A missed donor deadline, an expiring contract or an unpaid salary has a consequence that grows; a misfiled receipt and a delayed stationery order do not.",
+            "Protect one block of time for the work that never becomes urgent until it is a crisis: the register, the index, the reconciliation. That work has no deadline and therefore never wins against anything with one.",
+            "Say what you are not doing. An office manager who accepts every request silently is choosing which to fail, and saying so explicitly lets the requester decide whether the priority is real.",
+            "Deal with the same small task once a day rather than continuously. Answering each request as it arrives feels responsive and prevents any sustained work, and the backlog grows regardless.",
+            "Review the week on Friday for ten minutes. Most offices have two or three recurring bottlenecks, and naming them is the first step to removing one rather than absorbing it every week."
+          ],
+          "example": "An office manager stops answering each request immediately and holds two hours each morning for the register and reconciliation, which removes the Friday backlog within two weeks.",
+          "points": [
+            "Sort by consequence, not by volume",
+            "Protect time for work that never becomes urgent",
+            "Say explicitly what you are not doing"
+          ],
+          "check": "Name the three recurring bottlenecks in your office and the one you would remove first."
+        },
+        {
+          "title": "Simple procedures staff will follow",
+          "minutes": 16,
+          "teach": [
+            "A procedure that is not followed is worse than no procedure, because it creates the appearance of control while the actual practice continues unchanged and undocumented.",
+            "Write procedures at the length people will read. A one-page requisition procedure pinned to the wall is followed; a fifteen-page manual in a drawer is cited only when something has already gone wrong.",
+            "Involve the people who do the work. A procedure designed by the manager and imposed on the person who must complete it will be followed exactly until the first busy day.",
+            "Describe the exceptional case explicitly. Staff follow the rule until they meet a situation it does not cover, and the way they improvise becomes the real procedure unless the exception is written down.",
+            "Test it by asking somebody new to perform the task using only the document. If they cannot, the document is a description of what the author knows rather than an instruction.",
+            "Review annually and delete what is no longer true. Procedures accumulate and contradict each other, and a set of rules that disagrees with itself teaches staff that none of it is binding."
+          ],
+          "example": "A fifteen-page procurement manual is replaced by a one-page flow chart with three decision points and a named approver, and compliance rises because staff can see what to do.",
+          "points": [
+            "Unfollowed procedures are worse than none",
+            "Write for the person doing the task",
+            "Describe the exception or it will be improvised"
+          ],
+          "check": "Give a colleague one of your procedures and ask them to perform the task using it alone."
+        },
+        {
+          "title": "Handling confidential information",
+          "minutes": 17,
+          "teach": [
+            "Every office holds information that would harm somebody if it circulated: salaries, personnel files, medical records, tender prices before award, and the identities of people who report concerns.",
+            "The practical rule is need to know, defined by role rather than by seniority. A manager does not need every salary to approve a holiday request, and a filing cabinet with one key shared by five people protects nothing.",
+            "Label documents by handling requirement rather than by secrecy. Confidential, internal and public are enough categories, and a system with more will be applied inconsistently by people who cannot remember the difference.",
+            "Control the copies as well as the original. Most leaks come from a printed sheet left on a desk or a file sent to the wrong recipient, not from the locked cabinet, and the discipline has to cover the ordinary acts.",
+            "Destroy securely when the retention period ends. Shredding and secure disposal are part of the control, and a confidential file placed in an ordinary waste bin has been disclosed whatever the policy says.",
+            "Tell staff what to do when they receive something they should not have. A clear instruction to delete, notify and not forward is more useful than a general obligation to maintain confidentiality."
+          ],
+          "example": "An office stores personnel files in the same cupboard as programme documents. A temporary cleaner finds a salary letter, and the resulting dispute ignores the fact that the drawer had a working lock nobody used.",
+          "points": [
+            "Need to know defined by role, not seniority",
+            "Three handling labels are enough",
+            "Destroy securely when retention ends"
+          ],
+          "check": "List the confidential records your office holds and who currently has access to each."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "What does office administration primarily exist to guarantee?",
+      "explanation": "The three purposes are retrieval, record and protection: information can be found, commitments are recorded, and the office's resources are not lost to carelessness. Everything else in the role reduces to one of the three.",
+      "options": [
+        { "text": "That information can be found, commitments are recorded and resources are not lost", "correct": true },
+        { "text": "That senior staff are supported with travel, diary and correspondence", "correct": false },
+        { "text": "That the office is clean, presentable and stocked with supplies", "correct": false },
+        { "text": "That all incoming letters receive a reply within five working days", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A donor asks for evidence of three payments made eighteen months ago. What practice makes this quick?",
+      "explanation": "Filing by period with an index, and keeping vouchers, approvals and bank statements together, means retrieval is a lookup rather than a search. Filing by project with no index produces the same documents arranged so they cannot be found.",
+      "options": [
+        { "text": "Filing by period with an index that records where vouchers, approvals and statements sit", "correct": true },
+        { "text": "Keeping every document for seven years in the original boxes", "correct": false },
+        { "text": "Asking the finance officer to search their email for the transactions", "correct": false },
+        { "text": "Relying on the bank to reissue statements when a donor asks", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case study, what should the office manager do first with the two hundred dollars?",
+      "explanation": "The reported failure is that evidence could not be produced. Starting with a naming convention and an index costs nothing, identifies the documents that matter, and directs the money at the actual bottleneck rather than at equipment.",
+      "options": [
+        { "text": "Agree a naming convention and an index, then spend on the specific records that could not be produced", "correct": true },
+        { "text": "Buy a scanner and digitise the entire archive before changing anything else", "correct": false },
+        { "text": "Purchase document management software for all twelve staff", "correct": false },
+        { "text": "Hire a temporary filing clerk for a month and let them design the system", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why is a procedure that staff do not follow worse than having no procedure?",
+      "explanation": "An unfollowed procedure creates the appearance of control while practice continues undocumented. That makes the real process invisible, and it misleads anyone who relies on the document, including auditors and new staff.",
+      "options": [
+        { "text": "It creates the appearance of control while the real practice continues undocumented", "correct": true },
+        { "text": "It wastes the paper and the time spent writing it", "correct": false },
+        { "text": "It makes staff feel distrusted and reduces morale", "correct": false },
+        { "text": "It is legally binding even when it is not followed", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A manager travels constantly and approvals queue in their inbox. What is the most effective response?",
+      "explanation": "Agreeing written authority limits for routine decisions, plus one page of pending decisions with deadlines, removes most of the queue. Sending more messages adds to the problem rather than solving it.",
+      "options": [
+        { "text": "Agree a written list of decisions within the office's authority and send one page of pending items", "correct": true },
+        { "text": "Send every question individually so none is overlooked", "correct": false },
+        { "text": "Make the decisions and inform the manager afterwards", "correct": false },
+        { "text": "Wait for the manager to return and deal with the backlog then", "correct": false }
+      ]
+    }
+  ]
+}

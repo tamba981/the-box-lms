@@ -1,0 +1,358 @@
+{
+  "slug": "digital-productivity-and-remote-work",
+  "title": "Digital Productivity & Remote Work",
+  "program": "FCP",
+  "category": "digital-skills",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 0,
+  "summary": "Work effectively with the tools you already have: files that stay found, communication that does not leak, and habits that survive when your office is your laptop.",
+  "description": "Most people lose more hours each week to the way they handle files, messages and meetings than to the work itself. This course is about the ordinary digital habits that recover those hours: naming and organising documents so a colleague can find them without asking, running a meeting that ends with decisions, keeping a shared task list that is actually true, and protecting an account that holds your organisation's correspondence.\n\nIt is written for people working in organisations with unreliable power and expensive data, so it treats offline copies, low-bandwidth habits and shared devices as normal conditions rather than exceptions. Remote work is covered not as a lifestyle but as a discipline: what has to be agreed in advance for a team that is not in one room.\n\nNo particular software is required. Where a tool is named, the lesson is about the method, and any equivalent will do.",
+  "tags": [
+    "remote work",
+    "productivity",
+    "file management",
+    "email",
+    "meetings",
+    "digital skills"
+  ],
+  "outcomes": [
+    "Organise files and documents so that someone else can find them without help",
+    "Write short, clear messages that get a decision instead of a thread",
+    "Run a meeting that produces decisions, owners and dates",
+    "Set up a task and calendar system you will still be using in six months",
+    "Protect accounts and shared devices against the most common losses",
+    "Agree the working practices that make a distributed team function"
+  ],
+  "caseStudy": "A five-person advisory firm moves half its work online, keeps missing deadlines, and cannot find last quarter's client files.",
+  "modules": [
+    {
+      "title": "Module 1 · Finding things again",
+      "lessons": [
+        {
+          "title": "A folder structure that survives other people",
+          "minutes": 15,
+          "teach": [
+            "A folder structure is not for you. It is for the person who has to find a document six months from now and does not know what you called it. Most filing systems fail because they are organised around who produced something rather than what it is about.",
+            "The structure that works is shallow and consistent: one folder per year, then one per client, project or subject, then a small set of standard subfolders used everywhere. Depth beyond three levels is where documents go to be lost, because nobody opens a fourth level to look for something.",
+            "Build the top level around what changes most slowly. Years change annually, clients change occasionally, and documents change daily, so the year belongs at the top and the document at the bottom. Getting that order wrong is what produces folders reorganised every January and links that stop working. Revisit the structure once a year, deliberately, and move things in one planned pass rather than continuously, because a structure that is always being rebuilt is a structure nobody can remember. One useful test is to ask a colleague who has never seen the folder to find a specific document while you watch. Where they hesitate is where the structure is wrong, and it is usually the same place every time. Fix that place rather than redesigning everything."
+          ],
+          "example": "A consultancy keeps 2026 › Clients › Bassa Timber › (Contract, Reports, Invoices, Correspondence). Any colleague can reach any document in three clicks without asking.",
+          "points": [
+            "Organise by subject, not by author",
+            "Keep three levels or fewer",
+            "Use the same subfolder names everywhere"
+          ],
+          "check": "Draw your current top two levels. Could a colleague who started last week find a signed contract in under thirty seconds?"
+        },
+        {
+          "title": "File names that carry their own meaning",
+          "minutes": 14,
+          "teach": [
+            "A file name is the cheapest index a document will ever have. Most are wasted on names like final_v2_JB(edit).docx, which record the author's private history rather than what the document is.",
+            "A workable convention is date first in reverse order, then subject, then status: 2026-10-21 Bassa Timber contract signed.pdf. Date first sorts chronologically by default, which is how most people look for things. Avoid spaces in names that travel between systems; hyphens are safer.",
+            "A naming convention only works if it is written down where people see it. Put the pattern on a card beside the shared folder, with one example, and use it yourself without exception for a month. People copy what they see far more reliably than what they are told, and a single well-named file at the top of a folder teaches the pattern to everyone who opens it. Avoid the two conventions that quietly fail: initials, which stop meaning anything when people leave, and version numbers in the name, which multiply until nobody can tell which is current. A name that describes the document ages well; a name that records its history does not.",
+            "The test of a convention is whether a stranger can find a document without opening it. If they must open three files to identify the right one, the naming is costing the team more time than it saves."
+          ],
+          "example": "Renaming 2026-10-21_Bassa_Timber_contract_signed.pdf immediately shows when it was signed, who it concerns, and that it is not a draft.",
+          "points": [
+            "Date first, as YYYY-MM-DD",
+            "Subject before status",
+            "Hyphens instead of spaces for files that get emailed"
+          ],
+          "check": "Look at the ten most recent files you created. How many can be understood from the name alone?"
+        },
+        {
+          "title": "Search, versions and the copy of last resort",
+          "minutes": 15,
+          "teach": [
+            "Search is a discipline, not a button. Almost every system indexes file names and, increasingly, the text inside documents. Learning three things — search by date range, search inside a folder rather than everywhere, and search for a phrase you remember from the document — removes most of the frustration people attribute to their software.",
+            "Versions are the other half. Deciding once where the current version of a document lives, and naming drafts so they cannot be mistaken for the final one, prevents the most common and most embarrassing failure in shared work: two people editing two copies of the truth.",
+            "Duplicates are the quiet cost of a shared folder. Two copies of a document are not twice the safety; they are one document and one trap, and the trap is opened by whoever sends the wrong one. When you find a duplicate, decide immediately which is current and delete or archive the other, rather than leaving the decision to the next person who needs the file. Search also depends on the text inside a document, so a file whose contents are a photograph of a page cannot be found by its words. Where a scan matters, add two lines of searchable text at the top saying what it is."
+          ],
+          "example": "A team agrees that the shared folder holds the only current version; drafts carry a _draft suffix and a date, and are deleted when superseded.",
+          "points": [
+            "Search by folder and date, not globally",
+            "One agreed location for the current version",
+            "Drafts named as drafts, deleted when superseded"
+          ],
+          "check": "Where does the current version of your most important document live, and how would a colleague know that is the one?"
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Messages that get answers",
+      "lessons": [
+        {
+          "title": "The one-question email",
+          "minutes": 15,
+          "teach": [
+            "Most messages that go unanswered contain more than one request, or none that is visible. A reader skimming on a phone cannot tell what you want, so they defer it, and the delay becomes your problem.",
+            "Write the request in the first line and make it a single decision: approve, confirm, send, choose. Put the background underneath for whoever needs it. If you need two things, send two messages or number them, because a message with two questions reliably gets one answer.",
+            "Write for a reader who is scrolling on a phone between two other things. That reader will give your message a few seconds, and will act only if the request is unmistakable. Assume they will not scroll to the end, will not open an attachment unless told there is something in it for them, and will not remember a decision they made three messages ago. If the answer depends on three people agreeing, say who decides and by when, rather than asking all three at once. A request addressed to everybody is answered by nobody."
+          ],
+          "example": "Instead of a paragraph ending in thoughts?, the message opens: Please approve the Bassa Timber invoice of $4,200 by Thursday. Then, underneath, two lines of context.",
+          "points": [
+            "Request first, context second",
+            "One decision per message",
+            "State the date you need the answer by"
+          ],
+          "check": "Take your last unanswered email. What single decision did it ask for, in which line?"
+        },
+        {
+          "title": "Subject lines, threads and when to stop replying",
+          "minutes": 13,
+          "teach": [
+            "A subject line is a label somebody will search for later. Final version is not a label; Bassa Timber invoice October is. Changing the subject when the topic changes keeps a thread readable and keeps your own archive searchable.",
+            "Threads also need an ending. A conversation that continues past the decision becomes noise that everyone learns to ignore. When a decision is reached, reply once confirming it in a sentence, move the action to the task list, and stop.",
+            "Start a new message rather than replying when the subject genuinely changes. A thread that began as a delivery query and became a budget argument is unfindable six months later, because the subject line still says delivery. One sentence linking the two is enough to preserve the context that a new subject would otherwise lose. Search your own archive for a phrase you remember from a document you needed last month. If it does not come up, your subject lines and file names are the reason."
+          ],
+          "example": "A twelve-message thread about a delivery date ends with one line: Agreed — delivery 4 November, Kollie to confirm the truck by Friday.",
+          "points": [
+            "Subjects that name the subject",
+            "Rename when the topic changes",
+            "Close the thread with the decision in one line"
+          ],
+          "check": "Find a thread longer than ten messages. Can you state its decision in one sentence, and does the thread contain it?"
+        },
+        {
+          "title": "Groups, forwards and the cost of copying everybody",
+          "minutes": 14,
+          "teach": [
+            "Copying people who do not need to act is not politeness; it is a tax on their attention that compounds. Each unnecessary recipient costs a few minutes of reading and, worse, blurs who is responsible for replying.",
+            "The discipline is simple: to for the person who must act, copy for the person who must know, and nobody else. When you forward, say in one line what you want the new reader to do with it, because a bare forward is a request to guess.",
+            "A distribution list is not an audience. Before adding anybody to a regular summary, ask what they will do differently because of it. If the answer is nothing, they are being informed for the sender's comfort rather than their own benefit, and the list will grow until the summary is ignored by everybody on it. If a list has grown without anyone asking to be on it, check whether its content is still worth the attention it takes. Most regular mail fails that test within a year.",
+            "Trim the list at least once a year and tell people you have done it. A summary that is sent to fewer people who read it is worth more than one sent to everybody who deletes it."
+          ],
+          "example": "A weekly summary goes to the three people who act on it; the rest of the organisation reads it in a shared folder once a month.",
+          "points": [
+            "To: acts. Copy: knows.",
+            "Never forward without a line saying why",
+            "Summarise instead of forwarding chains"
+          ],
+          "check": "In your last five sent messages, how many recipients needed to read them to do something?"
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Meetings and time",
+      "lessons": [
+        {
+          "title": "Deciding whether to meet at all",
+          "minutes": 14,
+          "teach": [
+            "A meeting is expensive: it consumes the time of everyone in the room simultaneously and fragments the rest of their day. That cost is worth paying for discussion that genuinely needs several people at once — disagreement, negotiation, planning under uncertainty — and rarely worth paying for information that could be read.",
+            "Before scheduling, ask whether the purpose is to decide, to create something together, or to inform. If it is to inform, write it down. If it is to decide, say what the decision is in the invitation, so people arrive able to make it.",
+            "Written updates also leave a record. A decision taken in a meeting is remembered differently by everybody who was there; a decision written down is one document that later readers can rely on. That is the strongest argument for replacing information meetings with writing, and the one that most organisations discover only after a dispute about what was agreed. Keep the written update to one page and store it where it can be found later. A decision that exists only in somebody's memory is a decision that will be relitigated."
+          ],
+          "example": "A team replaces its weekly status meeting with a one-page written update read on Monday morning, and keeps the meeting only for the two items that need argument.",
+          "points": [
+            "Meet for discussion, write for information",
+            "Name the decision in the invitation",
+            "Cancel meetings with no decision to make"
+          ],
+          "check": "Which recurring meeting in your calendar could be replaced by a page of writing this week?"
+        },
+        {
+          "title": "An agenda that runs the meeting",
+          "minutes": 15,
+          "teach": [
+            "An agenda is useful only if each item states what has to happen and how long it may take. Item four: delivery schedule, is a topic; item four: agree the November delivery schedule, 10 minutes, is an instruction.",
+            "Put the items that need the most thinking first, when attention is highest, and put announcements last, where they can be read rather than discussed. Start on time whether or not everybody has arrived, because waiting teaches the room that the start time is a suggestion.",
+            "The person chairing the meeting owns the clock. If an item overruns, the chair either extends it deliberately and takes the time from a later item, or closes it and records what remains unresolved. What must not happen is an overrun that silently consumes the item everybody came for, which is how meetings acquire a reputation for wasting time. Send the agenda with the invitation, not the night before, so people can prepare. An agenda that arrives after people have accepted is a list of surprises."
+          ],
+          "example": "Four items with minutes attached, distributed a day ahead: two decisions, one discussion, one written update taken as read.",
+          "points": [
+            "Each item states the outcome wanted",
+            "Hardest item first",
+            "Start on time regardless"
+          ],
+          "check": "What is the outcome you want from the next meeting you are responsible for, stated in one sentence?"
+        },
+        {
+          "title": "Notes that turn into work",
+          "minutes": 15,
+          "teach": [
+            "Minutes are not a transcript. They are a record of what was decided, who owns each action, and when it is due. Anything else is a summary nobody rereads, and a summary that omits the decisions is worse than nothing because it gives the false impression that the meeting produced something.",
+            "Keep three headings: decisions, actions with an owner and a date, and items deferred to a named future meeting. Circulate within a day, while people still remember disagreeing. Begin the next meeting by reading the action list aloud.",
+            "Decide who writes the notes before the meeting starts, and where they will live afterwards. Notes written by the chair tend to record the chair's view; notes written by somebody with no stake in the outcome tend to record what was actually said. Whichever you choose, put the actions in the same place as the rest of the team's work, because minutes filed in an email folder are minutes nobody opens. Record the meeting date and who was present at the top, because minutes without those two facts cannot be used as evidence of anything later."
+          ],
+          "example": "A one-page record with four decisions, six actions each with a name and date, and one item carried to the following month.",
+          "points": [
+            "Decisions, actions, deferred items",
+            "Every action has a name and a date",
+            "Circulate within one working day"
+          ],
+          "check": "Look at your last set of minutes. How many actions have a named owner and a date?"
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Working away from the office",
+      "lessons": [
+        {
+          "title": "The agreements remote teams need in advance",
+          "minutes": 16,
+          "teach": [
+            "A team that is not in one room cannot rely on overhearing things. Every assumption that a shared office makes silently has to be written down: how quickly people are expected to reply, what counts as an emergency, when the working day overlaps, and where decisions are recorded.",
+            "Agreeing these before they are needed prevents the two failure modes of distributed work: the person who feels ignored because nobody answered within an hour, and the person who is contacted at midnight for something that could wait until Monday.",
+            "Agree how decisions get made when people are not in a room. Somebody has to be able to settle a matter without a meeting, or every small question becomes a scheduling problem. Name the person, name what they may decide alone, and write decisions where everybody can see them, so that authority is clear without being hierarchical. Write the four or five agreements on one page, put it where everybody can find it, and review it when the team changes. An agreement nobody can point to is an assumption."
+          ],
+          "example": "A five-person team agrees replies within one working day, phone calls only for same-day problems, and a shared document as the only record of decisions.",
+          "points": [
+            "Write down the response-time expectation",
+            "Define what counts as urgent",
+            "Name the single place decisions are recorded"
+          ],
+          "check": "Which expectation in your team is currently assumed rather than written down?"
+        },
+        {
+          "title": "Power, data and devices: planning for the real conditions",
+          "minutes": 15,
+          "teach": [
+            "Working remotely in a place with intermittent power and costly data is a design problem, not a motivation problem. The habits that help are unglamorous: download what you will need before you need it, keep an offline copy of the documents you work on most, and prefer text over video for anything that does not require a face.",
+            "Treat the device as the risk. A shared or borrowed machine may not have your account signed in, may lose the file, and may be examined by someone else. Keep sensitive work on a device you control, sign out of services on shared machines, and assume anything you would not want read aloud may be.",
+            "Plan for the connection to fail rather than hoping it will not. Download the files you will need before you leave, keep the ones you use daily available offline, and know which tasks you can complete without a connection at all. A person who has prepared for an outage loses minutes; one who has not loses the day. Keep one small thing that works without power at all: a notebook, a printed list, a charged power bank. Preparedness is mostly the refusal to be surprised by something entirely predictable.",
+            "Write the fallback down and give it to somebody who is not you. A recovery plan that exists only in the head of the person who set it up disappears on the day that person is travelling."
+          ],
+          "example": "A field officer downloads the week's forms on Sunday, works offline, and uploads once at an office with a reliable connection.",
+          "points": [
+            "Download before you travel",
+            "Offline copies of what you use daily",
+            "Sign out on any shared device"
+          ],
+          "check": "If your connection failed for two days, what work would you be unable to do, and what would you need to have saved?"
+        },
+        {
+          "title": "Accounts, passwords and the one habit that matters",
+          "minutes": 15,
+          "teach": [
+            "The single most effective security habit is not a complex password; it is a different password for each important account, held somewhere you can recover it. Reusing one password means one leak anywhere gives away everything, and leaks are routine.",
+            "Use a password manager where you can, and long passphrases of several unrelated words where you cannot. Turn on two-step verification for email above all, because email is the account that resets all the others. Never send a password in the same channel as the account it protects.",
+            "Set the recovery details on every account you care about while you still have access to it. A recovery email that no longer works is the difference between a password reset and a permanent loss, and it is discovered at the worst possible moment. Check those details once a year, and make sure the recovery address is one you control rather than one belonging to a former employer or an old phone number. Recovery questions are also worth answering properly rather than with a word anybody could guess. The security of an account is usually decided by the least careful of its recovery options."
+          ],
+          "example": "A manager enables two-step verification on the organisation's email, keeps other passwords in a manager, and shares access through a named account rather than by text message.",
+          "points": [
+            "A different password per important account",
+            "Two-step verification on email first",
+            "Never send a password beside its account"
+          ],
+          "check": "Which of your accounts, if compromised, would let somebody reset all the others? Is it protected by more than a password?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "What makes a folder structure usable by somebody other than the person who built it?",
+      "explanation": "Shallow, consistent structure organised by subject lets anyone predict where a document will be, which is what makes it findable without asking.",
+      "options": [
+        {
+          "text": "It is organised by subject, shallow, and uses the same subfolders everywhere",
+          "correct": true
+        },
+        {
+          "text": "It mirrors the organisation chart so each person has their own folder",
+          "correct": false
+        },
+        {
+          "text": "It has a folder for every month and every team member",
+          "correct": false
+        },
+        {
+          "text": "It is deep enough to separate every possible kind of document",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which message is most likely to get a fast answer?",
+      "explanation": "A single visible request, with a date by which it is needed, is answerable from a phone in seconds. Background underneath serves the readers who want it.",
+      "options": [
+        {
+          "text": "One that states a single decision in the first line with a deadline",
+          "correct": true
+        },
+        {
+          "text": "One that explains the full background before asking anything",
+          "correct": false
+        },
+        {
+          "text": "One that asks two related questions to save a round trip",
+          "correct": false
+        },
+        {
+          "text": "One that copies everybody who might be interested",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "prompt": "What belongs in minutes for a meeting to produce work?",
+      "explanation": "Decisions, actions with an owner and a date, and items deferred to a named future meeting are what make a record useful. A transcript records the noise.",
+      "options": [
+        {
+          "text": "Decisions, actions with an owner and a date, and deferred items",
+          "correct": true
+        },
+        {
+          "text": "A full transcript of who said what",
+          "correct": false
+        },
+        {
+          "text": "A list of attendees and the topics covered",
+          "correct": false
+        },
+        {
+          "text": "A summary of the discussion in the order it happened",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "prompt": "Why is copying someone who has no action to take a problem?",
+      "explanation": "It costs their attention every time, and it blurs who is expected to reply, which is how requests get quietly dropped.",
+      "options": [
+        {
+          "text": "It costs attention and obscures who must act",
+          "correct": true
+        },
+        {
+          "text": "It is against most organisations' email policy",
+          "correct": false
+        },
+        {
+          "text": "It slows down the email system",
+          "correct": false
+        },
+        {
+          "text": "It is only a problem in large organisations",
+          "correct": false
+        }
+      ]
+    },
+    {
+      "prompt": "Which security habit prevents the most damage for the least effort?",
+      "explanation": "Email resets every other account, so protecting it with two-step verification protects everything downstream of it.",
+      "options": [
+        {
+          "text": "Two-step verification on the email account",
+          "correct": true
+        },
+        {
+          "text": "Changing every password on the first of each month",
+          "correct": false
+        },
+        {
+          "text": "Using a very long password that is the same everywhere",
+          "correct": false
+        },
+        {
+          "text": "Avoiding public internet connections entirely",
+          "correct": false
+        }
+      ]
+    }
+  ]
+}

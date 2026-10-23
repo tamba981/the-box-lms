@@ -1,0 +1,406 @@
+{
+  "slug": "business-analytics-and-strategy-diploma",
+  "title": "Business Analytics & Strategy Diploma",
+  "program": "PDP",
+  "category": "data-analytics",
+  "level": "advanced",
+  "credential": "diploma",
+  "priceCents": 5000,
+  "certificateFeeCents": 0,
+  "summary": "Turn data into decisions: assess maturity honestly, treat data quality as a strategic problem, close the gap between insight and action, and govern what you automate.",
+  "description": "Most organisations do not have an analytics problem; they have a decision problem that has been given a technical name. Dashboards are built, reports circulate, and the decisions that matter are still made from experience and hierarchy, because nobody connected the analysis to the moment of choice.\n\nThis diploma treats analytics as a management capability rather than a technology stack. Across six modules it examines where an organisation actually sits on the maturity ladder rather than where it claims to be, why data quality is an ownership problem before it is a technical one, and how insight becomes action through decisions that are defined in advance. It then addresses building capability where money and skills are scarce, the narrow conditions under which analytics creates genuine competitive advantage, and the governance questions that arrive the moment a model affects a person's life.\n\nThe West African context is central rather than decorative: small populations in which anonymised data is still identifying, credit models trained on thin or unrepresentative histories, and institutions whose enforcement capacity must be designed around rather than assumed.",
+  "tags": ["analytics", "data strategy", "decision making", "data quality", "governance", "ethics", "diploma"],
+  "outcomes": [
+    "Place an organisation on the analytics maturity ladder with evidence rather than aspiration",
+    "Quantify the cost of poor data quality and assign ownership that survives reorganisation",
+    "Define the decision an analysis must serve before any analysis begins",
+    "Present analytical uncertainty to a board in a form that supports a choice",
+    "Build analytics capability in an environment of scarce skills and expensive technology",
+    "Govern models that affect individuals, including privacy, bias and accountability"
+  ],
+  "caseStudy": "A microfinance institution lending to 12,000 borrowers across three counties has built a credit-scoring model on two years of its own repayment data. The model would reduce defaults and also exclude the informal traders who constitute most of its social mission, and the board, the regulator and the lender providing its wholesale funding each want a different answer.",
+  "modules": [
+    {
+      "title": "Module 1 · Analytics maturity",
+      "lessons": [
+        {
+          "title": "The ladder, and why almost nobody is where they say",
+          "minutes": 22,
+          "html": [
+            "<p>Analytics maturity is usually drawn as a ladder: descriptive, diagnostic, predictive, prescriptive. The ladder is useful because each rung requires different data, different skills and a different relationship between analysis and authority; it is misleading because organisations describe themselves by their most advanced artefact rather than by their routine.</p>",
+            "<p>An organisation with one predictive model and no reliable monthly reporting is not doing predictive analytics. It is doing a project that will decay, because the routine that would keep it fed does not exist. Position is determined by what the organisation does every month without heroics, not by what it did once with external help.</p>",
+            "<p>Descriptive analytics answers what happened. Diagnostic answers why. Predictive answers what is likely. Prescriptive answers what to do. Most organisations that claim prescriptive analytics are doing descriptive analytics with a recommendation attached by a person, which is perfectly reasonable and should be described accurately.</p>",
+            "<p>The rungs are also not equally valuable for every organisation. A distributor with stable demand patterns may gain more from reliable descriptive reporting than from a predictive model, because the decisions it faces are about execution rather than about forecasting. Maturity is not an end in itself; it is a match between capability and the decisions the organisation actually makes.</p>",
+            "<p>Be specific about what counts as routine. Data assembled within the normal working week, by people who were not asked to do anything unusual, is routine; anything else is a project. The distinction sounds pedantic until an organisation discovers that every figure it relies on depends on one analyst working late. Count how many of those there are.</p>",
+            "<h3>The assessment that is worth doing</h3>",
+            "<p>Take the last twenty significant decisions your organisation made and ask what information was used, where it came from, and how long it took to obtain. The pattern in those answers is your real maturity, and it is more useful than any questionnaire, because it measures the capability as it operates rather than as it is described.</p>",
+            "<p>Repeat the exercise annually and look for movement in the ratio of decisions supported by routinely available data. That single measure captures more about progress than a stack of dashboards, and it is difficult to inflate.</p>",
+            "<p><strong>Check yourself.</strong> Take five recent significant decisions. For each, name the data used and whether it was produced routinely or assembled specially for that decision.</p>"
+          ]
+        },
+        {
+          "title": "The maturity trap: tools before questions",
+          "minutes": 21,
+          "html": [
+            "<p>The most common failure in analytics investment is buying the tool before defining the question. A dashboard platform, a data warehouse, a reporting suite: each is purchased because it is the recognised next step, and each then searches for a purpose, producing views that nobody opens and a team that becomes a report factory.</p>",
+            "<p>Tools are also the visible part, which makes them attractive to fund. The invisible parts — agreed definitions, ownership of data, someone with authority to say what a number means — are what determine whether the tool produces anything, and they are much harder to buy.</p>",
+            "<p>The trap has a predictable sequence. A tool is bought, an analyst is hired to run it, definitions are discovered to be inconsistent, a data-cleaning project begins, the original question is forgotten, and eighteen months later the organisation has better infrastructure and the same decisions. The sequence is not caused by the tool; it is caused by starting in the middle.</p>",
+            "<p>Start instead with a decision that matters, has an owner, recurs, and is currently made on intuition. Build the smallest thing that supports it, using whatever tools already exist. Where that works, the organisation has a demonstration, a definition, and a demand for more; where it fails, the failure is cheap and specific.</p>",
+            "<p>Write the answer to each of the three down and get it signed by the decision's owner. A decision owner who has not agreed the definition of the measure they are deciding on will dispute the result, usually after it has been produced and publicly presented. Get it in writing before the analysis starts.</p>",
+            "<h3>What to establish before the tool</h3>",
+            "<p>Three things: the decision and its owner, the definition of the measure involved, and the source of record. Each is organisational rather than technical, and each is the reason analytics projects stall. None of them requires a purchase.</p>",
+            "<p>Where the definition cannot be agreed, that is the finding. Two departments reporting different revenue figures is not a data problem to be solved by a warehouse; it is a disagreement about what revenue means, and a tool will simply propagate whichever definition the implementer happened to choose.</p>",
+            "<p><strong>Check yourself.</strong> Name the last analytics tool or licence your organisation bought. What decision has it improved, and can you show the before and after?</p>"
+          ]
+        },
+        {
+          "title": "Benchmarking honestly against yourself",
+          "minutes": 21,
+          "html": [
+            "<p>Comparisons with other organisations are mostly unhelpful, because published maturity assessments measure aspiration, and the organisations that score highest are often those with the largest budget rather than the best decisions. The useful benchmark is your own past and your own decisions.</p>",
+            "<p>Measure four things quarterly: how long it takes to answer a routine question, how many routine reports are produced manually, how often two departments quote different figures for the same thing, and how many decisions were made with data that had to be assembled specially. Each is observable, each is cheap to measure, and each moves when capability genuinely improves.</p>",
+            "<p>Time-to-answer is the most revealing. An organisation that takes three weeks to answer a question about its own operations cannot be analytical, whatever its dashboards show, because the answer arrives after the decision. Reducing that to three hours changes behaviour more than any model.</p>",
+            "<p>Disagreement between departments is the second. Where two figures exist for one thing, the organisation has no shared truth, and every analysis becomes an argument about whose number is correct rather than about what to do. Resolving those disagreements is unglamorous work with a very high return.</p>",
+            "<p>Ask the third question before the first two, because it is the one that predicts whether the function will be taken seriously. A board that can name a decision changed by analysis has an analytics capability; one that cannot has a reporting department with a modern name. Ask the question once a year and record the answer.</p>",
+            "<h3>The benchmark that matters to a board</h3>",
+            "<p>Boards do not need a maturity score; they need to know whether the information they receive is timely, consistent and sufficient to challenge management. Three questions to the board each year: is the reporting you receive produced routinely, is it consistent with what other parts of the organisation see, and has any decision been changed by it?</p>",
+            "<p>If the answer to the third is never, the analytics function is producing comfort rather than insight. That is worth saying plainly, because the alternative is another year of reports that reassure and do not inform.</p>",
+            "<p><strong>Check yourself.</strong> How long would it take your organisation to answer, with confidence, how many customers bought twice last quarter? Measure it rather than estimating.</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Data quality as a strategic problem",
+      "lessons": [
+        {
+          "title": "The cost of bad data, in money",
+          "minutes": 22,
+          "html": [
+            "<p>Data quality is discussed as a technical concern and it is a financial one. Duplicate customer records mean duplicated effort and invoicing errors; inaccurate stock records mean sales lost to an empty shelf and cash tied up in a full one; incomplete borrower records mean credit decisions made on partial information.</p>",
+            "<p>Making the cost visible is what moves it up the agenda. For each of three known data problems, estimate the hours spent correcting it, the revenue affected, and the decisions that were made wrongly. The resulting figure is usually larger than the cost of the system that would prevent it, and it is persuasive in a way that appeals to quality never are.</p>",
+            "<p>Cost is not only error correction. It is also the shadow work that data problems create: the private spreadsheets maintained because the system cannot be trusted, the reconciliation done by hand every month, the two people who know how to get the right number. That work is invisible in any budget and substantial in aggregate.</p>",
+            "<p>Assign the cost before assigning blame. Data quality failures are almost never caused by careless individuals; they are caused by processes that permit ambiguity, systems that accept impossible values, and definitions that nobody owns. Blame produces concealment, which makes the problem harder to measure.</p>",
+            "<p>Start with the problem that is both expensive and cheap to fix. Early wins are not vanity; they establish that the data function delivers something visible, which is the political capital needed for the harder problems that follow. Choose the first one for its visibility as well as its value.</p>",
+            "<h3>Choosing which problems to fix</h3>",
+            "<p>Not all data quality problems are worth fixing. Rank them by the value of the decisions they affect and the cost of correction. A misspelled address that delays a delivery is worth fixing; a missing middle name is not. The discipline is to fix the few that change decisions and to record deliberately that the rest are tolerated.</p>",
+            "<p>Acknowledging tolerated defects is important, because it prevents a perfectionist programme that consumes years and delivers nothing visible. The organisation needs a small number of measures it trusts, not a universally clean database.</p>",
+            "<p><strong>Check yourself.</strong> Estimate the hours your organisation spent last month correcting or working around a data problem. What would it cost to prevent it?</p>"
+          ]
+        },
+        {
+          "title": "Ownership that survives reorganisation",
+          "minutes": 21,
+          "html": [
+            "<p>Data quality without ownership degrades, because improvement requires somebody to decide what correct means and to be accountable for keeping it true. In most organisations that accountability is distributed across functions, which in practice means it belongs to nobody.</p>",
+            "<p>Assign ownership by data domain rather than by system: customer, supplier, item, employee, transaction. Each domain has one named owner who defines what correct means, approves changes to the definition, and is accountable for measured quality. The owner is usually a business function, not the information technology team, because the definition is a business question.</p>",
+            "<p>Ownership must survive reorganisation, which means the domain is described in terms of the business rather than the department. A customer record does not stop existing when the department that owned it is merged into another, and the owner should be a role rather than a person's name.</p>",
+            "<p>Publish a small quality score per domain: completeness of the fields that matter, duplication rate, and the count of records that fail a rule. Three numbers, reviewed monthly, create the accountability that no policy achieves.</p>",
+            "<p>Escalate disagreement about definitions with a recommendation attached rather than as a complaint. The decision-maker needs the impact of each definition — how many records, how much revenue, which decisions change — and that impact is what converts an argument into a choice. Send it to whoever can bind both functions, and put a date on the reply.</p>",
+            "<h3>When two functions disagree about a definition</h3>",
+            "<p>Disagreements about definitions are the most costly and least visible data problem. Finance counts revenue when invoiced, operations when delivered, and the difference is a permanent reconciliation nobody owns. The resolution is a decision, made at a level high enough to be binding, recorded where both functions can see it.</p>",
+            "<p>After the decision, the reporting must be changed in the same quarter, because a definition that is agreed and not implemented creates the illusion of resolution while the two figures continue to circulate.</p>",
+            "<p><strong>Check yourself.</strong> For your three most important data domains, who is the named owner, and what would they say correct means?</p>"
+          ]
+        },
+        {
+          "title": "Identifiers and the single source of truth",
+          "minutes": 21,
+          "html": [
+            "<p>Most data quality failures reduce to one technical decision made badly: the absence of a stable identifier. When a customer can be identified by name and phone number, and the phone number changes, the customer becomes two customers, and every historical analysis about them becomes wrong.</p>",
+            "<p>Establish identifiers deliberately: one per entity, assigned once, never reused, never re-derived from mutable attributes. Where external identifiers exist — a national number, a registration code — use them as attributes rather than as the key, because they can be corrected.</p>",
+            "<p>Beware the identifier that looks unique and is not. A phone number can be shared within a household, reassigned by an operator, or entered with different formatting. A name is not an identifier in any population. Each of these has produced duplicate and conflicting records in organisations that believed their data was clean.</p>",
+            "<p>The single source of truth is then a consequence of ownership plus identifiers, not a system purchase. A system becomes the source of record for a domain because the organisation has decided it is, and that decision must be enforced by process: no parallel spreadsheets, no local edits, no exceptions granted to important people.</p>",
+            "<p>Handle the request for an exception as a governance decision rather than a favour. Where it is genuinely operational, define the extract as read-only, date it, and record who authorised it. Where it is convenience, refuse and explain the cost, because the cost is real and it falls on everyone who later has to reconcile the two versions. Keep a list of every extract authorised in the last year.</p>",
+            "<h3>The exception that destroys the source</h3>",
+            "<p>One exemption granted to a senior person is enough. Once a local copy exists and is maintained, the source of truth is contested, and every downstream report becomes a matter of which version was used. Executives who insist on their own spreadsheet for convenience are, usually without intending it, ending the possibility of consistent reporting.</p>",
+            "<p>Where a genuine operational need requires a local extract, define it as read-only and dated, so that it cannot become an alternative source. The distinction between a report and a database is the distinction between a snapshot and a claim about the truth.</p>",
+            "<p><strong>Check yourself.</strong> Which entity in your organisation can appear twice, and what would it take to give it a permanent identifier?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · From analytics to decision",
+      "lessons": [
+        {
+          "title": "Case study: the credit model nobody can agree on",
+          "minutes": 24,
+          "html": [
+            "<p><strong>The situation.</strong> A microfinance institution with 12,000 borrowers across three counties has built a credit-scoring model using two years of its own repayment history. In back-testing, the model separates good from bad borrowers well: the bottom two deciles default at more than four times the rate of the top five. Applying it would reduce the portfolio's loss rate from an estimated 7.1 per cent to about 4.6 per cent, on a loan book of 3.4 million dollars.</p>",
+            "<p><strong>What the model does.</strong> It rewards borrowers with documented business records, a fixed address, a bank account and a history of formal employment. Those characteristics are strongly associated with repayment in the institution's data. They are also characteristics that informal market traders, who constitute 62 per cent of the current portfolio, systematically lack — not because they are worse credit risks but because their businesses are structured differently.</p>",
+            "<p><strong>The three stakeholders.</strong> The board wants the loss rate reduced, because the institution's licence to operate depends on being financially sustainable. The regulator has recently issued guidance requiring that lending decisions be explainable to the borrower and that the institution demonstrate it is not excluding segments without justification. The wholesale lender, which provides 70 per cent of the funding, applies a covenant requiring a portfolio-at-risk ratio below 5 per cent by year end — a threshold the institution currently breaches and the model would meet.</p>",
+            "<p><strong>The numbers that matter.</strong> Applying the model as designed would exclude roughly 4,100 of the 7,400 informal traders. Their current default rate is 8.9 per cent, against 3.2 per cent for formal borrowers, but their average loan is smaller and their repeat rate is higher, so contribution per borrower is not far apart. The social mission, stated in the institution's charter, is to extend formal financial services to those excluded from them.</p>",
+            "<p>Note what the model treats as fixed. A scoring model trained on two years of history assumes the relationship between the variables and repayment is stable. In a market with currency movement, new competitors or a change in lending practice, that assumption is the first thing to test and the last thing to examine. Write the assumption down and put a review date against it.</p>",
+            "<h3>What makes this hard</h3>",
+            "<p>Each stakeholder's position is defensible. The board is right that an insolvent institution serves nobody. The regulator is right that a model which is opaque to the borrower cannot be defended. The lender is right that its covenant is a condition of the funding that makes the portfolio possible. The mission is right that the excluded are the reason the institution exists.</p>",
+            "<p>The technical question — does the model predict well — has already been answered. The remaining question is one of judgement: what weight to give each claim, and whether the institution can find a structure that serves more than one at a time. There is no calculation that settles it, and any answer involves accepting a cost that somebody will bear.</p>",
+            "<p><strong>Decide and defend.</strong> Which of the following would you recommend, and on what stated assumptions: apply the model as designed; apply it to new borrowers only while retaining existing relationships; apply it with additional data collection for informal traders over twelve months; or decline to apply it and seek covenant relief. For each, state who bears the cost, what the lender is likely to do, and what you would tell the regulator.</p>"
+          ]
+        },
+        {
+          "title": "Presenting uncertainty to a board",
+          "minutes": 21,
+          "html": [
+            "<p>A board facing an analytical recommendation is usually being asked to accept a range while hearing a point estimate. The failure mode is not that boards cannot handle uncertainty; it is that analysts present it in a form that removes the decision, either by hiding the range or by presenting so many caveats that no choice is discernible.</p>",
+            "<p>Present three things: the central estimate, the range and what drives it, and the decision threshold. A modelling exercise that says the investment returns between six and eleven per cent, with the range driven by a single volume assumption, tells a board exactly what to interrogate. The same analysis presented as a nine per cent return tells them nothing and invites false confidence.</p>",
+            "<p>Translate into the language of the decision. A board that has set a hurdle rate of eight per cent needs to know the probability of exceeding it, not the internal rate of return under a specific scenario. Restating analytical output as a decision consequence is the analyst's job and is where most presentations lose their audience.</p>",
+            "<p>Show what would change your mind. A recommendation presented with the evidence that would overturn it is more persuasive than one presented as certain, because it demonstrates that the analysis was tested rather than assembled.</p>",
+            "<p>Where the board is uncomfortable with a range, offer a staged decision instead: approve a smaller commitment now, with the larger one contingent on the assumption being confirmed. That preserves the board's appetite for certainty without requiring the analyst to pretend to a precision that does not exist. A staged approval is usually the more honest instrument.</p>",
+            "<h3>When the board wants a number</h3>",
+            "<p>Boards sometimes ask for a single figure because the governance process requires one. Give the figure and give the caveat in the same breath, then record that both were given. An analyst who supplies a number without the range is complicit in any decision later taken on a false basis, and will be the person blamed when the outcome falls at the edge.</p>",
+            "<p>Where a decision must be taken before the uncertainty can be reduced, say what it would cost to reduce it and how long it would take. The board can then choose between acting now with a range and waiting for precision, which is a legitimate strategic choice rather than a failure of analysis.</p>",
+            "<p><strong>Check yourself.</strong> Think of the last analysis you presented. Did it include the threshold at which the recommendation changes, and did you say what would change your mind?</p>"
+          ]
+        },
+        {
+          "title": "When the data disagrees with experience",
+          "minutes": 21,
+          "html": [
+            "<p>Experienced operators routinely hold views that data appears to contradict, and the reflex to dismiss those views is as dangerous as the reflex to dismiss the data. Neither the model nor the operator has privileged access to the truth, and the disagreement is usually information about both.</p>",
+            "<p>When an experienced person says the numbers are wrong, ask what specifically they see that the data does not capture. The answer frequently identifies something real: a change in how a process works, a customer segment not represented, a measurement that counts an activity the operator knows is not equivalent to the one being reported.</p>",
+            "<p>Equally, ask what would have to be true for the operator's view to be correct, and whether the data can test it. Where the model was built on two years of history and the market has changed, the operator may simply be closer to the present than the model is.</p>",
+            "<p>Distinguish disagreement about facts from disagreement about values. Facts can be investigated; values cannot be settled analytically and should not be disguised as analysis. An executive who believes the organisation should serve a segment regardless of its measured return is making a legitimate value judgement, and dressing it as a data objection helps nobody.</p>",
+            "<p>Record the disagreement and the test result in the same place, whoever turns out to be right. Organisations that keep no record repeat the same argument annually, with the same participants and the same absence of evidence, and each repetition costs a meeting and a little more goodwill. Keep the record even when it shows you were wrong.</p>",
+            "<h3>The cost of being right too early</h3>",
+            "<p>Analysis that contradicts widely held belief is rarely adopted on its merits, however sound. It requires a sponsor, a demonstration on a small scale, and patience. Analysts who win the argument in a meeting and lose the implementation have achieved nothing except a reputation for being difficult.</p>",
+            "<p>The practical route is to propose a test rather than a conclusion: run the change in one branch, one segment, one month, and let the result persuade. That costs less than a contested rollout and converts an argument into evidence that both sides can accept.</p>",
+            "<p><strong>Check yourself.</strong> Name one place where your organisation's data and its experienced judgement disagree. What small test would settle it?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Building capability in low-resource settings",
+      "lessons": [
+        {
+          "title": "People: hire for questions, grow for skill",
+          "minutes": 21,
+          "html": [
+            "<p>In a thin labour market, the analyst who is technically excellent and uninterested in the business will produce work nobody uses, and the technically modest analyst who can define a question with an operator will change decisions. Hire for the second and grow the first capability deliberately, because it is far easier to teach a method than to teach curiosity about the work.</p>",
+            "<p>Look for three qualities in a candidate: evidence that they have simplified something complex for a non-specialist, evidence they have challenged a number they were given, and evidence they finished something that was used. Each can be tested with a question about a real piece of work rather than with a technical exercise.</p>",
+            "<p>Then grow the technical capability with deliberate practice on the organisation's own data. A fortnightly session in which somebody brings a real question and the group builds the answer together develops skill faster than any course, and it produces a reusable asset every time.</p>",
+            "<p>Retention matters more than recruitment in a small market, because your analyst is employable elsewhere and the institutional knowledge leaves with them. Document the definitions, keep the models in a form somebody else can read, and give the work visibility so that it is a career rather than a service.</p>",
+            "<p>Where the external work is unavoidable, make the handover a condition of the contract and specify what it includes: the model logic in a form the organisation can run, the definitions used, the limitations documented, and two named staff trained to maintain it. Handover negotiated at the end is handover that does not happen. Name the two staff in the contract itself.</p>",
+            "<h3>The specialist you should not hire</h3>",
+            "<p>Where the organisation has one analytical decision a year requiring a specialist, hiring a specialist is a poor use of a scarce budget. Commission the work externally, insist on the model and the definitions being handed over, and keep the interpretation in-house. The capability that matters is knowing which questions to ask and what the answer implies.</p>",
+            "<p>What must not be outsourced is the definition of terms and the ownership of data. Those determine whether the organisation can use the result after the consultant leaves, and they are precisely the parts that external providers are least able to set.</p>",
+            "<p><strong>Check yourself.</strong> Who in your organisation can define a question clearly enough for somebody else to answer it? Is that person's capability being developed?</p>"
+          ]
+        },
+        {
+          "title": "Process: questions before tools, again",
+          "minutes": 21,
+          "html": [
+            "<p>Capability is mostly process, not software. An organisation with a weekly decision review, an agreed set of measures and a culture of asking what the number means will outperform one with better tools and no routine, because the routine is what turns information into action.</p>",
+            "<p>Establish the routine before the tooling. A monthly review of four measures with the people who can act on them, a standing question about what changed and why, and a written record of what was decided. That routine costs nothing and creates the demand that justifies any subsequent investment.</p>",
+            "<p>Then standardise the small number of things that must be consistent: definitions, reporting periods, and the source of record for each measure. Everything else can vary. Organisations that attempt to standardise everything create a governance burden that consumes the capacity it was meant to protect.</p>",
+            "<p>Make requests cheap. Where obtaining a number requires a formal request and a week, people stop asking and revert to intuition. A single place where questions can be asked, with a stated response time, keeps the analytical function connected to the work rather than isolated behind a process.</p>",
+            "<p>Give the question a deadline and an owner, or it will be deferred indefinitely. Even a fortnightly half-hour question session with a named person responsible for bringing the question produces more useful analysis than an open invitation that nobody takes up. Thirty minutes with one question beats an open door with none.</p>",
+            "<h3>The report that should be deleted</h3>",
+            "<p>Most organisations have reports that are produced because they were once required and nobody has asked since. Each consumes capacity that could answer a live question. Ask, once a year, which reports changed a decision; delete the ones that did not, publicly, so that the decision is visible and not quietly reversed.</p>",
+            "<p>Deletion is also a form of quality control. A report nobody reads is a report whose errors nobody has noticed, and the day it is used will be the day the error matters.</p>",
+            "<p><strong>Check yourself.</strong> Which report does your organisation produce that nobody would notice if it stopped? What would you do with the time recovered?</p>"
+          ]
+        },
+        {
+          "title": "Technology: integrate more, buy less",
+          "minutes": 21,
+          "html": [
+            "<p>In constrained environments, the constraint on analytics is rarely storage or processing; it is the cost of integration and the availability of people who can maintain what was bought. A modest tool that connects to existing systems and is understood by two staff beats a sophisticated platform that requires a specialist the organisation cannot retain.</p>",
+            "<p>Integration is where projects fail. Two systems that each work perfectly and do not share identifiers produce a reconciliation burden that grows with every month of operation. Before buying anything, establish whether it will talk to what exists, and who will be responsible for keeping that connection working when an update breaks it.</p>",
+            "<p>Prefer fewer systems with clear ownership over many with overlapping function. Every additional system is another place a customer can be recorded differently, and the cost of that difference appears later, in reports that disagree and decisions that take longer.</p>",
+            "<p>Budget for maintenance explicitly, at roughly a quarter of the purchase cost annually. Organisations that do not do this discover in year three that their systems are unsupported, their data has drifted, and the replacement cost is now the whole budget.</p>",
+            "<p>Make the association explicit by writing, at the point of purchase, what happens when the supplier withdraws support or the price rises sharply. An exit position agreed during procurement costs a paragraph; the same position negotiated three years later costs whatever the supplier decides it costs. Review the exit position before every renewal.</p>",
+            "<h3>The pilot that becomes production</h3>",
+            "<p>Most analytics work in small organisations begins as a pilot that quietly becomes relied upon, with none of the support, documentation or access controls that production systems require. The moment a pilot informs a decision that affects a customer, it is production, and it should be treated as such or retired.</p>",
+            "<p>Decide at the outset what happens if the pilot succeeds. If the answer is unclear, the pilot's success will produce an unmanaged dependency, which is a worse outcome than a documented failure.</p>",
+            "<p><strong>Check yourself.</strong> Which spreadsheet or prototype in your organisation is now a system in all but name? Who maintains it, and what happens when that person is unavailable?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 5 · Analytics as advantage",
+      "lessons": [
+        {
+          "title": "Advantage versus table stakes",
+          "minutes": 21,
+          "html": [
+            "<p>There is a persistent belief that data and analytics confer competitive advantage. In most markets they confer parity. A competitor can buy the same tools, hire from the same pool and copy the same reports; what they cannot copy is proprietary data, embedded operational knowledge, or a decision routine that uses analysis better than they do.</p>",
+            "<p>Table stakes is the capability needed to compete at all: knowing your costs, your stock position, your customers' payment behaviour. Falling below it is fatal; reaching it confers nothing, because everyone else has it too. Distinguishing table stakes from advantage prevents organisations from treating an infrastructure project as a strategy.</p>",
+            "<p>Advantage arises where the analysis changes a decision that competitors cannot make as well, and where the underlying information is not available to them. That is a narrow condition. A better forecast of demand is an advantage only if acting on it is possible, and only if competitors cannot obtain the same forecast from the same data.</p>",
+            "<p>It also decays. Any advantage based on data processing tends to become cheaper and more widely available, which means the advantage is temporary and must be converted into something more durable — customer relationships, a cost position, a service that depends on the capability.</p>",
+            "<p>Then ask the harder question: even if it could be replicated, would a competitor act on it? Many analytical advantages fail not because they can be copied but because the organisation that holds them lacks the operational ability to respond, which is a capability problem rather than an analytical one. Test the response capability before claiming the advantage.</p>",
+            "<h3>The uncomfortable test</h3>",
+            "<p>Ask whether a competitor with the same data and a competent analyst could replicate your analytical position within a year. If yes, it is table stakes and should be funded as infrastructure rather than presented as differentiation. Answering honestly is uncomfortable, because most analytical work is in that category and it is still worth doing.</p>",
+            "<p>The value of the distinction is in expectation setting. Infrastructure delivered as infrastructure is judged on reliability and cost; the same work presented as strategic advantage is judged on competitive outcomes it was never going to deliver.</p>",
+            "<p><strong>Check yourself.</strong> Name one analytical capability your organisation treats as an advantage. Could a competitor with your data replicate it in a year?</p>"
+          ]
+        },
+        {
+          "title": "Data you have that rivals cannot obtain",
+          "minutes": 21,
+          "html": [
+            "<p>The durable analytical advantages come from information that is generated by the organisation's own activity and cannot be purchased: transaction histories in a market nobody else serves, relationships with a customer segment others cannot reach, operational records accumulated over years in a specific terrain.</p>",
+            "<p>Such data is usually held informally and underused. It is often not captured systematically, not tied to an identifier, and not retained when systems change. The first act of building an advantage is therefore preservation: capturing consistently, keeping it, and not losing it in the next system migration.</p>",
+            "<p>Ask what question your organisation could answer that nobody else could. It is frequently about a narrow population or a specific route or a particular supplier relationship, and it is almost never about a general market trend, which everyone can observe.</p>",
+            "<p>Be careful with the word proprietary. Data about individuals belongs to them in most regulatory frameworks, and the advantage is in the analysis, not in the possession. An organisation that treats customer data as an asset to be exploited will eventually discover a boundary it did not anticipate.</p>",
+            "<p>Start with preservation, because it is cheap and irreversible when neglected. Ensure that the data generated today is captured with an identifier, retained beyond the life of the current system, and documented well enough that a future analyst can understand what each field meant at the time it was recorded. A field whose meaning is lost is a field that will be misused.</p>",
+            "<h3>Converting information into a position</h3>",
+            "<p>An advantage that exists only in analysis is fragile, because it leaves no trace in the customer relationship. Convert it: better terms for reliable customers, a service that competitors cannot match without the same information, a cost position derived from anticipating demand more accurately.</p>",
+            "<p>Those conversions are durable in a way the analysis is not. The data advantage creates the opportunity; the relationship or the cost position is what defends it once the data becomes available to others.</p>",
+            "<p><strong>Check yourself.</strong> What question could your organisation answer that no competitor could? What would it take to make that capability permanent rather than dependent on one person?</p>"
+          ]
+        },
+        {
+          "title": "When analytics is simply a cost of compliance",
+          "minutes": 21,
+          "html": [
+            "<p>A large share of analytics work exists because somebody requires it: a donor's reporting format, a regulator's return, a lender's covenant certificate, a tax filing. This work is not strategy and it should not be defended as such, because doing so distorts expectations and consumes the credibility of the analytic function.</p>",
+            "<p>Compliance analysis should be made as cheap and reliable as possible, and separated from decision support, so that failure in one does not discredit the other. The same people frequently do both, which is why a missed regulatory return and a weak commercial analysis are often confused in a board's mind.</p>",
+            "<p>Where compliance requirements are numerous, look for the shared core: the same underlying data can often satisfy several returns if the definitions are aligned in advance. Organisations that build each return separately accumulate parallel processes that diverge and then disagree.</p>",
+            "<p>Treat a compliance change as a design event rather than an administrative one. A new reporting requirement is an opportunity to reconcile definitions, and it is much cheaper to do so at that moment than to unpick two years of divergence afterwards.</p>",
+            "<p>Measure the split rather than assuming it. Most analytical teams can produce a rough estimate of hours by category for a month, and the figure is usually more skewed towards compliance than the team believed. Visibility is the first step towards any rebalancing. Publish the split to the leadership team each quarter.</p>",
+            "<h3>Protecting the capacity for questions</h3>",
+            "<p>Compliance work expands to consume available capacity, because it has deadlines and penalties while analytical questioning has neither. Without deliberate protection, the organisation ends up with excellent reporting and no insight.</p>",
+            "<p>Ring-fence a proportion of analytical capacity for questions that nobody has mandated. Even a day a week produces more than the equivalent time spread thinly across reporting work, and it keeps the capability oriented towards decisions rather than obligations.</p>",
+            "<p><strong>Check yourself.</strong> What proportion of your analytical effort goes to work somebody requires rather than work that informs a choice? What would you protect if you could?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 6 · Ethics and governance of analytics",
+      "lessons": [
+        {
+          "title": "Privacy in a small population",
+          "minutes": 22,
+          "html": [
+            "<p>Anonymisation assumes that individuals can be lost in a crowd. In a market town of eight thousand people, a record containing a district, an occupation, an age band and a loan size can identify a specific person to anybody who lives there. Techniques calibrated for populations of millions do not transfer.</p>",
+            "<p>The practical consequence is that datasets used for analysis must be designed for the population in question: coarser categorisation, aggregation before release, and suppression of cells below a threshold. A table that answers the question without exposing an individual is often achievable, and it requires somebody to think about it before the data leaves the organisation.</p>",
+            "<p>Consider consent as a design question rather than a legal one. A customer who gave their details to obtain a loan did not necessarily consent to their repayment behaviour being used to build a model that will be applied to their neighbours. Where the secondary use is plausible and beneficial, say so at the point of collection.</p>",
+            "<p>Access control matters more where staff know the customers personally. Curiosity is the most common breach in small organisations, and it is rarely malicious. Logged access, a stated purpose for each query, and an expectation that access is reviewed converts curiosity into a decision.</p>",
+            "<p>Test your own data before releasing it: take one record you know, and see whether somebody familiar with the community could identify the person from the aggregated fields alone. That exercise takes an hour and changes how the next dataset is designed. Make it a standing step before any external release.</p>",
+            "<h3>The tension that cannot be avoided</h3>",
+            "<p>Useful analysis wants detail; privacy wants aggregation. There is no technique that removes the tension, only choices about where to place the boundary. Making that choice explicitly, and writing down the reasoning, is what distinguishes governance from accident.</p>",
+            "<p>Where the choice is genuinely difficult, involve the people affected rather than deciding for them. A community meeting is slower and produces better decisions than a policy written by people who will never be in the dataset.</p>",
+            "<p><strong>Check yourself.</strong> Take a dataset your organisation holds. How many attributes would somebody need to identify an individual in the community you serve?</p>"
+          ]
+        },
+        {
+          "title": "Bias in credit and eligibility models",
+          "minutes": 22,
+          "html": [
+            "<p>A model trained on historical data learns the patterns of the past, including the patterns created by past exclusion. If a segment was never lent to, there is no repayment history to learn from, and the model will treat that absence as risk. This is not a technical flaw; it is the model doing exactly what it was asked to do.</p>",
+            "<p>The result is a system that reproduces an existing distribution and presents it as an objective finding. Its outputs carry the authority of arithmetic while encoding a judgement somebody made years ago, often without recording it.</p>",
+            "<p>The mitigations are known and imperfect. Test performance separately across segments and report the differences rather than the aggregate. Where a segment is systematically excluded, consider whether the variables proxy for something other than risk. Use human review for cases near the threshold, and collect the additional information that would distinguish the underserved.</p>",
+            "<p>Proxy variables deserve particular scrutiny. A requirement for a fixed address or a bank account may be a reasonable operational condition and also a mechanism that excludes people whose businesses are viable but informal. Whether that exclusion is acceptable is a policy question that the model cannot answer.</p>",
+            "<p>Ask it before deployment rather than after, and put the answer in the board minutes. A trade-off recorded in advance is a decision; the same trade-off discovered afterwards is an accusation, and the model will be withdrawn rather than governed. Minuted trade-offs are the only ones that survive scrutiny.</p>",
+            "<h3>The governing question</h3>",
+            "<p>Ask what the model would have to show for the organisation to accept a higher loss rate in order to serve a segment. That question makes the trade explicit and puts it where it belongs: with the people accountable for the mission as well as the balance sheet. A model that is never asked this question has quietly been given authority over strategy.</p>",
+            "<p>Record the decision, including the reasoning and who made it, because the reasoning will be examined later by people who see the exclusion and not the trade. A documented judgement can be defended; an undocumented one looks like an accident or a preference.</p>",
+            "<p><strong>Check yourself.</strong> Which requirement in your organisation functions as a proxy for the segment you do not serve? Has anybody decided that explicitly?</p>"
+          ]
+        },
+        {
+          "title": "Accountability for automated decisions",
+          "minutes": 21,
+          "html": [
+            "<p>The moment a model affects a person's access to credit, employment or service, the organisation needs an answer to three questions: who is accountable for the decision, what can the person do about it, and how would a mistake be discovered.</p>",
+            "<p>Accountability cannot sit with the model. It sits with a named role who understands the model's limits and has the authority to override it. Where nobody holds that role, the organisation has automated a decision while retaining none of the judgement, which is the worst of both arrangements.</p>",
+            "<p>Redress has to be practical. A person refused by an automated process needs a route to ask why, a human able to answer, and a means of correcting information that is wrong. In many contexts the most common failure is not a biased model but an inaccurate record that nobody can get corrected.</p>",
+            "<p>Detection requires monitoring after deployment, not only validation before it. Model performance decays as behaviour changes, and the decay is invisible in aggregate figures that look stable. Track the segment-level outcomes and the volume of overrides, because overrides are the organisation's own signal that the model is wrong.</p>",
+            "<p>Keep the explanation with the decision record, not only in the training material. When a decision is challenged a year later, the sentence that was written for the customer at the time is the most useful artefact the organisation has, and it is almost never retained. Two sentences per automated decision, kept with the case file.</p>",
+            "<h3>Explainability as an operational requirement</h3>",
+            "<p>If the reasons for a decision cannot be explained to the person affected in a sentence they understand, the process is not ready to be automated. That standard is stricter than most regulators require and it is the right one, because it forces the designers to know what the model is actually keying on.</p>",
+            "<p>Write the explanation before deploying, for a real case, and read it aloud. If it sounds like a rationalisation, the model is doing something the organisation would not defend if it were visible.</p>",
+            "<p><strong>Check yourself.</strong> Name one decision your organisation makes with a formula. Who is accountable for it, and how would a person affected get it corrected?</p>"
+          ]
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "An organisation has one predictive model built with external consultants and no reliable monthly reporting. How should its maturity be described?",
+      "explanation": "Maturity is what the organisation does routinely. A single externally built model without a sustaining reporting routine will decay, so the organisation has not acquired the capability.",
+      "options": [
+        { "text": "Descriptive at best — the model will decay without the routine that feeds and maintains it", "correct": true },
+        { "text": "Predictive, because a predictive model exists", "correct": false },
+        { "text": "Prescriptive, since the model recommends action", "correct": false },
+        { "text": "Diagnostic, because the model explains why defaults occur", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Two departments report different revenue figures. A data warehouse is proposed as the solution. What is the more likely correct first step?",
+      "explanation": "This is a disagreement about definition, an ownership question. A warehouse will propagate whichever definition the implementer chose and leave the disagreement intact.",
+      "options": [
+        { "text": "Decide and record a binding definition, with an owner accountable for it", "correct": true },
+        { "text": "Build the warehouse and let it standardise the calculation", "correct": false },
+        { "text": "Report both figures so readers can choose", "correct": false },
+        { "text": "Ask the technology team to reconcile the systems", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A credit model predicts well but excludes informal traders because they lack documented records. What is the correct characterisation?",
+      "explanation": "The model learned past exclusion as risk. That is a policy question about acceptable trade-offs, not a technical error, and it must be decided by those accountable for mission as well as financial performance.",
+      "options": [
+        { "text": "The model encodes historical exclusion as risk; whether that is acceptable is a policy decision for accountable management", "correct": true },
+        { "text": "The model is technically flawed and should be rebuilt with different variables until it approves everyone", "correct": false },
+        { "text": "The model is objective and the exclusion simply reflects reality", "correct": false },
+        { "text": "The regulator should determine the model's variables", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A board sets an 8% hurdle rate. Analysis shows a return between 6% and 11%, driven by one volume assumption. What is the most useful presentation?",
+      "explanation": "The board needs the probability of clearing its own threshold and knowledge of the single driver. Reporting a point estimate removes the decision rather than informing it.",
+      "options": [
+        { "text": "State the range, the single driving assumption, and the probability of exceeding the 8% hurdle", "correct": true },
+        { "text": "Report the midpoint of the range as the expected return", "correct": false },
+        { "text": "Report all four scenarios separately and let the board choose", "correct": false },
+        { "text": "Recommend proceeding, since the upper bound exceeds the hurdle", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An operator insists the data is wrong about a decline in sales. Which response is most likely to be productive?",
+      "explanation": "Ask what they see that the data does not capture, then test it. Their observation may identify a real change the model's history cannot represent.",
+      "options": [
+        { "text": "Ask what they observe that the data does not capture, then design a test", "correct": true },
+        { "text": "Show them the source data to demonstrate the decline is real", "correct": false },
+        { "text": "Accept their view, since experience outranks analysis", "correct": false },
+        { "text": "Escalate the disagreement to the board for a decision", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In a town of 8,000 people, a dataset contains district, occupation, age band and loan size. What does this mean for anonymisation?",
+      "explanation": "In small populations these attributes can identify an individual. Aggregation and cell suppression are needed, not just removal of names.",
+      "options": [
+        { "text": "The combination can identify individuals; aggregation and suppression are required before use", "correct": true },
+        { "text": "Removing names is sufficient anonymisation", "correct": false },
+        { "text": "Anonymisation standards designed for large populations apply unchanged", "correct": false },
+        { "text": "The data is safe if it stays within the organisation", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A model's aggregate performance looks stable while segment-level outcomes are diverging. What is the most likely explanation?",
+      "explanation": "Aggregation masks divergence. Stable totals with diverging segments mean the model is degrading for some groups while improving for others, which only segment monitoring reveals.",
+      "options": [
+        { "text": "Performance is decaying for some groups and improving for others, hidden by aggregation", "correct": true },
+        { "text": "The model has stabilised and requires no further monitoring", "correct": false },
+        { "text": "Segment-level reporting is unnecessary if the total is accurate", "correct": false },
+        { "text": "The divergence indicates a data entry error in one segment", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A retail distributor with volatile demand can fund either reliable weekly sales reporting or a demand-forecasting model. It currently has neither. Both are defensible. Which is the better first investment, and why?",
+      "explanation": "Weekly reporting is the capability that supports daily operating decisions and generates the history a forecast needs. The forecast is better later, when there is a routine to feed it; without that, it will decay.",
+      "options": [
+        { "text": "Weekly reporting — it supports daily decisions now and produces the data a forecast would later require", "correct": true },
+        { "text": "The forecasting model — it addresses the hardest problem and demonstrates ambition", "correct": false },
+        { "text": "Whichever is cheaper, since neither is strategic", "correct": false },
+        { "text": "Both simultaneously, to avoid a second procurement cycle", "correct": false }
+      ]
+    }
+  ]
+}

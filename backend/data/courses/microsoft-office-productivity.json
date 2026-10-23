@@ -1,0 +1,240 @@
+{
+  "slug": "microsoft-office-productivity",
+  "title": "Microsoft Office Productivity",
+  "program": "FCP",
+  "category": "digital-skills",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 0,
+  "summary": "Use Word, Excel and PowerPoint for the work they are actually good at, and stop doing by hand what the software will do for you.",
+  "description": "Most people use a fraction of the software on their desk and pay for it in hours. This course covers the parts of Microsoft Office that change how long a task takes: styles and templates in Word so a document can be reformatted in one click, formulas in Excel that do the arithmetic instead of you, and a presentation built to be understood rather than decorated.\n\nIt is practical throughout. Each module takes a task people genuinely do — a report, a monthly summary, a proposal presentation — and shows the shortest honest route to a professional result. Formatting that survives editing, tables that do not break, and files that can be handed to a colleague without explanation.\n\nThe course assumes you have used Word, Excel and PowerPoint before and are tired of doing things the slow way.",
+  "tags": ["microsoft office", "word", "excel", "powerpoint", "documents", "productivity"],
+  "outcomes": [
+    "Build a Word document with styles so it can be reformatted and navigated in one step",
+    "Write Excel formulas that fill down correctly and explain themselves to a colleague",
+    "Summarise data with sort, filter and a pivot table rather than by retyping it",
+    "Build a presentation whose slides carry one idea each",
+    "Set up a spreadsheet that others can enter data into without breaking it",
+    "Produce documents that print and share correctly the first time"
+  ],
+  "caseStudy": "A programme office produces its monthly report by retyping numbers from three spreadsheets into a Word document, and it takes two days.",
+  "modules": [
+    {
+      "title": "Module 1 · Word: documents that behave",
+      "lessons": [
+        {
+          "title": "Styles, and why manual formatting costs you later",
+          "minutes": 15,
+          "teach": [
+            "When you make a heading bold and large by hand, you have described how one heading looks. When you apply a heading style, you have said what the heading is. The difference only shows up later, when somebody asks for every heading in the document to change: with styles that is one edit, and by hand it is an afternoon.",
+            "Styles also build the navigation pane and the table of contents. A forty-page document with styles can be navigated by heading, and its contents page updates itself. The same document formatted by hand has to be scrolled and its contents page typed.",
+            "The habit to build is small: use the styles already in the template, and change the style's definition rather than the text when you want it to look different. Anything you would want to change everywhere at once deserves a style. Two habits make the change stick: never press the bold button on a heading again, and when a document arrives formatted by hand, spend ten minutes converting it before adding to it. A half-styled document is worse than an unstyled one, because the navigation pane and the contents page will be wrong in ways nobody checks. Convert the documents you reuse most and leave the one-off letters alone; the time goes where it is repaid."
+          ],
+          "example": "A 30-page proposal is reformatted to a new house font by editing two style definitions, which takes a minute rather than the morning it would take by hand.",
+          "points": ["Use styles for anything repeated", "Edit the style, not the text", "Styles give you a live table of contents"],
+          "check": "Open your longest document. How many headings are formatted by hand rather than with a style?"
+        },
+        {
+          "title": "Templates and the two hours you get back",
+          "minutes": 14,
+          "teach": [
+            "Any document your organisation produces more than twice a month should be a template. A template is not a saved copy; it is a file that opens as a new untitled document, so nobody overwrites the original. It carries the styles, the header, the footer, the page numbers and the sections that never change.",
+            "The saving is not in the typing, which is small. It is in the decisions you no longer make each time: what size the headings are, where the logo goes, whether the reference number is in the header. Decisions made once and embedded are decisions nobody re-litigates.",
+            "Building one takes an hour. Keep it in a shared location with a name that says what it is for, and keep a note of who owns it, because a template nobody maintains drifts back into inconsistency. Store templates somewhere people look, not in an individual's folders, and name them after the document they produce rather than the department that owns them. When a template changes, tell the people who use it and keep the old version for documents already in progress, because reformatting a signed contract to a new template is a change nobody asked for. Review the template once a year, because a document that has not been looked at in three years is usually carrying formatting nobody remembers choosing."
+          ],
+          "example": "A monthly report template with styles, header, footer and a fixed front page means the report is written rather than assembled.",
+          "points": ["Templates hold decisions, not just text", "Save as .dotx so the original cannot be overwritten", "One owner per template"],
+          "check": "Which document do you rebuild from scratch every month, and what would its template contain?"
+        },
+        {
+          "title": "Tables, images and the things that break when you share",
+          "minutes": 15,
+          "teach": [
+            "Documents break when they move between machines, and almost always for three reasons: text boxes, manual page breaks, and images anchored to a paragraph that then moves. Each looks fine on the machine that made it and collapses on the machine that receives it.",
+            "Use a table with proper columns rather than tabs or spaces to align anything. Set the table to autofit to the window rather than a fixed width, so it survives a different paper size. Insert images in line with text unless you need them to float, and if they must float, anchor them to the heading they belong to.",
+            "Then check the file the way your reader will: export to PDF and look at it, print preview it, and open it on a phone. If the document is going to be read on a phone — and most are — the layout has to survive a narrow screen, which means no wide tables and no text in text boxes. One further check is cheap and catches the worst failures: send the document to yourself and open it on your phone. Whatever you cannot read there, your reader cannot read either, and the fixing is usually a table width or a page break rather than a redesign. Keep one test document that has a long table, an image and a heading, and run every template change through it before releasing the change."
+          ],
+          "example": "A report that used tabs to align a budget collapses on a colleague's printer; rebuilt as a table with autofit, it holds on A4 and on screen.",
+          "points": ["Tables, not tabs, for alignment", "Images in line with text by default", "Check the PDF, not just the Word view"],
+          "check": "Which of your documents would fall apart if it were opened on a different computer? What is holding it together?"
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Excel: making the sheet do the work",
+      "lessons": [
+        {
+          "title": "References, and the dollar signs that matter",
+          "minutes": 16,
+          "teach": [
+            "A formula is a description of a relationship, and the dollar sign controls how that description travels when you copy it. A1 moves in both directions; $A$1 stays still; $A1 keeps the column and lets the row move. Most broken spreadsheets are broken by a missing dollar sign.",
+            "The test is simple: before you drag a formula down a column, say out loud what should stay the same. If a formula multiplies a quantity in column B by a rate held in cell F2, the reference to F2 must be $F$2 or the second row will multiply by F3, which is empty.",
+            "Named ranges are the other half of the habit. If F2 is called vat_rate, the formula reads as quantity times vat_rate and cannot be misinterpreted by whoever maintains the sheet after you. When you finish a formula, read it as a sentence and check the direction of each reference: does this row's quantity multiply the rate, or the next row's? Most spreadsheet errors are not arithmetic mistakes but references pointing one cell away from where the author meant. Put a hand check beside every important formula: type the answer you expect, and see whether the sheet agrees."
+          ],
+          "example": "=B2*$F$2 filled down a hundred rows keeps pointing at the single rate cell; =B2*F2 would drift into empty cells by row three.",
+          "points": ["Decide what stays fixed before you copy", "Use $ for the fixed part", "Name important cells"],
+          "check": "Take a formula you copy down a column. Does it still work at row 500? Test it."
+        },
+        {
+          "title": "Sort, filter and the pivot table you should be using",
+          "minutes": 17,
+          "teach": [
+            "A pivot table is the fastest way to answer a question about a list, and most people never open one. Given a table of transactions with a date, a category and an amount, a pivot table summarises totals by category, by month, or by both, without a single formula.",
+            "The prerequisite is discipline in the source data: one row per record, one header row, no merged cells, no blank rows in the middle, and no totals typed inside the table. A pivot table over clean data takes seconds; over merged and broken data it produces confident nonsense.",
+            "Use filters for looking and pivot tables for reporting. A filter hides rows; a summary has to be produced from all of them. Once the pivot is built, it refreshes when the source changes, so a monthly report becomes a refresh rather than a rebuild. Keep the pivot on its own sheet with a title saying what it summarises and which data it reads. A pivot three months old looks identical to one refreshed this morning, and the only defence is to date it and to refresh before you send. When a number in the pivot disagrees with one in another report, the source data is nearly always the cause, not the pivot."
+          ],
+          "example": "Twelve months of petty cash entries pivot to total spend by category and month in under a minute, and the totals match the ledger.",
+          "points": ["One row per record, one header row", "No merged cells in source data", "Pivot for summaries, filter for looking"],
+          "check": "What question do you answer by manually adding up a column? Could a pivot table answer it instead?"
+        },
+        {
+          "title": "Sheets other people can use without breaking",
+          "minutes": 15,
+          "teach": [
+            "A spreadsheet that others will type into needs three things: a visible place to enter data, protection on everything else, and validation that refuses values that cannot be right. Without them, the first person to insert a row shifts every reference below it and the totals silently disagree with reality.",
+            "Keep data entry on one sheet and calculations on another. Colour the input cells consistently, lock the formula cells, and use data validation to constrain dates, amounts and lists. A dropdown for a category costs a minute to build and prevents the spelling variants that make summaries wrong.",
+            "Then test it as a stranger: enter a record that should be rejected and confirm it is, and enter one that should be accepted and confirm the totals change correctly. A control you have not tried is a control you do not know you have. Accept that some people will bypass validation by pasting, which overwrites the rule. That is why the totals need a stated reconciliation figure: a rule stops the honest mistake, and a reconciliation catches everything the rule did not. Choose the reconciliation before you build the sheet; knowing what the total must equal shapes how the columns are set out."
+          ],
+          "example": "An expense sheet with a locked calculation sheet, unlocked input cells and validation refusing negative amounts is safe to circulate.",
+          "points": ["Inputs on one sheet, calculations on another", "Lock everything that is not an input", "Validate the values that must not be wrong"],
+          "check": "If five colleagues typed into your spreadsheet tomorrow, what is the first thing that would break?"
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · PowerPoint: saying one thing at a time",
+      "lessons": [
+        {
+          "title": "The point of the deck, in one sentence",
+          "minutes": 14,
+          "teach": [
+            "A presentation exists to change what the audience knows or decides. Before designing a slide, write the sentence they should be able to repeat afterwards. If you cannot write that sentence, the deck is not ready and no amount of layout will fix it.",
+            "The sentence then governs everything else: what stays, what is cut, and what order the rest goes in. Most decks fail because they were assembled from material on hand rather than built towards a conclusion, and the audience can feel that even when they cannot name it.",
+            "Writing the sentence also tells you how many slides you need. Usually fewer than you have. Three good slides that reach a decision beat twenty that describe a situation. Write the sentence before the first slide, not after the twentieth, because a deck assembled from material on hand has to be dismantled to find its argument. If you cannot write the sentence in a minute, the thinking is not finished and no template will finish it. Say the sentence to a colleague before building anything; if they can restate it back in their own words, it is clear enough to present."
+          ],
+          "example": "A funding request deck is built around one sentence: approve the second mill in November, because it pays back in twenty-eight months.",
+          "points": ["Write the takeaway first", "Cut anything that does not serve it", "Fewer slides, more conclusion"],
+          "check": "Write the one sentence your last presentation wanted the audience to leave with."
+        },
+        {
+          "title": "Slides that support you rather than replace you",
+          "minutes": 15,
+          "teach": [
+            "A slide covered in sentences is a document, and if it is a document the audience will read it instead of listening to you. The slide carries the shape of the point — a number, a chart, three words — and you carry the explanation.",
+            "Practically: one idea per slide, a title that states the idea rather than labelling the topic, and body text reduced to what supports it. A title like Delivery costs rose 18% since March says something; Delivery costs says only where we are.",
+            "If the detail genuinely must be available, put it in an appendix and say so. The audience gets the argument, and the person who needs the numbers can find them afterwards without the room having to read them aloud. Read your speaker notes aloud once before presenting. Any sentence you stumble over in private is a sentence the audience will stumble over too, and most of them can be shortened or cut entirely. Aim for a slide you could present from a glance rather than one you must read, because reading aloud from your own slide is the fastest way to lose a room."
+          ],
+          "example": "A slide titled Delivery costs rose 18% since March carries one chart and two words of annotation; the full monthly table lives in an appendix.",
+          "points": ["One idea per slide", "Titles that state the conclusion", "Detail in the appendix"],
+          "check": "Read only the titles of your last deck. Do they tell the whole argument on their own?"
+        },
+        {
+          "title": "Charts that do not mislead",
+          "minutes": 15,
+          "teach": [
+            "Most misleading charts are not dishonest; they are careless. A vertical axis that does not start at zero exaggerates small changes, a pie chart with eight slices cannot be read, and a line that joins unrelated points implies a trend that does not exist.",
+            "Choose the chart from the question. Comparing categories: a bar chart. Change over time: a line. A single proportion: a number in a sentence, or a bar if comparison matters. Two things to check every time — is the axis labelled, and would a careful reader draw a stronger claim from this than the data supports.",
+            "Then remove decoration: gridlines nobody uses, three-dimensional effects, colours that carry no meaning. Every mark on a chart should answer a question the audience is asking. Finally, show the chart to somebody who was not involved and ask what they conclude. If their conclusion is stronger than the data supports, the chart is misleading whether or not that was the intention. Where a comparison is close, show it plainly instead of designing a chart to imply a bigger difference than exists."
+          ],
+          "example": "A four-category comparison is shown as a bar chart with a labelled axis starting at zero, replacing a pie chart with eight unreadable slices.",
+          "points": ["Bars for comparison, lines for time", "Label the axis and start at zero", "Remove any element that says nothing"],
+          "check": "Take your most recent chart. What claim could somebody make from it that the underlying numbers do not support?"
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Getting files where they are going",
+      "lessons": [
+        {
+          "title": "Formats, compatibility and the PDF decision",
+          "minutes": 13,
+          "teach": [
+            "Send the format that preserves what you made. A Word file reflows on another machine, a PowerPoint file loses its fonts, and a spreadsheet sent as a CSV keeps numbers and loses formulas, formatting and every other sheet.",
+            "The PDF rule is simple: send a PDF when the document is finished and the reader only needs to read it; send the editable file when they need to change it. Send both when the answer to those two questions differs, and say clearly which is which.",
+            "For spreadsheets there is a third case: the reader needs to look at numbers but not change the logic. A PDF loses too much and the workbook gives away your working, so a printed summary page plus the full workbook is usually the honest answer. Whichever format you choose, name the file with a date and a status so the recipient knows whether they are looking at the current version. A well-made file with a careless name undoes most of the care that went into it. Check the file opens before you rely on the attachment having arrived, because a document that will not open is indistinguishable from one not sent."
+          ],
+          "example": "An invoice goes out as a PDF; a contract goes out as a PDF plus an editable version when the counterparty has to insert their details.",
+          "points": ["PDF when finished and read-only", "Editable file when they must change it", "Never send a CSV when the formatting matters"],
+          "check": "Think of the last file a colleague could not open properly. Which format would have prevented it?"
+        },
+        {
+          "title": "Naming, versioning and handing over a file",
+          "minutes": 14,
+          "teach": [
+            "A file that leaves your machine carries your professionalism with it. final_new2.xlsx tells the recipient that nobody was sure which was the real one, and it invites them to work on the wrong one.",
+            "Use the same naming rule everywhere: date, subject, status. When a document is superseded, say so in the name or delete it. When you hand a file over, take thirty seconds to remove the sheets, comments and hidden columns that were only for you.",
+            "One more habit saves arguments: when you send a spreadsheet, state in the message which cell is the input and what total it should produce. It takes one line and removes the most common follow-up question. Strip the workbook before it leaves: delete the scratch columns, unhide the hidden ones, and resolve the comments that were notes to yourself. A file is judged by what the recipient can see, including the parts you forgot were there. If a file has grown to many megabytes for no clear reason, the cause is usually a stray value or formatting far below the data, and Ctrl+End will take you to it."
+          ],
+          "example": "2026-10-21 Bassa Timber monthly report FINAL.pdf, with a message naming the two input cells and the expected total.",
+          "points": ["Date, subject, status in the name", "Remove what was only for you", "Say which cell to change and what should result"],
+          "check": "Would a colleague opening your last sent file know which numbers they may change?"
+        },
+        {
+          "title": "Working together on one file",
+          "minutes": 15,
+          "teach": [
+            "Two people editing copies of the same document produces two truths and an argument. The fix is procedural rather than technical: one file in one location, one person editing at a time, and a rule about who owns which section.",
+            "Where shared editing is available, use it and use comments rather than tracked changes for discussion, because a comment says what should change and a tracked change only says what did. Where it is not available, agree a rota: you edit until Tuesday, I take it Wednesday, and neither of us keeps a private copy.",
+            "Locking the file is not a substitute for agreeing the process. It prevents the collision but not the confusion about the confusion about who was supposed to be editing at all. Where two people must edit the same file on the same day, split it by section rather than by time, so neither waits and neither overwrites. The merge is then a matter of assembling two halves rather than reconciling two versions of the same paragraph. Agree the rule for who merges, because a merge done by the person with the strongest opinion is not a merge."
+          ],
+          "example": "A team agrees section ownership and an editing rota, keeps one shared copy, and uses comments for questions and tracked changes only for accepted edits.",
+          "points": ["One file, one location", "Agree who edits when", "Comments for discussion, track changes for edits"],
+          "check": "How many copies of your current team document exist right now, and which one is real?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Why do styles save time compared with formatting headings by hand?",
+      "explanation": "A style describes what the text is, so editing the style definition changes every heading at once and enables navigation and a live table of contents.",
+      "options": [
+        { "text": "Editing one style definition updates every heading and powers the contents page", "correct": true },
+        { "text": "Styles make the document file smaller", "correct": false },
+        { "text": "Styles prevent other people editing the document", "correct": false },
+        { "text": "Styles are required for the document to print", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A formula =B2*F2 is filled down a column and the results go wrong from row 3. What is the most likely cause?",
+      "explanation": "F2 moves to F3, F4 and so on as the formula is copied. If the rate lives in one cell, it must be referenced as $F$2.",
+      "options": [
+        { "text": "The rate cell should be absolute: =B2*$F$2", "correct": true },
+        { "text": "The column B reference should be absolute", "correct": false },
+        { "text": "Excel cannot multiply two columns", "correct": false },
+        { "text": "The formula needs to be pasted as values", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What does a pivot table require of its source data?",
+      "explanation": "One row per record, a single header row, no merged cells and no blank rows. Clean source data is what makes the summary trustworthy.",
+      "options": [
+        { "text": "One row per record, one header row, no merged cells or blank rows", "correct": true },
+        { "text": "Totals typed at the bottom of each column", "correct": false },
+        { "text": "Every column formatted as text", "correct": false },
+        { "text": "The data split across several sheets, one per month", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which slide title is doing its job?",
+      "explanation": "A title that states the conclusion tells the audience what to take from the slide. A title that names the topic makes them work it out.",
+      "options": [
+        { "text": "Delivery costs rose 18% since March", "correct": true },
+        { "text": "Delivery costs", "correct": false },
+        { "text": "Financial update", "correct": false },
+        { "text": "Slide 4", "correct": false }
+      ]
+    },
+    {
+      "prompt": "When should you send an editable file rather than a PDF?",
+      "explanation": "The format follows the reader's job: read-only when the document is finished, editable when they must add or change something.",
+      "options": [
+        { "text": "When the recipient needs to change the content", "correct": true },
+        { "text": "Always, because PDFs are unreliable", "correct": false },
+        { "text": "Never, because editable files get altered", "correct": false },
+        { "text": "Only when the file is larger than 10 MB", "correct": false }
+      ]
+    }
+  ]
+}

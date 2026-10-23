@@ -1,0 +1,240 @@
+{
+  "slug": "effective-communication-and-public-speaking",
+  "title": "Effective Communication & Public Speaking",
+  "program": "FCP",
+  "category": "professional-development",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 0,
+  "summary": "Say what you mean, to the person in front of you, and stand up in front of a room without losing the thread.",
+  "description": "Communication is treated as a talent when it is mostly a set of decisions: who the audience is, what they need to leave with, and how much they can hold at once. This course makes those decisions explicit, then applies them to the three situations most people find hardest — a difficult conversation with a colleague, a written message that must not be misread, and speaking to a room.\n\nOn public speaking, it starts from the fear rather than pretending it away. Preparation, structure and rehearsal are what replace nervousness with something usable, and the course treats a presentation as an argument with a shape rather than a performance.\n\nIt closes with listening, which is the half of communication most training ignores and the half that decides whether the other three land.",
+  "tags": ["communication", "public speaking", "listening", "presentations", "professional development"],
+  "outcomes": [
+    "State the purpose and audience of any message before composing it",
+    "Structure a talk so a listener can follow it without notes",
+    "Handle a difficult conversation without either avoiding it or escalating it",
+    "Write messages that cannot be reasonably misread",
+    "Manage nerves using preparation rather than avoidance",
+    "Listen in a way that changes what you say next"
+  ],
+  "caseStudy": "You must tell a long-standing supplier that their prices are no longer competitive, in a meeting you have been avoiding for three weeks.",
+  "modules": [
+    {
+      "title": "Module 1 · The decisions before the words",
+      "lessons": [
+        {
+          "title": "Audience, purpose, and what they must leave with",
+          "minutes": 15,
+          "teach": [
+            "Almost every communication failure begins before a word is written, with a message aimed at nobody in particular. Who is this for, what do they already know, and what should be different after they have read or heard it? Those three answers decide the content.",
+            "The audience question is harder than it looks because the person you are writing to is rarely the only reader. A message to a manager may be forwarded to a finance officer who lacks the context you assumed. Writing so that the least informed likely reader can follow it avoids most of that damage.",
+            "The purpose question has a trap: many messages have two purposes, one stated and one real. A note that asks for information while actually signalling dissatisfaction will be read for the second and answered for the first. Decide which you mean and say it. There is a third case worth naming: the message written to discharge the writer's own worry, which says in effect that I am still waiting and achieves nothing except to make the reader defensive. Before sending, look for a decision, a piece of information or a question. If none of the three is present, the thought belongs in your own notes rather than in somebody else's inbox. Keep a single note for those thoughts; half of them turn out to matter later and can be sent once they have a purpose."
+          ],
+          "example": "Before writing a proposal, two lines at the top: reader is the procurement committee, decision needed is approval of the November order, they know the contract but not the price change.",
+          "points": ["Name the reader before the words", "Assume it may be forwarded", "Separate the stated purpose from the real one"],
+          "check": "Take a message you sent this week. Who exactly was it for, and what changed because of it?"
+        },
+        {
+          "title": "The shape of a message a listener can follow",
+          "minutes": 15,
+          "teach": [
+            "People can hold a small number of things in mind at once, and a message that asks them to hold more loses them at the point where they stop trying. Structure exists to keep the count low.",
+            "The most reliable shape is three parts: where we are, where we need to be, and what I am asking for. It works in a two-line email, in a five-minute update, and in a forty-minute briefing, because it answers the three questions a listener actually has in the order they ask them.",
+            "Within each part, one idea per sentence and one sentence per idea. Long sentences with several subordinate clauses feel careful to the writer and feel like fog to the reader, who has to reconstruct the argument to find the verb. A practical test is to read the sentence aloud in one breath. Where you have to stop for air, the reader has to stop for thought, and the sentence should be split. The same test applies to titles and headings: one that cannot be said in a breath is usually doing two jobs at once and will be remembered for neither. Short sentences also make translation easier, which matters more often than most writers expect."
+          ],
+          "example": "Where we are: the delivery slipped by nine days. Where we need to be: stock on the shelf before December. What I am asking: approval to pay for air freight on the first consignment.",
+          "points": ["Where we are, where we need to be, what I ask", "One idea per sentence", "Short sentences carry more weight"],
+          "check": "Rewrite your last long email as three sentences using that shape. Is anything important lost?"
+        },
+        {
+          "title": "Saying the difficult thing without the fight",
+          "minutes": 16,
+          "teach": [
+            "A difficult conversation goes badly for one of two reasons: the issue is buried until the end, or it arrives wrapped in accusation. Both make the other person defend themselves, and a defending person cannot hear you.",
+            "The structure that works states the observation, then the impact, then the request. Observation is a fact both of you could verify: the last three orders arrived after the agreed date. Impact is what it did: we had to buy from a second supplier at a higher price. Request is specific: can we agree a delivery date at the point of order.",
+            "Then stop talking. The silence after a request is the other person's thinking time, and filling it with justification is what turns a conversation into an argument. If they need a moment, give it. Expect that the first thing said after the silence may be a defence, and let it pass without correcting it. A defence is not a refusal; it is the other person establishing that they are not being accused of something. Once that is settled, the request can be answered, and the conversation you were avoiding turns out to take less time than the weeks of avoiding it. Choose a room with a door and a chair; a corridor conversation leaves neither of you able to think."
+          ],
+          "example": "Observation: the last three orders were late. Impact: we paid a premium to source elsewhere. Request: agree a date at order and tell us the same day if it moves.",
+          "points": ["Observation, impact, request", "Facts both parties could verify", "Stop talking after the request"],
+          "check": "Think of a conversation you are avoiding. What is the observation, the impact, and the one request?"
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Speaking to a room",
+      "lessons": [
+        {
+          "title": "Why preparation beats confidence",
+          "minutes": 15,
+          "teach": [
+            "Nerves are not removed by reassurance. They are made manageable by knowing exactly what you are going to say, which is a matter of preparation rather than temperament.",
+            "The most effective preparation is not memorising a script. It is knowing the argument well enough to say it in different words if the room goes somewhere unexpected, plus having a deliberate opening and a deliberate ending that you do rehearse word for word. Those two moments carry disproportionate weight.",
+            "Nerves also respond to the physical: arriving early, standing where you can see everyone, having water, and having your notes on one page rather than in your hand as a script. The aim is not to feel calm but to be able to continue while feeling nervous. Practise in the room where you will speak, if you can. Standing in the actual space once removes a surprising amount of the unfamiliarity that nerves feed on, because much of what feels like fear is simply the work of orienting yourself in a place you have not been before. Arrive early enough to be bored before you begin; boredom is a calmer starting point than hurry."
+          ],
+          "example": "A speaker rehearses only the first thirty seconds and the last twenty, and trusts the argument in between, so a question mid-way cannot derail the whole talk.",
+          "points": ["Know the argument, not a script", "Rehearse the opening and the close", "One page of notes, not a transcript"],
+          "check": "What are the first two sentences of your next talk, said out loud?"
+        },
+        {
+          "title": "Structure for a live audience",
+          "minutes": 16,
+          "teach": [
+            "A listener cannot re-read a paragraph, so a talk needs signposting that a document does not. Tell them the shape at the start, tell them where they are as you go, and tell them what you have said at the end.",
+            "Three points is not a rule of nature but it is a reliable size for a talk: it is enough to be substantive and few enough to remember. If you have seven, you have three with four sub-points, and the audience keeps the three.",
+            "End on the point you want repeated, not on questions. Taking questions and then stopping hands the final impression to whoever asked the last one, who may well have been the person who disagreed. Take questions from the whole room rather than the front row, and if one person dominates, say plainly that you will take one more from them and then come to somebody else. The room is watching whether the discussion is fair as much as what it concludes. If a questioner has a grievance rather than a question, name it politely and offer to discuss it after, so the room keeps its time."
+          ],
+          "example": "Open with the three points named, signpost at each transition, and close by restating the three before inviting questions.",
+          "points": ["Say the shape, then follow it", "Three points, with sub-points inside them", "Close before questions, not after"],
+          "check": "Name your three points for your next talk. Could you say them afterwards from memory?"
+        },
+        {
+          "title": "Questions, interruption and losing your place",
+          "minutes": 15,
+          "teach": [
+            "A question is usually a request for help understanding, not an attack, even when it arrives with an edge. Hearing it as the former keeps your voice steady, which matters more than the answer.",
+            "Use four steps: repeat the question briefly so the room hears it and you gain a second, answer it, say if you do not know and when you will find out, then check whether that has answered it. Claiming to know something you do not is the fastest way to lose a room.",
+            "If you lose your place, say so and return to the last signpost: we were on the second point, the cost. Audiences are forgiving of a speaker who is organised enough to recover and unforgiving of one who bluffs. One further defence is worth preparing in advance: the question you hope nobody asks. Write the answer to it and bring it with you, because the question you fear is usually the one the room most needs answered, and having prepared it turns the worst moment into the best one. Answer it briefly when it comes, because a long answer signals that you had rehearsed it."
+          ],
+          "example": "I do not have that figure here; I will send it to you tomorrow. Does that answer the question, or did you mean something else?",
+          "points": ["Repeat, answer, admit, check", "I do not know is a complete answer", "Recover from the last signpost"],
+          "check": "When did you last claim certainty you did not have in front of an audience? What would you say instead now?"
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Listening",
+      "lessons": [
+        {
+          "title": "Listening as a technique rather than a virtue",
+          "minutes": 15,
+          "teach": [
+            "Most people listen waiting for a gap. The result is that they answer the question they were preparing for rather than the one asked, and both parties leave with different memories of the conversation.",
+            "Listening as a technique has three moves: let the person finish, say back what you heard in your own words, then ask the question that follows from it. The say-back is the one that changes conversations, because it either confirms understanding or reveals a gap while there is still time.",
+            "This is especially useful in disagreement. Saying back the other position accurately, before answering it, is what makes an argument about the issue rather than about whether each person has been heard. The say-back also slows you down, which is useful. Most of the damage in a disagreement is done by the first reply, and a reply that has been delayed by ten seconds of accurate restating is almost always a better one than the one you would have given immediately. Restating also stops you from answering a point that was never made."
+          ],
+          "example": "So your concern is that the new schedule adds a day to every delivery, not that it costs more. Is that right?",
+          "points": ["Let them finish", "Say back what you heard", "Answer what was asked"],
+          "check": "In your last disagreement, could you have stated the other person's position to their satisfaction?"
+        },
+        {
+          "title": "Feedback that can be heard",
+          "minutes": 15,
+          "teach": [
+            "Feedback fails when it describes a person rather than a piece of work, and when it arrives long after the event. Both make it feel like a verdict rather than information.",
+            "Describe what you observed, the effect it had, and what you would find useful instead. This is the same structure as the difficult conversation, applied more often and more lightly. Praise with the same structure is also more useful: your summary was clear about the decision is worth more than good job.",
+            "Ask before giving it where you can. May I say something about how that meeting ran, is a question that converts a verdict into an offer, and the answer is usually yes. Keep it small and specific. Praise with the same structure is worth twice as much as praise without it, because it tells the person what to repeat rather than merely that they pleased somebody. Good job is a feeling; the summary named the decision, so nobody chased it is an instruction. Written feedback is easier to hear than spoken, and easier to return to; use it when the point matters more than the moment."
+          ],
+          "example": "The summary left out who owns the delivery date, so two of us chased it. Next time could the owner be named in the note?",
+          "points": ["Observation, effect, request", "Praise specifically too", "Ask before you give it"],
+          "check": "Recall the last useful feedback you received. What made it usable rather than simply unpleasant?"
+        },
+        {
+          "title": "Communication across difference",
+          "minutes": 15,
+          "teach": [
+            "The same words carry different weight depending on who reads them. Seniority, language, gender, region and previous experience all change what a sentence means to the person receiving it, and none of that is visible in the text.",
+            "Two habits reduce the risk. First, state intent explicitly when the stakes are high: I am asking because we need to decide by Friday, not because I doubt the figure. Second, check the tone of anything written in haste to somebody who has less power than you, because a short message from a senior person reads as sharp to the person receiving it.",
+            "Where language is a second language for either party, write more plainly and confirm understanding rather than assuming silence means agreement. Silence most often means somebody is waiting to be asked. The same caution applies to humour, which rarely survives a change of language or a change of power. What reads as warm between colleagues can read as mockery from a manager, and the person receiving it has no easy way to say so. Where you are unsure, plain speech is the safer courtesy, because it is the one form almost nobody resents."
+          ],
+          "example": "A terse note from a director is softened with one line of intent, and the recipient is asked directly whether anything is unclear.",
+          "points": ["State intent when stakes are high", "Check the tone of short messages to junior colleagues", "Confirm understanding rather than assuming it"],
+          "check": "Which of your recent messages could have been read as sharper than you intended?"
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Putting it to work",
+      "lessons": [
+        {
+          "title": "Preparing a briefing under time pressure",
+          "minutes": 15,
+          "teach": [
+            "You are often asked to brief somebody in ten minutes on something you know well and they do not. The trap is to start where your own knowledge starts, which is usually in the middle of the detail.",
+            "Start from the decision, not the history. What is being decided, what are the two or three options, what does each cost, and what do you recommend. Detail exists to support the recommendation, and it can be offered when asked rather than delivered in advance.",
+            "Write that on a single page before any meeting where you might be asked. The page is not for the other person; it is so that you can find the top of your own argument in thirty seconds. Practise the page out loud once, even alone. Saying it aloud exposes the place where your knowledge is a pile of detail rather than an argument, and that is the place a question will find in the meeting. Keep the page with you; the act of having it is more useful than the act of consulting it."
+          ],
+          "example": "One page: the decision, three options with costs, the recommendation, and the two risks that matter.",
+          "points": ["Start at the decision", "Three options at most", "One page for yourself, not the reader"],
+          "check": "If you were asked to brief your manager tomorrow morning, what is the decision and your recommendation?"
+        },
+        {
+          "title": "Running a meeting you are responsible for",
+          "minutes": 15,
+          "teach": [
+            "If you are responsible for a meeting, you are responsible for its outcome. That means stating at the start what has to be decided, keeping the discussion inside the agenda, and ending with decisions, owners and dates before anybody leaves.",
+            "The hardest part is interrupting a discussion that has drifted, and the way to do it without offence is to name the drift: we have moved onto next year's budget; can we park it and finish the schedule. Parking items visibly, rather than letting them run, is what keeps a meeting to its time.",
+            "End early if the work is done. Ending on time is a courtesy; ending early is a gift, and it teaches people that the meeting will not expand to fill the space. Circulate the actions within a day, and put the next meeting's first item as the list from this one. A meeting that begins by reading out last month's commitments is the fastest way to make people keep them. Start with the list even when somebody senior wants to begin elsewhere; the habit survives on being defended once."
+          ],
+          "example": "A meeting opens with the two decisions to be made, parks two side issues on a visible list, and closes with three actions each named and dated.",
+          "points": ["Say what must be decided at the start", "Park drift visibly", "Close with actions, owners and dates"],
+          "check": "What did the last meeting you ran decide, and who is doing what about it?"
+        },
+        {
+          "title": "The habit that ties it together",
+          "minutes": 14,
+          "teach": [
+            "Every technique in this course depends on one habit: deciding what the other person needs before deciding what you will say. It takes seconds and it is the difference between being heard and being tolerated.",
+            "Practise it on the smallest things. Before replying to a message, ask what the sender needs from the reply. Before a phone call, ask what you want to be true when it ends. Small repetitions build the reflex, and the reflex is what shows up under pressure.",
+            "Then review occasionally. Once a month, take one exchange that went badly and ask which of the three decisions you skipped: audience, purpose, or what they should leave with. The answer is almost always one of them. Keep the note in one place and read it before a similar conversation comes round. A pattern is worth more than a single review: three skipped decisions of the same kind is a habit, and a habit is what you are actually trying to change. Change one thing at a time, and tell somebody what you are practising so the change is visible."
+          ],
+          "example": "A manager keeps a note of one difficult exchange a month and identifies which decision was skipped, which improves faster than rereading theory.",
+          "points": ["Ask what they need before what you will say", "Practise on the smallest messages", "Review one exchange a month"],
+          "check": "Which of the three decisions do you most often skip: audience, purpose, or outcome?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "What three questions should be answered before composing any message?",
+      "explanation": "Who it is for, what should be different afterwards, and what the reader already knows. Those three decide the content and the length.",
+      "options": [
+        { "text": "Who is it for, what should change, and what do they already know", "correct": true },
+        { "text": "How long should it be, what tone, and which format", "correct": false },
+        { "text": "Who else should be copied, when to send it, and what to attach", "correct": false },
+        { "text": "What is the subject line, the greeting and the sign-off", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which structure makes a difficult conversation least likely to become a fight?",
+      "explanation": "Observation, impact, request, then silence. Facts both parties could verify keep the conversation about the issue rather than about character.",
+      "options": [
+        { "text": "Observation, impact, request, then stop talking", "correct": true },
+        { "text": "Explain how you feel, then ask them to change", "correct": false },
+        { "text": "List every past example, then state the consequence", "correct": false },
+        { "text": "Raise it gently at the end of an unrelated meeting", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why rehearse the opening and closing word for word but not the whole talk?",
+      "explanation": "Knowing the argument lets you adapt; rehearsing the two moments that carry most weight means neither nerves nor an unexpected question can derail them.",
+      "options": [
+        { "text": "Those moments carry the most weight and can be made reliable", "correct": true },
+        { "text": "Because audiences only remember the beginning and end", "correct": false },
+        { "text": "Because memorising the whole talk sounds robotic", "correct": false },
+        { "text": "Because the middle is usually improvised anyway", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A questioner asks something you do not know the answer to. What is the strongest response?",
+      "explanation": "Admitting the gap and committing to a date preserves credibility. Bluffing is discovered quickly and costs the whole room's trust.",
+      "options": [
+        { "text": "Say you do not know and when you will send the answer", "correct": true },
+        { "text": "Give your best estimate and move on quickly", "correct": false },
+        { "text": "Redirect the question to the audience", "correct": false },
+        { "text": "Explain that the question is outside the scope of the talk", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What makes feedback usable rather than simply unpleasant?",
+      "explanation": "Describing the work rather than the person, the effect it had, and what would be more useful turns a verdict into information somebody can act on.",
+      "options": [
+        { "text": "Describe what you observed, its effect, and what would help next time", "correct": true },
+        { "text": "Deliver it privately so nobody is embarrassed", "correct": false },
+        { "text": "Balance every criticism with a compliment", "correct": false },
+        { "text": "Wait for the annual review so it has full context", "correct": false }
+      ]
+    }
+  ]
+}

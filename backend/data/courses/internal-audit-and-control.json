@@ -1,0 +1,326 @@
+{
+  "slug": "internal-audit-and-control",
+  "title": "Internal Audit & Control",
+  "program": "FCP",
+  "category": "finance-accounting",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 1000,
+  "summary": "Understand what internal audit does that external audit does not, test controls with real evidence, and write findings that management can act on.",
+  "description": "Internal audit is widely misunderstood, including by some of the people who commission it. It is not the annual financial audit, and it is not a compliance inspection. It is an independent function that tells the governing body whether the organisation's controls are working, in the areas where failure would matter most.\n\nThis course covers the distinction between internal audit, external audit, compliance and risk; the independence that is the entire source of the function's value; the charter and plan that define what gets examined; and the practical craft of testing a control rather than assuming it operates because a procedure describes it.\n\nIt then works through the part that determines whether an audit changes anything: writing findings that name a condition, a criterion, a consequence and a cause; rating them proportionately; and following up until recommendations are closed rather than politely acknowledged.\n\nThe case study concerns an internal auditor who finds that a small NGO's finance officer has been paying himself undocumented float expenses. The finance officer has twelve years of service, is well liked and is related to the founder, and the auditor's manager suggests handling it quietly. Students must decide what the auditor does and why.\n\nIt is written for Liberian conditions: small NGOs with donor audit requirements, ministries with nominal internal audit units, banks with established functions, and organisations where everyone knows everyone.",
+  "tags": ["internal audit", "controls", "assurance", "findings", "governance", "fraud"],
+  "outcomes": [
+    "Distinguish internal audit from external audit, compliance and risk",
+    "Explain why independence is the source of audit value",
+    "Describe what a good control looks like and when it fails",
+    "Test whether a control exists and operates, not just whether it is documented",
+    "Write a finding with condition, criterion, consequence and cause",
+    "Rate findings proportionately and require a management response",
+    "Follow up recommendations until they close",
+    "Recognise the limits of the auditor's role when fraud is suspected"
+  ],
+  "caseStudy": "An internal auditor finds that a small NGO's finance officer has been paying himself float expenses with no supporting documentation. The finance officer has twelve years of service, is well liked and is the founder's cousin. The auditor's manager says the matter should be handled quietly. Students must decide what the auditor does, who is told, and what the limits of the auditor's role are.",
+  "modules": [
+    {
+      "title": "What internal audit is",
+      "lessons": [
+        {
+          "title": "Three jobs that look similar and are not",
+          "minutes": 17,
+          "teach": [
+            "External audit gives an opinion on the financial statements. It asks whether the accounts present a true and fair view, it is performed by an independent firm, and it is designed for shareholders, donors and regulators.",
+            "Internal audit examines whether the organisation's controls and risk management are working. It reports to the governing body, it covers operations and compliance as well as finance, and its output is a view on whether things are under control.",
+            "Compliance checks whether specific rules were followed. It is narrower and more mechanical than audit, and it is usually performed by the people responsible for the process, which is why it cannot provide independent assurance.",
+            "Risk management identifies and assesses what could go wrong. Internal audit tests whether those assessments and the responses to them are real, which is a different activity performed by different people.",
+            "The practical difference is who the work serves. External audit serves the reader of the accounts; internal audit serves the board, which needs to know what management cannot or will not report.",
+            "One organisation may have all four functions, or a single person doing all four badly. Knowing which hat is being worn at a given moment matters, because the independence required differs substantially between them."
+          ],
+          "example": "An NGO's donor asks for an audit. The external auditor gives an opinion on the accounts in six weeks, while the internal reviewer spends the same period testing whether procurement approvals were genuine.",
+          "points": [
+            "External audit opines on accounts",
+            "Internal audit reports on control",
+            "Compliance and risk are narrower, separate activities"
+          ],
+          "check": "Name which of the four functions exists in your organisation and who performs each."
+        },
+        {
+          "title": "Independence is the whole value",
+          "minutes": 18,
+          "teach": [
+            "Internal audit's only product is a credible opinion, and credibility depends entirely on the reviewer not being part of what is reviewed. Everything else about the function is secondary.",
+            "Independence fails in small visible ways: the auditor prepares the reconciliation they later review, approves a payment during a staff absence, or reports to the finance director whose department is being examined.",
+            "Reporting lines matter more than titles. An internal auditor who reports to the person responsible for the process being audited has a manager, not an assurance function, whatever the job description states.",
+            "The standard structure is a functional reporting line to the audit committee or board, and an administrative line to the chief executive. The first protects the work; the second makes the function operable.",
+            "Independence is also a state of mind that must be visible. An auditor who joins the management team's planning and then audits the plan has compromised the second activity by participating in the first.",
+            "Where absolute independence is impossible, disclose it. A one-person organisation cannot separate every duty, and an auditor who states the limitation produces more trust than one who pretends it does not exist."
+          ],
+          "example": "A donor-funded project's internal auditor reports to the finance director. When the audit finds weaknesses in finance controls, the report is edited before reaching the board, and nobody outside the department ever sees the original.",
+          "points": [
+            "Credibility depends on not reviewing your own work",
+            "Functional line to the board, administrative to the executive",
+            "Disclose the limitation rather than pretend it is absent"
+          ],
+          "check": "Draw your organisation's reporting lines and identify whether the auditor reports to an auditee."
+        },
+        {
+          "title": "The charter, the plan and the committee",
+          "minutes": 17,
+          "teach": [
+            "An audit charter states what the function may examine, who it reports to, and what access it has to records, staff and systems. Without it, an auditor's request for a file becomes a negotiation with whoever holds it.",
+            "The charter should also state what internal audit does not do. If the function is expected to prepare the accounts and then assure them, the charter is describing two incompatible roles.",
+            "The annual plan allocates limited capacity across the organisation's risks rather than across its departments. Where the risk assessment says procurement is the biggest exposure, the plan should reflect that rather than visiting every department equally.",
+            "A risk-based plan is defensible and a rotational one is not. The auditor who can say the plan follows the risk register, and who can show the register, is answering the question the committee will ask.",
+            "The audit committee approves the plan, receives the reports and holds management to the responses. A committee that only notes reports has become a recipient rather than a governor.",
+            "Report to the committee without management present at least annually. That single session is where the most useful conversations happen, and its absence is usually a sign that the committee is ceremonial."
+          ],
+          "example": "An audit plan allocates equal time to each of eight departments. The risk register shows procurement accounts for most of the exposure, and the plan is rewritten to spend half the year there.",
+          "points": [
+            "A charter grants access and states the limits",
+            "Plan against risk, not against departments in rotation",
+            "The committee approves, receives and follows up"
+          ],
+          "check": "Check whether your audit plan is based on a risk assessment and whether the committee approved it."
+        }
+      ]
+    },
+    {
+      "title": "Testing controls",
+      "lessons": [
+        {
+          "title": "What a control actually is",
+          "minutes": 18,
+          "teach": [
+            "A control is anything that reduces the likelihood or impact of an error or irregularity. It is not a policy, a procedure or a signature on a form unless that document actually changes what happens.",
+            "Controls have types. Preventive controls stop something happening, such as a payment above a limit requiring two approvals. Detective controls find it afterwards, such as a monthly bank reconciliation. Corrective controls fix it once found.",
+            "A control also needs a person. Something described as automated is controlled by whoever can change the settings, and that is frequently the person the control was meant to constrain.",
+            "The test of whether a control is real is what happens when it is absent. If removing the approval step would change nothing because the approver signs everything presented, then the control exists on paper and not in practice.",
+            "Controls fail predictably in small organisations through absence, through volume and through deference. The approver is travelling, the volume makes review impossible, or the approver trusts the person and stops reading.",
+            "Two controls that sit with the same person are usually one control, and often none. Approval, custody and record-keeping concentrated in one individual is the arrangement that every fraud investigation eventually describes."
+          ],
+          "example": "A payment procedure requires the director's approval. In practice the director signs a batch of forty vouchers once a month without reading them, so the control is present in form and absent in effect.",
+          "points": [
+            "A control changes what happens; a policy does not",
+            "Preventive, detective and corrective are different",
+            "Concentrated duties are usually no control at all"
+          ],
+          "check": "Take one control in your organisation and describe how you would know it had stopped working."
+        },
+        {
+          "title": "Testing: design, existence and operation",
+          "minutes": 19,
+          "teach": [
+            "There are three questions and they must be asked in order. Is the control designed well enough to prevent the problem? Does it exist? Does it operate consistently, not only when someone is watching?",
+            "Design is examined on paper, and it is where the most common weakness sits. A control requiring one approval for a payment of any size is badly designed regardless of whether it is followed, because it provides no separation at the top end.",
+            "Existence is tested by asking to see the evidence. The approval signature, the reconciliation, the second count, the system log. Where no evidence exists, the control is treated as absent, which is the convention every auditor applies.",
+            "Operation is tested by sampling transactions across the period and checking that the control was applied to each. Ten payments, ten signatures, and two missing is a control that operates sixty percent of the time in the sample.",
+            "Select the sample deliberately. Cover the whole period rather than one month, include unusual items, and include transactions involving the people who control the process, because that is where the exceptions live.",
+            "Record what you tested, what you selected, what you found and what you concluded. A working paper that another auditor could not repeat from is a working paper that will not survive a challenge, and challenges arrive exactly when the finding is unwelcome."
+          ],
+          "example": "A purchase approval control is tested across the year. The design is adequate, evidence exists for all ten sampled transactions, and three approvals were given by the person who raised the request, which is a design flaw surfacing in operation.",
+          "points": [
+            "Design, existence, then operation, in that order",
+            "No evidence means the control is absent",
+            "Sample across the period and include insider transactions"
+          ],
+          "check": "Take ten transactions from last year and test one control against each of them."
+        },
+        {
+          "title": "Evidence and the working paper",
+          "minutes": 17,
+          "teach": [
+            "Audit evidence should be sufficient, relevant and reliable in that order of thinking. Sufficient means enough to support the conclusion; relevant means it addresses the control being tested; reliable means it is not a summary prepared by the person being reviewed.",
+            "Documentary evidence from outside the organisation is the strongest: bank statements, supplier confirmations, signed delivery notes from third parties. Internal records are weaker, and verbal explanations are the weakest of all.",
+            "Corroborate verbal evidence. A statement that approvals are always obtained is not evidence, and the auditor who writes it down as fact has recorded an assertion rather than a finding.",
+            "Keep the physical or digital copy, not a description. The photocopy of the missing signature is the finding, while a note saying there was no signature is a claim about a document nobody else can see.",
+            "Working papers should stand alone. Somebody reading them two years later, after everyone has left, should be able to see what was examined, what was found and how the conclusion followed.",
+            "Retain them for the period stated in the charter or required by funders. Audit files are requested long after an engagement ends, usually because a donor, a lender or a new management team is asking how a previous conclusion was reached."
+          ],
+          "example": "An auditor reports that reconciliations are prepared monthly. The working paper contains bank statements, the reconciliations themselves and the dates they were signed, and when the conclusion is challenged the file settles it.",
+          "points": [
+            "External documents are stronger than internal ones",
+            "Corroborate anything that was only said out loud",
+            "Working papers must stand alone years later"
+          ],
+          "check": "Look at one working paper you have and ask whether a stranger could repeat the test from it."
+        }
+      ]
+    },
+    {
+      "title": "Findings and judgement",
+      "lessons": [
+        {
+          "title": "Writing a finding somebody can act on",
+          "minutes": 19,
+          "teach": [
+            "A finding has four parts: the condition, meaning what actually happens; the criterion, meaning what should happen and according to what; the consequence, meaning why it matters; and the cause, meaning why it is happening.",
+            "Most weak findings contain only the condition. Documentation should be improved states what the auditor observed and nothing else, so nobody can tell what would be different if it were changed.",
+            "The criterion is what makes a finding defensible. Citing the organisation's own policy, the donor agreement or a recognised standard converts a preference into a requirement, and it shifts the conversation from opinion to fact.",
+            "The consequence is what secures attention. Three payments without supporting documents is a condition; the risk that a donor disallows the expenditure and the organisation repays it from its own funds is a consequence.",
+            "The cause determines the recommendation. If the cause is that the form has no field for the document reference, the fix is a form change. If the cause is that the finance officer is overloaded, the fix is staffing or process, and a recommendation to be more careful solves neither.",
+            "Keep the tone factual. Findings that describe people as careless invite a defence of the person rather than a change to the system, and a defensive response is a finding that will not be closed."
+          ],
+          "example": "We recommend improving documentation is rewritten as sixteen of forty sampled payments lacked a supporting invoice, contrary to the finance policy, exposing 24,000 dollars to disallowance, because the approval form has no field requiring the invoice reference.",
+          "points": [
+            "Condition, criterion, consequence, cause",
+            "The criterion makes the finding defensible",
+            "The cause determines the recommendation"
+          ],
+          "check": "Rewrite one finding you have seen using the four parts."
+        },
+        {
+          "title": "Rating and the management response",
+          "minutes": 18,
+          "teach": [
+            "Ratings should reflect consequence rather than the size of the sample. A single instance of an unauthorised payment at a material value is more serious than twenty missing signatures on low-value stationery requisitions.",
+            "Use a small scale and define it. High, medium and low with written definitions produces consistent ratings, while five levels with vague descriptions produce an argument about adjectives at every reporting round.",
+            "Every finding needs a management response that states an action, an owner and a date. A response that agrees with the finding and promises improvement is not a response, because there is nothing to follow up.",
+            "Accept disagreement where it is reasoned. Management may argue that the criterion does not apply or that the consequence is overstated, and the auditor should record the disagreement and the basis for the original view rather than force agreement.",
+            "Do not negotiate the rating down to keep the relationship comfortable. Ratings that move under pressure teach management that the report is a starting position, and the next report is discounted before it is read.",
+            "Report the important items early rather than at the end of the engagement. An issue needing immediate action should not wait for the final report, and the auditor who escalates it promptly demonstrates that the function is useful."
+          ],
+          "example": "A finding is rated low because only three payments were affected. The consequence is an unapproved transfer of 18,000 dollars, and the rating is revised to high on consequence rather than on the count of exceptions.",
+          "points": [
+            "Rate on consequence, not on exception count",
+            "Define the scale in writing",
+            "A response needs an action, an owner and a date"
+          ],
+          "check": "Look at your last audit finding and test whether its rating matches its consequence."
+        },
+        {
+          "title": "Case: the finance officer, the float and the founder's cousin",
+          "minutes": 22,
+          "teach": [
+            "An internal auditor finds that a small NGO's finance officer has been paying himself float expenses with no supporting documentation. He has twelve years of service, is well liked, and is the founder's cousin. The auditor's manager suggests handling it quietly.",
+            "Handling it quietly is not one option among several. An undocumented payment to the person who controls payments is either a control failure or a misappropriation, and the auditor cannot determine which alone, but must ensure somebody with authority does.",
+            "The auditor's role is to report, not to investigate as an investigator. Gathering evidence beyond the audit scope, interviewing under caution or reaching a conclusion about intent are outside the function, and doing so can compromise a subsequent process.",
+            "Immediate escalation goes to the audit committee or board, in writing, whatever the management view. Where the manager who suggests discretion is also in the reporting line, the escalation must bypass them, which is exactly why the charter provides a direct line.",
+            "The conflict of interest is a finding in itself. A finance officer related to the founder in a role with custody and record-keeping, with no second signature, is a structural weakness that existed before any payment was made.",
+            "The auditor should also protect themselves: document the manager's instruction, keep the working papers intact, and record the disclosure in writing. A quiet handling that later becomes a scandal usually removes the person who was told to be quiet."
+          ],
+          "example": "A finance officer pays himself float expenses with no documentation. He has twelve years' service, is well liked, is the founder's cousin, and the auditor's manager suggests handling it quietly.",
+          "points": [
+            "Report, do not investigate intent",
+            "Escalate in writing, bypassing a compromised line",
+            "The related-party structure is a finding in itself"
+          ],
+          "check": "For this case, state who you would tell, in what order, and what you would put in writing."
+        }
+      ]
+    },
+    {
+      "title": "Making audit useful",
+      "lessons": [
+        {
+          "title": "Follow-up, and the graveyard of recommendations",
+          "minutes": 17,
+          "teach": [
+            "Most audit value is lost after the report is issued. Recommendations are accepted, minuted and never implemented, and the same findings reappear in the following year's report with the same wording.",
+            "Track every recommendation with an owner, a date and a status. A register of open items reviewed at each committee meeting converts a report into an obligation.",
+            "Report the age of open items. A recommendation open for eighteen months is a management decision not to act, and stating the age makes that visible without an argument about importance.",
+            "Escalate items that are overdue and material. The committee exists partly to decide what happens when management does not act, and it cannot decide if it is not told.",
+            "Distinguish closure from agreement. An item is closed when the evidence of implementation has been seen, not when a manager says it has been done, and the difference is usually discovered by the next auditor.",
+            "Consider why items are not closing. Where most recommendations remain open, the problem is often that there are too many of them, and a shorter list of items that matter is more likely to be implemented than a comprehensive one that overwhelms."
+          ],
+          "example": "An audit recommendation to introduce a payment register appears in four consecutive annual reports. It is closed in the fifth year only after the committee asks for the age of every open item.",
+          "points": [
+            "Follow up with owner, date and status",
+            "Report the age of open items",
+            "Close on evidence, not on assurance"
+          ],
+          "check": "Count your open audit recommendations and the age of the oldest one."
+        },
+        {
+          "title": "Auditing when the organisation has three staff",
+          "minutes": 17,
+          "teach": [
+            "In a small organisation segregation of duties is often impossible, and an audit that recommends it produces a finding nobody can implement. The useful response is to identify compensating controls that are achievable.",
+            "Compensating controls in small organisations are review, timing and visibility. A second person reviews the reconciliation even if they cannot prepare it, the bank statement goes to somebody other than the preparer, and the board sees the summary monthly.",
+            "Mandatory absence is the most effective cheap control. A person who must take two weeks' leave, with their tasks performed by somebody else, cannot sustain a concealment that requires their continuous presence.",
+            "External confirmation substitutes for internal separation. Sending a list of suppliers to the bank for confirmation, or requesting statements directly, bypasses the person whose records are being checked.",
+            "Be realistic in recommendations. A recommendation that requires hiring a second accountant will not be implemented by an organisation of three people, and issuing it annually is a way of avoiding the harder question of what could work instead.",
+            "Say plainly what risk remains after the compensating controls. An organisation with three staff carries a residual risk that no procedure removes, and the board should be told what it is rather than assured that everything is controlled."
+          ],
+          "example": "A three-person NGO cannot separate payment approval from recording. The board introduces a monthly review of the bank statement by a trustee and requires the finance officer to take two weeks' leave each year.",
+          "points": [
+            "Find compensating controls a small team can operate",
+            "Mandatory absence is cheap and effective",
+            "State the residual risk rather than implying it is gone"
+          ],
+          "check": "Name one duty in your organisation that cannot be separated and the compensating control you would use."
+        },
+        {
+          "title": "Fraud, suspicion and the limits of the role",
+          "minutes": 18,
+          "teach": [
+            "An auditor is not an investigator. The function is to identify indicators of fraud, report them to the appropriate authority, and support an investigation if asked, not to conduct interviews or reach conclusions about intent.",
+            "Indicators are often unglamorous: a person who never takes leave, a supplier with no verifiable address, payments just below an approval threshold, or a reconciling item that recurs at the same value every month.",
+            "Act on suspicion promptly and discreetly. Telling the wrong person, or confronting the individual, destroys evidence and gives the person time to construct an explanation, and it can expose the organisation to a claim of defamation if the suspicion is wrong.",
+            "Preserve evidence before it can be altered. Copies of documents, system extracts and the working papers should be secured, and the auditor should not continue testing in a way that signals what has been found.",
+            "The decision about investigation, suspension, police involvement and recovery belongs to the board or chief executive, advised by legal counsel. The auditor supplies the evidence and the conclusion about control failure, and steps back from the decision.",
+            "Expect pressure. Fraud findings attract pressure to soften language, delay the report or describe the matter as an error, and the auditor's protection is the charter, the written escalation route and a contemporaneous record of every instruction received."
+          ],
+          "example": "An auditor notices a supplier whose address cannot be verified and whose invoices fall just under the dual-approval threshold. The matter is reported to the committee, evidence is preserved, and the investigation is commissioned separately.",
+          "points": [
+            "Identify and report; do not investigate intent",
+            "Preserve evidence before confronting anyone",
+            "The board decides; the auditor supplies evidence"
+          ],
+          "check": "Write down who in your organisation has authority to commission a fraud investigation."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "What is the difference between the control working and the control being tested?",
+      "explanation": "A control that works is an observation about an outcome. Testing is the evidence that the control operated across a period and a population. An auditor cannot report assurance from an impression, only from a documented test.",
+      "options": [
+        { "text": "Working is an impression about an outcome; testing is documented evidence that it operated across the period", "correct": true },
+        { "text": "They are the same thing described by auditors and managers respectively", "correct": false },
+        { "text": "Testing applies only to automated controls and working applies to manual ones", "correct": false },
+        { "text": "A control that works does not need to be tested until the following year", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An audit finding says the organisation should improve its documentation. What is wrong with it?",
+      "explanation": "The finding states a condition and nothing else. Without a criterion it cannot be defended, without a consequence nobody prioritises it, and without a cause the recommendation cannot address why the problem exists.",
+      "options": [
+        { "text": "It lacks a criterion, a consequence and a cause, so nobody can act on it or defend it", "correct": true },
+        { "text": "It is too specific and should refer to several processes at once", "correct": false },
+        { "text": "It should be rated high to ensure management pays attention", "correct": false },
+        { "text": "Findings should never recommend anything, only describe", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case study, the auditor's manager suggests handling the matter quietly. What should the auditor do?",
+      "explanation": "Undocumented payments to the person who controls payments must reach the board in writing. The auditor reports rather than investigates, and where the manager is in the reporting line the escalation bypasses them, which is what the charter exists for.",
+      "options": [
+        { "text": "Escalate in writing to the audit committee or board, document the instruction, and preserve the working papers", "correct": true },
+        { "text": "Confront the finance officer privately and seek an explanation before reporting", "correct": false },
+        { "text": "Accept the manager's judgement because they understand the relationships involved", "correct": false },
+        { "text": "Conduct a full investigation and report the conclusion on intent to the founder", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What is the strongest evidence that a control operated?",
+      "explanation": "Evidence originating outside the organisation, such as a bank statement or a third-party confirmation, cannot be created by the person being reviewed. Internal records and verbal assurances are progressively weaker.",
+      "options": [
+        { "text": "A document originating outside the organisation that the auditee could not have created", "correct": true },
+        { "text": "A signed statement from the finance officer that the procedure is followed", "correct": false },
+        { "text": "The existence of a written procedure approved by the board", "correct": false },
+        { "text": "A summary report prepared by the department being audited", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In a three-person organisation, an audit recommendation to segregate duties cannot be implemented. What is the better approach?",
+      "explanation": "Where separation is impossible, compensating controls that are achievable, such as independent review, mandatory leave and external confirmation, reduce the risk, and the residual risk should be stated to the board rather than implied away.",
+      "options": [
+        { "text": "Recommend achievable compensating controls such as independent review and mandatory leave, and state the residual risk", "correct": true },
+        { "text": "Repeat the recommendation annually until the organisation hires more staff", "correct": false },
+        { "text": "Conclude that no assurance is possible and remove the area from the audit plan", "correct": false },
+        { "text": "Recommend that the board approve a policy requiring duties to be segregated", "correct": false }
+      ]
+    }
+  ]
+}

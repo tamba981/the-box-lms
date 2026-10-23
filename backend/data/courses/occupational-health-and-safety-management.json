@@ -1,0 +1,326 @@
+{
+  "slug": "occupational-health-and-safety-management",
+  "title": "Occupational Health & Safety Management",
+  "program": "FCP",
+  "category": "professional-development",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 3000,
+  "summary": "Identify what can injure somebody before it does, control it in the right order, and build a safety system that survives a busy week.",
+  "description": "Most workplaces do not have accidents because nobody cares. They have accidents because nobody looked, and because the people closest to the hazard had learned to work around it rather than report it.\n\nThis course is about the practical mechanics of safety in settings where a dedicated safety officer is a luxury. It covers hazard identification, risk assessment that leads to action rather than a document, the hierarchy of controls and why personal protective equipment is the last resort rather than the first, and the site organisation that prevents most incidents before any procedure is written.\n\nExamples are drawn from Liberian workplaces: construction and reconstruction sites, iron ore and gold mining, agricultural chemical handling, transport and road safety, and the small workshops where the same person operates the machine and repairs it.\n\nThe case study concerns a construction site in Sinkor with no safety officer, two injuries in the last month, and an owner who says the company has always worked this way. Students must decide what a safety consultant recommends first given that the budget, the schedule and the culture all constrain the answer.\n\nThe course closes on the parts that make safety last: incident reporting that does not punish the reporter, worker involvement through a functioning committee, legal duties, and measures that do not reward silence.",
+  "tags": ["health and safety", "hazard", "risk assessment", "incident reporting", "construction", "workplace"],
+  "outcomes": [
+    "Explain how harm occurs and why near misses matter",
+    "Identify hazards by task, location and activity",
+    "Assess risk in a way that changes what is done",
+    "Apply the hierarchy of controls in the correct order",
+    "Explain why protective equipment alone is not a control system",
+    "Investigate an incident without assigning blame first",
+    "Establish legal duties and record-keeping obligations",
+    "Measure safety without incentivising under-reporting"
+  ],
+  "caseStudy": "A construction site in Sinkor has no safety officer. Two workers were injured last month, and the owner says the company has always worked this way. Students must decide what a safety consultant should recommend first, what it would cost, and how to answer the owner's objection given the schedule and the budget.",
+  "modules": [
+    {
+      "title": "Hazards and harm",
+      "lessons": [
+        {
+          "title": "How harm actually happens",
+          "minutes": 16,
+          "teach": [
+            "Harm comes from exposure to a hazard: a height, a machine, a chemical, a load, a vehicle, or heat. Most incidents are the result of several small failures lining up rather than one dramatic mistake by one person.",
+            "The sequence is usually visible in advance. Somebody works without the guard, the guard was removed last month because it slowed the job, nobody replaced it, and the supervisor had stopped noticing.",
+            "Near misses are the cheapest information available. A load that slipped but landed safely is the same event as one that did not, minus the injury, and an organisation that records the first prevents the second.",
+            "Blame is the reason most information never arrives. Where the response to a report is discipline, the report stops, and the organisation continues with the same hazard and a cleaner incident log.",
+            "Chronic harm is under-reported everywhere. Dust, noise, repetitive lifting and chemical exposure produce injuries that appear years later and are rarely counted as workplace incidents at all.",
+            "The practical starting point is therefore a blunt question about each task: what would have to go wrong for somebody to be hurt here, and has it already nearly happened?"
+          ],
+          "example": "A worker falls from a scaffold and is unhurt. The report is logged as a near miss, the missing guard rail is found to have been removed three weeks earlier, and the whole site is checked the same day.",
+          "points": [
+            "Incidents are chains of small failures",
+            "Near misses are the cheapest information",
+            "Blame stops reporting and hides the hazard"
+          ],
+          "check": "Ask three workers what nearly went wrong for them last month, and write down what they say."
+        },
+        {
+          "title": "Finding hazards before they find you",
+          "minutes": 17,
+          "teach": [
+            "Hazard identification works best by walking the workplace with the people who work in it. A checklist finds what the author anticipated; a walk with a mason finds what the mason steps around every day.",
+            "Go by task rather than by area. A single workbench can present a cutting hazard, a lifting hazard, a dust hazard and an electrical hazard, and a walk organised by task will surface all four.",
+            "Ask what people do when the proper method is inconvenient. The workaround is the real procedure, and it usually identifies a hazard the design created, such as a guard that must be removed to reach the material.",
+            "Include the journeys as well as the work. Most fatal incidents in many settings involve vehicles, and the route to the site, the reversing area and the loading point deserve the same attention as the work itself.",
+            "Record what you find in plain language with a location and a photograph. A hazard register that says poor housekeeping is unusable; one that says stacked timber blocking the west fire exit, photo attached, is actionable.",
+            "Repeat the exercise at a fixed interval and after any change: a new task, a new machine, a new crew or a new season. Hazards change with the work, and a register compiled once describes a site that no longer exists."
+          ],
+          "example": "A site walk with the crew identifies that the only route to the upper floor passes under a hoist. Nobody had reported it because everybody had learned to walk quickly.",
+          "points": [
+            "Walk the workplace with the people in it",
+            "Organise by task, not by area",
+            "The workaround is the real procedure"
+          ],
+          "check": "Walk one work area with the person who works there and list three hazards they mention casually."
+        },
+        {
+          "title": "Risk assessment that leads to action",
+          "minutes": 17,
+          "teach": [
+            "A risk assessment is a decision about what to do first. Its output is a ranked list with actions, owners and dates, and an assessment that produces only a document has produced nothing.",
+            "Separate severity from likelihood and consider them independently. A fall from height is severe whatever the likelihood, and a minor cut is not, which is why multiplying the two into one score hides the worst cases.",
+            "Assess what is actually happening rather than what the procedure says. If the procedure requires two people to lift a load and the reality is one, the risk assessment for the real situation is the one that will prevent an injury.",
+            "Rank by what would kill somebody first, then what would cause a permanent injury, then what would cause lost time. This ordering is more useful than a numeric score because it produces an obvious sequence of work.",
+            "Assign each action to a named person with a date. An action belonging to everybody is an action belonging to nobody, and the ones that matter are usually cheap and quick: replace a guard, secure a ladder, mark a trench.",
+            "Review when something changes or an incident occurs. A risk assessment is a snapshot of a workplace that keeps moving, and an annual review during a period of rapid change is effectively no review."
+          ],
+          "example": "A risk assessment scores a scaffold fall and a hand cut both as medium. Reordered by severity, the scaffold edge becomes the first action and a guard rail is installed in two days.",
+          "points": [
+            "Output is ranked actions with names and dates",
+            "Judge severity and likelihood separately",
+            "Rank by what could kill first"
+          ],
+          "check": "Take one task you know and write its worst credible outcome, then its likelihood."
+        }
+      ]
+    },
+    {
+      "title": "Controls",
+      "lessons": [
+        {
+          "title": "The hierarchy of controls",
+          "minutes": 18,
+          "teach": [
+            "Controls are ranked by how reliably they remove the hazard: eliminate it, substitute something safer, engineer a barrier, change the way people work, and only then rely on protective equipment.",
+            "Elimination means the task is not done that way at all, such as assembling at ground level instead of at height. It is free of reliance on human behaviour, which is why it is the strongest control available.",
+            "Engineering controls change the physical situation: guards, barriers, ventilation, interlocks, edge protection and separation of vehicles from people. They keep working when the worker is tired, rushed or distracted.",
+            "Administrative controls include procedures, permits, training and rotation. They depend entirely on somebody remembering and choosing to comply, which is why they fail exactly when the day is busy.",
+            "Protective equipment is the last line, not the first. A helmet works only if it is worn, fits, is not damaged and is worn by everybody including the supervisor, and any single failure removes the protection entirely.",
+            "The practical test of any control is what happens on the worst day. If the control stops working when the schedule slips or the supervisor leaves the site, it was a preference rather than a control."
+          ],
+          "example": "A crew cuts stone at head height, filling the area with dust. Instead of issuing masks, the task is moved outside with a water spray, and the dust exposure falls without depending on anybody's behaviour.",
+          "points": [
+            "Engineered controls beat procedural ones",
+            "Protective equipment is the last line",
+            "Test the control on the worst day"
+          ],
+          "check": "Take your main hazard and name one control at each of the five levels."
+        },
+        {
+          "title": "Protective equipment and why it is last",
+          "minutes": 16,
+          "teach": [
+            "Protective equipment is the most visible safety measure and the weakest. It protects one person against one hazard, only while it is correctly worn, and it fails silently when it is not.",
+            "Fit and condition matter more than issue. A mask that does not seal, a harness stored in the sun, or boots two sizes too large provide the appearance of protection and none of the effect.",
+            "Distribution is not use. Handing out equipment during an induction, with no replacement system and no enforcement, produces a workforce that owns equipment it does not wear and supervisors who stop noticing.",
+            "Comfort determines compliance. In heat, a heavy garment will be removed when nobody is watching, and the correct response is to select equipment suited to the climate rather than to insist more loudly.",
+            "Visitors and supervisors must wear it too. The single most reliable predictor of whether equipment is worn is whether the most senior person on site is wearing it, and the opposite is equally true.",
+            "Use equipment as a complement rather than a substitute. Where the only control is a mask, the question is why the dust is being generated in the first place, and the answer is usually a change of method."
+          ],
+          "example": "A site issues dust masks at induction and never replaces them. Six months later most masks are discoloured or missing, and the workers say they cannot breathe through them in the heat.",
+          "points": [
+            "Issue is not protection",
+            "Comfort determines compliance",
+            "Senior behaviour sets what everyone wears"
+          ],
+          "check": "Check the condition of the protective equipment in your workplace and how it is replaced."
+        },
+        {
+          "title": "Site organisation: housekeeping, access and storage",
+          "minutes": 17,
+          "teach": [
+            "Most incidents on a site are made possible by disorder. Materials in walkways, unmarked trenches, trailing cables and stacked loads in the wrong place create the conditions that a moment of inattention turns into an injury.",
+            "Housekeeping is not tidiness. Clear walkways, designated storage, waste removed daily and materials kept away from edges are working controls, and they cost organisation rather than money.",
+            "Control access. A site with one entrance, a signing-in process and barriers around open excavations knows who is present and can account for them, which matters enormously in an emergency.",
+            "Separate people from vehicles and plant. Reversing vehicles are a leading cause of fatal incidents in construction, and a pedestrian route, a banksman and a one-way flow remove most of the exposure.",
+            "Store hazardous materials deliberately: locked, labelled, away from drains, with the safety information available and somebody named as responsible. Chemical incidents are rare and severe, and they are usually caused by storage rather than use.",
+            "Plan for the emergency before it happens. A means of raising the alarm, a route out, a meeting point and somebody trained in first aid are the minimum, and every one of them is useless if it is the first time anyone has used it."
+          ],
+          "example": "A site has materials stacked across the only walkway to the rear. Moving the stack and marking a route takes an afternoon and removes the condition that had caused two trips in a month.",
+          "points": [
+            "Disorder makes incidents possible",
+            "Control who is on site and know where they are",
+            "Separate people from vehicles and plant"
+          ],
+          "check": "Walk your workplace and note every obstruction in a route people actually use."
+        }
+      ]
+    },
+    {
+      "title": "People and reporting",
+      "lessons": [
+        {
+          "title": "Incident reporting and investigation",
+          "minutes": 18,
+          "teach": [
+            "An incident report exists to prevent the next one, not to allocate blame. Where the report is used as evidence against the person who filed it, the next incident is reported late, described vaguely, or not at all.",
+            "Record immediately and in plain words: what happened, who was involved, where, when, what was being done and what changed. Memory reorganises quickly, and a report written three days later is a reconstruction.",
+            "Investigate causes by asking why until you reach something the organisation can change. The worker was not wearing gloves is followed by why, and the answer may be that the gloves were not available for two weeks.",
+            "Distinguish the immediate cause from the underlying one. The immediate cause of a fall may be a broken ladder; the underlying cause is a procurement rule that does not allow a ladder to be replaced without three quotations.",
+            "Keep the record and look for patterns. Three similar incidents in six months is a systemic finding, and the pattern is invisible when each incident is treated as an isolated event with an individual explanation.",
+            "Feed the finding back to the workforce. An investigation whose conclusions are never shared teaches everybody that reporting produces paperwork, and the reporting stops."
+          ],
+          "example": "A worker cuts his hand. The investigation finds the guard was removed to increase output and that no replacement was requested. The fix is a guard interlock and a supervisor briefing, not a warning to the worker.",
+          "points": [
+            "Reports exist to prevent, not to punish",
+            "Ask why until you reach something changeable",
+            "Look for patterns across incidents"
+          ],
+          "check": "Read your last incident report and identify whether it names a cause you could fix."
+        },
+        {
+          "title": "Training, induction and supervision",
+          "minutes": 16,
+          "teach": [
+            "Induction is the point at which a new worker learns what is dangerous here. A general briefing covering the company's values wastes the one moment when the person is paying full attention to the specifics.",
+            "Cover the site, not the policy. Where the first aid kit is, which route to use, who to tell when something looks wrong, what the alarm sounds like and where to assemble are the contents of an effective induction.",
+            "Train by task, close to the work, and demonstrate rather than describe. A short session at the machine with the actual guard is worth more than a classroom module on machine safety.",
+            "Supervision is a control and should be resourced as one. An unsupervised apprentice, an unsupervised night shift or a subcontractor with no oversight is a hazard created by the staffing decision, not by the individual.",
+            "Refresh training when something changes: a new task, a new machine, an incident or a return after a long absence. Annual refreshers on unchanged tasks are less useful than triggered sessions on changed ones.",
+            "Check understanding rather than attendance. A signature on a training register proves that somebody sat in a room, and asking them to describe the hazard proves whether anything transferred."
+          ],
+          "example": "An induction is reduced from forty slides to a thirty-minute site walk with three questions at the end. New workers can describe the assembly point and the person to report to, which they previously could not.",
+          "points": [
+            "Induct to this site, not to the company generally",
+            "Train at the task with the real equipment",
+            "Check understanding, not signatures"
+          ],
+          "check": "Ask a recent recruit to describe the emergency procedure, and see what they actually know."
+        },
+        {
+          "title": "Case: two injuries and a company that has always worked this way",
+          "minutes": 22,
+          "teach": [
+            "A construction site in Sinkor has no safety officer. Two workers were injured last month, one falling from a loading platform and one cutting a hand. The owner says the company has always worked this way and the schedule cannot slip.",
+            "The schedule is a real constraint and pretending otherwise loses the argument before it starts. The recommendation has to be something that can be done this week, within the budget, without pausing the work.",
+            "Start with the two injuries that already happened rather than with a general assessment. The platform needs edge protection and the cutting task needs a guard or a change of method, and both are physical fixes costing materials rather than time.",
+            "Then the cheapest systemic measure: a daily ten-minute briefing and a single incident book, with an explicit commitment that reporting will not be punished. This produces information within a week and costs nothing.",
+            "Answer the owner in their own terms. The fall risked a fatality, which would have closed the site for weeks and ended the contract, so the controls protect the schedule rather than threaten it.",
+            "Be honest about what cannot be fixed by a consultant. Without somebody accountable for safety on site every day, the improvements will decay, and the recommendation should say so plainly and propose the smallest version of that role."
+          ],
+          "example": "A Sinkor site has no safety officer, two injuries last month, and an owner who says the company has always worked this way. The schedule cannot slip.",
+          "points": [
+            "Start from the injuries that already happened",
+            "Frame controls as protecting the schedule",
+            "Name the accountability gap a consultant cannot fill"
+          ],
+          "check": "For this case, list the first three recommendations in order with an approximate cost and time."
+        }
+      ]
+    },
+    {
+      "title": "Making it last",
+      "lessons": [
+        {
+          "title": "Legal duties and the record",
+          "minutes": 17,
+          "teach": [
+            "Employers carry a general duty to provide a safe workplace, and the specifics usually sit in labour law, sector regulations and the conditions attached to permits and contracts. Knowing the general duty is not sufficient.",
+            "The duty typically extends to subcontractors, visitors and anyone affected by the work, not only to employees on the payroll. A site with six subcontractors and no coordination is one workplace with one duty holder.",
+            "Records are the evidence that the duty was taken seriously: risk assessments, inductions, training, equipment inspections, incident reports and maintenance logs. A missing record is treated as a missing control, whatever actually happened.",
+            "Insurance and contracts often impose additional requirements. A main contractor's terms may specify a safety plan, a method statement and reporting obligations, and breaching them can cost the contract as well as injure somebody.",
+            "Reporting serious incidents to the relevant authority is usually mandatory within a timeframe. Missing the timeframe is a separate offence from the incident itself and is the kind of detail discovered after the event.",
+            "Keep the documents where they can be produced. A safety file that exists on a laptop belonging to somebody who has left is not a record, and producing it in an hour is what turns a compliant organisation into a demonstrably compliant one."
+          ],
+          "example": "A contractor's safety file contains risk assessments and inductions but no equipment inspection records. Following an incident, the missing log is treated as evidence that the scaffold was never inspected.",
+          "points": [
+            "The duty usually covers everyone affected by the work",
+            "A missing record is treated as a missing control",
+            "Know the reporting timeframe for serious incidents"
+          ],
+          "check": "List the five records you would need to produce if an inspector arrived today."
+        },
+        {
+          "title": "Committees and worker involvement",
+          "minutes": 16,
+          "teach": [
+            "The people who do the work know where it is dangerous, and a safety committee is the mechanism that converts that knowledge into a decision somebody acts on.",
+            "A committee that meets, reviews minutes and produces no change is worse than none, because it demonstrates that raising a concern leads nowhere and discourages the next person who notices something.",
+            "Composition matters. A committee of managers discussing safety in a room the workers are not in will identify the hazards that managers can see, which are usually the ones already recorded.",
+            "Give the committee something real to control: an inspection schedule, a small budget for immediate fixes, or authority to stop a specific task. Authority is what distinguishes it from a discussion group.",
+            "Make the escalation route explicit. A concern that cannot be resolved at the committee should have a named person and a timeframe for the next level, and the route should be known to the workers rather than only to the members.",
+            "Report back to the workforce. A noticeboard showing what was raised, what was done and what is outstanding is the simplest evidence that the mechanism functions, and it costs a sheet of paper a month."
+          ],
+          "example": "A safety committee formed of two managers meets monthly for a year. The workforce's actual complaint, that the only ladder is broken, appears in the log for the first time only after a worker joins the committee.",
+          "points": [
+            "Workers know where it is dangerous",
+            "A powerless committee discourages reporting",
+            "Publish what was raised and what was done"
+          ],
+          "check": "Find out whether your workplace has a safety committee, who sits on it and what it has changed."
+        },
+        {
+          "title": "Measuring safety without rewarding silence",
+          "minutes": 17,
+          "teach": [
+            "The most common safety measure, days without a lost-time injury, improves when injuries are not reported. It is a measure of the record, not of the workplace, and it is gamed wherever it is used as a performance target.",
+            "Prefer leading measures: the proportion of hazards closed within their target date, inductions completed before the first shift, inspections performed, and near misses reported and acted on.",
+            "Count reporting as a positive. An increase in near-miss reports is usually the first sign that a safety system is starting to work, and an organisation that treats it as a deterioration will get the silence it asked for.",
+            "Measure closure rather than detection. The number of hazards identified is a measure of observation; the number fixed within a stated period is a measure of management, and it is the second that affects whether people get hurt.",
+            "Look at who is reporting. If nobody from a particular crew, shift or subcontractor ever reports anything, that group is either perfectly safe or not being heard, and the second is far more likely.",
+            "Keep the measures few and visible. Three numbers reviewed monthly and posted where people work do more than a dashboard of twenty nobody reads, and the visible part is what makes them credible."
+          ],
+          "example": "A site reports zero lost-time injuries for eleven months. Near-miss reports also fall to zero in the same period, and a new supervisor discovers the incident book has not been opened since March.",
+          "points": [
+            "Zero injuries can mean zero reporting",
+            "Measure closure, not just detection",
+            "Rising near-miss reports can be a good sign"
+          ],
+          "check": "Name one safety measure your organisation uses and say how it could be improved by not reporting."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Why are near misses worth recording?",
+      "explanation": "A near miss is the same event as an injury without the harm. It carries the information about what failed while it is still cheap to fix, and an organisation that records them prevents the incident that would otherwise follow.",
+      "options": [
+        { "text": "They carry the same information as an injury without the harm, so the cause can be fixed cheaply", "correct": true },
+        { "text": "They are required by insurers and reduce the premium", "correct": false },
+        { "text": "They demonstrate that the workforce is careless and needs closer supervision", "correct": false },
+        { "text": "They provide evidence for disciplining the worker involved", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A crew is exposed to heavy dust. Which control should be considered first?",
+      "explanation": "The hierarchy starts with removing or engineering out the hazard. Changing the method or using water suppression removes the exposure itself, while a mask depends on the worker wearing it correctly for the whole shift.",
+      "options": [
+        { "text": "Change the method or suppress the dust so the exposure does not occur", "correct": true },
+        { "text": "Issue dust masks and instruct workers to wear them", "correct": false },
+        { "text": "Rotate workers so nobody is exposed for a full shift", "correct": false },
+        { "text": "Add a warning sign at the entrance to the area", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the Sinkor case, how should the consultant answer the owner's claim that the company has always worked this way and the schedule cannot slip?",
+      "explanation": "The recommendation has to be deliverable within the constraint. Framing the controls as protecting the schedule, because a fatality would close the site, and starting with the two hazards that already caused injuries, makes the case in the owner's own terms.",
+      "options": [
+        { "text": "Recommend the fixes for the two actual injuries this week and frame them as protecting the schedule from a closure", "correct": true },
+        { "text": "Insist on a full safety management system before any further work proceeds", "correct": false },
+        { "text": "Report the company to the authorities and let them enforce the standard", "correct": false },
+        { "text": "Accept the owner's position and return when the schedule allows a proper assessment", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An incident investigation finds that a guard was removed because it slowed production. What is the correct conclusion?",
+      "explanation": "The individual did not create the condition; the production pressure and the absence of any check did. The fix is an engineered interlock plus a supervisory practice, not a warning to the worker who removed the guard.",
+      "options": [
+        { "text": "The design and supervision allowed the guard to be removed, so the fix is an interlock and a supervisory check", "correct": true },
+        { "text": "The worker who removed the guard should be disciplined to deter others", "correct": false },
+        { "text": "The guard should be reattached and the workforce reminded of the procedure", "correct": false },
+        { "text": "Production targets should be reduced permanently across the site", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A site reports zero lost-time injuries for eleven months. What should you check before concluding it is safe?",
+      "explanation": "Zero injuries is also what an unreported record looks like. Checking whether near misses are being reported, whether the incident book is used and whether any crew ever reports anything distinguishes a safe site from a silent one.",
+      "options": [
+        { "text": "Whether near misses and minor injuries are being reported at all", "correct": true },
+        { "text": "Whether the insurance premium has fallen in line with the record", "correct": false },
+        { "text": "Whether the workforce has grown during the period", "correct": false },
+        { "text": "Whether the site has passed its last external audit", "correct": false }
+      ]
+    }
+  ]
+}

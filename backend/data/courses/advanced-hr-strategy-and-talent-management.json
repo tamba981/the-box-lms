@@ -1,0 +1,326 @@
+{
+  "slug": "advanced-hr-strategy-and-talent-management",
+  "title": "Advanced HR Strategy & Talent Management",
+  "program": "CPP",
+  "category": "business-management",
+  "level": "intermediate",
+  "credential": "certificate",
+  "priceCents": 3000,
+  "certificateFeeCents": 0,
+  "summary": "Plan capability rather than headcount, understand why your best people actually leave, and earn a seat where the decisions are made.",
+  "description": "Most organisations manage people by filling vacancies. Strategic human resource management starts one step earlier: deciding what capability the organisation will need in three years, whether to build it, buy it or borrow it, and what it will cost to keep it once it exists.\n\nThis course covers workforce planning from capability rather than headcount, the honest analysis of why people leave as opposed to what the exit interview says, pay structures and the internal compression that drives out senior staff, and the non-financial retention factors that managers can actually control.\n\nIt treats succession as a system rather than a list of names, development as something that changes capability rather than attendance at courses, and restructuring as a process that can be done with dignity or without it.\n\nLiberian conditions are central: the brain drain of qualified professionals, thin specialist markets where a single hire can take a year, family business dynamics where a relative occupies the role a professional was hired for, and organisations that compete for the same small pool of accountants and engineers.\n\nThe case study concerns a growing company that has lost three of its top five performers to competitors in six months. The HR director's answer is to pay more. Students must identify the strategic question that the salary answer is avoiding.",
+  "tags": ["HR strategy", "talent", "retention", "succession", "workforce planning", "compensation"],
+  "outcomes": [
+    "Plan workforce capability rather than headcount",
+    "Decide between building, buying and borrowing skills",
+    "Diagnose why high performers leave using evidence",
+    "Identify pay compression and its effect on senior retention",
+    "Design non-financial retention that managers control",
+    "Build succession as a system rather than a list",
+    "Use workforce metrics that executives will act on",
+    "Conduct restructuring that preserves dignity and capability"
+  ],
+  "caseStudy": "A growing company has lost three of its top five performers to competitors in six months. The HR director says the answer is to pay more. Students must identify the actual strategic question, what evidence would settle it, and what should be done in the next quarter.",
+  "modules": [
+    {
+      "title": "Workforce planning",
+      "lessons": [
+        {
+          "title": "From headcount to capability",
+          "minutes": 19,
+          "teach": [
+            "A headcount plan asks how many people are needed. A capability plan asks what the organisation must be able to do in three years, which of those things it can already do, and what would have to be true for the gap to close.",
+            "The distinction changes the hiring conversation. Filling a vacancy reproduces yesterday's structure, while asking what the role is for sometimes reveals that the vacancy should not exist and a different capability is needed.",
+            "Build the plan from the strategy backwards. If the organisation intends to enter a regulated market, the requirement is someone who has operated under regulation, and that person may not be a version of anyone currently employed.",
+            "Distinguish capability from capacity. Two accountants may provide capacity for the current workload and no capability for a new reporting standard, and increasing the number does not close that gap.",
+            "Assess supply realistically. In a thin market the constraint is not the salary but the number of people who exist with the skill, and a plan that assumes three experienced engineers can be recruited in Monrovia is a wish rather than a plan.",
+            "Review the plan annually and after any major strategic change. Workforce plans go stale faster than most documents because both the strategy and the labour market move, and a plan from two years ago describes a market that has gone."
+          ],
+          "example": "A company plans to replace a departing logistics manager with a similar hire, then maps the next three years and finds the real requirement is customs expertise for cross-border expansion, which the vacancy does not provide.",
+          "points": [
+            "Capability, not headcount",
+            "Build the plan backwards from strategy",
+            "Capacity is not capability"
+          ],
+          "check": "Write the three capabilities your organisation will need in three years that it does not have today."
+        },
+        {
+          "title": "The supply of skills in a thin market",
+          "minutes": 19,
+          "teach": [
+            "A thin market behaves differently from a deep one. In a deep market you choose between candidates; in a thin market you compete for the few people who exist, and the competition includes employers in other countries.",
+            "This changes the economics of retention. Where replacement takes nine months and costs a search, an above-market salary for a scarce role is cheaper than the vacancy, and organisations that apply uniform pay policy to scarce roles lose them repeatedly.",
+            "Diaspora recruitment is a real option and a specific one. It requires patience with notice periods, help with relocation and a realistic conversation about conditions, and it usually works best for roles where the experience matters more than the local network.",
+            "Training local people into scarce roles is slower and more reliable. It builds loyalty that a lateral hire does not have, and the retention risk is manageable if the development is genuine rather than a certificate and a promise.",
+            "Institutions matter as much as individuals. A role that depends entirely on one external auditor, one systems administrator or one donor relationship is a capability held outside the organisation, and it should be recorded as a risk.",
+            "Plan for the loss before it happens. Every scarce role should have a documented process, a named deputy and a handover file, because in a thin market the resignation arrives with a start date already agreed elsewhere."
+          ],
+          "example": "A bank's only qualified risk officer resigns with four weeks' notice. The role takes seven months to fill, and during that period the bank cannot pursue a licence application that depended on the function.",
+          "points": [
+            "Thin markets change the economics of pay",
+            "Build scarce skills rather than always buying them",
+            "Every scarce role needs a deputy and a file"
+          ],
+          "check": "Name the role in your organisation whose absence would take longest to replace."
+        },
+        {
+          "title": "Build, buy or borrow",
+          "minutes": 18,
+          "teach": [
+            "There are three ways to close a capability gap, and each has a different cost profile. Building takes time and is uncertain; buying is fast and expensive; borrowing is flexible and leaves the capability outside the organisation.",
+            "Building suits capabilities the organisation will need permanently and where the local market can supply candidates to develop. It is slow, and its cost is concentrated in the people who might then leave for a competitor who did not pay for the training.",
+            "Buying suits capabilities needed now for a specific purpose, such as a regulated activity with a deadline. It is expensive in salary and search cost, and the person arrives without the internal relationships that make them effective.",
+            "Borrowing covers peaks, specialist tasks and trials. A consultant can design a system in three months that would take a permanent employee a year, and the organisation is then dependent on the consultant to maintain it, which is a delivery risk.",
+            "The sensible portfolio mixes all three deliberately rather than defaulting to buying. Organisations that only buy develop no internal pipeline and remain permanently exposed to a market they cannot control.",
+            "Record the decision and its rationale. When the borrowed specialist leaves and the system fails, the file showing that the risk was identified and accepted, or not, determines whether the outcome is a lesson or a governance failure."
+          ],
+          "example": "A company needs audit capability for a donor requirement within four months. It borrows for the first audit, recruits an assistant accountant in parallel, and moves the function in-house over eighteen months.",
+          "points": [
+            "Building, buying and borrowing have different risks",
+            "Only buying leaves no internal pipeline",
+            "Record which risk you accepted and why"
+          ],
+          "check": "For one capability gap, write which of the three routes you would use and what it costs."
+        }
+      ]
+    },
+    {
+      "title": "Retention and reward",
+      "lessons": [
+        {
+          "title": "Why people actually leave",
+          "minutes": 20,
+          "teach": [
+            "Exit interviews report reasons that are socially acceptable. People rarely say they left because their manager was dismissive of their judgement, so the recorded reason is a better salary and the analysis goes in the wrong direction.",
+            "Ask the people who stayed. A short conversation with strong performers about what would make them consider leaving reveals more than any exit interview, and it can be acted on while there is still time.",
+            "The recurring drivers are known: lack of progress, a poor relationship with a direct manager, unfair treatment relative to a colleague, and work that no longer feels worth doing. Pay matters most at the margin and least as the first cause.",
+            "Dissatisfaction is usually local. Organisations lose people from specific teams and specific managers rather than evenly, and a breakdown of turnover by manager is more useful than any company-wide figure.",
+            "The first resignation is a signal, and the third is a pattern. Organisations that treat each departure as individual lose the opportunity to notice that three capable people left the same department within a year.",
+            "Distinguish regrettable from non-regrettable turnover. Losing a poor performer is a success, and treating all turnover as a failure produces retention programmes aimed at the people the organisation would be better without."
+          ],
+          "example": "Three of five strong performers leave a company and cite salary. Conversations with the two who stayed reveal that all five had been passed over for a title change they had been promised, and the salary was the reason they gave at the door.",
+          "points": [
+            "Exit interviews report acceptable reasons",
+            "Turnover is local: look at manager and team",
+            "Separate regrettable from non-regrettable loss"
+          ],
+          "check": "Break down last year's departures by team and by manager, and see what the pattern shows."
+        },
+        {
+          "title": "Pay structures, compression and equity",
+          "minutes": 20,
+          "teach": [
+            "Pay compression is the situation where a new recruit is paid close to or more than an experienced person doing the same job. It arises when market rates rise faster than internal adjustments, and it drives out exactly the people the organisation can least afford to lose.",
+            "The pattern is predictable. A scarce role is filled at market rate, the existing holder discovers it within a month, and the resulting grievance is about fairness rather than money, which is far harder to resolve later.",
+            "Internal equity matters more than absolute level for most staff. People compare with colleagues rather than with the labour market, and an unexplained difference inside the same grade does more damage than a below-market salary applied consistently.",
+            "Have a structure with grades and ranges rather than individual negotiations. A range allows discretion within a defensible boundary, while pure negotiation produces a set of salaries that cannot be explained and cannot be defended when they are questioned.",
+            "Confront the relative who is paid above the range. In family firms this is the single most corrosive pay issue, and it is usually known to every employee while being unmentioned in any meeting.",
+            "Be honest about what you cannot match. An organisation that cannot pay international rates should say so plainly and compete on development, responsibility and stability, because a promise it cannot keep costs more credibility than the truth would."
+          ],
+          "example": "A company recruits a new accountant at a market rate 30 percent above the two existing accountants. Both leave within eight months, and the replacement cost exceeds the salary difference that caused it.",
+          "points": [
+            "Compression drives out experienced staff",
+            "Internal equity matters more than absolute level",
+            "Use grades and ranges, not individual deals"
+          ],
+          "check": "Compare the salary of the newest recruit in one role with the longest-serving holder of the same role."
+        },
+        {
+          "title": "Non-financial retention that managers control",
+          "minutes": 19,
+          "teach": [
+            "The retention levers a manager actually controls are unglamorous and effective: whether the work is clear, whether progress is visible, whether the person is consulted on decisions that affect them, and whether their manager responds when they raise a problem.",
+            "Progress is the strongest of these and the cheapest. People stay where they can see themselves becoming more capable, and a role with no visible next step is a role with a leaving date, whatever the salary.",
+            "Recognition must be specific and timely. A vague thank you at the end of the year does less than a sentence within a week naming what the person did and why it mattered, and the second costs nothing.",
+            "Flexibility is worth money and is often cheaper than money. Where the work allows it, arrangements around study, care responsibilities or travel retain people who would otherwise leave for a job with a shorter commute.",
+            "Fairness in small things signals fairness in large ones. A manager who applies the rules to some staff and not others will lose the staff to whom the rules were applied, and the reason recorded will be something else entirely.",
+            "Measure what you can. A quarterly conversation with each strong performer about what would make them consider leaving is a leading indicator, and it is the only one that arrives before the resignation letter."
+          ],
+          "example": "A company introduces a quarterly career conversation and a specific recognition note for each project completion. Two of the three staff who had been considering leaving stay, and no salary increase is given.",
+          "points": [
+            "Progress is the cheapest retention lever",
+            "Specific, timely recognition beats annual gestures",
+            "Ask strong performers what would make them leave"
+          ],
+          "check": "Ask one strong performer what would make them consider leaving, and record the answer."
+        }
+      ]
+    },
+    {
+      "title": "Succession and development",
+      "lessons": [
+        {
+          "title": "Succession as a system, not a list",
+          "minutes": 19,
+          "teach": [
+            "A succession plan that is a list of names against roles is a document that will be wrong. A succession system identifies the critical roles, the capability each requires and the people who could hold them with a defined period of development.",
+            "Start with criticality rather than seniority. The role that would stop the organisation is not always the most senior, and a finance officer who alone understands the donor reporting is frequently more critical than a director.",
+            "Readiness should be stated in time rather than in adjectives. Ready now, ready in one year and ready in three years are answers a board can act on, while high potential is an opinion that cannot be tested.",
+            "Every ready-now candidate needs exposure before the vacancy. A deputy who has never chaired the meeting, signed the return or faced the auditor is not ready, and readiness is built from specific experiences rather than from time served.",
+            "Vacancies are predictable in aggregate even when individual departures are not. An organisation can plan for the retirement it knows about and hold a general bench for the ones it does not, and the second is what distinguishes a system from a list.",
+            "Review the plan annually with the board. Succession is a governance responsibility, and a board that discovers it has no successor at the moment of a resignation has delegated its most important decision to circumstance."
+          ],
+          "example": "A company's succession list names the finance manager as ready now for the director role. In the year the director leaves, the finance manager has never presented to the board and declines the position.",
+          "points": [
+            "Criticality, not seniority",
+            "State readiness in months, not adjectives",
+            "Give candidates the experiences before the vacancy"
+          ],
+          "check": "Name your three most critical roles and whether there is a ready-now successor for each."
+        },
+        {
+          "title": "Development that changes capability",
+          "minutes": 19,
+          "teach": [
+            "Most development spending produces attendance and little else. A course is an input, and unless the person returns to work that requires the new capability, the learning decays within months and the budget has bought a certificate.",
+            "Design development around a task the organisation needs doing. A junior manager who is given responsibility for a real budget with support and review develops more in six months than in three courses, and the organisation gains the output.",
+            "Use the seventy-twenty-ten proportion as a discipline rather than a doctrine: most development comes from doing the work, some from observing others, and a small amount from formal instruction, and budgets are usually allocated in the opposite order.",
+            "Assign a mentor who is not the line manager. The line manager assesses performance and has an interest in the work being delivered, while a mentor can discuss the person's development without that conflict.",
+            "Make the learning visible in the work. Documenting what was tried, what happened and what would be done differently converts experience into transferable capability, and it takes twenty minutes a month.",
+            "Measure development by what people can now do. A count of training days is an activity measure, while a reduction in escalations, an increased scope held by the individual or a successful handover is evidence that capability changed."
+          ],
+          "example": "A finance assistant attends three accounting courses and remains unable to prepare a bank reconciliation unsupervised. Given ownership of the reconciliation with monthly review, she is independent within four months.",
+          "points": [
+            "Give people real work with support and review",
+            "Fund experience, not only instruction",
+            "Measure what people can now do"
+          ],
+          "check": "Name one person whose development would change if they owned a real piece of work next quarter."
+        },
+        {
+          "title": "Case: three of five performers gone, and an answer about pay",
+          "minutes": 23,
+          "teach": [
+            "A growing company has lost three of its top five performers to competitors in six months. The HR director's recommendation is a market adjustment across the board, and the chief executive is inclined to approve it because it is the only proposal on the table.",
+            "The salary answer may be correct in part and it is not yet an analysis. Three departures out of five in six months is a pattern, and a pattern has a cause that applies to the group rather than to each individual.",
+            "Establish where they went and what changed. If all three went to the same competitor, the question is what that competitor offers. If they went to three different places, the question is what they had in common before they left.",
+            "Ask the two who stayed. They hold the same information as the three who left, they are still available, and their answer is the only one that can be acted on before the next resignation arrives.",
+            "Check the structural explanation. Promotions that were promised and not delivered, a relative appointed above them, a title that never changed, or a decision-making structure in which capable people had no authority are patterns that a salary increase does not touch.",
+            "The quarter's work is therefore diagnostic before it is financial: three conversations, the destination analysis, and the two structural questions. If pay compression is confirmed as one cause, address that specifically for the affected roles rather than across the board."
+          ],
+          "example": "A company loses three of its top five performers in six months and the HR director proposes a market pay adjustment. Two of the three went to the same competitor; all three had been promised a title change that never happened.",
+          "points": [
+            "A pattern has a cause that applies to the group",
+            "Ask the people who stayed",
+            "Look for the structural explanation before the financial one"
+          ],
+          "check": "For this case, list the three pieces of evidence you would gather before approving any salary increase."
+        }
+      ]
+    },
+    {
+      "title": "HR as a business partner",
+      "lessons": [
+        {
+          "title": "Earning the seat at the table",
+          "minutes": 19,
+          "teach": [
+            "HR is invited into strategic decisions when it brings information nobody else has, and it is excluded when it brings policy, process and compliance. The seat is earned by usefulness rather than by title.",
+            "The information that earns it is about capability and risk: which roles cannot be replaced, what the loss of a specific team would do to delivery, what the next strategy will require that the organisation does not have.",
+            "Speak in the language of the decision being taken. A conversation about a new contract becomes an HR contribution when it addresses who will deliver it, whether the skills exist and what it would cost to acquire them.",
+            "Bring a recommendation rather than a constraint. Saying that the timescale is unrealistic for recruitment is a constraint; proposing a contracting route for the first six months and a recruitment plan for the rest is a contribution.",
+            "Accept that some HR work is administrative and must be done well anyway. Payroll errors and late contracts destroy credibility faster than any strategic insight builds it, and the administrative base is the price of being heard.",
+            "Build relationships with operational managers before you need them. An HR function that only appears when there is a problem is experienced as a cost, and one that helped design the delivery plan is experienced as a partner."
+          ],
+          "example": "During a bid for a large contract, HR maps the delivery roles, identifies two that cannot be filled locally in the timescale, and proposes a subcontract for those components. The bid proceeds with a credible staffing plan.",
+          "points": [
+            "Usefulness earns the seat, not the title",
+            "Bring a recommendation, not a constraint",
+            "Administrative accuracy is the price of being heard"
+          ],
+          "check": "Find one upcoming business decision and write the workforce question it raises."
+        },
+        {
+          "title": "Metrics an executive will act on",
+          "minutes": 18,
+          "teach": [
+            "Most HR reporting measures activity: days of training delivered, appraisals completed, recruitment turnaround. Executives cannot act on these because they do not connect to anything the organisation is trying to achieve.",
+            "Report the metrics that describe risk and capability: the number of critical roles without a ready successor, the proportion of scarce roles filled internally, voluntary turnover among high performers, and vacancies open beyond a stated period.",
+            "Segment everything that matters. Company-wide turnover conceals the fact that one team is losing everyone, and an average hides the distribution that determines what to do.",
+            "Tie at least one metric to money. The cost of a vacancy in a revenue-generating role, or the cost of a failed senior recruitment, gives the executive a reason to act that a percentage does not.",
+            "Keep the set small and stable. Five measures reported for two years reveal trends, while twenty reported once per year reveal nothing and are forgotten between cycles.",
+            "Explain the movement rather than only reporting it. A number with a sentence on why it changed and what is proposed is a management report; a number alone is data, and data does not reach the agenda."
+          ],
+          "example": "An HR report of nine activity measures is replaced by five: critical roles without successors, internal fill rate for scarce roles, high-performer turnover, vacancies beyond 90 days, and cost of senior recruitment failure.",
+          "points": [
+            "Report risk and capability, not activity",
+            "Segment averages",
+            "Explain the movement and propose an action"
+          ],
+          "check": "Take your current HR report and mark which measures an executive could act on."
+        },
+        {
+          "title": "Restructuring and difficult exits",
+          "minutes": 19,
+          "teach": [
+            "Restructuring is sometimes necessary and it is always experienced by the people affected as the end of something. How it is conducted determines whether the organisation retains the goodwill of those who leave and the confidence of those who stay.",
+            "Decide the structure before deciding the people. Processes that begin by identifying individuals to remove, and then design a structure that excludes them, are transparent to everyone and are remembered for years.",
+            "Consult where you are required to and be honest where you are not. Legal obligations vary, and the minimum standard is that people hear about their own future from their manager in a private conversation rather than from a rumour.",
+            "Support the transition concretely: notice, pay in lieu, references, and practical help with the next step. The cost is small relative to the disruption of a disputed exit, and the people who leave talk to the people who stay.",
+            "Treat the survivors deliberately. The people who remain carry the work of those who left, watch how the process was conducted and decide whether to trust the organisation, and a restructuring that ignores them produces a second wave of resignations.",
+            "Separate the process from the person's history. Someone who is leaving because a role no longer exists should be told that plainly, and a conversation that implies performance failure to soften a structural decision is both unfair and legally risky."
+          ],
+          "example": "A company restructures without telling the remaining staff why. Within four months two of the people who were retained resign, citing the way the process was handled rather than the outcome.",
+          "points": [
+            "Design the structure before selecting the people",
+            "People hear their own news privately, from their manager",
+            "Manage the survivors as carefully as the leavers"
+          ],
+          "check": "Write the sentence you would use to tell a good performer that their role no longer exists."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "What is the difference between a capability plan and a headcount plan?",
+      "explanation": "Headcount asks how many people are needed; capability asks what the organisation must be able to do and what gap exists. Filling a vacancy reproduces yesterday's structure, while a capability view sometimes shows the vacancy should not exist.",
+      "options": [
+        { "text": "Capability starts from what the organisation must be able to do, which may show the vacancy should not be filled", "correct": true },
+        { "text": "Headcount is for large organisations and capability is for small ones", "correct": false },
+        { "text": "Capability planning is a longer version of the same forecast", "correct": false },
+        { "text": "Headcount is the financial view and capability is the training view", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case study, what should be established before approving a market pay adjustment?",
+      "explanation": "Three of five leaving is a pattern, and patterns have structural causes. Where the departures went, and what the two who stayed say, distinguishes a pay problem from a promise, structure or authority problem that money would not solve.",
+      "options": [
+        { "text": "Where the three went, what the two who stayed say, and whether a structural change explains all three", "correct": true },
+        { "text": "The exact salary each leaver was offered by the competitor", "correct": false },
+        { "text": "Whether the company can afford the adjustment in the current year", "correct": false },
+        { "text": "The average salary for those roles across the sector nationally", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why is pay compression damaging beyond its immediate cost?",
+      "explanation": "A new recruit paid close to or above an experienced holder creates a grievance about fairness rather than money, and it is the experienced people, whose replacement is hardest, who leave as a result.",
+      "options": [
+        { "text": "It makes the grievance about fairness rather than money, which is harder to resolve later", "correct": true },
+        { "text": "It increases the total payroll beyond what the budget anticipated", "correct": false },
+        { "text": "It reduces the organisation's ability to recruit in future", "correct": false },
+        { "text": "It breaches most jurisdictions' equal pay legislation", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which succession statement is a board able to act on?",
+      "explanation": "Readiness stated in time can be planned against: the board knows whether to prepare an interim arrangement or wait. Adjectives such as high potential cannot be tested and produce a list that fails at the moment it is needed.",
+      "options": [
+        { "text": "Ready in twelve months, with the two experiences still required", "correct": true },
+        { "text": "High potential and highly regarded across the organisation", "correct": false },
+        { "text": "A strong performer who is well liked by the leadership team", "correct": false },
+        { "text": "Has served the organisation for eight years with consistent results", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which HR metric would an executive most likely act on?",
+      "explanation": "Executives act on risk and capability. Critical roles without a ready successor, high-performer turnover and vacancies open beyond ninety days describe exposure, while training days delivered describes activity.",
+      "options": [
+        { "text": "Critical roles with no ready successor, and high-performer turnover", "correct": true },
+        { "text": "Training days delivered per employee this year", "correct": false },
+        { "text": "Percentage of appraisals completed on time", "correct": false },
+        { "text": "Average number of applications received per vacancy", "correct": false }
+      ]
+    }
+  ]
+}

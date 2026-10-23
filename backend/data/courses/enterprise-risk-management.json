@@ -1,0 +1,326 @@
+{
+  "slug": "enterprise-risk-management",
+  "title": "Enterprise Risk Management",
+  "program": "CPP",
+  "category": "finance-accounting",
+  "level": "intermediate",
+  "credential": "certificate",
+  "priceCents": 3000,
+  "certificateFeeCents": 0,
+  "summary": "Build a risk framework that changes decisions: usable registers, real appetite limits, honest scoring, board reporting and the three lines of defence.",
+  "description": "Enterprise risk management fails in a specific and predictable way. The register is complete, the workshops are delivered, every status is green, and the organisation is still surprised. This course is about closing that gap: making risk work constrain real decisions rather than document them afterwards.\n\nYou will work through the frameworks that dominate practice, COSO and ISO 31000, in plain terms and without the jargon, then move to the parts that are usually skipped: writing appetite limits that stop a transaction, structuring a risk statement as cause, event and consequence, and understanding why multiplying likelihood by impact produces false precision.\n\nThe course covers financial risk in a thin-currency economy with limited hedging, operational and people risk, the three lines of defence and what happens when they collapse into one desk, and board reporting that talks in money and licence rather than in residual scores.\n\nIt is written for managers, finance staff and board members in Liberian institutions operating with currency volatility, concentrated counterparties, institutional transition and sanctions exposure. The assessment asks for judgement under ambiguity rather than recall of definitions.",
+  "tags": ["risk management", "governance", "internal control", "risk appetite", "board reporting", "compliance"],
+  "outcomes": [
+    "Distinguish risk management from compliance, insurance and audit",
+    "Write risk statements as cause, event and consequence so they can be treated",
+    "Assign ownership across the three lines of defence and detect collapse",
+    "Choose between COSO and ISO 31000 based on what must be demonstrated",
+    "Draft appetite limits with a measure, a threshold and an escalation route",
+    "Explain why likelihood-times-impact scoring misleads and use it properly",
+    "Quantify currency, liquidity and concentration exposure with numbers",
+    "Report risk to a board in terms of consequence and movement"
+  ],
+  "caseStudy": "A bank's board ERM report shows every risk within appetite and every indicator green, presented on the Monday. On the Wednesday a peer bank's accounting scandal is reported, sector confidence falls, and the bank's share price drops twenty percent. The risk officer confirms there was no exposure to the peer bank. The chairman asks why the share price fell, and the report contains nothing that could answer. Students must identify what the register omitted and how it should have been reported.",
+  "modules": [
+    {
+      "title": "Risk and the organisation",
+      "lessons": [
+        {
+          "title": "What risk management is, and what it is not",
+          "minutes": 18,
+          "teach": [
+            "Risk management is the discipline of deciding what could stop the organisation achieving its objectives, and what it will do about it in advance rather than during. It looks forward, which is why it feels optional in a week full of current problems.",
+            "It is not compliance, though the two are often confused. Compliance asks whether you followed the rule. Risk management asks whether the rule addresses the thing that could actually hurt you, and sometimes the honest answer is that it does not.",
+            "It is not insurance either. Insurance transfers a defined loss after it happens. Risk management includes that decision among many others, but reducing likelihood and impact comes first, because a transferred loss still costs you the disruption.",
+            "And it is not a list of everything that could go wrong. A register of two hundred items is a catalogue of anxieties rather than a management tool, because nobody in the organisation can hold that many in mind or fund the responses.",
+            "What it is, more precisely, is a small number of decisions taken deliberately about the ways the organisation could fail to meet its objectives, recorded where they can be revisited when circumstances change and reviewed while there is still time to act.",
+            "The test of a risk function is whether a significant decision this year was different because of a risk assessment. If the answer is no, then the function exists, the reports are produced, and the organisation is unprotected."
+          ],
+          "example": "A commercial bank's risk committee reviews forty items each quarter. Asked which three could end the bank, the committee names them in under a minute, and they are not the three highest-scoring items on the register.",
+          "points": [
+            "Risk management looks forward, not backwards",
+            "It is neither compliance nor insurance",
+            "A usable register is short"
+          ],
+          "check": "Name the three risks that could end your organisation, and say whether each sits at the top of your register."
+        },
+        {
+          "title": "The register is the record, not the programme",
+          "minutes": 19,
+          "teach": [
+            "A risk register stores decisions: what the risk is, who owns it, what is being done, and how you would know if it were happening. It has no value in itself, and a well-formatted register with no decisions inside is an expensive filing habit.",
+            "The commonest failure is that risks are entered by a risk officer and owned by nobody. If the named owner cannot describe the treatment without opening the file, the register is fiction and the treatment will not be executed.",
+            "A useful risk statement has a cause, an event and a consequence, in that order. Currency depreciation causes imported input prices to rise, which reduces gross margin below the level needed to service existing debt.",
+            "That structure matters because each part suggests a different response. The cause can be mitigated by sourcing locally, the event transferred with a forward contract, the consequence absorbed with a larger facility. A statement missing the structure cannot be treated.",
+            "Keep the register at the level where decisions are made. A branch register with forty local items and a group register with the same forty items is one register copied rather than a governance structure, and it dilutes attention at both levels.",
+            "Review the register on a schedule that matches the speed of the risks it holds. Quarterly suits strategic risk. Nothing on it should be reviewed so rarely that the first review after a failure is the one that discovers it."
+          ],
+          "example": "A risk statement reading currency risk is high cannot be treated. Rewritten as depreciation raising imported input costs, which compresses margin below the debt covenant, it suggests three distinct responses with three distinct owners.",
+          "points": [
+            "Cause, event, consequence: write it in that order",
+            "An owner who has not read the file owns nothing",
+            "Register at the level where decisions are made"
+          ],
+          "check": "Rewrite one item from your register as cause, event and consequence, and name one response for each part."
+        },
+        {
+          "title": "Three lines: who owns which risk",
+          "minutes": 20,
+          "teach": [
+            "The three lines model separates the people who take risk from the people who oversee it. The first line is management, running the business and owning the risks it creates, which is where risk actually lives and is genuinely managed.",
+            "The second line sets the framework: policy, limits, appetite, reporting and the aggregation of risk across the organisation. It advises and challenges, and it does not take the commercial decisions that it monitors.",
+            "The third line is internal audit, independent of both, reporting to the board and confirming whether the first two are working. Independence is the whole of its value, so it should never be handed operational risk duties.",
+            "The failure mode is a second line that has quietly absorbed the first line's work. When the risk team writes the assessments business units are supposed to own, ownership moves into the risk team and the business units stop thinking about risk.",
+            "A second failure is audit performing consulting. The moment internal audit helps design a control, it can no longer give an independent opinion on that control, and the board loses the only assurance it had.",
+            "In a small institution the three lines may be three people rather than three departments. That is acceptable, provided the roles are distinctly assigned and nobody signs off on their own work without a second pair of eyes."
+          ],
+          "example": "At a small insurance broker the finance director sets risk policy, reviews the underwriting decisions he personally approves, and chairs the audit committee. All three lines pass through one desk, and no control is independently tested.",
+          "points": [
+            "The first line owns the risk it creates",
+            "The second line challenges, it does not manage",
+            "Audit loses its value the moment it consults"
+          ],
+          "check": "Map your organisation onto the three lines and mark every point where one person occupies two of them."
+        }
+      ]
+    },
+    {
+      "title": "Frameworks and appetite",
+      "lessons": [
+        {
+          "title": "Frameworks in plain terms: COSO, ISO 31000 and what they share",
+          "minutes": 20,
+          "teach": [
+            "The two frameworks that dominate practice differ in emphasis rather than in substance. COSO is a control-oriented structure built around objectives, and ISO 31000 is a principles and process standard that fits loosely around whatever governance already exists.",
+            "COSO's contribution is the link between risk and internal control: the control environment, the assessment of risk, control activities, information flows and monitoring. It suits regulated institutions that must demonstrate a control environment to a supervisor.",
+            "ISO 31000's contribution is the process: establish context, identify, analyse, evaluate, treat, then communicate, monitor and review. It is deliberately framework-agnostic, which makes it useful where governance is informal or still being built.",
+            "What they share matters more than where they differ. Both define risk against objectives, both require assessment to be systematic rather than intuitive, and both require treatment to be recorded, assigned and reviewed, which is the part organisations skip.",
+            "Neither framework tells you what your risks are or what appetite is appropriate. They are scaffolding for judgement, and a certificate of conformity to either says something about documentation and nothing about whether the organisation is safer.",
+            "Choose by what you must demonstrate. If a regulator examines your control environment, COSO's structure supplies the vocabulary. If you are building a function from nothing, ISO 31000's process gives you a sequence that fits the institution you have."
+          ],
+          "example": "A microfinance institution preparing for a central bank inspection adopts the COSO structure for documentation while keeping ISO 31000's identify-analyse-treat cycle for its quarterly risk workshops.",
+          "points": [
+            "Frameworks structure judgement, they do not replace it",
+            "COSO suits a regulated control environment",
+            "ISO 31000 suits a process being built"
+          ],
+          "check": "Which framework fits your institution, and what could you demonstrate with it that you cannot demonstrate today?"
+        },
+        {
+          "title": "Writing a risk appetite statement that constrains something",
+          "minutes": 21,
+          "teach": [
+            "Most appetite statements say the organisation is conservative and seeks to manage risk prudently. That is a statement of mood. It constrains nothing, because no decision can be shown to breach it and no manager can be held to it.",
+            "A usable statement names a category, a measure, a limit and an action. Exposure to a single counterparty will not exceed fifteen percent of the deposit base, and any breach will be reported to the board within two working days.",
+            "Write appetite per risk type rather than one number for the whole organisation. An institution may accept substantial credit risk, tolerate little operational risk and refuse reputational risk entirely, which is coherent and cannot be expressed in a single word.",
+            "State what you will not do, not only what you will. Prohibitions are clearer than tolerances in most organisations, because they survive contact with a persuasive commercial director who has found an exception worth arguing for.",
+            "Attach each limit to the decision it governs and to the person who must escalate. An appetite statement not connected to delegated authority is commentary, and a limit without an escalation route is discovered only after months of breach.",
+            "Revisit it when the environment moves, and say so openly. An unchanged appetite through a currency collapse is evidence that nobody read it, and revising it under pressure is far better than pretending it still holds."
+          ],
+          "example": "A bank's appetite statement reads that the bank is conservative. Asked which transaction it would have stopped last year, the risk officer cannot name one, and rewrites it as four limits with named escalation routes.",
+          "points": [
+            "Name a measure, a limit and an action",
+            "Write appetite per risk type, not one word for all",
+            "State what you will not do"
+          ],
+          "check": "Draft one appetite limit for your organisation with a measure, a threshold and an escalation route."
+        },
+        {
+          "title": "Scoring: why likelihood times impact misleads",
+          "minutes": 20,
+          "teach": [
+            "The standard risk matrix multiplies likelihood by impact and ranks the result. It is popular because it is simple, and misleading because both dimensions are measured on ordinal scales that do not support multiplication.",
+            "Multiplying a likelihood score of three by an impact score of five implies the result is comparable with five times three. Nothing in the scales justifies that, so the arithmetic produces false precision rather than useful insight.",
+            "The deeper problem is that the product cannot distinguish a frequent small loss from a rare catastrophic one. Low likelihood with high impact and medium with medium produce similar scores, and the two demand entirely different treatment.",
+            "A one-in-fifty-year event that would close the institution needs contingency funding, capital and probably insurance. A frequent medium loss needs a process change. Collapsing both into one matrix cell hides the distinction that determines the response.",
+            "Likelihood estimates also cluster around recent memory. After a fraud, fraud is rated high and everything else falls. The register then reflects the last meeting rather than the exposure, which is why a stable scale with written definitions is essential.",
+            "Use the matrix for structured conversation rather than for ranking. Discuss the two dimensions separately, define what each band means in observable terms, and let the decision on treatment be made by people who understand the consequence."
+          ],
+          "example": "A distributor's register scores fuel price volatility and a warehouse fire at nine each, both red. One needs a weekly pricing review. The other needs a sprinkler system and a business interruption policy.",
+          "points": [
+            "Ordinal scales do not multiply",
+            "Rare and severe is not the same as medium and medium",
+            "Use the matrix to talk, not to rank"
+          ],
+          "check": "Take two risks with similar scores on your register and show why their treatments must differ."
+        }
+      ]
+    },
+    {
+      "title": "Where risk lives",
+      "lessons": [
+        {
+          "title": "Financial risk in a thin-currency economy",
+          "minutes": 21,
+          "teach": [
+            "Currency risk dominates in a small open economy with limited hedging instruments. If inputs are imported and revenue is local, a depreciation compresses margin immediately, and there may be no forward market in which to transfer the exposure.",
+            "Without instruments the responses are operational: price in a way that can be revised, shorten the period between purchase and sale, keep imported stock turning quickly, and invoice in a reference currency wherever contracts allow it.",
+            "Liquidity risk is the one that ends institutions fastest. A solvent business with payments due this week and no cash is not solvent in any sense that matters, so the primary control is a rolling cash forecast rather than a ratio.",
+            "Concentration is the quiet risk. One customer at forty percent of revenue, one supplier for a critical input, one bank holding all operating cash: each is a single point of failure that the financial statements record as ordinary activity.",
+            "Interest rate risk appears where facilities are priced at a reference rate plus a margin. A repricing clause moves the cost without any change in the business, and the exposure stays invisible until a statement arrives and the margin has gone.",
+            "The discipline is to write these exposures down with numbers attached, in local currency and in the reference currency, and to review them whenever the rate moves materially rather than only at the annual planning round."
+          ],
+          "example": "An importer with dollar-denominated stock and local-currency sales measures margin at three exchange rates. At the rate prevailing in the previous quarter its gross margin falls from 22 to 9 percent, with no change in sales.",
+          "points": [
+            "Quantify exposures in both currencies",
+            "Cash forecasting beats ratio analysis",
+            "Concentration is a single point of failure"
+          ],
+          "check": "List your top three concentrations and the revenue or supply that would stop if each one failed."
+        },
+        {
+          "title": "Operational and people risk",
+          "minutes": 20,
+          "teach": [
+            "Operational risk is loss from failed processes, systems, people or external events. It is the largest category in most institutions and the hardest to measure, because the losses are small, frequent and recorded where nobody aggregates them.",
+            "Start with the events that have already happened. A log of incidents, near misses and manual workarounds surfaces the recurring failures faster than any self-assessment workshop, and it arrives with dates and costs attached.",
+            "People risk is usually recorded as key person dependency and then forgotten. The practical test is whether the organisation could continue for a month without any single individual, discoverable by asking what only that person knows.",
+            "Fraud risk concentrates where authority, custody and record-keeping meet in one person. Separation of duties is the control, and where staff numbers are too small the compensating control is independent review by somebody outside that person's reporting line.",
+            "Process risk grows at the boundaries between departments, where each assumes the other is checking. The controls that matter are the handovers: who confirms the goods arrived, who matches the payment to the order, who signs before an account is opened.",
+            "Record the incidents that did not become losses as well. Near misses are cheap information, and an organisation with no near misses recorded is not safe, it is simply not looking or is not being told."
+          ],
+          "example": "A wholesaler cannot operate for a week if its only credit controller leaves, yet the register rates key person risk as low. Documenting her approval rules and training a deputy cuts the recovery period to one day.",
+          "points": [
+            "Mine the incident log before running workshops",
+            "Fraud lives where duties are not separated",
+            "Record near misses as cheap information"
+          ],
+          "check": "Name the person whose absence would stop a critical process, and what you would document first."
+        },
+        {
+          "title": "Case: everything managed, and a twenty percent fall",
+          "minutes": 23,
+          "teach": [
+            "A board risk report shows every risk within appetite and every indicator green. It is presented on the Monday. On the Wednesday a peer bank's accounting scandal is reported, sector confidence falls, and the bank's own share price drops twenty percent.",
+            "The chairman asks whether the bank had exposure to the peer. The answer is no exposure at all. The chairman asks why the share price fell, and the report cannot answer, because it measures the bank and not the system in which the bank sits.",
+            "The failure is a category error rather than a data error. The register held credit, liquidity and operational risk inside the institution. It had no line for sector contagion, funding confidence, or the risk that a competitor's conduct changes the price at which the bank is valued.",
+            "Contagion risk is real and measurable at first order: it is the correlation of your funding cost and share price with peers, and the share of deposits that could move on reputation rather than on service. That can be stated, monitored and given an appetite like any other risk.",
+            "A second lesson concerns the word managed. A green status means a control is operating, not that the risk has been removed. Boards read green as safety, and risk functions that report green without qualification teach them to stop asking questions.",
+            "The remedy is to add the external and systemic dimension to the register, report leading indicators alongside status, and brief the board before rather than after an event the risk function could reasonably have anticipated and did not."
+          ],
+          "example": "A peer bank's accounting scandal causes a solvent, well-capitalised bank's share price to fall twenty percent. Its ERM report showed every risk green, because the register held only risks originating inside the bank.",
+          "points": [
+            "A green status means controlled, not safe",
+            "Registers must include systemic and contagion risk",
+            "Boards need leading indicators, not only status"
+          ],
+          "check": "For this case, write the missing register line as cause, event and consequence, and one indicator you could have reported."
+        }
+      ]
+    },
+    {
+      "title": "Governing and embedding",
+      "lessons": [
+        {
+          "title": "Reporting to the board",
+          "minutes": 19,
+          "teach": [
+            "A board risk report exists to support decisions about appetite, exposure and the adequacy of controls. Most packs instead report activity: workshops held, policies approved, assessments completed. That tells the board what the risk function did, not what the organisation faces.",
+            "Report the top risks with a trend and the movement since the last pack, and say what has changed in the exposure rather than in the documentation. A board that reads the same ten risks at the same scores for six quarters learns to skim.",
+            "Include breaches plainly, with dates, amounts and the actions taken. A pack showing no breaches for a year signals either an extremely well controlled institution or limits set where they cannot be hit, and the board should be told which it is looking at.",
+            "Put the forward view first. The board's value is judgement about what is coming, so the report should state the three developments expected to change the risk profile and what the risk function recommends in response to each.",
+            "Keep the language of consequence. Directors understand the loss of a quarter's profit or the loss of a licence. They cannot act on a residual score of sixteen, and a report leading with scores forces them to translate before they can think.",
+            "Say what you do not know. A risk report that is uniformly confident is not trusted, and an honest statement of the limits of the analysis is what allows a board to calibrate how much weight to put on everything else."
+          ],
+          "example": "A board pack lists eleven risks, each scored exactly as last quarter, and reports four workshops delivered. It does not state that the exposure behind the top risk has doubled since the previous pack.",
+          "points": [
+            "Report exposure and movement, not activity",
+            "Lead with consequence in money and licence",
+            "Name the limits of the analysis"
+          ],
+          "check": "Take your last risk report and write one sentence describing what changed in the actual exposure."
+        },
+        {
+          "title": "Embedding risk in strategy and decisions",
+          "minutes": 19,
+          "teach": [
+            "Risk work becomes real when it changes a decision. That means being in the room when strategy is set, when a large contract is signed, when an investment is approved and when a new market is entered, rather than reviewing afterwards.",
+            "The practical instrument is a structured question at the point of decision: what would have to be true for this to fail, and what would we see first? Those two questions surface assumptions and generate indicators without a workshop or a framework.",
+            "Large decisions warrant a written assessment with the downside quantified in the same units as the upside. A proposal showing an eighteen percent return without the loss if it fails is not a decision aid, it is a sales document.",
+            "Embed appetite in delegated authority. If a manager may commit up to a limit, the framework should define what that limit is expressed in, and the authority should stop automatically when the limit is reached rather than after a discussion.",
+            "Use scenarios for decisions that cannot be reversed. A three-case view, base, adverse and severe, with the trigger that distinguishes them, is more useful to a board than a single forecast and far cheaper than a model.",
+            "Measure the function by decisions influenced rather than documents produced. Registers completed, assessments filed and workshops delivered are all activity, and none of them shows that the organisation is better protected than it was a year ago."
+          ],
+          "example": "A manufacturer's board approves a new plant on an eighteen percent projected return. Asked to state the loss if demand does not materialise, management revises the proposal to a phased build with a decision point after phase one.",
+          "points": [
+            "Ask what would have to be true for this to fail",
+            "Quantify the downside in the same units as the upside",
+            "Measure decisions influenced, not documents filed"
+          ],
+          "check": "Take a decision now before your organisation and write the sentence that would have to be true for it to succeed."
+        },
+        {
+          "title": "Building risk culture without a poster campaign",
+          "minutes": 18,
+          "teach": [
+            "Culture is what people do when the framework is not watching, and it is shaped by what gets rewarded, what gets punished and what gets tolerated at the top. Posters and e-learning modules change none of those, which is why they rarely move a culture.",
+            "The strongest signal is how bad news is received. If the messenger is blamed, the next problem arrives late and through a third party. If the reporting is thanked and the problem fixed, the organisation gains an early warning system for free.",
+            "Discuss near misses in the same register as incidents, and ask why the control failed rather than who failed. A blame-oriented investigation produces a story about an individual; a systems-oriented one produces a change that prevents recurrence.",
+            "Make risk part of ordinary commercial conversation. A sales director who can say what could go wrong with a large order, and what margin would compensate, demonstrates culture more convincingly than any signed attestation.",
+            "Incentives decide behaviour. If bonuses depend entirely on volume and never on loss experience, no amount of training will produce caution, because the organisation is paying for the opposite of what it says it wants.",
+            "Accept that culture is slow. It changes over quarters as people observe that stated values match the decisions taken, and it can be destroyed in a week by a single senior exception that everybody hears about."
+          ],
+          "example": "Two staff report the same near miss on a payment run. In one organisation the reporter is questioned about procedure; in the other the reconciliation step is redesigned. Only the second produces a second report next month.",
+          "points": [
+            "Culture is what happens without the framework",
+            "Reward early reporting, not clean reports",
+            "Incentives outrank training"
+          ],
+          "check": "Recall the last time bad news reached you. Would the person who brought it do so again?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A risk appetite statement says the organisation is conservative. What is wrong with it, and which fix is right?",
+      "explanation": "A statement of mood constrains nothing because no transaction can be shown to breach it. The fix is to name a risk type, a measure, a limit and an escalation route, so that a specific decision can be stopped or reported.",
+      "options": [
+        { "text": "It names no measure or limit, so it should be replaced with per-risk limits and named escalation routes", "correct": true },
+        { "text": "It is too specific and should be shortened to a single sentence for the annual report", "correct": false },
+        { "text": "It should be approved by the board and then left unchanged for consistency", "correct": false },
+        { "text": "It should be supported by a poster campaign so that staff understand it", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Two risks score nine on a likelihood-times-impact matrix: a one-in-fifty-year event that would close the business, and a frequent small loss. Why does the ranking mislead?",
+      "explanation": "The product cannot distinguish rarity and severity from frequency and moderation. The two demand different treatments, contingency funding and capital for one, a process change for the other, and a single score erases the distinction.",
+      "options": [
+        { "text": "Because frequency and severity need different responses, and the product collapses them into one number", "correct": true },
+        { "text": "Because likelihood should always be weighted more heavily than impact", "correct": false },
+        { "text": "Because a five-by-five matrix is too coarse and a ten-by-ten matrix would fix it", "correct": false },
+        { "text": "Because the rarer risk should always be ranked highest on principle", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case study, every risk was green yet the share price fell twenty percent after a peer's scandal. What was missing from the register?",
+      "explanation": "The register only held risks originating inside the bank. Contagion, sector confidence and the funding and valuation effects of a peer's conduct are external, systemic risks that can be stated and monitored if they are on the register at all.",
+      "options": [
+        { "text": "Systemic and contagion risk arising outside the institution but affecting its funding and valuation", "correct": true },
+        { "text": "More frequent scoring of the existing credit and liquidity risks", "correct": false },
+        { "text": "A stricter appetite statement covering operational risk", "correct": false },
+        { "text": "A larger internal audit team to test the controls already in place", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Who should own a risk recorded in the register?",
+      "explanation": "The first line takes the risk and therefore manages it. A risk officer can record and challenge, but a risk owned by the function that monitors it rather than the function that creates it will not be actively treated.",
+      "options": [
+        { "text": "The manager in the business who creates and can act on the exposure", "correct": true },
+        { "text": "The risk officer, because they maintain the register", "correct": false },
+        { "text": "Internal audit, because they test whether the control works", "correct": false },
+        { "text": "The board, because it carries ultimate accountability", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which single change is most likely to improve how early bad news reaches senior management?",
+      "explanation": "Reporting behaviour follows the response it receives. Where the messenger is thanked and the control fixed, problems surface early; where the messenger is blamed, the next report goes elsewhere or arrives late.",
+      "options": [
+        { "text": "Thank the person who reports the problem and fix the control rather than blaming the reporter", "correct": true },
+        { "text": "Require all staff to complete annual risk awareness training", "correct": false },
+        { "text": "Add a confidential hotline and wait for reports to arrive through it", "correct": false },
+        { "text": "Increase the number of risk indicators on the monthly dashboard", "correct": false }
+      ]
+    }
+  ]
+}

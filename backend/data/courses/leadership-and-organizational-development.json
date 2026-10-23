@@ -1,0 +1,341 @@
+{
+  "slug": "leadership-and-organizational-development",
+  "title": "Leadership & Organizational Development",
+  "program": "FCP",
+  "category": "professional-development",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 3000,
+  "summary": "Lead people you did not choose, build a team that works without you in the room, and change an organisation in a way that survives your departure.",
+  "description": "Leadership is usually taught as a set of qualities. This course treats it as a set of practices: what you agree with people, what you model, what you decide and what you refuse to decide. Those are learnable, and they can be observed by the people you lead.\n\nIt starts with the distinction that matters most in practice, between managing work and leading people, and with the uncomfortable fact that authority is granted rather than taken. It then works through the situations that actually test a leader: expectations that survive contact with real work, feedback that can be heard, delegating without abandoning, conflict between two competent people, and change that does not quietly reverse itself the moment attention moves elsewhere.\n\nIt is written for the person who has just been given responsibility for others, and for the one who has had it for years without ever being taught it. The examples are set in West African organisations, where authority, family obligation and scarce resources change what good leadership looks like.",
+  "tags": ["leadership", "management", "organisational development", "teams", "change", "professional development"],
+  "outcomes": [
+    "Distinguish the work of managing from the work of leading, and know which a situation needs",
+    "Build trust deliberately rather than waiting to earn it by accident",
+    "Set expectations that survive contact with real work",
+    "Give feedback and hold difficult conversations without damaging the relationship",
+    "Delegate outcomes rather than tasks, and check without hovering",
+    "Lead a change that continues after your attention moves on"
+  ],
+  "caseStudy": "A newly appointed head of a ten-person programme office inherits a team that reports to her on paper, works around her in practice, and has two people who will not speak to each other.",
+  "modules": [
+    {
+      "title": "Module 1 · What leadership is for",
+      "lessons": [
+        {
+          "title": "Managing work and leading people are different jobs",
+          "minutes": 18,
+          "html": [
+            "<p>Managing is about the work: what has to be done, by when, to what standard, with what resources. Leading is about the people doing it: whether they know why it matters, whether they are able to do it, whether they will still be there next year, and whether they trust the person asking. The two are done by the same human being on the same day, and confusing them is the most common failure in organisations that promote good technicians.</p>",
+            "<p>A manager who spends all day on the work becomes the bottleneck. Every decision returns to them because nothing was settled in a way that could survive their absence. A leader who spends all day on the people, without ever looking at the work, presides over a warm and ineffective team. The craft is in knowing which is needed at this moment, and saying so.</p>",
+            "<p>The test is simple. If the problem is that something is not getting done, manage: clarify, resource, sequence, remove the obstacle. If the problem is that people are not doing it well, or not doing it at all, or are doing it while resenting each other, that is leadership, and no amount of task clarity will fix it.</p>",
+            "<p>There is a practical way to tell which mode a moment needs. Ask what would change if the person were perfectly willing but slightly unsure: if the answer is the output, manage; if the answer is the willingness, lead. Most managers answer the first question out of habit and then wonder why clarity did not fix a problem of confidence, and most leaders answer the second and then wonder why a team with high morale missed a deadline. Ask the question out loud before choosing; it takes ten seconds and prevents a week of the wrong kind of effort. Write the answer down; it becomes the first line of your own job description.</p>",
+            "<h3>Why promotion creates the problem</h3>",
+            "<p>People are usually promoted for being excellent at the work. Nothing in that excellence teaches them to lead, and the habits that made them effective as an individual — doing it yourself, checking everything, being the one who knows — become the habits that damage a team. The new leader has to unlearn competence as a default response, which feels like becoming worse at the job.</p>",
+            "<p>Name that openly with yourself. The measure of your work has changed: it is no longer what you produce, it is what the team produces without you standing over it.</p>",
+            "<p><strong>Check yourself.</strong> For the last week, roughly what share of your attention went to the work and what share to the people doing it? Which share does your team actually need?</p>"
+          ]
+        },
+        {
+          "title": "Authority is granted, not taken",
+          "minutes": 17,
+          "html": [
+            "<p>A job title gives you the right to allocate work and to sit in certain meetings. It does not give you the willingness of other people to be led, which is what actually makes anything happen. That willingness is granted, individually, by each person, and can be withdrawn without any formal process.</p>",
+            "<p>Three things earn it. Competence: you understand the work well enough to judge it and to help when asked. Consistency: you treat people the same way on a bad day as on a good one. And fairness: when something goes wrong, you find out what happened before deciding who is at fault. Of the three, consistency is the one people notice most, because it is the one that tells them whether today is safe.</p>",
+            "<p>The most common mistake is to rely on the title when willingness is missing. Raising your voice, invoking the hierarchy, or escalating to a higher authority all work briefly and cost more than they return. A team that complies because it must will do exactly what is specified and nothing more, which is precisely what you do not want in an organisation that runs on judgement.</p>",
+            "<p>Willingness is also specific rather than general. A team may trust you completely on technical judgement and not at all on fairness in allocating overtime, and both judgements are reasonable. That is why a leader who is strong in one area and weak in another is not simply respected or not respected: they are trusted with some things and tested on others, and the testing is visible in what people bring to them and what they take elsewhere. Knowing where you are trusted is as useful as knowing where you are not. Ask two people on your team this week where they would like more of your attention.</p>",
+            "<h3>The first ninety days</h3>",
+            "<p>A new leader is watched much more closely than an established one, and small things are read as signals. What you are punctual about, what you ask about first, whose opinion you seek in public, and what you let pass without comment all teach the team what you value. None of that is a communications strategy; it is simply behaviour, and it is being read whether you intend it or not.</p>",
+            "<p>Say what you intend to do and then do it, even in small matters. The currency of a new leader is the gap between their words and their behaviour, and every instance of it closing builds the willingness you need later for something difficult.</p>",
+            "<p><strong>Check yourself.</strong> What have you promised your team in the last month, and what would they say you actually did?</p>"
+          ]
+        },
+        {
+          "title": "What people need from a leader",
+          "minutes": 17,
+          "html": [
+            "<p>Ask people what they want from a manager and the answers are consistent across countries and sectors, and rarely include being liked. They want to know what is expected of them, to be given what they need to do it, to be told when they are doing well and when they are not, and to be treated decently while it happens.</p>",
+            "<p>Clarity comes first, and it is the one most often missing. A person who does not know what good looks like will invent a standard, usually a harsher one than you intended, and will then be judged against yours. Writing expectations down takes twenty minutes and prevents months of quiet mismatch.</p>",
+            "<p>Resources come second, and here honesty matters more than generosity. Saying that you cannot provide something, and why, builds more trust than vague optimism followed by silence. People can plan around a refusal; they cannot plan around a promise that never resolves.</p>",
+            "<p>It is worth saying plainly what people do not need: to be liked, to be entertained, or to be protected from every difficult fact. Teams that are kept cheerful and uninformed cannot plan, and they discover the truth later from somebody less careful. Being told that a contract is at risk, and what is being done about it, is more respectful than being told that everything is on course. A team that is told the truth early can help solve it, and often does. The information you withhold to protect people is usually the information they most need.</p>",
+            "<h3>The third need, which is rarely spoken</h3>",
+            "<p>People need to know that a mistake will be treated as a problem to solve rather than a person to blame. In organisations where errors are punished, errors are hidden, and the hidden ones are the expensive ones. Where the response to a mistake is curiosity — what happened, what did we not know, what will we change — problems surface while they are still small.</p>",
+            "<p>That does not mean tolerating poor work. It means separating the careless from the systemic, and saying which you are treating as which. A leader who cannot tell the difference will eventually have a team that tells them nothing.</p>",
+            "<p><strong>Check yourself.</strong> If somebody on your team made a serious mistake today, what would they expect you to do, and is that expectation what you would want?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Leading people you did not choose",
+      "lessons": [
+        {
+          "title": "Expectations that survive contact with real work",
+          "minutes": 18,
+          "html": [
+            "<p>Most performance problems are agreement problems. The person believed they were doing what was asked, and the manager believed otherwise, and neither discovered it until a review. The fix is not a longer document; it is a shorter agreement made face to face and written down in the same conversation.</p>",
+            "<p>Agree three things for any significant area of work: the outcome, the standard that will be used to judge it, and how you will both know it is done. Outcome without standard produces work that is complete but unusable. Standard without a definition of done produces work that is never finished.</p>",
+            "<p>Then agree what the person may decide alone and what must come to you. This is the single most useful sentence in a delegation, and it is almost never said. Without it, either everything escalates or nothing does, and both are expensive.</p>",
+            "<p>Write the agreement down and give the person a copy. Not because it will be enforced, but because memory is selective in a way that favours whoever is doing the remembering. A short note of what was agreed, sent the same day, removes most later disagreement about what was said, and it costs one message. Agree also how the note will be kept, so that it can be found in six months when the role is reviewed. An unwritten agreement is one that will be renegotiated from memory.</p>",
+            "<h3>Expectations change, so revisit them</h3>",
+            "<p>Work changes quietly. A role that was mostly one thing becomes mostly another, and the expectations written a year ago no longer describe the job. A leader who never revisits them is judging people against a description of work nobody is doing any more.</p>",
+            "<p>Revisit the agreement at a fixed interval, even when nothing appears wrong. The conversation is short when things are going well and invaluable when they are not, because by then it is a habit rather than an emergency.</p>",
+            "<p><strong>Check yourself.</strong> Take one person you lead. Could you both write their three main outcomes and the standard for each, separately, and have the pages match?</p>"
+          ]
+        },
+        {
+          "title": "Feedback that can be heard",
+          "minutes": 18,
+          "html": [
+            "<p>Feedback fails when it is about a person rather than a piece of work, when it arrives long after the event, or when it arrives only at a formal review. All three make it feel like a verdict, and a verdict invites a defence rather than a change.</p>",
+            "<p>The structure that works has three parts: what you observed, the effect it had, and what would be more useful. It is the same structure as a difficult conversation, applied more often and more lightly. Said within a day or two, it is information; said six months later, it is a grievance.</p>",
+            "<p>Praise needs the same structure to be worth anything. Good job is a feeling. The note named who owned the delivery, so nobody chased it is an instruction that tells the person what to repeat. Specific praise also signals what you are watching, which quietly shapes what people prioritise.</p>",
+            "<p>Before any difficult conversation, ask whether the person could have known what was expected. If they could not, the conversation is about your failure of clarity as much as their performance, and saying so first makes the rest hearable. If they could, the facts can be stated plainly without softening them into something nobody can act on. Say which of the two it is before you begin, so the person is not left guessing. Ambushing somebody with a serious conversation is a failure of leadership, not a test of character.</p>",
+            "<h3>When feedback must be formal</h3>",
+            "<p>Some conversations cannot be kept light: repeated lateness, work that has not met the standard after support, conduct that affects others. Those need preparation, privacy, notice, and a record. Tell the person the purpose of the meeting in advance, so they are not ambushed, and bring the facts rather than the impression.</p>",
+            "<p>Then agree what happens next and when you will meet again. A formal conversation without a follow-up date is a warning that everyone hopes will be forgotten, and it usually is, until the problem is much larger.</p>",
+            "<p><strong>Check yourself.</strong> What is one piece of feedback you have been carrying for weeks? Say it now, using observation, effect and request.</p>"
+          ]
+        },
+        {
+          "title": "Delegating without abandoning",
+          "minutes": 17,
+          "html": [
+            "<p>Delegation fails in two directions. Too little, and the leader becomes the bottleneck while the team stays dependent. Too much, and people are given work without the authority, information or support to do it, which is not delegation but abandonment with a deadline attached.</p>",
+            "<p>Delegate the outcome, not the steps. Say what must be true when it is finished, what constraints apply, and what the person may decide. Then let them find the route, even if it is not the route you would have taken. The result is what you are accountable for, not the method.</p>",
+            "<p>Agree how you will check in, rather than checking as the mood takes you. A short scheduled conversation at a stated point is reassuring; an unannounced review of the work feels like doubt. People can prepare for the first and are unsettled by the second.</p>",
+            "<p>Keep a simple list of what you have delegated, to whom, and when you agreed to look at it. Leaders who delegate well still lose track, and losing track is read by the person waiting as indifference. Five lines in a notebook is enough to prevent that, and it doubles as the agenda for the check-in conversation. Review it monthly and close the items that are finished. An open delegated item that nobody mentions is the one that quietly turns into a crisis.</p>",
+            "<h3>Delegating to somebody less experienced</h3>",
+            "<p>Give a task slightly beyond current ability, with support available. That combination is what develops people, and it fails if either half is missing: without stretch, nothing is learned, and without support, the person learns only that they were set up.</p>",
+            "<p>Show it once, watch it once, then let it be done. The middle step is the one leaders skip, and skipping it is how a capable person is judged incapable of something they were never shown.</p>",
+            "<p><strong>Check yourself.</strong> Name one thing you do that somebody else could do at eighty per cent of your quality. What stops you handing it over?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Building a team that works",
+      "lessons": [
+        {
+          "title": "Roles, handoffs and the gaps between them",
+          "minutes": 17,
+          "html": [
+            "<p>Most teamwork failures happen in the gaps, not inside the roles. Each person does their part correctly and the thing still goes wrong, because nobody owned the boundary between one job and the next. The boundary is exactly where leaders should spend their attention.</p>",
+            "<p>Write down who does what for the workflows that cross people. Not a full process manual: for each one, the sequence, the handoff, and what must be true before the handoff is complete. A handoff that is complete when I have finished my part will fail; one that is complete when the next person can start will not.</p>",
+            "<p>Then look for duplications. Two people doing the same task is not redundancy; it is two versions of the truth and an argument about which is right. It usually arises from a gap being filled by whoever noticed it, which is a good instinct in a person and a symptom in an organisation.</p>",
+            "<p>Gaps are easier to see from the outside. When a new person joins, ask them in their first fortnight what they could not work out: which step was unclear, who they had to ask, what they were told different things about. Their confusion is a map of your boundaries, and it disappears within a month as they learn the workarounds. Fix the first two gaps they mention; the rest usually follow. The third week is too late, because by then the workaround has become the process.</p>",
+            "<h3>The owner of a gap</h3>",
+            "<p>Every recurring gap needs a named owner, and it should be the person closest to it rather than the most senior one available. Ownership is not the same as doing the work; it is being the person who notices and escalates when the boundary fails.</p>",
+            "<p>Review the gaps after something goes wrong, not only after something goes right. A failure that nobody traces back to its boundary will happen again, and the second time it will be blamed on the person who was standing nearest.</p>",
+            "<p><strong>Check yourself.</strong> Name one handoff in your team that has failed more than once. Who owns the boundary?</p>"
+          ]
+        },
+        {
+          "title": "Meetings, decisions and information",
+          "minutes": 17,
+          "html": [
+            "<p>A team's real operating system is made of three things: how decisions get made, how information moves, and what happens when the two disagree. Most teams never discuss any of them, and then wonder why coordination takes so much effort.</p>",
+            "<p>Decide, explicitly, which decisions are made by one person, which need consultation, and which need consensus. Without that, every decision is negotiated from scratch and the loudest or most senior voice wins by default. Consultation means the decision maker listens before deciding; consensus means nobody decides alone and everything takes longer. Both are legitimate, and a team needs to know which it is using.</p>",
+            "<p>Information should move by default to the people who need it to do their work, rather than by permission. A team where information is a status symbol will spend its energy on politics instead of work.</p>",
+            "<p>A decision that is recorded but not dated is nearly useless, and one that is dated but not explained is not much better. The date tells a future reader whether the reasoning still applies; the reason tells them what would have to change for the decision to be worth revisiting. Two lines in a shared document is the whole discipline. Appoint one person to keep it, or it will not be kept. A decision log nobody owns becomes a document of intentions.</p>",
+            "<h3>Making a decision stay made</h3>",
+            "<p>Record decisions where the team can find them, with the date and the reason. Decisions get reopened because nobody remembers why the alternative was rejected, and the reopening costs more than the original decision. A one-line reason is enough.</p>",
+            "<p>When a decision must be reversed, say so openly and say what changed. Quiet reversals teach a team that decisions are provisional, and then nothing is worth implementing properly.</p>",
+            "<p><strong>Check yourself.</strong> How does your team currently make a decision that affects everybody? If the answer is it depends, that is the thing to fix.</p>"
+          ]
+        },
+        {
+          "title": "Conflict between people who are both good at their jobs",
+          "minutes": 18,
+          "html": [
+            "<p>The conflict that damages a team is rarely between a good performer and a poor one. It is between two competent people who see the work differently, and who have each concluded that the other is the problem. Left alone, it hardens into sides, and the team starts routing information around it.</p>",
+            "<p>Start by separating the issue from the relationship. Ask each person, separately, what the work needs and where they think it is going wrong. Then bring them together and have each state the other's position before answering it. That single rule changes most disagreements from a contest into a problem.</p>",
+            "<p>Then make the decision that the work needs, even if it is not what either of them wanted, and say why. A leader who avoids deciding in the hope that the parties will settle it is choosing the slowest and most damaging option, because unresolved conflict becomes the team's main topic.</p>",
+            "<p>Conflicts that persist usually have a structural cause underneath the personal one: two people responsible for the same outcome, one person accountable without authority, or a target that rewards one team for what costs another. Fixing the structure is unglamorous and it resolves more disputes than any amount of facilitation. Look for the structure before you look for who is to blame. The person in the middle of a badly designed process is usually its most reliable witness.</p>",
+            "<h3>Where mediation is not the answer</h3>",
+            "<p>Some conflict is not a misunderstanding. Bullying, discrimination, or a pattern of one person undermining another is a conduct matter, and treating it as a personality clash protects the wrong person. Know the difference, and act on the second quickly; a team watches how such things are handled far more closely than it watches anything you say about values.</p>",
+            "<p>For genuine working disagreements, the test of a resolution is whether the two people can work together on the next task without you present. If they cannot, the work is not done, however amicable the meeting was.</p>",
+            "<p><strong>Check yourself.</strong> Is there a conflict in your team you have been treating as a misunderstanding? What would you do if it were conduct?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Developing the organisation",
+      "lessons": [
+        {
+          "title": "Reading the organisation as it actually is",
+          "minutes": 17,
+          "html": [
+            "<p>Every organisation has two shapes: the one on the chart and the one in which work actually happens. The chart shows reporting lines. The real shape shows who people ask when they are unsure, whose judgement is trusted, and where decisions actually get made. Leading development means working with the second, and the first is often a poor guide to it.</p>",
+            "<p>You can map the real shape by asking three questions of several people: who do you go to when you do not know what to do, who do you avoid, and where does a decision stop. The answers, drawn as lines, look nothing like the org chart and explain a great deal about why things take as long as they do.</p>",
+            "<p>None of that is necessarily dysfunction. A trusted informal adviser may be doing the organisation a service the chart does not recognise. The danger is when the real shape is invisible to the people responsible for it, so that a well-intentioned change disrupts the mechanism everybody depended on.</p>",
+            "<p>Do not confuse the informal map with gossip. The question of who is trusted is a reputation question, and reputations are usually built on something real. Where the informal map contradicts the formal one badly enough, the organisation is spending money on a structure that does not describe its work, and that is a leadership problem rather than a chart problem. The chart can be redrawn in an afternoon; the trust cannot. Spend a month learning the informal map before you redraw the formal one.</p>",
+            "<h3>What to do with the map</h3>",
+            "<p>Use it to place responsibility where it can work, rather than where it looks tidy. If decisions consistently travel to one person, either that person should formally own them or the team should be given the authority to decide. Leaving it informal keeps the workload hidden and the accountability unclear.</p>",
+            "<p>Revisit the map when people leave. Departures remove nodes that the chart never showed, and the first symptom is a set of questions nobody can answer.</p>",
+            "<p><strong>Check yourself.</strong> Who in your organisation is the person others quietly ask? Is that recognised anywhere?</p>"
+          ]
+        },
+        {
+          "title": "Skills you do not have, and who should have them",
+          "minutes": 17,
+          "html": [
+            "<p>Most small organisations run on one or two people who know how something works. That is efficient until one of them leaves, and then the knowledge leaves with them. Organisational development means deliberately reducing that dependence, which is uncomfortable because it means letting go of a personal advantage.</p>",
+            "<p>Identify the tasks where there is exactly one person who can do them. Those are the vulnerabilities. Choose the most critical and train a second person, not by sending them on a course but by having them do the task with the expert watching. Training that does not include doing is entertainment.</p>",
+            "<p>Write down what only exists in somebody's head: the steps, the exceptions, the people to call. A one-page note per critical process is enough, and it is far more useful than a policy manual nobody updates.</p>",
+            "<p>Do this exercise honestly and it will be uncomfortable. Most leaders find two or three tasks that only they can do, and the reason is usually not a lack of capable colleagues but a lack of time spent handing over. The task you have never handed over is the task you have decided to keep, whether or not that was the intention. Name the two most critical and start with the one that would hurt soonest. Handing over is a habit, and the first one is the hardest.</p>",
+            "<h3>Hiring for what you lack</h3>",
+            "<p>When you hire, hire the gap rather than a copy of yourself. That is harder than it sounds, because people naturally trust what resembles their own strengths. Ask what the team cannot currently do, and whether the new person makes that possible.</p>",
+            "<p>Then give the new capability room. A person hired for a skill the organisation does not have will be ignored unless the leader visibly uses their judgement, and that means accepting decisions you would have made differently.</p>",
+            "<p><strong>Check yourself.</strong> Which task would stop your organisation for a week if one person left tomorrow? What would it take to have a second person able to do it?</p>"
+          ]
+        },
+        {
+          "title": "Change that survives your attention moving on",
+          "minutes": 18,
+          "html": [
+            "<p>Most change programmes fail not because the change was wrong but because it was never finished. It is announced, implemented with energy, and then quietly abandoned when the leader's attention moves to the next thing. The organisation learns a valuable lesson from this, and the lesson is that initiatives are temporary.</p>",
+            "<p>Change persists when three things change: what people are asked to do, what is measured, and what is rewarded. Announcement changes none of the three. If the weekly report still asks for the old numbers, people will keep producing them, whatever the new strategy says.</p>",
+            "<p>So work backwards. Decide the behaviour you need, then change the form, the meeting, the report or the approval that produces the old behaviour. Removing an old requirement is more powerful than adding a new one, and it is the step people skip because it feels like losing something.</p>",
+            "<p>Change also needs a story that survives repetition. If the reason for it can only be explained by the person who designed it, it will not last, because it will be retold by people who are not sure what to say. Give the team a two-sentence version they can repeat, and check after a month whether they do. If they cannot, the story is yours rather than theirs, and it needs simplifying. A change nobody can explain in two sentences is four changes in disguise.</p>",
+            "<h3>Making it visible and reversible</h3>",
+            "<p>Say what will be different in observable terms and when you will review it. A change with no review date drifts; a change with one can be judged honestly. If the review shows it is not working, say so and adjust, which strengthens rather than weakens credibility. Silent abandonment destroys it.</p>",
+            "<p>Expect the moment when the old way becomes more convenient. That moment, usually a few months in, is when a change is either confirmed or quietly lost, and it is worth planning for rather than discovering.</p>",
+            "<p><strong>Check yourself.</strong> What is still being asked for in your organisation that supports a practice you thought you had stopped?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 5 · Leading yourself",
+      "lessons": [
+        {
+          "title": "What you model is what you teach",
+          "minutes": 16,
+          "html": [
+            "<p>A team learns from what a leader does under pressure, not from what a leader says about values. If deadlines are missed without comment but lateness is punished, the team learns that deadlines are optional. If the leader answers email at midnight, the team learns that availability is the measure of commitment, whatever the policy says.</p>",
+            "<p>Decide which behaviours you are willing to be judged on, and be consistent about them. Two or three are enough: being on time, doing what you said, and saying when you were wrong. Each is visible, each is copied, and each is difficult precisely when it matters most.</p>",
+            "<p>Admitting a mistake is the strongest signal available to a leader, and the least used. It costs a moment of authority and returns a team that reports problems early, which is worth far more than the moment cost.</p>",
+            "<p>There is a version of this that matters more than any policy: how you behave when you are tired. The team sees you at your least rehearsed, and what you do then is what they believe about you. A leader who is courteous when exhausted has taught the organisation something that no training course can. Decide what you are willing to be judged on, and be that person on the bad days too. That is the whole of the method, and it cannot be delegated.</p>",
+            "<h3>The cost of modelling too much</h3>",
+            "<p>Working extreme hours teaches a team that extreme hours are the standard, and the people with caring responsibilities quietly leave or quietly stop progressing. A leader who never takes leave teaches that leave is not really available. What looks like dedication is often a policy being written by example.</p>",
+            "<p>Say what you are doing and why. I am taking Friday off, and here is who decides in my absence is a sentence that gives the team permission to do the same, and protects the organisation from depending on one person's constant presence.</p>",
+            "<p><strong>Check yourself.</strong> Name one behaviour of yours your team copies. Would you be content for it to become the norm?</p>"
+          ]
+        },
+        {
+          "title": "Deciding when you do not have enough information",
+          "minutes": 17,
+          "html": [
+            "<p>Leaders are paid for decisions made without complete information, and the discomfort of that never goes away. What can be learned is a method: distinguish reversible decisions from irreversible ones, and treat them differently.</p>",
+            "<p>Most decisions are reversible: a supplier, a schedule, a format, a hire who can be managed. For those, decide quickly with the information available, because the cost of delay usually exceeds the cost of being slightly wrong. A small number are effectively irreversible: selling part of the organisation, ending a partnership, a public commitment. Those deserve time, advice and a written record of the reasoning.</p>",
+            "<p>For both, write down what you expect to happen and when you will know. That single habit converts decisions into learning, because you cannot tell whether your judgement is improving unless you have recorded what you thought would occur.</p>",
+            "<p>Beware the decision that keeps being reopened. If the same question returns every few weeks, the earlier decision was never really made, or the people affected were not part of making it. Reopening it repeatedly is more expensive than any single wrong answer, because it consumes the attention of everybody who has to wait for it. Decide, record, and move the team on. A decision everybody understands is worth more than one everybody would have chosen.</p>",
+            "<h3>Deciding with people who disagree</h3>",
+            "<p>Seek out the person who thinks you are wrong, before you decide rather than after. If you cannot answer their objection, the decision is not ready. If you can, you will defend it better, and the person is more likely to implement something they were heard on.</p>",
+            "<p>Then decide, and say clearly that it is decided. A leader who keeps the question open in the hope of agreement produces a team that waits, and waiting is the most expensive state an organisation can be in.</p>",
+            "<p><strong>Check yourself.</strong> What decision are you currently delaying? Is it reversible, and what would it cost to be wrong?</p>"
+          ]
+        },
+        {
+          "title": "Knowing when to step back",
+          "minutes": 16,
+          "html": [
+            "<p>A leader who is present at every decision creates a team that cannot decide. The measure of good leadership is not how much runs through you, but how much runs without you and still goes well. That requires giving up the comfort of being needed.</p>",
+            "<p>Step back deliberately and in stages: first from the how, then from the when, then from some of the what. At each stage, say what you are handing over and what you still want to be told about. Ambiguity about what has been delegated is worse than not delegating at all.</p>",
+            "<p>Expect to be uncomfortable, and expect the work to be done differently. The test is the outcome and the standard, not the resemblance to your method. A leader who corrects the method after delegating has taught the team that delegation was theatre.</p>",
+            "<p>Stepping back is also how a leader is judged after they leave. An organisation that collapses when its head departs was led for its head rather than for its work. That is worth thinking about long before departure, because the habits that create dependence are comfortable and the habits that remove it are not. Practise absence in small doses while the cost of failure is still low. The first time you are away is the only time the organisation tells you the truth.</p>",
+            "<h3>Stepping back when it is hard</h3>",
+            "<p>There are moments when stepping back is the wrong choice: a genuine crisis, a new person's first significant task, a decision with consequences you cannot delegate. Distinguish those from the ordinary discomfort of not being in control. The first is a reason to lead closely; the second is a reason to breathe and let it be.</p>",
+            "<p>Plan for your own absence. A week away, arranged in advance, with decisions named in advance, tells you exactly where the organisation depends on you, and it is the most useful diagnostic a leader can run.</p>",
+            "<p><strong>Check yourself.</strong> If you were unavailable for two weeks starting Monday, what would stop, and what does that tell you to hand over?</p>"
+          ]
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A team keeps missing deadlines and the leader responds by checking progress more often. What is the likely problem?",
+      "explanation": "Repeated missed deadlines usually mean the expectations were never agreed clearly — outcome, standard and definition of done — rather than that people need more supervision.",
+      "options": [
+        { "text": "The expectations were never agreed, so people are working to different standards", "correct": true },
+        { "text": "The team needs closer supervision to stay motivated", "correct": false },
+        { "text": "The leader should take the work back and do it personally", "correct": false },
+        { "text": "Deadlines should be removed to reduce pressure", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What most reliably earns a team's willingness to be led?",
+      "explanation": "Competence, consistency and fairness. Consistency is noticed most, because it tells people whether today is safe.",
+      "options": [
+        { "text": "Competence, consistency and fairness, with consistency noticed most", "correct": true },
+        { "text": "A clear job title and the authority that comes with it", "correct": false },
+        { "text": "Being personally liked by the team", "correct": false },
+        { "text": "Protecting the team from senior management", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which delegation is most likely to succeed?",
+      "explanation": "The outcome, the constraints, what may be decided alone, and a scheduled check-in. Delegating steps and then reviewing everything produces dependence.",
+      "options": [
+        { "text": "The outcome, the constraints, what may be decided alone, and an agreed check-in", "correct": true },
+        { "text": "The exact steps to follow, checked daily", "correct": false },
+        { "text": "The task with no check-in, to show trust", "correct": false },
+        { "text": "The task and the blame if it goes wrong", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Two competent colleagues have stopped speaking to each other. What is the least useful response?",
+      "explanation": "Waiting for them to settle it makes the conflict the team's main topic. Separate the issue from the relationship, then decide what the work needs.",
+      "options": [
+        { "text": "Wait for them to resolve it themselves to avoid taking sides", "correct": true },
+        { "text": "Hear each separately, then have each state the other's position", "correct": false },
+        { "text": "Decide what the work needs and explain why", "correct": false },
+        { "text": "Check whether it is actually a conduct matter", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why do most change initiatives quietly fail?",
+      "explanation": "Nothing changed in what people are asked to do, what is measured, or what is rewarded — and old requirements were never removed.",
+      "options": [
+        { "text": "The forms, measures and rewards were never changed, so the old behaviour persisted", "correct": true },
+        { "text": "The strategy was not communicated often enough", "correct": false },
+        { "text": "The organisation lacked a sufficiently detailed implementation plan", "correct": false },
+        { "text": "People resist change by nature", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What makes a statement of expectations usable?",
+      "explanation": "Outcome, the standard it will be judged against, and how both parties will know it is done. Outcome alone produces unusable work; standard alone produces work that never finishes.",
+      "options": [
+        { "text": "It names the outcome, the standard and how completion will be recognised", "correct": true },
+        { "text": "It is written in the annual appraisal document", "correct": false },
+        { "text": "It describes the person's attitude and commitment", "correct": false },
+        { "text": "It is reviewed only when something goes wrong", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A leader works until midnight every day. What is the likely effect on the team?",
+      "explanation": "Behaviour writes the real policy. The team learns that constant availability is the standard, and those with other obligations quietly disengage.",
+      "options": [
+        { "text": "The team learns that extreme hours are the standard, whatever the policy says", "correct": true },
+        { "text": "The team is inspired to match the leader's commitment", "correct": false },
+        { "text": "No effect, as long as the leader does not ask others to stay", "correct": false },
+        { "text": "The team becomes more efficient to protect the leader", "correct": false }
+      ]
+    },
+    {
+      "prompt": "How should reversible and irreversible decisions be treated?",
+      "explanation": "Decide reversible matters quickly, since delay costs more than slight error; give irreversible ones time, advice and a written record.",
+      "options": [
+        { "text": "Decide reversible ones quickly; take time and record reasoning on irreversible ones", "correct": true },
+        { "text": "Apply the same thorough process to both", "correct": false },
+        { "text": "Delay both until consensus is reached", "correct": false },
+        { "text": "Delegate both to the most senior available person", "correct": false }
+      ]
+    }
+  ]
+}

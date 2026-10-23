@@ -1,0 +1,339 @@
+{
+  "slug": "entrepreneurship-and-business-management",
+  "title": "Entrepreneurship & Business Management",
+  "program": "FCP",
+  "category": "business-management",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 2000,
+  "summary": "Test an idea before you spend on it, price so the business survives, keep the books that tell you the truth, and grow without breaking.",
+  "description": "Most new businesses do not fail because the founder lacked effort. They fail because the idea was never tested, the price never covered the real cost, the money was never separated, or the business grew faster than its cash. Each of those is learnable, and each is cheaper to learn here than in the market.\n\nThis course treats entrepreneurship as a sequence of decisions rather than a personality trait. It starts with finding a problem somebody will pay to have solved, and testing that cheaply before committing capital. It then works through unit economics and pricing, the discipline of separating business money from household money, the records that make a small business manageable, and the specific dangers of growth.\n\nIt is written for somebody already trading or about to start, in a market where credit is expensive, records are informal, and reputation is the main asset. Every method is one that can be applied this week with paper and a phone.",
+  "tags": ["entrepreneurship", "small business", "pricing", "records", "cash flow", "business management"],
+  "outcomes": [
+    "Test a business idea cheaply before committing capital to it",
+    "Calculate what a unit actually costs and price it so the business survives",
+    "Separate business and household money and explain why it matters",
+    "Keep a simple set of records that answers where the money went",
+    "Decide when to extend credit and when to refuse",
+    "Recognise the point at which growth becomes dangerous"
+  ],
+  "caseStudy": "A tailor in Gbarnga has more orders than she can sew, no records, and less cash at the end of each month than at the start.",
+  "modules": [
+    {
+      "title": "Module 1 · The idea and the customer",
+      "lessons": [
+        {
+          "title": "A business is a problem somebody pays to solve",
+          "minutes": 18,
+          "html": [
+            "<p>An idea is not a business. A business exists when somebody with a problem hands over money to have it solved, repeatedly. Everything else — the name, the logo, the plan — is decoration until that exchange happens.</p>",
+            "<p>The useful starting point is therefore not what you can make or do, but what people around you are already struggling with and paying to fix badly. If customers are travelling two hours for something, or paying a premium for a poor version, or doing it themselves at a cost in time, there is a business waiting.</p>",
+            "<p>Listen for complaints rather than compliments. Nobody tells you about a problem they have solved, and everybody will describe one they have not. The complaints you hear repeatedly, from people who have money, are the closest thing to free market research that exists.</p>",
+            "<p>Where you look matters as much as what you ask. The complaints in your own trade are the easiest to hear and the hardest to act on, because everybody in the trade knows the same problem and has the same constraints. The complaints from adjacent trades, from the people who serve your customers before and after you, are often more useful, because nobody has tried to solve them yet. Spend a week listening in both places and write down every complaint in the words used, without correcting them.</p>",
+            "<h3>What makes a problem worth solving</h3>",
+            "<p>Three conditions. The person must have the problem often enough that solving it once is not enough. They must have the money, or be able to get it. And they must currently be dissatisfied with how they solve it, because a customer who is content has no reason to switch, however good your offer is.</p>",
+            "<p>Write the problem in the customer's words, not yours. If you cannot, you have not listened yet, and the idea is still yours rather than theirs.</p>",
+            "<p><strong>Check yourself.</strong> Write the problem your business solves in one sentence, using the words a customer would use.</p>"
+          ]
+        },
+        {
+          "title": "Testing before you spend",
+          "minutes": 17,
+          "html": [
+            "<p>The most expensive mistake in a new business is building capacity before confirming demand. A shop, a machine, a stock of two hundred units: each is a bet placed before the market has answered.</p>",
+            "<p>Test cheaply instead. Sell before you make, take orders before you buy stock, borrow the equipment or rent it by the day, run the service for two customers and watch what actually happens. Each test costs a fraction of the commitment and returns the same information.</p>",
+            "<p>A good test answers three questions: will they pay this price, will they come back, and can I deliver at that price without losing money. A test that answers only the first is a sale, not research.</p>",
+            "<p>Design the test so that failing is cheap and quick. If a test costs three months and a large purchase, you will not run it, and the business will be committed before anybody has been asked to pay. If a test takes a week and a phone call, you will run several, and the one that fails teaches you something you can use. The discipline is to keep tests small enough that you are willing to be wrong, because a test you cannot afford to fail is not a test, it is a commitment with optimism attached.</p>",
+            "<h3>What counts as evidence</h3>",
+            "<p>Opinions are not evidence. Somebody saying they would buy is worth almost nothing; somebody paying a deposit is worth a great deal. Count commitments, not compliments: orders placed, money received, repeat purchases, referrals.</p>",
+            "<p>Set a threshold before you start, so the result cannot be reinterpreted afterwards. Ten customers in three weeks at this price, for example. Then honour it, whichever way it goes.</p>",
+            "<p><strong>Check yourself.</strong> What is the cheapest test of your idea that would involve somebody actually paying, and what result would make you continue?</p>"
+          ]
+        },
+        {
+          "title": "The first sale, and what it teaches",
+          "minutes": 16,
+          "html": [
+            "<p>The first sale is the most informative event in a business's life, and the most commonly misread. It proves somebody will pay, which is real; it does not prove the price was right, the cost was covered, or that anybody else will.</p>",
+            "<p>After the first sale, write down what happened while it is fresh: how the customer found you, what they asked, what they hesitated over, what you charged, what it cost you in money and hours, and whether they said they would return. Those five lines are worth more than a business plan written beforehand.</p>",
+            "<p>Then ask the customer directly why they chose you. The answer is almost never the one you expect, and it tells you what to say to the next ten people.</p>",
+            "<p>Take the first order only if you can state the delivery date and the standard out loud, without hedging. If you cannot, the honest reply is to offer a later date you can hold. The instinct to say yes to everything is the reason so many new businesses acquire a reputation for unreliability in their first year, and the reputation is much harder to lose than the order was to refuse. A business that delivers what it promised, late or small, builds something a business that promises everything cannot.</p>",
+            "<h3>Selling before you are ready</h3>",
+            "<p>There is a real risk in the first sale: you may promise something you cannot deliver. Take the order only if you can meet the date and the standard. A first customer lost to a broken promise costs far more than a first sale delayed, because in a small market the story of what you failed to do travels as fast as the story of what you did.</p>",
+            "<p>Where you are unsure, say so and offer a date you know you can keep. Customers forgive caution; they do not forgive silence.</p>",
+            "<p><strong>Check yourself.</strong> Recall your first sale. What did it cost you in money and hours, and what did the customer actually want?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Money from the first day",
+      "lessons": [
+        {
+          "title": "What a unit really costs",
+          "minutes": 18,
+          "html": [
+            "<p>Most small businesses price from what a competitor charges and discover the loss months later. The alternative is to know what one unit costs you to produce and deliver, all the way through.</p>",
+            "<p>Direct costs are the materials and labour that disappear into the unit: the cloth, the thread, the packaging, the transport to deliver it, the hours of the person who made it. Those are visible and most people count them.</p>",
+            "<p>The costs that get missed are the ones that are real but not per unit: power for the machine, the licence, the rent, the phone, your own time, and the wastage that happens on every batch. Divide those by the number of units you realistically sell per month and add them to the direct cost. That figure, not the material cost, is what the price has to clear.</p>",
+            "<p>Work out the cost on your three best-selling items first, because those are where a wrong price does the most damage. The items you sell least matter less, and the ones you sell at a loss without knowing it are usually the ones you have never costed at all. Write the figures on paper, not in your head. A cost you have calculated once and written down can be checked by somebody else, disputed with evidence, and updated when a supplier raises a price.</p>",
+            "<h3>Your own time is a cost</h3>",
+            "<p>A business that does not pay its owner is not profitable; it is subsidised. Put a wage into the cost, even a modest one, and see whether the price still works. If it does not, the business is buying sales with the owner's unpaid hours, which cannot continue and hides the problem until the owner is exhausted.</p>",
+            "<p>Work the numbers on your main product this week. The arithmetic usually surprises people, and the surprise is the point.</p>",
+            "<p><strong>Check yourself.</strong> What does one unit of your best-selling item cost you, including a wage for your own time?</p>"
+          ]
+        },
+        {
+          "title": "Pricing so the business survives",
+          "minutes": 17,
+          "html": [
+            "<p>The price has to do three things: cover the full cost, leave something to reinvest, and be one a customer will pay. Those three pull in different directions, and the business fails when any one of them is ignored.</p>",
+            "<p>Cost gives you the floor. What the customer will pay gives you the ceiling. Where the two leave no room, the answer is not a thinner margin; it is a different product, a different customer, or a lower cost base. Selling at a loss to build volume makes the loss bigger.</p>",
+            "<p>Discounting deserves particular care. A discount reduces the price but not the cost, so it cuts straight into what is left. A ten per cent discount on a product with a twenty per cent margin halves the profit on that sale, which means every discounted sale has to be matched by an extra full-price one just to stand still.</p>",
+            "<p>Raise a price by telling the customers you have, before they discover it. A short message saying that from a named date this item costs this much, and why, is respected far more than a silent change discovered at the counter. Expect to lose a few customers, and know in advance which ones you can afford to lose. What ruins a price change is doing it quietly and then arguing about it individually, which teaches every customer to negotiate and costs the business the trust it needed to hold the new price.</p>",
+            "<h3>Deciding what to charge when you are new</h3>",
+            "<p>Being cheapest is a strategy only if you have a structural reason to be cheaper: better supply, lower rent, more volume. Without that, competing on price attracts the customers who will leave for the next cheapest, and they are the least valuable customers a business can have.</p>",
+            "<p>Being clearer is usually the better position: faster delivery, better advice, a guaranteed return. Those justify a price and survive a competitor's discount.</p>",
+            "<p><strong>Check yourself.</strong> If a customer asks for a ten per cent discount, what does that do to your profit on the sale, and what would you need in return?</p>"
+          ]
+        },
+        {
+          "title": "Two pockets, not one",
+          "minutes": 16,
+          "html": [
+            "<p>The most common financial failure in a small business is not theft or bad luck. It is that household and business money share the same pocket, so the business's working capital is spent on school fees and nobody can tell how much the business actually earned.</p>",
+            "<p>Separate them deliberately. A separate account, or even two separate cash boxes with two books, and a fixed amount the owner takes each week as a wage. That wage is a business cost, recorded as such. Anything the owner takes above it is either a loan from the business or a distribution of profit, and both need to be recorded.</p>",
+            "<p>The separation does more than tidy the accounts. It converts an anxious, unbounded relationship with money into a number the owner can plan with, and it makes the business's true result visible.</p>",
+            "<p>Set the owner's wage before the first month ends, even if it is small. An agreed figure converts an unbounded claim on the business into a known cost, and it makes the profit calculation honest. Where the business cannot yet pay it, record the shortfall as owed to the owner rather than pretending it does not exist. Three months of unpaid wages is a fact about the business that needs a decision, and a business that hides that fact will keep making the decision it cannot afford to make.</p>",
+            "<h3>What to do when the business cannot yet pay a wage</h3>",
+            "<p>Say so honestly and record what the owner is owed. A business that owes its founder three months of wages is in a different position from one that is profitable, and pretending otherwise delays the decision that is actually needed: raise prices, cut costs, or accept that the business is not yet viable.</p>",
+            "<p>Keep a single sheet or notebook of owner drawings. It is the smallest possible record and it answers the question that ends most partnerships: where did the money go?</p>",
+            "<p><strong>Check yourself.</strong> What did you take out of the business last month, and where is it written down?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Getting and keeping customers",
+      "lessons": [
+        {
+          "title": "Selling without a shop",
+          "minutes": 16,
+          "html": [
+            "<p>Most small businesses cannot afford to wait for customers to walk past. Selling actively is a set of ordinary actions: telling people you exist, being where they already are, and making it easy to buy once they decide.</p>",
+            "<p>The highest-return channel for a new business is almost always the people who already know you: former colleagues, family, the traders beside you, the customers of somebody who does not compete with you. A referral from a person the buyer already trusts outperforms any advertisement, and it costs nothing but the courage to ask.</p>",
+            "<p>Then make buying easy. A clear price, a known location, a phone number that is answered, and a choice of how to pay. A remarkable number of sales are lost not to a competitor but to friction: the customer could not find the price, or could not reach anybody.</p>",
+            "<p>Choose the demonstration that removes the customer's specific doubt. If the doubt is quality, show the quality. If it is durability, show something old that still works. If it is whether you will still be there next year, show the customers who have been with you for two. Demonstrating the feature you are proudest of is a common mistake, because it answers a question the customer was not asking, and leaves the real doubt exactly where it was.</p>",
+            "<h3>The demonstration that sells</h3>",
+            "<p>Where the product can be shown, show it. A taste, a sample, a trial fitting, a before-and-after: demonstration removes the risk in the buyer's mind better than any claim. It also tells you immediately which feature people respond to, which is worth knowing before you print anything.</p>",
+            "<p><strong>Check yourself.</strong> Name five people who already trust you and could send you a customer this month. Have you asked any of them?</p>"
+          ]
+        },
+        {
+          "title": "Reputation is the cheapest asset",
+          "minutes": 16,
+          "html": [
+            "<p>In a market where advertising is expensive and credit is scarce, reputation does the work that capital does elsewhere. It is built slowly by keeping small promises and lost quickly by breaking one.</p>",
+            "<p>The promises that matter are the ordinary ones: the date you said, the price you quoted, the quality you showed. A business that keeps those becomes the default choice, and customers stop comparing prices because comparing takes effort and trust saves it.</p>",
+            "<p>What to do when you fail, because you will. Tell the customer before they discover it, say what you will do, and do it. A problem handled well produces a more loyal customer than a sale that went smoothly, because it demonstrates something a smooth sale never can.</p>",
+            "<p>Answer a complaint the same day, even if the answer is that you are looking into it. Silence is interpreted as guilt, and it gives the person telling the story a free hand. Say what you know, say what you will do next and when, and then keep that promise exactly as you would keep a delivery date. The customer who complained is often recoverable; the customers who heard about it and never spoke to you are the ones you lose, and they are the majority.</p>",
+            "<h3>The cost of a bad story</h3>",
+            "<p>In a small market, one dissatisfied customer tells more people than ten satisfied ones, and the story mutates as it travels. Treat a complaint as a message about your operation rather than an attack on your character, and fix the cause rather than the conversation.</p>",
+            "<p>Keep a note of every complaint and what caused it. Three complaints with the same cause is not bad luck; it is a process that needs changing.</p>",
+            "<p><strong>Check yourself.</strong> What is the last promise you made to a customer, and did you keep the date you named?</p>"
+          ]
+        },
+        {
+          "title": "The customer worth more than the sale",
+          "minutes": 15,
+          "html": [
+            "<p>A customer who buys once costs as much to acquire as one who buys for years, and returns a fraction as much. Everything about how a small business treats its existing customers should reflect that arithmetic.</p>",
+            "<p>Repeat business comes from being easy to return to: remembering what they bought, telling them when it is available again, and being consistent in quality so they do not have to check. Consistency is underrated; a customer who knows exactly what they will get will pay more than one who is taking a chance.</p>",
+            "<p>Ask for the next order rather than waiting for it. A short message when stock arrives, or a reminder when their usual quantity would be running low, is not pushy; it is useful. Most customers appreciate being remembered.</p>",
+            "<p>Refusing work is easiest when the terms are decided in advance rather than in the moment. Write your terms once: this is the price, this is the payment date, this is the lead time, and this is what happens if the goods are not collected. Applying them consistently means the awkward conversation happens once per customer rather than once per order. A business that varies its terms under pressure is teaching its customers that pressure works, and it will be under pressure permanently.</p>",
+            "<h3>When to say no</h3>",
+            "<p>Not every customer is worth keeping. The ones who pay late, demand endless changes, and negotiate every price consume the capacity that better customers need. Letting them go is uncomfortable and usually improves both profit and morale.</p>",
+            "<p>Decide the terms once — price, payment, lead time — and apply them consistently. A business that changes its terms for whoever pushes hardest teaches every customer to push.</p>",
+            "<p><strong>Check yourself.</strong> Which customer takes the most of your time for the least return, and what would happen if you set a firm term with them?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Records and control",
+      "lessons": [
+        {
+          "title": "The four records a small business needs",
+          "minutes": 17,
+          "html": [
+            "<p>Bookkeeping sounds like a specialist activity. For a small business it is four lists, kept daily, that answer where the money went and what is left.</p>",
+            "<p>Sales: what was sold, to whom, when, for how much, and whether it was paid. Purchases and expenses: what was bought, from whom, when, how much, and whether it was paid. Cash: what came in and out of the box or account, with the balance. Debts: who owes you and whom you owe, with dates.</p>",
+            "<p>That is the whole system. It fits in a notebook with four sections, or in a spreadsheet with four sheets, and it takes minutes a day if it is done daily. Reconstructing a month from memory is what makes bookkeeping feel impossible.</p>",
+            "<p>Make recording easy enough that it actually happens. A notebook with the four sections marked, a pen tied to it, and a rule that nothing is sold without a line written takes about a minute per transaction. Systems that require a computer, a connection and a moment of peace get abandoned on the busy days, which are exactly the days worth recording. The record does not need to be elegant, it needs to be complete, and completeness comes from lowering the effort per entry rather than from adding discipline.</p>",
+            "<h3>Why daily matters</h3>",
+            "<p>A record written the same day is accurate. One written at month end is a reconstruction, and reconstructions have gaps that are filled with plausible numbers. The gap is never the problem; the confident guess that fills it is.</p>",
+            "<p>Keep receipts in one envelope per month and write on each what it was for. It takes a second and it converts a pile of paper into evidence, which matters for tax, for a loan application, and for your own memory in six months.</p>",
+            "<p><strong>Check yourself.</strong> Could you state today, from records rather than memory, what your sales were last week and what you are owed?</p>"
+          ]
+        },
+        {
+          "title": "Stock: the money you cannot see",
+          "minutes": 16,
+          "html": [
+            "<p>Stock is where small businesses lose money without noticing. It is bought with cash, it sits, it is sold or it is not, and without a record nobody can tell the difference between a good month and a month that quietly consumed its own profit.</p>",
+            "<p>Keep a simple stock card for each item: opening quantity, received, sold, closing, and a physical count at a fixed interval. The count is what makes the record real; a book that has never been checked against the shelf is a guess written down.</p>",
+            "<p>The gap between the book and the count is the interesting number. If the shelf holds fewer than the book says, the cause is one of four: unrecorded sales, unrecorded own use, damage, or theft. Each has a different fix, and none of them can be found without the count.</p>",
+            "<p>Ordering well is a skill built from two numbers: how long a supplier actually takes to deliver, and how much you sell in that time. Order when the stock on hand approaches the amount you will sell before the next delivery can arrive, plus a small buffer for a late truck. Ordering on a fixed day each month is simpler and works when sales are steady, but it fails in the month when demand changes, and that failure shows up as either an empty shelf or money sitting in the store room.</p>",
+            "<h3>Buying better</h3>",
+            "<p>Order from what you sold rather than from what you think you will sell. Keep a note of how long each item takes to move, and hold more of what moves fast and less of what does not, even when the slow item is the one the supplier offers a discount on. A discount on something that will not sell is a cost, not a saving.</p>",
+            "<p><strong>Check yourself.</strong> When did you last count your stock against your record, and what did the difference tell you?</p>"
+          ]
+        },
+        {
+          "title": "Knowing whether you made money",
+          "minutes": 17,
+          "html": [
+            "<p>At the end of a month a small business owner usually knows whether the box has money in it, which is not the same question. Profit is what is left after every cost of earning the month's sales, including the ones paid in a different month.</p>",
+            "<p>The simplest reliable calculation for a small business is: sales, minus the cost of what was sold, minus the running costs of the month, minus the owner's wage. What remains is profit. If it is negative, the business is being funded by something: savings, credit, or unpaid bills, and it is worth knowing which.</p>",
+            "<p>Cash is a separate question with a separate answer. A profitable month can end with an empty box because a big customer has not paid, and a loss-making month can end with a full one because a supplier has been paid late. Both matter, and neither substitutes for the other.</p>",
+            "<p>A profit figure is only useful if it is calculated the same way every month. Decide once what counts as a sale, what counts as a cost, and how you treat the owner's wage, and then apply it without adjustment. A month where the treatment changes is a month that cannot be compared, and comparison is the entire purpose. Write the method in one line at the top of the page, so that the future you, or the person who takes over, calculates it the same way.</p>",
+            "<h3>The five-minute monthly review</h3>",
+            "<p>Once a month, write five numbers: sales, cost of sales, running costs, profit, and cash at the end. Compare with last month and with the same month last year. Two or three months of this produces a trend, and a trend tells you what to change long before a crisis does.</p>",
+            "<p>Keep the five numbers in one place. The value is in the comparison, not the arithmetic.</p>",
+            "<p><strong>Check yourself.</strong> Write last month's five numbers. Which one surprised you, and why?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 5 · Growing without breaking",
+      "lessons": [
+        {
+          "title": "Credit: giving it and taking it",
+          "minutes": 17,
+          "html": [
+            "<p>Credit runs through small business in both directions, and getting either side wrong is expensive. Giving credit to customers is lending them your working capital. Taking credit from suppliers is borrowing with a date attached.</p>",
+            "<p>When you give credit, decide who and how much. A limit per customer, agreed in advance, prevents the situation where a good customer's balance grows until refusing further credit would end the relationship. Record what is owed and when it is due, and follow up on the day, politely and by phone.</p>",
+            "<p>When you take credit, know what it costs. Supplier terms are usually free for the agreed period and expensive afterwards, in price and in priority. Formal loans carry interest and a schedule that does not move, and borrowing to fund a permanent gap simply postpones a decision.</p>",
+            "<p>Before you approach a lender, prepare the four things they will ask for and that you should want anyway: what the money buys, what it will earn, how it will be repaid, and what happens if the plan is late. A lender who asks none of these questions is a warning rather than an opportunity, because the loan will still have to be repaid when the plan does not work. Prepare the same four answers for a family loan, which is often the harder negotiation and the one that damages a relationship when it goes wrong.</p>",
+            "<h3>Borrowing for the right reason</h3>",
+            "<p>Borrow for something that will earn more than it costs: equipment that increases output, stock for a confirmed order, a vehicle that removes a delivery cost. Do not borrow for losses, for consumption, or to pay interest on other borrowing. The first builds capacity; the rest dig a hole with a repayment date.</p>",
+            "<p>Before taking any credit, write the repayment source in one sentence. If the sentence is we will see how it goes, the answer is no.</p>",
+            "<p><strong>Check yourself.</strong> What is the largest amount you are owed right now, by whom, and how overdue is it?</p>"
+          ]
+        },
+        {
+          "title": "The first employee",
+          "minutes": 16,
+          "html": [
+            "<p>Hiring is the decision most likely to change a small business permanently, in both directions. The first employee multiplies capacity and immediately adds a fixed cost that must be paid whether or not the work arrives.</p>",
+            "<p>Before hiring, be sure the work is repeatable and that the margin on it covers a wage. Ask what the person will be doing in a normal week, written down. If the answer is help with everything, the role is not ready, because a job that is everything cannot be trained, measured or handed over.</p>",
+            "<p>Write the terms: the wage, the day it is paid, the hours, what the person is responsible for, and how you will both know whether it is going well. A written agreement protects both of you, and the conversation it forces is worth more than the document.</p>",
+            "<p>Write the job description in the language of tasks rather than qualities. Reliable and hardworking are qualities you cannot check; opens the shop at seven, records every sale, and balances the box at close are tasks you can. A task list also tells the new person when the work is done, which is the most common source of friction in a first job. Review it after a month and change what was wrong, because a job description written before anybody did the job will always contain something that does not survive contact with the work.</p>",
+            "<h3>Delegating without losing quality</h3>",
+            "<p>Show the task, watch it done, then let it be done. The middle step is the one people skip, and skipping it is how a new employee is set up to fail while the owner concludes that nobody can do it properly.</p>",
+            "<p>Accept that a new person will do it differently and possibly more slowly at first. The test is whether the result meets the standard, not whether the method matches yours.</p>",
+            "<p><strong>Check yourself.</strong> What is the single task you would hand over first, and could you describe its standard of quality in three sentences?</p>"
+          ]
+        },
+        {
+          "title": "Growing into a bigger problem",
+          "minutes": 17,
+          "html": [
+            "<p>Growth consumes cash. More customers means more stock, more credit given, more wages paid before the money arrives, and more equipment bought outright. A business can double its sales and run out of money doing it, which is the most painful failure available because it comes disguised as success.</p>",
+            "<p>Before taking on a big order or a new market, work out the cash it will absorb and when that cash comes back. Then check you can fund the gap from your own resources or an agreed facility. If the answer depends on the customer paying early, the answer is no.</p>",
+            "<p>The order that kills a small business is usually the largest one it has ever won. It arrives with a short deadline, a demanding customer, and payment after delivery, and it consumes every resource the business has at the moment it has least capacity to spare.</p>",
+            "<p>Price the big order before you accept it, including the cash it will absorb. Add up the stock you must buy, the wages for the extra hours, the transport, and the delay before the customer pays. Then compare that with what you have available. If the answer is that you can only do it with the customer paying a deposit, ask for the deposit as a normal condition of a large order rather than as a favour, and put it in writing before any work begins.</p>",
+            "<h3>Deciding to say no</h3>",
+            "<p>Saying no to work that cannot be funded or delivered is a management skill, not a failure of ambition. The honest reply — we can deliver half of this by the date, or all of it three weeks later — keeps the customer and protects the business. Silence followed by a missed deadline keeps neither.</p>",
+            "<p>Grow at the speed your cash allows. That is slower than ambition, and it is the only speed at which a small business survives its own success.</p>",
+            "<p><strong>Check yourself.</strong> If your sales doubled next month, how much extra cash would you need, and where would it come from?</p>"
+          ]
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "What is the strongest evidence that a business idea is worth pursuing?",
+      "explanation": "Money changing hands, repeatedly. Opinions and encouragement cost the speaker nothing; a deposit is a commitment.",
+      "options": [
+        { "text": "Customers paying, and then paying again", "correct": true },
+        { "text": "Friends and family saying it is a good idea", "correct": false },
+        { "text": "A detailed business plan", "correct": false },
+        { "text": "A competitor already doing something similar", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why should the owner's own time be included in the cost of a unit?",
+      "explanation": "A business that does not pay its owner is subsidised by the owner. Including a wage shows whether the price actually works.",
+      "options": [
+        { "text": "Otherwise the business is being subsidised and its true viability is hidden", "correct": true },
+        { "text": "Because tax rules require it in every country", "correct": false },
+        { "text": "Because it increases the selling price", "correct": false },
+        { "text": "Because employees must be paid the same rate", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A product has a 20% profit margin. What does a 10% discount do to the profit on that sale?",
+      "explanation": "The discount comes straight out of profit, so a 20% margin falls to roughly 10% — the profit on that sale halves.",
+      "options": [
+        { "text": "It roughly halves the profit on that sale", "correct": true },
+        { "text": "It reduces profit by 10%", "correct": false },
+        { "text": "It has no effect if volume increases", "correct": false },
+        { "text": "It increases profit because more units sell", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why must business and household money be kept separate?",
+      "explanation": "Mixed money means the business's working capital is spent on household needs, and nobody can tell what the business actually earned.",
+      "options": [
+        { "text": "So working capital is not consumed and the business's real result is visible", "correct": true },
+        { "text": "Because banks require two accounts", "correct": false },
+        { "text": "Because the tax authority audits household spending", "correct": false },
+        { "text": "Only so the records look tidy", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A stock count is lower than the stock record. What does this indicate?",
+      "explanation": "One of four causes: unrecorded sales, own use, damage or theft. The count is what makes the record meaningful.",
+      "options": [
+        { "text": "Unrecorded sales, own use, damage or theft — the count is what reveals it", "correct": true },
+        { "text": "The record is always right and the shelf is wrong", "correct": false },
+        { "text": "The supplier short-delivered the last order", "correct": false },
+        { "text": "Nothing; small differences are normal and can be ignored", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which is a legitimate reason to borrow?",
+      "explanation": "Borrow for something that earns more than it costs. Borrowing for losses or consumption digs a hole with a repayment date.",
+      "options": [
+        { "text": "Equipment that increases output and pays for itself", "correct": true },
+        { "text": "Covering a permanent shortfall in monthly running costs", "correct": false },
+        { "text": "Household expenses during a slow month", "correct": false },
+        { "text": "Paying interest on an earlier loan", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What is the main risk of accepting a very large order with short delivery and payment after delivery?",
+      "explanation": "The order consumes stock, wages and capacity up front. A profitable order can still exhaust the cash needed to deliver it.",
+      "options": [
+        { "text": "The cash needed to deliver it can exceed what the business has", "correct": true },
+        { "text": "The customer may negotiate a lower price later", "correct": false },
+        { "text": "It will attract competitors", "correct": false },
+        { "text": "The profit margin will be too high", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What should you do when you cannot meet a promised date?",
+      "explanation": "Tell the customer before they discover it, say what you will do, and do it. Handled well, a problem builds more loyalty than a smooth sale.",
+      "options": [
+        { "text": "Tell them before they discover it, and say what you will do", "correct": true },
+        { "text": "Deliver late and apologise afterwards", "correct": false },
+        { "text": "Wait to see whether they notice", "correct": false },
+        { "text": "Offer a discount instead of an explanation", "correct": false }
+      ]
+    }
+  ]
+}

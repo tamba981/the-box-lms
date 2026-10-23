@@ -1,0 +1,325 @@
+{
+  "slug": "digital-transformation-strategy",
+  "title": "Digital Transformation Strategy",
+  "program": "CPP",
+  "category": "technology",
+  "level": "intermediate",
+  "credential": "certificate",
+  "priceCents": 3500,
+  "certificateFeeCents": 0,
+  "summary": "Diagnose why transformation programmes stall, sequence the work honestly, and turn a technology purchase into a change in how people actually work.",
+  "description": "Most digital transformation programmes fail for reasons that were fully visible before the first purchase order. The process being transformed was never mapped, the data needed to make the system useful was held in three incompatible places, and the people expected to use it were told about it rather than involved in it.\n\nThis course is about the decisions that determine whether a transformation delivers: the difference between digitising an existing process and changing the operating model, sequencing that puts the plumbing before the visible product, and the adoption problem that is a behaviour and incentive question rather than a training question.\n\nIt covers the honest business case and why benefits that cannot be measured after go-live should not be claimed, vendor selection and lock-in, the data and integration work that nobody funds, and the governance that keeps a multi-year programme aligned as the technology moves.\n\nLiberian conditions run through it: mobile money as an existing transformation success, e-government initiatives constrained by connectivity and electricity, low digital literacy in the user base, and institutions buying platforms before deciding what the platform is for.\n\nThe case study concerns a bank that invested two million dollars in a digital platform and reached twelve percent adoption in six months. The chief executive wants to double the marketing budget. Students must identify the actual problem and what to do instead.",
+  "tags": ["digital transformation", "change management", "adoption", "technology strategy", "data", "vendors"],
+  "outcomes": [
+    "Distinguish digitising a process from transforming an operating model",
+    "Diagnose the common causes of transformation failure before purchasing",
+    "Sequence a programme so foundations precede visible products",
+    "Build a business case with benefits that can be measured after go-live",
+    "Explain adoption as an incentive and workflow problem",
+    "Assess vendor proposals for integration cost and lock-in",
+    "Govern a multi-year programme as technology and conditions change"
+  ],
+  "caseStudy": "A bank invests two million dollars in a digital platform. Six months after launch, adoption is 12 percent. The chief executive wants to double the marketing budget to drive uptake. Students must diagnose the actual problem, challenge the marketing answer with evidence, and propose what to do in the next ninety days.",
+  "modules": [
+    {
+      "title": "Why transformation fails",
+      "lessons": [
+        {
+          "title": "Technology is the easy part",
+          "minutes": 20,
+          "teach": [
+            "The technology is the cheapest, fastest and most reversible part of a transformation. It arrives with a contract, a delivery date and a vendor who is paid to make it work, and it is rarely the reason a programme fails.",
+            "What fails is the surrounding change: a process that was never redesigned, a role whose work doubled, a supervisor whose targets now conflict with the new system, or a customer who was never asked whether they wanted it.",
+            "This is why the failure rate quoted for transformation is so high and so uninformative. Programmes fail mostly after go-live, and the post-implementation phase is usually the one with no budget, no executive sponsor and no plan.",
+            "The practical consequence is that the business case must fund the change, not only the software. Training, process redesign, data cleanup, temporary double-running and support are the costs that determine success and are the ones most often cut to fit the budget.",
+            "Treat the technology decision as the second decision. The first is what the organisation will do differently, who will do it, and what will stop happening as a result, and it should be answerable in a paragraph without mentioning any product.",
+            "Beware the demonstration. A well-run vendor demonstration shows a process that has already been simplified for the demo, with clean data and a happy user, and none of those conditions exist in your organisation yet."
+          ],
+          "example": "A hospital installs an electronic records system on schedule. Six months later clinicians still write on paper and a clerk enters the data at night, because nobody redesigned the consultation to include typing time.",
+          "points": [
+            "Technology is the reversible part",
+            "Fund the change, not just the software",
+            "Say what will be done differently before choosing a product"
+          ],
+          "check": "Describe your transformation in one paragraph without naming any technology."
+        },
+        {
+          "title": "Digitising is not transforming",
+          "minutes": 20,
+          "teach": [
+            "Digitising takes an existing process and puts it on a screen. Transforming changes what the process is, who does it and where, and the second is where the value sits and where the difficulty lives.",
+            "A digitised paper form with twelve approval signatures becomes an electronic form with twelve approvals, and it is faster to move and just as slow to decide. The improvement is real and much smaller than the business case assumed.",
+            "Transformation asks why the twelve approvals exist. If four of them are duplicate checks introduced after an incident twenty years ago, removing them may deliver more value than any system, and the system can then be built around three.",
+            "The order matters at the level of the board. A programme announced as transformation and delivered as digitisation produces disappointed expectations, while one announced as digitisation and which then creates headroom for real change is seen as a success.",
+            "Transformation usually moves authority and information, which is why it meets resistance that appears technical and is actually political. A system that lets a regional manager see branch performance changes the relationship between them.",
+            "Ask every major process what decision it supports and who makes that decision. Where the answer is unclear, digitising it will automate confusion and make the confusion faster and more expensive to unpick."
+          ],
+          "example": "A ministry digitises a procurement approval chain of eleven signatures. The cycle time falls from nine weeks to eight, and a review finds that four signatures exist only because a 2004 audit recommendation was never closed.",
+          "points": [
+            "Digitising speeds a process, transforming changes it",
+            "Remove steps before automating them",
+            "Transformation moves authority, which is why it resists"
+          ],
+          "check": "Identify one approval in your process and write down why it exists."
+        },
+        {
+          "title": "Reading your own capability honestly",
+          "minutes": 19,
+          "teach": [
+            "Transformation depends on capability that is rarely assessed before it is needed: reliable power, connectivity, data quality, basic digital literacy among staff, and at least one person who can maintain the system after the vendor leaves.",
+            "Assess these before committing, not during implementation. An organisation without connectivity to a rural branch cannot run a cloud system there, and discovering this in month five converts a design assumption into a change request.",
+            "Data quality is the capability most often overestimated. A system is only as useful as the records it holds, and a customer database with three copies of every client will produce three copies of every report, faster.",
+            "Support capability determines the whole life of the system. If nobody in the organisation can reset a password, run a report or explain an error, every small problem becomes a vendor call with a cost and a delay.",
+            "Digital literacy is a spectrum rather than a binary. Staff who can use a smartphone confidently may still be slow with a keyboard and a spreadsheet, and the design should accommodate the actual distribution rather than the average.",
+            "Write the assessment down and revisit it annually. Capability changes faster than most strategies expect, and a constraint that justified a decision two years ago may now be an unnecessary limit on what is possible."
+          ],
+          "example": "A distributor plans a cloud inventory system across eight branches. An assessment finds two branches without reliable power and one without a manager who can use a spreadsheet, and the rollout is sequenced rather than uniform.",
+          "points": [
+            "Assess power, connectivity, data and skills first",
+            "Support capability determines the system's life",
+            "Revisit the assessment annually"
+          ],
+          "check": "Score your organisation from one to five on each of power, connectivity, data quality and support capability."
+        }
+      ]
+    },
+    {
+      "title": "Strategy and sequencing",
+      "lessons": [
+        {
+          "title": "Start from the journey, not the tool",
+          "minutes": 19,
+          "teach": [
+            "The useful starting point is a journey someone actually takes: a customer opening an account, a patient collecting medicine, a trader clearing goods. The journey crosses departments, and that is precisely why it is where the waste lives.",
+            "Map the journey as it is today, including the queues, the repeat visits and the moment the person is asked for the same document twice. The map is uncomfortable and it is the best argument for change available.",
+            "Identify the two or three points where the delay or failure concentrates. Most journeys have a bottleneck that consumes more time than every other step combined, and fixing it delivers more than automating the rest.",
+            "Then ask what technology would remove that specific constraint. This sequence produces small, affordable interventions with traceable benefits rather than a platform in search of a use.",
+            "Keep the internal process map and the external journey map together. Digitising an internal process that a customer never experiences improves a metric nobody outside the organisation cares about, and it is the most common way transformation effort is spent.",
+            "Test the journey with real people before building. Asking five customers where their transaction failed takes a morning and routinely overturns an assumption that a steering committee has held for a year."
+          ],
+          "example": "A bank maps account opening and finds the process requires four visits, two of which exist only to collect documents that could be captured once. The first transformation project becomes document capture, not a new platform.",
+          "points": [
+            "Map the journey as it is, including the repeat visits",
+            "Find the single bottleneck rather than automating everything",
+            "Ask real users before building"
+          ],
+          "check": "Walk one customer journey yourself and count the number of separate visits it requires."
+        },
+        {
+          "title": "Phasing, and the cost of doing everything at once",
+          "minutes": 19,
+          "teach": [
+            "A transformation delivered as one large release has one delivery date, one budget and one chance. If it is late, everything waits, and if it is wrong, everything is wrong at the same time.",
+            "Phasing converts a single large risk into a sequence of smaller ones and produces evidence between phases. A first phase that works tells you the data and the process assumptions are sound before the expensive parts are committed.",
+            "Phase on capability rather than on modules. The useful question is what the organisation will be able to do after phase one that it cannot do now, and the answer should be something a customer or a manager would notice.",
+            "Sequence the foundations first even though they are invisible. Identity, data definitions, integration and support are what every later phase depends on, and deferring them means rebuilding the visible phases later at greater cost.",
+            "Plan for the interfaces between phases. A phase that delivers a new system alongside an old one requires double-running, reconciliation and a period of extra work, and that period must be funded and staffed rather than assumed.",
+            "Resist the political pressure to front-load visible benefits. A dashboard delivered in phase one and supported by unreliable data discredits the whole programme, and the recovery costs more than the delay would have."
+          ],
+          "example": "A retailer's transformation is re-phased from one eighteen-month release into four, with stock accuracy as phase one. The accuracy improvement pays for the second phase before the platform is complete.",
+          "points": [
+            "Phase on capability, not on modules",
+            "Foundations first, even though nobody sees them",
+            "Fund the double-running period"
+          ],
+          "check": "Write what your organisation could do after phase one that it cannot do today."
+        },
+        {
+          "title": "Data, integration and the plumbing nobody funds",
+          "minutes": 20,
+          "teach": [
+            "The value of a system comes from the data it can see, and most transformation budgets allocate the smallest share to the work of getting that data into one place with one meaning.",
+            "Integration is unglamorous and unavoidable. Two systems that both hold customer records will disagree, and the disagreement will be discovered by a customer, an auditor or a regulator rather than by the project team.",
+            "Agree definitions before agreeing interfaces. An interface built to transfer a field whose meaning has not been settled will transfer the disagreement faithfully and at scale, and the cost appears in reconciliation for years.",
+            "Data cleanup should be treated as a deliverable with a budget and an owner. Migration is not a technical step at the end of a project; it is a change in the operating practice of whoever creates the records, and it needs time.",
+            "Avoid the temporary interface that becomes permanent. The spreadsheet bridge built to get phase one live will still be running in three years, maintained by one person, and it will fail on a day when that person is on leave.",
+            "Budget for integration at a realistic share from the start. Programmes that underfund it deliver a working system that cannot talk to the systems around it, which is a demonstration rather than a transformation."
+          ],
+          "example": "A bank's new platform goes live with customer data migrated from three legacy systems. Nobody agreed which record was authoritative, and the first month is spent reconciling 4,000 duplicated clients by hand.",
+          "points": [
+            "Agree definitions before interfaces",
+            "Data cleanup is a deliverable with an owner",
+            "Beware the temporary bridge that becomes permanent"
+          ],
+          "check": "Identify the source that is authoritative for each of your three most important fields."
+        }
+      ]
+    },
+    {
+      "title": "People and adoption",
+      "lessons": [
+        {
+          "title": "Adoption is a behaviour problem",
+          "minutes": 20,
+          "teach": [
+            "Low adoption is almost never caused by insufficient awareness. People know the system exists, and they are choosing, rationally and daily, to keep using what works for them.",
+            "The choice is rational because the old method is faster for the person using it, even when it is slower for the organisation. A clerk who keeps a paper register can find a record in ten seconds while the new system takes a minute, and that minute is the whole argument.",
+            "Anyone designing for adoption should ask what the new system asks a person to do that they did not do before, and how much extra time per transaction it costs. Then ask what the system gives them back in the same week.",
+            "Removing the old option is the most effective single intervention, and it is only safe once the new one is demonstrably faster or has a compensating benefit. Removing the old route before that produces workarounds rather than adoption.",
+            "Watch for the double-entry pattern. Where a new system is introduced without retiring the old one, staff will maintain both, and the workload increase guarantees that the new system is treated as an additional obligation.",
+            "Measure adoption by behaviour rather than by login counts. A user who logs in and transcribes from paper is not an adopter, and the number of transactions completed through the system on a normal day is the only figure that matters."
+          ],
+          "example": "A hospital's new records system shows 80 percent login rates. A ward visit finds nurses using it to check patient lists while continuing to record observations on paper, and the 80 percent was measuring authentication, not use.",
+          "points": [
+            "People choose the faster method for themselves",
+            "Retiring the old route is the strongest lever",
+            "Measure transactions, not logins"
+          ],
+          "check": "Name what your new system asks a user to do that they did not do before, and what it gives back."
+        },
+        {
+          "title": "Incentives, training and the middle manager",
+          "minutes": 19,
+          "teach": [
+            "Training is the intervention organisations reach for first and it is rarely the binding constraint. Nobody needs a course to use a simple app, and where the system is unusable, training will not fix it.",
+            "Incentives decide behaviour. If a branch manager is measured on transactions processed per hour, a system that adds a step will be worked around, and no amount of training changes the arithmetic they are being assessed against.",
+            "Align the measures before the launch. Where a supervisor's targets conflict with the new process, the conflict will be resolved in favour of the target, and the system will be the thing that quietly loses.",
+            "The middle manager decides whether adoption happens. Senior sponsorship announces the change and frontline staff experience it, but the supervisor who allocates work, answers the first question and notices the workaround is the person who determines the outcome.",
+            "Support the supervisor explicitly: give them the answer to the three questions they will be asked in the first week, the authority to adjust a target that the system has made unachievable, and a route to report a defect that gets fixed.",
+            "Recruit early adopters deliberately rather than waiting for volunteers. One respected clerk who finds the system faster and says so converts more colleagues in a week than any internal communication campaign achieves in a quarter."
+          ],
+          "example": "A branch manager measured on customers served per hour tells staff to keep using the old terminal for simple transactions. The system's usage plateaus at the level that does not affect the target.",
+          "points": [
+            "Training rarely solves an incentive problem",
+            "Align targets before launch",
+            "The supervisor determines whether adoption happens"
+          ],
+          "check": "Check whether any supervisor's current target conflicts with using the new process."
+        },
+        {
+          "title": "Case: two million dollars and twelve percent adoption",
+          "minutes": 23,
+          "teach": [
+            "A bank invests two million dollars in a digital platform. Six months after launch, twelve percent of eligible customers use it, and the chief executive wants to double the marketing budget to drive uptake.",
+            "The marketing answer assumes the problem is awareness. Twelve percent adoption after six months with an existing customer base usually means people tried it, found it slower or less reliable than the branch, and stopped.",
+            "The first diagnostic is the drop-off point. How many registered, how many completed a first transaction, how many completed a second within thirty days? A large fall between registration and second use identifies a product problem rather than a reach problem.",
+            "The second is the comparison. Time a simple transaction in the branch and on the platform, including the failures: the password reset, the network error, the step that requires a branch visit anyway. If the platform is slower or incomplete, marketing spends money to accelerate disappointment.",
+            "The third is the incentive inside the bank. If staff are measured on branch transactions, they will not promote a channel that reduces their own count, and the branch network becomes the most effective opponent of the digital channel.",
+            "The ninety-day response is to fix the two or three abandonment points, complete the journeys that currently dead-end at a branch requirement, change the counter staff measures, and market only after the second-use rate has improved."
+          ],
+          "example": "A bank's digital platform reaches 12 percent adoption after a two million dollar investment, and the chief executive proposes doubling the marketing budget. Registration is high; second-transaction rates are 20 percent.",
+          "points": [
+            "Low adoption is usually a product problem, not a reach problem",
+            "Find the drop-off point between registration and repeat use",
+            "Marketing amplifies whatever the experience already is"
+          ],
+          "check": "For this case, name the first three figures you would ask for before agreeing to any marketing spend."
+        }
+      ]
+    },
+    {
+      "title": "Governing transformation",
+      "lessons": [
+        {
+          "title": "The business case and honest benefits",
+          "minutes": 20,
+          "teach": [
+            "A transformation business case is usually a set of benefits that cannot be measured after go-live, discounted at a rate nobody questions, against costs that omit the change. It is approved because it is optimistic, and it is judged because it was.",
+            "Every benefit should name its measure, its baseline, its owner and the date it will be reviewed. Improved customer experience is not a benefit; a reduction in average account opening time from four days to one, measured monthly, is.",
+            "Separate cash benefits from non-cash. Cost reduction and revenue growth appear in the accounts, while time saved and errors avoided do not unless somebody has decided where the saving goes, and that decision is usually never taken.",
+            "Model the cost of the change as well as the cost of the technology: process redesign, data cleanup, training, double-running, support and the productivity dip during transition. The dip is real, it lasts months, and a case that omits it will be breached in the first quarter.",
+            "Present a range rather than a single figure. A case showing a twelve to eighteen month payback across three scenarios is more credible and more useful than one showing a single number that everyone knows is a guess.",
+            "Commit to a post-implementation review. Naming the date at approval changes how the case is written, because the author knows the numbers will be examined by the same people who approved them."
+          ],
+          "example": "A business case claims improved efficiency of 30 percent. Rewritten as a reduction of two staff in the reconciliation team within nine months, with a named owner, it becomes measurable and it changes the approval discussion.",
+          "points": [
+            "Every benefit needs a measure, baseline and owner",
+            "Include the productivity dip",
+            "Commit to a post-implementation review at approval"
+          ],
+          "check": "Take one benefit in your case and write the date and measure by which it will be judged."
+        },
+        {
+          "title": "Vendors, procurement and lock-in",
+          "minutes": 19,
+          "teach": [
+            "A vendor sells a product that works well for the customers in its reference list, and the reference list is selected. Diligence means speaking to a customer who was not offered, and asking what the implementation actually cost.",
+            "Total cost of ownership includes integration, customisation, training, support, upgrades and exit. The licence is frequently the smallest of these, and the largest is often the integration the vendor's proposal excluded.",
+            "Customisation is where budgets go and where upgrades stop. Every modification makes the next version harder to adopt, and an organisation with heavy customisation is progressively locked to the version it has.",
+            "Lock-in is a data question before it is a commercial one. If the data cannot be exported in a usable format, the cost of leaving is the cost of recreating the history, and that is what makes a renewal price arbitrary.",
+            "Negotiate the exit at the start, when the vendor wants the deal. Data export format, transition assistance, notice periods and the ownership of configurations are far easier to obtain before signature than after.",
+            "Require a proof of concept on your own data and your own process. A demonstration on the vendor's sample data tests the product's best case, while a trial on your records tests the only case that matters."
+          ],
+          "example": "A ministry signs a five-year platform contract with no data export provision. At renewal the price rises 60 percent, and the cost of migrating the four-year history is quoted at more than the increase.",
+          "points": [
+            "Ask a reference the vendor did not offer",
+            "Total cost includes integration and exit",
+            "Negotiate data export before signature"
+          ],
+          "check": "Find the data export clause in one of your technology contracts and read it."
+        },
+        {
+          "title": "Leading change when the board wants visible progress",
+          "minutes": 19,
+          "teach": [
+            "Boards and funders need visible progress, and the honest position in months one to six is usually that the plumbing is being built and nothing visible has changed. Managing that gap is part of the job, not a communication failure.",
+            "Give visible evidence of the foundations rather than inventing visible benefits. A data accuracy figure improving from 71 to 96 percent is unglamorous, true, and far more persuasive to a sceptical board than a pilot dashboard built on unreliable data.",
+            "Report the risks you are actually carrying. A board told that the programme is on track and then surprised at month nine will not believe month ten either, and the credibility lost is the resource needed for the difficult middle period.",
+            "Protect the programme from reorganisation. Transformation programmes are frequently restructured at the first sign of a slip, which resets the clock and loses the institutional knowledge at exactly the moment it is most valuable.",
+            "Keep one accountable executive sponsor throughout. Programmes that change sponsor twice in a year lose the mandate to make unpopular decisions, and the deferrals accumulate until the original case is unimplementable.",
+            "Define what success looks like in twelve months in operational language: a specific transaction completed in a specific time by a specific group of staff. A board can hold an organisation to that, and cannot hold it to a vision statement."
+          ],
+          "example": "A transformation programme reports no visible benefits for nine months and instead reports data accuracy, integration tests passed and staff trained. The board holds its position because the evidence is concrete and the risks are stated.",
+          "points": [
+            "Show foundation evidence rather than inventing benefits",
+            "Report the risks you are actually carrying",
+            "One sponsor, sustained, or the mandate erodes"
+          ],
+          "check": "Write your twelve-month success in operational language with a transaction, a time and a group of staff."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A transformation programme is late and over budget. Which component is least likely to be the cause?",
+      "explanation": "The technology arrives with a contract and a vendor paid to deliver it. Failure concentrates in the surrounding change: process redesign, data quality, adoption, incentives and support, all of which are usually funded last.",
+      "options": [
+        { "text": "The software itself, which is the most contracted, visible and reversible element", "correct": true },
+        { "text": "The data being migrated from systems nobody documented", "correct": false },
+        { "text": "Staff continuing to use the old process alongside the new one", "correct": false },
+        { "text": "The absence of anyone able to support the system after go-live", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the bank case, adoption is 12 percent and the chief executive wants to double marketing. What is the best response?",
+      "explanation": "Marketing amplifies whatever the experience is. The diagnostic question is where customers drop off after registering, and whether the platform is slower or incomplete compared with the branch, because that determines whether reach is the constraint.",
+      "options": [
+        { "text": "Establish the drop-off between registration and repeat use, and whether the platform is slower than the branch", "correct": true },
+        { "text": "Agree the marketing budget but require it to be spent on branch staff incentives", "correct": false },
+        { "text": "Reduce the marketing budget and reinvest it in a new platform", "correct": false },
+        { "text": "Run the campaign in the two districts with the highest smartphone penetration", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why should foundations such as identity, data definitions and integration be sequenced before visible products?",
+      "explanation": "Every later phase depends on them, and deferring them means rebuilding the visible phases later. A dashboard on unreliable data discredits the programme and costs more to recover from than the delay would have.",
+      "options": [
+        { "text": "Because every later phase depends on them, and rebuilding after they are missing costs more than waiting", "correct": true },
+        { "text": "Because funders insist on technical foundations before approving user-facing features", "correct": false },
+        { "text": "Because they are cheaper to deliver and improve the early budget position", "correct": false },
+        { "text": "Because visible products cannot be demonstrated until the foundations are complete", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What makes a technology vendor difficult to leave?",
+      "explanation": "The cost of leaving is the cost of recreating history. Where data cannot be exported in a usable format, migration is not a commercial negotiation but a rebuild, and that is what gives the vendor pricing power at renewal.",
+      "options": [
+        { "text": "Data that cannot be exported in a usable format, making exit a rebuild rather than a migration", "correct": true },
+        { "text": "A long contract term with a fixed annual licence fee", "correct": false },
+        { "text": "A vendor with a large support team in another country", "correct": false },
+        { "text": "A product that requires annual training for new staff", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A board wants visible progress in month four of a multi-year programme. What is the most defensible response?",
+      "explanation": "Foundations produce measurable evidence even when nothing visible has changed. Reporting data accuracy, integration tests and training completion, alongside the risks being carried, is credible and preserves trust for the difficult middle period.",
+      "options": [
+        { "text": "Report foundation evidence such as data accuracy and tests passed, together with the risks being carried", "correct": true },
+        { "text": "Build a pilot dashboard using the available data so the board has something to see", "correct": false },
+        { "text": "Explain that transformation takes time and ask the board to wait until phase two", "correct": false },
+        { "text": "Reorganise the programme so that a visible component can be delivered earlier", "correct": false }
+      ]
+    }
+  ]
+}

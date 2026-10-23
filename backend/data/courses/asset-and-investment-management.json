@@ -1,0 +1,252 @@
+{
+  "slug": "asset-and-investment-management",
+  "title": "Asset & Investment Management",
+  "program": "FCP",
+  "category": "finance-accounting",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 1000,
+  "summary": "Know what you own and owe, understand why money today is worth more than money later, and spread risk instead of concentrating it.",
+  "description": "Most people in Liberia who hold wealth hold it in one thing: a house, a business, or cash. That is not a savings strategy, it is a concentration, and it means a single event can remove everything. This course is about the small number of ideas that change that position.\n\nIt starts with the arithmetic everyone should be able to do: what you own, what you owe, and what is actually yours. It then covers the time value of money, why a payment this year and a payment in three years are not comparable without adjustment, and how interest works in both directions. From there it works through the trade-off between risk and return, which is the only reason investments earn anything, and closes on diversification, the one protection available to a small investor that costs nothing.\n\nThe examples are Liberian and blunt: a second-hand car, a cousin's import business, a fixed deposit, a plot of land, mobile money. It is not investment advice, and it says so.",
+  "tags": ["investing", "assets", "risk", "diversification", "savings", "finance"],
+  "outcomes": [
+    "Calculate net worth from assets and liabilities, and explain which of the two is being built",
+    "Compare cash flows at different dates using a discount rate",
+    "Explain the risk-return trade-off and apply it to a real choice",
+    "Recognise concentration risk in your own holdings",
+    "Describe how diversification works and what it cannot protect against",
+    "Ask the four questions that should precede any investment decision"
+  ],
+  "caseStudy": "A business owner in Monrovia with 15,000 dollars in savings must choose between a second-hand vehicle she can rent out, a share in a friend's import business that defaulted once before, and a fixed deposit paying four per cent a year.",
+  "modules": [
+    {
+      "title": "Module 1 · What you own and what you owe",
+      "lessons": [
+        {
+          "title": "Assets, liabilities and the number that matters",
+          "minutes": 15,
+          "teach": [
+            "An asset is something you own that has value and can be converted to cash. A liability is an obligation you must settle. Net worth is the difference, and it is the only single number that describes your financial position rather than your income.",
+            "The distinction people get wrong is between an asset and something they simply own. A vehicle used for family transport is an asset that declines in value and costs money monthly; the same vehicle rented out is closer to a business. Neither is automatically good, but they behave differently.",
+            "Second error: counting borrowed money as wealth. If you own land worth 30,000 and owe 24,000 against it, you own 6,000, not 30,000. The asset is real and so is the debt, and only the difference is available to you.",
+            "Write the list once and keep it. Most people discover that their largest holding is also their riskiest, which they had never seen because they had never written it down. Review it every six months, because a business loan that looked modest at signing grows as the business changes, and nobody notices until the repayment date."
+          ],
+          "example": "House 40,000, land 12,000, savings 3,000, owed to you 2,000 = 57,000 in assets. Mortgage 18,000, business loan 9,000, school fees owing 1,500 = 28,500. Net worth 28,500.",
+          "points": ["Net worth = assets minus liabilities", "Borrowed money is not wealth", "An asset that costs you monthly is not automatically an investment"],
+          "check": "Write your own two columns from memory, then check the balances. What surprised you?"
+        },
+        {
+          "title": "Good assets and bad assets are not the same question",
+          "minutes": 15,
+          "teach": [
+            "An asset either produces income, appreciates in value, or does neither. A rental property produces income and may appreciate. A plot of land on the edge of a growing town appreciates without producing anything. A vehicle used personally does neither, and that is fine as long as it is not mistaken for an investment.",
+            "Judging an asset by its usefulness is a common and expensive error. A business machine that saves two hours a day is valuable to the business; the same machine bought by someone with no use for it is a liability with a resale value.",
+            "The useful test for each asset is what it would earn or save over a year, compared with what it costs to hold. Where that comparison is negative for several years and there is no prospect of appreciation, the asset is consuming your position rather than building it.",
+            "This is not an argument against owning things. It is an argument against describing them inaccurately, because a person who believes they are investing while their money is being consumed will make the next decision badly. Ask of each holding whether you would buy it again today at its current value. Where the answer is no, you are holding it by inertia rather than by choice."
+          ],
+          "example": "A vehicle bought at 9,000 and rented at 150 a month grosses 1,800 a year; fuel, repairs and insurance take 900, leaving 900 before depreciation. Its value falls about 1,200 a year. Net contribution is negative.",
+          "points": ["Income, appreciation, or neither", "Usefulness is not the same as return", "Compare annual return with annual holding cost"],
+          "check": "Take your three largest assets. For each, did it earn, appreciate or neither in the last twelve months?"
+        },
+        {
+          "title": "Where Liberian savings actually sit",
+          "minutes": 16,
+          "teach": [
+            "Savings in this market sit in a small number of places: a bank account, mobile money, cash at home, a susu or savings group, property, stock for a trading business, or a business owned outright. Each has a different risk, a different return and a different speed of access.",
+            "Cash at home earns nothing and loses value with inflation. It is also the fastest to access and requires no institution to remain solvent. Bank deposits earn little and depend on the bank being sound. Mobile money is faster than a bank and is now where a great deal of daily money sits, with limits and fees of its own.",
+            "Susu and savings groups are often the best-performing small savings vehicle available to people excluded from formal credit, because the return is the discipline plus access to a lump sum. The risk is that they depend entirely on the organiser's honesty and the members' ability to keep paying.",
+            "Property is where most surplus ends up. It is a real asset, it cannot be spent casually, and it can rise in value. It is also illiquid, expensive to sell, and often held in one location, which is a concentration rather than a savings decision. The practical question is not which route is best in general but which combination you can maintain through a bad year without withdrawing it at the worst moment."
+          ],
+          "example": "A trader keeps 200,000 LRD in mobile money for daily working capital, 400,000 in a susu cycle for a predictable lump sum, and 60,000 in cash at home for emergencies.",
+          "points": ["Each savings route trades return against access and safety", "Cash at home loses value to inflation", "Susu returns discipline and access, but depends on people"],
+          "check": "Where is your money now, in what proportions, and would you choose that split deliberately if you were starting today?"
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Time value of money",
+      "lessons": [
+        {
+          "title": "Why a payment today is not a payment next year",
+          "minutes": 16,
+          "teach": [
+            "Money available now can be used, lent or invested. Money arriving in a year cannot. That difference is not a matter of preference; it is the reason interest exists, and it applies to your decisions whether or not you name it.",
+            "The simplest way to see it: if you could earn ten per cent on money today, then 100 now and 110 in a year are equal. Any offer promising 110 in a year for 100 now is exactly breaking even, and 105 is worse than keeping the money.",
+            "Inflation is the second half. A payment fixed at the same amount in three years buys less than it does today, so a return that is below inflation is a loss in real terms even though the balance grows.",
+            "Once you see cash flows on a timeline, most financial arguments become simpler, because the question stops being which number is bigger and becomes when each number arrives. Once you can draw a timeline, you can also see which of your obligations are bunched together, and bunching is what turns a manageable year into a crisis."
+          ],
+          "example": "An offer of 1,200 in a year for 1,000 today is a 20 per cent return. The same offer in three years is about 6.3 per cent a year, which may be worse than a fixed deposit.",
+          "points": ["Money now can be put to work; money later cannot", "Compare offers by the rate, not the total", "A return below inflation is a real loss"],
+          "check": "Someone offers you 1,000 now or 1,300 in two years. At what annual rate are those equal, and which would you take?"
+        },
+        {
+          "title": "Interest, compounding and the cost of borrowing",
+          "minutes": 16,
+          "teach": [
+            "Interest works in both directions and most people are more familiar with the painful direction. A loan at 28 per cent a year on 100,000 costs 28,000 in the first year and considerably more if the balance is not reduced.",
+            "Compounding means interest is charged on interest. Paid monthly rather than annually, the same nominal rate costs more. This is why the stated rate is not the useful number and the total cost of credit is. Ask the lender for the total in writing before you sign, and compare that total with what you are buying; the comparison is usually the whole argument.",
+            "On the savings side, compounding rewards time more than it rewards rate. Small regular amounts over many years outperform a large amount placed late, because the early contributions have the longest to grow.",
+            "The practical rule is to compare total amounts in and total amounts out, for every credit offer and every savings product. If a lender cannot or will not state the total, that is the answer."
+          ],
+          "example": "Borrowing 100,000 at 3 per cent a month with no repayment for a year leaves 142,600 owing. Borrowing the same at 28 per cent a year leaves 128,000. The shorter-sounding rate is the dearer one.",
+          "points": ["3 per cent a month is not 36 per cent a year in effect", "Compare total repayment, not the rate", "Regular small savings beat a late lump sum"],
+          "check": "Take any loan offer you have. What is the total you will repay, and what percentage is that of what you borrowed?"
+        },
+        {
+          "title": "Comparing options on a timeline",
+          "minutes": 15,
+          "teach": [
+            "Most investment choices differ in timing, not just in amount: a deposit paying annually, a business returning cash monthly, land that pays nothing until sold. To compare them, put each cash flow on a timeline and adjust to a single date.",
+            "You do not need software. Choose a rate you could actually earn elsewhere, divide each future amount by a factor for each year it is away, and add. The result is today's equivalent value, and it makes the options comparable.",
+            "The rate you choose will change the ranking, which is not a flaw. It means the answer depends on what you could otherwise do, which is the honest position and worth stating when you explain a decision.",
+            "Where the timing differences are small and the amounts are clear, do not build a model. The discipline is for decisions large enough that a year's delay matters, or where a salesperson is presenting a benefit as larger than it is. A timeline drawn on paper is enough of a model for most household decisions, and it has the advantage that you can explain it to somebody else."
+          ],
+          "example": "Option A pays 500 a year for three years. Option B pays 1,400 at the end of year three. At ten per cent, A is worth about 1,243 today and B about 1,052, so the smaller total wins.",
+          "points": ["Put every option on one timeline", "Discount at a rate you could really earn", "State the rate, because it changes the ranking"],
+          "check": "Which of your current commitments pays you later for money you spend now, and what return does that imply?"
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Risk and return",
+      "lessons": [
+        {
+          "title": "Why higher returns are always paid for with risk",
+          "minutes": 16,
+          "teach": [
+            "Nobody offers a high return for safety. A high expected return exists because the outcome is uncertain, and the investor is being compensated for accepting that uncertainty. An offer with high return and no risk is a mispriced offer or a lie.",
+            "Risk here means the range of outcomes, not the likelihood of disaster alone. An investment that returns between 6 and 8 per cent is low risk; one that returns 40 per cent or loses everything is high risk, even if its average is higher.",
+            "This is the discipline that separates investing from hoping. Before asking what an investment might earn, ask what the worst realistic outcome is and whether you could survive it.",
+            "Where you cannot survive the worst case, the expected return is irrelevant, because you will not be present to collect it. Write down the worst case in numbers you can picture, such as the month's obligations you could no longer meet, because vagueness is what allows optimism to win."
+          ],
+          "example": "A deposit paying 5 per cent with certainty and a venture with a 60 per cent chance of doubling and 40 per cent chance of total loss have similar expected value, but only one is survivable.",
+          "points": ["Return is payment for uncertainty", "Judge the range of outcomes, not the average", "Survival comes before expected return"],
+          "check": "For your riskiest commitment, what is the worst realistic outcome, and what would you do the month after it happened?"
+        },
+        {
+          "title": "The risks that actually threaten a small investor",
+          "minutes": 15,
+          "teach": [
+            "The textbook risks are market, credit and liquidity. For a small investor in this market, three others matter more: concentration, counterparty honesty, and the inability to sell when you need to.",
+            "Concentration is holding everything in one business, one property or one person's promise. It is the most common and the most damaging, because it converts a single ordinary misfortune into a total loss.",
+            "Counterparty honesty is unglamorous and decisive. Money lent to a friend, a susu organiser or a business partner depends on their conduct, and no expected return compensates for a counterparty who may simply not pay.",
+            "Liquidity is the one people remember only when they need cash. Land, vehicles and business inventory can take months to convert, and selling under time pressure usually means selling at a discount. Keep a reserve that is genuinely separate: money you do not see as available for the business, because a reserve that can be raided in a good week is not a reserve."
+          ],
+          "example": "A family with all savings in one unfinished building cannot pay a medical bill without selling it quickly, which in practice means accepting perhaps two-thirds of its value.",
+          "points": ["Concentration turns misfortune into ruin", "Counterparty conduct is a risk you cannot diversify away casually", "Illiquid assets are worth less when you are in a hurry"],
+          "check": "If you needed 5,000 in seven days, what would you sell, and what would you lose doing it?"
+        },
+        {
+          "title": "Case study: three uses for 15,000",
+          "minutes": 18,
+          "teach": [
+            "A business owner in Monrovia has 15,000 dollars in savings from eight years of trading. She has three offers and one constraint: she may need part of the money within a year for her daughter's schooling.",
+            "The first offer is a second-hand vehicle from a departing aid worker at 11,000. A neighbour already rents his for 250 a month and says demand is steady. Running costs, repairs and depreciation are real, and the vehicle cannot be sold quickly without a discount.",
+            "The second is a 40 per cent share in a friend's import business for 12,000. The friend is capable and the margins are good, but a previous venture of his failed and left suppliers unpaid. The share pays out only when the business distributes, which it has not done in two years of operation.",
+            "The third is a fixed deposit at four per cent a year, convertible within thirty days. It will not build wealth and it will beat inflation only narrowly, but the money remains available and the capital is intact. A common answer is a combination: part in the deposit for the schooling money, part in an asset she can rent, and none in the partnership unless she is willing to lose it and to say so out loud."
+          ],
+          "example": "The owner's own numbers: vehicle net contribution roughly 900 a year before depreciation of about 1,200; the import share has returned nothing to date; the deposit returns 600 a year on the full amount.",
+          "points": ["Compare net contribution, not gross income", "A partner's past conduct is evidence, not slander", "Match the term of the investment to when you need the money"],
+          "check": "Which would you recommend, and what would you say to her about the schooling money she will need within a year?"
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Diversification",
+      "lessons": [
+        {
+          "title": "The only protection that costs nothing",
+          "minutes": 15,
+          "teach": [
+            "Diversification means not depending on one outcome. It works because different holdings rarely fail at the same time, so a loss in one is offset by another. It is the closest thing to a free improvement in finance, and it requires no special access.",
+            "It is not the same as owning several things. Three shops in the same market fail together in a fire or a market closure. Five businesses depending on the same large customer fail when that customer leaves.",
+            "The test is whether the same event can damage everything at once. If it can, the holdings are one position wearing several names.",
+            "For a small investor, genuine diversification may only need three or four unrelated things: a business, a deposit, property in a different location, and cash for emergencies. Write the list and look for the second and third items that depend on the same customer, the same road or the same season. Those form one risk even when they look separate."
+          ],
+          "example": "A trader with three stalls in one market and stock financed by one supplier is not diversified. The same trader with a stall, a deposit and a plot in a different county is.",
+          "points": ["Diversification is about unrelated failures", "Several similar holdings are one position", "Three or four unrelated assets is usually enough"],
+          "check": "Name the single event that would damage most of what you own at once. What could you move to reduce it?"
+        },
+        {
+          "title": "Why owning one property is not diversification",
+          "minutes": 16,
+          "teach": [
+            "Property feels like a spread because it is physical and valuable. But one building in one town is one bet on one location's rents, one currency and one set of buyers, and it cannot be sold in pieces when you need a little cash.",
+            "A Monrovia investor with everything in city property is exposed to a single set of conditions: demand for rented space, construction costs, and the willingness of buyers to complete a purchase. Those move together.",
+            "Property also carries costs that are easy to forget when calculating a return: maintenance, tax, voids between tenants, and the price of a forced sale.",
+            "None of this makes property a bad asset. It makes it a concentrated one, and it argues for keeping part of a portfolio in something that can be converted quickly. A useful measure is how long each holding would take to turn into cash at a fair price: days, months or years. Anything measured in years needs a liquid counterpart."
+          ],
+          "example": "A landlord with two flats and no savings had to sell one during a vacancy and a repair year, accepting 15 per cent below the asking price to complete quickly.",
+          "points": ["One property is one location, one currency, one market", "Property has holding costs and voids", "Keep a liquid reserve alongside property"],
+          "check": "If your property stood empty for six months, which other money would cover your obligations?"
+        },
+        {
+          "title": "The four questions before any investment",
+          "minutes": 15,
+          "teach": [
+            "First: what is the worst realistic outcome, and can I survive it? This question ends more bad decisions than any analysis, because many investments are only attractive if nothing goes wrong.",
+            "Second: when do I need this money back? Money needed within a year does not belong in anything illiquid, whatever the promised return, because the promise and the date will not align.",
+            "Third: who else's behaviour does this depend on, and what is my evidence about them? A counterparty's past conduct is the best available information, and it is usually ignored in favour of the projected return.",
+            "Fourth: what does this stop me doing? Money committed is unavailable for the next opportunity, and that cost never appears in the proposal, which always presents the investment alone. Write the four answers down before you decide, because a proposal explained in conversation is remembered as attractive and a proposal written down is remembered as it actually is."
+          ],
+          "example": "A 12,000 commitment to a friend's business fails the second question if 5,000 is needed for school fees in nine months, regardless of the projected margin.",
+          "points": ["Survive the worst case first", "Match term to need", "Judge counterparties on evidence", "Every commitment has an opportunity cost"],
+          "check": "Apply the four questions to the last significant financial decision you made. Which did you skip?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "You own land worth 30,000 with a 24,000 loan secured against it. What is your net worth from this holding?",
+      "explanation": "Net worth is assets minus liabilities. The land is real, the debt is real, and only the difference belongs to you.",
+      "options": [
+        { "text": "6,000", "correct": true },
+        { "text": "30,000", "correct": false },
+        { "text": "24,000", "correct": false },
+        { "text": "54,000", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An offer pays 1,200 in one year for 1,000 today. A deposit pays 8 per cent a year. Which is the better use of the 1,000, and why?",
+      "explanation": "The offer returns 20 per cent in a year against 8 per cent, so it is better on return — but only if the counterparty pays, which is the risk the extra return is paying for.",
+      "options": [
+        { "text": "The offer, because 20 per cent beats 8 per cent, provided the counterparty is credible", "correct": true },
+        { "text": "The deposit, because any investment offering 20 per cent must be fraudulent", "correct": false },
+        { "text": "The offer, because a larger total is always better regardless of timing", "correct": false },
+        { "text": "They are equivalent because both involve a year", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A trader owns three stalls in one market, all stocked by one supplier. Are they diversified?",
+      "explanation": "A fire, closure or supplier failure damages all three simultaneously. Several similar holdings are one position, not a spread.",
+      "options": [
+        { "text": "No — one event could damage all of it at once", "correct": true },
+        { "text": "Yes — three separate businesses is a spread", "correct": false },
+        { "text": "Yes — as long as the stalls sell different goods", "correct": false },
+        { "text": "Only if the supplier also provides credit", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why is 3 per cent a month more expensive than 28 per cent a year?",
+      "explanation": "Interest compounds monthly on the unpaid balance, so the effective annual cost is far above the nominal figure implied by multiplying by twelve.",
+      "options": [
+        { "text": "Because monthly compounding produces an effective annual cost well above the stated monthly rate", "correct": true },
+        { "text": "Because monthly payments are more difficult to budget for", "correct": false },
+        { "text": "It is not; 36 per cent nominal is always worse", "correct": false },
+        { "text": "Because lenders who quote monthly rates are unregulated", "correct": false }
+      ]
+    },
+    {
+      "prompt": "You have 15,000 in savings, may need 5,000 within a year, and are offered a 40 per cent share in a business that pays out only on distribution. What is the strongest objection?",
+      "explanation": "The money's term does not match the need. An investment that cannot return capital on demand is unsuitable for funds required within a year, whatever the projected return.",
+      "options": [
+        { "text": "The investment cannot return capital when it is needed, so it does not match the term", "correct": true },
+        { "text": "Forty per cent is too large a share to give away", "correct": false },
+        { "text": "The business pays no interest", "correct": false },
+        { "text": "Shares are always riskier than property", "correct": false }
+      ]
+    }
+  ]
+}

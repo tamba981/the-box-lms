@@ -1,0 +1,460 @@
+{
+  "slug": "strategic-hr-management-diploma",
+  "title": "Strategic HR Management Diploma",
+  "program": "PDP",
+  "category": "business-management",
+  "level": "advanced",
+  "credential": "diploma",
+  "priceCents": 5000,
+  "certificateFeeCents": 0,
+  "summary": "Plan the capability the organisation will need, hold on to the people who provide it, and build successors before you need them.",
+  "description": "This diploma treats human resource management as a set of strategic decisions rather than an administrative function. It assumes the learner already manages people and now has to answer harder questions: what capability will this organisation need in four years, what will it cost to keep the people who have it, and who will run the place when the current leadership leaves.\n\nAcross six modules it works from the shift from administration to strategy, through workforce planning, acquisition and retention in a thin labour market, succession and leadership development, and the use of evidence in HR decisions. The final module is a three-lesson extended case.\n\nThe case concerns a fast-growing West African company that has lost forty percent of its senior managers in eighteen months to better-paying competitors, including two international NGOs and a mining company. The chief executive wants aggressive counter-offers, the HR director wants a retention strategy, the board chairman wants a chief executive succession plan within three years, and four of five senior managers come from one ethnic group.\n\nThe material is written for Liberian and wider West African conditions: professional brain drain, thin specialist markets where a single hire can take a year, family business dynamics, union relationships, and organisations competing for a small pool of qualified accountants, engineers and managers.\n\nAssessment asks the learner to sequence decisions rather than list them, because in this subject the order in which things are done determines whether any of them work.",
+  "tags": ["HR strategy", "workforce planning", "retention", "succession", "HR analytics", "organisational design"],
+  "outcomes": [
+    "Distinguish strategic HR decisions from administrative processing",
+    "Plan workforce capability against a three to five year horizon",
+    "Assess a thin labour market and decide between building and buying",
+    "Diagnose senior turnover using evidence rather than exit interviews",
+    "Design pay structures that survive a competitor's counter-offer",
+    "Build succession for roles and development for people",
+    "Use workforce metrics that a board will act on",
+    "Sequence retention, succession and composition work in a live case"
+  ],
+  "caseStudy": "A fast-growing West African company has lost 40 percent of its senior managers in 18 months to better-paying competitors, including two international NGOs and a mining company. The chief executive wants aggressive counter-offers, the HR director wants a talent retention strategy, and the board chairman wants a chief executive succession plan within three years. Meanwhile four of the five senior managers are from one ethnic group. The case runs across the final module.",
+  "modules": [
+    {
+      "title": "HR as strategy, not administration",
+      "lessons": [
+        {
+          "title": "What changes when HR is strategic",
+          "minutes": 22,
+          "teach": [
+            "Administrative HR processes what has already been decided: contracts, payroll, leave, discipline. Strategic HR influences what is decided, by bringing information about capability that nobody else in the organisation holds.",
+            "The change is not a matter of title or of being invited to meetings. It is a change in what the function produces, from transactions completed to judgements offered about whether the organisation can do what it intends to do.",
+            "The information that earns a seat is specific: which roles cannot be replaced within a year, what the loss of one team would do to delivery, what the next strategy requires that the organisation does not currently have.",
+            "The function must speak the language of the decision being taken. A conversation about a large contract becomes an HR contribution when it addresses who will deliver it, whether the skills exist, and what acquiring them would cost in money and time.",
+            "Strategic HR also says no. An organisation that accepts every commitment and discovers the staffing consequence afterwards has an HR function that is processing decisions rather than informing them.",
+            "Credibility is built in the opposite order to the one people expect. The administrative base has to be flawless first, because payroll errors and late contracts destroy more authority than any strategic insight creates."
+          ],
+          "example": "During a bid for a large contract, HR maps the delivery roles, identifies two that cannot be filled locally in time, and proposes subcontracted components. The bid proceeds with a staffing plan the client can believe.",
+          "points": [
+            "Influence decisions rather than process them",
+            "Bring capability information nobody else holds",
+            "Fix the administrative base first"
+          ],
+          "check": "Name one business decision now before your organisation and the workforce question it raises."
+        },
+        {
+          "title": "The three decisions HR actually owns",
+          "minutes": 22,
+          "teach": [
+            "HR owns three decisions and advises on many others. The first is what capability the organisation needs, now and in four years. The second is how to acquire it: build, buy or borrow. The third is how to keep it once acquired.",
+            "The first decision is a planning question answered with the strategy, and it is frequently skipped because the vacancy in front of the organisation appears to answer it. Filling a vacancy reproduces last year's structure.",
+            "The second is an economic question with a time dimension. Building takes years and is uncertain; buying is immediate and expensive; borrowing is flexible and leaves the capability outside the organisation.",
+            "The third is where most of the cost sits over time, because replacing a capable person costs recruitment, lost productivity and the knowledge that leaves with them, and that cost is never in a budget.",
+            "Everything else in HR is advisory: pay levels, disciplinary process, restructuring, union relations. Advisory work is substantial and it is not the same as owning the three, and confusing them produces a function that is busy and uninfluential.",
+            "Organisations without a strategic HR function still make all three decisions. They make them by accident, one vacancy at a time, and the pattern is visible only in the aggregate four years later."
+          ],
+          "example": "A company has filled eleven vacancies in two years without asking what capability it needed. A review finds that seven were replacements for the same role, at rising cost, because nothing was done about retention.",
+          "points": [
+            "Capability, acquisition route, retention",
+            "Everything else is advisory",
+            "Without a decision, the pattern emerges by accident"
+          ],
+          "check": "Answer the three questions for your organisation in one sentence each."
+        },
+        {
+          "title": "The administrative base that earns credibility",
+          "minutes": 21,
+          "teach": [
+            "Payroll accuracy, contracts issued before the first day, leave records that match reality and files that exist are the foundation of everything else. Their absence makes every strategic claim suspect.",
+            "Staff judge the organisation by the reliability of its administration. A person paid late twice does not believe a message about valuing people, and the message costs more to produce than the process that would have prevented the delay.",
+            "The administrative load can be reduced rather than tolerated. A single HR information file with contracts, leave, training and appraisals removes most of the repeated manual work that consumes the function's week.",
+            "Compliance obligations should be on a calendar rather than in memory: registrations, contributions, statutory returns, contract renewals and probation deadlines. Each has a date and each has a penalty attached to missing it.",
+            "Delegation needs a rule. Where the line manager holds the leave record and finance holds the contract, the two disagree, and the disagreement surfaces when somebody leaves and nobody can say what they were owed.",
+            "Protect time for the strategic work explicitly. A function that absorbs every administrative demand will do no planning, and the planning is what the organisation actually needs from it."
+          ],
+          "example": "An HR officer spends four days a month reconciling leave records kept separately by five managers. A single shared record removes the reconciliation and releases the time for workforce planning.",
+          "points": [
+            "Accuracy is the precondition for influence",
+            "Put compliance obligations on a calendar",
+            "Protect time for planning against administrative demand"
+          ],
+          "check": "List your statutory HR obligations and the date each one falls due."
+        }
+      ]
+    },
+    {
+      "title": "Strategic workforce planning",
+      "lessons": [
+        {
+          "title": "Planning capability for three to five years",
+          "minutes": 23,
+          "teach": [
+            "A workforce plan is not a headcount forecast. It starts from the strategy and asks what the organisation must be able to do in three to five years, which of those things it can already do, and what would have to be true for the gap to close.",
+            "Work backwards from the intended position. If the organisation intends to operate under a regulated licence, it needs people who have worked under regulation, and that may be a capability no current employee possesses in any quantity.",
+            "Separate capability from capacity. Two accountants provide capacity for the current workload and no capability for a new reporting standard, and hiring a third does not close that gap.",
+            "Identify the roles that carry the strategy. Most organisations have three to seven roles where the whole plan depends on having capable people in them, and those roles deserve individual attention rather than a place in a table.",
+            "State the plan in time and money. Capability required by year two, route to acquire it, cost per year and the risk if it is not acquired — a table of these is a plan, while a list of desired skills is a wish.",
+            "Review annually and after any strategic change. Workforce plans go stale faster than most documents because both the strategy and the labour market move, and a plan from two years ago describes a market that has gone."
+          ],
+          "example": "A company plans three years ahead, identifies that its growth depends on customs and cross-border expertise it does not have, and starts a two-year development route rather than a recruitment search it cannot fill.",
+          "points": [
+            "Start from strategy, not from current headcount",
+            "Capability is not capacity",
+            "Name the three to seven roles the plan depends on"
+          ],
+          "check": "Write the two capabilities your organisation will need in three years that it does not have today."
+        },
+        {
+          "title": "The labour market you actually have",
+          "minutes": 22,
+          "teach": [
+            "A thin market behaves differently from a deep one. In a deep market you choose between candidates; in a thin market you compete for the few people who exist, and the competition includes employers in other countries.",
+            "This changes the economics. Where replacement takes nine months and a search, an above-market salary for a scarce role is cheaper than the vacancy, and applying a uniform pay policy to scarce roles loses them repeatedly.",
+            "Measure the market rather than assuming it. Time to fill, the number of qualified applicants per vacancy, and the proportion of offers declined are three figures that describe the market you are actually operating in.",
+            "The diaspora is a real source and a specific one. Recruiting from abroad requires patience with notice periods, practical help with relocation and a realistic conversation about conditions, and it works best where experience matters more than a local network.",
+            "Regional mobility within West Africa is underused. Professionals move between countries for opportunity, and an organisation that recruits only locally has removed most of its market without deciding to.",
+            "Accept that some roles cannot be filled at all, and design around it. A structure that depends on a capability nobody can supply is a structural risk, and the response is to redesign the role rather than to keep advertising it."
+          ],
+          "example": "A bank measures time to fill for risk roles at eleven months and offers declined at 60 percent. It stops advertising and starts a two-year internal development route with an external mentor.",
+          "points": [
+            "Thin markets change the economics of pay",
+            "Measure time to fill and offers declined",
+            "Design around roles that cannot be filled"
+          ],
+          "check": "Record time to fill and offers declined for your three hardest roles last year."
+        },
+        {
+          "title": "Build, buy or borrow, and what each costs",
+          "minutes": 22,
+          "teach": [
+            "Building a capability means developing people who are already there, or recruiting at junior level and growing them. It is slow, it builds loyalty, and its cost is concentrated in people who may then leave for a competitor who did not pay for the training.",
+            "Buying means recruiting a finished capability at market rate. It is immediate and expensive, and the person arrives without the relationships that make them effective, which means the first six months deliver less than the salary suggests.",
+            "Borrowing covers peaks, specialist tasks and trials. A consultant can design a system in three months that a permanent employee would take a year to learn, and the organisation is then dependent on the consultant to maintain it.",
+            "Cost all three over the same horizon. A senior hire at a premium salary for three years frequently exceeds the cost of developing two internal successors, and the comparison only becomes visible when both are priced.",
+            "Mix the routes deliberately. Organisations that only buy develop no pipeline and remain exposed to a market they cannot control, while those that only build move too slowly for opportunities that require a capability this year.",
+            "Record which risk you accepted. When the borrowed specialist leaves and the system fails, the file that shows the risk was identified and accepted turns a failure into a lesson rather than a governance finding."
+          ],
+          "example": "A company needs audit capability for a donor requirement within four months. It borrows for the first audit, recruits an assistant accountant in parallel, and moves the function in-house over eighteen months.",
+          "points": [
+            "Cost all three routes over the same horizon",
+            "Buying alone leaves no pipeline",
+            "Record the risk you chose to accept"
+          ],
+          "check": "Price building and buying the same capability over three years."
+        }
+      ]
+    },
+    {
+      "title": "Acquisition and retention in tight markets",
+      "lessons": [
+        {
+          "title": "Hiring when the pool is small",
+          "minutes": 22,
+          "teach": [
+            "When there are three plausible candidates, the process must be faster than the competitor's and the decision more considered. A slow process in a thin market loses the best candidate to whoever moved first, and the best candidate is the one with options.",
+            "Write the requirement as tasks and standards rather than qualities. Reliable and hardworking cannot be assessed at interview, while reconciles the bank by the fifth working day and reports variances above a stated amount can be.",
+            "Test for the thing you are worried about. If the risk is that the person cannot work without supervision, give them a real problem with incomplete information and watch how they proceed rather than asking whether they are self-directed.",
+            "Use references properly. Ask a former manager what the person was trusted to do without checking, and what they would not delegate to them. That question produces more than any question about strengths.",
+            "Sell the role honestly. An organisation that oversells to attract a scarce candidate produces a resignation within a year, and the resignation is attributed to the person rather than to the description they were given.",
+            "Keep the unsuccessful candidates warm. In a thin market the second choice is frequently the next hire, and an organisation that treats candidates badly in one process has removed them from the next one."
+          ],
+          "example": "A company takes seven weeks to decide between two candidates. The stronger one accepts elsewhere in week three, and the appointment is made from a pool that no longer contained the best option.",
+          "points": [
+            "Speed matters when candidates have options",
+            "Write tasks and standards, not qualities",
+            "Ask references what was not delegated to them"
+          ],
+          "check": "Measure how long your last three appointments took from advert to offer."
+        },
+        {
+          "title": "Why senior people leave, and what they say at the door",
+          "minutes": 23,
+          "teach": [
+            "Exit interviews report socially acceptable reasons. A departing manager rarely says that their judgement was overruled repeatedly, so the record says better salary and the analysis goes in the wrong direction.",
+            "Ask the people who stayed. A short conversation with strong performers about what would make them consider leaving reveals more than any exit interview and, crucially, it can be acted on while there is still time.",
+            "The recurring drivers are known: lack of progress, a poor relationship with the person above them, perceived unfairness relative to a colleague, and work that no longer feels worth doing. Pay matters most at the margin.",
+            "Dissatisfaction is local. Organisations lose people from specific teams under specific managers rather than evenly, and a breakdown of turnover by manager is more useful than any company-wide figure.",
+            "The first resignation is a signal and the third is a pattern. Organisations that treat each departure as individual lose the chance to notice that three capable people left the same function within a year.",
+            "Distinguish regrettable from non-regrettable loss. Losing a poor performer is a success, and treating all turnover as failure produces retention effort aimed at people the organisation would be better without."
+          ],
+          "example": "Three of five strong performers leave citing salary. Conversation with the two who stayed shows all five were promised a title change that never happened, and salary was the reason given at the door.",
+          "points": [
+            "Exit interviews report acceptable reasons",
+            "Turnover is local to a team and a manager",
+            "Separate regrettable from non-regrettable loss"
+          ],
+          "check": "Break last year's departures down by team and manager and read the pattern."
+        },
+        {
+          "title": "Pay structures that survive a counter-offer",
+          "minutes": 23,
+          "teach": [
+            "When a key employee resigns for a higher salary, matching the offer solves the immediate problem and creates a larger one: everyone learns that resignation is the route to a pay rise, and the next round of resignations is caused by the first settlement.",
+            "The real question is why the organisation did not know before the resignation. A person who is paid 40 percent below market and is content is unusual, and the absence of a review that would have revealed it is the actual failure.",
+            "Compensation structures require grades and ranges rather than individual negotiation. A range allows discretion within a defensible boundary, while pure negotiation produces salaries that cannot be explained and cannot be defended when they are questioned.",
+            "Pay compression is the silent driver of senior departures. A new recruit hired at market rate close to an experienced holder produces a grievance about fairness rather than money, and it is the experienced person whose replacement is hardest to find.",
+            "Where the structure cannot accommodate a market rate, decide explicitly: pay above the range as a documented exception, accept the departure, or change the role. The one option that fails is an undocumented exception that others discover.",
+            "Publish the logic even if not the numbers. Staff who understand how grades and ranges work, and what moves a person through them, are far less likely to conclude that the only route is an offer from elsewhere."
+          ],
+          "example": "A company matches a 40 percent counter-offer for one manager. Within five months, three other managers resign, each having received an offer from elsewhere before negotiating.",
+          "points": [
+            "Matching a resignation teaches resignation as a tactic",
+            "Ask why nobody knew before the offer",
+            "Fix compression before it causes the departure"
+          ],
+          "check": "Compare the newest recruit's salary in a role with the longest-serving holder's, and note the gap."
+        }
+      ]
+    },
+    {
+      "title": "Succession and leadership development",
+      "lessons": [
+        {
+          "title": "Succession for the role and for the person",
+          "minutes": 22,
+          "teach": [
+            "Planning for the role answers what the position requires and who could hold it. Planning for the person answers what each capable individual needs to become ready, and an organisation that does only the first produces a list that fails at the moment it is used.",
+            "Start with criticality rather than seniority. The role that would stop the organisation is not always the most senior, and a finance officer who alone understands donor reporting is frequently more critical than a director.",
+            "Readiness should be stated in time: ready now, ready in a year, ready in three years. Adjectives such as high potential cannot be tested, and a list of adjectives produces a board that believes it has a plan.",
+            "Every ready-now candidate needs exposure before the vacancy. A deputy who has never chaired the meeting, signed the return or faced the auditor is not ready, and readiness is built from specific experiences rather than time served.",
+            "Review the plan with the board annually. Succession is a governance responsibility, and a board that discovers it has no successor at the moment of a resignation has delegated its most important decision to circumstance.",
+            "Accept that some roles will be filled externally. A plan that assumes every critical role has an internal successor is a plan that has not been tested against the actual bench, and honesty about that gap is what makes the rest credible."
+          ],
+          "example": "A succession list names the finance manager as ready now for the director role. When the director leaves, the finance manager has never presented to the board and declines the position.",
+          "points": [
+            "Plan for roles and for people separately",
+            "State readiness in months",
+            "Give candidates the experiences before the vacancy"
+          ],
+          "check": "Name your three most critical roles and whether each has a ready-now successor."
+        },
+        {
+          "title": "Development that changes capability",
+          "minutes": 22,
+          "teach": [
+            "Most development spending produces attendance and little else. A course is an input, and unless the person returns to work that requires the new capability, the learning decays within months and the budget has bought a certificate.",
+            "Design development around a task the organisation needs doing. A junior manager given responsibility for a real budget, with support and review, develops more in six months than in three courses, and the organisation gains the output.",
+            "Use the seventy-twenty-ten proportion as a discipline rather than a doctrine: most development comes from doing the work, some from observing others, and a small amount from instruction, and budgets are usually allocated in the opposite order.",
+            "Assign a mentor who is not the line manager. The line manager assesses performance and has an interest in the work being delivered, while a mentor can discuss the person's development without that conflict.",
+            "Make the learning visible in the work. Documenting what was tried, what happened and what would be done differently converts experience into transferable capability, and it takes twenty minutes a month.",
+            "Measure development by what people can now do. A count of training days is an activity measure, while a reduction in escalations or a successful handover is evidence that capability changed."
+          ],
+          "example": "A finance assistant attends three accounting courses and cannot prepare a reconciliation unsupervised. Given ownership of the reconciliation with monthly review, she is independent within four months.",
+          "points": [
+            "Give people real work with support and review",
+            "Fund experience, not only instruction",
+            "Measure what people can now do"
+          ],
+          "check": "Name one person whose development would change if they owned a real piece of work next quarter."
+        },
+        {
+          "title": "The chief executive succession question",
+          "minutes": 23,
+          "teach": [
+            "Chief executive succession is the board's decision and not the incumbent's, and it is the single event where a board's competence is most visibly tested. A board that has not considered it has left its most consequential decision to chance.",
+            "Start with what the next phase requires rather than with who is available. A company entering a regulated market, a regional expansion or a turnaround needs a different chief executive from the one who built the current business.",
+            "Distinguish an internal successor from an external one on purpose. An internal appointment preserves continuity and culture and risks reproducing the current model; an external appointment brings change and costs institutional knowledge.",
+            "Tell the internal candidates where they stand. An organisation that maintains a fiction of open competition while grooming one person loses the others, and those others are usually the people the next succession will need.",
+            "Plan the handover rather than only the appointment. Six months of overlap, a defined set of relationships transferred and a written account of the open issues is what allows a new chief executive to start on the strategy rather than on the archaeology.",
+            "Prepare for the unplanned departure too. The chairman should know, in writing, who would act and under what authority if the chief executive were unavailable tomorrow, and the answer should not be the same person who signs the cheques."
+          ],
+          "example": "A chairman asks for a three-year chief executive succession plan. The board defines the capability the next phase requires before considering candidates, and finds it differs from the current profile.",
+          "points": [
+            "Define what the next phase needs, not who is available",
+            "Be honest with internal candidates",
+            "Plan for the unplanned departure as well"
+          ],
+          "check": "Write who would act if your chief executive were unavailable tomorrow, and under what authority."
+        }
+      ]
+    },
+    {
+      "title": "Evidence, design and ethics",
+      "lessons": [
+        {
+          "title": "Metrics a board will act on",
+          "minutes": 22,
+          "teach": [
+            "Most HR reporting measures activity: training days, appraisals completed, recruitment turnaround. Executives cannot act on these because they do not connect to anything the organisation is trying to achieve.",
+            "Report the measures that describe risk and capability: critical roles without a ready successor, the internal fill rate for scarce roles, voluntary turnover among high performers, and vacancies open beyond a stated period.",
+            "Segment everything that matters. Company-wide turnover conceals the fact that one team is losing everyone, and an average hides exactly the distribution that determines what to do.",
+            "Tie at least one measure to money. The cost of a vacancy in a revenue-generating role, or the cost of a failed senior recruitment, gives an executive a reason to act that a percentage does not.",
+            "Keep the set small and stable. Five measures reported for two years reveal trends, while twenty reported once a year reveal nothing and are forgotten between cycles.",
+            "Explain the movement rather than only reporting it. A number with a sentence on why it changed and what is proposed is a management report; a number alone is data, and data does not reach the agenda."
+          ],
+          "example": "An HR report of nine activity measures is replaced by five risk measures, including critical roles without successors and high-performer turnover, and the board discusses the second for twenty minutes.",
+          "points": [
+            "Report risk and capability, not activity",
+            "Segment averages",
+            "Explain the movement and propose an action"
+          ],
+          "check": "Take your HR report and mark which measures an executive could act on this quarter."
+        },
+        {
+          "title": "Organisational design follows strategy",
+          "minutes": 22,
+          "teach": [
+            "Structure is not neutral. Every structure makes some decisions easy and others difficult, so the question is not which structure is best but which one makes the strategy's critical decisions easy.",
+            "Design around the decisions rather than the people. A structure that works because one exceptional manager holds it together will fail when that person leaves, and the design should be judged by what happens without them.",
+            "Count the layers and the spans. Every additional layer slows a decision and adds a person whose role is to transmit information upward, and wide spans with a capable manager often outperform narrow ones.",
+            "Beware the reorganisation as a response to a problem that is not structural. Poor performance in one function is frequently a capability or management issue, and restructuring moves the problem rather than solving it.",
+            "Define accountability at each boundary. Where two functions share responsibility for an outcome without one owning it, the gap becomes visible only when something fails and both can demonstrate that it was not theirs.",
+            "Change structure rarely and explain it fully. Frequent restructuring exhausts the organisation, and each one resets relationships and interrupts work at a cost that is never included in the business case."
+          ],
+          "example": "A company restructures twice in two years to fix late reporting. The third review finds the cause is a missing reconciliation process rather than the reporting line.",
+          "points": [
+            "Design for the decisions the strategy needs",
+            "Judge the design by what happens without a specific person",
+            "Reorganising is not a fix for a capability problem"
+          ],
+          "check": "Name one decision your structure makes unnecessarily difficult."
+        },
+        {
+          "title": "Composition, fairness and the ethics of hiring",
+          "minutes": 23,
+          "teach": [
+            "Where senior management draws from one group, the organisation loses access to talent and to perspectives, and it also loses legitimacy with customers, staff and regulators who notice the pattern even when nothing is stated.",
+            "The pattern usually has ordinary causes: hiring through networks, promotion from a single function, and criteria that reproduce the current leadership profile. Each is fixable and none requires anyone to have acted in bad faith.",
+            "The first step is measurement, not accusation. Recording the composition of applications, shortlists and appointments at each level shows where the pattern is created, and the point is frequently earlier than people assume.",
+            "Widen the sourcing before changing the criteria. Advertised roles, structured interviews and a shortlist rule that requires more than one qualified candidate from outside the existing network change outcomes without any explicit target.",
+            "Succession and composition are the same conversation. A leadership pipeline that produces one profile will keep producing it, so who is developed becomes more consequential than who is hired this year.",
+            "Handle it as a business problem rather than a moral one, and say so. Framing it as fairness invites a debate about fairness, while framing it as access to capability and legitimacy invites the people who must act to solve it."
+          ],
+          "example": "A company finds that 80 percent of applications come from one network but only 45 percent of qualified candidates do. Advertising the roles and requiring a wider shortlist changes the outcome within two hiring rounds.",
+          "points": [
+            "Measure composition at each stage, not only at the top",
+            "Widen sourcing before tightening criteria",
+            "Frame it as capability and legitimacy, not only fairness"
+          ],
+          "check": "Record the composition of your last three shortlists and where candidates came from."
+        }
+      ]
+    },
+    {
+      "title": "The talent flight case",
+      "lessons": [
+        {
+          "title": "Case part one: the numbers and what they conceal",
+          "minutes": 23,
+          "teach": [
+            "A fast-growing West African company has lost 40 percent of its senior managers in eighteen months, to better-paying competitors including two international NGOs and a mining company. The chief executive wants aggressive counter-offers.",
+            "The first move is to establish what the 40 percent actually consists of. Which roles, which functions, which tenure, which destinations, and whether the people who left were high performers or people the organisation would have moved on in any case.",
+            "Aggressive counter-offers would be a decision taken before the diagnosis. A pattern of departures to several different employers suggests a general condition rather than one competitor, and a condition cannot be solved one offer at a time.",
+            "The board chairman's succession question is not a separate item. If senior managers are leaving, the chief executive's own successor may be among the people who have gone or who are considering it, and the three questions in this case are one question about the organisation's ability to keep capability.",
+            "The composition issue belongs in the same analysis. Four of five senior managers from one ethnic group is a fact about how people have been developed and recruited, and it is relevant because a narrow pipeline is also a thin pipeline, which is the same problem as talent flight.",
+            "The output of this stage is a written diagnosis with numbers, not a strategy. Organisations that skip it produce retention plans aimed at the wrong cause, and the plans are recognised as such by the staff they are meant to retain."
+          ],
+          "example": "A company reports losing 40 percent of senior managers. The breakdown shows five of nine departures came from one function under one director, and three were people already on performance plans.",
+          "points": [
+            "Break down the loss before responding to it",
+            "One competitor suggests a problem, several suggests a condition",
+            "The succession and composition questions are the same question"
+          ],
+          "check": "For this case, list the four breakdowns you would produce before proposing anything."
+        },
+        {
+          "title": "Case part two: retention, succession and composition as one problem",
+          "minutes": 23,
+          "teach": [
+            "The three requests in this case are usually treated as three projects with three owners. In reality they share one cause: the organisation has not been able to offer capable people a future it can describe, and each departure makes that future less credible.",
+            "A counter-offer addresses pay and leaves the future unchanged. A retention strategy that does not include visible progression will retain people for one more cycle, and the second resignation will be harder to answer than the first.",
+            "Succession answers the future question directly. Naming who could hold which role, and what development each needs, tells every senior manager whether there is a path, and the absence of that answer is what a competitor's offer exploits.",
+            "Composition widens the pipeline that succession depends on. An organisation drawing its leaders from one network has fewer candidates for every senior role, which makes each departure more damaging than it would be in a wider pool.",
+            "So the sequence is diagnosis, then progression and succession, then pay structure, then composition, and the pay question is answered inside a structure rather than one settlement at a time.",
+            "The board chairman's three-year horizon sets the clock. A chief executive succession plan within three years is achievable only if the development starts now, and it also gives senior managers the most credible retention argument available, which is that the organisation is preparing someone for the top job."
+          ],
+          "example": "A retention plan, a succession plan and a diversity review run as three projects. None of them tells a senior manager what their own next three years look like, and two more resign during the year.",
+          "points": [
+            "All three requests share one cause",
+            "Counter-offers buy one cycle, not a future",
+            "Succession is the strongest retention argument available"
+          ],
+          "check": "For this case, write the one sentence that describes the shared cause of the three problems."
+        },
+        {
+          "title": "Case part three: sequencing the first year",
+          "minutes": 23,
+          "teach": [
+            "The first quarter is diagnosis and conversation. Produce the breakdown of departures, hold the conversations with current senior managers that reveal what would make them consider leaving, and establish what the next phase of the business requires of its leadership.",
+            "The second quarter is the succession and progression framework. Critical roles, readiness in time, the development each candidate needs, and an honest statement to internal candidates about where they stand. This is the work that answers the future question.",
+            "The third quarter is pay structure and the counter-offer policy. Grades and ranges, a documented position on exceptions, and a rule agreed with the board about what the organisation will and will not match.",
+            "The fourth quarter is composition and sourcing. Advertising rather than relying on networks, structured interviews, wider shortlists, and measurement at each stage so that the pattern becomes visible and therefore manageable.",
+            "Throughout, the chief executive's own succession runs in parallel rather than at the end. It is the board's item, it needs its own timetable, and it should be reported to the board at every meeting rather than annually.",
+            "The measure of success after a year is not turnover alone. It is whether the organisation can name a ready successor for each critical role, whether high-performer turnover has fallen, and whether the shortlist composition has widened. Those three are the evidence that the sequence worked."
+          ],
+          "example": "A company sequences diagnosis, succession, pay structure and sourcing across four quarters, and reviews the board's succession plan at every meeting rather than annually.",
+          "points": [
+            "Diagnose first, then build progression",
+            "Fix pay inside a structure, not one offer at a time",
+            "Report chief executive succession at every board meeting"
+          ],
+          "check": "For this case, name the one action you would take in the first thirty days and why it comes first."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A key employee receives an offer at 40 percent higher salary. You could match it but it would break the compensation structure. What is the real question?",
+      "explanation": "Matching solves one resignation and teaches the organisation that resignation is the route to a rise. The real question is why the gap existed unnoticed, and whether the organisation can offer a future that makes the offer less decisive.",
+      "options": [
+        { "text": "Why the gap went unnoticed, and whether a future can be offered that makes pay the only difference", "correct": true },
+        { "text": "Whether the employee is genuinely worth 40 percent more than their colleagues", "correct": false },
+        { "text": "Whether the competitor can sustain paying that salary", "correct": false },
+        { "text": "Whether the employee has another offer in writing", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A chief executive wants to hire someone exactly like the last person in the role. What is wrong with that criterion?",
+      "explanation": "Hiring a replica reproduces the previous model, which is appropriate only if nothing has changed. The requirement should come from what the next phase needs, and that frequently differs from the profile of the person who has left.",
+      "options": [
+        { "text": "It reproduces the previous model regardless of whether the next phase needs something different", "correct": true },
+        { "text": "It is discriminatory because it favours internal candidates", "correct": false },
+        { "text": "It makes the salary negotiation more difficult", "correct": false },
+        { "text": "It slows the recruitment process unnecessarily", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In succession planning, what is the difference between planning for the role and planning for the person?",
+      "explanation": "The role plan asks what the position requires and who could hold it. The person plan asks what each individual needs to become ready. An organisation that does only the first holds a list that fails when it is needed.",
+      "options": [
+        { "text": "The role plan defines requirements and candidates; the person plan defines what each candidate needs to become ready", "correct": true },
+        { "text": "The role plan is for executives and the person plan is for junior staff", "correct": false },
+        { "text": "They are the same exercise conducted at different levels of detail", "correct": false },
+        { "text": "The person plan is confidential and the role plan is published", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case, what should be established before any retention plan is proposed?",
+      "explanation": "The 40 percent is an aggregate. Which roles, functions, tenure and performance levels the departures represent determines whether this is a pay problem, a management problem or a normal restructuring that has been miscounted.",
+      "options": [
+        { "text": "A breakdown by role, function, tenure, performance and destination", "correct": true },
+        { "text": "The exact salary each leaver was offered by the competitor", "correct": false },
+        { "text": "Whether the chief executive supports a retention budget", "correct": false },
+        { "text": "The average market salary for each of the vacated roles", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Four of five senior managers come from one ethnic group. What is the most effective first step?",
+      "explanation": "Measurement at each stage shows where the pattern is created, and it is usually earlier than people assume. Widening sourcing and shortlists changes outcomes without requiring anyone to be accused of bad faith.",
+      "options": [
+        { "text": "Measure composition at application, shortlist and appointment to find where the pattern is created", "correct": true },
+        { "text": "Set a quota for the next two senior appointments", "correct": false },
+        { "text": "Publish a statement committing the company to diversity", "correct": false },
+        { "text": "Bring in an external facilitator to run a workshop on inclusion", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why does matching counter-offers tend to increase resignations rather than reduce them?",
+      "explanation": "A settlement reached by resigning is observed by everyone. It teaches that an external offer is the only effective way to obtain a rise, and the next round of resignations is caused by the first settlement rather than by the market.",
+      "options": [
+        { "text": "Everyone learns that resignation is the route to a rise, so the next offers are sought deliberately", "correct": true },
+        { "text": "Matching a counter-offer always breaches the salary structure and requires disclosing it", "correct": false },
+        { "text": "Competitors respond by raising their offers further each time", "correct": false },
+        { "text": "The employee who was matched becomes less productive afterwards", "correct": false }
+      ]
+    }
+  ]
+}

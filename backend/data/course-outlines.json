@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "note": "Index of the Phase 2d catalog. Each course's outline and lesson copy lives in its own file under data/courses/ so a change to one course is a diff to one file. This file carries the decisions a reviewer needs to check at a glance: program, pricing, credential and authoring type.",
+  "instructorEmail": "motivacooperation4@gmail.com",
+  "programs": {
+    "FCP": {
+      "name": "Foundation Certificate Programme",
+      "level": "beginner",
+      "credential": "certificate"
+    },
+    "CPP": {
+      "name": "Comprehensive Professional Programme",
+      "level": "intermediate",
+      "credential": "certificate"
+    },
+    "PDP": {
+      "name": "Professional Diploma Programme",
+      "level": "advanced",
+      "credential": "diploma"
+    }
+  },
+  "courses": [
+    { "title": "Digital Productivity & Remote Work", "slug": "digital-productivity-and-remote-work", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 0, "file": "courses/digital-productivity-and-remote-work.json" },
+    { "title": "Microsoft Office Productivity", "slug": "microsoft-office-productivity", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 0, "file": "courses/microsoft-office-productivity.json" },
+    { "title": "Effective Communication & Public Speaking", "slug": "effective-communication-and-public-speaking", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 0, "file": "courses/effective-communication-and-public-speaking.json" },
+    { "title": "Customer Service & Relationship Management", "slug": "customer-service-and-relationship-management", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 0, "file": "courses/customer-service-and-relationship-management.json" },
+    { "title": "Office Administration & Management", "slug": "office-administration-and-management", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 0, "file": "courses/office-administration-and-management.json" },
+    { "title": "Data Analysis Using SPSS", "slug": "data-analysis-using-spss", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 0, "file": "courses/data-analysis-using-spss.json" },
+    { "title": "Microsoft Excel Essentials", "slug": "microsoft-excel-essentials", "program": "FCP", "type": "handwritten", "priceCents": 0, "certificateFeeCents": 0, "file": "courses/microsoft-excel-essentials.json" },
+    { "title": "Research & Report Writing", "slug": "research-and-report-writing", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 0, "file": "courses/research-and-report-writing.json" },
+    { "title": "Monitoring & Evaluation", "slug": "monitoring-and-evaluation", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 0, "file": "courses/monitoring-and-evaluation.json" },
+    { "title": "QuickBooks Essentials", "slug": "quickbooks-essentials", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 0, "file": "courses/quickbooks-essentials.json" },
+
+    { "title": "Asset & Investment Management", "slug": "asset-and-investment-management", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 1000, "file": "courses/asset-and-investment-management.json" },
+    { "title": "Banking & Finance", "slug": "banking-and-finance", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 1000, "file": "courses/banking-and-finance.json" },
+    { "title": "Compliance & Risk Management", "slug": "compliance-and-risk-management", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 1000, "file": "courses/compliance-and-risk-management.json" },
+    { "title": "Database Administration & Management", "slug": "database-administration-and-management", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 1000, "file": "courses/database-administration-and-management.json" },
+    { "title": "Disaster Management & Emergency Response", "slug": "disaster-management-and-emergency-response", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 1000, "file": "courses/disaster-management-and-emergency-response.json" },
+    { "title": "Environmental & Social Impact Assessment", "slug": "environmental-and-social-impact-assessment", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 1000, "file": "courses/environmental-and-social-impact-assessment.json" },
+    { "title": "Graphic Design Using Adobe Photoshop", "slug": "graphic-design-using-adobe-photoshop", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 1000, "file": "courses/graphic-design-using-adobe-photoshop.json" },
+    { "title": "Internal Audit & Control", "slug": "internal-audit-and-control", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 1000, "file": "courses/internal-audit-and-control.json" },
+    { "title": "Marketing Strategy & Brand Management", "slug": "marketing-strategy-and-brand-management", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 1000, "file": "courses/marketing-strategy-and-brand-management.json" },
+    { "title": "Public Relations & Media Strategy", "slug": "public-relations-and-media-strategy", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 1000, "file": "courses/public-relations-and-media-strategy.json" },
+
+    { "title": "Digital Marketing & Content Creation", "slug": "digital-marketing-and-content-creation", "program": "FCP", "type": "handwritten", "priceCents": 0, "certificateFeeCents": 2000, "file": "courses/digital-marketing-and-content-creation.json" },
+    { "title": "Entrepreneurship & Business Management", "slug": "entrepreneurship-and-business-management", "program": "FCP", "type": "handwritten", "priceCents": 0, "certificateFeeCents": 2000, "file": "courses/entrepreneurship-and-business-management.json" },
+    { "title": "Financial Management", "slug": "financial-management", "program": "FCP", "type": "handwritten", "priceCents": 0, "certificateFeeCents": 2000, "file": "courses/financial-management.json" },
+    { "title": "Human Resource Management", "slug": "human-resource-management", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 2000, "file": "courses/human-resource-management.json" },
+    { "title": "Logistics & Supply Chain Management", "slug": "logistics-and-supply-chain-management", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 2000, "file": "courses/logistics-and-supply-chain-management.json" },
+    { "title": "Project Management", "slug": "project-management", "program": "FCP", "type": "handwritten", "priceCents": 0, "certificateFeeCents": 2000, "file": "courses/project-management.json" },
+    { "title": "Procurement & Contract Management", "slug": "procurement-and-contract-management", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 2000, "file": "courses/procurement-and-contract-management.json" },
+
+    { "title": "Leadership & Organizational Development", "slug": "leadership-and-organizational-development", "program": "FCP", "type": "handwritten", "priceCents": 0, "certificateFeeCents": 3000, "file": "courses/leadership-and-organizational-development.json" },
+    { "title": "Occupational Health & Safety Management", "slug": "occupational-health-and-safety-management", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 3000, "file": "courses/occupational-health-and-safety-management.json" },
+    { "title": "Proposal Writing & Resource Mobilization", "slug": "proposal-writing-and-resource-mobilization", "program": "FCP", "type": "templated", "priceCents": 0, "certificateFeeCents": 3000, "file": "courses/proposal-writing-and-resource-mobilization.json" },
+
+    { "title": "Advanced Financial Analysis & Modeling", "slug": "advanced-financial-analysis-and-modeling", "program": "CPP", "type": "handwritten", "priceCents": 4000, "certificateFeeCents": 0, "file": "courses/advanced-financial-analysis-and-modeling.json" },
+    { "title": "Strategic Business Management", "slug": "strategic-business-management", "program": "CPP", "type": "handwritten", "priceCents": 4000, "certificateFeeCents": 0, "file": "courses/strategic-business-management.json" },
+    { "title": "Advanced Project Management", "slug": "advanced-project-management", "program": "CPP", "type": "templated", "priceCents": 4000, "certificateFeeCents": 0, "file": "courses/advanced-project-management.json" },
+    { "title": "Data Analytics & Business Intelligence", "slug": "data-analytics-and-business-intelligence", "program": "CPP", "type": "templated", "priceCents": 3500, "certificateFeeCents": 0, "file": "courses/data-analytics-and-business-intelligence.json" },
+    { "title": "Digital Transformation Strategy", "slug": "digital-transformation-strategy", "program": "CPP", "type": "templated", "priceCents": 3500, "certificateFeeCents": 0, "file": "courses/digital-transformation-strategy.json" },
+    { "title": "Enterprise Risk Management", "slug": "enterprise-risk-management", "program": "CPP", "type": "templated", "priceCents": 3000, "certificateFeeCents": 0, "file": "courses/enterprise-risk-management.json" },
+    { "title": "Advanced HR Strategy & Talent Management", "slug": "advanced-hr-strategy-and-talent-management", "program": "CPP", "type": "templated", "priceCents": 3000, "certificateFeeCents": 0, "file": "courses/advanced-hr-strategy-and-talent-management.json" },
+    { "title": "Supply Chain Optimization", "slug": "supply-chain-optimization", "program": "CPP", "type": "templated", "priceCents": 3000, "certificateFeeCents": 0, "file": "courses/supply-chain-optimization.json" },
+    { "title": "Advanced Marketing Analytics", "slug": "advanced-marketing-analytics", "program": "CPP", "type": "templated", "priceCents": 3000, "certificateFeeCents": 0, "file": "courses/advanced-marketing-analytics.json" },
+    { "title": "Corporate Governance & Ethics", "slug": "corporate-governance-and-ethics", "program": "CPP", "type": "templated", "priceCents": 2000, "certificateFeeCents": 0, "file": "courses/corporate-governance-and-ethics.json" },
+    { "title": "Advanced Negotiation & Contract Management", "slug": "advanced-negotiation-and-contract-management", "program": "CPP", "type": "templated", "priceCents": 2000, "certificateFeeCents": 0, "file": "courses/advanced-negotiation-and-contract-management.json" },
+
+    { "title": "Executive Leadership & Management Diploma", "slug": "executive-leadership-and-management-diploma", "program": "PDP", "type": "handwritten", "priceCents": 5000, "certificateFeeCents": 0, "file": "courses/executive-leadership-and-management-diploma.json" },
+    { "title": "Advanced Financial Management Diploma", "slug": "advanced-financial-management-diploma", "program": "PDP", "type": "templated", "priceCents": 5000, "certificateFeeCents": 0, "file": "courses/advanced-financial-management-diploma.json" },
+    { "title": "Strategic HR Management Diploma", "slug": "strategic-hr-management-diploma", "program": "PDP", "type": "templated", "priceCents": 5000, "certificateFeeCents": 0, "file": "courses/strategic-hr-management-diploma.json" },
+    { "title": "Project Management Professional Diploma", "slug": "project-management-professional-diploma", "program": "PDP", "type": "templated", "priceCents": 5000, "certificateFeeCents": 0, "file": "courses/project-management-professional-diploma.json" },
+    { "title": "Business Analytics & Strategy Diploma", "slug": "business-analytics-and-strategy-diploma", "program": "PDP", "type": "handwritten", "priceCents": 5000, "certificateFeeCents": 0, "file": "courses/business-analytics-and-strategy-diploma.json" }
+  ]
+}

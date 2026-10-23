@@ -1,0 +1,371 @@
+{
+  "slug": "financial-management",
+  "title": "Financial Management",
+  "program": "FCP",
+  "category": "finance-accounting",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 2000,
+  "summary": "Read a set of accounts, understand why profit is not cash, control working capital, and make spending and funding decisions you can defend.",
+  "description": "Financial management is the set of decisions that decide whether a business survives its own success. A company can win every contract in front of it and still fail, because growth consumes cash before it produces it. This course teaches the numbers a manager actually uses: how to read the three statements and how they connect, why a profitable month can empty the bank account, how working capital quietly absorbs money, how to work out what a purchase has to earn to be worth making, and how to choose between borrowing and selling a share of the business.\n\nIt is written for the person who has to explain the numbers rather than merely produce them: the manager who signs off a purchase, the officer who prepares the monthly report, the owner who has to decide whether to take the order. Every method is worked through on small numbers you can redo on paper, and every lesson ends with a question about your own organisation rather than a definition to memorise.\n\nThe course assumes no accounting qualification. It assumes you have seen a set of accounts, or will look at one while you study.",
+  "tags": [
+    "financial management",
+    "financial statements",
+    "cash flow",
+    "working capital",
+    "budgeting",
+    "break-even",
+    "finance"
+  ],
+  "outcomes": [
+    "Read an income statement, balance sheet and cash flow statement, and explain what each one does and does not tell you",
+    "Explain why a profitable organisation can run out of cash, and forecast the point at which it will",
+    "Measure and shorten the cash conversion cycle of a real business",
+    "Calculate break-even, contribution and payback on a decision you are actually facing",
+    "Compare debt and equity honestly, including what each one costs beyond the interest rate",
+    "Run a monthly financial review that produces decisions rather than a report nobody reads"
+  ],
+  "caseStudy": "A wholesale business in Monrovia is growing fast, profitable on paper, and short of cash every month. You are asked to explain why, and what to change first.",
+  "modules": [
+    {
+      "title": "Module 1 · Reading the numbers",
+      "lessons": [
+        {
+          "title": "The three statements, and the question each one answers",
+          "summary": "An income statement, a balance sheet and a cash flow statement answer three different questions. Confusing them is the most common way to misread a business.",
+          "minutes": 18,
+          "html": [
+            "<p>A set of accounts is not one document. It is three, and each answers a question the other two cannot. The income statement answers <em>did we make money over this period</em>. The balance sheet answers <em>what do we own and owe at this moment</em>. The cash flow statement answers <em>where did the money actually go</em>. A manager who can only read one of them will confidently draw the wrong conclusion from it.</p>",
+            "<p>Start with the income statement. It lists what was earned and what it cost to earn it, over a period: a month, a quarter, a year. Sales, less the direct cost of what was sold, gives a gross profit. Subtract the running costs of the organisation and you reach an operating profit. Subtract interest and tax and you have the bottom line. The bottom line is an opinion about performance, and it is a useful one, but it is not money.</p>",
+            "<p>The balance sheet is a photograph taken at the close of that period. On one side, what the business owns: cash, what customers owe it, stock, equipment, buildings. On the other, what it owes: suppliers, loans, tax. The difference between the two is what belongs to the owners. Every transaction changes both sides, which is why it always balances, and why it is the statement that catches what the income statement quietly ignores.</p>",
+            "<p>The cash flow statement is the reconciliation between the two. It takes the profit and removes everything that was not cash: a sale on credit that has not been collected, a purchase of stock still sitting in the warehouse, a machine bought outright. What remains is the movement in the bank account, and it must agree with the bank statement or something is wrong.</p>",
+            "<h3>Why the three disagree on purpose</h3>",
+            "<p>They disagree because they measure different things over different windows. Revenue is recorded when the sale is made, not when the customer pays. A machine is recorded as a small annual cost rather than the large payment made in one month. None of that is dishonest; it is what makes a year comparable with the year before. But it means the income statement can report a good year while the bank account falls, and both statements are correct.</p>",
+            "<p><strong>Check yourself.</strong> Take the last set of accounts you saw. Which of the three statements did you read first, and what would the other two have changed about your conclusion?</p>"
+          ]
+        },
+        {
+          "title": "How the statements connect",
+          "summary": "Profit flows into the balance sheet and out through the cash flow statement. Tracing that path is how you find out whether a number is real.",
+          "minutes": 17,
+          "html": [
+            "<p>The three statements are one system, and the joints between them are where errors hide. Profit from the income statement lands in the balance sheet as an increase in the owners' stake; it is the link that ties performance to position. The same profit is the starting point of the cash flow statement. Follow one number through all three and you can tell in a minute whether the accounts hold together.</p>",
+            "<p>Now take a single sale on credit. The income statement records the revenue immediately and the profit rises. The balance sheet shows a new receivable and a larger owners' stake. The cash flow statement starts from that higher profit and then subtracts the increase in receivables, so the cash effect is nil. Three statements, one event, and only the third tells you that no money arrived. This is the single most useful thing to understand about accounts: the profit is booked, the cash is not, and the gap sits on the balance sheet waiting to be collected or written off.</p>",
+            "<h3>A purchase, worked through</h3>",
+            "<p>A business buys a delivery vehicle for 12,000 in cash. Profit does not fall by 12,000; the vehicle is an asset, and only its annual depreciation touches the income statement. The balance sheet swaps cash for a fixed asset, so total assets are unchanged. The cash flow statement shows the full 12,000 leaving under investing activities. Anyone reading only the income statement would conclude that nothing happened, which is exactly what a manager about to approve the purchase needs to know is untrue.</p>",
+            "<p>Do the same for a loan. The money arrives: cash up, loan liability up, no effect on profit. Each month an interest charge reduces profit and a repayment reduces cash by more than that, with the difference reducing the liability. Three statements, three different impressions of the same month.</p>",
+            "<h3>Using the connections as a check</h3>",
+            "<p>When a set of accounts feels wrong, test the joints. Does the closing cash on the cash flow statement match cash on the balance sheet? Does the movement in owners' stake equal profit less anything the owners took out? Does the change in receivables roughly match the change in sales? None of these proves the accounts are right, but a failure proves they are wrong, and it usually points at the entry responsible.</p>",
+            "<p><strong>Check yourself.</strong> If your organisation collected 200,000 more from customers this month while sales were flat, which line on which statement would move, and in which direction?</p>"
+          ]
+        },
+        {
+          "title": "Reading a set of accounts in fifteen minutes",
+          "summary": "A fixed order of questions gets you to the real story faster than reading every note.",
+          "minutes": 15,
+          "html": [
+            "<p>Most people read accounts by starting at the top and working down, which is the slowest possible route. A reviewer with fifteen minutes uses a fixed sequence of questions instead, because each answer decides what to look at next.</p>",
+            "<p>First: is the business growing, and is profit growing with it? Compare two or three periods, not one. Revenue rising while profit falls is a story about cost or price, and it is the most common shape of trouble. Second: where is the profit? Gross margin tells you whether the business earns enough on what it sells before overheads consume it. A gross margin that has fallen two years running is a pricing or purchasing problem, and no amount of expense cutting fixes it.</p>",
+            "<p>Third: is the profit cash? Put the cash flow from operations beside the operating profit, across several periods. If profit is consistently higher than cash, the difference is sitting somewhere on the balance sheet, and the balance sheet will tell you where: receivables growing faster than sales means customers are paying later, or not at all; inventory growing faster than sales means stock is not moving.</p>",
+            "<p>Fourth: how much does the business owe, and to whom? Compare total debt with the profit the business makes in a year. Then look at what falls due within the next twelve months and what cash is available. A business with modest debt that falls due next month is in more danger than one with heavy debt and five years to pay.</p>",
+            "<h3>The three numbers to carry away</h3>",
+            "<p>You do not need to remember everything. Carry three: the gross margin trend, the gap between operating profit and operating cash, and the ratio of debt to annual profit. Those three will tell you whether the business is earning, whether it is being paid, and whether it can survive a bad quarter.</p>",
+            "<p>Finally, read the notes to the accounts, but only the ones a reviewer reads first: accounting policies that changed, related-party transactions, and anything described as a provision or a contingent liability. That is where the things somebody hoped you would not notice tend to be.</p>",
+            "<p><strong>Check yourself.</strong> Apply the four questions to your own organisation and write down the answer to each in one sentence. If you cannot answer one, that is the number you are missing.</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Cash is not profit",
+      "lessons": [
+        {
+          "title": "Why a profitable business runs out of money",
+          "summary": "Growth consumes cash before it produces it. The faster you grow, the larger the gap.",
+          "minutes": 18,
+          "html": [
+            "<p>The failure that surprises people most is the profitable business that cannot pay its staff. It is not bad luck and it is not fraud. It is arithmetic, and once you have seen it you cannot unsee it.</p>",
+            "<p>Consider a trader who buys goods for 60 and sells them for 100, on credit. Every sale is genuinely profitable. But the goods are paid for on delivery and the customer pays ninety days later. Sell twice as much this month and you must find twice the cash to buy stock, while the cash from last month's sales has not yet arrived. The business is more profitable than it has ever been and closer to collapse than it has ever been. Growth did that, not failure.</p>",
+            "<h3>Three things consume cash when you grow</h3>",
+            "<p>Receivables: every additional sale on credit is a loan you have made to your customer, funded from your own pocket. Inventory: every additional unit sold must be bought and held before it is sold. Capacity: at some point you need another vehicle, another machine, another warehouse, and those are paid for in full before they earn anything.</p>",
+            "<p>The three together mean that a business growing at thirty per cent a year needs cash roughly in proportion to the growth, and it needs it now, while the profit it is generating arrives later. A profitable company can borrow against that, and often should. What kills it is growing while believing the profit has already paid for the growth.</p>",
+            "<h3>What to do about it</h3>",
+            "<p>Three levers, in order of how quickly they work. Get paid sooner: shorten terms, invoice on delivery rather than at month end, chase the oldest balances first. Pay later within the terms you agreed: not late, but not early either. Hold less: reduce the stock of the items that move slowly rather than the ones that move fast. Only then consider more money from outside, because borrowing to fund a gap you could have closed is expensive habit-forming.</p>",
+            "<p><strong>Check yourself.</strong> If your sales doubled next month, how much extra cash would you need before the customers paid, and where would it come from?</p>"
+          ]
+        },
+        {
+          "title": "The cash conversion cycle",
+          "summary": "Days of stock plus days of receivables minus days of payables. One number that says how long your money is tied up.",
+          "minutes": 17,
+          "html": [
+            "<p>The cash conversion cycle measures the time between paying for something and being paid for it. It is the cleanest single measure of how much cash a business model absorbs, and it can be calculated from any set of accounts in ten minutes.</p>",
+            "<p>Three steps. Days of inventory: the average value of stock divided by the cost of goods sold, multiplied by 365. Days of receivables: average receivables divided by revenue, multiplied by 365. Days of payables: average payables divided by the cost of goods sold, multiplied by 365. The cycle is inventory days plus receivable days minus payable days.</p>",
+            "<h3>A worked example</h3>",
+            "<p>A distributor holds stock worth 90 days of cost, is paid by customers after 60 days, and pays suppliers after 30 days. Its cycle is 90 + 60 − 30 = 120 days. To support that, it must fund four months of operating cost from its own cash or from borrowing. Shorten stock holding to 45 days and the cycle falls to 75 days, freeing roughly six weeks of cost, which is real money released without a single extra sale.</p>",
+            "<p>This is why two businesses with identical profit can have completely different cash needs. A supermarket sells for cash and pays suppliers later, so its cycle can be negative: suppliers are financing it. A contractor paid ninety days after completing work has a long cycle and needs capital simply to stand still.</p>",
+            "<h3>Reading your own cycle</h3>",
+            "<p>Calculate it for the last two years. If it has lengthened, ask which of the three legs moved and why. A lengthening receivable leg is a collection or credit problem, or a customer in difficulty. A lengthening inventory leg means buying decisions are detached from selling. A shortening payable leg usually means suppliers have lost confidence, which is a warning about something else entirely.</p>",
+            "<p>Be careful with averages. A business with a seasonal peak can look healthy on an annual average while being unable to pay wages in the peak month. If your trade is seasonal, calculate the cycle for the tightest month as well.</p>",
+            "<p><strong>Check yourself.</strong> Work out your cycle from your last accounts, then name the one leg you could shorten within a quarter without damaging a relationship.</p>"
+          ]
+        },
+        {
+          "title": "Building a cash forecast you can trust",
+          "summary": "A thirteen-week forecast on a single page is more useful than an annual budget and takes an afternoon.",
+          "minutes": 16,
+          "html": [
+            "<p>A cash forecast answers one question: will there be money in the account on the day the salaries are due. It is not a profit forecast, and treating the two as the same thing is how organisations discover a problem four weeks too late.</p>",
+            "<p>Build it weekly, for thirteen weeks. A week is the shortest interval that lets you act, and a quarter is the longest period you can forecast with any confidence. Columns are weeks; rows are the movements that matter: opening balance, collections from customers, payments to suppliers, salaries, rent and fixed costs, tax and statutory payments, loan repayments, capital purchases, closing balance. Twelve or fifteen rows is enough. If your forecast has eighty rows, nobody will maintain it.</p>",
+            "<h3>Forecast collections, not sales</h3>",
+            "<p>The most common error is putting this month's sales in this month's cash. Sales arrive as cash later, and often in parts: a deposit, a progress payment, a final amount that arrives after argument. Forecast each significant customer's expected payment by week, based on what they have actually done rather than what the contract says. For smaller customers, use your collection pattern: if historically forty per cent pays in the month of sale, forty per cent the following month and the rest later, apply that instead of hoping.</p>",
+            "<p>Then forecast payments on their real dates. Salaries on the day, rent on the day, suppliers on the day you intend to pay them rather than the day you are entitled to. Add the payments that do not appear monthly: insurance renewals, annual licences, tax instalments, bonuses. These are the ones that break forecasts, because they are large, predictable and forgotten.</p>",
+            "<h3>Using it</h3>",
+            "<p>Update it every week with the actual closing balance, and keep the forecast you made the week before beside the actual. The difference is your forecast error, and knowing it tells you how much to trust yourself. When a week shows a negative closing balance, you have time to act: delay a purchase, ask a good customer to pay early, draw on an agreed facility. When the negative balance is next week, your options are down to asking for forbearance.</p>",
+            "<p><strong>Check yourself.</strong> What is your projected closing cash balance four weeks from now, and which single payment is most likely to be larger or earlier than you assumed?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Managing working capital",
+      "lessons": [
+        {
+          "title": "Inventory is money on a shelf",
+          "summary": "Stock is not a sign of strength. Every item you hold has been paid for and has not yet earned anything.",
+          "minutes": 16,
+          "html": [
+            "<p>Inventory is the least visible way a business loses money, because it looks like an asset. A full warehouse reads as readiness. Financially, it is cash that has been converted into something that may not sell, may be damaged, may go out of date, and costs money to store, insure and count.</p>",
+            "<p>The cost of holding stock is larger than most managers assume. There is the money tied up, which could have paid a supplier or avoided an overdraft. There is storage, security and insurance. There is deterioration, whether physical or commercial, because a model of phone or a bag of cement does not improve with age. Add those together and holding cost is commonly a fifth to a third of stock value each year. A warehouse holding a million in stock is spending something like a quarter of a million each year to hold it.</p>",
+            "<h3>The question to ask about every item</h3>",
+            "<p>Not whether it will eventually sell, but how long it has been there and what it has cost to keep. Sort stock by value and by movement. A small number of items usually accounts for most of the value, and a different small number accounts for most of the movement. Items that are high value and slow moving deserve a decision: discount, return to supplier, use in another product, or write off. Keeping them costs money every month and defers a loss that is already real.</p>",
+            "<h3>Reducing stock without breaking service</h3>",
+            "<p>Cutting stock indiscriminately is a fast way to lose customers. The useful moves are narrower. Order more often in smaller quantities from suppliers who can deliver reliably. Separate the items that must never be out of stock from the ones that can wait a week. Set a reorder point based on how long delivery actually takes and how much you use in that time, rather than a round number. And agree with a supplier to hold buffer stock on your behalf, in exchange for a firm commitment.</p>",
+            "<p>The test is not how much stock you hold but whether you can serve the customer in front of you. Reduce the stock of what nobody is asking for and protect the stock of what everybody asks for.</p>",
+            "<p><strong>Check yourself.</strong> List the five items your organisation has held longest. For each, say what decision would release the cash, and who has to make it.</p>"
+          ]
+        },
+        {
+          "title": "Receivables and the real cost of a slow payer",
+          "summary": "A customer who pays in ninety days is not paying full price. They are paying less, and you are lending them the difference.",
+          "minutes": 17,
+          "html": [
+            "<p>Every sale on credit is a loan. The customer receives the goods now and pays later, and you fund the interval. Once you see it that way, credit terms stop looking like a sales policy and start looking like a financial decision, because that is what they are.</p>",
+            "<p>Put a price on it. If a customer owes 100,000 for ninety days and your cost of funds, or the overdraft you are avoiding, is twenty per cent a year, that customer is costing you roughly 5,000 a year in financing to keep. On a repeat relationship that is a real number. On a customer who also negotiates the lowest price, it may be the difference between a profitable account and a loss-making one.</p>",
+            "<h3>Credit terms are a decision, not a formality</h3>",
+            "<p>Decide terms deliberately and write them down. Who may buy on credit, up to what amount, for how long, and who may approve an exception. Without that, terms drift: a good customer asks for sixty days, then ninety, and there is no record of who agreed or why. A simple credit application, a limit per customer, and a named person who can raise it will prevent most of the problems you will otherwise chase for years.</p>",
+            "<h3>Collecting without damaging the relationship</h3>",
+            "<p>Most late payment is administrative rather than malicious: the invoice went to the wrong person, the purchase order number was missing, nobody followed up. That means the cheapest collection work is the work you do before the invoice is sent. Confirm who receives invoices, what reference number they need, and when their payment run happens. Then follow up on day one after the due date, politely and by phone, asking whether anything is missing rather than demanding money.</p>",
+            "<p>Then age the debt weekly and act on the oldest items first, in descending order of amount. Stop supplying an account that has gone beyond an agreed limit, and say so in advance so it is a policy rather than a surprise. Escalate in writing before the relationship has deteriorated beyond repair, because a written statement of the balance owed is the document you will need later.</p>",
+            "<p>Finally, provide for the ones that will not pay. A small monthly provision against doubtful debts is honest, and it means a single bad customer does not destroy a good year.</p>",
+            "<p><strong>Check yourself.</strong> What are your current terms, who set them, and what is the largest amount one customer currently owes you past its due date?</p>"
+          ]
+        },
+        {
+          "title": "Payables, suppliers and the value of being trusted",
+          "summary": "Stretching suppliers is free money until it is not. The limit is their confidence in you.",
+          "minutes": 14,
+          "html": [
+            "<p>Payables are the cheapest source of short-term finance available to most businesses: a supplier who delivers now and invoices on thirty days is lending you the goods at no interest. The temptation is to take more of it. The skill is knowing where the free money ends.</p>",
+            "<p>The maths is straightforward. Paying thirty days later than you do now releases thirty days of purchases as cash. If you spend 50,000 a month with suppliers, that is 50,000 of cash you did not have to find. It is a genuine benefit, and it is why suppliers' terms are worth negotiating at the start of a relationship rather than after a dispute.</p>",
+            "<h3>What stretching actually costs</h3>",
+            "<p>Beyond the agreed terms, the cost changes form. Suppliers who are paid late begin to price for the risk: a small premium on the next quotation, or cash-on-delivery for a business they no longer trust. They prioritise other customers when stock is short. They stop offering credit for the seasonal purchase that matters. None of that appears in the accounts as an interest charge, and all of it is more expensive than borrowing at a bank rate would have been.</p>",
+            "<p>There is also the operational cost. A supplier chasing payment occupies your finance officer's week, and a delivery held pending payment stops a job. Organisations routinely spend more management time managing late payment than the interest they saved.</p>",
+            "<h3>A workable policy</h3>",
+            "<p>Pay on the agreed date, every time, and treat that as a promise the organisation keeps. If you need longer terms, negotiate them before the order rather than after the invoice. Where a supplier offers a discount for early payment, compare it with your cost of funds: two per cent for paying ten days early is an annualised rate in the region of seventy per cent, and almost always worth taking if the cash exists. Where a supplier offers nothing for early payment, pay on time and keep the cash.</p>",
+            "<p>Keep a simple list of what you owe, to whom, and when it is due. Most late payments happen not because the money is absent but because nobody was looking at the list.</p>",
+            "<p><strong>Check yourself.</strong> Which of your suppliers would extend your terms tomorrow if you asked, and what would you offer them in return?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Deciding what to spend",
+      "lessons": [
+        {
+          "title": "Fixed, variable, and the difference that changes decisions",
+          "summary": "Which costs move with activity decides what a discount, an extra order or a quiet month actually does to profit.",
+          "minutes": 15,
+          "html": [
+            "<p>Splitting costs into fixed and variable is not an accounting exercise. It is the difference between knowing whether an extra order makes money and guessing, and most pricing mistakes come from guessing.</p>",
+            "<p>A variable cost rises with each unit sold: materials, packaging, transport, commission, the direct labour on a production line. A fixed cost does not move with volume over the relevant range: rent, salaried staff, insurance, the licence fee. The distinction is about behaviour over a period and a range, not about the nature of the cost. A salaried driver is fixed until you need a second one, at which point the cost steps up.</p>",
+            "<h3>Contribution, and why it matters more than profit per unit</h3>",
+            "<p>Revenue minus variable cost is contribution. It is what each sale contributes towards the fixed costs and, after those are covered, towards profit. A product that sells for 100 with variable costs of 70 contributes 30. That 30 is what pays the rent, and understanding it changes how you answer everyday questions.</p>",
+            "<p>Should you accept an order at a discount? If the price still exceeds the variable cost and you have spare capacity, the order adds contribution and improves the result, even if it is below the normal price. If you have no spare capacity, the same order may displace a better one and make things worse. Should you keep a product that looks unprofitable? Only if it contributes: a fully costed product can show a loss while still paying for the overhead it absorbs, and dropping it may reduce profit rather than raise it.</p>",
+            "<h3>The trap</h3>",
+            "<p>Discounting below variable cost to win work is not a pricing strategy, it is a decision to lose money on every unit in the hope of volume. Volume makes it worse. The one legitimate reason to sell below variable cost is to establish a market or dispose of stock, and that should be a deliberate, dated, limited decision.</p>",
+            "<p>Write down your five largest cost lines and mark each fixed or variable. Then calculate contribution for your main product or service. Those two pieces of paper answer more pricing questions than any spreadsheet model.</p>",
+            "<p><strong>Check yourself.</strong> A customer offers to buy your product at ten per cent below your normal price, for a volume that uses capacity you are not using. What is the contribution on that order, and what would make you refuse it?</p>"
+          ]
+        },
+        {
+          "title": "Break-even, plainly",
+          "summary": "The volume at which contribution covers fixed costs, and what happens when price or costs move.",
+          "minutes": 16,
+          "html": [
+            "<p>Break-even is the sales volume at which the business makes neither profit nor loss. It is a single calculation that makes risk visible, and it is the number to know before committing to a fixed cost.</p>",
+            "<p>The method: divide total fixed costs by the contribution per unit. A business with fixed costs of 120,000 a year and contribution of 30 per unit breaks even at 4,000 units. Everything above that adds 30 per unit to profit; everything below loses 30 per unit of shortfall. In sales value rather than units, divide fixed costs by the contribution margin ratio, which is contribution divided by price: here 30/100, so 30 per cent, giving break-even revenue of 400,000.</p>",
+            "<h3>What it tells you about a decision</h3>",
+            "<p>Suppose you are considering a new vehicle that adds 18,000 a year in fixed cost. It must generate 600 additional units of contribution, or 60,000 of additional revenue at the current margin, before it earns anything. That is a much better question to ask than whether the vehicle is necessary. It does not decide the matter, but it tells you what the decision actually costs.</p>",
+            "<p>Break-even also shows how exposed a business is. A company with high fixed costs and thin contribution needs high volume to survive and suffers badly in a quiet month. A company with low fixed costs and high contribution survives a downturn and earns less in a boom. Neither is right in general; one is right for your market.</p>",
+            "<h3>The sensitivity that matters</h3>",
+            "<p>Recalculate break-even after a ten per cent price cut and after a ten per cent rise in material cost. Price cuts almost always hurt more than they appear to, because contribution falls faster than revenue. A ten per cent cut from a 30 per cent margin reduces contribution per unit by a third, so break-even volume rises by half. Any plan that relies on volume making up for a price cut has to clear that bar first.</p>",
+            "<p>Then ask the reverse question, which is the one that keeps businesses alive: how far can sales fall before this organisation stops covering its costs?</p>",
+            "<p><strong>Check yourself.</strong> Calculate your break-even in units and in revenue. If sales fell twenty per cent next month, would you still cover fixed costs?</p>"
+          ]
+        },
+        {
+          "title": "Payback, and the cost of a large purchase",
+          "summary": "For most operating decisions, payback in months is a better test than a discounted model nobody maintains.",
+          "minutes": 15,
+          "html": [
+            "<p>A large purchase is usually justified by a business case that took a week to write and was never read again. There is a simpler test that a manager can apply in five minutes and defend in a meeting.</p>",
+            "<p>Payback is the time it takes for the extra cash a purchase generates to equal what it cost. A machine costing 30,000 that saves 1,000 a month in labour and waste pays back in thirty months. If the machine is expected to last five years, it is probably worth buying. If it is expected to last two, it is not. Payback says nothing about what happens after the money is back, which is both its weakness and its virtue: it is conservative, and it is understood by everybody in the room.</p>",
+            "<h3>Getting the cash flows right</h3>",
+            "<p>The most common mistake is counting savings that are not cash. A purchase that reduces a cost you pay monthly produces cash. A purchase that makes staff happier produces value that may not appear in the bank account, and should be argued for honestly on those grounds rather than dressed up as a financial saving. Count only the movements in cash: the purchase price, installation, training, additional running costs, and the savings or additional revenue.</p>",
+            "<p>Include the exit. If the asset has a resale value or a disposal cost, that belongs in the calculation. So does everything you will have to spend to keep it working.</p>",
+            "<h3>When to use something more precise</h3>",
+            "<p>For decisions involving large sums, long horizons or a choice between genuinely different options, payback is too blunt: it treats a payment in year five as equal to a payment today. A discounted calculation is better there, but it depends on a discount rate you must choose and justify, and a wrong rate produces a confident wrong answer. Use it for capital decisions of real size, and write down the rate and where it came from.</p>",
+            "<p>What matters most is not the method but that the assumptions are stated, so a later reader can see what the decision depended on. A payback of thirty months with the savings listed line by line is more honest, and more useful, than a net present value with a hidden spreadsheet behind it.</p>",
+            "<p><strong>Check yourself.</strong> Take a purchase your organisation made in the last year. Work out its actual payback so far, using what really happened, and compare it with what was promised.</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 5 · Funding and control",
+      "lessons": [
+        {
+          "title": "Debt and equity, and what each really costs",
+          "summary": "Interest is the visible cost of borrowing. There are others, and equity has a price of its own.",
+          "minutes": 17,
+          "html": [
+            "<p>There are only two ways to fund a business: money you must repay, and money you sell a share of the business to obtain. Everything else is a variation on those two. The choice between them is not mainly about which is cheaper this year.</p>",
+            "<p>Debt has a price you can see: the interest rate, plus fees, plus the requirement to repay on a schedule whether or not the year went well. It does not dilute ownership: whatever the business is worth afterwards belongs to the same people. It is suitable for assets that will earn enough to service it, and it becomes dangerous when it is used to fund losses or a permanent gap in working capital, because the repayment date does not move.</p>",
+            "<p>Equity has no repayment date and no interest. In exchange, the owner gives up a share of everything the business will ever earn, and usually some control: a say in decisions, information rights, restrictions on what the founders may pay themselves. The visible cost appears to be zero, which is why it is often chosen for the wrong reasons. The real cost is the share of future value given away, and it is frequently the most expensive money in the building.</p>",
+            "<h3>The questions that decide it</h3>",
+            "<p>First, can the business service the debt from its own cash flow with a margin for a bad year? If not, debt will convert a difficult year into a terminal one. Second, is the money for something that will still be worth having in five years, or for a gap that will reappear? Third, is the owner willing to share control and value? A business that needs money and cannot answer the second question honestly should not borrow; one that cannot answer the third should not sell equity.</p>",
+            "<h3>Mixed funding and the cost of impatience</h3>",
+            "<p>Most real funding is mixed: some owner capital, some debt, some retained profit. The mistake to avoid is taking whichever is available fastest. Money raised badly costs years of management attention, and in the case of equity it is very hard to undo.</p>",
+            "<p>Write down, on one page, what the money is for, what it will earn, how it will be repaid or what share it buys, and what happens if the plan is a year late. If you cannot complete the page, the funding decision is not ready.</p>",
+            "<p><strong>Check yourself.</strong> For the last money your organisation raised, which of those four questions was answered properly at the time, and which was not?</p>"
+          ]
+        },
+        {
+          "title": "Budgets that people use",
+          "summary": "A budget nobody looks at between January and December is an administrative cost, not a control.",
+          "minutes": 15,
+          "html": [
+            "<p>Most budgets fail for the same reason: they are built once a year, in a format the finance office needs, and never opened again. A budget that is not compared with actual results monthly is not a control; it is a document produced to satisfy somebody.</p>",
+            "<p>A useful budget has three properties. It covers a period short enough to act on, so monthly rather than annual totals. It is owned by a named person for each line, not by the organisation as a whole. And it is built from what will actually happen, not from last year plus a percentage, because last year's mistakes are then funded again by default.</p>",
+            "<h3>Build it from drivers</h3>",
+            "<p>Budget the things that cause cost, not just the cost. Sales volume drives materials, transport and commission. Headcount drives salaries. Vehicles drive fuel and maintenance. When a driver is stated, a variance becomes diagnosable: spending more on fuel than budgeted because you drove more is a different problem from spending more because fuel cost more. With a single line called transport, the two are indistinguishable.</p>",
+            "<h3>The monthly comparison</h3>",
+            "<p>Each month, for each line: budget, actual, variance, and one sentence of explanation for any variance that matters. Not every line: the ones large enough to change a decision. The explanation is the part that does the work, because writing it forces somebody to find out. A report of variances without explanations is a list of things that happened.</p>",
+            "<p>Then reforecast. Once a quarter, replace the remaining months of the budget with what you now expect, and keep the original for comparison. Organisations that only compare against a stale annual plan spend the second half of the year explaining why the plan was wrong instead of managing what is happening.</p>",
+            "<p>Keep the whole thing to two pages. A budget nobody reads controls nothing, and the more elaborate the model, the less likely anybody will open it in month four, when it starts to matter.</p>",
+            "<p><strong>Check yourself.</strong> When was the last time you looked at your budget, and could you name the three largest variances this month without being told?</p>"
+          ]
+        },
+        {
+          "title": "The monthly financial review",
+          "summary": "One hour a month, four questions, and a list of decisions with names against them.",
+          "minutes": 16,
+          "html": [
+            "<p>Financial management is a routine rather than an event. The organisations that handle money well do so because a small group meets every month, looks at the same few numbers, and leaves with a short list of things to change. The ones that handle it badly meet when something has gone wrong.</p>",
+            "<p>Four questions, in this order. Are we on course for the year, and if not, which lines have moved? What is the cash position now and in thirteen weeks? Is anything owed to us getting old? And is there any decision in front of us that these numbers should change? Everything else is detail that can be read afterwards.</p>",
+            "<h3>What the meeting needs in front of it</h3>",
+            "<p>One page: the month's actual against budget with variances explained; the thirteen-week cash forecast with the tightest week identified; the aged list of receivables with the largest overdue accounts named; and the decisions outstanding from last month with their status. Nothing else. A pack of forty pages ensures the discussion stays on page one.</p>",
+            "<h3>What makes it fail</h3>",
+            "<p>Two failure modes. The first is a meeting that reviews the past and never decides anything, which becomes a ritual everybody resents. The second is a meeting that decides things without recording who will do them, so the same items return every month. Fix both with one habit: every agenda item ends with a decision, a name and a date, and the first item of the next meeting is the list from the last one.</p>",
+            "<p>Keep it short. An hour is enough if the numbers arrive a day in advance and the people in the room can speak for their own lines. The purpose is not to review the accounts; it is to change something while there is still time for the change to matter.</p>",
+            "<p><strong>Check yourself.</strong> Who currently looks at your numbers together, how often, and what decision did the last such meeting produce?</p>"
+          ]
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A business reports a profit for the year and a fall in its bank balance. Which statement explains how both can be true?",
+      "explanation": "Profit is recorded when a sale is made and when costs are incurred, not when cash moves. Increases in receivables or inventory, or purchases of assets, explain the gap between profit and cash.",
+      "options": [
+        { "text": "The cash flow statement, which reconciles profit to the movement in cash", "correct": true },
+        { "text": "The income statement, which must therefore contain an error", "correct": false },
+        { "text": "The balance sheet alone, because a fall in cash is always a loss", "correct": false },
+        { "text": "None of them; the two cannot both be correct", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A distributor holds 90 days of stock, is paid after 60 days and pays suppliers after 30 days. What is its cash conversion cycle?",
+      "explanation": "Inventory days plus receivable days minus payable days: 90 + 60 − 30 = 120 days, which is how long its own money is tied up.",
+      "options": [
+        { "text": "120 days", "correct": true },
+        { "text": "60 days", "correct": false },
+        { "text": "180 days", "correct": false },
+        { "text": "30 days", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Fixed costs are 120,000 a year and each unit contributes 30. What is break-even?",
+      "explanation": "Fixed costs divided by contribution per unit: 120,000 ÷ 30 = 4,000 units. Above that each unit adds 30 to profit; below it each unit adds 30 to the loss.",
+      "options": [
+        { "text": "4,000 units", "correct": true },
+        { "text": "120,000 units", "correct": false },
+        { "text": "3,600 units", "correct": false },
+        { "text": "It cannot be calculated without the selling price", "correct": false }
+      ]
+    },
+    {
+      "prompt": "You have unused capacity and a customer offers an order below your normal price but above your variable cost. What does that order do to profit?",
+      "explanation": "With spare capacity, any price above variable cost adds contribution towards fixed costs, so profit improves even at a discount. Without spare capacity the order may displace better work.",
+      "options": [
+        { "text": "It increases profit, because it adds contribution to fixed costs", "correct": true },
+        { "text": "It decreases profit, because the price is below the normal price", "correct": false },
+        { "text": "It has no effect until fixed costs are fully covered", "correct": false },
+        { "text": "It always destroys value and should be refused", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which is the most dangerous way to fund a permanent gap in working capital?",
+      "explanation": "Debt has a fixed repayment schedule that does not move. Borrowing to fund a gap that will not close turns a cash problem into a default.",
+      "options": [
+        { "text": "Short-term borrowing that falls due on a fixed date", "correct": true },
+        { "text": "Retaining profit rather than distributing it", "correct": false },
+        { "text": "Negotiating longer terms with suppliers", "correct": false },
+        { "text": "Selling equity to a new investor", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A customer owes 100,000 for 90 days and your cost of funds is 20% a year. What is the approximate annual financing cost of that balance?",
+      "explanation": "100,000 at 20% for a quarter of a year is about 5,000. Slow payment is a real cost, even when it never appears as an interest charge.",
+      "options": [
+        { "text": "About 5,000", "correct": true },
+        { "text": "About 20,000", "correct": false },
+        { "text": "Nothing, because the customer will pay", "correct": false },
+        { "text": "About 90,000", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A purchase costs 30,000 and generates 1,000 a month in cash savings. What is the payback period?",
+      "explanation": "30,000 ÷ 1,000 = 30 months. Payback is simple and conservative, and it says nothing about the years after the money is recovered.",
+      "options": [
+        { "text": "30 months", "correct": true },
+        { "text": "3 months", "correct": false },
+        { "text": "36 months", "correct": false },
+        { "text": "It cannot be determined without a discount rate", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which single habit most reliably turns a monthly financial review into a control rather than a ritual?",
+      "explanation": "Every item ending with a decision, a named person and a date, and the next meeting starting with that list, is what makes the routine change behaviour.",
+      "options": [
+        { "text": "Ending every item with a decision, a name and a date, and reviewing that list first next month", "correct": true },
+        { "text": "Circulating a fuller pack of reports so nobody lacks detail", "correct": false },
+        { "text": "Holding the meeting only when results are poor", "correct": false },
+        { "text": "Restricting attendance to the finance team", "correct": false }
+      ]
+    }
+  ]
+}

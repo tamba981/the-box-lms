@@ -1,0 +1,406 @@
+{
+  "slug": "executive-leadership-and-management-diploma",
+  "title": "Executive Leadership & Management Diploma",
+  "program": "PDP",
+  "category": "business-management",
+  "level": "advanced",
+  "credential": "diploma",
+  "priceCents": 5000,
+  "certificateFeeCents": 0,
+  "summary": "Lead an organisation rather than a function: switch between strategist and operator deliberately, design for constraint, hold conflicting stakeholders, and leave something that survives you.",
+  "description": "This diploma is written for people who already lead, or are about to, and who have discovered that the frameworks they were taught assume resources, institutions and stability that their organisation does not have. It treats executive work as a sequence of judgements made under ambiguity, with conflicting stakeholders and incomplete information, where the cost of being wrong is borne by people who did not choose it.\n\nAcross six modules it works through the switches an executive has to make deliberately: between strategy and operations, between formal and informal systems, between the interests of owners, staff, government and community. It examines organisational design where capability is scarce and turnover is high, crisis leadership as a discipline rather than a personality trait, and the ethical grey zones that appear when survival is at stake.\n\nIt closes on succession and legacy, which is where most executive careers are finally judged. The Liberian and wider West African context runs through the cases: family ownership meeting professional management, currency and epidemic shocks that arrive without warning, and institutions whose enforcement cannot be assumed.",
+  "tags": ["executive leadership", "organisational design", "stakeholders", "crisis", "ethics", "succession", "diploma"],
+  "outcomes": [
+    "Switch deliberately between strategic and operational modes rather than defaulting to one",
+    "Design an organisation that functions with scarce capability and high turnover",
+    "Map conflicting stakeholder interests and decide whose claim takes precedence, and why",
+    "Lead through a crisis on incomplete information and account for the choices afterwards",
+    "Recognise ethical grey zones before they become decisions, and set limits that hold",
+    "Build a succession that produces judgement rather than a named replacement"
+  ],
+  "caseStudy": "A family-owned group with 340 staff, three generations of owners, a unionised workforce, a government concession that expires in two years and a founder who is refusing to name a successor must choose a new managing director from an internal candidate with operational credibility and an external candidate with sector experience, while the currency has lost a third of its value in twelve months.",
+  "modules": [
+    {
+      "title": "Module 1 · The leader as strategist and operator",
+      "lessons": [
+        {
+          "title": "Two modes, and the cost of defaulting to one",
+          "minutes": 22,
+          "html": [
+            "<p>Every executive operates in two modes. In strategic mode you are choosing what the organisation will be good at, what it will refuse, and where it will spend money it does not yet have. In operational mode you are making the machine run: schedules, escalations, exceptions, the hundred decisions a week that cannot wait. Both are necessary and they compete for the same finite attention.</p>",
+            "<p>The default failure of people promoted from operations is to remain in operational mode permanently, because it is where they are competent and where progress is visible. The organisation then has no strategy, or a strategy written once and never revisited, and the executive becomes the constraint on every non-routine decision.</p>",
+            "<p>The opposite failure is equally common in executives who arrive from outside or from staff roles. Strategy is absorbing, and it produces documents that feel like progress. Meanwhile the operational details that determine whether the strategy is achievable — a vacancy in a critical role, a supplier relationship deteriorating, a compliance obligation unowned — go unexamined until they become crises.</p>",
+            "<p>The discipline is to make the switch explicit rather than reactive. Decide at the start of a quarter which mode the organisation most needs, block time accordingly, and tell the people around you which mode you are in. An executive who is unavailable for operational decisions during a strategic period must say so in advance, with a named deputy, or the period will not survive the first interruption.</p>",
+            "<p>Consider the ratio rather than the total. An executive with forty hours of operational demands and four hours of strategic time is not splitting attention; they are keeping the organisation's present running and leaving its future unmanaged. The proportion, not the effort, is the variable that determines whether the organisation is still viable in five years. Track the proportion quarterly; it moves slowly and it moves in one direction.</p>",
+            "<h3>The switch that is never scheduled</h3>",
+            "<p>Most executives do not choose their mode; they are pulled into one by whoever is loudest. The organisation learns that access is obtained by escalation, and escalation becomes the primary channel. Six months later the executive is fully occupied with operational exceptions and believes there is no time for strategy, which is true only because the time was never defended.</p>",
+            "<p>Defending it is uncomfortable because operational requests have named owners and visible consequences, while strategic work has neither. The remedy is structural: a standing block, a published rule about what constitutes a genuine escalation, and a deputy whose decisions are supported even when they differ from what you would have decided.</p>",
+            "<p><strong>Check yourself.</strong> In the last four weeks, how many hours did you spend in each mode, and did you choose those hours or did they choose you?</p>"
+          ]
+        },
+        {
+          "title": "Reading which mode a situation actually needs",
+          "minutes": 21,
+          "html": [
+            "<p>The decision is not personal preference but diagnosis. A situation needs operational mode when a process is failing, a commitment is at risk, or a decision cannot be made by anybody else today. It needs strategic mode when the organisation is competently executing the wrong thing, when the environment has changed permanently, or when the resource allocation contradicts the stated direction.</p>",
+            "<p>A useful test is to ask whether the problem would recur if you solved it once yourself. If yes, it is a design problem and belongs in strategic mode: the escalation will return with a different name next month. If no, it is an operational exception and should be settled quickly and locally.</p>",
+            "<p>Executives commonly misdiagnose the second as the first, treating a recurring structural problem as a series of urgent exceptions, and thereby becoming permanent participants in a loop the organisation cannot escape. The tell is a decision that arrives at your desk for the third time with different details.</p>",
+            "<p>Misdiagnosis in the other direction is rarer and more damaging. A genuine exception treated as a strategic question produces a committee, a policy and three months of delay for something that needed an answer by Friday. Not every difficult decision is strategic; some are simply decisions nobody wanted to make.</p>",
+            "<p>Note which signal you have been explaining away. Executives under pressure develop a vocabulary for deferring structural questions — we will look at that after the audit, once the financing is closed — and the list of deferred items is usually the real strategy, whatever the document says. Revisit the list quarterly and force one item off it.</p>",
+            "<h3>Signals worth acting on</h3>",
+            "<p>Three signals reliably indicate that strategic mode is overdue: the same exception recurring, the organisation hitting a constraint that money cannot remove, and a competitor or regulator changing the rules in a way the current plan does not describe. Each is a signal about design rather than execution, and none of them announces itself as urgent.</p>",
+            "<p>The counter-signal is equally worth respecting. If your team is competent, the plan is coherent and performance is close to plan, the organisation may simply need you to lead the execution rather than rethink it. Executives who restructure during a period of steady performance usually destroy value quietly and explain it as proactivity.</p>",
+            "<p><strong>Check yourself.</strong> Name one recurring exception in your organisation. What design decision would stop it recurring, and why has that decision not been taken?</p>"
+          ]
+        },
+        {
+          "title": "Delegating judgement rather than tasks",
+          "minutes": 21,
+          "html": [
+            "<p>Executives who delegate tasks remain the only source of judgement, and the organisation grows a bottleneck shaped like its leader. Delegating judgement means giving somebody the authority to decide in your place, within stated bounds, and then living with decisions you would not have made.</p>",
+            "<p>The bounds need to be explicit: what may be decided without reference, what must be discussed, and what is reserved. Three categories, written down, understood by both parties. Without them, delegation is ambiguous and both sides default to escalation, which feels safe and slows everything down.</p>",
+            "<p>The harder discipline is afterwards. An executive who reverses a delegated decision more than occasionally has taught the organisation that delegation is nominal, and the next delegated decision will arrive for approval anyway. Where the decision was within the bounds and you disagree, the cost of supporting it is usually lower than the cost of re-centralising, and the learning is worth the outcome.</p>",
+            "<p>Where a genuinely wrong decision is made, distinguish between the decision and the process that produced it. If the person had the information and used it reasonably, the decision is theirs to own and the outcome is a learning cost. If the information was missing, the failure is in the reporting, not the judgement, and fixing the reporting is the executive's work.</p>",
+            "<p>Count how many decisions you made last month that somebody else could have made with the information available to them. That number, more than any engagement score, measures whether the organisation is developing judgement or merely executing instructions. Set a target and watch it fall.</p>",
+            "<h3>What delegation actually develops</h3>",
+            "<p>Judgement cannot be taught in a classroom; it is built by making decisions with consequences and being asked to explain them afterwards. An executive who delegates tasks produces skilled executors. One who delegates judgement produces people who can run the organisation, which is the only form of succession that works.</p>",
+            "<p>Build the explanation in deliberately: after a significant decision, ask the person what they expected to happen and what they would do differently. That single question, asked without judgement, is the fastest development tool available and it costs ten minutes.</p>",
+            "<p><strong>Check yourself.</strong> Which decisions currently require you that could be made by somebody else within stated bounds? What are those bounds, written down?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Organisational design under constraint",
+      "lessons": [
+        {
+          "title": "Designing for scarce capability",
+          "minutes": 22,
+          "html": [
+            "<p>Most organisational design assumes you can hire the capability you need. In a market with a thin professional labour pool, that assumption is false, and a design built on it will produce vacancies that stay open, work that accumulates around whoever is capable, and a small number of people carrying obligations nobody has counted.</p>",
+            "<p>Design instead around the capability you actually have. That means fewer specialists holding broader roles, documented procedures so that a role can be filled by somebody adjacent rather than identical, and a deliberate decision about which capabilities must be bought in rather than grown.</p>",
+            "<p>Concentrate deliberately rather than accidentally. If only three people can do a critical task, say so and protect them: pay them properly, plan for their absence, and do not assign them to everything else that needs judgement. Unrecognised concentration is where organisations discover, on the day somebody resigns, that a fifth of their operations existed in one person's head.</p>",
+            "<p>Reduce the number of handoffs. Every handoff is a place where a scarce person must re-explain context, and in a constrained organisation those costs compound. Fewer, larger, better-supported roles usually outperform a fine-grained structure borrowed from a larger organisation.</p>",
+            "<p>Write the coverage list and keep it current, alongside the vacancy list. Most organisations know precisely how many posts are unfilled and have no idea how many critical tasks have only one person able to perform them, which is the exposure that actually stops operations. Review it before every hiring decision rather than after each resignation.</p>",
+            "<h3>Design that survives turnover</h3>",
+            "<p>Turnover is not an exception to plan for; it is a condition. Design accordingly: write down what is only in people's heads, make the second person capable rather than merely informed, and expect a new joiner to need three months before contributing at the level of the person they replaced.</p>",
+            "<p>Test the design by removing somebody. For each critical role, ask who covers it, whether they have done it before, and how long the handover would take. Where the answer is nobody, the design has a single point of failure that is currently being managed by hope and by that person's goodwill.</p>",
+            "<p><strong>Check yourself.</strong> Remove your three most capable people from the organisation chart. Which functions stop, and what would it cost to have a second person for each?</p>"
+          ]
+        },
+        {
+          "title": "Informal systems and the shadow organisation",
+          "minutes": 21,
+          "html": [
+            "<p>Every organisation runs two systems. The formal one has procedures, approvals and reporting lines. The informal one has trusted advisers, reciprocal obligations and shortcuts that make the formal system work at all. In constrained environments the informal system often carries more weight than the formal one, and executives who ignore it are repeatedly surprised.</p>",
+            "<p>The informal system is not inherently bad. It is how a signature is obtained in a week rather than a month, how a supplier agrees to release goods before payment, how a problem gets solved by two people who know each other. Trying to eliminate it produces paralysis; the formal system alone is rarely capable of the speed the organisation needs.</p>",
+            "<p>It becomes a liability when it is invisible to the executive, when it substitutes personal loyalty for standards, or when it allocates real resources without any record. The distinction to hold is between relationships that make the system work and relationships that replace the system.</p>",
+            "<p>An executive's practical task is to see the informal system without destroying it: know who actually decides, know which obligations are outstanding, and bring the critical parts into the formal system where they can be governed — a documented exception process, a named relationship owner, a record of what was agreed.</p>",
+            "<p>Do not attempt to abolish the informal system; it will simply move somewhere less visible. The achievable goal is to keep its essential functions while ensuring that any commitment of money, contract or position leaves a trace that a successor or an auditor could follow without needing the relationships you hold. Start with the three largest commitments made last year.</p>",
+            "<h3>When informality becomes risk</h3>",
+            "<p>The signal is a decision that cannot be explained to an outsider. If a contract was awarded, a rule waived or a payment advanced and no record explains why, the organisation is running on trust that will not survive an audit, a change of personnel or a dispute. That is not a compliance detail; it is an unmeasured liability that grows with the size of the favours.</p>",
+            "<p>Write the reason down while it is still ordinary. A two-line note explaining why an exception was made converts a favour into a decision, and it protects the person who made it. Executives who insist on this are not bureaucrats; they are the only reason the informal system remains usable.</p>",
+            "<p><strong>Check yourself.</strong> Name two decisions in your organisation that could not be explained to an auditor. What record would have made them defensible?</p>"
+          ]
+        },
+        {
+          "title": "Structure that fits the strategy, not the history",
+          "minutes": 21,
+          "html": [
+            "<p>Most structures are accumulated rather than designed: a department added for a contract that ended, a unit created for a donor requirement, a reporting line changed to accommodate one person's departure. The result is a shape that describes the organisation's history rather than its intentions.</p>",
+            "<p>The test is whether the structure places responsibility where the strategy needs decisions to be made. If the strategy depends on serving a segment quickly, and the structure requires three approvals from functions that do not share a measure, the structure is working against the strategy and will win, because structure determines what is easy.</p>",
+            "<p>Restructuring is expensive and usually oversold. Most structural problems are really measurement problems, and moving boxes on a chart to fix an incentive is a familiar way of spending a year and achieving nothing. Before restructuring, ask what decision is being made badly and who currently owns it.</p>",
+            "<p>Where a genuine structural change is needed, sequence it: clarify accountability first, then measures, then reporting lines. Organisations that begin with the reporting lines produce a new chart and the same behaviour, because the underlying questions about who decides and what is rewarded were never addressed.</p>",
+            "<p>Estimate that cost before proposing the change, and put it in the paper. A restructure presented as cost-free is a restructure whose author has not counted the months of frozen decisions and the departures of people who saw the chart and concluded their future was elsewhere. Put the estimate in the board paper, and hold yourself to it afterwards.</p>",
+            "<h3>The cost of a restructure</h3>",
+            "<p>Restructuring consumes management attention for months, freezes decisions while people wait to learn their fate, and loses some of the people whose institutional knowledge you most need. That cost is justified when the structure genuinely obstructs the strategy and not when it is a response to a bad quarter.</p>",
+            "<p>Decide in advance what evidence would show that the restructure worked, and when you will look. Without that, the change will be judged by how it felt, and the next executive will restructure again to demonstrate that something is happening.</p>",
+            "<p><strong>Check yourself.</strong> Where does your structure force a decision to travel further than the strategy can afford? Is that a structural problem or a measurement problem?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Stakeholders in conflict",
+      "lessons": [
+        {
+          "title": "Mapping interests rather than positions",
+          "minutes": 22,
+          "html": [
+            "<p>Stakeholders present positions; what matters is their interests. A union's position is a wage percentage; its interest may be predictability for members, or protection of a differential that has symbolic value. An owner's position is a dividend; the interest may be liquidity for a personal obligation nobody has mentioned.</p>",
+            "<p>Map each stakeholder on three dimensions: what they actually need, what they can do to you, and what they believe about your intentions. The third is the one executives underweight, and it determines whether a reasonable proposal is received as reasonable or as a manoeuvre.</p>",
+            "<p>Where interests genuinely conflict, the executive's job is to decide and to explain the basis of the decision. Trying to satisfy everybody produces a compromise that satisfies nobody and delays the cost to a later, worse moment. The legitimacy of the decision comes from the reasoning being visible, not from everyone agreeing.</p>",
+            "<p>Identify the stakeholder who can stop you with a single action — a signature withheld, a permit delayed, a workforce that stops — and deal with them early and directly. Late engagement with a blocking stakeholder converts a negotiation into a crisis, and crises are where the least attractive options are chosen.</p>",
+            "<p>Keep the record of commitments separately and review it before every meeting with that stakeholder. Most damage to an executive's credibility with a powerful stakeholder comes not from a refusal but from a forgotten promise, and the promise was usually small enough that nobody else recorded it either. Confirm commitments in writing within a day, in two lines.</p>",
+            "<h3>What to write down</h3>",
+            "<p>Keep a live map: stakeholder, interest, leverage, current belief about you, what you have committed to them, and when you last spoke. Two pages, updated quarterly. It is the difference between managing a relationship and reacting to it, and it survives your own memory lapses and your successor's ignorance.</p>",
+            "<p>Review the map when anything material changes: a new minister, a new owner, a contract renewal, an incident. Stakeholder alignments shift faster than strategies, and a map that is a year old is a description of a situation that no longer exists.</p>",
+            "<p><strong>Check yourself.</strong> For your most powerful stakeholder, write down the interest behind their stated position. If you cannot, you have not spoken to them recently enough.</p>"
+          ]
+        },
+        {
+          "title": "Family ownership and professional management",
+          "minutes": 22,
+          "html": [
+            "<p>In a family-owned business, ownership, employment and family obligation overlap, and the executive is appointed into a system whose rules are partly unwritten. A decision that is obviously correct commercially may be socially impossible, and an executive who does not distinguish the two will be judged as competent and removed.</p>",
+            "<p>The first task is to establish what the owners actually want. Growth, stability, employment for family members and status in the community are different objectives, and several may be held simultaneously by different family members. Writing them down, with names attached, is politically uncomfortable and it is the only basis for a plan.</p>",
+            "<p>The second is to define the boundary between family matters and management matters, in writing, with the owners' agreement. Which roles require competence, how family members are appraised, what happens when performance is inadequate. Where that boundary is undefined, every management decision is vulnerable to being reopened through a family channel.</p>",
+            "<p>Third, professionalise selectively. Introducing performance management, budgeting and reporting improves the business, and doing all of it at once signals that the family's traditional way of working is being replaced, which mobilises resistance from the people whose identity is bound up in it. Sequence it, and name the things that will not change.</p>",
+            "<p>Where the conditions cannot be met and you stay regardless, be honest with yourself about what has changed. An executive who remains without conditions is not demonstrating loyalty; they are accepting responsibility for outcomes they have no means to influence, and the organisation will hold them accountable for exactly those. State the conditions to the owners, in writing, before you decide to stay.</p>",
+            "<h3>When the two genuinely cannot be reconciled</h3>",
+            "<p>Some situations have no workable accommodation: a family member in a critical role who cannot perform it, an owner extracting cash the business needs, two branches of the family in open conflict. In those cases the executive's choice is whether to stay under conditions they can state, or to leave.</p>",
+            "<p>Stating the conditions is not ultimatum politics; it is a professional position. If the owners will not accept the conditions and the executive stays anyway, the executive becomes complicit in outcomes they cannot influence, and their credibility with the rest of the organisation will be spent on defending decisions they did not make.</p>",
+            "<p><strong>Check yourself.</strong> In your organisation, which decisions require competence and which require family consent? Is that boundary written down anywhere?</p>"
+          ]
+        },
+        {
+          "title": "Unions, government and community",
+          "minutes": 21,
+          "html": [
+            "<p>Three external stakeholders can each end an executive's plans without buying a share. A union can stop production; a government can withdraw a concession, a licence or an exemption; a community can make operations untenable through obstruction that is never formally a decision.</p>",
+            "<p>With unions, the sustainable currency is predictability and honesty rather than generosity. A workforce that has been told the truth about constraints will accept difficult decisions far more readily than one that has been managed with optimism and then surprised. Surprise is what converts a wage negotiation into a strike.</p>",
+            "<p>With government, the risk is single-point dependence. Where a concession or a licence is the basis of the business, the executive's job is to reduce exposure — diversify revenue, formalise obligations, build relationships across changes of administration — rather than to assume the current arrangement continues because the current relationship is good.</p>",
+            "<p>With communities, the operative question is whether the organisation is seen as taking more than it gives. Employment, local purchasing and visible contribution matter more than formal community programmes, and a written agreement about expectations is worth more than a donation, because it can be referred to when memory differs.</p>",
+            "<p>Ask what would happen if the stakeholder exercised their leverage today. The answer is your organisation's true risk profile, and it belongs in the board's papers rather than in the executive's private understanding of how the relationships currently stand. Where the answer is fatal, say so to the board in those words.</p>",
+            "<h3>The stakeholder you cannot negotiate with</h3>",
+            "<p>Where a stakeholder's demand is incompatible with the organisation's survival, the executive must decide and be able to defend the reasoning. That means documenting the analysis before the decision, and communicating it to the other stakeholders whose support will be needed afterwards. Decisions of this kind are judged later, by people who were not in the room.</p>",
+            "<p>Do not confuse a relationship problem with a structural one. If a hostile stakeholder can end the business with one action, the real problem is the dependence, not the hostility. Executives who spend years improving a relationship that remains a single point of failure have treated a structural exposure as a personal one.</p>",
+            "<p><strong>Check yourself.</strong> Which external stakeholder could end your organisation's current activity with one decision? What has been done to reduce that dependence rather than to manage the relationship?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Crisis leadership",
+      "lessons": [
+        {
+          "title": "Deciding without the information you need",
+          "minutes": 22,
+          "html": [
+            "<p>A crisis is a situation where the information required to decide cannot be obtained in the time available, and the cost of not deciding exceeds the cost of deciding wrongly. Currency collapse, epidemic, sudden loss of a contract, a security incident: each removes the normal basis for decision and replaces it with a clock.</p>",
+            "<p>The first discipline is to distinguish reversible from irreversible actions and take the reversible ones immediately. Suspend non-essential spending, freeze commitments that can be unfrozen, move cash to where it is accessible. Those actions buy time, and time is the resource a crisis removes first.</p>",
+            "<p>The second is to decide what you will not do, in advance. In a currency crisis, an executive who has pre-decided not to cancel salaries in the first month, but to defer capital spending, makes faster and more consistent decisions than one reasoning from principle under pressure. Pre-commitment is not rigidity; it is a way of protecting the values you will not be able to think clearly about later.</p>",
+            "<p>The third is to establish a single decision forum with named participants and a fixed rhythm. Crises attract participants and produce meetings; a standing group of four or five meeting twice a day, with authority to decide, prevents the paralysis of consensus-seeking while the situation moves.</p>",
+            "<p>Give the decision forum a single scribe and a single log, updated in the meeting rather than afterwards. Recollection within an hour already differs between participants, and the record is what allows the organisation to explain itself when the outcome is examined by people who were comfortable throughout. The log is also the only honest input to the review afterwards.</p>",
+            "<h3>The decisions that get made badly</h3>",
+            "<p>Under time pressure, executives systematically overweight the most recent information and the loudest voice, and underweight the quiet operational knowledge that would have prevented the problem. Counter this deliberately: ask the person closest to the work what they would do, and give their answer the weight their proximity deserves.</p>",
+            "<p>Record decisions as you make them, with the time and the information available. A crisis log seems like an indulgence while it is happening and is the only defence later, when the same decisions are reviewed by people with the benefit of knowing how it turned out.</p>",
+            "<p><strong>Check yourself.</strong> What would you decide, and refuse to decide, in the first forty-eight hours of your worst plausible scenario? Have you written it down anywhere?</p>"
+          ]
+        },
+        {
+          "title": "Communicating when you know little",
+          "minutes": 21,
+          "html": [
+            "<p>In a crisis, silence is interpreted as either concealment or collapse, and both interpretations cause more damage than an incomplete statement. People can tolerate uncertainty that is acknowledged; they cannot tolerate being left to imagine.</p>",
+            "<p>Say what you know, what you do not know, what you are doing, and when you will speak again. Four parts, delivered on a schedule, even when the news is unchanged. The schedule itself is reassurance: it tells people that somebody is in charge and that information will arrive rather than having to be extracted.</p>",
+            "<p>Choose who speaks and keep it to one voice. Multiple executives giving slightly different accounts is normal in organisations and catastrophic in crises, because the difference is read as concealment. Where different audiences need different detail, the facts must be identical.</p>",
+            "<p>Communicate internally before externally wherever possible. Staff who learn about a crisis from a customer or a broadcast become witnesses rather than participants, and their subsequent behaviour — gossip, departure, speculation — costs more than the original problem.</p>",
+            "<p>Prepare the difficult statement before you need it: the sentence that says what is not yet known and when it will be, without either alarming people or promising an outcome you cannot control. Executives who improvise that sentence under pressure produce phrases that are quoted back at them for years. Rehearse it once, out loud, before you need it.</p>",
+            "<h3>What not to say</h3>",
+            "<p>Avoid reassurance you cannot substantiate. Everything is under control is the sentence that destroys credibility the moment the situation worsens, and it is remembered long after the recovery. Saying that the next four weeks will be difficult and that salaries are secured for that period is both more honest and more calming.</p>",
+            "<p>Expect the information vacuum to be filled by people with their own account. The only effective response is a faster, more consistent supply of facts from the organisation itself, which requires somebody whose job during the crisis is communication rather than operations.</p>",
+            "<p><strong>Check yourself.</strong> If your organisation faced a serious incident tomorrow, who would speak, to whom, and with what script? Has any of that been prepared?</p>"
+          ]
+        },
+        {
+          "title": "Afterwards: what gets rebuilt and what should not",
+          "minutes": 21,
+          "html": [
+            "<p>Crises end unevenly. Operations resume before confidence does, and the organisation is tempted to declare recovery and return to normal, which leaves the underlying cause intact and the people who carried the burden unrewarded.</p>",
+            "<p>Run two reviews, not one. The first is operational: what happened, what the response depended on, what failed. The second is about the organisation's exposure, which is usually more uncomfortable, because it asks why a single event could threaten survival and who decided not to reduce that dependence.</p>",
+            "<p>Rebuild deliberately. Some things should return: the routines that worked, the relationships that held, the standards that were temporarily suspended. Others should not: the heroic dependence on individuals, the reporting that was bypassed, the tolerance of a supply or revenue concentration that the crisis exposed.</p>",
+            "<p>Look after the people who carried it, explicitly and visibly. In crisis, some staff work beyond reason while others are protected by circumstance, and the organisation that does not recognise the difference teaches everybody which behaviour is actually rewarded. Recognition does not have to be financial; it has to be specific and public.</p>",
+            "<p>Name the end of the crisis explicitly, in public, with a date and what changes. Organisations that drift out of emergency mode without an announcement keep behaving as though the next shock is imminent, and the people who performed best under pressure begin to leave for somewhere calmer. Say the words the crisis is over, and mean them.</p>",
+            "<h3>The crisis that becomes the culture</h3>",
+            "<p>Organisations that survive repeated crises can become permanently urgent: every week a fire, every decision escalated, every plan provisional. That mode is effective for a season and corrosive over years, because it consumes the people who are best at it and prevents any work that pays off slowly.</p>",
+            "<p>Decide when the crisis is over and act as if it is. Restore the planning horizon, reduce the meeting rhythm, and give people permission to work on things that will not show results this quarter. An executive who cannot end a crisis response has not led through it; they have adopted it.</p>",
+            "<p><strong>Check yourself.</strong> What did the last crisis in your organisation expose about its design? What was actually changed, and what quietly returned?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 5 · Ethics under pressure",
+      "lessons": [
+        {
+          "title": "The grey zone, named in advance",
+          "minutes": 22,
+          "html": [
+            "<p>Ethical failures rarely begin with a decision to do something wrong. They begin with a small accommodation that is reasonable in isolation: a favour to speed a signature, a payment to a facilitator, a contract to a relative who is competent. Each is defensible once. The problem is that each establishes a precedent that is expensive to reverse.</p>",
+            "<p>The executive's advantage is deciding the boundary before pressure arrives. A limit set in calm conditions can be explained and held; the same limit invented in the moment looks arbitrary and invites negotiation. Write the limits down, discuss them with the board or owners, and make them known to the people who will be asked to break them.</p>",
+            "<p>The most useful question is not whether an action is legal, because legality is decided later by people who may apply a different standard. The useful questions are who bears the cost if this goes wrong, and whether you would be content for the decision to be described accurately in public. Both are answerable in the moment.</p>",
+            "<p>Consider the asymmetry. The gain from an accommodation is usually small and immediate; the cost, if exposed, is large and arrives at a time chosen by somebody else. Executives who make this calculation explicitly make different decisions from those who evaluate only the immediate benefit.</p>",
+            "<p>Test your stated position against a real case before it happens. Take a practice you know occurs in your industry and ask what you would actually do if a contract depended on it: the answer, spoken aloud to a colleague, is your policy, whatever the code of conduct says. If they differ, the code is decoration.</p>",
+            "<h3>The accommodation that becomes a requirement</h3>",
+            "<p>Once an organisation has paid a facilitation fee to obtain a licence, the next renewal will require it, and the amount will rise. What began as a solution becomes a recurring cost and a permanent exposure, and exiting it is far harder than never entering, because the counterparty now has leverage.</p>",
+            "<p>The practical protection is to know your exit before you take the first step. If there is no answer to what happens when the requirement increases, the decision has not been thought through, however routine it feels at the time.</p>",
+            "<p><strong>Check yourself.</strong> Name one practice in your industry that everybody does and nobody defends. What is your stated position on it, and who knows it?</p>"
+          ]
+        },
+        {
+          "title": "Nepotism, competence and obligation",
+          "minutes": 21,
+          "html": [
+            "<p>Hiring relatives is normal in family businesses and community enterprises, and it is not automatically a failure. The damage comes from hiring them into roles they cannot perform, or from exempting them from standards applied to everybody else, because both signal that competence is optional and that the organisation's rules are for other people.</p>",
+            "<p>The distinction to hold is between the obligation to provide opportunity and the requirement to protect capability. Providing a role, training, a start: legitimate. Placing somebody in a position where their failure damages the organisation and their colleagues: not legitimate, and the person concerned often knows it.</p>",
+            "<p>Where a relative is underperforming, the executive must act, and the acting is harder than for anyone else because it carries family consequences. Doing nothing is the more common outcome and it is the one that damages the organisation most, because everybody can see the exemption and infers the rules.</p>",
+            "<p>Set the terms for family employment before the need arises: which roles require demonstrated competence, how performance is reviewed, who conducts the conversation, and what happens if it is inadequate. An owner who agrees those terms in advance is more likely to hold to them than one asked to agree in the middle of a specific case.</p>",
+            "<p>Decide who conducts the conversation with a relative whose performance is inadequate, and prepare them. It is usually not the executive, whose authority is compromised by the relationship, but a senior colleague with standing and no family tie, supported by a written standard and a record. Decide this before the case exists, not during it.</p>",
+            "<h3>When the obligation is real</h3>",
+            "<p>Sometimes the obligation cannot be refused: a family member who has no alternative, or a community expectation that employing locally includes employing your own. In those cases, manage the risk openly rather than pretending it does not exist: give the role real scope but bounded consequences, provide support, and review honestly.</p>",
+            "<p>What must not happen is the creation of a role with a title and no accountability, because that is visible to everybody and it teaches the organisation that the two currencies are connection and performance, with connection winning.</p>",
+            "<p><strong>Check yourself.</strong> Which role in your organisation was filled by obligation rather than competence, and is it designed so that failure cannot damage others?</p>"
+          ]
+        },
+        {
+          "title": "Survival decisions and what they cost",
+          "minutes": 21,
+          "html": [
+            "<p>Executives are sometimes required to decide between options that all harm somebody: redundancies to preserve the organisation, reduced hours to avoid closures, abandoning a product that a community depends on, exiting a market where the organisation is the only formal employer.</p>",
+            "<p>These decisions are not made better by pretending they are neutral. They are made better by making the reasoning explicit, consulting the people affected before the decision is final where that is possible, and being honest about what is being traded. Consultation that cannot change the decision is not consultation, and people can tell.</p>",
+            "<p>The manner of implementation matters as much as the decision. A redundancy handled with notice, accurate information, support and dignity is remembered as hard; the same redundancy handled with rumour and haste is remembered as betrayal, and the difference is almost entirely within the executive's control.</p>",
+            "<p>Consider who bears the cost and whether it is distributed fairly. Executives frequently protect their own positions while asking others to accept reductions, and the organisation notices even when no one says so. A visible willingness to share the cost buys credibility that no communication strategy can manufacture.</p>",
+            "<p>Write down the decisions you would refuse even at the cost of the organisation, and give the list to somebody who will hold you to it. Under pressure, the ability to reason from principle is exactly what degrades first, and a prior commitment made in calm conditions is the only reliable substitute. Name one person who would remind you, and ask them to.</p>",
+            "<h3>The line that must hold</h3>",
+            "<p>Survival justifies difficult decisions and does not justify fraudulent ones. Misrepresenting the position to a lender, hiding a liability from a buyer, or withholding wages owed while continuing operations are not survival decisions; they are transfers of loss to people who did not consent, and they convert a business problem into a legal and reputational one.</p>",
+            "<p>Where the organisation may not survive, say so. An honest statement that the next six months determine whether the organisation continues, accompanied by a plan, gives people the chance to act. Optimism presented as fact removes that chance and is the most common way executives fail the people who trusted them.</p>",
+            "<p><strong>Check yourself.</strong> If you had to make your hardest plausible decision tomorrow, what would you be unwilling to do even to survive? Who else knows that?</p>"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Module 6 · Succession and legacy",
+      "lessons": [
+        {
+          "title": "Building judgement, not successors",
+          "minutes": 21,
+          "html": [
+            "<p>Succession planning usually produces a name rather than a capability. An organisation that has identified a successor but never given them decisions to make has produced a person who will be tested for the first time in the role, at the organisation's expense and theirs.</p>",
+            "<p>Judgement is built by deciding with consequences and reflecting on the result. That means giving real decisions earlier than feels comfortable, allowing outcomes that are not ideal, and discussing afterwards what the person expected and what happened. A development plan of courses and shadowing produces familiarity; only decisions produce judgement.</p>",
+            "<p>Give several people those decisions, not one. A single anointed successor is a fragile plan: they may leave, may not want the role, or may be unacceptable to a stakeholder. A bench of three people who have each run something significant gives the board options and gives the organisation resilience.</p>",
+            "<p>Test candidates against the situation the organisation will actually face, not the one it faces now. If the next five years require cost discipline in a shrinking market, a candidate whose strength is growth will fail, however impressive their record. Say what the next phase demands before assessing who can deliver it.</p>",
+            "<p>Make the plan visible enough that capable people can plan their own careers around it. Ambition that is kept secret to preserve options is the most common reason strong internal candidates take a job elsewhere, and their departure is usually explained afterwards as a surprise. Tell each serious candidate where they stand and when.</p>",
+            "<h3>The conversation nobody has</h3>",
+            "<p>Ask the candidates directly whether they want the role, and what they would need in order to do it well. Assumptions about ambition are frequently wrong in both directions, and an executive's own reluctance to discuss their departure prevents the conversation that would let somebody plan a career.</p>",
+            "<p>Be explicit about the timeline, to the extent it can be. A named date transforms a successor from a rival into a colleague with a plan, and it removes the ambiguity that makes capable people leave because they cannot see a future.</p>",
+            "<p><strong>Check yourself.</strong> Which three people in your organisation have made a decision with real consequences in the last year? If fewer than three, what are you waiting for?</p>"
+          ]
+        },
+        {
+          "title": "The founder's exit",
+          "minutes": 21,
+          "html": [
+            "<p>A founder's departure is different from any other succession, because the founder's authority does not come from the role. It comes from having built the thing, and it does not transfer with a title. An organisation can appoint a new managing director and continue to be run by the founder's absence, habits and opinions.</p>",
+            "<p>Plan the exit as a series of withdrawals rather than an event. Hand over an area, let it run, and resist the urge to intervene when it is done differently. Each successful withdrawal increases the organisation's capacity; each intervention resets the process and confirms that the handover was nominal.</p>",
+            "<p>Deal with the founder's financial and emotional stake explicitly. Security, status and a continuing role as adviser or chair can all be arranged, and each must be defined so that it does not become a back channel through which the organisation continues to be run by one person.</p>",
+            "<p>Expect the organisation to regress in the founder's presence. Long-standing staff will defer, decisions will be referred upward, and the new leader will be reduced to a coordinator. Either the founder is genuinely absent for defined periods or the transition has not started.</p>",
+            "<p>Hold the founder to a written handover of at least four areas, with dates, and review whether they were actually released. An area that was nominally handed over but is still discussed weekly at the founder's kitchen table has not been handed over, and everybody except the founder can see it. Agree a review date for each area and attend it.</p>",
+            "<h3>What the founder owes the organisation</h3>",
+            "<p>Three things: a written account of the decisions that shaped the business and why, an honest assessment of the organisation's weaknesses, and a public endorsement of the successor that is visible to staff and external stakeholders. The endorsement is not sentiment; it is the transfer of authority the new leader cannot obtain any other way.</p>",
+            "<p>Where a founder cannot make the transfer — because the identity is too bound up with the role — the board's task is to create the conditions rather than to wait. Succession that depends on the outgoing leader's willingness, with no alternative, is not a plan.</p>",
+            "<p><strong>Check yourself.</strong> If your organisation's longest-serving leader left tomorrow, which decisions would still be made as they would have made them? What does that tell you?</p>"
+          ]
+        },
+        {
+          "title": "What outlives you",
+          "minutes": 21,
+          "html": [
+            "<p>An executive's legacy is rarely the strategy, which is revised by successors, or the results, which are attributed to circumstances. What persists is the organisation's capability: the standards it will not breach, the people it developed, the systems it built, and the reputation it earned with the people who can end it.</p>",
+            "<p>Judged that way, some impressive tenures leave little. An executive who delivered excellent results by making every decision personally leaves an organisation less capable than they found it, and the decline becomes visible eighteen months after they leave, which is usually long enough for it to be attributed to the successor.</p>",
+            "<p>Build deliberately for the period after you. Document the reasoning behind the major commitments, develop people beyond your own requirements, and make the organisation's relationships institutional rather than personal. Each is unglamorous, none appears in a results summary, and each determines whether the organisation holds together without you.</p>",
+            "<p>Accept that some of what you build will be changed. A successor who does not adapt the organisation to a changed environment is not honouring a legacy; they are preserving a decision past its usefulness. Build capability rather than arrangements, and the capability will be used differently, which is the point.</p>",
+            "<p>Answer the question in writing, share it with your leadership team, and ask them whether they agree. Their version of what would be worse is usually more accurate than yours, because they see the dependencies you rely on without noticing. Their answer is your real succession plan.</p>",
+            "<h3>The test worth applying</h3>",
+            "<p>Ask what would be worse in this organisation if you left in six months. If the answer is only consequences and decisions, the organisation will manage. If the answer is capability, judgement or relationships, those are the things to build now, and they cannot be bought later.</p>",
+            "<p>Write the answer down and revisit it annually. It is the most honest measure of an executive available, and it is the one that the people inside the organisation are already applying, whether or not they say so.</p>",
+            "<p><strong>Check yourself.</strong> If you left in six months, what would be worse? What would you do in the next ninety days about the largest item on that list?</p>"
+          ]
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "An executive is competent operationally, accessible to every escalation, and has not revisited the strategy in two years. What is the consequence, and what is the correct intervention?",
+      "explanation": "The organisation has no strategic direction and the executive has become a permanent decision bottleneck. The intervention is structural — a published escalation threshold and a deputy with supported authority — not simply working harder on strategy.",
+      "options": [
+        { "text": "The organisation is executing competently without direction; publish an escalation threshold and delegate judgement with supported authority", "correct": true },
+        { "text": "The organisation is well led and only needs a clearer strategy document", "correct": false },
+        { "text": "The executive should schedule a strategy retreat and continue as before", "correct": false },
+        { "text": "The board should replace the executive with an external strategist", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Only three people can perform a critical task, and they are also the people to whom every difficult decision is escalated. Which description best fits?",
+      "explanation": "This is unrecognised concentration of scarce capability. It needs to be named, protected and duplicated, not simply managed by hoping those people stay.",
+      "options": [
+        { "text": "An unrecognised single point of failure that must be named, protected and duplicated", "correct": true },
+        { "text": "An efficient use of scarce talent that should be left undisturbed", "correct": false },
+        { "text": "A sign the task should be outsourced immediately", "correct": false },
+        { "text": "A training problem to be solved with courses", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A decision was made under delegated authority, within stated bounds, and you disagree with it. What is usually the right response?",
+      "explanation": "Supporting it preserves delegation as real. Reversing decisions within bounds teaches the organisation that delegation was nominal and decisions will return to you.",
+      "options": [
+        { "text": "Support it, then discuss the judgement afterwards with the person who made it", "correct": true },
+        { "text": "Reverse it quietly and explain later", "correct": false },
+        { "text": "Narrow the delegated bounds so it cannot recur", "correct": false },
+        { "text": "Ask the person to reconsider before announcing it", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A union and an owner hold incompatible positions on wages, and both can impose serious costs on the organisation. What is the executive's most defensible course?",
+      "explanation": "Decide, make the reasoning visible, and deal directly with whichever party can stop the organisation. Attempting to satisfy both delays the cost to a worse moment and satisfies neither.",
+      "options": [
+        { "text": "Decide on stated reasoning, communicate it to both, and address the greater structural exposure directly", "correct": true },
+        { "text": "Offer a compromise that gives each side part of what it asked for", "correct": false },
+        { "text": "Defer the decision until the next financial year", "correct": false },
+        { "text": "Let the board decide without a recommendation from management", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the first 48 hours of a currency collapse, which sequence is most defensible?",
+      "explanation": "Take reversible cash-preserving actions immediately, avoid irreversible commitments, and protect pre-committed priorities such as salaries for one period while deferring capital spending.",
+      "options": [
+        { "text": "Take reversible cash actions at once, defer irreversible commitments, protect pre-agreed priorities", "correct": true },
+        { "text": "Wait for reliable information before making any changes", "correct": false },
+        { "text": "Announce immediate redundancies to protect the cash position", "correct": false },
+        { "text": "Raise prices to match the exchange rate on the same day", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An organisation has paid a facilitation payment to obtain a licence and now faces renewal. Which analysis is most useful?",
+      "explanation": "The first payment created a recurring requirement and gave the counterparty leverage. The relevant question is the exit, because the cost will rise and the exposure is now permanent until exited.",
+      "options": [
+        { "text": "The payment created a recurring requirement and leverage; decide the exit before renewing", "correct": true },
+        { "text": "The payment was a one-off and renewal is unrelated", "correct": false },
+        { "text": "The practice is industry standard and should be budgeted as a cost", "correct": false },
+        { "text": "The matter should be delegated to the department that obtained the licence", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A relative holds a role they cannot perform, and the family will object to any change. What is the best available judgement?",
+      "explanation": "The exemption damages the organisation by teaching everyone that rules are for other people. The defensible course is to bound the role's consequences, support the person, and review honestly — or restructure the role entirely.",
+      "options": [
+        { "text": "Bound the role's consequences, provide support, and review honestly rather than leave the exemption visible", "correct": true },
+        { "text": "Leave it, because the family consequence would be worse for the business", "correct": false },
+        { "text": "Remove the person immediately regardless of consequence", "correct": false },
+        { "text": "Create a new title with no accountability to resolve the tension", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Two candidates for managing director: one has delivered strong results by personally deciding everything; one has delivered slightly weaker results while building a capable team that has since succeeded without them. The next five years require expansion into a new market with an inexperienced team. Which is the better appointment, and why?",
+      "explanation": "The requirement is capability building in unfamiliar territory, where the first candidate's personal judgement has no advantage and their habits would deepen dependence. Both are credible appointments; the second is better against this specific brief.",
+      "options": [
+        { "text": "The second — the next phase requires building capability, not personal decision-making, in a setting where the first candidate's habit would deepen dependence", "correct": true },
+        { "text": "The first — stronger results are the only reliable evidence of executive ability", "correct": false },
+        { "text": "Either, since both have led an organisation to results", "correct": false },
+        { "text": "Neither — an external appointment is required for a new market", "correct": false }
+      ]
+    }
+  ]
+}

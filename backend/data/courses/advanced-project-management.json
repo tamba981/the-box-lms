@@ -1,0 +1,326 @@
+{
+  "slug": "advanced-project-management",
+  "title": "Advanced Project Management",
+  "program": "CPP",
+  "category": "business-management",
+  "level": "intermediate",
+  "credential": "certificate",
+  "priceCents": 4000,
+  "certificateFeeCents": 0,
+  "summary": "Manage projects where the requirements move: multi-donor governance, stakeholder politics, contractual interfaces and recovery from a failing schedule.",
+  "description": "Introductory project management assumes a defined scope, a single sponsor and a plan that survives contact with reality. Advanced practice begins when none of those hold: five funders with different reporting cycles, a ministry that changes its priorities mid-implementation, three contractors whose delays interact, and a schedule that has already slipped before you arrived.\n\nThis course works on the decisions that determine whether such a project delivers anything. It covers the distinction between portfolio, programme and project; benefits realisation and why the benefits register is the document that survives; governance structures that let a steering committee actually decide; stakeholder mapping that identifies who can stop you rather than who is friendly; and the contractual interfaces where risk quietly transfers.\n\nThe centre of the course is delivery under stress: the schedule-cost-scope trade that cannot be avoided, the early warning indicators that appear months before a formal variance, and recovery options ranked by what they actually buy.\n\nThe case study concerns a five million dollar multi-donor infrastructure project. After eight months, three of five donors have changed their priorities while the original objectives remain the government's stated goals. Students must decide what to renegotiate, what to protect and what to tell whom.\n\nIt is written for Liberian conditions: donor-funded programmes, public-private arrangements, post-conflict reconstruction and infrastructure delivered through layered contracting.",
+  "tags": ["project management", "governance", "stakeholders", "benefits", "risk", "procurement"],
+  "outcomes": [
+    "Distinguish portfolio, programme and project questions",
+    "Build and maintain a benefits register that survives closure",
+    "Design governance that allows real decisions to be taken",
+    "Map stakeholders by their power to stop the project",
+    "Manage conflicting requirements across multiple donors",
+    "Identify where risk sits in a chain of contracts",
+    "Recognise early warning signs before a formal variance appears",
+    "Recover a slipping schedule with options ranked by what they buy"
+  ],
+  "caseStudy": "You manage a five million dollar multi-donor infrastructure project. After eight months, three of five donors have changed their priorities. The original objectives remain the government's stated goals, and the remaining two donors are content. Students must decide what to renegotiate, what to protect, who to tell and in what order.",
+  "modules": [
+    {
+      "title": "Portfolio, programme, project",
+      "lessons": [
+        {
+          "title": "Three words that ask different questions",
+          "minutes": 19,
+          "teach": [
+            "A project delivers a defined output within a defined time and budget. A programme delivers an outcome through several related projects. A portfolio is the set of investments an organisation is making, chosen and stopped according to a strategy.",
+            "The questions differ accordingly. A project asks whether we can deliver this on time and to specification. A programme asks whether the collection of projects will produce the change we promised. A portfolio asks whether we should be doing these things at all.",
+            "Confusion between the levels produces the commonest governance failure: a steering committee reviewing task progress on a project whose overall justification has already collapsed, because nobody at that table is empowered to ask whether it should continue.",
+            "Programme management is where dependency lives. Two projects that each look healthy can fail together because one was supposed to deliver the training before the other installed the system, and dependency is invisible at project level.",
+            "Portfolio discipline is about stopping things. An organisation that never cancels a project has a portfolio by accident, and the rational response to new evidence, which is to reallocate, is unavailable to it.",
+            "Know which level you are operating at before accepting an accountability. A project manager held responsible for benefits is being blamed for outcomes they do not control, and a programme manager reporting task status is doing work somebody else should be doing."
+          ],
+          "example": "A health programme reports all four projects on schedule while the immunisation coverage target has not moved, because the projects delivered training, cold rooms, vehicles and data systems to different districts in a sequence nobody owned.",
+          "points": [
+            "Project, programme and portfolio answer different questions",
+            "Dependencies live at programme level",
+            "Portfolio discipline means stopping things"
+          ],
+          "check": "Name a project you manage and the programme outcome it is supposed to serve."
+        },
+        {
+          "title": "Benefits realisation and the register nobody maintains",
+          "minutes": 20,
+          "teach": [
+            "A benefits register lists the outcomes the investment is meant to produce, how each will be measured, who owns it and when it is expected. It is the document that outlives the project team and answers the only question a funder eventually asks.",
+            "The distinction between output and benefit is where registers fail. A register that lists kilometres of road built has recorded an output, while reduced travel time to the market is the benefit, and only the second can justify the money.",
+            "Each benefit needs an owner who is not the project manager. Benefits usually materialise after the project closes, in an operating department, and an owner inside the project disappears with the team at handover.",
+            "Measure the baseline before implementation. A benefit that cannot be compared with a starting position is an assertion, and the absence of a baseline is the most common reason benefits claims are discounted by everyone who reads them.",
+            "Review benefits after closure at six and twelve months. This is the step almost universally skipped, and it is the only evidence that the investment achieved anything, which is what makes the next funding round possible.",
+            "Accept that some benefits will not materialise and say so. A register that records expectations and later reports what actually happened, including the disappointments, is far more credible than one whose numbers are never revisited."
+          ],
+          "example": "A road project's register lists 42 kilometres of sealed surface as the benefit. Rewritten as a reduction in journey time from four hours to ninety minutes and a projected fall in transport cost, it can be measured after closure.",
+          "points": [
+            "Benefits are outcomes, not outputs",
+            "Every benefit needs an owner outside the project",
+            "Review at six and twelve months after closure"
+          ],
+          "check": "Take one benefit from your project and write its baseline, its measure and its owner."
+        },
+        {
+          "title": "Governance: who decides what, and when",
+          "minutes": 19,
+          "teach": [
+            "Project governance is the arrangement that says who may approve a change, who may commit money, who resolves an escalation and what happens when the project manager and the sponsor disagree.",
+            "A steering committee without decision rights is a briefing session. If every significant matter must go to a ministry or a donor board, the committee's real function is to receive information, and the project's decision cycle is set somewhere else.",
+            "Define tolerances rather than seeking approval for everything. A sponsor who agrees in advance that the project may vary time by two weeks and cost by five percent without returning to the committee removes weeks of delay and reserved attention.",
+            "Escalation routes must terminate. A structure where decisions can go up but nothing comes back down produces a queue, and the queue becomes the real schedule, with the plan reduced to a description of what would have happened.",
+            "Separate assurance from delivery. The person who assures the project, whether internal audit, a funder's monitor or a technical panel, must not report to the person delivering it, or the assurance becomes a confirmation.",
+            "Record decisions with the basis on which they were taken. When a decision is later questioned, the minute showing what was known, what was considered and who decided is the only defence available to everyone involved."
+          ],
+          "example": "A steering committee meets quarterly and approves nothing between meetings. A two-week variation waits eleven weeks for the next meeting, and the schedule absorbs a delay larger than the variation itself.",
+          "points": [
+            "Agree tolerances instead of seeking constant approval",
+            "Escalation must have a route back down",
+            "Assurance must not report to delivery"
+          ],
+          "check": "Write the tolerances your sponsor has actually agreed, as opposed to the ones you assume."
+        }
+      ]
+    },
+    {
+      "title": "Complexity and stakeholders",
+      "lessons": [
+        {
+          "title": "Mapping stakeholders by their power to stop you",
+          "minutes": 20,
+          "teach": [
+            "A stakeholder map is not a list of everyone with an interest. It is an assessment of who can stop the project, who can slow it, who must approve a variation and who bears the consequence if it fails.",
+            "Map on two axes: influence over the project and interest in its outcome. The high-influence, low-interest group is the dangerous quadrant, because they are not attending the meetings and will intervene late, once, and decisively.",
+            "Identify the blocking minority. In a multi-party structure, one dissenting funder, one landowner or one district authority may be able to halt progress without being able to advance it, and that asymmetry deserves specific attention.",
+            "Distinguish the stakeholder from the representative. The ministry official in the meeting may not speak for the ministry, and assuming they do produces commitments that evaporate when the file reaches somebody senior who was never consulted.",
+            "Manage the relationship continuously rather than at reporting points. A stakeholder who hears from the project only when something is required has no reason to extend goodwill when something goes wrong.",
+            "Revisit the map quarterly. Influence moves as the political cycle, the funding cycle and the construction sequence change, and a map drawn at inception describes a project that has not yet started."
+          ],
+          "example": "A project maps a district superintendent as low interest and does not brief her. At the land acquisition stage she exercises a veto the project had not identified, and six weeks are lost.",
+          "points": [
+            "Map who can stop you, not who is friendly",
+            "Watch the influential and uninterested",
+            "Identify the blocking minority explicitly"
+          ],
+          "check": "Name the three people or bodies who could stop your project next month, and when you last spoke to each."
+        },
+        {
+          "title": "Multi-donor environments and conflicting requirements",
+          "minutes": 20,
+          "teach": [
+            "Multiple funders on one project means multiple reporting formats, procurement thresholds, audit requirements, budget lines and definitions of success, and the conflicts are structural rather than personal.",
+            "Some conflicts cannot be reconciled and must be managed. Where one donor prohibits per diem payments and another requires them, the project needs a documented position agreed with both rather than an attempt to satisfy each in private.",
+            "A single consolidated reporting calendar is the most useful instrument. One narrative, one financial report, one results framework, with donor-specific annexes where unavoidable, prevents the project team from spending its week producing versions of the same information.",
+            "Financial rules are where the risk concentrates. Different eligibility rules for expenditure mean that a cost chargeable to one funder is ineligible for another, and a pooled arrangement must define which rule governs which expenditure before any is incurred.",
+            "Escalate conflicts to a joint forum rather than conducting bilateral negotiations. Separate conversations produce separate promises, and the promises are discovered to contradict each other at the first audit.",
+            "Document the agreed interpretation. Where donors have accepted a particular treatment, record it in writing, because the person who agreed it will have moved on before the audit arrives and the file will be the only witness."
+          ],
+          "example": "Two donors require different procurement thresholds for the same contract. A joint written position is agreed stating that the stricter threshold applies to all expenditure, and the audit finds no conflicting treatment.",
+          "points": [
+            "Some conflicts must be managed, not reconciled",
+            "One consolidated reporting calendar",
+            "Escalate to a joint forum, never bilaterally"
+          ],
+          "check": "List the requirements of your funders that currently contradict each other."
+        },
+        {
+          "title": "Contractual interfaces and where risk really sits",
+          "minutes": 19,
+          "teach": [
+            "A project with three contractors has four interfaces: the three between the contractor and the project, and the two or three between the contractors, which are usually not contracted at all.",
+            "Risk transfers at interfaces faster than it transfers in contracts. The civil contractor's delay is the equipment installer's idle time, and unless the contract addressed that dependency, the project pays for it and neither contractor does.",
+            "Programme the interfaces rather than the activities. The date on which the site is handed over, the date on which the structure is complete enough to install into and the date on which power is available are the real milestones, and each belongs to more than one party.",
+            "Name a single point of responsibility where possible. Where nobody is accountable for the whole, the project manager becomes the coordinator of parties who have no obligation to each other, which is a role that fails under pressure.",
+            "Read the payment terms against the dependencies. A contractor paid on completion of their own scope has no interest in the sequence, while one paid on a milestone the other contractor controls will manage that interface themselves.",
+            "Where interfaces cannot be contracted, manage them through a joint schedule reviewed with all parties present. A schedule that each party has contributed to is more binding than one issued to them, even when it has no legal force."
+          ],
+          "example": "A civil contractor finishes three weeks late. The equipment installer charges standing time and the project pays, because no contract made either party responsible for the other's sequence.",
+          "points": [
+            "Interfaces carry more risk than contracts",
+            "Programme the handover dates, not the activities",
+            "Payment terms should match the dependencies"
+          ],
+          "check": "Draw the interfaces on your project and mark which ones no contract covers."
+        }
+      ]
+    },
+    {
+      "title": "Delivery under stress",
+      "lessons": [
+        {
+          "title": "The trade you cannot avoid",
+          "minutes": 20,
+          "teach": [
+            "Time, cost and scope cannot all be fixed. Where a project claims all three are locked, the variable being absorbed is quality, and it is absorbed silently until something fails.",
+            "The value of naming the trade is that it moves the decision to the person with authority to make it. A project manager who absorbs a schedule slip by reducing testing has taken a decision that belongs to the sponsor and the client.",
+            "Present options rather than problems. Three routes, each with a cost, a date and a consequence, allow a steering committee to choose; a single recommendation invites negotiation over the recommendation rather than the trade-off.",
+            "Crashing a schedule has a diminishing return. Adding crews to a late activity works once and then stops working as coordination costs and site congestion rise, and the addition often makes the schedule worse.",
+            "Fast-tracking by overlapping activities transfers risk rather than removing it. Overlapping design and construction saves time and commits the project to changes that cost more than the time saved when the design proves wrong.",
+            "Reduce scope deliberately and record what was removed. A project that de-scopes without documenting it delivers a smaller output at the same cost while reporting completion, and the omission is discovered by the people who needed it."
+          ],
+          "example": "A project reports on time and on budget after cutting commissioning tests. The plant fails in its first month, and the cost of the failure exceeds the cost of the tests several times over.",
+          "points": [
+            "Quality is the variable when all three are locked",
+            "Offer options, not a single recommendation",
+            "Record every de-scope decision"
+          ],
+          "check": "State which of the three your project is currently absorbing, and who decided that."
+        },
+        {
+          "title": "Early warning before the variance",
+          "minutes": 19,
+          "teach": [
+            "Formal variance appears in reports weeks after the underlying problem began. The indicators that matter are behavioural and early: decisions waiting, approvals outstanding, subcontractor mobilisation behind schedule, staff turnover in a key role.",
+            "Percent complete is the least informative measure available. Ninety percent complete for three consecutive months describes a project that has stopped measuring, and the remaining work is usually much larger than the number implies.",
+            "Watch the trend of the float. A schedule where the critical path has no remaining float will slip at the next problem, and float consumption is visible months before the completion date moves.",
+            "Watch the ratio of rework. Rising rework means the quality of information or workmanship is falling, and it is an early signal of a change in supervision, resourcing or pressure that will surface later as delay.",
+            "Ask the people doing the work. A supervisor who is asked what worries them will name the problem in plain language long before it appears in a report, and the conversation costs ten minutes.",
+            "Set triggers in advance. If float falls below five days, if a key decision is outstanding for more than two weeks, or if a subcontractor's mobilisation is behind by a week, the response is agreed before it happens rather than improvised after."
+          ],
+          "example": "A project reports 92 percent complete for four consecutive months. A schedule review finds the critical path has no float, one key approval has been outstanding for nine weeks, and completion is five months away.",
+          "points": [
+            "Behavioural signals precede formal variance",
+            "Percent complete stops meaning anything near the end",
+            "Agree triggers before the problem occurs"
+          ],
+          "check": "Name three early warning indicators you would trust more than your current variance report."
+        },
+        {
+          "title": "Case: five million, five donors, three changed priorities",
+          "minutes": 23,
+          "teach": [
+            "You manage a five million dollar multi-donor infrastructure project. After eight months, three of five donors have changed their priorities. The original objectives remain the government's stated goals, and the other two donors are content.",
+            "The first task is to establish what has actually changed. A changed priority may mean a different reporting emphasis, a reduced appetite for a component, or a refusal to fund the next tranche, and the response differs completely between them.",
+            "Separate what is contracted from what is expected. Where the agreement specifies the outputs, the donors cannot simply withdraw; where it specifies a framework and indicative activities, they can. Read the agreements before forming a view.",
+            "Protect the government's objectives explicitly. Three funders have changed and one government has not, and a project that quietly follows the money will deliver something the ministry never asked for and cannot maintain.",
+            "The realistic answer is usually a re-profile rather than a redesign: the same objectives delivered in a different sequence or geography, so that each funder can see its priority addressed within the shared framework and the government's outcome is still achieved.",
+            "Tell everyone the same thing on the same day. Sequential private conversations produce three different understandings of what was agreed, and the contradictions surface when the revised framework is circulated for signature."
+          ],
+          "example": "A 5 million dollar project has five donors. After eight months three have changed priorities, the government's objectives are unchanged, and the two remaining donors are content.",
+          "points": [
+            "Establish whether the priority change is emphasis, appetite or funding",
+            "Read the agreements before forming a view",
+            "Re-profile rather than redesign where possible"
+          ],
+          "check": "For this case, write the first paragraph of the note you would send to all five donors."
+        }
+      ]
+    },
+    {
+      "title": "Closing and learning",
+      "lessons": [
+        {
+          "title": "Acceptance, handover and defects",
+          "minutes": 19,
+          "teach": [
+            "A project is not finished when the work stops. It is finished when somebody has accepted the output against defined criteria and taken responsibility for it, and the gap between those two moments is where most disputes live.",
+            "Acceptance criteria must exist before the work begins. If the specification says functional but does not say what function, the acceptance meeting becomes a negotiation about expectations conducted by people who are already committed.",
+            "Handover includes the things that are not the asset: as-built drawings, maintenance manuals, warranties, spare parts lists, training records and the contact for a defect. An asset without these is one the operator cannot maintain.",
+            "Defects need a defined liability period and a mechanism for reporting them. Without both, defects are reported informally to whoever is still answering the phone, and the contractor's obligation expires while everybody is being polite.",
+            "Payment should be tied to acceptance rather than to completion of activity. A final payment released before acceptance removes the only leverage the client has, and retention exists precisely for this reason.",
+            "Plan the handover from the beginning. An operator who has not been involved in design or construction will not maintain what has been built, and the cost of that disconnection appears in the first year of operation rather than at closure."
+          ],
+          "example": "A clinic is complete and the final payment is released. The handover file contains no maintenance manual or warranty for the cold chain, and the first equipment failure is repaired at the ministry's expense.",
+          "points": [
+            "Agree acceptance criteria before work begins",
+            "Handover includes documents, not just the asset",
+            "Tie final payment to acceptance"
+          ],
+          "check": "Name the documents an operator would need from your project that do not yet exist."
+        },
+        {
+          "title": "Closure and the audit trail",
+          "minutes": 18,
+          "teach": [
+            "Closure is a set of administrative acts: final accounts, contract completion certificates, asset registration, records archived, staff released and lessons recorded. Projects that stop rather than close leave obligations that surface years later.",
+            "The audit trail is assembled during the project, not reconstructed at the end. Vouchers, approvals, variations, minutes and correspondence should already exist in a form that can be produced, and the final audit is a test of the filing rather than of the work.",
+            "Reconcile the physical and the financial before closure. Assets built but not registered on the ministry's asset register, or registered assets that do not exist, become a finding that follows the project manager indefinitely.",
+            "Obtain written confirmation from each funder that obligations are discharged. An informal assurance from a programme officer is not closure, and the file should contain the letter.",
+            "Record the lessons in a form that can be used. A list of generic observations serves nobody; three specific findings with what would be done differently and what it would have cost is usable by the next project.",
+            "Release the team properly. People who are demobilised without a formal ending carry unresolved obligations with them, and the institutional memory of what went wrong leaves with them at exactly the moment somebody needs to ask."
+          ],
+          "example": "A project's final audit is delayed for eight months because three variations were never documented. The technical work is complete and unexamined, while the file consumes the whole review.",
+          "points": [
+            "Close rather than simply stop",
+            "Reconcile assets against the register",
+            "Get written discharge from each funder"
+          ],
+          "check": "List what would be missing today if your project had to close next week."
+        },
+        {
+          "title": "Leading a project you inherited",
+          "minutes": 19,
+          "teach": [
+            "Taking over a project mid-delivery is the most common advanced situation and the least discussed. The plan describes an intention that may bear no relation to what has been built, and the team has already learned what it cannot say.",
+            "Begin with a factual review rather than a plan review. What physically exists, what is contracted, what has been paid, what is outstanding and what is disputed. The plan is a claim; the site, the contracts and the ledger are the facts.",
+            "Expect the informal organisation to be more accurate than the reported one. The team knows which suppliers are unreliable and which approvals are stuck, and a manager who asks without punishing the answer receives more in a week than the reports contain in a year.",
+            "Do not announce a rescue in the first fortnight. Declaring the project troubled before you understand it makes the previous manager defensive, the team anxious and the funders alarmed, and none of that produces information.",
+            "Renegotiate the baseline once, openly, on the basis of the review. A revised plan that everyone accepts is worth more than an original plan that everyone has stopped believing, and the credibility gained is the resource you will need later.",
+            "Protect the people who told you the truth. The first person who reports a bad number after your arrival is the test of whether the new regime is different, and whatever happens to them is communicated across the project within a day."
+          ],
+          "example": "A new manager inherits a project reported at 70 percent complete. A factual review finds the physical work at 45 percent, two unsigned variations and an unpaid subcontractor, and the baseline is renegotiated once, openly.",
+          "points": [
+            "Start with facts: site, contracts and ledger",
+            "The informal organisation knows more than the report",
+            "Renegotiate the baseline once and openly"
+          ],
+          "check": "If you took over your project today, what would you verify physically before reading the plan?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A steering committee meets quarterly and approves nothing between meetings. What is the consequence?",
+      "explanation": "Governance that cannot decide between meetings transfers the real schedule to the meeting cycle. Variation approval waits weeks, and the delay exceeds the variation, which is why pre-agreed tolerances matter more than meeting frequency.",
+      "options": [
+        { "text": "The decision cycle becomes the schedule, and waiting for approval costs more time than the variation itself", "correct": true },
+        { "text": "The project manager gains useful discretion because nobody is checking between meetings", "correct": false },
+        { "text": "Reporting quality improves because decisions are made with full information", "correct": false },
+        { "text": "Funders become more confident because governance is formal and documented", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Three contractors are each on schedule, but completion slips. What is the most likely cause?",
+      "explanation": "Interfaces between contractors are usually not contracted. Each party delivers its own scope while the dependency between them, such as installation requiring the structure first, has no owner and is discovered as a delay.",
+      "options": [
+        { "text": "An uncontracted dependency between them, where one party's sequence is another's constraint", "correct": true },
+        { "text": "All three contractors have independently underestimated their own scope", "correct": false },
+        { "text": "The client has changed the specification without informing the contractors", "correct": false },
+        { "text": "The schedule was optimistic in aggregate but accurate for each scope", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the multi-donor case, what should be established before deciding how to respond?",
+      "explanation": "A changed priority can mean a reporting emphasis, a reduced appetite or a refusal to fund. Each requires a different response, and the contracts determine what donors can actually do, so the agreements must be read before a position is formed.",
+      "options": [
+        { "text": "Whether the change is emphasis, appetite or funding, and what the agreements actually commit each donor to", "correct": true },
+        { "text": "Which donor contributes the largest share of the budget", "correct": false },
+        { "text": "Whether the government is willing to replace the funding from its own resources", "correct": false },
+        { "text": "Which components can be delivered most quickly to show visible progress", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A project claims that time, cost and scope are all fixed. What is actually happening?",
+      "explanation": "The three cannot all be fixed. Where they are treated as such, quality absorbs the difference, usually through reduced testing or specification, and the absorption is silent until something fails.",
+      "options": [
+        { "text": "Quality is absorbing the difference, usually silently through reduced testing or specification", "correct": true },
+        { "text": "The project is well controlled and the constraint structure is working", "correct": false },
+        { "text": "The estimate was conservative and the contingency has not been used", "correct": false },
+        { "text": "The scope was defined too narrowly at the outset", "correct": false }
+      ]
+    },
+    {
+      "prompt": "You inherit a project reported at 70 percent complete. What should you verify first?",
+      "explanation": "The report is a claim about intention. What exists physically, what is contracted, what has been paid and what is disputed are facts, and the gap between the facts and the report is the actual starting position.",
+      "options": [
+        { "text": "The physical work, the contracts and the payments, rather than the plan or the reported percentage", "correct": true },
+        { "text": "The accuracy of the reporting system that produced the percentage", "correct": false },
+        { "text": "Whether the previous manager's departure was voluntary", "correct": false },
+        { "text": "The funder's satisfaction with progress to date", "correct": false }
+      ]
+    }
+  ]
+}

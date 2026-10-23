@@ -1,0 +1,325 @@
+{
+  "slug": "public-relations-and-media-strategy",
+  "title": "Public Relations & Media Strategy",
+  "program": "FCP",
+  "category": "professional-development",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 1000,
+  "summary": "Build relationships before you need them, earn coverage without a budget, and answer a hostile question without making the story worse.",
+  "description": "Public relations is misunderstood in two directions. Some organisations treat it as advertising by another name, producing announcements nobody reads. Others treat it as something only large companies can afford, and then improvise at the exact moment they most need a considered answer.\n\nThis course treats PR as the management of relationships with the people whose opinion determines whether the organisation can operate: journalists, communities, regulators, donors, staff and customers. It covers who those groups actually are, why reputation is held by them rather than by the organisation, and how to earn coverage when there is no budget for advertising.\n\nThe centre of the course is the difficult conversation. It works through why no comment usually makes a crisis worse, what the first forty-eight hours require, and the difference between answering a question and responding to an accusation.\n\nExamples come from Liberian conditions: a media landscape of radio stations, newspapers and active social media, community journalists who are the first to arrive and the last to be taken seriously, companies criticised publicly before they know a story exists, and NGOs whose funding depends on how a single incident is reported.\n\nThe case study concerns a mining company criticised in local media for environmental damage. A community journalist is asking questions, the lawyers advise saying nothing, and the chief executive wants to set the record straight.",
+  "tags": ["public relations", "media", "crisis communication", "reputation", "journalists", "social media"],
+  "outcomes": [
+    "Define public relations as relationship management rather than publicity",
+    "Identify the publics whose opinion determines whether you can operate",
+    "Earn media coverage without a budget",
+    "Prepare for an interview and answer a hostile question",
+    "Explain why no comment usually worsens a crisis",
+    "Structure a response in the first forty-eight hours",
+    "Handle criticism and questions on social media"
+  ],
+  "caseStudy": "A mining company is criticised in local media for environmental damage. A community journalist is asking questions. The company's lawyers advise saying nothing, and the chief executive wants to set the record straight. Students must choose the right public relations move and weigh the trade-offs of each option.",
+  "modules": [
+    {
+      "title": "What public relations is",
+      "lessons": [
+        {
+          "title": "Relationships, not press releases",
+          "minutes": 17,
+          "teach": [
+            "Public relations is the deliberate management of relationships with the people whose decisions affect the organisation. A press release is one instrument, and organisations that confuse the instrument with the discipline produce announcements nobody reads.",
+            "The work is mostly done before anything is published: the call to a journalist who has your number, the community meeting held in a good month, the relationship with a regulator that is not only about inspections.",
+            "Its measure is not coverage. A business can be in the newspaper every week and still lose its licence, while an organisation nobody writes about can be trusted completely by everyone who matters to it.",
+            "PR is therefore closer to operations than to marketing. Marketing asks a customer to buy; public relations asks a community, a regulator or a journalist to believe that the organisation is trustworthy and worth dealing with.",
+            "The difference in audience changes the tone. Marketing can be persuasive, while public relations must be credible, and credibility is lost by overstating in a way that marketing would tolerate.",
+            "Small organisations have an advantage they rarely use: a proprietor and a director are reachable and known. A journalist who can call the person in charge directly will treat that organisation more fairly than one that routes everything through a distant office."
+          ],
+          "example": "A company invites three local journalists to see a completed project before it is announced. When a critical story appears six months later, those journalists call for comment rather than publishing without it.",
+          "points": [
+            "Relationships before publications",
+            "Coverage is not the measure; trust is",
+            "Credibility, not persuasion"
+          ],
+          "check": "List the journalists, officials and community leaders who have your number and use it."
+        },
+        {
+          "title": "Who your publics actually are",
+          "minutes": 17,
+          "teach": [
+            "Publics are the groups whose opinion has consequences, and they are rarely the general public. A mining company is affected by a handful of villages, a district authority, a ministry, an investor and two journalists, far more than by national opinion.",
+            "Map them by what they can do rather than by how friendly they are. A regulator can stop work, a village can stop access, a journalist can change the terms of a debate, and a donor can suspend funding.",
+            "Different publics need different information. The community needs to know what happens to their water; the ministry needs compliance evidence; the investor needs to know the licence is secure. Sending all three the same document serves none of them.",
+            "Identify the trusted voice in each group. A message from a company is discounted by definition, while the same message carried by a respected local figure is believed, and that figure is found by asking rather than by assumption.",
+            "Include your own staff. They are the most credible source and the most likely to be asked, and an organisation whose staff learn bad news from the radio has a communication failure that no media strategy repairs.",
+            "Revisit the map when something changes: a new project, a new official, a new journalist on the beat. Relationships turn over, and an organisation that has not noticed is starting again without knowing it."
+          ],
+          "example": "A company treats the general public as its audience and issues a national press release about local dust. The village that is affected hears about it last, from a radio bulletin, and the meeting that follows is hostile.",
+          "points": [
+            "Map by consequence, not by friendliness",
+            "Different publics need different information",
+            "Staff are the most credible voice you have"
+          ],
+          "check": "List the five groups who can stop your organisation operating, and who is trusted by each."
+        },
+        {
+          "title": "Reputation is held by other people",
+          "minutes": 16,
+          "teach": [
+            "Reputation is not what the organisation says about itself. It is the sum of what other people believe, and it is built from their direct experience, what they have heard from someone they trust, and what they have read.",
+            "That means reputation cannot be repaired by communication alone. A message that contradicts the experience of the people receiving it makes the gap worse, because it suggests the organisation is either unaware or dishonest.",
+            "The strongest evidence is third party: a satisfied customer who speaks, a regulator who confirms compliance, a community leader who says the consultation was real. These are difficult to manufacture and therefore believed.",
+            "Disagreement is more useful than applause. The critics who engage with the substance tell you what the credible objections are, and those objections will be the questions your supporters ask in private.",
+            "Reputation decays slowly and breaks quickly. A decade of consistent behaviour survives a bad week only if the behaviour was real, and an organisation that has been carefully managing an impression rather than operating well is found out in one incident.",
+            "Accept the limits. Some publics will never be persuaded, and effort spent on them is effort taken from the ones who are reachable and whose opinion matters more."
+          ],
+          "example": "A company's advertisement claims environmental care while a village's water is visibly affected. The advertisement is quoted back at the company in a community meeting, and it makes the negotiation harder rather than easier.",
+          "points": [
+            "Reputation is belief held by others",
+            "Communication cannot contradict experience",
+            "Third party evidence is what is believed"
+          ],
+          "check": "Write what three different publics currently believe about your organisation, as far as you know."
+        }
+      ]
+    },
+    {
+      "title": "Working with media",
+      "lessons": [
+        {
+          "title": "The media landscape you actually have",
+          "minutes": 17,
+          "teach": [
+            "In Monrovia the reach that matters for many organisations is radio, followed by social media, with newspapers and online outlets shaping the agenda among officials, donors and the educated public.",
+            "Radio is conversational and local. A station that carries a call-in programme will discuss your organisation whether or not you are present, and being present is usually better than being discussed.",
+            "Community journalists are frequently the first to arrive and the easiest to overlook. They are often poorly resourced and highly motivated, and the relationship formed in a quiet month determines how a difficult story is handled.",
+            "Social media moves faster than any newsroom and has no editor. A claim posted in the evening can be the accepted version by morning, and the correction will reach a fraction of the audience that saw the original.",
+            "Understand the outlet's constraints. A radio station needs a voice and a duration, a newspaper needs a quote and a photograph, an online outlet needs something current. Supplying the wrong thing is the same as supplying nothing.",
+            "Know one or two journalists properly rather than every journalist slightly. A working relationship with two people who cover your sector is worth more than a list of fifty contacts who would not recognise the name."
+          ],
+          "example": "An NGO responds to a critical radio call-in programme by sending a staff member to participate. The discussion becomes a conversation about the programme's constraints rather than an unanswered accusation.",
+          "points": [
+            "Radio and social media carry the reach",
+            "Community journalists are the first to arrive",
+            "Know two journalists properly rather than fifty slightly"
+          ],
+          "check": "Name the two journalists or programmes that most influence opinion about your sector."
+        },
+        {
+          "title": "Earning coverage with no budget",
+          "minutes": 17,
+          "teach": [
+            "Coverage is earned by supplying something a journalist needs: a fact, a photograph, an insight, an event worth attending or a person worth hearing. None of those require payment.",
+            "Have something to say. A story needs a development, a number, a decision or a human detail, and an organisation with nothing new will be given nothing in return for its press release.",
+            "Write the way a journalist will use it. A short message with the key fact in the first sentence, a quote that can be attributed and a contact number will be used; a three-page background document will not be opened.",
+            "Offer access rather than announcements. A journalist invited to see a project, speak to a beneficiary or visit a site produces a better story than one handed a statement, and the story is more credible because it is theirs.",
+            "Time it to the news cycle. A story sent on a quiet morning is more likely to run than the same story sent during a major national event, and the difference costs nothing but attention.",
+            "Accept that some coverage will be unwelcome. An organisation that only seeks favourable coverage is not practising public relations, and journalists notice which organisations will engage with a difficult question."
+          ],
+          "example": "An organisation issues a three-page statement about a new clinic and gets no coverage. It later invites a reporter to the opening, provides a patient willing to speak, and receives a five-minute radio interview.",
+          "points": [
+            "Supply a fact, a photograph or access",
+            "Write the way a journalist will use it",
+            "Time the story to the news cycle"
+          ],
+          "check": "Write a 100-word message about your organisation that a journalist could use without editing."
+        },
+        {
+          "title": "The interview: prepare, answer, and what not to say",
+          "minutes": 18,
+          "teach": [
+            "Preparation is deciding three things in advance: the one message you want the audience to remember, the two questions that worry you most, and what you will say to each without speculating.",
+            "Answer the question that was asked, briefly, then connect to your message. An answer that ignores the question is edited out, and the audience concludes that the speaker has something to hide.",
+            "Use plain numbers and concrete examples. A spokesperson who says a substantial investment has said nothing, while one who says two million dollars over eighteen months has given the audience something they can hold.",
+            "Do not speculate, do not guess about causes you do not know, and do not answer a question about somebody else's conduct. Saying that you do not know and will find out is a complete answer and costs nothing.",
+            "Assume everything is on the record, including the remark before the microphone is on and the conversation in the corridor. Journalists are not being deceptive when they use it; that is the profession.",
+            "Apologise for the experience, not for a fault you have not established. Saying that you are sorry a family has had this worry is honest and does not concede anything, while admitting negligence before an investigation has concluded creates a liability that cannot be withdrawn."
+          ],
+          "example": "Asked whether a spill caused a fish kill, a spokesperson says the investigation began on Tuesday and the results will be published, rather than offering an opinion that would later contradict the findings.",
+          "points": [
+            "One message, two feared questions, prepared answers",
+            "Answer briefly, then connect to your message",
+            "Apologise for the experience, not for an unproven fault"
+          ],
+          "check": "Write the two questions you most fear and a ten-second answer to each."
+        }
+      ]
+    },
+    {
+      "title": "When it goes wrong",
+      "lessons": [
+        {
+          "title": "Why no comment makes it worse",
+          "minutes": 18,
+          "teach": [
+            "No comment is heard as an admission. The audience cannot distinguish between an organisation that is being careful and one that has something to hide, and it will assume the second because that assumption requires no further information.",
+            "It also hands the story to whoever will speak. The journalist needs a version of events and, if the organisation declines, the version that runs will be the accuser's, uncontested and complete.",
+            "There are legitimate reasons for a limited response: legal proceedings, an unconfirmed fact, an employee's privacy. Each of those is a reason to say what you can rather than to say nothing at all.",
+            "The substitute for no comment is a holding statement: what happened as far as is known, what is being done, when more will be known, and who to contact. It answers the audience's real question without prejudging the investigation.",
+            "Lawyers advise silence to protect a legal position, which is a legitimate objective that must be weighed against the reputational cost of silence. That trade-off belongs to the chief executive and the board, informed by both views.",
+            "Rehearse the holding statement before it is needed. The organisation that drafts it during the first hour of a crisis produces something defensive, while one that has a template produces something calm."
+          ],
+          "example": "A company facing an accusation of water contamination says no comment for three days. The story runs with photographs, quotes from residents and no response, and the company's later statement is reported as a denial after the fact.",
+          "points": [
+            "Silence is read as guilt",
+            "Say what you can, not everything or nothing",
+            "The holding statement buys time without hiding"
+          ],
+          "check": "Draft a holding statement template you could adapt within an hour."
+        },
+        {
+          "title": "The first forty-eight hours",
+          "minutes": 18,
+          "teach": [
+            "The first forty-eight hours determine the shape of the story. What is established then, including the fact that the organisation is engaged and open, tends to persist even when the detail later changes.",
+            "Establish the facts internally before speaking publicly, but do not wait for certainty. A statement that confirms what is known, describes the response and commits to an update by a named time is credible and can be issued within hours.",
+            "Nominate one spokesperson. Multiple voices produce contradictions, and a contradictory account is reported as concealment even when the difference is only emphasis.",
+            "Reach the most affected people first. A community that learns from the radio that something happened to them will not accept a later explanation, and the order of communication is remembered longer than its content.",
+            "Correct errors promptly and visibly. A wrong figure repeated for a day and then quietly amended damages more than the original error, while an immediate correction is treated as competence.",
+            "Keep a log of what was said, when and to whom. During a fast-moving event two people will give slightly different accounts, and the log is how the organisation reconciles them before a journalist does."
+          ],
+          "example": "Within a day of an incident, a company briefs the affected village, issues a short statement naming a spokesperson and a time for the next update, and logs every call received.",
+          "points": [
+            "Speak early with what is known",
+            "One spokesperson only",
+            "Tell the affected people before the public"
+          ],
+          "check": "Write the sequence of who you would contact in the first two hours of an incident."
+        },
+        {
+          "title": "Case: the mining company and the community journalist",
+          "minutes": 22,
+          "teach": [
+            "A mining company is criticised in local media for environmental damage. A community journalist is asking questions. The lawyers advise saying nothing and the chief executive wants to set the record straight.",
+            "Both instincts are understandable and both are wrong as stated. Silence cedes the story, while setting the record straight before the facts are established produces claims that may not survive the first inspection.",
+            "The settlement is a holding statement plus verification: confirm what is known, state what is being checked and by whom, commit to a date for the results, and give the community the information directly rather than through a bulletin.",
+            "Separate the two questions the journalist is asking. One is what happened, which requires evidence. The other is what the company is doing, which can be answered immediately and is the question the audience actually cares about.",
+            "Engage the community journalist properly. Inviting them to accompany the technical team to the site costs a seat in a vehicle and produces a story based on observation rather than on accusation, which is better for everyone including the company.",
+            "Prepare for the possibility that the company is at fault. A response strategy built on the assumption of innocence collapses if the tests come back badly, and the organisation that has committed to publishing results is in a far stronger position when they do."
+          ],
+          "example": "A mining company faces public criticism of environmental damage. Its lawyers advise silence and its chief executive wants to deny. A community journalist is asking what the company is doing.",
+          "points": [
+            "Silence and denial are both wrong as stated",
+            "Answer what the company is doing immediately",
+            "Invite the journalist to observe, and publish the results"
+          ],
+          "check": "For this case, write the holding statement and name what you would commit to publishing and by when."
+        }
+      ]
+    },
+    {
+      "title": "Building the practice",
+      "lessons": [
+        {
+          "title": "Social media: criticism, questions and replies",
+          "minutes": 17,
+          "teach": [
+            "Social media removes the editor. A complaint posted in public is visible to every customer and every journalist, and it stays visible while the organisation decides whether to respond.",
+            "Distinguish a question from an accusation. A question deserves a factual answer quickly and publicly, while an accusation deserves an acknowledgement, an offer to take it to a private channel, and a commitment to respond within a stated time.",
+            "Never argue in public. The organisation always has more to lose from an exchange than the individual does, and a defensive reply will be screenshotted and shared far more widely than the original complaint.",
+            "Respond to the audience watching rather than only to the person complaining. The reply is read by hundreds of people deciding whether this organisation is reasonable, and it should be written for them.",
+            "Correct false information without contempt. A short factual correction with a source, offered without sarcasm, is believed by the undecided and is the only thing that reaches them.",
+            "Have one person responsible for the account and a rule about what is escalated. Accounts managed by whoever is available produce inconsistent tone and, occasionally, a reply that becomes the story."
+          ],
+          "example": "A customer posts that a shop sold expired goods. The shop replies publicly within an hour, states what it found, offers to refund, and takes the details to a direct message, and the exchange is read as competence.",
+          "points": [
+            "Separate questions from accusations",
+            "Write for the audience, not the complainant",
+            "One owner and a clear escalation rule"
+          ],
+          "check": "Write a reply to your most likely public complaint, in under sixty words."
+        },
+        {
+          "title": "Internal communication comes first",
+          "minutes": 16,
+          "teach": [
+            "Staff are asked about the organisation more often than any spokesperson is, by their families, their neighbours and the people they serve. If they do not know what is happening, their uncertainty becomes the organisation's public position.",
+            "Brief staff before the public. A short message explaining what has happened, what to say, and who to refer questions to takes an hour and prevents a month of contradictory accounts.",
+            "Give people words they can use. A sentence that a driver or a receptionist can say with confidence is worth more than a policy document, because it is what will actually be said at the gate.",
+            "Be honest about what you do not know internally. Staff who are told that everything is fine and then read otherwise conclude that they are not trusted, and that conclusion outlasts the incident.",
+            "Create a route for staff to raise a concern before it becomes public. Most crises were visible to somebody inside the organisation weeks earlier, and the absence of a route is why nobody said anything.",
+            "Recognise that silence is a message. Staff who hear nothing assume the worst, and the rumour that fills the gap will be more damaging than the truth would have been."
+          ],
+          "example": "Before announcing a restructuring publicly, a company briefs all staff in the morning with a short script and a named person to refer questions to. No account reaches the press that contradicts the announcement.",
+          "points": [
+            "Brief staff before the public",
+            "Give people the sentence they can use",
+            "Silence fills with rumour"
+          ],
+          "check": "Write the three sentences you would give a receptionist during a difficult week."
+        },
+        {
+          "title": "Measuring reputation without a budget",
+          "minutes": 16,
+          "teach": [
+            "Without money for research, reputation is measured by listening: what people say to your staff, what appears in the media, and what is said in the groups where your customers and communities talk.",
+            "Keep a media log. Every mention, the outlet, the tone and whether the organisation was contacted first. Two months of log shows which issues recur and which outlets assume the worst without asking.",
+            "Count the incoming questions. The number of times you are asked the same thing is the clearest signal of what people do not understand, and it is free information arriving at your front desk.",
+            "Ask the people who deal with the public. Drivers, receptionists and field staff hear the candid version that never reaches a survey, and a fifteen-minute monthly conversation captures it.",
+            "Watch who contacts you first. An organisation that hears from a journalist before it hears from the community has a relationship problem, and the pattern is visible in the log long before it becomes a crisis.",
+            "Review quarterly and change one thing. A reputation practice that produces observations and no changes is a diary, and the value comes from acting on the pattern rather than recording it."
+          ],
+          "example": "A six-month media log shows the same complaint about waiting times appearing in four different outlets. The organisation addresses the queue rather than issuing a statement, and the coverage stops.",
+          "points": [
+            "Listen, log and count the repeat questions",
+            "Ask frontline staff what they hear",
+            "Act on the pattern, not only on the record"
+          ],
+          "check": "Start a media log this week with the outlet, the tone and whether you were contacted."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Why does a no comment response often make a crisis worse?",
+      "explanation": "The audience cannot distinguish caution from concealment and will assume concealment, because that assumption requires no further evidence. Meanwhile the story runs with the accuser's version, uncontested.",
+      "options": [
+        { "text": "The audience reads it as concealment, and the story runs with the accuser's version uncontested", "correct": true },
+        { "text": "Journalists are legally entitled to publish an inference of guilt when refused", "correct": false },
+        { "text": "It signals that the organisation has not prepared a statement", "correct": false },
+        { "text": "It gives competitors an opportunity to comment instead", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What is the difference between responding to criticism and responding to a question?",
+      "explanation": "A question wants a fact and can be answered immediately. Criticism is a claim about the organisation's conduct, and the useful response acknowledges it, states what is being done, and commits to a time for more.",
+      "options": [
+        { "text": "A question wants a fact you can give now; criticism needs acknowledgement, action and a commitment to respond", "correct": true },
+        { "text": "Criticism should be ignored and questions should be answered in private", "correct": false },
+        { "text": "They are the same and both require a formal written statement", "correct": false },
+        { "text": "Questions come from journalists and criticism comes from customers", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the mining case, the lawyers advise silence and the chief executive wants to deny. What is the correct move?",
+      "explanation": "Both extremes fail. A holding statement confirms what is known, states what is being verified and commits to publishing results, while engaging the journalist directly and telling the community first keeps the story factual.",
+      "options": [
+        { "text": "Issue a holding statement, verify the facts, commit to publishing results, and brief the community first", "correct": true },
+        { "text": "Follow the legal advice and say nothing until the investigation concludes", "correct": false },
+        { "text": "Deny the allegation publicly to correct the record before it spreads", "correct": false },
+        { "text": "Ask the journalist to delay publication until the company has completed its own report", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What makes a holding statement credible?",
+      "explanation": "It states what is known, what is being done, when more will be known and who to contact. Committing to a named time for an update is what distinguishes it from a delay dressed as a statement.",
+      "options": [
+        { "text": "It states what is known, what is being done, and a named time for the next update", "correct": true },
+        { "text": "It denies responsibility while expressing concern for those affected", "correct": false },
+        { "text": "It is written by the legal team so that nothing can be used against the company", "correct": false },
+        { "text": "It is issued only once all the facts are fully established", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A customer accuses your organisation publicly on social media. What should the reply be written for?",
+      "explanation": "The reply is read by everyone watching, not only by the complainant. Those observers are deciding whether the organisation is reasonable, and a calm, factual response written for them is the objective.",
+      "options": [
+        { "text": "The audience watching, who are judging whether the organisation is reasonable", "correct": true },
+        { "text": "The complainant, so that they are satisfied and delete the post", "correct": false },
+        { "text": "The platform's moderation team, in case the post is removed", "correct": false },
+        { "text": "The organisation's own staff, who need to see the complaint answered", "correct": false }
+      ]
+    }
+  ]
+}

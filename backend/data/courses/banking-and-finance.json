@@ -1,0 +1,264 @@
+{
+  "slug": "banking-and-finance",
+  "title": "Banking & Finance",
+  "program": "FCP",
+  "category": "finance-accounting",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 1000,
+  "summary": "How banks actually make money, why credit is refused, where mobile money fits, and what the central bank does for an ordinary user.",
+  "description": "Banking is usually taught as a list of products. This course explains the machine underneath: how deposits become loans, why a bank must hold reserves, why a borrower with no collateral is refused even when the business is sound, and what happens to everyone when a bank gets it wrong.\n\nIt covers the institutions a Liberian actually meets — commercial banks, microfinance institutions, credit unions, mobile money providers and susu groups — and explains what each does well and where each is dangerous. Credit is covered from the lender's side, because understanding what a lender needs is the fastest route to being able to borrow.\n\nIt closes with the Central Bank of Liberia and why regulation matters to somebody who has never read a regulation: deposit protection, capital requirements, and the reasons a payment can be delayed or a bank closed. No prior finance knowledge is assumed.",
+  "tags": ["banking", "credit", "mobile money", "central bank", "microfinance", "finance"],
+  "outcomes": [
+    "Explain how a bank turns deposits into loans and why that creates risk",
+    "Distinguish commercial banks, microfinance institutions, credit unions and mobile money providers",
+    "Describe what a lender assesses before granting credit, in the lender's own terms",
+    "Explain the role of the central bank and what it can and cannot protect",
+    "Identify the risks of saving outside the formal system",
+    "Prepare a credit application that a lender can actually assess"
+  ],
+  "caseStudy": "A market cooperative needing 8,000 dollars to expand is offered a bank loan requiring collateral it does not have, a microfinance loan at 28 per cent a year, and a diaspora loan at 12 per cent requiring the chairperson's personal guarantee.",
+  "modules": [
+    {
+      "title": "Module 1 · What a bank actually does",
+      "lessons": [
+        {
+          "title": "The intermediation function, plainly",
+          "minutes": 16,
+          "teach": [
+            "A bank takes money from people who have more than they need now and lends it to people who need more than they have. That is the whole business, and everything else is detail. The bank earns the difference between what it pays savers and what it charges borrowers.",
+            "This function is useful because the two sides want opposite things. Depositors want their money available on demand and safe. Borrowers want it for a year or five years and are willing to pay for the certainty. The bank reconciles the mismatch and is paid for bearing it.",
+            "The mismatch is also the risk. If many depositors want their money at once, the bank cannot recall its loans quickly, because loans are contracts with dates. That gap is why banks fail, and why they are regulated more heavily than other businesses.",
+            "Understanding this changes how you read a bank. Deposits are not stored in a vault waiting for you; they are working in loans, and your ability to withdraw depends on the bank's soundness and on nobody panicking.",
+            "Practical consequence: the interest rate a bank offers on a deposit reflects what it can earn on loans and how much it wants your money. A rate far above others is not generosity; it is a signal that the bank needs cash for a reason."
+          ],
+          "example": "A bank holds 100 million in deposits, lends 75 million, and keeps 25 million in reserves and liquid assets. Its income is the interest on the 75 million less what it pays on the 100 million, less its costs.",
+          "points": ["Banks borrow short and lend long", "The duration gap is the structural risk", "An unusually high deposit rate is information"],
+          "check": "If your bank called in all its loans tomorrow, could it repay every depositor? What does your answer depend on?"
+        },
+        {
+          "title": "Reserves, capital, and why a bank can fail while solvent",
+          "minutes": 16,
+          "teach": [
+            "Reserves are the cash and near-cash a bank keeps available to meet withdrawals. Capital is the owners' own money, held as a cushion against losses. They are different things and both matter.",
+            "A bank can hold assets worth more than its liabilities and still fail, because it cannot convert assets to cash fast enough to pay depositors who arrive together. This is illiquidity, and it kills banks faster than insolvency does.",
+            "Capital absorbs losses. If loans go bad by an amount smaller than the capital, the bank survives and depositors are unaffected. If losses exceed capital, the bank is insolvent and somebody loses — which is why regulators impose minimum capital ratios.",
+            "For a depositor, the useful questions are whether the bank is supervised, whether deposits are insured or protected in any form, and how concentrated its lending is. Those three tell you more than the interest rate.",
+            "None of this is academic in a market with few banks. A bank failure here is not an inconvenience; it can remove a family's savings and a business's working capital at once."
+          ],
+          "example": "A bank with 10 in capital and 100 in loans can absorb a 10 per cent loss on those loans. A 12 per cent loss wipes out the capital and the bank is insolvent.",
+          "points": ["Liquidity is not solvency", "Capital absorbs losses before depositors do", "Check supervision and deposit protection before the rate"],
+          "check": "Do you know whether your deposits are protected if your bank fails, and by whom?"
+        },
+        {
+          "title": "Where banks make their money, and where they lose it",
+          "minutes": 15,
+          "teach": [
+            "Banks earn a margin between the cost of funds and the yield on loans, plus fees on transactions, accounts and foreign exchange. In a market with limited lending opportunities, fees can be a larger share than outsiders expect.",
+            "Losses come from loans that are not repaid, from operating costs that scale with branches, and from the cost of holding cash in an economy that still runs on it. Each is a reason a bank may seem unhelpful to a small customer.",
+            "The unhelpful behaviour is often rational from the bank's side: minimum balances, fees, and reluctance to lend small amounts all reflect the cost of administering small accounts and the difficulty of assessing small businesses.",
+            "That does not make it acceptable, but understanding it tells you how to respond. A borrower who presents tidy records, a clear purpose and a repayment source is cheaper for the bank to assess, and being cheap to assess is a real advantage.",
+            "The customer who complains that banks only help the rich is usually describing a bank's cost structure accurately and doing nothing about the one part they control."
+          ],
+          "example": "A bank branch may cost more to run than the deposits it collects, which is why rural branches close and why mobile channels are adopted for small balances.",
+          "points": ["Margin plus fees, minus losses and costs", "Small accounts are expensive to administer", "Being easy to assess is a genuine advantage"],
+          "check": "What would make you cheaper to assess as a borrower than the person behind you in the queue?"
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · The institutions you actually meet",
+      "lessons": [
+        {
+          "title": "Commercial banks, microfinance, credit unions and susu",
+          "minutes": 16,
+          "teach": [
+            "A commercial bank takes deposits from the public, lends to businesses and individuals, and is licensed and supervised. It is the safest place for savings and usually the cheapest source of large credit, and it is the hardest to access for small borrowers.",
+            "A microfinance institution lends to borrowers banks consider too small or too risky. It usually cannot take deposits, funds itself from lenders or donors, and charges more because its costs per loan are higher and its borrowers are riskier.",
+            "A credit union or cooperative is owned by its members, lends to them from their own savings, and is governed by them. Its rates are usually better than microfinance for members, and its capacity is limited by what the membership has saved.",
+            "A susu or savings group collects regular contributions and pays out a lump sum in rotation. It is not a bank and is not regulated as one. Its return comes from discipline and access rather than interest, and its risk is the organiser's honesty.",
+            "Each institution solves a different problem. The mistake is to expect one to behave like another: a susu cannot give you a mortgage, and a bank will not lend nine hundred dollars to a market trader without a year of records."
+          ],
+          "example": "A trader uses a susu for a predictable lump sum, a microfinance lender for stock finance, and keeps a bank account for payments from a corporate customer.",
+          "points": ["Each institution solves a different problem", "Microfinance is dearer because it is riskier and costlier to serve", "Susu risk is the organiser, not the market"],
+          "check": "Which of these four do you actually use, and for which purpose? Is there a cheaper institution for that purpose?"
+        },
+        {
+          "title": "Mobile money as banking",
+          "minutes": 16,
+          "teach": [
+            "Mobile money has done what banks could not: it put a transaction account in the hands of people who would never have opened one. Money moves by phone, is recorded, and can be sent across distance in seconds.",
+            "It is not a deposit account in the legal sense. The balance sits with the provider, backed by arrangements the regulator requires, and it typically earns nothing. Its value is convenience, speed and record, not return.",
+            "The risks are specific: fraud through social engineering, loss through a shared or stolen phone, agent cash-out limits, and fees that accumulate across many small transactions. Each is manageable with habits rather than with knowledge.",
+            "The habits that matter: never share a personal identification number with anyone claiming to be from the provider, confirm the recipient name before sending, keep the transaction message until you are sure, and do not keep a large balance in a wallet for months.",
+            "For a business, mobile money also produces a record. That record is the beginning of the credit history that a lender will later want, and keeping it in one number rather than several is worth more than it appears."
+          ],
+          "example": "A shop that receives all payments to one merchant number builds six months of receipts that a microfinance lender can accept as evidence of turnover.",
+          "points": ["Convenience, not interest", "Fraud arrives as a caller who needs your PIN", "One merchant number builds a usable record"],
+          "check": "How much is in your wallet right now, and what would you do if that phone disappeared today?"
+        },
+        {
+          "title": "The savings that sit outside the system",
+          "minutes": 15,
+          "teach": [
+            "A great deal of Liberian money never enters a bank: it is cash at home, in a susu, with a family member, or in stock for trading. Each is a rational response to something the formal system does not provide.",
+            "The cost is real. Money outside the system has no deposit protection, no record that stands up in a dispute, and no contribution to a credit history. It is also unavailable for the electronic payments a larger customer may require.",
+            "The benefit is equally real: access, trust and no minimum balance. A person with 300 dollars and no identification cannot easily open an account; they can join a susu the same afternoon.",
+            "A useful position is to keep both. A bank or wallet account for anything the state, a customer or a lender must see, and a susu or informal arrangement for the discipline and access that the formal system does not offer.",
+            "Where a business holds money informally, the cost is usually the credit it cannot obtain. Six months of recorded turnover is often the difference between a loan and a refusal."
+          ],
+          "example": "A cooperative that moved member contributions into a bank account could show twelve months of deposits, which the lender accepted as evidence while refusing the same group the previous year.",
+          "points": ["Informal savings are rational, and costly", "No record means no credit history", "Keep both: formal for evidence, informal for discipline"],
+          "check": "What share of your money is outside the banking system, and what does that cost you in access?"
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Credit: how lenders decide",
+      "lessons": [
+        {
+          "title": "What a lender is actually assessing",
+          "minutes": 16,
+          "teach": [
+            "A lender is not deciding whether your plan is good. It is deciding whether it will be repaid, on time, from a source it can identify, if the plan goes partly wrong. Those are different questions and they produce different answers.",
+            "Five things are assessed: capacity to repay from cash flow, capital you have at stake, collateral available, character as evidenced by history, and the conditions of the market you operate in. The order matters less than the fact that all five are considered.",
+            "Capacity is the one that matters most in principle and is hardest to document in a market with few records. This is why lenders fall back on collateral, which is easy to value and easy to sell, even when it says nothing about the business.",
+            "Character is assessed through history: previous loans, references, how you behaved when a payment was late. A first-time borrower has no history, which is why a small loan repaid on time is worth more than an argument.",
+            "Conditions cover the environment the business cannot control: a single large customer, a seasonal market, a currency mismatch. A lender that ignores them is not being generous, it is being careless with somebody else's depositors' money."
+          ],
+          "example": "A cooperative with no titled land but twelve months of banked contributions and two completed small loans is a better credit than one with land and no repayment record.",
+          "points": ["Repayment from cash flow, not the quality of the plan", "Collateral substitutes for information", "A small loan repaid builds the record that matters"],
+          "check": "Against those five, which is your weakest, and what would it take to strengthen it this year?"
+        },
+        {
+          "title": "Collateral, guarantees and the price of not having them",
+          "minutes": 16,
+          "teach": [
+            "Collateral is an asset the lender can take and sell if you do not pay. Its function is to make the loan safe for the lender, not attractive for you, and lenders typically lend a fraction of its value because forced sales realise less than fair value.",
+            "A personal guarantee is a promise by a third party to pay if you do not. It converts your problem into somebody else's exposure, and it is a serious commitment: the guarantor's own assets are at risk and their relationship with you is now a financial instrument.",
+            "Where a borrower has neither collateral nor a guarantee, the lender either refuses or prices the risk. That is why microfinance rates look high: an unsecured loan to a business without records is expensive to administer and carries a real chance of loss.",
+            "The practical routes for a borrower without collateral are a smaller first loan, a group guarantee where members cover each other, an asset that can be registered, or a lender whose mandate includes the segment rather than one that is making an exception.",
+            "Borrowing against a guarantee you cannot honour is the fastest way to lose both the money and the relationship, and it happens most often between relatives who did not discuss what would occur if the business failed."
+          ],
+          "example": "A lender values a vehicle at 6,000 and advances 3,500 against it, because a forced sale would realistically realise 4,000 after costs and delay.",
+          "points": ["Lenders advance a fraction of collateral value", "A guarantee puts somebody else's assets at risk", "Smaller first loans are the usual route in"],
+          "check": "Whose signature would you ask for, and have you told them exactly what happens if you cannot repay?"
+        },
+        {
+          "title": "Case study: how should the cooperative borrow 8,000?",
+          "minutes": 18,
+          "teach": [
+            "A market cooperative of 42 members needs 8,000 dollars to build a storage shed and buy stock at harvest prices. It has no titled land. It has a bank account with twelve months of consistent contributions and one small loan repaid on time.",
+            "The commercial bank will lend at 14 per cent but requires titled collateral, which the cooperative does not have. Its manager suggests the members consider registering the land they occupy collectively, which would take four to six months.",
+            "The microfinance institution will lend at 28 per cent a year, unsecured, with weekly repayments and a group guarantee from five members. Weekly repayment starts immediately, before the shed is built or the stock is sold.",
+            "A member's relative abroad offers 12 per cent on condition that the chairperson signs a personal guarantee. The chairperson owns a house and is willing, but two members object that the risk falls on one person while the benefit is shared.",
+            "The cooperative's own numbers suggest the shed and stock would add about 2,600 dollars a year in margin, against interest of 960 at the microfinance rate, 640 at the diaspora rate, or 1,120 at the bank rate."
+          ],
+          "example": "At 28 per cent with weekly repayments, the cooperative must find roughly 220 dollars a week from the first month, before the shed produces anything.",
+          "points": ["Cost is not the only difference between offers", "Repayment schedule can be more binding than the rate", "Concentrating risk on one guarantor is a governance choice"],
+          "check": "Which offer would you recommend, and what would you say to the two members who object to the chairperson's guarantee?"
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · The central bank and why regulation matters",
+      "lessons": [
+        {
+          "title": "What a central bank does",
+          "minutes": 15,
+          "teach": [
+            "A central bank issues the currency, sets the conditions under which banks operate, supervises them, and acts as the bank to the government and to the banks themselves. It is not a commercial bank and does not compete with them.",
+            "Its supervisory role is the one an ordinary user feels: licensing, minimum capital, reporting requirements, and the power to intervene when an institution is failing. That power is why a licensed bank is different from a promising-looking office with a sign.",
+            "It also manages the payments system and, in many countries, mobile money oversight. When a transfer takes three days or a wallet is capped, the rules behind it usually originate here rather than with the provider.",
+            "What a central bank cannot do is make a bank solvent by wishing it. It can require capital, restrict activity and manage a failure in an orderly way, but it cannot create the assets that were lost.",
+            "For a saver, the practical implication is to check who is licensed and by whom. An institution that cannot name its regulator is not a bank, whatever it calls itself."
+          ],
+          "example": "A deposit-taking institution that is not licensed cannot be supervised, which means nobody has verified its capital or its lending, and nobody can intervene before it fails.",
+          "points": ["Licensing and supervision are the protection", "Rules you feel as fees or delays originate upstream", "Regulation cannot restore lost assets"],
+          "check": "Which regulator supervises your bank or wallet provider? If you cannot answer, does that change how much you keep there?"
+        },
+        {
+          "title": "Why banks are regulated more than other businesses",
+          "minutes": 15,
+          "teach": [
+            "A bank failure harms people who did nothing wrong and could not have assessed the risk: depositors, employees, and businesses whose working capital disappears. That is the reason for heavier regulation than a failed shop would attract.",
+            "Regulation also protects the payments system, because banks are connected. One institution's failure can freeze payments for others, which turns an isolated problem into an economic one.",
+            "The requirements that follow are unglamorous: capital ratios, liquidity rules, limits on large exposures, anti-money-laundering checks, and reporting. Each costs money, and that cost is partly why banking services are not cheaper.",
+            "Compliance is also the reason a transaction can be delayed or refused. A bank that does not ask questions about a large cash deposit is not being helpful; it is exposing itself to penalties that could end it.",
+            "The reasonable position for a customer is to expect the inconvenience and to keep the documentation that makes it quick: identification, source of funds, and a record of the transaction."
+          ],
+          "example": "A business depositing 5,000 in cash without a sales record slows its own banking and creates a file it may later have to explain.",
+          "points": ["Depositors cannot assess a bank's risk themselves", "Connected systems spread failure", "Documentation is what makes compliance quick"],
+          "check": "For your last large cash deposit, could you show where the money came from if asked six months later?"
+        },
+        {
+          "title": "What a customer should expect and demand",
+          "minutes": 15,
+          "teach": [
+            "A regulated institution should be able to tell you its fees in writing, how long a transfer takes and why, how to complain and to whom, and what happens to your money if it fails. Those four answers are the practical content of regulation.",
+            "Fees deserve particular attention because they are where small accounts are lost. A monthly maintenance charge, a withdrawal fee and a transfer fee can combine to consume a meaningful share of a small balance.",
+            "A complaint route that leads outside the institution matters. Where an ombudsman or the regulator accepts complaints, that route changes behaviour; where none exists, persistence and documentation are the only tools.",
+            "The customer who compares three institutions on those four questions will usually find differences worth several per cent a year, which is more than the interest rate differences that people spend their time on.",
+            "Where none of the answers is satisfactory, keeping a smaller balance while maintaining the account for records and payments is a legitimate strategy, not a defeat."
+          ],
+          "example": "A trader comparing two accounts finds one charges 1.5 monthly and 0.5 per withdrawal, the other nothing on either but 2 per transfer; the cheaper choice depends on how she transacts.",
+          "points": ["Ask for fees in writing", "Know the external complaint route", "A small balance still buys you a record"],
+          "check": "What does your bank charge you per month in total? Add it up from a statement rather than from memory."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A bank holds 100,000 in deposits and has lent 80,000, with a 10% reserve requirement. How much can it lend further, and why might it decline to?",
+      "explanation": "It must hold 10,000 in reserve, so of 100,000 it may lend 90,000 and has lent 80,000 — 10,000 more is permissible. It may decline because of loan demand, capital limits or the need for liquidity.",
+      "options": [
+        { "text": "10,000 more, but it may hold back for liquidity, capital or lack of demand", "correct": true },
+        { "text": "20,000 more, because reserves only apply to new lending", "correct": false },
+        { "text": "Nothing further, because 80% is fully lent", "correct": false },
+        { "text": "90,000 more, since deposits can be lent in full", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why is a bank that is solvent still able to fail?",
+      "explanation": "Illiquidity. Loans cannot be recalled quickly, so simultaneous withdrawals can exhaust available cash even when assets exceed liabilities.",
+      "options": [
+        { "text": "Its assets cannot be converted to cash fast enough to meet withdrawals", "correct": true },
+        { "text": "Because supervision requires it to hold no cash", "correct": false },
+        { "text": "Because depositors are legally entitled to interest on demand", "correct": false },
+        { "text": "Because loans are always worth less than their book value", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A cooperative has no titled land, twelve months of banked contributions and two repaid loans. A second has titled land and no records. Which is easier for most lenders to approve, and why?",
+      "explanation": "For a small loan, documented capacity and repayment history can outweigh collateral. Collateral matters most where cash flow cannot be evidenced.",
+      "options": [
+        { "text": "The first, because documented capacity and a repayment record can outweigh collateral for a small loan", "correct": true },
+        { "text": "The second, because collateral is the only thing lenders assess", "correct": false },
+        { "text": "Neither, since unregistered groups cannot borrow", "correct": false },
+        { "text": "The first, but only because land is worthless in this market", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A lender offers 28% a year with weekly repayments starting immediately; another offers 12% with repayment after six months. Which additional factor matters most?",
+      "explanation": "The schedule. Weekly repayment begins before the investment produces income, so the cheaper rate can still be unaffordable in practice.",
+      "options": [
+        { "text": "The repayment schedule, because weekly payments begin before the investment earns anything", "correct": true },
+        { "text": "Nothing; the lower rate is always the better offer", "correct": false },
+        { "text": "The lender's location, because distance affects service", "correct": false },
+        { "text": "The lender's ownership structure", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why does a bank delay or refuse a large cash deposit?",
+      "explanation": "Anti-money-laundering obligations require the institution to understand the source of funds. A bank that does not ask is exposing itself to penalties that can end it.",
+      "options": [
+        { "text": "It is required to establish the source of funds and record it", "correct": true },
+        { "text": "Because cash deposits are not legal tender", "correct": false },
+        { "text": "Because it earns less on cash than on transfers", "correct": false },
+        { "text": "Because the central bank forbids cash deposits above a fixed amount", "correct": false }
+      ]
+    }
+  ]
+}

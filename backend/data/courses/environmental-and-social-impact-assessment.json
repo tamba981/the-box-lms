@@ -1,0 +1,326 @@
+{
+  "slug": "environmental-and-social-impact-assessment",
+  "title": "Environmental & Social Impact Assessment",
+  "program": "FCP",
+  "category": "professional-development",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 1000,
+  "summary": "Assess what a project will do to land, water and people before it is built, and turn the findings into commitments somebody is held to.",
+  "description": "An environmental and social impact assessment is only worth the paper it is written on if it changes a project. Too often it is produced after the design is fixed, consulted on with the people easiest to reach, and filed as a permit requirement that nobody uses again.\n\nThis course works through the assessment as a decision tool: screening to decide what needs assessing and how deeply, scoping to decide which impacts matter, and the difference between an impact that can be mitigated and one that should cause a project to be redesigned or refused.\n\nIt covers environmental impacts on land, water, air and biodiversity, social impacts on livelihoods, resettlement and vulnerable groups, and the cumulative effects that appear when several projects use the same river, road or workforce. Liberian examples run through it: iron ore and gold mining, agricultural concessions, road infrastructure and community resettlement.\n\nThe case study concerns a road that will cut a community off from its well. The company proposes a replacement well two kilometres away, and the community objects because women currently walk 200 metres. Students must work out what the assessment professional's role actually is when the disagreement is about who bears the cost.\n\nThe course closes on the management plan, monitoring and the honesty required to distinguish technical compliance from an acceptable outcome.",
+  "tags": ["impact assessment", "environment", "stakeholder engagement", "resettlement", "compliance", "safeguards"],
+  "outcomes": [
+    "Explain the purpose of an ESIA and when it changes a project",
+    "Screen and scope a project to the right depth",
+    "Identify environmental impacts on land, water, air and biodiversity",
+    "Assess social impacts on livelihoods, resettlement and vulnerable groups",
+    "Distinguish consultation from engagement and use both",
+    "Design a grievance mechanism that people will actually use",
+    "Write a management plan with owners, budgets and dates",
+    "Distinguish technical compliance from an acceptable social outcome"
+  ],
+  "caseStudy": "A road project will pass through a rural community and cut off access to the community's existing well. The construction company proposes to build a replacement well two kilometres away. The community rejects this, because women currently walk 200 metres and the replacement would add hours each week. Students must determine the assessment professional's role, what the ESIA should have required, and how the disagreement should be resolved.",
+  "modules": [
+    {
+      "title": "What impact assessment is for",
+      "lessons": [
+        {
+          "title": "A decision tool, not a permit formality",
+          "minutes": 17,
+          "teach": [
+            "An impact assessment exists to inform a decision that has not yet been made. It identifies what a project will change, for whom, and how badly, so that the design can be altered, the harm reduced, or the project refused.",
+            "Once the design is fixed and the financing is agreed, an assessment can still be written, and it will describe impacts rather than influence them. That version satisfies a filing requirement and protects nobody.",
+            "The strongest assessments arrive early enough to change a route, a location, a technology or a schedule. Moving a borrow pit, changing a culvert or shifting a camp away from a water source are all cheap decisions at design stage and impossible later.",
+            "The assessment is also a public document. It tells affected people what will happen to them, and it commits the developer to measures that can be monitored, which is why a vague assessment is worse than a short one.",
+            "Independence matters more than length. An assessment written by the project's own engineers, to a deadline set by the project's own schedule, will find the impacts that are convenient and describe them as manageable.",
+            "Read an assessment by asking what changed as a result. If the answer is nothing, the document records a decision rather than informing it, and the community bears the cost of that difference for years."
+          ],
+          "example": "An assessment for a mining concession identifies that the haul road crosses a seasonal stream used for washing. The route is moved 400 metres during design, at negligible cost, because the assessment was done before the survey was fixed.",
+          "points": [
+            "Assess while the design can still change",
+            "Independence matters more than document length",
+            "Ask what changed as a result of the assessment"
+          ],
+          "check": "Find an impact assessment you have seen and name one design decision it changed."
+        },
+        {
+          "title": "Screening and scoping",
+          "minutes": 18,
+          "teach": [
+            "Screening decides whether a project needs a full assessment, a limited one, or none. It uses thresholds of scale, location and sensitivity: a project inside a protected area or near a dense settlement is screened in almost regardless of size.",
+            "Screening is usually a checklist and a judgement, and the judgement is where errors live. Projects are routinely split into phases so that each falls below a threshold, which produces cumulative harm that no single assessment examined.",
+            "Scoping decides what the assessment will cover and, just as importantly, what it will exclude and why. A scoping report that lists twelve issues and excludes none has not been scoped, it has been worried about.",
+            "Scoping should be informed by the people affected, not only by the technical team. A community will name the spring, the footpath and the burial ground that no map shows, and those are frequently the impacts that matter most.",
+            "Set the boundaries explicitly: the area, the time period, and the projects considered together with this one. Boundary choices determine the conclusion, and an assessment that stops at the fence line will always find that most impacts happen outside it.",
+            "Publish the terms of reference. A scoping document that states what will be studied, by whom and against what standard allows affected people and regulators to correct the assessment before it is written."
+          ],
+          "example": "A 300-hectare agricultural concession is screened as low impact. The screening misses that it sits across a footpath used by three villages, and the scoping is reopened after a community meeting.",
+          "points": [
+            "Screening sets depth, and splitting phases defeats it",
+            "Scope is a decision about what to exclude",
+            "Let affected people inform the scope"
+          ],
+          "check": "For a project you know, list what its scoping should have excluded and why."
+        },
+        {
+          "title": "The legal framework and the regulator",
+          "minutes": 18,
+          "teach": [
+            "In Liberia the Environmental Protection Agency administers the impact assessment process, issuing the environmental permit on which a project's other approvals depend, and setting the requirements for the assessment itself.",
+            "The framework typically establishes categories of project, the contents of an assessment, the requirement for public consultation, and the power to attach conditions to a permit. Understanding the specific requirements matters more than knowing the general principle.",
+            "Sector ministries add their own requirements. Mining, forestry, agriculture and public works each have rules about licences, land rights and consultation that run alongside the environmental process and sometimes conflict with it.",
+            "Community land rights sit at the centre of most disputes. Statutory title, customary ownership and use rights that are not written down all coexist, and an assessment that recognises only documented title will miss the people who depend on the land.",
+            "Regional and international standards often apply on top, particularly where finance comes from a development bank or an international lender. Those standards are frequently stricter than national law on consultation, resettlement and grievance.",
+            "Know which standard governs before you design the assessment. A project financed by an international lender may need to meet the lender's safeguard requirements as well as the national permit, and the two have different evidence requirements."
+          ],
+          "example": "A road project meets the national permit conditions but a lender requires livelihood restoration for households losing access to farmland. The assessment is expanded to cover economic displacement that the national process did not require.",
+          "points": [
+            "Know the specific requirements, not the general principle",
+            "Undocumented use rights are still impacts",
+            "Lender safeguards often exceed national law"
+          ],
+          "check": "Identify which standard, national or lender, governs the next project in your area."
+        }
+      ]
+    },
+    {
+      "title": "Finding the impacts",
+      "lessons": [
+        {
+          "title": "Environmental impacts on land, water, air and biodiversity",
+          "minutes": 19,
+          "teach": [
+            "Land impacts are usually permanent and begin with clearing. Loss of vegetation, changed drainage, soil compaction and erosion follow quickly, and the area affected is often larger than the footprint because access roads and spoil areas are not counted.",
+            "Water impacts are the ones communities notice first. Sediment in a stream, a changed water table, or a pit that intercepts a spring can remove a water source that no survey recorded, and the effect appears downstream months later.",
+            "Air and noise impacts are local and cumulative. Dust from haul roads settles on roofs, crops and laundry, and the complaint is rarely about dust in the abstract but about the cost of cleaning, the loss of a crop or a child's cough.",
+            "Biodiversity impacts extend beyond species of concern. Habitat fragmentation, disruption of a migration route and the loss of a wetland that regulates flooding are effects on people as much as on ecology, and they are easier to defend in those terms.",
+            "Hazardous materials, waste and closure deserve the same attention as construction. A tailings facility or a fuel store is where the largest and most permanent impacts arise, and the assessment should cover the end of the project as thoroughly as its opening.",
+            "Quantify where you can and describe honestly where you cannot. An estimate of sediment load with its method is usable; the phrase may affect water quality is not, because no condition, budget line or monitoring programme can be attached to it."
+          ],
+          "example": "An assessment records a borrow pit as 2 hectares of degraded land. Including access tracks, spoil placement and downstream sedimentation, the affected area is 9 hectares and a village well is at risk.",
+          "points": [
+            "The affected area is larger than the footprint",
+            "Water impacts are what communities notice first",
+            "Assess closure as thoroughly as construction"
+          ],
+          "check": "Take a project near you and list the impacts that fall outside its formal boundary."
+        },
+        {
+          "title": "Social impacts: livelihoods, resettlement and vulnerable groups",
+          "minutes": 20,
+          "teach": [
+            "Social impacts are harder to measure and more likely to be permanent. Loss of a farm, a market stall or access to fishing grounds removes an income that a cash compensation payment replaces for a season and not for a generation.",
+            "Physical displacement is visible and economic displacement is not. Households moved for a project attract attention and support; households that keep their house but lose the land or the path they depend on are frequently missed entirely.",
+            "Compensation is not restoration. Paying for a crop lost this year does not address the loss of the land itself, and restoration means the household is at least as well off afterwards, which requires livelihoods to be rebuilt rather than losses priced.",
+            "Vulnerable groups experience the same impact differently. Women, the elderly, disabled people and minorities may lose access to resources they do not formally hold, and a consultation that speaks only to male household heads will not hear it.",
+            "In-migration is a predictable and under-assessed effect. A project brings workers, cash and customers, which raises rents, changes prices and can increase pressure on services, and the host community may bear those costs without any share of the benefit.",
+            "Health and safety impacts extend into the community through traffic, dust, water contamination and the behaviour of a workforce far from home, all of which are assessable and all of which are routinely treated as temporary."
+          ],
+          "example": "A concession compensates farmers for standing crops, and considers the resettlement complete. Three years later the same households have no land to farm, and the grievance log shows a dispute nobody recorded as displacement.",
+          "points": [
+            "Economic displacement hides behind intact housing",
+            "Restoration is a standard, compensation is a payment",
+            "Ask who is not in the consultation room"
+          ],
+          "check": "Name a livelihood in your area that a project could remove without moving a single house."
+        },
+        {
+          "title": "Cumulative and indirect effects",
+          "minutes": 18,
+          "teach": [
+            "Most assessments examine one project at a time, while the harm usually comes from several together. A river can absorb one discharge, four discharges from four licensed projects are a different matter entirely.",
+            "Cumulative effects arise when projects share a resource, a road, a workforce or an ecosystem. Each may be compliant on its own and the combination may exceed what the area can carry, and no single assessment is responsible for noticing.",
+            "Indirect effects follow from what a project enables. A mine brings a road, the road brings logging, and the logging was never part of the application. These are legitimately hard to predict and not impossible to consider.",
+            "Time matters as much as space. An impact that lasts two years is a different proposition from one that lasts thirty, and assessments that report magnitude without duration understate the permanent cases.",
+            "The practical response is a regional or sector view alongside the project view. Where a basin, a forest or a road corridor is under multiple applications, somebody needs to hold the total, and the assessment should say so even if it cannot solve it.",
+            "Say plainly what the assessment cannot determine alone. An assessment that identifies a cumulative risk and recommends a coordinated limit is more useful than one that reports the project as acceptable in isolation."
+          ],
+          "example": "Four separate mining licences each pass a water discharge limit. Together they exceed the river's capacity in the dry season, and no individual assessment was required to consider the other three.",
+          "points": [
+            "Harm accumulates where projects share a resource",
+            "Indirect effects follow from what a project enables",
+            "Report magnitude together with duration"
+          ],
+          "check": "Name two other projects sharing a resource with yours, and the combined effect nobody is assessing."
+        }
+      ]
+    },
+    {
+      "title": "Engaging people",
+      "lessons": [
+        {
+          "title": "Consultation is not engagement",
+          "minutes": 18,
+          "teach": [
+            "Consultation is an event: a meeting is held, information is presented, comments are recorded. Engagement is a process in which affected people can influence decisions over the life of the project, including the ones that have not been taken yet.",
+            "A consultation can satisfy a legal requirement and change nothing, which is precisely why the distinction matters. If the design is fixed before the meeting, the community will notice within minutes and the rest of the process loses credibility.",
+            "Engage early, when options are still open. A community told about a route can discuss it; a community told about a route that has been surveyed, priced and approved can only object, and objection is the only role left.",
+            "Go to where people are, at times they can attend. A meeting at the district office on a weekday morning selects for people who are not working, which excludes most farmers and many women, and the resulting record looks like agreement.",
+            "Record what you were told and report back what you did with it. Feedback closes the loop and is the single practice that most improves trust, because it demonstrates that speaking had an effect rather than a form.",
+            "Language and literacy are practical constraints. Minutes written in English, in technical terms, and signed by a few attendees are not evidence of engagement, and a regulator or lender reading them will reach the same conclusion."
+          ],
+          "example": "A company holds four consultation meetings on a fixed design and records no objections. Attendance is low and all four meetings were held on market day, when the community was trading 30 kilometres away.",
+          "points": [
+            "Consultation informs, engagement influences",
+            "Engage while options are still open",
+            "Report back what happened to the comments"
+          ],
+          "check": "Compare your last consultation against the definition of engagement and name what was missing."
+        },
+        {
+          "title": "Grievance mechanisms that people use",
+          "minutes": 18,
+          "teach": [
+            "A grievance mechanism is the part of a project that admits it will get things wrong. Its value is that complaints arrive early, in a form that can be resolved, rather than accumulating into opposition or litigation.",
+            "The mechanism must be accessible to the people who need it. A form in English, available at a site office that requires transport to reach, is not a mechanism, it is a filter designed to reduce the number of complaints recorded.",
+            "Multiple channels are necessary: a named person in the community, a phone number that is answered, a box at a market, and a route through traditional or local authority where that is trusted more than the company.",
+            "Confidentiality and protection from retaliation are essential. A worker or community member who fears losing a job or a contract for complaining will not complain, and the grievance log will show a well-run project that is merely not being told anything.",
+            "Set and publish a timeframe. Acknowledging within a week and resolving or escalating within a month is achievable, and a mechanism without a service standard is a suggestion box with no owner.",
+            "Log every grievance, including the ones resolved informally. The pattern in the log is the most useful monitoring data a project produces, because it shows which commitments are failing before the formal indicators do."
+          ],
+          "example": "A project's grievance log shows nothing for eight months while the community meeting record shows repeated complaints about dust. The site office had no channel that women could reach during working hours.",
+          "points": [
+            "Accessibility determines what gets recorded",
+            "Publish a service standard and keep to it",
+            "The grievance log is your best monitoring data"
+          ],
+          "check": "Trace how a complaint would travel from a village to a resolution on your project, and time it."
+        },
+        {
+          "title": "Case: the road, the well and two kilometres",
+          "minutes": 22,
+          "teach": [
+            "A road will pass through a rural community and, as designed, will cut off the footpath to the community's well. The company proposes a replacement well two kilometres away, at its own cost, and considers the impact mitigated.",
+            "The community rejects the proposal. Women currently walk 200 metres, several times a day in some households, and the replacement adds hours each week, borne almost entirely by them and by girls who fetch water before school.",
+            "The assessment professional's role is not to decide for either party and not to defend the company's offer. It is to make the impact and its distribution visible, and to test whether the mitigation restores what was lost.",
+            "Restoration is the standard. A well at two kilometres does not restore the previous situation, it substitutes a different one, and the difference is a permanent daily cost falling on a specific group who were not consulted about it.",
+            "The realistic options are a design change: a culvert, an underpass, or a realigned segment that keeps the path open. These are engineering questions with costs, and the assessment should have raised them while the alignment could still move.",
+            "Where no design change is possible, the negotiation is about compensation for a permanent change in daily labour, agreed with the women affected rather than with a village head alone. Recording their view, and the company's response, is the professional obligation."
+          ],
+          "example": "A road cuts the path from a village to its well. The company offers a well two kilometres away. Women currently walk 200 metres, and the replacement adds hours each week that fall on them and on schoolgirls.",
+          "points": [
+            "Mitigation must restore, not substitute",
+            "Raise design options while the alignment can move",
+            "Assess who bears the daily cost, not just the average"
+          ],
+          "check": "For this case, state the one design question you would have raised and the evidence you would need to raise it."
+        }
+      ]
+    },
+    {
+      "title": "Commitments and monitoring",
+      "lessons": [
+        {
+          "title": "The environmental and social management plan",
+          "minutes": 18,
+          "teach": [
+            "The management plan converts findings into commitments. For each impact it states the measure, who is responsible, what it will cost, when it will be done and how compliance will be verified, and it is the part of the assessment that survives the permit.",
+            "A plan without owners and budgets is a list of intentions. Construction workers will not spray water on haul roads unless somebody is assigned to do it, supplied with water and held to a schedule.",
+            "Attach each commitment to a stage: design, mobilisation, construction, operation, closure. Measures that belong to construction are routinely scheduled for operation, and the impact has occurred by the time anyone notices.",
+            "Budget the plan separately and visibly. When mitigation is buried in a general environmental line, it is the first thing cut when costs rise, and the impact that was assessed as manageable becomes unmitigated within months.",
+            "Include the monitoring method in the plan itself: what will be measured, how often, by whom, and what result would trigger corrective action. A commitment to monitor dust is not a commitment until somebody has defined the measurement.",
+            "Make the plan a living document with a change log. Conditions get revised as the project evolves, and a plan that cannot show what changed, when and why invites the suspicion that the commitments were quietly dropped."
+          ],
+          "example": "A management plan lists dust suppression as a commitment with no owner, budget or frequency. It is rewritten as weekly watering of 4 kilometres of haul road by a named contractor at a stated monthly cost.",
+          "points": [
+            "Every commitment needs an owner, a cost and a date",
+            "Attach measures to the stage where the impact occurs",
+            "Define how compliance will be measured"
+          ],
+          "check": "Take three commitments from a management plan and say who is accountable for each."
+        },
+        {
+          "title": "Monitoring and what happens when commitments slip",
+          "minutes": 18,
+          "teach": [
+            "Monitoring is where most assessments quietly fail. The plan is approved, the project begins, and the promised measurements are either not taken or taken by the party with an interest in the result.",
+            "Independent monitoring is the difference between a commitment and a hope. Where the developer measures its own dust, water and grievance handling, the data tends to show compliance, and the pattern is predictable enough to be anticipated in the design.",
+            "Community monitoring is a practical complement. Trained local observers recording water clarity, dust on roofs or the timing of water deliveries produce data that is cheap, continuous and difficult to dispute.",
+            "Non-compliance needs a consequence that is real. A permit condition without an enforcement route, or an enforcement route that is never used, teaches the developer that the plan is administrative and the community that complaining is pointless.",
+            "Report publicly at a stated frequency. Publication is what allows the affected community, the regulator and the lender to compare the promise with the practice, and it is the cheapest accountability mechanism available.",
+            "When a commitment slips, the response should be correction and disclosure rather than quiet revision. Projects that disclose a failure and fix it retain credibility; those that amend the plan without saying so lose it permanently."
+          ],
+          "example": "A project's own monitoring reports dust within limits for two years. An independent survey using the same method records readings three times higher, and the difference is traced to sampling on days following rain.",
+          "points": [
+            "Self-monitoring by an interested party is not assurance",
+            "Give non-compliance a real consequence",
+            "Disclose a failure and correct it"
+          ],
+          "check": "Who measures the commitments on your project, and what would happen if they were breached?"
+        },
+        {
+          "title": "Technical compliance and acceptable impact",
+          "minutes": 18,
+          "teach": [
+            "A project can comply with every regulation and still impose an unacceptable cost on the people near it. Compliance is a floor set by a regulator, and acceptability is a judgement about whether the remaining burden is fair.",
+            "The distinction matters because compliance is often used as an argument. The claim that all requirements were met answers a legal question, and it does not answer the question the community is asking about their water, their path or their income.",
+            "Regulation is also slow and general. A standard written for a national context will not anticipate a spring, a footpath or a burial ground that appears on no map, and the gap between the standard and the place is where most disputes arise.",
+            "The mitigation hierarchy gives the professional a framework: avoid first, then minimise, then restore, and compensate only for what remains. Projects frequently jump to compensation because it is pricing rather than redesign.",
+            "Judgement is required, and it should be recorded. Saying that the residual impact is acceptable, and on what basis, and who was consulted, is professional. Saying that the project is compliant, and leaving the rest unstated, is an abdication.",
+            "Where the residual impact falls on an identifiable group and cannot be reduced further, say so explicitly in the assessment. A regulator, a lender or a court can act on a stated residual impact; nobody can act on one that has been described as mitigated."
+          ],
+          "example": "A project meets every discharge limit while drawing down a spring that three households rely on. The permit is valid, the impact is real, and the assessment never stated it as a residual impact falling on named households.",
+          "points": [
+            "Compliance is a floor, not an answer",
+            "Avoid, minimise, restore, then compensate",
+            "State residual impacts explicitly and to whom they fall"
+          ],
+          "check": "Name a project that is compliant with its permits, and the impact it still imposes on people nearby."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "What is the difference between consultation and engagement, and why does an assessment need both?",
+      "explanation": "Consultation is an event that records views; engagement is a process in which affected people can influence decisions over time. A legal requirement is usually satisfied by consultation, while the credibility of the assessment depends on engagement.",
+      "options": [
+        { "text": "Consultation records views at a point in time; engagement lets people influence decisions across the project, and credibility needs the second", "correct": true },
+        { "text": "Consultation is for communities and engagement is for government agencies", "correct": false },
+        { "text": "They are the same activity described differently by different lenders", "correct": false },
+        { "text": "Engagement is required only where physical resettlement occurs", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A project is technically compliant with every environmental regulation. Is that the same as having an acceptable social impact?",
+      "explanation": "Regulation sets a general floor. Acceptability depends on how the residual burden falls on specific people, and a compliant project can still remove a spring, a path or a livelihood that no standard anticipated.",
+      "options": [
+        { "text": "No. Compliance is a legal floor, while acceptability depends on the residual burden on affected people", "correct": true },
+        { "text": "Yes, because regulators set the standard on behalf of affected communities", "correct": false },
+        { "text": "Yes, provided the project also pays compensation to affected households", "correct": false },
+        { "text": "No, because compliance is never relevant to social impact", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case study, the company offers a well two kilometres away. Why does this fail as mitigation?",
+      "explanation": "Mitigation must restore what was lost. A well at two kilometres substitutes a different daily burden for the original 200 metres, and that burden falls on women and girls, who were not part of the agreement.",
+      "options": [
+        { "text": "Because it substitutes a new burden for the old one rather than restoring access, and the burden falls on women and girls", "correct": true },
+        { "text": "Because a replacement well is more expensive than a culvert", "correct": false },
+        { "text": "Because the company should not build infrastructure for communities at all", "correct": false },
+        { "text": "Because the community should have raised its objection earlier in the process", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What is the correct order of the mitigation hierarchy?",
+      "explanation": "The hierarchy runs from avoiding the impact entirely, through minimising and restoring, to compensating only for what remains. Projects often jump to compensation because it prices the harm instead of redesigning the project.",
+      "options": [
+        { "text": "Avoid, minimise, restore, then compensate for what remains", "correct": true },
+        { "text": "Compensate, minimise, restore, then avoid if affordable", "correct": false },
+        { "text": "Monitor, compensate, minimise, then report to the regulator", "correct": false },
+        { "text": "Avoid, compensate, monitor, then restore at closure", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A project's grievance log records no complaints for eight months. What is the most likely explanation?",
+      "explanation": "A silent log usually indicates inaccessible channels rather than an absence of problems. Where the only route requires travel, English literacy or a visit during working hours, complaints go unrecorded and later surface as opposition.",
+      "options": [
+        { "text": "The channels are inaccessible to the people affected, so complaints are not being recorded", "correct": true },
+        { "text": "The project is being delivered exactly as promised with no impacts", "correct": false },
+        { "text": "The community has no grievances because it was consulted at the start", "correct": false },
+        { "text": "The log is confidential and complaints are recorded elsewhere", "correct": false }
+      ]
+    }
+  ]
+}

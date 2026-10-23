@@ -1,0 +1,265 @@
+{
+  "slug": "human-resource-management",
+  "title": "Human Resource Management",
+  "program": "FCP",
+  "category": "business-management",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 2000,
+  "summary": "Hire deliberately, onboard properly, hold people to written expectations, and understand why good staff leave before they do.",
+  "description": "Most organisations with fewer than fifty staff have no human resource function, and that is fine. What they cannot do without is a small number of practices: knowing what a job actually is before recruiting for it, bringing somebody in well, setting expectations that can be met and checked, and having a conversation when they are not met.\n\nThis course is written for the owner or manager who does all of this alongside their own work. It avoids policy for its own sake and concentrates on the decisions that change outcomes: how to write a job description that a candidate could recognise, how to interview for what the role needs rather than for likability, how to conduct the first week, and how to handle the situation every family business faces — a relative who is not performing.\n\nIt closes on retention, which is cheaper than recruitment and far more neglected. Why people leave is usually knowable in advance, and the warning signs are almost always visible to everybody except the person who could act on them.",
+  "tags": ["human resources", "hiring", "performance", "retention", "onboarding", "business management"],
+  "outcomes": [
+    "Write a job description that describes tasks and standards rather than qualities",
+    "Interview for evidence of past behaviour rather than for impression",
+    "Run an onboarding week that gives a new person what they need to succeed",
+    "Set expectations that are specific enough to be checked",
+    "Conduct a performance conversation that produces a change or a decision",
+    "Recognise the warning signs of departure and act before the resignation"
+  ],
+  "caseStudy": "A trading company's best salesperson is the owner's cousin, arrives late three times a week and shouts at junior staff, and the owner will not act because of the family relationship.",
+  "modules": [
+    {
+      "title": "Module 1 · Hiring deliberately",
+      "lessons": [
+        {
+          "title": "Know what the job is before you advertise",
+          "minutes": 16,
+          "teach": [
+            "Most bad hires begin with an unclear job. A vacancy described as someone to help with everything cannot be advertised honestly, interviewed for properly, or appraised fairly, because there is nothing specific to measure against.",
+            "Write the job as tasks rather than qualities. Reliable and hardworking cannot be verified; opens the shop at seven, reconciles the till at close, and calls customers whose orders are late can be.",
+            "Add the standard each task must meet and the authority the person has. A cashier who may authorise a refund up to a stated value is different from one who must always ask, and only one of them can serve a queue.",
+            "Decide what the role must produce in its first three months. That single statement tells a candidate what success looks like and tells you what to check at the review.",
+            "Where a role genuinely is a mixture, say which part dominates. A shop assistant who spends eighty per cent of the day on stock and twenty per cent on customers is a stock role, and hiring a sociable person for it will disappoint both parties.",
+            "A written job description also protects you. Most disputes about pay, duties and dismissal are decided on what can be shown, and a document agreed at the start is the strongest evidence available. Revisit it when the role changes, not only when something goes wrong. Two people should be able to find the current version without asking."
+          ],
+          "example": "A vacancy for a shop assistant lists: opens at 7.00, serves customers, records every sale in the book, counts the till at close, may authorise refunds up to 200 Liberian dollars.",
+          "points": ["Tasks and standards, not qualities", "State the authority the role carries", "Say what the first three months must produce"],
+          "check": "Take your most recent hire. Could you have described the job in five verifiable tasks at the time you recruited?"
+        },
+        {
+          "title": "Finding candidates where they actually are",
+          "minutes": 15,
+          "teach": [
+            "The default recruitment method in a small market is asking people you know, which produces candidates who resemble the people you already have. That is efficient and it narrows the field in ways you may not intend.",
+            "Widen deliberately: customers who know the business, suppliers who see how it works, training institutions, and the noticeboard of the association you belong to. A short advertisement costs little and reaches people outside your circle.",
+            "Describe the job honestly, including the difficult parts. An advertisement that omits the early mornings and the Saturday trade will produce candidates who resign in month two, and their resignation is your fault rather than theirs.",
+            "Keep a note of good people you meet when you are not hiring. The best small-business hires often come from somebody you noticed eighteen months earlier, and the note is what makes that possible.",
+            "Where you must hire quickly, say so and shorten the process rather than shortening the advertisement. Ambiguity in the advert costs far more time later than a week of recruiting. Write the advertisement as if the best candidate will read it critically. If nobody would apply, the description is the problem, not the market."
+          ],
+          "example": "A trader advertises on a market association board and through two suppliers, and receives eleven applications where word of mouth had produced three, all from the same neighbourhood.",
+          "points": ["Word of mouth narrows the field", "Advertise the difficult parts honestly", "Keep a note of good people you meet"],
+          "check": "If you needed to hire next month, how many candidates could you name today without asking around?"
+        },
+        {
+          "title": "Interviews that test for the job",
+          "minutes": 16,
+          "teach": [
+            "Interviews usually measure how well somebody interviews. That is a skill with limited relationship to whether they will reconcile a till accurately or calm an angry customer.",
+            "Ask for past behaviour instead: tell me about a time a customer was angry, and what you did. A real account has detail, hesitation and a specific outcome. A prepared answer is general and usually flattering.",
+            "Set a small practical task related to the work. A candidate for a stock role can be asked to count a shelf; a cashier can be asked to work through a short reconciliation on paper. The task is a better predictor than any conversation.",
+            "Ask two people to interview rather than one where you can. A single interviewer tends to hire people they would enjoy working with, which is a reasonable criterion and not the only one.",
+            "Check references, and ask a specific question. Would you hire this person again is answered carefully; what did they do that you had to correct is answered honestly. Ask two references rather than one, and compare the accounts. A reference that hesitates has told you something."
+          ],
+          "example": "A candidate for a cashier role is asked to reconcile a day's sales of 14,300 against a till count of 14,100 and say what they would do about the difference.",
+          "points": ["Ask for past behaviour, not opinion", "Include a task from the actual work", "Ask references what had to be corrected"],
+          "check": "What practical task would tell you more about your last hire than the interview did?"
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Starting well",
+      "lessons": [
+        {
+          "title": "The first week that decides the first year",
+          "minutes": 15,
+          "teach": [
+            "Most people who leave a job within a year decided early. The first week tells them whether anybody expected them, whether the work is what was described, and whether anybody is responsible for them.",
+            "Prepare before they arrive: somewhere to sit, something to do on the first morning, a named person to ask, and the equipment they need. Arriving to no desk is read as an omen, and it is usually accurate.",
+            "Introduce them to the people they will depend on, not to everybody. A tour of twelve names is forgotten; an introduction to the three people who will answer their questions is remembered.",
+            "Give them a real task in the first week, small enough to complete and real enough to matter. Completing something is what converts a visitor into a colleague.",
+            "Assign a named person for questions and say who it is. A new person who does not know who to ask will ask nobody, and will guess, and the guess will become a habit. Name the buddy in writing, and ask them at the end of the week how it went. A buddy who was never asked is a buddy in name only."
+          ],
+          "example": "A new shop assistant arrives to a named buddy, a written first-week schedule, a till training session and a task to arrange one shelf by Friday.",
+          "points": ["Decide before the first morning", "Introduce the few people who matter", "Give a real task that can be completed"],
+          "check": "Who was responsible for your last new starter in their first week, and what did that person actually do?"
+        },
+        {
+          "title": "Expectations and terms in writing",
+          "minutes": 16,
+          "teach": [
+            "An informal arrangement suits both parties until something goes wrong. At that point everything depends on what can be shown, and verbal agreements are remembered differently by each person.",
+            "A short written agreement is enough: the role, the pay and when it is paid, the hours, the notice period, and what the employer will provide. One page, signed, with a copy each.",
+            "Write the pay date explicitly. Late or variable payment is one of the most common reasons good staff leave, and it is entirely within the employer's control to promise a date and keep it.",
+            "Record the standards you will hold people to, and not only the rules you will enforce. A person who knows what good looks like can meet it; one who is corrected only when they fail learns by punishment.",
+            "Review the agreement annually or when the role changes substantially, and write the change down. A role that has quietly grown by half without a change in terms will eventually produce a resignation or a dispute. A revised page costs ten minutes; a dispute costs far more. Put the revision in the diary at the same time as the hiring."
+          ],
+          "example": "A one-page agreement names the role, weekly pay on Friday, hours 7.00 to 16.00 Monday to Saturday, one week of notice, and the standards for till reconciliation.",
+          "points": ["One page, signed, two copies", "Name the pay date and keep it", "Write down the standards, not only the rules"],
+          "check": "Could you produce a written agreement for each person who works for you today?"
+        },
+        {
+          "title": "Training that transfers",
+          "minutes": 15,
+          "teach": [
+            "Training fails when it consists of being told. A person who has been told how to reconcile a till has learned about reconciling a till; the skill arrives when they do it with somebody watching.",
+            "Use a simple cycle: show the task, do it together, watch them do it, then let them do it alone and check the result. Most training skips the middle two steps, which is why the third week looks like the first.",
+            "Train on the exceptions, not only the standard process. The routine is usually guessable from the system; the unusual case is what produces the phone call, and it is what training should cover.",
+            "Write the steps down for anything done less than weekly. If it is done twice a year, nobody will remember it and the note is the training.",
+            "Train the second person before you need them. Training only when somebody is leaving guarantees that the knowledge leaves with them. Choose the second person for the task that would hurt most if it stopped. That is the training decision, made deliberately rather than by accident."
+          ],
+          "example": "A till reconciliation is taught by doing it together for three days, watching on the fourth, and checking the fifth; the written steps stay in the drawer for the unusual days.",
+          "points": ["Show, do together, watch, check", "Train the exceptions, not only the routine", "Have a second person trained in advance"],
+          "check": "Which task in your business is done by exactly one person? Who could you train this month?"
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Performance and hard conversations",
+      "lessons": [
+        {
+          "title": "Feedback that changes behaviour",
+          "minutes": 15,
+          "teach": [
+            "Feedback works when it is about a specific piece of work, given soon, and framed as something the person can act on. Feedback about character, given months later, produces defence or resignation.",
+            "Use three parts: what you observed, the effect it had, and what would be more useful. Said within a day or two it is information; said at an annual review it is a grievance.",
+            "Praise needs the same specificity to be worth anything. Good job is a feeling; the till reconciled exactly for three weeks, including the day of the rush, tells the person what to repeat.",
+            "Deliver it privately, and never in front of customers or colleagues. A public correction teaches the whole team that mistakes are dangerous, and the result is that mistakes get hidden.",
+            "Ask the person what they think happened before you explain. Half the time the account reveals a cause you did not know about, and the other half it confirms that they already know, which changes the conversation. Give the conversation fifteen minutes and no audience."
+          ],
+          "example": "The last three deliveries went out without the customer being called, and two of them arrived while nobody was there. Could the call be made before loading?",
+          "points": ["Observation, effect, request", "Praise specifically as well", "Ask their account first"],
+          "check": "What feedback have you been carrying for more than a week? What would you say in three sentences?"
+        },
+        {
+          "title": "When performance does not improve",
+          "minutes": 16,
+          "teach": [
+            "A performance problem becomes a management problem when it is known and tolerated. The moment everybody can see that nothing happens, the standard becomes whatever the worst performer does.",
+            "The sequence is consistent: a specific conversation about the gap, a stated expectation and a date, support where the cause is capability, and a review at that date. Write down what was agreed, and give the person a copy.",
+            "Distinguish capability from willingness. Capability problems are solved by training, reassignment or a different role. Willingness problems are not solved by training, and pretending otherwise delays the decision for everybody.",
+            "Set a review date and keep it. Most performance processes fail because the review never happens, the problem continues, and the eventual decision is made in anger rather than on a record.",
+            "Where the outcome is that the person leaves, do it decently: notice as agreed, pay owed, an honest reference for the parts that were true, and a conversation that leaves them able to explain it to their next employer. Most of that costs nothing and is remembered."
+          ],
+          "example": "Lateness is discussed on the 3rd, an expectation of arrival by 7.00 with a reason given in advance is agreed, and a review is set for the 24th.",
+          "points": ["Tolerated problems become the standard", "Separate capability from willingness", "Set a review date and keep it"],
+          "check": "Which performance problem in your team is currently known and tolerated?"
+        },
+        {
+          "title": "Case study: the cousin who arrives late",
+          "minutes": 18,
+          "teach": [
+            "A trading company's best salesperson by volume is the owner's cousin. He brings in more revenue than anybody else, arrives late roughly three mornings a week, and shouts at junior staff in front of customers.",
+            "Three junior staff have complained formally. One has already left and cited him in her exit conversation. The others say they will stay but have stopped raising problems with him.",
+            "The owner's position is that family obligations make dismissal impossible, that the cousin's sales are too valuable to risk, and that the shouting is simply his manner. The manager's position is that the standard has already collapsed.",
+            "The numbers are more ambiguous than either believes. The cousin's gross sales are the highest, but his discounts are the deepest, and his contribution margin is third of four. Two of the three juniors who complained are the only people who can handle the new supplier system.",
+            "Every option has a real cost. Doing nothing keeps the revenue and loses the juniors. Confronting him risks a family rupture. Moving him to a role without staff contact keeps him employed and may lose his sales ability."
+          ],
+          "example": "Cousin: gross sales 180,000 a month at 6 per cent margin. Second seller: 150,000 at 14 per cent. The cousin is not the most profitable seller, only the loudest.",
+          "points": ["Contribution margin, not gross sales, decides who is valuable", "The tolerated exception is already costing staff", "Separate the family relationship from the role"],
+          "check": "What would you do, and what exactly would you say to the owner? Which option would you defend to the juniors?"
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Keeping people",
+      "lessons": [
+        {
+          "title": "Why people leave, and the signs nobody reads",
+          "minutes": 15,
+          "teach": [
+            "People rarely leave for the reason given in the resignation conversation. Pay is often the stated reason and rarely the only one; the real cause is usually something that has been visible for months.",
+            "The reliable warning signs are behavioural: somebody who used to raise problems stops raising them, somebody who used to arrive early starts arriving exactly on time, somebody stops asking questions about the future.",
+            "Pay matters most when it is unfair rather than when it is low. A person who discovers a colleague doing similar work for more money will leave over the comparison, and the discovery is usually accidental and always remembered.",
+            "Ask before you need to. A short conversation twice a year about what would make the job better produces information you cannot get any other way, and the act of asking itself changes how people feel about staying.",
+            "When somebody does resign, conduct an honest conversation and write down what they say. The first resignation in a pattern is cheap information; the third is an expensive lesson."
+          ],
+          "example": "A supervisor who stopped flagging stock problems three months before resigning had been signalling for three months, and nobody had asked why the flags stopped. The first question costs five minutes; the replacement costs months.",
+          "points": ["The stated reason is rarely the real one", "Watch behaviour, not announcements", "Unfairness matters more than the level"],
+          "check": "Who in your team has changed their behaviour in the last three months, and have you asked why?"
+        },
+        {
+          "title": "Developing people without a training budget",
+          "minutes": 15,
+          "teach": [
+            "Most development in small organisations happens through work rather than through courses. A task slightly beyond current ability, with support available, teaches more than a week away and costs less.",
+            "The pattern that works is deliberate: give the person a real responsibility, agree what support you will provide, let them do it their way, and discuss afterwards what they would do differently.",
+            "Rotate the tasks nobody owns. Covering for somebody on leave is the cheapest training available, and it also tells you who could cover if somebody left permanently.",
+            "Let people see the whole business rather than only their part. A cashier who understands why stock is ordered in certain quantities makes better decisions at the counter, and feels more like a colleague than an operator.",
+            "Say what you are developing them for. A person who can see a future in the organisation invests differently from one who assumes the job is a dead end, and the second will leave for a lateral move. Ambition needs somewhere to go, even when the organisation is small."
+          ],
+          "example": "A shop assistant is given responsibility for ordering one product line, with the owner reviewing the first three orders and then stepping back.",
+          "points": ["Work-based development beats courses", "Covering for leave is free training", "Say what you are developing them for"],
+          "check": "What responsibility could you hand over this quarter that would develop somebody and free your own time?"
+        },
+        {
+          "title": "What turnover actually costs",
+          "minutes": 15,
+          "teach": [
+            "Replacing a person costs recruitment time, the productive gap while the role is empty, the training period, and the mistakes made while somebody is learning. For a skilled role that total is usually several months of salary.",
+            "It also costs things that do not appear anywhere: customers who dealt with the leaver and now deal with somebody who does not know them, colleagues who absorb the work in the gap, and the institutional knowledge that leaves with no record.",
+            "That arithmetic changes the decision about pay. A small increase that retains a trained person is almost always cheaper than replacing them, and the calculation is available before the resignation rather than after.",
+            "It also changes the decision about a difficult colleague. Keeping one person whose behaviour drives out three others is not free; it is a transfer of cost from one relationship to several.",
+            "Keep a simple record of who left, when, and why they said they left. Three departures with a shared cause is a management problem, not bad luck. Look for the cause in the first two, not the third."
+          ],
+          "example": "Replacing a trained cashier costs about six weeks of recruitment and training plus the errors in that period, which exceeds the annual cost of the raise that would have kept her.",
+          "points": ["Replacement costs months of salary", "The hidden costs exceed the visible ones", "One difficult person can drive out several good ones"],
+          "check": "How many people left in the last year, and what did each departure cost in weeks of disruption?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Which job description can be interviewed for and appraised against?",
+      "explanation": "Tasks and standards can be observed and checked. Qualities such as hardworking cannot be verified at interview or at review.",
+      "options": [
+        { "text": "Opens at 7.00, records every sale, reconciles the till at close, may authorise refunds up to 200", "correct": true },
+        { "text": "Hardworking, trustworthy and good with people", "correct": false },
+        { "text": "Assists the manager with all duties as required", "correct": false },
+        { "text": "Experienced in retail with a positive attitude", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why does asking a candidate to reconcile a till on paper tell you more than the interview?",
+      "explanation": "It samples the actual work rather than the ability to talk about it. A practical task is a better predictor than a fluent conversation.",
+      "options": [
+        { "text": "It samples the real task rather than the ability to discuss it", "correct": true },
+        { "text": "It proves the candidate is honest", "correct": false },
+        { "text": "It is fairer to candidates with less experience", "correct": false },
+        { "text": "It shows whether they can work under pressure", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An employee used to raise problems and has stopped. What does this most likely indicate?",
+      "explanation": "Withdrawal of voice is a recognised precursor to leaving. The absence of complaints is information, not contentment.",
+      "options": [
+        { "text": "Disengagement that often precedes resignation", "correct": true },
+        { "text": "That the problems have been resolved", "correct": false },
+        { "text": "That the person has become more focused", "correct": false },
+        { "text": "Nothing; it is a normal variation in behaviour", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A supervisor's performance gap is about capability, not willingness. What follows?",
+      "explanation": "Capability is addressed with training, reassignment or a different role. Applying a disciplinary process to a capability problem punishes somebody for a gap they were never helped to close.",
+      "options": [
+        { "text": "Training, reassignment or a different role, with a review date", "correct": true },
+        { "text": "A formal warning, since the standard has not been met", "correct": false },
+        { "text": "Immediate dismissal to protect the team's standards", "correct": false },
+        { "text": "Nothing, since capability cannot be changed", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case study, why does contribution margin change the decision about the cousin?",
+      "explanation": "Gross sales reward volume; contribution margin shows what the business keeps. His deep discounts mean he is the third most profitable of four sellers, not the most valuable.",
+      "options": [
+        { "text": "Because his deep discounts make him the third most profitable seller, not the most valuable", "correct": true },
+        { "text": "Because margin is irrelevant when volumes are high", "correct": false },
+        { "text": "Because the other sellers are also family", "correct": false },
+        { "text": "Because gross sales is the only figure the owner trusts", "correct": false }
+      ]
+    }
+  ]
+}

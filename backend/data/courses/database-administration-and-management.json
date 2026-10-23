@@ -1,0 +1,264 @@
+{
+  "slug": "database-administration-and-management",
+  "title": "Database Administration & Management",
+  "program": "FCP",
+  "category": "technology",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 1000,
+  "summary": "Move from a spreadsheet that loses data to a database that does not: tables, keys, simple queries, and backups that actually restore.",
+  "description": "A spreadsheet is an excellent tool for a hundred rows and a liability for four thousand. Two people editing at once, no record of who changed what, and a total that quietly stops matching the underlying data are all symptoms of using a personal tool for an organisational record.\n\nThis course explains what a relational database is and why it solves those specific problems: tables that hold one kind of thing each, keys that link them, and a query language that answers questions without anyone rearranging the data. It teaches enough SQL to retrieve, insert and update records, and enough design to avoid the two mistakes that make databases unusable — storing the same fact in two places and having no way to prevent a record pointing at something that does not exist.\n\nIt closes with backup and recovery, which is the discipline that determines whether any of the rest matters. A database that has never been restored from a backup is a database whose backup is untested.",
+  "tags": ["database", "sql", "data", "backup", "technology", "cooperatives"],
+  "outcomes": [
+    "Explain what a relational database does that a spreadsheet cannot",
+    "Design tables with primary and foreign keys that prevent orphan records",
+    "Write SELECT, WHERE, JOIN, INSERT and UPDATE statements",
+    "Explain what a foreign key constraint protects and why its absence causes damage",
+    "Design a backup routine and prove that a restore works",
+    "Ask the design questions that must be settled before any data is entered"
+  ],
+  "caseStudy": "A private school in Monrovia has kept eight years of records in one spreadsheet, now 4,200 rows; two staff overwrite each other's work and parents dispute grade records that do not match.",
+  "modules": [
+    {
+      "title": "Module 1 · Why a database",
+      "lessons": [
+        {
+          "title": "What a spreadsheet cannot do",
+          "minutes": 16,
+          "teach": [
+            "A spreadsheet is a grid of independent cells. Nothing in it knows that a row is a student, that the fee column must be a number, or that two rows describing the same person are a mistake. All of that knowledge lives in the head of whoever maintains it.",
+            "A database stores structure separately from data. It knows each column's type, which values must be unique, and which relationships must exist. That knowledge is enforced on every insert, by every user, whether or not they understand it.",
+            "The consequences are practical. A spreadsheet shared over a network can be overwritten silently; a database records each change and refuses conflicting ones. A spreadsheet duplicates a name in every row; a database stores it once.",
+            "None of this makes spreadsheets obsolete. They remain better for analysis, modelling and one-off calculation. The distinction is between a file for working in and a store of record for something the organisation must be able to prove.",
+            "The moment to move is when the data has more than one user, when history matters, or when a wrong figure would cause harm to a person. At that point the file has stopped being a workbook and become a record somebody may be held to."
+          ],
+          "example": "A 4,200-row student spreadsheet with two editors has no way to tell which grade is correct, while a database would record who changed the grade and when.",
+          "points": ["A spreadsheet has no knowledge of its own structure", "Concurrent editing loses data silently", "Move when there is more than one user or history matters"],
+          "check": "Which of your spreadsheets is really a store of record? How many people edit it, and do you know who changed what last?"
+        },
+        {
+          "title": "Structure that prevents the obvious disasters",
+          "minutes": 16,
+          "teach": [
+            "Two design failures cause most unusable databases. The first is storing the same fact in several places, so it can disagree with itself. The second is allowing references to things that do not exist.",
+            "Storing a student's name in every grade row means renaming a student requires changing hundreds of rows, and missing one leaves two versions of the name. Storing the name once in a students table and referring to it by an identifier removes the possibility.",
+            "The identifier is a key: a value that uniquely identifies a row and never changes. Names change, phone numbers get reassigned, and dates of birth can be wrong; a system-generated number does not.",
+            "The second failure is fixed by a foreign key, which requires that any reference points at a record that exists. Without it, a grade can refer to a student who was deleted or never existed, and no query will reveal the problem until somebody tries to print a report.",
+            "Both protections cost nothing at design time and are expensive to retrofit once data has been entered badly. Design is cheap while the tables are empty and expensive once four thousand rows depend on a mistake."
+          ],
+          "example": "Students table holds id, name and date of birth. Grades table holds student_id, subject_id, mark and date. The name exists once, and a grade cannot reference a missing student.",
+          "points": ["One fact, one place", "Keys are generated and never change", "Foreign keys stop orphan records"],
+          "check": "In your current spreadsheet, which fact is repeated in every row? What happens if it changes?"
+        },
+        {
+          "title": "The decisions to make before anyone types",
+          "minutes": 15,
+          "teach": [
+            "The most expensive database decision is the one made by accident during data entry. Before anything is typed, settle what the entities are, what identifies each one, and what must be true of every record.",
+            "Decide the questions the database must answer. A school needs enrolment counts by year, fee balances by student, and grade history by subject. Each question shapes which tables exist and what they must link.",
+            "Decide who may see and change what. A beneficiary record with medical or financial detail should not be readable by everybody who can use the system, and access rules are easier to apply before the data exists than after.",
+            "Decide how a mistake is corrected. Whether records are edited in place or superseded by a new version determines whether you can reconstruct what the database said last month, which is often the actual requirement.",
+            "Write those decisions on one page and keep it. It becomes the specification, the basis for the access rules, and the thing you check against when somebody asks for a change in year three. One page now saves a fortnight of argument later."
+          ],
+          "example": "A cooperative settles that members, contributions and loans are three entities, that a member is identified by a membership number, and that contributions are never edited, only reversed.",
+          "points": ["Settle entities and identifiers before entry", "Questions shape the design", "Decide how corrections work, in advance"],
+          "check": "List the five questions your database must answer. Do your current tables contain what each one needs?"
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Tables and relationships",
+      "lessons": [
+        {
+          "title": "One table, one kind of thing",
+          "minutes": 16,
+          "teach": [
+            "A table holds one kind of thing: students, payments, items, staff. Each row is one instance and each column is one attribute of that instance. Mixing two kinds of thing in one table is the commonest beginner error.",
+            "If a table holds students and their guardians, an attribute of the guardian is repeated for every sibling, and updating a phone number means changing several rows that must then stay consistent. Two tables, linked by a guardian identifier, remove the problem.",
+            "Each column holds one value, of one type. A column called contact details containing a phone number and an address cannot be searched, sorted or validated. Split it.",
+            "Name columns for what they hold, not for how they are used on a form. A column called box 3 will be meaningless in two years, and the person who inherits the database will guess wrong.",
+            "Where you are unsure whether something deserves its own table, ask how many of it a record can have. If the answer is a variable number, it needs its own table. That single test resolves most design arguments before they begin."
+          ],
+          "example": "A payments table with one row per payment, not one row per member with twelve columns for twelve months, which cannot handle a thirteenth payment or a missed one.",
+          "points": ["One table, one kind of thing", "One value per column, one type per column", "A variable number of something needs its own table"],
+          "check": "Does any of your tables have columns numbered one to twelve for the same kind of value? What breaks when a thirteenth arrives?"
+        },
+        {
+          "title": "Keys and the one-to-many relationship",
+          "minutes": 16,
+          "teach": [
+            "A primary key uniquely identifies a row. It must be unique, never null, and never changed. A generated number is the safest choice because it carries no meaning that might later need correcting.",
+            "A foreign key is a column that holds the primary key of another table. A grade holds a student_id; a payment holds a member_id. That column is how the two tables are related, and it is what prevents a grade from existing without a student.",
+            "One-to-many is the most common relationship: one student has many grades, one member has many contributions. The many side holds the foreign key. A many-to-many relationship, such as students and subjects, needs a linking table with both keys.",
+            "Declaring the foreign key as a constraint means the database itself refuses an invalid insert, rather than relying on every user and every application to check. That is the difference between a rule and a hope.",
+            "Where a constraint would block a legitimate operation, that is information: either the data model is wrong or the operation is. Treat the refusal as a question rather than an obstacle."
+          ],
+          "example": "Grades(student_id, subject_id, mark, date) with both columns declared as foreign keys: a grade cannot be inserted for a student or subject that does not exist.",
+          "points": ["Primary keys are unique, non-null and stable", "The many side holds the foreign key", "Declare constraints so the database enforces the rule"],
+          "check": "Which of your tables should reference another, and is that reference enforced or merely intended?"
+        },
+        {
+          "title": "Why orphan records appear, and what they cost",
+          "minutes": 15,
+          "teach": [
+            "An orphan is a record whose reference points at something that no longer exists: a contribution to a member who was deleted, a grade for a subject removed from the curriculum. They are invisible until a report joins the tables and the row silently disappears.",
+            "Orphans appear when constraints are absent, when data is imported from a spreadsheet that never had them, or when a record is deleted without considering what refers to it.",
+            "The cost is credibility. A total that omits twelve orphaned payments looks correct and provides the wrong answer, and the person who discovers it stops trusting every figure the system produces.",
+            "The remedy is a constraint plus a deletion policy: refuse to delete a parent record with children, or cascade the deletion deliberately, or mark the parent inactive instead of removing it. Choose one and apply it everywhere.",
+            "Where orphans already exist, find them with a query that looks for references without a match, correct or quarantine them, and then add the constraint so they cannot return. A constraint added after the fact stops the future; the cleanup deals with the past."
+          ],
+          "example": "Twelve contributions reference a member_id no longer in the members table; the annual total is 4 per cent low, and the discrepancy is only found when a member disputes her balance.",
+          "points": ["Orphans vanish quietly from reports", "Choose a deletion policy and apply it", "Find existing orphans before adding the constraint"],
+          "check": "Could any record in your data point at something that no longer exists? How would you find out?"
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Getting data back out",
+      "lessons": [
+        {
+          "title": "SELECT and WHERE: asking for what you need",
+          "minutes": 16,
+          "teach": [
+            "SELECT names the columns you want and the table they come from. WHERE restricts the rows. Between them they answer most questions anybody asks of an operational database.",
+            "Selecting specific columns rather than everything is a discipline that pays later: the query documents what it needs, and it keeps working when a new column is added.",
+            "WHERE takes conditions combined with AND and OR. Parentheses matter: name the member and the date, or the members who joined earlier, are different questions, and a missing bracket produces a plausible answer to the wrong one.",
+            "Sorting with ORDER BY makes output readable and reproducible. Without it, the order of rows is arbitrary and two runs of the same query can produce different sequences, which is confusing when somebody compares printouts.",
+            "Always run a SELECT with the same WHERE clause before running an UPDATE or DELETE. It is the single cheapest habit in database work: see the affected rows first. It costs a minute and prevents the mistake that a backup would take a day to reverse."
+          ],
+          "example": "SELECT member_id, amount, paid_on FROM contributions WHERE paid_on >= '2026-01-01' AND amount > 1000 ORDER BY paid_on;",
+          "points": ["Name the columns you need", "Parentheses change the meaning of AND and OR", "Preview the WHERE before you change anything"],
+          "check": "Write the query for the last question you answered by filtering a spreadsheet. Which clause does the work?"
+        },
+        {
+          "title": "JOIN: putting the tables back together",
+          "minutes": 16,
+          "teach": [
+            "A JOIN combines rows from two tables using the relationship between them. It is how a database answers a question that needs facts from more than one place: which members made contributions above a threshold, and what are their names.",
+            "An inner join returns only rows with a match in both tables. That is usually what you want, and it is also how orphans disappear silently, because the rows without a match are excluded without warning.",
+            "An outer join returns unmatched rows as well, with empty values on the missing side. For finding orphans, a left join from parents to children and a condition looking for nulls on the child side does the job in one line.",
+            "Every join needs a condition stating how the tables relate, and a missing or wrong condition multiplies rows rather than combining them, producing totals several times too large. A count that jumps unexpectedly is nearly always a join problem.",
+            "Where a query joins three or more tables, build it one join at a time and check the row count at each step. Debugging a five-table query without that discipline is guesswork. Print the count after every join and the error announces itself."
+          ],
+          "example": "SELECT m.name, SUM(c.amount) FROM members m JOIN contributions c ON c.member_id = m.id GROUP BY m.name ORDER BY 2 DESC;",
+          "points": ["Inner joins hide unmatched rows", "Left join plus null finds orphans", "A missing join condition multiplies rows"],
+          "check": "Take a report that combines two lists. What happens to rows present in one list but not the other?"
+        },
+        {
+          "title": "Case study: the school with eight years in a spreadsheet",
+          "minutes": 18,
+          "teach": [
+            "A private school in Monrovia has tracked students, fees and grades in one spreadsheet since 2018. It now has 4,200 rows, two staff who update it simultaneously, and no record of who changed anything.",
+            "Three symptoms have reached the headmaster. Data entered by one clerk has been overwritten by the other. Parents have produced fee receipts that do not match the school's record. A report to a sponsor counted 812 students while the enrolment register shows 806.",
+            "The spreadsheet has four kinds of information mixed in one sheet: student identity, guardian contact, fees by term, and subject grades. Some rows hold a student with no grades; others hold a grade for a student whose name was mistyped and now appears twice.",
+            "The headmaster has decided a database is needed and wants it built in a month. Nobody has yet settled who may see which records, whether grades may be edited after issue, or what the database is primarily for.",
+            "The decisions in front of the school are more consequential than the software: how to reconcile 4,200 uncertain rows, whether to migrate all eight years or start from this year, and who owns the record when a parent disputes it. Answering those three questions well matters more than the choice of software."
+          ],
+          "example": "The 812 against 806 discrepancy is explained by six rows with duplicate student names, which took an afternoon to find by counting distinct names rather than rows.",
+          "points": ["Separate the four kinds of information into entities", "Reconcile before migrating, not after", "Settle access rules before the data exists"],
+          "check": "What are the first three decisions this school should take before choosing any software, and who should take each?"
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Backup and recovery",
+      "lessons": [
+        {
+          "title": "A backup that has never been restored is a hope",
+          "minutes": 16,
+          "teach": [
+            "Most organisations believe they have backups. Far fewer have restored one. Until a restore has been performed, on a different machine, with the data checked afterwards, the existence of a file proves only that something was copied.",
+            "The failure modes are consistent: the backup ran but was empty, the backup file is on the same disk as the database, the person who knew how to restore it left, or the backup included the structure but not the records.",
+            "Restore discipline is therefore part of the routine, not a separate project. A monthly test restore into a scratch environment, with a spot check of a few records, converts a hope into a fact.",
+            "Record the steps in writing as you perform them. The document that matters is the one written by the person who does the restore, not the one supplied by a vendor.",
+            "Where a restore takes four hours, that figure is worth knowing before an incident rather than during one, because it determines how much data the organisation can afford to lose. Write that number down; it determines the whole routine that follows."
+          ],
+          "example": "A cooperative discovering its three-month-old backup was corrupt loses three months of contributions, because no restore had been attempted since the backup routine was set up.",
+          "points": ["Test the restore, not the backup", "Keep a copy away from the original", "Know how long a restore takes"],
+          "check": "When did your organisation last restore from a backup, and what did you check afterwards?"
+        },
+        {
+          "title": "What to back up, and how often",
+          "minutes": 15,
+          "teach": [
+            "Back up the data and everything needed to use it: the database itself, any configuration, and the documentation describing the structure. A database restored without its access rules is an exposure rather than a recovery.",
+            "Frequency follows value. Data that changes daily and matters hourly needs a daily backup; reference data that changes twice a year does not. Match the routine to how much work could be repeated without pain.",
+            "Keep more than one copy and more than one location. A backup on the same machine survives a mistake but not a theft or a fire; an offsite or cloud copy survives both, provided somebody can retrieve it.",
+            "Retention needs a decision: how far back you can go, and how long you keep it. Regulatory or contractual requirements often set a floor, and disk space usually sets no ceiling worth worrying about.",
+            "Automate the routine and alert on failure. A backup nobody notices has stopped is the most common way organisations discover, at the worst moment, that they have none. A monthly alert on the backup job is worth more than any recovery plan."
+          ],
+          "example": "A school backs up nightly to a cloud folder and weekly to an external disk kept off-site, retaining twelve weeks, with a monthly restore test recorded in a log.",
+          "points": ["Back up data, configuration and documentation", "Frequency follows how much work you could repeat", "Automate it and alert on failure"],
+          "check": "How much of your organisation's work could be repeated from memory if today's data were lost?"
+        },
+        {
+          "title": "Access, and the mistakes that are not accidents",
+          "minutes": 15,
+          "teach": [
+            "Most data loss is not a disaster. It is a person deleting the wrong records, overwriting a table, or running an update without a WHERE clause. Those mistakes are made by trusted staff, usually under time pressure.",
+            "The controls that prevent them are ordinary. Require a preview query before any bulk change. Restrict delete permission to a small number of people. Keep an audit trail of who changed what, so that a mistake can be traced and reversed.",
+            "Access should follow the work: the clerk who records payments needs to add them, not to delete a member. Granting broad access because it is easier is the habit that makes accidental loss routine.",
+            "Separate the person who can change data from the person who can change the structure. A schema change made casually, such as dropping a column, removes data permanently and silently.",
+            "Keep a written record of who has access to what, reviewed twice a year. People change roles, and permissions granted for a temporary task outlive the task by years. A short list reviewed twice a year is the whole control."
+          ],
+          "example": "A clerk running UPDATE contributions SET amount = 0 without a WHERE clause empties the ledger; an audit trail and a same-day backup are what make it recoverable.",
+          "points": ["Most loss is accidental, by trusted people", "Preview before bulk changes", "Review access twice a year"],
+          "check": "Who in your organisation can delete records, and does each of them need to?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Why split students and grades into two tables rather than one?",
+      "explanation": "Separating them stores the student's details once, so a change is made in one place, and it allows a student to have any number of grades without duplicating their name in every row.",
+      "options": [
+        { "text": "So each fact is stored once and a student can have any number of grades", "correct": true },
+        { "text": "Because databases cannot hold more than one kind of information per table", "correct": false },
+        { "text": "Because it makes the file smaller", "correct": false },
+        { "text": "Because grades are confidential and students are not", "correct": false }
+      ]
+    },
+    {
+      "prompt": "You find twelve records whose school_id references a school that no longer exists. What does this indicate?",
+      "explanation": "Orphan records, caused by the absence of a foreign key constraint and a deletion policy. The constraint should have prevented the deletion or cascaded it deliberately.",
+      "options": [
+        { "text": "A missing foreign key constraint and no deletion policy, allowing references to deleted records", "correct": true },
+        { "text": "That the schools table needs more columns", "correct": false },
+        { "text": "A backup failure", "correct": false },
+        { "text": "That the records should be deleted without further investigation", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A table has columns jan, feb, mar through dec for contributions. Why is this a design problem?",
+      "explanation": "It fixes the number of periods and prevents counting, summing by date, or recording two payments in a month. A variable number of something needs its own table.",
+      "options": [
+        { "text": "It fixes the number of periods and makes querying by date impossible", "correct": true },
+        { "text": "It uses too many columns for the database", "correct": false },
+        { "text": "Month names should be numbers", "correct": false },
+        { "text": "It is fine provided all twelve are always filled", "correct": false }
+      ]
+    },
+    {
+      "prompt": "You must change 300 records. What should you do before running the update?",
+      "explanation": "Run a SELECT with the same WHERE clause to see exactly which rows will be affected. This catches a missing or wrong condition before it destroys data.",
+      "options": [
+        { "text": "Run a SELECT with the same WHERE clause and inspect the rows first", "correct": true },
+        { "text": "Take a backup and proceed, since it can be restored", "correct": false },
+        { "text": "Run it on one record and assume the rest follow", "correct": false },
+        { "text": "Ask another person to watch you type it", "correct": false }
+      ]
+    },
+    {
+      "prompt": "An organisation backs up nightly but has never restored. What is the accurate description of its position?",
+      "explanation": "The existence of backup files proves a copy ran, not that it can be used. Only a tested restore establishes that recovery is possible.",
+      "options": [
+        { "text": "It has copies but no evidence that recovery is possible", "correct": true },
+        { "text": "It has a working recovery capability", "correct": false },
+        { "text": "It is fully protected as long as the files exist", "correct": false },
+        { "text": "It needs more frequent backups before testing matters", "correct": false }
+      ]
+    }
+  ]
+}

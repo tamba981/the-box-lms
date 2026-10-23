@@ -1,0 +1,460 @@
+{
+  "slug": "project-management-professional-diploma",
+  "title": "Project Management Professional Diploma",
+  "program": "PDP",
+  "category": "business-management",
+  "level": "advanced",
+  "credential": "diploma",
+  "priceCents": 5000,
+  "certificateFeeCents": 0,
+  "summary": "Select the right work, govern it across multiple funders and agencies, and take over a programme that is already failing.",
+  "description": "This diploma is for people who are accountable for outcomes they do not directly control: programmes funded by several donors, delivered through contractors and implementing agencies, overseen by boards and watched by ministries with their own political calendars.\n\nAcross six modules it moves from the distinction between project, programme and portfolio, through stakeholder strategy, selection and prioritisation, and programme governance, into crisis leadership and a three-lesson extended case.\n\nThe case concerns a twenty-five million dollar multi-donor infrastructure programme fourteen months into a thirty-six month timeline. Physical progress is 28 percent against a planned 40. Three of five donors have expressed concern and two are threatening to withdraw. The implementing agency's chief executive, a political appointee, is confident in the team. The programme director, a technical expert appointed eight months ago, privately believes the programme will not complete. The government wants visible progress before the next election. The learner is brought in as a turnaround advisor.\n\nThe material is written for Liberian and West African conditions: post-conflict reconstruction, multi-donor funding with conflicting requirements, infrastructure delivered through layered contracting, government implementation with political timelines, and the governance gap between who is accountable and who has authority.",
+  "tags": ["programme management", "portfolio", "governance", "turnaround", "multi-donor", "turnaround leadership"],
+  "outcomes": [
+    "Distinguish project, programme and portfolio questions and accountabilities",
+    "Define and track benefits after the delivery team has gone",
+    "Apply selection criteria that survive a challenge",
+    "Map stakeholders by their power to stop the programme",
+    "Design governance that can take decisions between meetings",
+    "Recognise the indicators that precede a formal variance",
+    "Lead the first two weeks of a turnaround",
+    "Present recovery options with their costs and consequences"
+  ],
+  "caseStudy": "A twenty-five million dollar multi-donor infrastructure programme is fourteen months into a thirty-six month timeline. Progress is 28 percent against 40 percent planned. Three of five donors have expressed concern and two are threatening withdrawal. The implementing agency's chief executive is confident; the programme director privately believes completion is unlikely. The government wants visible progress before an election. The learner is the turnaround advisor. The case runs across the final module.",
+  "modules": [
+    {
+      "title": "Project, programme, portfolio",
+      "lessons": [
+        {
+          "title": "Three levels and the questions each answers",
+          "minutes": 22,
+          "teach": [
+            "A project delivers a defined output in a defined time and budget. A programme delivers an outcome through several related projects. A portfolio is the set of investments an organisation is making, chosen and stopped against a strategy.",
+            "The questions differ accordingly. A project asks whether it can be delivered on time and to specification. A programme asks whether the collection of projects will produce the change that was promised. A portfolio asks whether these things should be done at all.",
+            "Confusing the levels produces the commonest governance failure: a steering committee reviewing task progress on a project whose justification has collapsed, because nobody at the table is empowered to ask whether it should continue.",
+            "Programme management is where dependency lives. Two projects that each look healthy can fail together because one was supposed to deliver the training before the other installed the system, and dependency is invisible at project level.",
+            "Portfolio discipline is about stopping things. An organisation that never cancels has a portfolio by accident, and the rational response to new evidence, which is to reallocate, is unavailable to it.",
+            "Know which level you are operating at before accepting accountability. A project manager held responsible for benefits is being blamed for outcomes they do not control, while a programme manager reporting task status is doing somebody else's work."
+          ],
+          "example": "A health programme reports all four projects on schedule while immunisation coverage has not moved, because the projects delivered training, cold rooms, vehicles and data systems in a sequence nobody owned.",
+          "points": [
+            "Project, programme and portfolio ask different questions",
+            "Dependencies live at programme level",
+            "Portfolio discipline means stopping things"
+          ],
+          "check": "Name a project you manage and the programme outcome it is supposed to serve."
+        },
+        {
+          "title": "Benefits and the register that outlives the team",
+          "minutes": 22,
+          "teach": [
+            "A benefits register lists the outcomes an investment is meant to produce, how each will be measured, who owns it and when it is expected. It is the document that survives the delivery team and answers the question a funder eventually asks.",
+            "The distinction between output and benefit is where registers fail. Kilometres of road built is an output, while reduced journey time to market is the benefit, and only the second can justify the money.",
+            "Every benefit needs an owner outside the project. Benefits usually materialise after closure, in an operating department, and an owner inside the project disappears with the team at handover.",
+            "Measure the baseline before implementation. A benefit without a starting position cannot be compared with anything, and the absence of a baseline is the most common reason benefits claims are discounted by everyone who reads them.",
+            "Review benefits at six and twelve months after closure. This is the step almost universally skipped and the only evidence that the investment achieved anything, which is what makes the next funding round possible.",
+            "Accept that some benefits will not materialise and record it. A register that reports what actually happened, including the disappointments, is far more credible than one whose numbers are never revisited."
+          ],
+          "example": "A road programme's register lists 42 kilometres sealed. Rewritten as journey time falling from four hours to ninety minutes with a projected fall in transport cost, it can be measured after the team has gone.",
+          "points": [
+            "Benefits are outcomes, not outputs",
+            "Owners must sit outside the delivery team",
+            "Review at six and twelve months after closure"
+          ],
+          "check": "Take one benefit from your programme and write its baseline, measure and owner."
+        },
+        {
+          "title": "Portfolio selection and the discipline of stopping",
+          "minutes": 22,
+          "teach": [
+            "Portfolio selection is the allocation of a fixed capacity across competing claims. The constraint is rarely money alone; it is the number of things the organisation can genuinely deliver at once with the people it has.",
+            "Rank rather than score. A scored list of twenty initiatives produces a ranking nobody believes, while a short explicit ordering with the reasons attached can be defended and acted upon.",
+            "Fund the mandatory separately. Statutory obligations, contractual commitments and safety work should be visible as a block, so that discretionary choices are made with the real remaining capacity rather than against the whole budget.",
+            "Include the cost of stopping. A cancelled project still consumes exit costs, contract settlements and credibility, and a portfolio decision that ignores them will find the saving smaller than expected.",
+            "Revisit at fixed points rather than continuously. A portfolio reviewed every month produces churn and no project finishes, while one reviewed twice a year with a clear decision rule reallocates without destabilising delivery.",
+            "Record the decision and the reason. The most useful document in a portfolio review is the record of what was stopped and why, because it discourages the quiet reinstatement of an initiative that has already been judged."
+          ],
+          "example": "An agency has eleven initiatives and capacity for six. Three are stopped, one is deferred, and the remaining seven are delivered, against a previous year in which all eleven progressed slowly and none finished.",
+          "points": [
+            "The constraint is delivery capacity, not only money",
+            "Fund mandatory work as a visible block",
+            "Record what was stopped and why"
+          ],
+          "check": "List your current initiatives and the number your organisation can actually deliver this year."
+        }
+      ]
+    },
+    {
+      "title": "Stakeholder strategy in complex projects",
+      "lessons": [
+        {
+          "title": "Mapping power and interest under pressure",
+          "minutes": 22,
+          "teach": [
+            "A stakeholder map is an assessment of who can stop the programme, who can slow it, who must approve a variation and who bears the consequence if it fails. It is not a list of everyone with an interest.",
+            "Map on influence and interest. The high-influence, low-interest group is the dangerous quadrant, because they are not in the meetings and will intervene late, once and decisively.",
+            "Identify the blocking minority. One dissenting donor, one landowner or one district authority may be able to halt progress without being able to advance it, and that asymmetry deserves specific attention.",
+            "Distinguish the stakeholder from the representative. The official in the room may not speak for the ministry, and commitments that assume they do evaporate when the file reaches somebody senior who was never consulted.",
+            "Manage relationships continuously rather than at reporting points. A stakeholder who hears from the programme only when something is required has no reason to extend goodwill when something goes wrong.",
+            "Revisit the map quarterly and whenever the political cycle changes. Influence moves quickly around an election, and a map drawn at inception describes a programme that has not yet started."
+          ],
+          "example": "A programme maps a district superintendent as low interest and does not brief her. At land acquisition she exercises a veto nobody had identified, and six weeks are lost.",
+          "points": [
+            "Map who can stop you, not who is friendly",
+            "Watch the influential and uninterested",
+            "Revisit when the political cycle moves"
+          ],
+          "check": "Name the three people who could stop your programme next month and when you last spoke to each."
+        },
+        {
+          "title": "Multi-donor and multi-agency environments",
+          "minutes": 23,
+          "teach": [
+            "Several funders on one programme means several reporting formats, procurement thresholds, audit requirements, budget lines and definitions of success, and the conflicts are structural rather than personal.",
+            "Some conflicts cannot be reconciled and must be managed. Where one donor prohibits a payment that another requires, the programme needs a documented position agreed with both rather than an attempt to satisfy each in private.",
+            "A single consolidated reporting calendar is the most useful instrument. One narrative, one financial report and one results framework, with donor-specific annexes only where unavoidable, prevents the team spending its week producing versions of the same information.",
+            "Financial rules are where risk concentrates. Different eligibility rules mean a cost chargeable to one funder is ineligible for another, and a pooled arrangement must define which rule governs which expenditure before any is incurred.",
+            "Escalate conflicts to a joint forum rather than conducting bilateral negotiations. Separate conversations produce separate promises, and the contradictions are discovered at the first audit.",
+            "Document every agreed interpretation in writing. The person who agreed it will have moved on before the audit arrives, and the file will be the only witness to a decision that was entirely reasonable at the time."
+          ],
+          "example": "Two donors require different procurement thresholds for the same contract. A joint written position applies the stricter threshold to all expenditure, and the audit finds no conflicting treatment.",
+          "points": [
+            "Manage conflicts rather than trying to reconcile them",
+            "One consolidated reporting calendar",
+            "Escalate to a joint forum, never bilaterally"
+          ],
+          "check": "List your funders' requirements that currently contradict each other."
+        },
+        {
+          "title": "Political timelines and delivery timelines",
+          "minutes": 23,
+          "teach": [
+            "A government's political calendar runs on elections, appointments and public expectation, while a construction programme runs on procurement, seasons and supply. The two are never aligned, and pretending they are is where programmes lose credibility.",
+            "A deadline set for political reasons is real even when it is not technically achievable. The professional response is not to dispute it but to establish what can credibly be delivered by that date and to be honest about what cannot.",
+            "Visible progress and substantive progress are different products. A completed kilometre of sealed road is visible and may represent very little of the programme's value, while a completed drainage system is essential and photographically dull.",
+            "Choose the visible components deliberately. Where a political milestone exists, sequence the work so that something demonstrable is genuinely complete rather than partially started everywhere, which is the failure mode of trying to satisfy a date.",
+            "Protect the technical sequence from the political one. Compressing foundations to show a wall is how a structure fails later, and the argument that carries weight with a political sponsor is the risk of a public failure after the event, not the elegance of the method.",
+            "Record what was promised and on what basis. Where a date was accepted with a stated condition, the record protects both the programme and the official who accepted it when the condition does not hold."
+          ],
+          "example": "A ministry requires visible progress before an election. The programme brings forward one complete road section rather than starting four, and the visible result is real rather than staged.",
+          "points": [
+            "Political deadlines are real; dispute the content, not the date",
+            "Deliver something complete rather than everything partly",
+            "Record the conditions attached to any accepted date"
+          ],
+          "check": "Name the political deadline affecting your programme and what could genuinely be complete by then."
+        }
+      ]
+    },
+    {
+      "title": "Selection and prioritisation",
+      "lessons": [
+        {
+          "title": "Criteria that survive a challenge",
+          "minutes": 22,
+          "teach": [
+            "Selection criteria are tested when a project is rejected. If the sponsor of the rejected proposal can argue that the criteria were applied inconsistently or chosen to produce the answer, the whole process loses authority for the next cycle.",
+            "Choose criteria before the proposals exist and publish them. Strategic fit, deliverability, cost, risk and the capability to execute are the standard set, and each needs a definition specific enough to be applied the same way twice.",
+            "Weight the criteria deliberately. Deliverability and capability deserve weight in proportion to the organisation's history of not finishing things, and an organisation that has never completed a project of this scale should weight execution heavily.",
+            "Score independently before discussing. A group that scores together converges on the view of the most senior person present, and the resulting score records a hierarchy rather than an assessment.",
+            "Keep a record of the rejected proposals and the reasons. The record is what allows the organisation to explain a decision a year later, and it is also how it notices that the same proposal keeps returning.",
+            "Review the criteria when they stop discriminating. Where every proposal scores well, the criteria have become a formality, and the honest conclusion is that the real decision is being taken somewhere else."
+          ],
+          "example": "A selection panel scores independently before discussion. The project favoured by the chair scores lowest on deliverability, and the ranking changes once the scores are visible.",
+          "points": [
+            "Publish criteria before proposals exist",
+            "Weight execution capacity heavily",
+            "Score independently, then discuss"
+          ],
+          "check": "Write your five selection criteria and their weights, then check whether they were set before the proposals."
+        },
+        {
+          "title": "Appraisal, optimism and the strategic case",
+          "minutes": 22,
+          "teach": [
+            "Appraisal is systematically optimistic. Costs are underestimated because the estimator works from an incomplete design, benefits are overstated because the sponsor writes them, and duration is underestimated because nobody planned for the approvals.",
+            "Reference class forecasting corrects for this. Ask how long comparable projects actually took and what they actually cost rather than how long this one is planned to take, and adjust the estimate to that evidence.",
+            "Separate the strategic case from the economic case. A project may be strategically necessary, such as a road that connects a productive region, and still fail an economic test at the price proposed, and the honest response is to say both.",
+            "Test the sensitivity that matters. A project whose return collapses when traffic is twenty percent lower is a project whose return depends on a traffic forecast nobody has validated, and that should be the headline rather than a footnote.",
+            "Include the costs that fall outside the project budget: operating costs after handover, the ministry's capacity to maintain, and the displaced alternative. A project that is cheap to build and impossible to maintain is expensive.",
+            "Appraise the option of doing it later. Deferral is a legitimate choice and it has a value, because information improves and the cost of capital may fall, and an appraisal that compares only build against not build has removed an option."
+          ],
+          "example": "An appraisal estimates 24 months. Comparable programmes in the region took 41. Rebased on that reference class, the economic case reverses and the project is re-phased rather than cancelled.",
+          "points": [
+            "Correct estimates against comparables, not intentions",
+            "State strategic and economic cases separately",
+            "Include post-handover operating costs"
+          ],
+          "check": "Find how long comparable projects actually took against how long yours is planned to take."
+        },
+        {
+          "title": "Sequencing under a fixed budget",
+          "minutes": 21,
+          "teach": [
+            "Sequencing decides which work is done when, and it determines whether the budget buys a completed asset or a collection of half-finished ones. The technical order is usually fixed by dependency, and the strategic order is where judgement lives.",
+            "Fund whole components rather than equal shares of every component. A programme that spends its budget proportionally across six sites delivers six incomplete sites, and none can be handed over or maintained.",
+            "Sequence to release benefits early where it is possible. A first completed facility that can operate teaches the programme what the remaining ones will cost and gives the funders evidence that the model works.",
+            "Protect the enabling works. Access, drainage, power and water are the items cut when the budget tightens, and they are the items whose absence prevents everything else from functioning afterwards.",
+            "Plan the procurement lead times into the sequence. A tender that takes four months is part of the schedule, and a sequence that assumes month one can start work on month-two funding has ignored the constraint that will actually delay it.",
+            "Agree the sequence with the funders in writing. A sequence imposed by the implementing agency and discovered by the donors at a review will be renegotiated at the worst possible moment."
+          ],
+          "example": "A programme with budget for three of six sites delivers the first site completely with power and drainage, and the funders release the next tranche on the evidence of a working facility.",
+          "points": [
+            "Fund whole components, not shares of all",
+            "Sequence to release benefit early",
+            "Agree the sequence in writing with funders"
+          ],
+          "check": "Write the sequence your budget actually buys and whether it delivers one finished asset."
+        }
+      ]
+    },
+    {
+      "title": "Programme governance",
+      "lessons": [
+        {
+          "title": "Governance that can decide",
+          "minutes": 22,
+          "teach": [
+            "Governance is the arrangement that says who may approve a change, who may commit money, who resolves an escalation and what happens when the programme director and the sponsor disagree.",
+            "A committee without decision rights is a briefing session. If every significant matter must go to a donor board or a ministry, the committee's real function is to receive information, and the decision cycle belongs somewhere else entirely.",
+            "Define tolerances rather than seeking approval for everything. A sponsor who agrees in advance that time may vary by two weeks and cost by five percent without returning to the committee removes weeks of delay and a great deal of reserved attention.",
+            "Escalation must terminate. A structure where decisions travel upward and nothing returns produces a queue, and the queue becomes the real schedule while the plan becomes a description of what would have happened.",
+            "Separate assurance from delivery. The person who assures the programme, whether internal audit, a funder's monitor or a technical panel, must not report to the person delivering it, or assurance becomes confirmation.",
+            "Record decisions with the basis on which they were taken. When a decision is examined later, the minute showing what was known and who decided is the only defence available to everybody involved."
+          ],
+          "example": "A steering committee meets quarterly and approves nothing between meetings. A two-week variation waits eleven weeks, and the schedule absorbs a delay larger than the variation itself.",
+          "points": [
+            "Agree tolerances instead of seeking constant approval",
+            "Escalation needs a route back down",
+            "Assurance must not report to delivery"
+          ],
+          "check": "Write the tolerances your sponsor has actually agreed, as opposed to assumed."
+        },
+        {
+          "title": "Assurance, escalation and the board's role",
+          "minutes": 22,
+          "teach": [
+            "Assurance answers whether the programme is being delivered as reported and whether the risks are understood. It is a second opinion, and it is worthless if it is produced by the team that produced the first one.",
+            "Three sources are available: internal audit on controls and process, technical review on engineering or design, and the funders' own monitoring missions. Each sees a different part of the programme, and none sees the whole.",
+            "Use the assurance findings rather than receiving them. A programme that accumulates assurance reports and acts on none is paying for a document rather than a service, and the pattern is visible to the funders.",
+            "Escalate on triggers agreed in advance. Cost variance beyond a stated percentage, a slip against a critical milestone, a donor's formal concern or a safety incident should each produce a defined response rather than a discussion about whether to worry.",
+            "Give the board the decision, not the narrative. A board pack that describes activity and ends with a request for noting has given the board nothing to do, and boards that are given nothing to do eventually disengage.",
+            "Protect the board's time for the questions that only it can answer: whether the programme should continue in its current form, whether the funding structure still works, and whether the leadership is right for the next phase."
+          ],
+          "example": "A funder's monitoring mission reports weak procurement controls. The report is received and filed. Eight months later the same issue is the reason a tranche is withheld.",
+          "points": [
+            "Assurance must come from outside the delivery team",
+            "Agree escalation triggers in advance",
+            "Give the board a decision rather than a narrative"
+          ],
+          "check": "List the assurance reports your programme has received and what changed as a result."
+        },
+        {
+          "title": "Reporting that serves a funder and a ministry",
+          "minutes": 22,
+          "teach": [
+            "The same programme must satisfy a donor's results framework and a ministry's political requirements, and a single report written for one will be misread by the other. The solution is one dataset with two presentations.",
+            "Build the dataset first: physical progress by component, expenditure against budget, procurement status, risks and issues. That set serves both audiences and prevents the two reports from contradicting each other.",
+            "The donor version emphasises the results framework, expenditure eligibility and the risk register, because those are the questions their systems score. The ministry version emphasises completion dates, visible progress and the political commitments made.",
+            "Never let the two versions carry different numbers. A discrepancy between what a funder was told and what a ministry was told is discovered eventually, and it discredits the programme entirely at the worst moment.",
+            "Report bad news in the same format as good news. A report that only presents problems in a separate annex teaches the reader that the summary cannot be trusted, and the reader responds by reading only the annex.",
+            "Keep the reporting cycle shorter than the decision cycle. A monthly report arriving after the monthly meeting is a history document, and the programme is then governed on whatever was said in the corridor."
+          ],
+          "example": "A programme produces one dataset and two covers. The donor sees the results framework and the risk register, the ministry sees completion dates and physical progress, and the figures agree.",
+          "points": [
+            "One dataset, two presentations",
+            "Never let the versions disagree on numbers",
+            "Report faster than the decision cycle"
+          ],
+          "check": "Compare what your last donor report and ministry report each said about the same milestone."
+        }
+      ]
+    },
+    {
+      "title": "Crisis project leadership",
+      "lessons": [
+        {
+          "title": "Recognising a programme that is failing",
+          "minutes": 23,
+          "teach": [
+            "Programmes fail slowly and then visibly. The early signals are behavioural: decisions waiting, approvals outstanding, a subcontractor not mobilised, a key role vacant for months, and a team that has stopped raising problems.",
+            "Percent complete is the least informative measure near the end. Ninety percent complete for three consecutive months describes a programme that has stopped measuring, and the remaining work is almost always larger than the figure implies.",
+            "Watch the trend of float and of rework. A critical path with no remaining float will slip at the next problem, and rising rework signals that information quality or supervision has fallen before the schedule shows it.",
+            "Compare reported progress against money spent. Where expenditure is ahead of physical progress by a widening margin, either the valuation is optimistic or the work is not being done as described, and both require examination.",
+            "Listen for the sentence that signals a failing programme: we are confident the team will catch up. Confidence is not a recovery plan, and the absence of one is the finding.",
+            "Ask the people doing the work. A supervisor asked what worries them will name the problem in plain language months before it appears in any report, and the conversation costs ten minutes."
+          ],
+          "example": "A programme reports 28 percent physical progress against 41 percent of the budget spent. A schedule review finds no float on the critical path and two key roles vacant for five months.",
+          "points": [
+            "Behavioural signals precede formal variance",
+            "Compare spend against physical progress",
+            "Confidence is not a recovery plan"
+          ],
+          "check": "Compare your spend percentage with your physical progress percentage and explain the gap."
+        },
+        {
+          "title": "The first two weeks of a turnaround",
+          "minutes": 23,
+          "teach": [
+            "The first two weeks are for establishing facts, not for announcing a plan. A new leader who declares a rescue before understanding the programme makes the team defensive and the funders alarmed, and neither produces information.",
+            "Establish what physically exists. Drive the route, walk the sites, count the completed works and photograph them. The plan is a claim about intention; the ground is a fact, and the gap between them is the starting position.",
+            "Establish what is contracted and what is owed. Contracts, variations, unpaid invoices, disputed claims and commitments made verbally are the second fact set, and the financial position is usually worse than the report because the report follows the plan.",
+            "Talk to the funders individually before talking to them together. Each will say something in private that they will not say in a joint forum, and knowing which funder is closest to withdrawing determines the order of the work.",
+            "Protect the source of the bad news. The programme director who privately said completion was unlikely is the most valuable person in the room, and whatever happens to them after the first fortnight determines whether anyone tells the truth again.",
+            "Do not change anything material in the first two weeks. Suspend one commitment if you must, but a leader who restructures before understanding leaves the programme with less knowledge than it started with."
+          ],
+          "example": "A turnaround advisor spends the first fortnight on site, in the contract files and in individual meetings with five funders before proposing anything, and finds two variations that were never documented.",
+          "points": [
+            "Facts before plans",
+            "Contracts and commitments are the second fact set",
+            "Protect the person who told you the truth"
+          ],
+          "check": "List what you would physically verify in your first week on a programme reported as healthy."
+        },
+        {
+          "title": "Recovery options and what each actually buys",
+          "minutes": 23,
+          "teach": [
+            "Recovery options are usually three: complete to the original scope with more money and time, reduce the scope and complete what matters, or stop and close out. Each is defensible and each has a cost that must be stated.",
+            "More money and time preserves the outcome and requires the funders to accept a re-baseline. It is the right answer when the scope is genuinely necessary and the delivery risk is now understood, and it fails when the underlying capability is still absent.",
+            "Reducing scope delivers something real within the available money and time. It requires a decision about what to abandon, made by the people who will not receive it, and that decision is political rather than technical even when it is presented as neither.",
+            "Stopping is legitimate and rarely considered, because it is understood as failure. A programme that will deliver an asset the ministry cannot maintain may be better stopped, and the cost of stopping should be compared honestly with the cost of finishing something unusable.",
+            "Price the options against the same test. Each should state what is delivered, by when, at what cost, with what remaining risk and with what consequence if the assumptions fail, and a comparison on any single dimension selects the wrong option.",
+            "Recommend one option and say why. A report that presents three options and no recommendation has transferred the decision to people with less information, and that is an abdication rather than neutrality."
+          ],
+          "example": "A programme presents complete, reduce and stop with cost, delivery date, remaining risk and consequence. The board chooses reduction, and the abandoned component is agreed with the ministry in writing.",
+          "points": [
+            "Complete, reduce or stop: all three are real",
+            "Price every option on the same dimensions",
+            "Recommend one and say why"
+          ],
+          "check": "Write the three recovery options for your programme with one line of cost and consequence each."
+        }
+      ]
+    },
+    {
+      "title": "The failing programme",
+      "lessons": [
+        {
+          "title": "Case part one: what the numbers say",
+          "minutes": 23,
+          "teach": [
+            "A twenty-five million dollar multi-donor infrastructure programme is fourteen months into thirty-six. Physical progress is 28 percent against 40 percent planned. Three of five donors have expressed concern and two are threatening to withdraw.",
+            "The first finding is usually arithmetic rather than judgement. To finish the remaining 72 percent in twenty-two months requires a delivery rate roughly double the rate achieved so far, and the programme has no evidence that such a rate is achievable.",
+            "The second finding is where the delay sits. If it is concentrated in procurement, the recovery is about contracting; if it is in land access, it is about the state; if it is in a single contractor's performance, it is about replacement. The response differs completely.",
+            "The third is the financial position. Expenditure ahead of physical progress indicates either optimistic valuation or undelivered work, and the difference matters enormously when a funder examines it.",
+            "The fourth is the correlation between the political calendar and the programme calendar. Twenty-two months remaining against an election in twelve means the government's requirement will arrive before the programme's completion, and the two will collide.",
+            "The honest summary at the end of this analysis is a statement of what cannot be achieved. A programme that cannot complete in the time available needs a re-baseline or a reduction, and the advisor's first service is to say so before the funders do."
+          ],
+          "example": "A 25 million dollar programme is at 28 percent with 22 months left. Completion requires double the achieved delivery rate, and no evidence supports that rate.",
+          "points": [
+            "Check the arithmetic before the narrative",
+            "Locate where the delay actually sits",
+            "State what cannot be achieved, early"
+          ],
+          "check": "For this case, write the one sentence that states what cannot be achieved."
+        },
+        {
+          "title": "Case part two: the interests in the room",
+          "minutes": 23,
+          "teach": [
+            "Five donors with three concerned and two threatening withdrawal are not a single stakeholder. The two threatening withdrawal may be the least committed, and the three expressing concern may be the ones whose exit would be decisive.",
+            "The implementing agency's chief executive, a political appointee, is confident in the team. That confidence may be genuine, may be a position taken for political reasons, or may reflect information that has been filtered before reaching him.",
+            "The programme director, appointed eight months ago, privately believes completion is unlikely. That assessment is the most valuable information available and the most fragile, because it contradicts the person who appointed him.",
+            "The government wants visible progress before the next election. That is a legitimate requirement from an elected authority and it constrains what the advisor can recommend, because a technically optimal plan that delivers nothing visible before the election will not be approved.",
+            "The advisor has no formal authority over any of these parties. Influence comes from the analysis, from the funders' confidence and from being the only person in the room with no stake in the outcome.",
+            "The sequencing follows the interests: secure the funders' continued participation first, because without them no plan matters, then reconcile the chief executive with the programme director's assessment, then agree with the government what visible progress can actually mean."
+          ],
+          "example": "In a stumbling 25 million dollar programme, the two donors threatening exit turn out to be the least exposed, while one of the three expressing concern holds the tranche that matters.",
+          "points": [
+            "Five donors are five different stakeholders",
+            "The private assessment is the most valuable and most fragile",
+            "Secure funders before proposing a plan"
+          ],
+          "check": "For this case, name the order in which you would meet the five donors and why."
+        },
+        {
+          "title": "Case part three: the turnaround plan and the ask",
+          "minutes": 23,
+          "teach": [
+            "The plan begins with what has been established rather than with what will be done. Progress is 28 percent, the delivery rate required to complete is double the rate achieved, and the delay sits in two named causes with named remedies.",
+            "The recommendation is a re-baseline with reduced scope rather than an extension of the same scope, because the funders' confidence is the binding constraint and an extension asks them to believe the same forecast that has already failed.",
+            "The visible component is chosen to be genuinely complete before the election. That is what allows the government to support the plan, and it is honest because the component is finished rather than staged.",
+            "The governance change is part of the plan rather than an afterthought: monthly joint forum with decision rights, agreed tolerances for the programme director, and an independent technical monitor reporting to the funders rather than to the agency.",
+            "The ask is specific. A revised results framework with a stated completion date, a release of the next tranche conditional on two named milestones, and a written acceptance from the ministry of the reduced scope and of what will not be delivered.",
+            "The plan closes with what happens if the assumptions fail. A re-baselined programme that has already stated the conditions under which it would be stopped has given its funders a reason to continue, because continuing is now a series of decisions rather than an act of faith."
+          ],
+          "example": "The advisor proposes a re-baseline with reduced scope, one component genuinely complete before the election, monthly decision-making governance and a conditional tranche release.",
+          "points": [
+            "Lead with what has been established",
+            "Offer a re-baseline, not an extension of a failed forecast",
+            "Make the ask specific and conditional"
+          ],
+          "check": "For this case, write the three things you would ask the funders to approve in one meeting."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A programme is 20 percent over budget and 15 percent behind schedule, but the deliverables are excellent. Should it be cancelled, continued or expanded?",
+      "explanation": "The answer depends on whether the remaining benefits still justify the remaining cost, what the alternatives are, and whether the capability that produced good deliverables at that overrun can be repeated. Cost and schedule alone do not decide.",
+      "options": [
+        { "text": "It depends on whether remaining benefits justify remaining cost, and whether that performance can be repeated", "correct": true },
+        { "text": "It should be continued because the deliverables are excellent", "correct": false },
+        { "text": "It should be cancelled because overruns indicate poor management", "correct": false },
+        { "text": "It should be expanded because the team has demonstrated capability", "correct": false }
+      ]
+    },
+    {
+      "prompt": "You inherit a programme from a predecessor who left under unclear circumstances. The team is demoralised, the client is angry, and the file is a mess. What is your first week?",
+      "explanation": "The file and the report are claims; the site, the contracts and the payments are facts. Establishing those before announcing anything prevents a plan built on a position that has already collapsed.",
+      "options": [
+        { "text": "Establish the physical, contractual and financial facts before announcing any plan", "correct": true },
+        { "text": "Announce a recovery plan immediately to restore client confidence", "correct": false },
+        { "text": "Restructure the team so that a fresh start is visible", "correct": false },
+        { "text": "Commission an independent audit before speaking to anyone", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A political stakeholder wants quick wins and a technical stakeholder wants the fundamentals fixed first. Can you serve both?",
+      "explanation": "Partly, by choosing which component completes first rather than by starting everything. A genuinely finished visible component serves the political need and is honest, while the fundamentals continue in sequence behind it.",
+      "options": [
+        { "text": "Partly, by completing one visible component properly while the foundations proceed in sequence", "correct": true },
+        { "text": "No, and the technical stakeholder should prevail because the asset must function", "correct": false },
+        { "text": "Yes, by starting all components at once so that progress is visible everywhere", "correct": false },
+        { "text": "No, and the political stakeholder should prevail because funding depends on them", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case, the programme director privately says completion is unlikely while the chief executive is confident. What should the advisor do first?",
+      "explanation": "That private assessment is the most valuable and most fragile information available. Protecting the person who provided it, and verifying it against the site and the contracts, makes everything else possible.",
+      "options": [
+        { "text": "Protect the programme director and verify the assessment against physical and contractual facts", "correct": true },
+        { "text": "Report the disagreement to the funders immediately as evidence of leadership failure", "correct": false },
+        { "text": "Accept the chief executive's confidence, since the appointee carries the accountability", "correct": false },
+        { "text": "Ask the programme director to repeat the assessment in front of the chief executive", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A programme has 22 months left, is at 28 percent, and needs 72 percent more. What does the arithmetic tell you?",
+      "explanation": "Completing on the original plan requires roughly double the delivery rate achieved so far, and nothing in the programme's history supports that. The honest conclusion is that the original plan cannot be achieved as stated.",
+      "options": [
+        { "text": "That completing as planned requires double the achieved rate, which the programme has no evidence it can sustain", "correct": true },
+        { "text": "That the programme needs additional funding to accelerate", "correct": false },
+        { "text": "That the progress figures are probably wrong and should be re-measured", "correct": false },
+        { "text": "That the remaining work is smaller because the early work is the hardest", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why is a re-baseline often a stronger recommendation than an extension?",
+      "explanation": "An extension asks funders to believe the forecast that has already failed. A re-baseline with reduced scope provides new evidence, a credible rate and a decision they can take, which is what confidence actually depends on.",
+      "options": [
+        { "text": "An extension asks funders to believe a forecast that has already failed, while a re-baseline offers new evidence", "correct": true },
+        { "text": "A re-baseline is usually cheaper for the implementing agency", "correct": false },
+        { "text": "Extensions are not permitted under most donor agreements", "correct": false },
+        { "text": "A re-baseline avoids the need to report the original failure", "correct": false }
+      ]
+    }
+  ]
+}

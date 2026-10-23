@@ -1,0 +1,325 @@
+{
+  "slug": "graphic-design-using-adobe-photoshop",
+  "title": "Graphic Design Using Adobe Photoshop",
+  "program": "FCP",
+  "category": "design",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 1000,
+  "summary": "Use layers, selections and type to produce a graphic that looks right on a phone screen and survives a local print shop.",
+  "description": "Photoshop is a large program that most people use for a small number of tasks: cutting something out of a photo, putting text on an image, and preparing a file that will print correctly.\n\nThis course concentrates on those tasks and on the few ideas that make everything else easier. It covers the layer model that the whole program is built on, the selection tools and why a hard edge is usually wrong, the difference between screen and print resolution, and what actually happens when a flyer designed at the wrong size reaches a Monrovia print shop.\n\nIt also covers the less technical part of design work: asking a client for usable files, explaining why a logo sent as a small JPEG cannot be enlarged, and resisting the retouching request that would misrepresent a product.\n\nThe case study concerns a small bakery that wants a flyer for a promotion. The owner has a phone photograph of a cake, a logo designed by a cousin and saved as a low-resolution JPEG, no design budget, and a print shop that needs a file ready to run.\n\nNo previous design experience is assumed. The course is written for someone producing marketing material for a small business or an NGO campaign without a design department.",
+  "tags": ["photoshop", "graphic design", "layers", "print", "resolution", "branding"],
+  "outcomes": [
+    "Explain what Photoshop is suited to and when another tool is better",
+    "Work with layers rather than editing a flattened image",
+    "Make and refine selections with appropriate edges",
+    "Distinguish screen resolution from print resolution",
+    "Prepare a file with correct size, bleed and colour for a printer",
+    "Produce legible graphics for a phone screen",
+    "Ask a client for usable source assets"
+  ],
+  "caseStudy": "A small bakery wants a flyer for a promotion. The owner supplies a cake photograph taken on a phone, a logo designed by a cousin and saved as a low-resolution JPEG, and a requirement to print at a Monrovia print shop, with no design budget. Students must decide which design decisions matter most and what to tell the owner.",
+  "modules": [
+    {
+      "title": "The workspace and the layer model",
+      "lessons": [
+        {
+          "title": "What Photoshop is for, and what it is not",
+          "minutes": 16,
+          "teach": [
+            "Photoshop is a raster editor. It works on a grid of pixels, which makes it the right tool for photographs, textures and the kind of blended composition that has no clean edges.",
+            "It is the wrong tool for a logo, a form or a document that must stay sharp at any size. Those belong in a vector program, because vector shapes are described by mathematics and can be enlarged without loss.",
+            "The consequence appears when somebody designs a logo in Photoshop and later needs it on a banner. Enlarging the file produces a soft edge, and the fix is to redraw it rather than to sharpen it.",
+            "Photoshop is also the wrong tool for a long document or a layout with many pages of text. It will do it, slowly and painfully, and the file will be unmaintainable by anybody else.",
+            "Knowing the boundary saves an enormous amount of time. A designer who can say that this belongs elsewhere is more useful than one who can make the wrong tool produce something acceptable.",
+            "For most small organisations the tool that matter most is the one that produces the right file at the right resolution, and the choice of program matters far less than getting those two things correct."
+          ],
+          "example": "A shop logo is built in Photoshop at 800 pixels wide. When it is needed on a 3-metre banner, the file is unusable, and redrawing it in a vector tool takes longer than if it had been done properly at the start.",
+          "points": [
+            "Photoshop edits pixels, vector tools describe shapes",
+            "Wrong tool for logos, forms and long documents",
+            "Resolution decisions made at the start cannot be fixed later"
+          ],
+          "check": "List the design files your organisation uses and mark which are pixel-based when they should not be."
+        },
+        {
+          "title": "Layers: the idea the program is built on",
+          "minutes": 17,
+          "teach": [
+            "A layer is a transparent sheet holding one element: a photo, some text, a shape, a colour. They stack, and what you see is the combination from the bottom up.",
+            "Working with layers means every element remains editable. Move the text, change the colour, replace the photograph, and nothing else is destroyed, which is the entire reason the program is useful.",
+            "Never flatten until you must. A flattened image is a photograph of your design, and the client who asks for the headline in a different colour will require you to rebuild the whole thing.",
+            "Name the layers and group them. A file with fourteen layers called Layer 1, Layer 2 and Layer 3 is one that only its author can edit, and the author will have forgotten the order in a month.",
+            "Use layer masks rather than the eraser. A mask hides part of a layer without deleting it, so a decision made badly can be reversed, and a soft edge can be adjusted later.",
+            "Opacity and blend modes are the last refinements, not the first. Trying to fix a composition by making a layer 40 percent transparent usually means the composition was wrong."
+          ],
+          "example": "A flyer is saved with all layers intact. The client asks for the price to change twice and the photograph to be swapped, and each request takes two minutes rather than an hour.",
+          "points": [
+            "Every element stays on its own layer",
+            "Do not flatten a file you may need to change",
+            "Masks hide; the eraser destroys"
+          ],
+          "check": "Open a file you made and count how many layers it has, and whether they are named."
+        },
+        {
+          "title": "Resolution, size and colour decide before you design",
+          "minutes": 18,
+          "teach": [
+            "Resolution is the number of pixels available, and it is fixed at the start. A design made at 800 pixels wide cannot become a printed poster, and no filter recovers information that was never captured.",
+            "For print, 300 pixels per inch at the final physical size is the working standard. An A5 flyer is 148 by 210 millimetres, which at 300 ppi is roughly 1,748 by 2,480 pixels, and that number is the file size you create.",
+            "For a phone screen, pixel dimensions are what matter and 300 ppi is meaningless. A social media image is defined by the platform's recommended pixels, and a 1080 by 1080 file is plenty whatever its stated resolution.",
+            "Colour mode differs between the two destinations. Screens use RGB, and commercial printing uses CMYK, which cannot reproduce some bright screen colours, so a vivid green on screen may print dull.",
+            "Set the document up before placing anything in it. Changing the resolution afterwards resamples the image, and resampling downward loses detail while resampling upward invents it.",
+            "Bleed is the extra margin a printer trims off, usually a few millimetres. Without it, a background designed to the edge leaves a white sliver when the guillotine is slightly off, which it always is."
+          ],
+          "example": "A flyer is designed at 1080 by 1080 for social media and later requested as A4 print. Rather than enlarging it, the layout is rebuilt at 2,480 by 3,508 pixels with 3 millimetres of bleed.",
+          "points": [
+            "Resolution is fixed at the start",
+            "300 ppi for print at final size; pixels for screen",
+            "RGB for screens, CMYK for print, bleed for trimming"
+          ],
+          "check": "Calculate the pixel dimensions for one printed item at 300 ppi, including 3mm bleed."
+        }
+      ]
+    },
+    {
+      "title": "Selections, images and type",
+      "lessons": [
+        {
+          "title": "Selections and why the edge matters",
+          "minutes": 17,
+          "teach": [
+            "A selection defines what an edit will affect. Everything in Photoshop becomes easier once you can select precisely what you mean, and everything becomes frustrating when you cannot.",
+            "Use the right tool for the shape. Rectangular and elliptical selections for geometric areas, the lasso for rough freehand work, and the object and subject selection tools for a person or a product on a contrasting background.",
+            "The edge is where a cut-out is judged. A hard edge looks pasted, while a slightly soft edge looks natural, and the refine options that soften and shift the boundary are worth learning before anything else.",
+            "Hair, fur and foliage need a different approach from a box. Spending an hour on a difficult edge is usually the wrong decision, and changing the photograph or the composition is faster and better.",
+            "Select and mask, feather a few pixels, and check the result against a contrasting background rather than against the original. Most bad cut-outs look fine on the background they were cut from.",
+            "Keep the original unselected. Make selections on a duplicate layer so the source remains available when the client asks for a different crop next week."
+          ],
+          "example": "A cake is cut from a cluttered table photograph using a subject selection, and the edge is feathered by two pixels. Against a plain background the result looks photographed there rather than pasted.",
+          "points": [
+            "Choose the tool to match the shape",
+            "The edge is what a cut-out is judged on",
+            "Work on a duplicate, keep the original"
+          ],
+          "check": "Cut one object from a photo and check the edge against a plain white background."
+        },
+        {
+          "title": "Retouching: what is honest and what is not",
+          "minutes": 16,
+          "teach": [
+            "Retouching covers a range from colour correction, which is normal practice, to removing a defect that was never there, which is misrepresentation when the image sells a product.",
+            "Correcting exposure, white balance and contrast is not deception. A phone photograph in indoor light is usually too warm and too dark, and fixing that shows the product as it appears to a person standing in the room.",
+            "Removing dust from a table, a cable from a wall or a distraction at the edge of a frame is ordinary commercial practice and harms nobody.",
+            "Changing the size, condition or colour of a product is a different matter. A cake that is enlarged, a portion made larger, or a colour changed to something the customer will not receive creates a complaint that no design quality will offset.",
+            "The same applies to people. Slimming a model, changing skin tone or removing a characteristic is both dishonest and increasingly regulated, and in some markets it is unlawful in advertising.",
+            "The practical rule is that retouching should make an image clearer, not make a claim that is false. The client who asks for the second should be told what it costs them when the customer notices."
+          ],
+          "example": "A bakery's cake photograph is colour-corrected and cleaned of background clutter. The owner asks for the cake to be made to look twice as large, and is shown how a customer complaint would follow.",
+          "points": [
+            "Correction clarifies, manipulation claims",
+            "Never change size, condition or colour of a product",
+            "Saying no protects the client's reputation"
+          ],
+          "check": "Take an image you use in marketing and ask what a customer would find different in person."
+        },
+        {
+          "title": "Type, spacing and alignment",
+          "minutes": 17,
+          "teach": [
+            "Most amateur designs fail on type rather than on imagery. A good photograph with badly set text looks amateurish, while an ordinary photograph with well-set text looks professional.",
+            "Use two typefaces at most, and prefer one family in two weights. A headline in bold and body in regular of the same family is almost always better than three different fonts chosen for variety.",
+            "Alignment is what makes a layout look deliberate. Left-aligned text on a consistent margin reads faster than centred text, and centring everything produces a ragged shape that the eye cannot follow.",
+            "Spacing matters more than most beginners expect. Text touching the edge of a graphic looks like a mistake, and generous margins around a headline make it look more important rather than less.",
+            "Size establishes hierarchy. One element should be clearly the largest, and if the price, the product name and the logo are all similar sizes, the viewer sees none of them first.",
+            "Legibility on a phone is the test. View the design at actual size on a handset before approving it, because a graphic that reads well on a laptop screen often becomes unreadable once it is 400 pixels wide."
+          ],
+          "example": "A flyer using four fonts and centred text is rebuilt with one family in two weights, left-aligned on a single margin. Nothing else changes, and the design immediately looks more expensive.",
+          "points": [
+            "Two typefaces maximum, ideally one family",
+            "One consistent alignment, usually left",
+            "Check it at phone size before approving"
+          ],
+          "check": "Rebuild one of your graphics using a single typeface family in two weights."
+        }
+      ]
+    },
+    {
+      "title": "Output",
+      "lessons": [
+        {
+          "title": "Designing for print at a local shop",
+          "minutes": 18,
+          "teach": [
+            "A local print shop works to the file you supply. It will not correct your resolution, your colour or your bleed, and if the file is wrong the printed result will be wrong in a way nobody notices until the boxes are opened.",
+            "Ask the shop three questions before designing: what file format do you prefer, what physical size do you print, and do you want bleed included. The answers take five minutes and prevent most reprints.",
+            "Supply a PDF at the right size with fonts embedded or converted to outlines. A JPEG is acceptable for a simple flyer and a native Photoshop file is not, because the shop may not have your fonts or your version.",
+            "Design in CMYK if the shop prints in colour process, and accept that some on-screen brightness will be lost. If exact colour matters, ask for a proof or a single printed test rather than approving from a screen.",
+            "Keep important content away from the edge by a safe margin, usually five millimetres. Trim varies, and text placed near the edge will eventually be cut through.",
+            "Check the printed result before approving a full run. One copy of a flyer costs almost nothing and catches the errors that a screen cannot show, including colour, size and paper weight."
+          ],
+          "example": "A flyer is supplied as a Photoshop file with unflattened text in a font the shop does not have. The replacement font changes the line breaks, and 500 copies are printed with a headline that wraps badly.",
+          "points": [
+            "Ask the printer for format, size and bleed",
+            "PDF with fonts embedded or outlined",
+            "Proof one copy before a full run"
+          ],
+          "check": "Ask your printer the three questions and write the answers down."
+        },
+        {
+          "title": "Designing for a phone screen",
+          "minutes": 16,
+          "teach": [
+            "A phone screen is the primary destination for most marketing material, and it is far less forgiving than a printed page. The viewer is moving, the screen is small, and attention lasts about a second.",
+            "Design at the platform's stated pixel size and check it on an actual handset. Text that requires zooming is text that is not read, and the minimum sensible size is considerably larger than most beginners choose.",
+            "Contrast determines legibility. Light text on a light background, or text over a busy photograph, disappears on a phone in daylight, and the fix is a solid area behind the text rather than a bigger font.",
+            "One message per image. A graphic carrying a headline, three offers, an address, two phone numbers and a logo communicates nothing, because the viewer cannot identify what it is about.",
+            "Crop for the aspect ratio rather than shrinking the whole design. Vertical formats fill more of a phone screen, and a horizontal design placed in a vertical space leaves most of the screen unused.",
+            "Test the thumbnail before publishing. If the design is unreadable in the feed at small size, the viewer will scroll past without ever seeing the larger version."
+          ],
+          "example": "A promotion graphic designed horizontally is redrawn vertically at 1080 by 1350 pixels with the offer as the largest element, and engagement rises without any change to the offer itself.",
+          "points": [
+            "Design at platform size and check on a handset",
+            "Contrast fails before font size does",
+            "One message per image"
+          ],
+          "check": "View your last social graphic as a thumbnail and see whether the message survives."
+        },
+        {
+          "title": "Case: the bakery flyer",
+          "minutes": 21,
+          "teach": [
+            "A bakery wants a flyer for a promotion. The owner supplies a phone photograph of a cake, a logo designed by a cousin and saved as a low-resolution JPEG, and a print shop in Monrovia, and there is no design budget.",
+            "The logo is the first constraint. A small JPEG cannot be enlarged without softening, so the options are to ask the cousin for the original file, to redraw it, or to place it small enough that its resolution is adequate.",
+            "The photograph is the second. A phone photo is usually fine for print if it was taken in good light and is not cropped too far, so the design should use it close to its native size rather than stretching it across a poster.",
+            "The design decisions that matter most are not decorative. One message, a legible price, a clear date and a readable address will sell the promotion, while a beautiful layout that buries the date will not.",
+            "The cheapest design improvement is removing things. Deleting the second offer, the map and the two extra fonts makes the flyer readable at a glance and costs nothing but the decision to cut.",
+            "Tell the owner the two things that will actually change the result: supply the largest version of the logo available, and print one test copy before ordering. Everything else is refinement."
+          ],
+          "example": "A bakery's flyer has a low-resolution JPEG logo, one phone photograph and no design budget. The logo is asked for in a larger file, a single offer is kept, and the flyer prints legibly at A6.",
+          "points": [
+            "Work within the resolution you have",
+            "Cut until one message remains",
+            "Ask for original files and proof one copy"
+          ],
+          "check": "For this case, list the three decisions you would take first and what each costs."
+        }
+      ]
+    },
+    {
+      "title": "Working with people and files",
+      "lessons": [
+        {
+          "title": "Getting usable assets from non-designers",
+          "minutes": 16,
+          "teach": [
+            "Most design problems begin with the files somebody sent. A logo screenshot from a website, a photograph forwarded through a messaging app and a document scanned at low quality are all unusable, and none of them look unusable to the sender.",
+            "Ask for the largest original file that exists, and specify the format. Original logo files are usually vector formats, while a JPEG or a screenshot is a picture of a logo rather than a logo.",
+            "Explain the reason briefly. A client who is told that the file cannot be enlarged without going blurry will usually find the original, while one who is simply refused will send the same file again.",
+            "Messaging applications compress images by default. Ask for the photograph to be sent as a document or by email, because a photo that looks acceptable on a phone can be a quarter of the quality by the time it arrives.",
+            "Build a short asset request list you can send to every new client: logo in vector or largest available, photographs at original size, brand colours if defined, and any existing material to match.",
+            "Accept that some assets will never arrive. Design around the absence rather than enlarging something unsuitable, which usually means a layout with more space and less imagery than originally planned."
+          ],
+          "example": "A client sends a logo as a screenshot from a website. Asked for the original file, they produce a vector version from the designer, and the flyer prints sharply at every size.",
+          "points": [
+            "Ask for originals, not copies of copies",
+            "Explain why, or the same file returns",
+            "Design around missing assets rather than enlarging them"
+          ],
+          "check": "Write your standard asset request message and keep it ready to send."
+        },
+        {
+          "title": "Organising files and naming versions",
+          "minutes": 16,
+          "teach": [
+            "A design project generates many versions, and the version sent to a printer is the one that matters. Without naming discipline, the wrong file is printed and the cost is the reprint.",
+            "Use a name that contains the project, the purpose, the size and a version: bakery-flyer-print-A6-v3.pdf. Anybody can identify it without opening it, including the person at the print shop.",
+            "Keep the layered working file separate from the output files. The working file is what you edit, and the outputs are what you send, and mixing them produces either a huge email or a missing edit.",
+            "Never overwrite the file you sent. Create the next version, so that when something is wrong you can identify what changed between the approved version and the current one.",
+            "Archive per project with the source assets included. The photograph and the logo will be requested again in a year, and the person who has them will not remember where they put them.",
+            "Mark the final version clearly. A folder containing v1 to v7 with no indication of which was printed is a folder that will cause an error at the busiest possible moment."
+          ],
+          "example": "A print shop receives three files named flyer, flyer final and flyer final2. It prints the first, which has a typo, and the reprint costs more than the original order.",
+          "points": [
+            "Name with project, purpose, size and version",
+            "Keep working files and outputs apart",
+            "Never overwrite an approved output"
+          ],
+          "check": "Rename the files in one of your project folders using the convention and see what becomes obvious."
+        },
+        {
+          "title": "Making design cheaply without making it look cheap",
+          "minutes": 17,
+          "teach": [
+            "A small budget constrains the amount of design, not the quality of the decisions. The elements that make a design look expensive are restraint, consistent spacing and one clear message, and none of them cost money.",
+            "Use one typeface family rather than several, set one alignment, and leave generous margins. These three decisions account for most of the difference between work that looks considered and work that does not.",
+            "Prefer a strong photograph to decorative elements. A single clear image of the actual product, well lit and uncluttered, does more than icons, gradients and drop shadows combined.",
+            "Resist the effects available in the program. Drop shadows, bevels and gradients were once novel and now read as an absence of judgement, and every one of them makes the work look older.",
+            "Reuse a layout. A template used consistently across a year of flyers costs one design session and builds recognition, while a new layout each time costs more and achieves less.",
+            "Spend the limited budget on the thing the customer sees first: the photograph, the headline or the print quality. That is usually the paper weight or a proper photograph rather than more design time."
+          ],
+          "example": "A restaurant's flyer is reduced to one photograph, one headline, one price and an address, printed on heavier paper. It looks more expensive than the previous design with five fonts and a border.",
+          "points": [
+            "Restraint reads as quality",
+            "One good photograph beats decoration",
+            "Reuse a layout rather than redesigning each time"
+          ],
+          "check": "Remove every effect from one of your graphics and see whether it improves."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "Why should you never enlarge a small image for print?",
+      "explanation": "Resolution is a fixed number of pixels. Enlarging spreads those pixels over a larger area, so each one occupies more space and the printer reproduces visible blocks. No sharpening invents the detail that was never captured.",
+      "options": [
+        { "text": "Because the pixels are fixed, so enlarging spreads them and the printer reproduces visible blocks", "correct": true },
+        { "text": "Because larger files cannot be saved as PDF for a print shop", "correct": false },
+        { "text": "Because Photoshop reduces colour accuracy when an image is resized upward", "correct": false },
+        { "text": "Because print shops will refuse files below a stated file size", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A client sends a logo as a small JPEG. Why is that a problem and what should you ask for?",
+      "explanation": "A JPEG is a picture of a logo, so it is fixed at the pixels supplied and fails at larger sizes. The original vector file describes shapes mathematically and stays sharp at any size, so that is what to request.",
+      "options": [
+        { "text": "A JPEG is fixed in size and will blur when enlarged; ask for the original vector file", "correct": true },
+        { "text": "JPEG files cannot be placed into a Photoshop document at all", "correct": false },
+        { "text": "The colours in a JPEG are always wrong and must be replaced by the designer", "correct": false },
+        { "text": "The client should retake the logo as a photograph at higher resolution", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the bakery case, which decision would most improve the printed result?",
+      "explanation": "The binding constraint is the logo file. Obtaining the original, or placing it small enough to suit its resolution, removes the defect that no layout choice can fix, and a single proof copy catches the rest.",
+      "options": [
+        { "text": "Obtain the largest available version of the logo and print one test copy before ordering", "correct": true },
+        { "text": "Use a heavier paper stock and a larger format", "correct": false },
+        { "text": "Add more offers so the flyer appeals to more customers", "correct": false },
+        { "text": "Apply a drop shadow to the logo so it stands out against the photograph", "correct": false }
+      ]
+    },
+    {
+      "prompt": "What is the main advantage of keeping every element on its own layer?",
+      "explanation": "Layers keep each element editable, so a change of text, colour or photograph does not require rebuilding the design. This is what makes client revisions cheap rather than a new project.",
+      "options": [
+        { "text": "Each element stays editable, so revisions do not require rebuilding the design", "correct": true },
+        { "text": "The file is smaller and easier to email to a printer", "correct": false },
+        { "text": "The image prints at a higher resolution", "correct": false },
+        { "text": "Colours are automatically converted to CMYK", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A design looks good on a laptop but cannot be read on a phone. What is the most likely cause?",
+      "explanation": "Phone legibility depends on contrast and on how much the design is reduced. Text over a busy image, low contrast and too many elements all survive on a large screen and disappear at thumbnail size.",
+      "options": [
+        { "text": "Insufficient contrast and too many elements for the size it is actually viewed at", "correct": true },
+        { "text": "The file was saved in CMYK instead of RGB", "correct": false },
+        { "text": "It was designed at 300 ppi instead of 72 ppi", "correct": false },
+        { "text": "The typeface family is not installed on mobile devices", "correct": false }
+      ]
+    }
+  ]
+}

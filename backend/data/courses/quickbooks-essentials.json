@@ -1,0 +1,264 @@
+{
+  "slug": "quickbooks-essentials",
+  "title": "QuickBooks Essentials",
+  "program": "FCP",
+  "category": "finance-accounting",
+  "level": "beginner",
+  "credential": "certificate",
+  "priceCents": 0,
+  "certificateFeeCents": 0,
+  "summary": "Set up a company file properly, enter transactions that match reality, reconcile bank and mobile money, and produce reports a lender will accept.",
+  "description": "QuickBooks does not do your bookkeeping. It records what you tell it, quickly and consistently, and produces reports from that record. The quality of the reports is therefore entirely determined by the quality of the entries, which is why most small businesses with a bookkeeping package still cannot produce figures anybody trusts.\n\nThis course treats the software as the end of a process rather than the whole of one. It begins with the decisions that must be made before a company file is created: what the business actually is, how it is paid, and which categories of income and expense will matter when somebody asks a question. It then covers entering sales, expenses, bank and mobile money transactions, and reconciling them against statements.\n\nIt closes on the monthly routine that keeps a file trustworthy, the corrections that preserve an audit trail, and what a lender or a tax authority will actually ask for. The case is a Monrovia restaurant whose QuickBooks figures do not match the owner's notebook.",
+  "tags": ["quickbooks", "bookkeeping", "reconciliation", "financial reports", "small business", "finance"],
+  "outcomes": [
+    "Set up a company file with categories that answer real questions",
+    "Enter sales, expenses and payments so that reports are meaningful",
+    "Reconcile a bank account and a mobile money float against statements",
+    "Read a profit and loss report and explain what it does not show",
+    "Run a monthly close routine that keeps the file trustworthy",
+    "Correct an error without destroying the audit trail"
+  ],
+  "caseStudy": "A restaurant owner's QuickBooks figures do not match her notebook, and a bank wants six months of financials before approving a loan.",
+  "modules": [
+    {
+      "title": "Module 1 · Before you open the software",
+      "lessons": [
+        {
+          "title": "What bookkeeping must answer",
+          "minutes": 16,
+          "teach": [
+            "A set of books exists to answer three questions: did the business make money, where is the money now, and who owes what to whom. Everything else is detail that supports those three.",
+            "That framing decides the chart of accounts before any transaction is entered. A category is worth creating only if somebody will ask a question that needs it. Splitting travel into six subcategories when nobody ever asks about travel produces work and no information.",
+            "Most small business charts are copied from a template, which is why they contain accounts nobody uses and lack the two or three that matter. A restaurant needs food cost, staff cost and rent separated; a consultancy needs contractor cost and travel.",
+            "Decide also what the business is: cash basis or accrual. Cash records income when paid and expenses when paid. Accrual records them when earned or incurred, which is more accurate and requires more discipline.",
+            "The choice affects every report, and switching later is painful. Pick it deliberately at the start, write down why, and keep it consistent. A file that switches basis halfway through the year cannot be compared with itself. State the basis at the top of every report you produce, so readers know what they are looking at."
+          ],
+          "example": "A restaurant's chart separates food cost, beverage cost, wages, rent, utilities, and repairs. Nobody asks about stationery by subcategory, so stationery is one line.",
+          "points": ["Three questions, not a full trial balance", "Create a category only if someone will ask about it", "Choose cash or accrual deliberately and keep it"],
+          "check": "List the five questions your books must answer. Does your chart of accounts contain what each one needs?"
+        },
+        {
+          "title": "Setting up a company file that will not need rebuilding",
+          "minutes": 16,
+          "teach": [
+            "The setup decisions that matter are the ones that are awkward to change: the accounting basis, the fiscal year, the currency, the tax settings and the opening balances.",
+            "Opening balances are where most files become untrustworthy. If the opening bank balance is a guess, every reconciliation afterwards fails and the reports carry an error that nobody can trace. Take the balances from a real statement, dated.",
+            "Set up the bank accounts and the mobile money float as separate accounts. Most small businesses now hold money in both, and merging them destroys the ability to reconcile either.",
+            "Turn on the audit trail from the first day. It records who changed what, and retrofitting it leaves the earlier period unrecorded. It is the single setting most often skipped and most often needed.",
+            "Keep the file in one place that is backed up. A company file on a laptop with no backup is a set of books that can disappear, taking the business's financial history with it. Check the backup by restoring it once, rather than assuming. A backup you have never restored is a hope, and the moment you discover it is a hope is the worst possible moment to find out."
+          ],
+          "example": "Opening balances dated the first day of the fiscal year, taken from a bank statement and a mobile money statement, with the difference entered as opening equity.",
+          "points": ["Opening balances from real statements, dated", "Bank and mobile money as separate accounts", "Turn on the audit trail from day one"],
+          "check": "Where does your company file live, and when was it last backed up somewhere else?"
+        },
+        {
+          "title": "Sales, receipts and the difference between them",
+          "minutes": 15,
+          "teach": [
+            "A sale is what you sold. A receipt is money arriving. On cash basis they are recorded together; on accrual they are not, and confusing them is the most common reason a profit report disagrees with the bank account.",
+            "Record the sale when it happens, with the customer named if they will owe you. Record the receipt against that sale when the money arrives. The gap between the two is what the aged receivables report measures.",
+            "For a business paid mostly in cash, the temptation is to record only totals at the end of the day. That is acceptable if the daily total is entered as a single sales figure, and it is disastrous if the total is estimated.",
+            "Where a customer pays partly in advance, record the payment as a customer credit rather than as income, and apply it when the sale is made. Recording an advance as a sale overstates income in one period and understates it in the next.",
+            "Every entry needs a date, an amount, a category and something that identifies it. An entry without a reference is an entry nobody can check, and the person checking will be you in three months. Put the reference number on the entry at the moment you make it. A reference added later is a reference reconstructed from memory."
+          ],
+          "example": "A lunch service totalling 4,200 in cash is entered as one sales figure for the day, with the till slip filed; a corporate account invoiced at 12,000 is recorded as a sale with a receivable.",
+          "points": ["A sale and a receipt are different events on accrual", "Daily cash totals are acceptable if they are real", "Advances are credits, not income"],
+          "check": "Take yesterday's takings. Could you show where the figure came from and who entered it?"
+        }
+      ]
+    },
+    {
+      "title": "Module 2 · Recording what actually happened",
+      "lessons": [
+        {
+          "title": "Expenses, payments and the receipt you did not keep",
+          "minutes": 16,
+          "teach": [
+            "An expense is a cost incurred. A payment is money leaving. On accrual, a bill received in March and paid in April is an expense in March and a payment in April, and the two are different reports.",
+            "Recording expenses without a receipt is sometimes unavoidable and always a risk. The minimum discipline is a dated note of what was bought, from whom, for what purpose, and who authorised it, scanned or photographed and attached.",
+            "Category errors are the quiet killer. Fuel recorded as repairs makes both reports wrong, and the error survives until somebody tries to manage one of them and finds the numbers meaningless.",
+            "Do not use a single account called miscellaneous. It grows to contain most of the business, and the questions it should answer cannot then be answered. Every entry in miscellaneous is a decision postponed.",
+            "Reconcile the cash box separately. Cash spending is where discrepancies accumulate, because there is no statement to compare it against except the count. Count it monthly against the file, and investigate any gap the same week."
+          ],
+          "example": "A generator repair paid in cash with no receipt is recorded with a note naming the technician, the date, the fault and the amount, photographed and attached to the entry.",
+          "points": ["Expense and payment are different events", "An unsupported expense needs a written note", "Never let miscellaneous become the biggest account"],
+          "check": "What proportion of last month's expenses have no supporting document? What is in your miscellaneous account?"
+        },
+        {
+          "title": "Reconciling a bank account",
+          "minutes": 16,
+          "teach": [
+            "Reconciliation is the process of proving that the file agrees with the bank statement. It is the only routine that catches both missed entries and entered-twice entries, and it is the reason the books can be trusted.",
+            "The procedure is mechanical: enter the closing statement balance and date, tick off every transaction that appears on both, and investigate what remains. Anything in the file but not on the statement is either pending or wrong. Anything on the statement but not in the file is missing.",
+            "Do it monthly, at a fixed time, and finish it. A reconciliation left half-done accumulates ambiguity, and the longer it is left, the more entries need investigation at once.",
+            "Adjustments found during reconciliation are entered as corrections in the current period with a note, not by editing old entries. An edited history cannot be audited.",
+            "The finish line is a reconciled balance that matches the statement exactly, with nothing unexplained. Any difference carried forward as a rounding item will grow. A reconciled account has a zero difference, not a small one. Never carry a difference forward as a rounding item; find it or record it."
+          ],
+          "example": "A reconciliation shows the file 340 higher than the statement; the cause is a bank charge never entered, corrected in the current month with a note.",
+          "points": ["Reconciliation proves the file against reality", "Reconcile monthly and finish it", "Correct in the current period with a note"],
+          "check": "When did you last reconcile, and did it finish with a zero difference?"
+        },
+        {
+          "title": "Reconciling mobile money, which behaves differently",
+          "minutes": 15,
+          "teach": [
+            "Mobile money is a bank account with different mechanics: transaction fees charged per movement, cash-in and cash-out handled by an agent, and a float that must be managed separately from the business's own balance.",
+            "Set up the wallet as its own account and record every movement, including the fees, which are a real expense and often invisible because they are deducted rather than paid.",
+            "Where the business is itself an agent, the float is not the business's money. It is a balance held to serve customers, and mixing it with trading income will overstate both revenue and cash.",
+            "Fees deserve their own category. A business taking many small payments can lose a meaningful share of turnover to fees, and it cannot see that if they are buried inside transaction amounts.",
+            "Reconcile the wallet against the provider's statement as you would a bank. The statement is the authority, not the balance shown on the phone. Download it monthly rather than scrolling through messages. Where the provider offers a downloadable statement, use it: it is the document a lender will accept if you ever need to prove turnover."
+          ],
+          "example": "A shop taking 600 a day in wallet payments pays roughly 12 a day in fees, which is 6,000 a year that never appears as a cost unless it is recorded.",
+          "points": ["Record fees as their own expense", "Agent float is not the business's money", "The provider's statement is the authority"],
+          "check": "How much did your business pay in transaction fees last month, and can you find that figure in your records?"
+        }
+      ]
+    },
+    {
+      "title": "Module 3 · Reports that answer questions",
+      "lessons": [
+        {
+          "title": "The profit and loss report, and what it hides",
+          "minutes": 16,
+          "teach": [
+            "The profit and loss report shows income, cost of sales and expenses over a period, ending in a profit or loss. It answers whether the business earned money, and it says nothing about whether it collected it.",
+            "Read it by comparing periods, not in isolation. A profit figure means little without the month before and the same month last year. The direction and the cause are the information; the number is the evidence.",
+            "Look at gross margin before expenses. If gross margin is falling, the problem is price or purchasing, and cutting overheads will not fix it. If gross margin is stable and profit is falling, the problem is overheads.",
+            "The report hides cash. A profitable month with rising receivables and stock is a month that consumed money, and the profit and loss report will not mention it.",
+            "Customise the report once to show the lines that matter and save that layout. Reading the same report the same way each month is what makes comparison possible. Changing the layout each time makes it impossible. Save the customised report and open it rather than rebuilding it every month."
+          ],
+          "example": "A restaurant with 38 per cent food cost and 22 per cent wages has a margin problem if food cost was 30 per cent last year, not a staffing problem.",
+          "points": ["Profit is not cash", "Compare periods and read the margin first", "Save one layout and use it every month"],
+          "check": "What was your gross margin last month, and what was it the same month last year?"
+        },
+        {
+          "title": "The balance sheet, in plain terms",
+          "minutes": 15,
+          "teach": [
+            "The balance sheet lists what the business owns, what it owes, and the difference, which belongs to the owner. It is a photograph at a moment rather than a record of a period.",
+            "For a small business the useful items are few: cash at bank and in the wallet, money owed to you, stock, equipment, money you owe to suppliers, loans, and tax due.",
+            "The accounts receivable and payable figures are the ones to watch. Receivables growing faster than sales means collection is slipping; payables growing faster than purchases means suppliers are being stretched, which is a warning about something else.",
+            "The balance sheet also catches what a profit report misses: stock accumulating, equipment decaying, loans not being repaid. It is the statement that tells you whether growth is being funded.",
+            "Stock value on the balance sheet is an estimate unless somebody counts it. An uncounted stock figure is a placeholder, and it will be wrong. Count the items that carry the most value, even if not every item. A counted figure for the twenty items that carry most of the value beats an estimated figure for all two hundred."
+          ],
+          "example": "A business showing profit for six months while its bank balance fell financed the difference by growing receivables from 4,000 to 19,000.",
+          "points": ["A moment, not a period", "Watch receivables and payables as trends", "Stock value is a guess until counted"],
+          "check": "What are your receivables now compared with six months ago, and what does the change tell you?"
+        },
+        {
+          "title": "Case study: the notebook and the bookkeeper disagree",
+          "minutes": 18,
+          "teach": [
+            "A Monrovia restaurant owner has kept sales in a notebook for four years. She wants a loan, and the bank wants six months of financial statements before it will consider the application.",
+            "She has paid a bookkeeper to enter those six months into QuickBooks. The statements now show monthly sales averaging 210,000, while her notebook shows an average of 246,000.",
+            "The gap is roughly 15 per cent, which is close to the share of takings she believes were paid in cash and not receipted. She suspects the bookkeeper entered only the banked amounts and omitted the cash that went straight into the till.",
+            "The bookkeeper's position is that he can only record what he was given, and the bank statements show what was banked. The owner's position is that the notebook is the truth and the statements understate the business.",
+            "The bank will assess the application on the statements. Understating sales reduces the loan she can justify; overstating them, if the difference cannot be evidenced, is a misrepresentation that could end the relationship and the application. Her first job is to find out which numbers she can actually prove. Only then can she decide what can be submitted honestly."
+          ],
+          "example": "Notebook average 246,000 against statements of 210,000 is a gap of 36,000 a month, or 216,000 over the six months being submitted.",
+          "points": ["A gap that size is a documentation problem before it is an accounting one", "Never submit figures you cannot evidence", "Fix the recording habit, not only the historical numbers"],
+          "check": "What should she do before the application goes in, and what would you advise her to change from next month?"
+        }
+      ]
+    },
+    {
+      "title": "Module 4 · Keeping the file trustworthy",
+      "lessons": [
+        {
+          "title": "The monthly close routine",
+          "minutes": 15,
+          "teach": [
+            "A file stays trustworthy because of a routine, not because of care in the moment. The routine is short and it happens at the same time every month.",
+            "Enter everything outstanding, including bills received but not yet paid. Reconcile every bank and wallet account to a zero difference. Review the profit and loss against last month and explain anything that moved more than expected.",
+            "Then look at receivables and payables, and at stock if the business holds it. Finally, back up the file and note the date in a log so that somebody other than you can tell when it was last done.",
+            "Complete the routine before the fifth working day. A close that finishes in the middle of the next month is a report that arrives after the decisions it should have informed.",
+            "Keep a one-page checklist and tick it. A routine performed from memory is a routine that quietly drops a step and does not notice for four months. Keep the checklist in the file, not in your head. The checklist is also what makes the routine transferable, so that a new person can close the month without being taught it from scratch."
+          ],
+          "example": "The checklist: entries complete, three accounts reconciled, profit and loss reviewed, receivables listed, stock counted, backup taken, log signed, all by the fifth.",
+          "points": ["A routine, not good intentions", "Reconcile to zero before moving on", "Finish before the fifth working day"],
+          "check": "Which day did your last monthly close finish, and which steps did you skip?"
+        },
+        {
+          "title": "Correcting mistakes without destroying the trail",
+          "minutes": 15,
+          "teach": [
+            "Mistakes are normal. Editing an old entry so that the mistake disappears is not. The difference between a file that can be audited and one that cannot is whether history is preserved.",
+            "The correct method is a reversing entry: record the opposite of the wrong entry, dated today, with a note explaining what it corrects, then record the correct entry. The original stays visible and the correction is explained.",
+            "Deleting or editing is acceptable only in the current open period and only for entries that have no downstream effect. Deleting a reconciled transaction corrupts the reconciliation.",
+            "Attach the explanation to the correction. A reversing entry with no note is a second mystery rather than a fix, and the person reviewing it in a year will have to guess.",
+            "Review corrections monthly. A file with many is telling you something about training, process or honesty, and the pattern matters more than any single entry. If corrections cluster in one category, the category is probably wrong. Ask the person entering them before assuming carelessness."
+          ],
+          "example": "A 9,000 payment entered as repairs that was actually fuel is corrected by a reversing entry in repairs and a new entry in fuel, both dated today, with a note.",
+          "points": ["Reverse and re-enter; do not erase", "Never delete a reconciled transaction", "Attach an explanation to every correction"],
+          "check": "How many corrections were made in your file last month, and what do they have in common?"
+        },
+        {
+          "title": "Giving the file to a lender or a tax authority",
+          "minutes": 16,
+          "teach": [
+            "A lender or authority is not reading your books for interest. It is testing whether the figures are consistent, complete and supported, and inconsistency is what triggers questions.",
+            "Before submitting, check the three things that cause most rejections: the profit and loss does not reconcile to the balance sheet movement, the sales figure does not match the bank and wallet statements, or expenses are recorded with no supporting document.",
+            "Have the backup ready rather than a promise of one. A report that can be traced to source documents is worth more than a tidy one that cannot, and the request for evidence usually comes immediately.",
+            "Do not restate history to improve the picture. If an error is found, correct it openly with an explanation; a corrected figure is credible and an adjusted one that later unravels is not.",
+            "Ask what the reader needs before preparing anything. A lender assessing repayment wants cash flow and consistency; a tax authority wants completeness. Preparing the wrong document wastes the effort and invites a second request. One question at the start saves a week at the end."
+          ],
+          "example": "A loan application is submitted with the profit and loss, the receivables list, the loan repayment schedule, and a folder of receipts for the largest twenty expenses.",
+          "points": ["Consistency is what gets questioned", "Reconcile sales to bank and wallet statements", "Ask the reader what they need first"],
+          "check": "If a lender asked for evidence behind your five largest expenses, could you produce it today?"
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "On accrual accounting, a bill received in March and paid in April is recorded how?",
+      "explanation": "The expense belongs to March when it was incurred, and the payment to April when cash moved. They appear on different reports and must not be confused.",
+      "options": [
+        { "text": "The expense in March, the payment in April", "correct": true },
+        { "text": "Both in April when the money left", "correct": false },
+        { "text": "Both in March when the bill arrived", "correct": false },
+        { "text": "Split evenly across both months", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A file shows profit for six months while the bank balance fell. What is the most likely explanation?",
+      "explanation": "Growth in receivables or stock, or purchases of equipment, absorb cash without appearing on the profit and loss report. The balance sheet shows where it went.",
+      "options": [
+        { "text": "Receivables or stock grew, so profit was not collected as cash", "correct": true },
+        { "text": "The profit figure must be an error", "correct": false },
+        { "text": "The bank made a mistake", "correct": false },
+        { "text": "The business is overtrading and should stop selling", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Gross margin has fallen from 30% to 22% while overheads are unchanged. What is the problem, and what fix follows?",
+      "explanation": "A falling gross margin points to price or purchasing, not overheads. Cutting staff costs would treat the wrong problem and damage the service.",
+      "options": [
+        { "text": "Price or purchasing, so examine supplier costs and pricing rather than cutting overheads", "correct": true },
+        { "text": "Overheads, so reduce staff and rent", "correct": false },
+        { "text": "Sales volume, so increase marketing spend", "correct": false },
+        { "text": "Cash flow, so delay supplier payments", "correct": false }
+      ]
+    },
+    {
+      "prompt": "You entered a 9,000 payment in the wrong category last month, and it has been reconciled. What is the correct treatment?",
+      "explanation": "Reverse and re-enter in the current period with a note. Editing or deleting a reconciled entry corrupts the reconciliation and destroys the audit trail.",
+      "options": [
+        { "text": "Reverse the entry and re-enter it correctly in the current period, with an explanation", "correct": true },
+        { "text": "Edit the original entry to the correct category", "correct": false },
+        { "text": "Delete it and enter the correct one", "correct": false },
+        { "text": "Leave it; the total is unaffected", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the restaurant case, what should the owner do before submitting the loan application?",
+      "explanation": "The gap is a documentation problem. She must be able to evidence the cash sales before submitting, and fix the recording habit so the next six months are supportable.",
+      "options": [
+        { "text": "Evidence the cash sales and correct the record before submitting, then change the daily recording habit", "correct": true },
+        { "text": "Submit the notebook figures instead of the statements", "correct": false },
+        { "text": "Ask the bookkeeper to adjust the sales figure upward", "correct": false },
+        { "text": "Submit the statements as they are and explain later", "correct": false }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,326 @@
+{
+  "slug": "corporate-governance-and-ethics",
+  "title": "Corporate Governance & Ethics",
+  "program": "CPP",
+  "category": "business-management",
+  "level": "intermediate",
+  "credential": "certificate",
+  "priceCents": 2000,
+  "certificateFeeCents": 0,
+  "summary": "Make a board that governs rather than approves, manage conflicts of interest before they become scandals, and build an ethics culture that survives pressure.",
+  "description": "Governance becomes visible only when something goes wrong. A board that met quarterly, approved the accounts and asked no difficult questions is indistinguishable from a well-governed one until the year a related-party transaction, a family appointment or an expense claim turns out to have been the whole story.\n\nThis course is about the difference between a board that legitimises management's decisions and one that governs. It covers fiduciary duty, independence, the audit committee, related-party transactions and the practical mechanics of conflict of interest in organisations where family, community and business relationships overlap.\n\nIt then examines ethics as a system rather than a document: why codes of conduct change little on their own, how whistleblowing channels fail, and how to distinguish compliance (we followed the rule) from governance (the rule produced the right outcome).\n\nThe case study concerns a mid-sized company whose five-member board has three family directors and two independents. When the independents move to audit the chief executive's travel expenses, the family directors call it a personal matter. The audit finds company funds used for family obligations, and the chief executive is the founder's son.\n\nIt is written for Liberian conditions: family-owned firms professionalising, boards forming in the absence of deep capital markets, post-conflict institutional distrust, corruption pressure and cross-border compliance obligations.",
+  "tags": ["corporate governance", "board", "ethics", "conflict of interest", "audit", "whistleblowing"],
+  "outcomes": [
+    "Explain what a board is accountable for and what belongs to management",
+    "Apply the duties of care and loyalty to a real decision",
+    "Assess whether a director is genuinely independent",
+    "Identify and manage related-party transactions before they are agreed",
+    "Distinguish compliance from governance with concrete examples",
+    "Design a whistleblowing channel that a junior employee would trust",
+    "Evaluate a board's own effectiveness and composition",
+    "Reason through a legal-but-unethical decision using a defensible framework"
+  ],
+  "caseStudy": "A mid-sized company has a five-member board: three directors from the founding family and two independents. The independents propose auditing the chief executive's travel expenses and the family directors object that this is a personal matter. The audit finds that company funds have been used for family obligations, and the chief executive is the founder's son. Students must decide what the board should do, in what order, and what the family directors' objection reveals about the board itself.",
+  "modules": [
+    {
+      "title": "Governance and the board",
+      "lessons": [
+        {
+          "title": "What the board is for, and what it is not",
+          "minutes": 19,
+          "teach": [
+            "A board exists to hold the organisation to its purpose and to hold management to account for delivering it. It appoints the chief executive, agrees the strategy, approves the risk appetite and the accounts, and it can dismiss the person it appointed.",
+            "It is not a management committee. A board that approves operational decisions, chooses suppliers or reviews individual hires has moved into work it cannot do well and has stopped doing the work only it can do.",
+            "It is not a legal formality either, although in many jurisdictions the annual return makes it look like one. Directors carry personal duties, and the value of the structure is that somebody with a name and a liability is answerable for the whole organisation's direction.",
+            "The distinction between governance and management is the useful one: governance decides what success means and who is accountable, while management decides how to achieve it. Confusion between them produces boards that are busy and organisations that are ungoverned.",
+            "Where ownership and management are the same people, the board's independence has to be constructed deliberately, because there is no external shareholder to demand it. That construction is the subject of the rest of this course.",
+            "The test of a board is what it has refused, questioned or changed. A board whose minutes record unanimous approval of everything for three years is not a well-functioning board, it is a quorum."
+          ],
+          "example": "A board spends its quarterly meeting reviewing a supplier shortlist and approving a marketing budget. The audit committee report is deferred for lack of time, and the accounts are approved in nine minutes.",
+          "points": [
+            "The board appoints, agrees and holds to account",
+            "Governance sets accountability, management delivers",
+            "Ask what the board has refused or changed"
+          ],
+          "check": "Look at your last board agenda and mark which items were governance and which were management."
+        },
+        {
+          "title": "Fiduciary duty: care, loyalty and the duty to ask",
+          "minutes": 20,
+          "teach": [
+            "The duty of care requires a director to act with the knowledge and diligence a reasonable person would bring to the role. It does not require being right, and it does require having asked, having read and having recorded the basis of the decision.",
+            "The duty of loyalty requires a director to act in the organisation's interest rather than their own, or their family's, or a business partner's. Where those interests conflict, the duty is to disclose and step aside, not to weigh them fairly.",
+            "Both duties are tested against the information available at the time, not the outcome. A board that made a well-documented decision on adequate information is not liable because the decision turned out badly.",
+            "Care is where part-time directors fail most often. Accepting papers on the morning of the meeting, approving a transaction nobody has explained and asking no questions is a breach of care even when nothing goes wrong.",
+            "Loyalty is where family firms fail most often. A director who treats the company's resources as an extension of the household is not making a judgement error, they are acting outside the role, and the other directors are obliged to stop it.",
+            "Record dissent. A director who disagreed and said nothing in the minutes is treated as having agreed, and the minute is often the only evidence that exists years later when a transaction is questioned."
+          ],
+          "example": "A director receives board papers two hours before a meeting on a related-party lease and votes in favour. When the lease is later challenged, the absence of any question in the minutes is the evidence relied on.",
+          "points": [
+            "Care means having read, asked and recorded",
+            "Loyalty means disclosing a conflict and stepping aside",
+            "Record dissent in the minutes"
+          ],
+          "check": "Take one decision your board made and write down what information it had at the time."
+        },
+        {
+          "title": "Independence: why a friendly board is not a governed one",
+          "minutes": 19,
+          "teach": [
+            "An independent director is one whose judgement is not influenced by a relationship with management, a family connection, a material contract or a hope of future employment. Independence is a fact about circumstances, not a word in a policy.",
+            "Common tests include having no family relationship with executives, no consulting or supplier contract with the company, no long tenure, and no dependence on the fees. Formal tests matter because self-assessment tends to find everyone independent.",
+            "The purpose is to make disagreement possible. A board composed entirely of people whose livelihoods, friendships or family standing depend on the chief executive can only agree, and agreement is not governance.",
+            "Numbers matter less than the balance of power. Two independents on a five-person board can be outvoted at every meeting, which is why independence without a structural protection, such as a requirement for independent approval of related-party matters, changes nothing.",
+            "Independence also requires information. A director who learns about the business only through management's summary is dependent on management for the truth, however unrelated they are by family.",
+            "Independence ends with tenure. A director who has served twelve years is part of the institution's history and has usually become a friend of the executive, which is why term limits exist and why they are quietly resisted."
+          ],
+          "example": "Three directors are described as independent: one is the founder's brother-in-law, one supplies the company with fuel, and one has served eleven years. None meets a standard definition of independence.",
+          "points": [
+            "Independence is a fact about circumstances",
+            "Independence exists to make disagreement possible",
+            "Structure and information matter as much as status"
+          ],
+          "check": "Apply three independence tests to your board and see how many directors pass all three."
+        }
+      ]
+    },
+    {
+      "title": "Conflicts and control",
+      "lessons": [
+        {
+          "title": "Related-party transactions and the family firm",
+          "minutes": 20,
+          "teach": [
+            "A related-party transaction is any dealing between the company and a director, a shareholder, a close family member or an entity they control. There is nothing automatically wrong with them, and they are where most value is quietly extracted from small companies.",
+            "The mechanism that makes them safe is process, not prohibition: disclosure to the board, assessment by directors without the conflict, an independent opinion on terms where the amount is material, and a record of all of it.",
+            "In a family firm the transactions are often invisible because they are normal. A relative's transport company delivers the goods, a cousin manages the warehouse, an uncle's land is leased. Each may be appropriate, and none will be documented unless somebody decides that it must be.",
+            "The test is the arm's-length standard: would the company have agreed these terms with an unrelated party? Rent above the market rate, a supply contract at a premium, or an interest-free loan from the company to a family member all fail that test, and the cost is borne by every other shareholder and by the tax authority.",
+            "Family employment is the most sensitive case. Employing a capable relative is not misconduct; employing one without a role definition, a market salary benchmark or any appraisal is, because it converts the company's money into an untraceable household benefit.",
+            "Adopt a written policy with a threshold. Below a stated value the chief executive discloses to the board annually; above it, prior board approval without the conflicted director is required. A policy that requires disclosure of everything produces disclosure of nothing."
+          ],
+          "example": "A company leases its warehouse from a director's brother at 40 percent above the local market rate. Nobody recorded the relationship, and the board approved the last three renewals without knowing it existed.",
+          "points": [
+            "Process makes a related-party deal safe, not prohibition",
+            "Apply the arm's-length test to terms",
+            "Set a threshold so disclosure is possible"
+          ],
+          "check": "List every supplier, landlord or contractor related to a director of your organisation."
+        },
+        {
+          "title": "Internal control, audit and the audit committee",
+          "minutes": 19,
+          "teach": [
+            "Internal control is the set of processes that make the accounts true: who may approve a payment, who reconciles the bank, who can add a supplier to the master list, and what happens when somebody is on leave.",
+            "Segregation of duties is the core principle. The person who authorises a payment should not record it, and the person who records it should not reconcile the bank, because a single person holding all three can take money with no record of having done so.",
+            "In a small company segregation is difficult and the compensating controls are independent review, mandatory leave and rotation. Fraud frequently surfaces when a long-serving employee is finally required to take two weeks off and somebody else performs the task.",
+            "The audit committee sits between the board and the auditors, receives the management letter, and follows up the issues raised. Its independence is the point: where it is chaired by the same person who chairs the board or runs finance, it is a discussion group.",
+            "External audit is an opinion on the accounts, not a detection service. Auditors sample, they are told what they are given, and an unqualified opinion is not a statement that no fraud occurred. Directors who treat it as one have misunderstood what they bought.",
+            "Follow up the management letter formally. The same findings appear year after year in most small companies because nobody assigns the corrective action, and the auditor's value is halved when the findings are read and filed."
+          ],
+          "example": "The same finance officer approves payments, posts them to the ledger and performs the bank reconciliation. The annual audit reports no exception, because the reconciliation is the evidence the auditor relies on.",
+          "points": [
+            "Segregation of duties is the core control",
+            "Independent review and compulsory leave compensate in small firms",
+            "An audit opinion is not a fraud check"
+          ],
+          "check": "Name the person in your organisation who can approve, record and reconcile the same payment."
+        },
+        {
+          "title": "Whistleblowing: channels, protection and the fate of the reporter",
+          "minutes": 19,
+          "teach": [
+            "Every organisation has people who know about a problem before the board does. The purpose of a whistleblowing channel is to make it possible for one of them to say so without ending their career.",
+            "The channel must reach beyond the line of management. A route to the person who is complicit, or to their subordinate, is not a channel, and staff know this within a week of the policy being issued.",
+            "Protection has to be real. Confidentiality of identity, an option to report to an independent party such as an audit committee chair, and a genuine no-retaliation commitment that is enforced when tested are all necessary.",
+            "Most policies fail on the third point. The first person who reports and is then moved sideways, excluded from meetings or constructively dismissed teaches the whole organisation what the policy is worth, and the lesson outlives the policy.",
+            "Anonymous channels have real limits. Anonymous reports are harder to investigate, easier to dismiss and more often malicious, so the best design offers confidentiality with a named route rather than anonymity alone.",
+            "Count what arrives and act on it. An organisation with a functioning channel receives a handful of reports a year, most of them minor, and the pattern tells you far more about culture than any staff survey question about ethics."
+          ],
+          "example": "A driver reports that fuel is being sold from the company depot. The report goes to the depot supervisor named in the policy, who is involved. The driver is reassigned, and no further reports are received for two years.",
+          "points": [
+            "The channel must bypass the line of management",
+            "No-retaliation must survive its first real test",
+            "Confidentiality with a named route beats anonymity alone"
+          ],
+          "check": "Trace where a report would go in your organisation if the person's manager were involved."
+        }
+      ]
+    },
+    {
+      "title": "Ethics in practice",
+      "lessons": [
+        {
+          "title": "Codes are not cultures",
+          "minutes": 19,
+          "teach": [
+            "A code of conduct is a statement of intent. Culture is what happens when a valued employee breaches it, and the two diverge most visibly at the moment a senior person is protected.",
+            "The signals that shape behaviour are the ones nobody writes down: whose expenses are queried, which client is allowed to pay late, who is promoted after a poor result, and whether the chief executive's relative follows the procurement process.",
+            "Codes do add value when they are specific and when they are used. A short code with worked examples of conflicts, gifts and entertainment, and a named person to consult, is more useful than a comprehensive document nobody has read.",
+            "Training should be scenario-based rather than declaration-based. Signing an annual attestation changes nothing; a session where managers work through three real dilemmas from the company's own experience changes how they respond next time.",
+            "Measure the culture with questions that have uncomfortable answers. Would you report a colleague's misconduct? Would you raise a concern about the chief executive? Has anyone been penalised for raising a concern? The answers are the culture.",
+            "Accept the limits. Culture is set by leadership behaviour over years and cannot be installed by a consultant in a quarter, and announcing a new values programme while protecting a senior offender produces cynicism that takes longer to repair than the programme took to design."
+          ],
+          "example": "A company adopts a twelve-page code and an annual e-learning module. In the same quarter, a senior manager's inflated expenses are quietly written off, and staff draw the obvious conclusion about the code.",
+          "points": [
+            "What is tolerated at the top is the culture",
+            "Specific worked examples beat comprehensive documents",
+            "Ask questions whose answers would be uncomfortable"
+          ],
+          "check": "Name the last time a senior person in your organisation was held to a rule a junior person would have been held to."
+        },
+        {
+          "title": "Compliance is not governance",
+          "minutes": 20,
+          "teach": [
+            "Compliance asks whether a rule was followed. Governance asks whether the organisation is being run in the interest of its purpose and its owners, and the second question is not answered by the first.",
+            "A company can comply with every filing requirement, hold every meeting and pay every fee while still being governed badly: a board that never challenges, accounts prepared to the minimum standard, and related-party dealings disclosed in a footnote nobody reads.",
+            "The practical difference shows up in who asks the question. Compliance is asking did we do what the rules require. Governance is asking is this the right thing to do, and who bears the consequence if it is not.",
+            "Regulators increasingly recognise the gap, which is why codes of corporate governance go beyond the statutory minimum into independence, committee structure and disclosure of remuneration. Meeting those standards is also compliance, and the reasoning behind them is governance.",
+            "For the director, the distinction changes the question at the meeting. Compliance asks whether the transaction is permitted; governance asks whether it is in the company's interest, on arm's-length terms, and whether the people approving it are free of the conflict.",
+            "When a decision is defensible only because it is legal, that is the signal to test it again. The law sets a floor for behaviour and the floor is not where a director's duty of loyalty ends."
+          ],
+          "example": "A company discloses a director's loan in its annual return exactly as required. The law is satisfied, the loan is interest-free and unsecured, and no independent director ever reviewed it.",
+          "points": [
+            "Compliance asks if a rule was followed",
+            "Governance asks whose interest the decision serves",
+            "A decision defensible only as legal should be retested"
+          ],
+          "check": "Take a recent decision that was compliant and ask who bore the risk it created."
+        },
+        {
+          "title": "Case: three family directors, two independents and a travel claim",
+          "minutes": 23,
+          "teach": [
+            "A mid-sized company has a five-member board: three directors from the founding family and two independents. The independents propose that the audit committee review the chief executive's travel expenses, and the family directors respond that this is a personal matter.",
+            "The objection is the more important fact. Travel expenditure incurred by a chief executive on company business is company money, and the authority to review it belongs to the board regardless of whose son holds the post.",
+            "The review finds that company funds have been used for family obligations: school fees, a relative's medical costs, and travel unconnected with the business, recorded as operating expenses with no supporting documentation.",
+            "Three separate failures are now visible: the misapplication of funds, the absence of expense controls that would have detected it, and a board whose composition allowed the family directors to treat a governance question as a family one.",
+            "The board's first duty is to establish the facts and quantify them, with the chief executive excluded and the conflicted directors abstaining. Recovery, disciplinary action and the question of continued employment are decisions for the directors who are free of the conflict.",
+            "The structural remedy is not a lecture on ethics. It is an expense policy with limits and documentation, an audit committee with a majority of independents and the authority to commission work, and a related-party policy that treats family dealings like any other transaction."
+          ],
+          "example": "Independents on a five-person board move to audit the chief executive's travel. Family directors call it a personal matter. The audit finds company funds used for school fees and a relative's medical costs.",
+          "points": [
+            "Company money spent by an executive is never a personal matter",
+            "Exclude the conflicted parties from the decision",
+            "Fix the structure, not just the individual"
+          ],
+          "check": "For this case, state the first three actions you would take and who should be in the room for each."
+        }
+      ]
+    },
+    {
+      "title": "Holding the line",
+      "lessons": [
+        {
+          "title": "Decisions that are legal but wrong",
+          "minutes": 20,
+          "teach": [
+            "Directors regularly face a decision that is permitted, defensible in court and damaging to the organisation's purpose or reputation. The law will not help, and a framework is needed that a board can apply together rather than each director applying privately.",
+            "Start with transparency: would the decision survive being described accurately in a newspaper, or to the workforce, or to the regulator in three years' time? Most wrong-but-legal decisions fail this test immediately, and the failure is a real signal rather than an emotional one.",
+            "Then test the distribution of harm. Who bears the cost of this decision, can they consent to it, and do they have any way to object? A decision that transfers a risk onto people who cannot consent is a governance problem regardless of its legality.",
+            "Test reversibility. A decision that can be undone merits a different standard from one that cannot, and boards often apply the same process to both, spending as much deliberation on a logo as on a land acquisition.",
+            "Ask whose interest is being served by the legal minimum. Where the answer is the decision-maker's, and where the rule was written for a different situation, compliance is being used as cover rather than as a standard.",
+            "Record the reasoning either way. A board that decides to proceed after explicitly considering the ethics, and minuting that it did, is in a completely different position from one that never raised the question, whatever the outcome."
+          ],
+          "example": "A company can legally make 40 staff redundant with two weeks' notice under the contract terms. It is permitted, and the local labour office, the workforce and two major customers will all read it as the same decision.",
+          "points": [
+            "Test transparency: could you describe it accurately in public",
+            "Ask who bears the harm and whether they can object",
+            "Minute the ethical consideration, not only the vote"
+          ],
+          "check": "Take a decision your board is considering and apply the transparency test in one sentence."
+        },
+        {
+          "title": "Board effectiveness, composition and succession",
+          "minutes": 19,
+          "teach": [
+            "A board should evaluate itself annually against what it is for: has it held management to account, has it tested the strategy, has it ensured the risk appetite is current, and does its composition match the organisation's needs over the next three years.",
+            "Composition follows strategy. A company entering a regulated market needs someone who understands regulation; one undertaking a major capital project needs financial and construction experience. Boards that recruit in their own image keep meeting the needs of five years ago.",
+            "Skill gaps are more common than diversity gaps and harder to admit. A board of five accountants will scrutinise the accounts and never challenge the operating model, and the missing skill is invisible to the people who do not have it.",
+            "Succession is a governance responsibility that boards systematically neglect. The chief executive's departure, planned or sudden, is the single event the board exists to manage, and a board with no succession plan has delegated its most important decision to circumstance.",
+            "The chair's role is separate from the chief executive's and should be held by a different person where the organisation can manage it. Where they are combined, the board's ability to challenge the executive depends entirely on the executive's willingness to be challenged.",
+            "Evaluate openly and record it. A self-assessment that concludes the board is effective, with no actions attached, is worse than none, because it produces a document that will be cited as evidence of governance by people who never read past the conclusion."
+          ],
+          "example": "A board of five comprises four accountants and the chief executive. It scrutinises the accounts each quarter and has never examined why gross margin has fallen for two years.",
+          "points": [
+            "Evaluate against purpose, with actions attached",
+            "Composition follows the next three years, not the last five",
+            "Succession is the board's most important unplanned decision"
+          ],
+          "check": "List the skills your board will need in three years that no current director has."
+        },
+        {
+          "title": "Governance under pressure",
+          "minutes": 20,
+          "teach": [
+            "Governance is easiest when conditions are comfortable. It is tested by a currency crisis, a change of government, a request from an important customer or an approach from an official who can make a problem disappear.",
+            "Corruption pressure rarely arrives as an obvious bribe. It arrives as a facilitation payment for a clearance, a consultancy contract for a relative of a decision-maker, or a generous gift before a tender, and each has a plausible justification offered at the time.",
+            "Have the position settled before the situation arises. A written gifts and hospitality policy with a value threshold, a register, and a clear statement that facilitation payments are prohibited gives a manager something to point at when refusing.",
+            "Political transition creates a specific risk: relationships that were legitimate become liabilities, and contracts that were properly won are re-examined. Keep the record of how each was awarded, because the file is the only defence available later.",
+            "Sanctions and cross-border compliance add a layer that small companies underestimate. A shareholder, a bank or a supplier appearing on a list can freeze a transaction, and screening is cheaper than the disruption of discovering it during a payment.",
+            "The board's role under pressure is to be the place where the standard is held. Where a director is willing to say in the meeting that the company does not do this, and it is minuted, the position becomes institutional rather than personal, and it survives the departure of the person who said it."
+          ],
+          "example": "A customs official offers to release a container the same day for a small cash payment. The company's written policy prohibits facilitation payments and names the escalation route, and the manager uses it.",
+          "points": [
+            "Settle the position before the pressure arrives",
+            "Keep the award file: it is your defence after a transition",
+            "A standard minuted becomes institutional and survives its author"
+          ],
+          "check": "Name the situation most likely to test your organisation's standards this year, and write the sentence that settles it."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "What is the difference between compliance and governance?",
+      "explanation": "Compliance asks whether a rule was followed. Governance asks whether the organisation is being run in the interest of its purpose and its owners, and who bears the consequence. A company can comply with everything and still be governed badly.",
+      "options": [
+        { "text": "Compliance asks if the rule was followed; governance asks whose interest the decision serves and who bears the risk", "correct": true },
+        { "text": "Compliance applies to listed companies and governance applies to family firms", "correct": false },
+        { "text": "Governance is compliance with a written code of conduct", "correct": false },
+        { "text": "Compliance is a board duty and governance is a management duty", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A board faces a decision that is legal but ethically questionable. Which test is most useful first?",
+      "explanation": "The transparency test is fast and difficult to argue with: if the decision could not survive being described accurately in public, or to the workforce, the objection is real. It surfaces the problem before the board splits on personal values.",
+      "options": [
+        { "text": "Whether the decision could survive being described accurately in public, to the workforce and to the regulator", "correct": true },
+        { "text": "Whether the company's lawyers will confirm in writing that it is lawful", "correct": false },
+        { "text": "Whether a competitor has done the same thing without being prosecuted", "correct": false },
+        { "text": "Whether the decision will increase profit this financial year", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case study, what does the family directors' objection reveal?",
+      "explanation": "The objection treats company expenditure as a family matter, which shows the board's composition allows a governance question to be reclassified as a private one. The structural failure is prior to the travel claim and larger than it.",
+      "options": [
+        { "text": "That the board's composition lets a governance question be reframed as a family matter, which is the structural failure", "correct": true },
+        { "text": "That the independent directors overstepped their authority on an operational matter", "correct": false },
+        { "text": "That travel expenses are properly a matter for the chief executive alone", "correct": false },
+        { "text": "That the family directors were protecting the company from unnecessary audit costs", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Why does a whistleblowing channel that reports to the person's own manager usually fail?",
+      "explanation": "Where the manager is involved or dependent on the outcome, the channel cannot deliver a safe report. Staff learn within weeks that the route does not protect them, and the policy becomes evidence of the opposite of what it claims.",
+      "options": [
+        { "text": "Because the report reaches the person who may be implicated, so staff learn the route is not safe", "correct": true },
+        { "text": "Because managers are too busy to process reports promptly", "correct": false },
+        { "text": "Because anonymity is always required for a channel to work", "correct": false },
+        { "text": "Because only the audit committee can investigate misconduct", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A five-person board has three family directors and two independents. Why is independence alone insufficient?",
+      "explanation": "Independence has to be able to change an outcome. Two independents can be outvoted on every motion, so unless there are structural protections such as independent approval of related-party matters, their presence legitimises decisions they cannot influence.",
+      "options": [
+        { "text": "Because two independents can be outvoted on every motion unless specific decisions require their approval", "correct": true },
+        { "text": "Because independent directors are usually less experienced than family directors", "correct": false },
+        { "text": "Because a board must always have a majority of independents to be lawful", "correct": false },
+        { "text": "Because independence only matters for listed companies", "correct": false }
+      ]
+    }
+  ]
+}

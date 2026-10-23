@@ -1,0 +1,460 @@
+{
+  "slug": "advanced-financial-management-diploma",
+  "title": "Advanced Financial Management Diploma",
+  "program": "PDP",
+  "category": "finance-accounting",
+  "level": "advanced",
+  "credential": "diploma",
+  "priceCents": 5000,
+  "certificateFeeCents": 0,
+  "summary": "Make financial decisions where capital is scarce and currency is volatile: structure, value, govern and finance a company across borders.",
+  "description": "This diploma is for managers who already read a set of accounts and now have to decide something with them. It treats financial management as a sequence of choices under uncertainty rather than as a set of techniques, and it is built around the conditions that make those choices hard in Liberia: capital that is expensive or absent, a currency that moves against you, information that cannot be verified, and ownership structures where family, board and management overlap.\n\nAcross six modules it works from financial strategy through capital structure, valuation with few comparables, and financial governance, then into cross-border finance and a four-lesson extended case in which a Liberian logistics company considers acquiring a competitor.\n\nThe case runs through the last two modules. The target's accounts are unaudited, the owner wants cash, the buyer's own cash is limited, bank debt is available and expensive, a diaspora investor offers equity in exchange for board seats, currency risk is material, and three months of due diligence would delay a deal that may not survive the delay.\n\nAssessment asks for judgement rather than recall. Every question presents a situation in which a defensible answer requires stating assumptions before choosing, and in which the more confident answer is usually the wrong one.",
+  "tags": ["financial strategy", "capital structure", "valuation", "governance", "currency risk", "acquisition"],
+  "outcomes": [
+    "Set financial strategy when capital is scarce and expensive",
+    "Compare debt and equity including the control each transfers",
+    "Judge how much leverage a volatile revenue base can carry",
+    "Value a business using several methods and reconcile them",
+    "Assess what unaudited accounts conceal before committing",
+    "Design board oversight of money that survives scrutiny",
+    "Manage currency and cross-border financing operationally",
+    "Defend an acquisition recommendation with stated assumptions"
+  ],
+  "caseStudy": "A Liberian logistics company considers acquiring a competitor. The target's financial statements are decent but unaudited, and the owner wants cash. The buyer has limited cash and needs financing: bank debt is available but expensive, and a diaspora investor offers equity in exchange for board seats. Currency risk is significant, and three months of due diligence would delay the acquisition but might reveal dealbreakers. The case runs across four lessons in modules 5 and 6.",
+  "modules": [
+    {
+      "title": "Financial strategy in a scarce-capital economy",
+      "lessons": [
+        {
+          "title": "What financial strategy actually decides",
+          "minutes": 22,
+          "teach": [
+            "Financial strategy decides three things: what the organisation invests in, how it pays for it, and how much it keeps back for the things it has not foreseen. Everything else in finance is execution against those three.",
+            "In a deep capital market the third question is answered by instruments. In a thin one it is answered by behaviour, and the organisations that survive are the ones that hold reserves rather than the ones with the cleverest structure.",
+            "The three decisions are linked. A long-payback investment requires long-maturity financing, and funding a five-year asset with a one-year facility creates a refinancing risk unrelated to the asset's merits.",
+            "Strategy also decides what the organisation will refuse. A business that will not take on debt above a stated level, or will not sell equity to a particular kind of investor, has a position that constrains the opportunities it can accept, and that constraint is the strategy.",
+            "The link to operations is through cash. Growth consumes working capital before it produces profit, so a plan that forecasts profit and not cash will be surprised by a shortage at the exact moment sales are rising fastest.",
+            "The board's role is to test those three decisions against the strategy rather than to approve a budget line by line. A board that spends its meeting on last month's variance has not engaged with financial strategy at all."
+          ],
+          "example": "A logistics company plans to buy five vehicles. Funding them from a one-year overdraft while the vehicles earn over five years creates a refinancing cliff, and the plan is restructured before it is approved.",
+          "points": [
+            "Invest, finance, and reserve: three linked decisions",
+            "Match the maturity of the funding to the asset",
+            "Growth consumes cash before it produces profit"
+          ],
+          "check": "Name your three largest investments and how each is funded, with the maturity of that funding."
+        },
+        {
+          "title": "The cost of capital when there is no market",
+          "minutes": 22,
+          "teach": [
+            "In a market with a listed index you can estimate the cost of equity from a beta and a risk-free rate. In an economy with almost no listed companies, that calculation is unavailable and pretending otherwise produces a number with false authority.",
+            "The practical substitute is the owner's required return plus a country and liquidity premium. If the alternative is a dollar deposit earning a few percent, and lending to a small unlisted business carries genuine risk of total loss, the required return is high.",
+            "Debt has a visible price: the bank's rate plus fees, plus the cost of the collateral and covenants the bank requires. That visible price is frequently lower than the true cost, because the covenants restrict what the business can do later.",
+            "The weighted cost of the two is the discount rate for decisions. Where the correct rate is uncertain, run the decision at two rates and see whether the answer changes. If it does, the decision is not robust and should not be made on a single estimate.",
+            "The most common error is using a rate from elsewhere. A project appraised at a discount rate appropriate to a European utility will appear attractive in Monrovia almost regardless of its merits, and the appraisal becomes a justification rather than a test.",
+            "State the rate and its basis in every investment paper. A board that cannot see how the rate was chosen cannot challenge the conclusion, and an unchallengeable appraisal is one that will eventually fund something indefensible."
+          ],
+          "example": "A company appraises a warehouse at a 12 percent hurdle rate borrowed from a regional benchmark. Rerun at 22 percent, appropriate to local risk, the project's payback extends beyond the loan's term.",
+          "points": [
+            "Build the rate from the owner's required return plus risk premia",
+            "Debt's true cost includes covenants",
+            "Test the decision at two rates"
+          ],
+          "check": "Write the discount rate your organisation uses and the reasoning behind it."
+        },
+        {
+          "title": "Liquidity before profitability",
+          "minutes": 21,
+          "teach": [
+            "A profitable business with no cash on the day a payment falls due is not viable, however good its income statement. Liquidity is a survival constraint and profitability is a performance measure, and they are not interchangeable.",
+            "The constraint appears in the cash conversion cycle: the days between paying for inputs and receiving cash for outputs. Every day in that cycle is financing the business requires, and reducing it is usually cheaper than borrowing.",
+            "Volatility makes the cycle worse. Where customers pay late and unpredictably, a forecast based on average collection days will be wrong in exactly the months when cash is tightest, and the error compounds.",
+            "The control is a rolling weekly or fortnightly cash forecast covering at least thirteen weeks. Anything shorter cannot show a funding need before it arrives, and anything longer is a plan rather than a forecast.",
+            "Reserves are the second control, and they are unpopular because they look idle. A facilities line that can be drawn is worth more than the same money spent on inventory, because it is available on the day the shock occurs rather than already committed.",
+            "Report both measures to the board. An organisation that reports profit monthly and cash occasionally has told its governors which it takes seriously, and they will follow."
+          ],
+          "example": "A distributor reports a 14 percent net margin and runs out of cash in a strong sales month. Receivables days have risen from 32 to 61 while payables have stayed at 30, and growth is being financed by the bank.",
+          "points": [
+            "Liquidity is a constraint, profit is a measure",
+            "Shorten the cash conversion cycle before borrowing",
+            "A thirteen-week rolling forecast, updated weekly"
+          ],
+          "check": "Calculate your cash conversion cycle in days and which element has moved most this year."
+        }
+      ]
+    },
+    {
+      "title": "Capital structure decisions",
+      "lessons": [
+        {
+          "title": "Debt, equity and the control each transfers",
+          "minutes": 22,
+          "teach": [
+            "Debt sells a fixed claim on future cash and leaves ownership intact. Equity sells a share of everything the business will ever earn and usually transfers some control with it, and the two are not interchangeable sources of the same money.",
+            "Debt is cheaper in good years and dangerous in bad ones, because the payment does not fall when revenue does. Equity is more expensive in good years and forgiving in bad ones, because the dividend is discretionary.",
+            "The hidden price of debt is the covenant. A facility that restricts dividends, additional borrowing or capital expenditure has transferred decisions to the lender, and those restrictions arrive at exactly the moment the business wants flexibility.",
+            "The hidden price of equity is the board seat. An investor with a seat can influence strategy, block decisions and, in the wrong structure, become the person the chief executive must persuade before acting.",
+            "The choice therefore turns on volatility and on control. A stable cash flow can carry debt comfortably, and an owner who intends to direct the business for a decade should think carefully before selling a share of the decisions.",
+            "Take the cheaper instrument only when the other costs are understood. Organisations routinely choose debt for the rate and then discover in a bad quarter that the covenant, not the interest, was the constraint that mattered."
+          ],
+          "example": "A company borrows at 18 percent rather than selling a 20 percent stake. In the second year a covenant limits dividends and capital spending, and the flexibility lost costs more than the interest saved.",
+          "points": [
+            "Debt fixes the claim, equity shares the future",
+            "Covenants transfer decisions to the lender",
+            "Choose on volatility and on control, not only on rate"
+          ],
+          "check": "Read the covenants on your main facility and list the decisions they restrict."
+        },
+        {
+          "title": "How much debt is too much when revenue moves",
+          "minutes": 22,
+          "teach": [
+            "Capacity to service debt is not the same as willingness to lend. A business that can cover interest comfortably in an average year may breach a covenant in a bad one, and the breach rather than the inability to pay is what triggers the crisis.",
+            "Model the bad year rather than the plan. Take the worst twelve months of the last five, apply the current debt structure and see what coverage looks like. That calculation tells a board more than any ratio in the annual accounts.",
+            "Match currency. Borrowing in dollars against revenue in local currency creates a repayment obligation that grows precisely when the business is under pressure, and this is the single most damaging structural error in the region.",
+            "Match maturity to the asset. Long assets deserve long money, and a working capital line renewed annually cannot fund a building without creating a refinancing risk every twelve months.",
+            "Watch the ratio that triggers behaviour. Where a bank measures debt against a fixed asset base, the constraint is not profit but collateral, and an asset revaluation can move a compliant borrower into breach without any change in trading.",
+            "Keep headroom deliberately. A business that borrows to its limit has removed its ability to respond to an opportunity or a shock, and unused capacity has real value even though it appears on no statement."
+          ],
+          "example": "A company covers interest 3.2 times in an average year and 1.1 times in its worst year of the last five. On that evidence the board reduces leverage before proceeding with expansion.",
+          "points": [
+            "Test coverage in the worst year, not the average",
+            "Borrow in the currency your revenue arrives in",
+            "Keep capacity unused on purpose"
+          ],
+          "check": "Run your debt service through your worst recent twelve months and see what coverage results."
+        },
+        {
+          "title": "Raising money from people you know",
+          "minutes": 21,
+          "teach": [
+            "Family, friends and diaspora investors are the realistic source of equity for most businesses in a thin market, and the informality that makes them accessible is also what makes the terms dangerous.",
+            "Every capital contribution must be documented: the amount, what it buys, whether it is equity or a loan, what the repayment or dividend expectation is, and what happens if the business fails. A verbal understanding becomes a dispute in the first difficult year.",
+            "Distinguish a loan from an equity contribution even when both are described as an investment. A loan has a fixed obligation that can bankrupt the business, while equity does not, and confusing them in a family company is how a rescue becomes a liquidation.",
+            "Diaspora capital is often patient and often expects a role. The investor may want board representation, reporting, or a say in how money is spent, and those expectations should be negotiated at the point of investment rather than discovered afterwards.",
+            "Expect the related-party problem. Money from a relative is a related-party transaction, and it requires the same disclosure, arm's-length terms and board approval without the conflicted director as any other, or it becomes the finding that discredits the accounts.",
+            "Write the exit. Most informal equity has no mechanism for the investor to leave, and the absence of an exit becomes a permanent constraint that surfaces when the business wants to bring in someone new."
+          ],
+          "example": "An uncle contributes 30,000 dollars described as an investment. No document distinguishes equity from loan, and after two weak years he demands repayment, which the business cannot make.",
+          "points": [
+            "Document every contribution and its terms",
+            "Never blur a loan into an equity contribution",
+            "Related-party money needs arm's-length process"
+          ],
+          "check": "List every informal capital contribution in your business and whether it is documented as debt or equity."
+        }
+      ]
+    },
+    {
+      "title": "Valuation when information is thin",
+      "lessons": [
+        {
+          "title": "What a business is worth, and to whom",
+          "minutes": 22,
+          "teach": [
+            "A business has no single value. It has a range that depends on who is buying, what they can do with it and what alternatives they have, and a valuation that presents one number has hidden that range from the reader.",
+            "Value to a strategic buyer includes synergies: shared distribution, duplicated overheads removed, a competitor eliminated. Those are real and they belong to the buyer, which is why a strategic buyer can pay more than a financial one.",
+            "Value to the current owner includes control and, frequently, the income the business provides through salary. An owner who takes 40,000 dollars a year from a business that reports modest profit may be selling something more valuable than the accounts suggest.",
+            "Value to a lender is different again, being driven by collateral and cash flow stability rather than by growth. Confusing the three produces proposals that nobody can assess.",
+            "The transaction also has to be payable. A price agreed in cash up front, in instalments or in earn-out is three different offers, and the difference in risk between them can exceed the difference in headline price.",
+            "State the perspective explicitly in any valuation: value to this buyer, on these terms, for this stake. That sentence is the difference between analysis and an opinion with numbers attached."
+          ],
+          "example": "The same business is valued at 380,000 to a financial buyer and 520,000 to a competitor who can remove a duplicated depot and consolidate two transport fleets.",
+          "points": [
+            "Value depends on buyer, purpose and stake",
+            "Owner salary distorts reported profit",
+            "Price and payment terms are one package"
+          ],
+          "check": "Write who the likely buyer of your business would be and what synergy they would gain."
+        },
+        {
+          "title": "Three methods when comparables do not exist",
+          "minutes": 22,
+          "teach": [
+            "With no listed comparables you cannot rely on multiples of similar companies, although regional transaction multiples from the same sector remain a weak but useful anchor where they can be found and adjusted for size and country risk.",
+            "The earnings-based method is the workhorse: normalise profit for owner compensation, one-off items and related-party pricing, then capitalise it at a rate reflecting the risk of achieving that profit. It is only as good as the normalisation.",
+            "The asset-based method values what the business owns: property, vehicles, stock and receivables, at realisable values rather than book values. It sets a floor and it is the appropriate method for a business whose value is in its assets rather than its earnings.",
+            "The discounted cash flow method forecasts free cash and discounts it. In a low-information environment its precision is illusory, because small changes in the terminal assumption move the answer enormously, but its value is that it forces the assumptions into the open.",
+            "Triangulate and reconcile. Three methods producing 300,000, 340,000 and 520,000 tell you that the third rests on an assumption the other two contradict, and the reconciliation is more informative than any single number.",
+            "Give the highest confidence to the method whose inputs you can verify. Where the accounts are unaudited and the assets are tangible, the asset-based and normalised-earnings methods are more defensible than a cash flow built on forecasts nobody can check."
+          ],
+          "example": "A transport company with unaudited accounts is valued at 340,000 on normalised earnings, 290,000 on realisable assets and 610,000 on a cash flow forecast. The gap identifies where the forecast is optimistic.",
+          "points": [
+            "Normalise earnings before capitalising them",
+            "Asset values set a floor",
+            "Triangulate and explain the gaps"
+          ],
+          "check": "Value one business using two methods and write why they differ."
+        },
+        {
+          "title": "What unaudited accounts conceal",
+          "minutes": 21,
+          "teach": [
+            "Unaudited accounts are a management statement. They are prepared by the people who benefit from them being favourable, they have not been tested against underlying records, and the absence of an opinion is itself a piece of information.",
+            "Revenue is where the questions start. Are sales recorded when invoiced or when paid, are there large sales to related parties, and is there a customer whose orders appear at year end and are reversed shortly after?",
+            "Receivables deserve a ledger rather than a total. Any single customer above a fifth of the balance, any balance older than ninety days and any receivable from a related party requires separate examination before it is counted as an asset.",
+            "Stock is the most common overstatement in small businesses. Old or damaged goods carried at cost, and stock that exists only in the records, both inflate the balance sheet and the profit that was reported.",
+            "Liabilities are where the surprises live, because omissions are easier than inventions. Unrecorded supplier balances, tax arrears, staff entitlements and informal loans from relatives are all absent from accounts that were prepared to look good.",
+            "Accounts can also be accurate and still misleading if the accounting basis is inconsistent. A change from cash to accrual, a revaluation, or a change in depreciation policy can move reported profit substantially between years without any change in trading."
+          ],
+          "example": "A target reports 90,000 of receivables. The ledger shows 46,000 owed by a company owned by the seller's brother, unpaid for fourteen months, and the balance is written down before valuation.",
+          "points": [
+            "Unaudited means prepared by the interested party",
+            "Examine receivables as a ledger, not a total",
+            "Search for omitted liabilities and tax arrears"
+          ],
+          "check": "Take one set of unaudited accounts and list the five questions you would ask a seller first."
+        }
+      ]
+    },
+    {
+      "title": "Financial governance",
+      "lessons": [
+        {
+          "title": "Board oversight of money",
+          "minutes": 22,
+          "teach": [
+            "A board's financial responsibility is to ensure that the money is accounted for, that the reporting is honest and that the organisation can meet its obligations. It is not to make operating decisions, and boards that drift into those stop doing any of the three.",
+            "The instruments are few: a budget approved against strategy, monthly management accounts with a comparison to that budget, a cash forecast, a facility schedule and an audit committee that follows up findings.",
+            "Reporting should be short and comparable. A pack that shows this month, year to date, the budget and last year in four columns, with an explanation of the two largest variances, is more useful than forty pages of detail nobody reads.",
+            "Ask about what is absent. A pack showing profit but no cash, no receivables ageing and no facility headroom has omitted the three figures that determine whether the organisation can trade through a bad quarter.",
+            "The board should approve the authority limits it delegates. If the chief executive can commit an amount the board would not approve, the limits exist in the wrong place, and the board will learn about the commitment after it is made.",
+            "Minutes should record the questions asked and the answers given. A board that asked about a receivable and was told it was fine has a record that matters if it later proves not to be, and that record is what distinguishes oversight from attendance."
+          ],
+          "example": "A board pack of thirty-eight pages contains no cash forecast and no facility headroom. The board adds a single page covering both, and two meetings later it identifies a funding gap three months before it arrives.",
+          "points": [
+            "Approve against strategy, monitor against budget",
+            "Demand cash, receivables ageing and headroom",
+            "Minute the questions, not only the resolutions"
+          ],
+          "check": "Review your board pack and list what it does not show."
+        },
+        {
+          "title": "Related-party transactions and family capital",
+          "minutes": 22,
+          "teach": [
+            "A related-party transaction is any dealing between the company and a director, a shareholder, a close family member or a business they control. In family firms these are frequent, often sensible and almost never documented.",
+            "The standard is arm's length: would the company have agreed these terms with an unrelated party? Rent above market, a supply contract at a premium or an interest-free loan from the company all fail that test, and the cost falls on every other shareholder and on the tax authority.",
+            "The process protects the family as much as the company. Disclosure to the board, assessment by directors without the conflict, an independent opinion above a stated value and a minute recording all of it is what allows a family business to be sold, or to borrow, or to survive a dispute between relatives.",
+            "Compensation is the most sensitive case. A family member in a role should have a defined job, a benchmarked salary and an appraisal like anyone else, because an undocumented arrangement is indistinguishable from an extraction when it is later examined.",
+            "Intercompany and shareholder loans need written terms, interest and a repayment schedule. A director's loan account without terms is the item that a lender, a tax authority or a buyer will question first, and the answer is usually a reconstruction rather than a document.",
+            "Disclose them in the accounts. A related-party note is not an admission, it is evidence that the board knew and considered, and its absence is what turns a defensible arrangement into a finding."
+          ],
+          "example": "A company leases its yard from the managing director at 35 percent above the market. After disclosure and an independent rent assessment, the lease is renegotiated and a related-party note is added to the accounts.",
+          "points": [
+            "Apply the arm's-length test to every related deal",
+            "Keep the loan account documented and on terms",
+            "Disclose: the note is the protection"
+          ],
+          "check": "List every transaction between your company and a director or a relative, and whether it is documented."
+        },
+        {
+          "title": "Transparency that survives scrutiny",
+          "minutes": 21,
+          "teach": [
+            "Transparency is not the same as disclosure. Disclosure is producing documents when asked; transparency is being able to produce them quickly, consistently and in a form the reader can use, whoever the reader is.",
+            "The tests arrive from four directions: an auditor sampling transactions, a lender checking covenants, a donor or lender reviewing procurement, and a tax authority examining a period. Each wants the same thing, which is a file that reconstructs what happened.",
+            "Build the file as you go. Contracts, approvals, vouchers, bank statements, reconciliations, board minutes and the related-party register, filed by period and indexed, are the assets that make scrutiny survivable.",
+            "Keep accounting records current. A set of accounts closed three months after the period ends cannot support a decision taken during it, and the lag itself is a finding in most assessments of financial management capacity.",
+            "Reconcile bank accounts monthly and have that reconciliation reviewed by somebody other than the preparer. It is the single control that most often detects both error and misappropriation, and it is the one most often skipped when a business is busy.",
+            "Prepare for the question you would least like. A business that has rehearsed the awkward transaction, documented its reasoning and can explain it calmly is in a completely different position from one that discovers the question in the meeting."
+          ],
+          "example": "A lender requests support for three covenant calculations. The company produces reconciliations and board minutes within a day, and the facility is renewed without a renegotiation of terms.",
+          "points": [
+            "Transparency means produce it fast, in usable form",
+            "Keep books current, not three months behind",
+            "Monthly reconciliation, independently reviewed"
+          ],
+          "check": "Time how long it would take to produce the evidence for one covenant calculation."
+        }
+      ]
+    },
+    {
+      "title": "Cross-border finance and the offer",
+      "lessons": [
+        {
+          "title": "Financing an import or an export",
+          "minutes": 22,
+          "teach": [
+            "Import finance bridges the gap between paying a foreign supplier and selling the goods locally. The instruments are documentary credits, supplier credit, pre-shipment finance and, in their absence, the distributor's own working capital.",
+            "A letter of credit substitutes the bank's credit for the buyer's, which a foreign supplier will accept when it will not accept the buyer's. It costs a fee and requires the documents to match exactly, because a discrepancy allows the bank to refuse payment.",
+            "Supplier credit is cheaper when it is available and depends entirely on the relationship and the supplier's own funding position. It is also the first thing withdrawn when the supplier becomes nervous about the country or the customer.",
+            "Export finance works the other way, with the exporter funding the period between shipping and receiving payment. It requires working capital and a buyer who will accept the terms, and it is where a small exporter most often runs out of cash while appearing profitable.",
+            "Currency of invoicing is a financing decision. Invoicing in dollars shifts the risk to the buyer, which may be acceptable or may lose the order, while invoicing locally transfers the risk to the seller and must be priced.",
+            "Cost the whole chain before choosing. The fee, the collateral, the documents, the delay and the financing of the inventory in transit together determine whether the instrument is affordable, and comparing fees alone reverses the answer."
+          ],
+          "example": "A distributor compares a letter of credit costing 2 percent with supplier credit at 30 days. Including the inventory financing either requires, the letter of credit is cheaper for a shipment that takes eleven weeks to sell.",
+          "points": [
+            "A letter of credit substitutes bank for buyer credit",
+            "Supplier credit disappears when confidence falls",
+            "Cost the whole chain, not the fee"
+          ],
+          "check": "Cost two import financing options for one shipment including the inventory period."
+        },
+        {
+          "title": "Currency exposure and what you can do about it",
+          "minutes": 22,
+          "teach": [
+            "Exposure exists wherever costs and revenues are in different currencies, and it is measured rather than felt. Take the foreign currency payable, the local revenue that will fund it and the rate at which each transaction is expected to settle.",
+            "Hedging instruments may simply not exist in the local market. Where they do not, the management is operational: shorten the period between purchase and sale, price with a revision clause, hold some foreign currency, and keep imported stock turning quickly.",
+            "Natural hedging is available to almost any business. Earning some revenue in the same currency as the cost offsets the exposure without any instrument, and a business that exports as well as imports has a partial hedge already.",
+            "Price review clauses are the practical protection on contracts. A clause allowing price revision if the rate moves beyond a stated band, agreed in advance, converts an uncontrollable risk into an agreed mechanism, and it is far easier to negotiate before the contract than after.",
+            "Test the exposure at the rate that would hurt. Model a 20 percent depreciation against current payables and see what happens to margin and to covenant compliance, and the size of the answer determines whether the business needs a policy or merely a forecast.",
+            "Write the policy down: how much exposure is acceptable, what instruments are used, who may commit the business to a hedge and what happens when the limit is breached. An unwritten policy means each decision is taken by whoever is most worried that week."
+          ],
+          "example": "A company with 180,000 dollars of payables and local-currency sales models a 20 percent depreciation, finds margin falls from 19 to 3 percent, and introduces a price review clause on its largest contract.",
+          "points": [
+            "Measure exposure rather than feeling it",
+            "Natural hedges and price clauses where instruments are absent",
+            "Write the policy before the shock"
+          ],
+          "check": "Model a 20 percent depreciation against your current foreign payables and your margin."
+        },
+        {
+          "title": "Case part one: the offer and the information available",
+          "minutes": 23,
+          "teach": [
+            "A Liberian logistics company is offered the chance to acquire a competitor. The target's financial statements look decent, they are unaudited, and the owner wants cash rather than shares or deferred consideration.",
+            "The buyer's position is constrained. It has limited free cash, no listing, and a banking relationship that will lend for the acquisition at a rate that reflects the collateral and the risk, which is expensive relative to the returns the business currently makes.",
+            "A diaspora investor has appeared and offers equity at a lower effective cost than the bank, conditional on board representation. That is not cheaper money; it is a different instrument with a different consequence.",
+            "Currency risk is material because the target's largest contracts are priced locally while a significant portion of its running costs, particularly fuel and spares, are dollar-denominated.",
+            "The information problem is the first decision. Three months of due diligence would establish what the target actually owns, owes and earns, and would also give a competing buyer time to appear, and the seller has signalled impatience.",
+            "Before any of that, the buyer should be able to answer why it wants this business at all: which synergy, which customers, which capability, and what happens if the answer is nothing and the acquisition is simply a purchase of revenue at a price."
+          ],
+          "example": "A logistics company is offered a competitor whose accounts are unaudited, whose owner wants cash, and whose fuel and spares are dollar-denominated while its contracts are local.",
+          "points": [
+            "Establish why you want it before how to pay for it",
+            "Distinguish cheaper debt from different equity",
+            "Due diligence competes with the seller's patience"
+          ],
+          "check": "For this case, write the two questions you would insist are answered before any offer is made."
+        }
+      ]
+    },
+    {
+      "title": "The acquisition decision",
+      "lessons": [
+        {
+          "title": "Case part two: what the target is worth, and the range",
+          "minutes": 23,
+          "teach": [
+            "The target's accounts show a reasonable profit and an asset base of vehicles, a yard and receivables. Normalising the profit for the owner's salary, a one-off vehicle sale and rent paid to a relative produces a materially different figure from the reported one.",
+            "Receivables are examined as a ledger. A large balance owed by a company connected to the seller, unpaid for over a year, is written down, and two smaller balances are written off entirely as uncollectable.",
+            "Vehicles are checked physically rather than from the register. Four of the eighteen listed are not roadworthy, and the maintenance records suggest a fleet that has been run hard with deferred servicing.",
+            "Three valuations result. Asset-based, after the vehicle and receivable adjustments, gives a floor. Normalised earnings at a rate reflecting local risk gives a central figure. A forecast-based cash flow, prepared by the seller, gives a number considerably higher than both.",
+            "The gap between the earnings value and the forecast value is the entire negotiation. It exists because the forecast assumes contract renewals, fuel prices and exchange rates that the seller cannot guarantee, and the buyer's job is to price that uncertainty rather than to argue about it.",
+            "The defensible answer to the board is a range with a walk-away point, tied to the assumptions. A single number invites a negotiation about the number, while a range with a stated basis allows the board to approve a mandate and the management to negotiate within it."
+          ],
+          "example": "Asset value adjusted for vehicles and receivables is 290,000, normalised earnings give 340,000, and the seller's forecast supports 610,000. The gap is the negotiation.",
+          "points": [
+            "Normalise for owner salary and related-party rent",
+            "Check the fleet physically, not from the register",
+            "Bring a range with a walk-away, not a number"
+          ],
+          "check": "For this case, write the adjustment you would make first and why."
+        },
+        {
+          "title": "Case part three: the financing options and their real cost",
+          "minutes": 23,
+          "teach": [
+            "Bank debt for the acquisition is available at a rate well above the target's current return on assets, secured on the fleet and the yard, with covenants on leverage and on distributions. The interest is affordable and the covenants are the constraint.",
+            "The diaspora equity removes the repayment obligation and brings cash for working capital, in exchange for a share of the business and a board seat. On a five-year view it is the cheaper money; on a control view it is the more expensive.",
+            "A deferred element of the price is the third route, and the seller has said he wants cash. That position is often a negotiating stance rather than a fact, and an earn-out tied to the contracts actually renewing is the instrument that closes the valuation gap.",
+            "Combining the routes is usually the answer. Part equity, part debt and part deferred consideration spreads the risk, keeps the leverage within the covenant, and gives the seller enough cash to accept while pricing the uncertainty into the deferred portion.",
+            "Each route changes the governance of the combined business. Bank debt constrains distributions and acquisitions; equity brings a board participant; deferred consideration keeps the seller involved and interested in the contracts he has just sold.",
+            "The board paper should present the three routes with their cost, their covenant consequence and their control consequence, because the last two are what the board is actually deciding. A comparison on cost alone will select the option that limits the business most."
+          ],
+          "example": "Bank debt at 19 percent carries leverage covenants; diaspora equity is cheaper over five years but adds a board seat; deferred consideration is refused as a cash demand but is the instrument that closes the valuation gap.",
+          "points": [
+            "Compare cost, covenant and control together",
+            "An earn-out prices the seller's optimism",
+            "Combining routes usually beats choosing one"
+          ],
+          "check": "For this case, write the combination you would propose and the covenant risk it creates."
+        },
+        {
+          "title": "Case part four: the recommendation to the board",
+          "minutes": 23,
+          "teach": [
+            "The recommendation should open with what the board is being asked to approve, not with the analysis. A mandate to negotiate within a stated range and structure, and to spend on a defined due diligence scope, is a decision the board can take in one meeting.",
+            "State the strategic case in one paragraph. If the acquisition adds a route, a customer contract or a capability the buyer cannot build in two years, say which, and say what it would cost to build instead. That comparison is the real justification.",
+            "Present the range and the walk-away. Given asset values of 290,000 and normalised earnings of 340,000, and a forecast that supports 610,000, the mandate should be a maximum price with a deferred component tied to contract renewal.",
+            "Set out the risks with the mitigations attached, not as a list. Currency exposure, contract concentration, fleet condition, the unrecorded liabilities that due diligence may find, and the seller's related-party balances should each have a response and an owner.",
+            "Define what would stop the deal. A due diligence finding of unrecorded tax arrears above a stated amount, a contract that cannot be assigned, or a covenant breach in the financing structure are all reasons to withdraw, and they should be agreed before negotiations begin.",
+            "Close with the governance. The decision on financing requires a board resolution with the conflicted directors excluded, and the investor's board seat must be documented on terms the existing board has actually considered rather than accepted as a condition of the money."
+          ],
+          "example": "The board is asked to approve a mandate up to 380,000 with 40 percent deferred against contract renewals, conditional on due diligence findings and within agreed covenant limits.",
+          "points": [
+            "Ask for a mandate, not an opinion",
+            "Agree the walk-away conditions in advance",
+            "Exclude conflicted directors from the financing vote"
+          ],
+          "check": "For this case, write the three conditions that would stop the deal after due diligence begins."
+        }
+      ]
+    }
+  ],
+  "quiz": [
+    {
+      "prompt": "A company has low debt, high cash and stable revenue. Should it raise additional capital?",
+      "explanation": "The answer depends on whether there is an investment that earns more than the cost of the capital, not on the current balance sheet. Low debt with no suitable investment is a rational position, and raising money to hold it destroys value.",
+      "options": [
+        { "text": "Only if there is an investment earning more than the cost of the capital; otherwise the current position is rational", "correct": true },
+        { "text": "Yes, because low leverage signals that the company is not growing", "correct": false },
+        { "text": "No, because a company with cash should never borrow", "correct": false },
+        { "text": "Yes, because raising capital before it is needed is always cheaper", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A diaspora investor offers capital below the bank's rate but wants board representation. What is the real trade-off?",
+      "explanation": "Cheaper capital is not the only difference. Equity removes a repayment obligation but transfers a share of the future and a voice in decisions, and the seat can constrain strategy in ways the interest saving does not compensate for.",
+      "options": [
+        { "text": "Lower cost and no repayment obligation, against a share of the future and a permanent voice in decisions", "correct": true },
+        { "text": "The rate difference is the only material consideration for a small company", "correct": false },
+        { "text": "Board seats are symbolic in private companies and carry no real influence", "correct": false },
+        { "text": "Equity is always more expensive than debt over any period longer than three years", "correct": false }
+      ]
+    },
+    {
+      "prompt": "You are valuing a business with no comparables. Which three methods would you use, and which gives the most confidence here?",
+      "explanation": "Asset value, normalised earnings and discounted cash flow triangulate the range. Where accounts are unaudited but assets are tangible, asset and normalised earnings rest on verifiable inputs and are more defensible than a forecast-based cash flow.",
+      "options": [
+        { "text": "Asset value, normalised earnings and discounted cash flow; the first two carry most confidence when inputs are verifiable", "correct": true },
+        { "text": "Comparable multiples, price-to-earnings and replacement cost; multiples carry most confidence", "correct": false },
+        { "text": "Discounted cash flow only, because it captures the future", "correct": false },
+        { "text": "Book value only, because it is the figure in the accounts", "correct": false }
+      ]
+    },
+    {
+      "prompt": "In the case, the seller insists on cash and refuses deferred consideration. How should that be treated?",
+      "explanation": "An opening position is not a fact. Deferred consideration tied to contract renewals is the instrument that prices the valuation gap, and it is frequently accepted once the price reflects the risk the seller is asking the buyer to carry.",
+      "options": [
+        { "text": "As a negotiating position rather than a fact; an earn-out tied to contract renewal prices the gap", "correct": true },
+        { "text": "As a binding constraint that ends the negotiation", "correct": false },
+        { "text": "As evidence that the seller has something to hide in the contracts", "correct": false },
+        { "text": "As a reason to raise the cash price to secure the deal quickly", "correct": false }
+      ]
+    },
+    {
+      "prompt": "Which financing comparison would you put to a board?",
+      "explanation": "The board is deciding control and covenant headroom as much as cost. A comparison on rate alone selects the option that most restricts the business, and the restriction usually appears in the year it is least affordable.",
+      "options": [
+        { "text": "Cost, covenant consequence and control consequence for each route, together", "correct": true },
+        { "text": "Effective interest rate only, since the board delegates structure to management", "correct": false },
+        { "text": "The option that requires the least external approval", "correct": false },
+        { "text": "The option with the shortest repayment period", "correct": false }
+      ]
+    },
+    {
+      "prompt": "A target's accounts show 90,000 of receivables. What is the first thing to examine?",
+      "explanation": "A total conceals the composition. Balances owed by related parties, balances older than ninety days and any single large customer require separate assessment before the figure is counted as an asset in a valuation.",
+      "options": [
+        { "text": "The ledger behind the total, particularly related-party balances and anything over ninety days", "correct": true },
+        { "text": "Whether the receivables are insured against non-payment", "correct": false },
+        { "text": "The average collection period compared with the prior year", "correct": false },
+        { "text": "Whether the debtors were notified of the proposed sale", "correct": false }
+      ]
+    }
+  ]
+}
