@@ -610,7 +610,7 @@ async function commit(prepared, { publish, force }) {
     document.priceCents = course.priceCents;
     document.certificateFeeCents = course.certificateFeeCents;
     document.instructor = instructor._id;
-    document.instructorName = instructor.name || '';
+    document.instructorName = instructor.fullName;
 
     const removedLessons = await Lesson.deleteMany({ course: document._id });
     const removedQuizzes = await Quiz.deleteMany({ course: document._id });
