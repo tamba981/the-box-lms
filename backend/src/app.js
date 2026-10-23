@@ -10,12 +10,13 @@ const config = require('./config/env');
 const db = require('./db');
 const logger = require('./lib/logger');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
-const { securityHeaders, corsPolicy, sameOriginGuard, compressionMiddleware } = require('./middleware/security');
+const { securityHeaders, canonicalHost, corsPolicy, sameOriginGuard, compressionMiddleware } = require('./middleware/security');
 const { apiLimiter } = require('./middleware/rateLimit');
 
 const authRoutes = require('./routes/auth');
 const avatarRoutes = require('./routes/avatars');
 const coursesRoutes = require('./routes/courses');
+const reviewsRoutes = require('./routes/reviews');
 const enrollmentsRoutes = require('./routes/enrollments');
 const certificatesRoutes = require('./routes/certificates');
 const notificationsRoutes = require('./routes/notifications');
@@ -110,6 +111,7 @@ function createApp() {
 
   /* ---- 2. Headers and CORS ------------------------------------- */
   app.use(securityHeaders());
+  app.use(canonicalHost());
   app.use(corsPolicy());
 
   /* ---- 3. Body parsing ---------------------------------------- */
@@ -175,6 +177,9 @@ app.use('/api/v1/payments/callback', express.raw({ type: 'application/json', lim
 
   app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/avatars', avatarRoutes);
+  // Mounted before the course router so `:courseId/reviews` is never mistaken
+  // for a course slug.
+  app.use('/api/v1/courses/:courseId/reviews', reviewsRoutes);
   app.use('/api/v1/courses', coursesRoutes);
   app.use('/api/v1/enrollments', enrollmentsRoutes);
   app.use('/api/v1/certificates', certificatesRoutes);

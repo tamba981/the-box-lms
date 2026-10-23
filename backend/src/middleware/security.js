@@ -123,6 +123,39 @@ function securityHeaders() {
 }
 
 /**
+ * Send `www.` traffic to the canonical host.
+ *
+ * `www` and the apex host serve the same pages, which is duplicate content and,
+ * worse, splits a signed-in visitor's cookies across two origins. The redirect is
+ * active only in production and only when PUBLIC_BASE_URL names the host to keep,
+ * so local development on 127.0.0.1 is untouched.
+ *
+ * 308 rather than 301 for anything that is not a GET: it preserves the method
+ * and the body, so a form posted to the alias still arrives.
+ */
+function canonicalHost() {
+  let canonical = null;
+
+  if (config.isProduction) {
+    try {
+      canonical = new URL(config.publicBaseUrl).hostname.toLowerCase();
+    } catch (error) {
+      canonical = null;
+    }
+  }
+
+  return function canonicalHostMiddleware(req, res, next) {
+    if (!canonical || /^(localhost|127\.0\.0\.1|\[::1\])$/.test(canonical)) return next();
+
+    const host = String(req.get('host') || '').split(':')[0].toLowerCase();
+    if (host !== `www.${canonical}`) return next();
+
+    const status = req.method === 'GET' || req.method === 'HEAD' ? 301 : 308;
+    return res.redirect(status, `https://${canonical}${req.originalUrl}`);
+  };
+}
+
+/**
  * Reflect the caller's origin. Only ever reached for an origin that has already
  * been accepted below, so reflecting is safe and is what keeps credentialed
  * requests working for an allowlisted host.
@@ -217,6 +250,7 @@ const compressionMiddleware = compression({
 
 module.exports = {
   securityHeaders,
+  canonicalHost,
   corsPolicy,
   sameOriginGuard,
   compressionMiddleware,

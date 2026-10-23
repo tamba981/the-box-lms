@@ -9,6 +9,7 @@ const ContactMessage = require('../models/ContactMessage');
 const Enrollment = require('../models/Enrollment');
 const NewsletterSubscriber = require('../models/NewsletterSubscriber');
 const Payment = require('../models/Payment');
+const Review = require('../models/Review');
 const User = require('../models/User');
 
 const enrollmentService = require('../services/enrollmentService');
@@ -34,6 +35,8 @@ const { authenticate, requireAdmin } = require('../middleware/auth');
 const { validate } = require('../middleware/validate');
 const { writeLimiter } = require('../middleware/rateLimit');
 const schemas = require('../validators/auth');
+const reviewSchemas = require('../validators/reviews');
+const { recomputeCourseRating } = require('../services/reviewService');
 
 const router = express.Router();
 
@@ -1426,6 +1429,165 @@ router.get(
       total,
       active,
     });
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * Reviews
+ *
+ * A review is written by a student and published only after an administrator
+ * has read it. The queue is the only place a pending review is readable, so the
+ * routes below deliberately do not reuse the student-facing serialiser: that one
+ * hides the text of an unapproved review, which is exactly what a moderator
+ * needs to see.
+ * ------------------------------------------------------------------ */
+
+async function courseIndexFor(reviews) {
+  const ids = [...new Set(reviews.map((review) => String(review.course)))];
+  const courses = await Course.find({ _id: { $in: ids } }).select('title slug');
+
+  return new Map(courses.map((course) => [String(course._id), course]));
+}
+
+function reviewForModeration(review, courses) {
+  const course = courses.get(String(review.course));
+
+  return {
+    id: String(review._id),
+    courseId: String(review.course),
+    courseTitle: course ? course.title : '',
+    courseSlug: course ? course.slug : null,
+    rating: review.rating,
+    title: review.title,
+    body: review.body,
+    status: review.status,
+    author: {
+      id: String(review.student),
+      name: review.studentName || 'A student',
+      avatarUrl: review.studentAvatar || null,
+    },
+    moderationNote: review.moderationNote,
+    moderatedAt: review.moderatedAt,
+    createdAt: review.createdAt,
+    updatedAt: review.updatedAt,
+  };
+}
+
+router.get(
+  '/reviews',
+  validate({ query: reviewSchemas.listModerationQuery }),
+  asyncHandler(async (req, res) => {
+    const query = req.valid.query;
+    const { page, limit, skip } = parsePagination(query);
+
+    const filter = {};
+    if (query.status !== 'all') filter.status = query.status;
+    if (query.courseId) filter.course = query.courseId;
+
+    const [reviews, total, pending, approved, rejected] = await Promise.all([
+      Review.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      Review.countDocuments(filter),
+      Review.countDocuments({ status: 'pending' }),
+      Review.countDocuments({ status: 'approved' }),
+      Review.countDocuments({ status: 'rejected' }),
+    ]);
+
+    const courses = await courseIndexFor(reviews);
+
+    return ok(res, {
+      ...paginated(
+        reviews.map((review) => reviewForModeration(review, courses)),
+        total,
+        { page, limit }
+      ),
+      counts: { pending, approved, rejected },
+    });
+  })
+);
+
+/** Shared by approve and reject: settle the course score, then tell the author. */
+async function decideReview(review, { status, note, req, message }) {
+  review.status = status;
+  review.moderationNote = note || null;
+  review.moderatedBy = req.user._id;
+  review.moderatedAt = new Date();
+  await review.save();
+
+  await recomputeCourseRating(review.course);
+
+  const course = await Course.findById(review.course).select('title slug');
+
+  try {
+    await notifications.notify(review.student, {
+      title: status === 'approved' ? 'Your review is live' : 'Your review was not published',
+      message,
+      type: 'system',
+      link: course ? `/course.html?course=${course.slug}&tab=reviews` : null,
+      meta: { reviewId: String(review._id) },
+    });
+  } catch (error) {
+    // The decision stands whether or not the student can be told about it.
+    logger.error('review decision notification failed', {
+      error,
+      reviewId: String(review._id),
+    });
+  }
+
+  const courses = await courseIndexFor([review]);
+  return reviewForModeration(review, courses);
+}
+
+router.post(
+  '/reviews/:id/approve',
+  writeLimiter,
+  validate({ params: reviewSchemas.reviewIdParam }),
+  asyncHandler(async (req, res) => {
+    const review = await Review.findById(req.valid.params.id);
+    if (!review) throw notFound('That review could not be found.', { code: 'REVIEW_NOT_FOUND' });
+
+    const result = await decideReview(review, {
+      status: 'approved',
+      note: null,
+      req,
+      message: 'Your review has been checked and now appears on the course page.',
+    });
+
+    return ok(res, { review: result }, 'Review published.');
+  })
+);
+
+router.post(
+  '/reviews/:id/reject',
+  writeLimiter,
+  validate({ params: reviewSchemas.reviewIdParam, body: reviewSchemas.rejectReviewBody }),
+  asyncHandler(async (req, res) => {
+    const review = await Review.findById(req.valid.params.id);
+    if (!review) throw notFound('That review could not be found.', { code: 'REVIEW_NOT_FOUND' });
+
+    const reason = req.valid.body.reason;
+
+    const result = await decideReview(review, {
+      status: 'rejected',
+      note: reason,
+      req,
+      message: `Your review was not published. ${reason}`,
+    });
+
+    return ok(res, { review: result }, 'Review sent back to the student.');
+  })
+);
+
+router.delete(
+  '/reviews/:id',
+  writeLimiter,
+  validate({ params: reviewSchemas.reviewIdParam }),
+  asyncHandler(async (req, res) => {
+    const review = await Review.findByIdAndDelete(req.valid.params.id);
+    if (!review) throw notFound('That review could not be found.', { code: 'REVIEW_NOT_FOUND' });
+
+    await recomputeCourseRating(review.course);
+
+    return ok(res, null, 'Review removed.');
   })
 );
 

@@ -15,6 +15,58 @@ no external DNS provider to log into.
 
 ---
 
+## Current state — verified 23 October 2026
+
+Read from public resolvers (`8.8.8.8` and `1.1.1.1`), not from the registrar's
+control panel, so this is what the world sees rather than what was intended.
+
+| Record | Host | Value now | Verdict |
+| ------ | ---- | --------- | ------- |
+| `NS` | `@` | `dns1`/`dns2.registrar-servers.com` | Namecheap BasicDNS is authoritative. Railway does **not** host this zone. |
+| `CNAME` | `@` | `leddkd3y.up.railway.app` | Serves the site, but see "the apex problem" below. |
+| `A` | `www` | `162.255.119.228` | Namecheap parking address. `https://www.` times out. |
+| `MX` | `@` | `mx.zoho.com` 10, `mx2.zoho.com` 20, `mx3.zoho.com` 50 | Correct, and visible to both resolvers. |
+| `TXT` | `@` | `zoho-verification=zb27672558.zmverify.zoho.com` | Present. |
+| `TXT` | `@` | `v=spf1 include:zoho.com ~all` | Present. |
+| `TXT` | `zoho._domainkey` | *nothing* | **DKIM was never added**, so mail is sent unsigned. |
+| `TXT` | `_dmarc` | *nothing* | No DMARC policy. |
+| `send` | — | *does not exist* | The Resend sending subdomain from step 3 is not in DNS. |
+
+### The apex problem, in one paragraph
+
+An apex `CNAME` may not coexist with any other record at the same name. Because
+`wuteveglobalacademy.com` is a CNAME, a resolver is entitled to answer *only*
+with that CNAME and ignore the MX set — and at least one resolver used here does
+exactly that. Google and Cloudflare currently return the Zoho MX records anyway,
+which is why inbound mail sometimes works. It is not stable, and no amount of
+mailbox configuration fixes it; the record type has to change.
+
+### Two changes are still outstanding
+
+**1. `www`** — the application side is done: the server now 301s `www` to the apex
+(308 for non-GET requests) whenever `PUBLIC_BASE_URL` names the canonical host. DNS
+is not done. Choose one:
+
+| Option | Steps | Trade-off |
+| ------ | ----- | --------- |
+| **Serve `www` from Railway** (recommended) | Railway → Settings → Networking → Custom Domain → add `www.wuteveglobalacademy.com`, then in Namecheap Advanced DNS delete the `A` on `www` (`162.255.119.228`) and add `CNAME www → leddkd3y.up.railway.app` | Railway issues the certificate for `www`, and the app redirects to the apex. Needs the Railway dashboard. |
+| **Namecheap URL Redirect** | Advanced DNS → delete the `A` on `www`, add `URL Redirect` on `www` → `https://wuteveglobalacademy.com` | No Railway change, but the redirect is served over plain HTTP by Namecheap; `https://www.…` still fails until a certificate exists for that name. |
+
+Either way the parking `A` record must go first. Leaving it in place is what
+makes `https://www.wuteveglobalacademy.com` hang today.
+
+**2. The apex CNAME** — the site depends on it, so it cannot simply be deleted.
+Pick one:
+
+| Option | Steps | Why it works |
+| ------ | ----- | ------------ |
+| **Move the zone to Cloudflare** (free) | Create the zone in Cloudflare, re-create every record above, set nameservers at Namecheap to Cloudflare's, then use a proxied `CNAME @ → leddkd3y.up.railway.app` (Cloudflare flattens it) | CNAME flattening answers the apex with A records, so MX coexists legally. This is the only option that fixes mail without touching Railway. |
+| **Railway A record** | Only if Railway's domain dialog offers an `A` target; replace the apex CNAME with it | Legal alongside MX. Railway does not guarantee the address, so it can change. |
+
+Do not add a second SPF record while doing this, and do not delete the MX set.
+
+---
+
 ## Step 0 — clear out the defaults that will break both
 
 **Do this first.** A newly registered Namecheap domain ships pointing at

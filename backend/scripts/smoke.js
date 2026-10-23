@@ -295,6 +295,7 @@ async function cleanup() {
   const StudyGroup = require('../src/models/StudyGroup');
   const LiveSession = require('../src/models/LiveSession');
   const CommunityPost = require('../src/models/CommunityPost');
+  const Review = require('../src/models/Review');
   const Payment = require('../src/models/Payment');
 
   // Clean up by namespace, not only by tracked email.
@@ -338,6 +339,7 @@ async function cleanup() {
   await StudyGroup.deleteMany({ $or: [{ createdBy: { $in: userIds } }, { members: { $in: userIds } }] });
   await LiveSession.deleteMany({ $or: [{ instructor: { $in: userIds } }, { course: { $in: courseIds } }] });
   await CommunityPost.deleteMany({ $or: [{ user: { $in: userIds } }, { course: { $in: courseIds } }] });
+  await Review.deleteMany({ $or: [{ student: { $in: userIds } }, { course: { $in: courseIds } }] });
   await Payment.deleteMany({
     $or: [{ student: { $in: userIds } }, { course: { $in: courseIds } }],
   });
@@ -6667,6 +6669,282 @@ async function testCertificateFees() {
  * Run
  * ------------------------------------------------------------------ */
 
+/**
+ * Course reviews: eligibility, moderation and the rating they produce.
+ *
+ * The rules being asserted are the ones a visitor depends on: an unapproved
+ * review is invisible, an unenrolled student cannot write one, and the number on
+ * a course card only moves when a review has actually been published.
+ */
+async function testReviews() {
+  const Review = require('../src/models/Review');
+  const Course = require('../src/models/Course');
+  const Notification = require('../src/models/Notification');
+
+  const adminEmail = `smoke-review-admin-${runId}@example.com`;
+  const authorEmail = `smoke-review-author-${runId}@example.com`;
+  const otherEmail = `smoke-review-other-${runId}@example.com`;
+  createdEmails.push(adminEmail, authorEmail, otherEmail);
+
+  let adminToken = null;
+  let authorToken = null;
+  let otherToken = null;
+  let author = null;
+  let other = null;
+  let course = null;
+
+  const signIn = async (email) => {
+    const { json } = await request('POST', '/api/v1/auth/login', { body: { email, password: PASSWORD } });
+    return json.data.accessToken;
+  };
+
+  const reviewsPath = () => `/api/v1/courses/${course.id}/reviews`;
+  const publicList = async () => {
+    const { status, json } = await request('GET', reviewsPath());
+    assertEqual(status, 200, 'list status');
+    return json.data;
+  };
+  const courseRating = async () => {
+    const { json } = await request('GET', `/api/v1/courses/${course.slug}`);
+    return { rating: json.data.course.rating, count: json.data.course.ratingCount };
+  };
+
+  await check('review fixtures are provisioned', async () => {
+    await User.create({
+      firstName: 'Review',
+      lastName: 'Admin',
+      email: adminEmail,
+      password: PASSWORD,
+      role: 'admin',
+      emailVerified: true,
+    });
+    author = await User.create({
+      firstName: 'Review',
+      lastName: 'Author',
+      email: authorEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+    other = await User.create({
+      firstName: 'Other',
+      lastName: 'Student',
+      email: otherEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+
+    adminToken = await signIn(adminEmail);
+    authorToken = await signIn(authorEmail);
+    otherToken = await signIn(otherEmail);
+
+    course = await Course.create({
+      title: 'A course with reviews',
+      slug: `smoke-review-course-${runId}`,
+      instructor: (await User.findOne({ email: adminEmail }))._id,
+      instructorName: 'Review Admin',
+      category: 'business-management',
+      level: 'beginner',
+      status: 'published',
+      publishedAt: new Date(),
+      priceCents: 0,
+    });
+
+    assert(adminToken && authorToken && otherToken, 'all three sessions must exist');
+  });
+
+  await check('a course nobody has reviewed reports no rating', async () => {
+    const rating = await courseRating();
+    assertEqual(rating.count, 0, 'rating count');
+    assertEqual(rating.rating, 0, 'rating');
+
+    const list = await publicList();
+    assertEqual(list.pagination.total, 0, 'published reviews');
+    assertEqual(list.summary.count, 0, 'summary count');
+  });
+
+  await check('a student who has not enrolled cannot review', async () => {
+    const { status, json } = await request('POST', reviewsPath(), {
+      token: otherToken,
+      body: { rating: 5, body: 'A review from someone who never enrolled.' },
+    });
+
+    assertEqual(status, 403, 'status');
+    assertEqual(json.code, 'ENROLLMENT_REQUIRED', 'error code');
+  });
+
+  await check('an enrolled student can submit a review', async () => {
+    const enrolled = await request('POST', `/api/v1/courses/${course.id}/enroll`, { token: authorToken });
+    assert(enrolled.status === 200 || enrolled.status === 201, `enrol status: ${enrolled.status}`);
+
+    const { status, json } = await request('POST', reviewsPath(), {
+      token: authorToken,
+      body: {
+        rating: 5,
+        title: 'Worth the time',
+        body: 'The lessons explained the material with worked examples I could follow.',
+      },
+    });
+
+    assertEqual(status, 201, 'status');
+    assertEqual(json.data.review.status, 'pending', 'a new review waits for moderation');
+  });
+
+  await check('a review is not public until it has been approved', async () => {
+    const list = await publicList();
+    assertEqual(list.pagination.total, 0, 'published reviews');
+
+    const own = await request('GET', reviewsPath(), { token: authorToken });
+    assertEqual(own.json.data.myReview.status, 'pending', 'the author sees their own review');
+    assertEqual(own.json.data.myReview.isMine, true, 'isMine');
+  });
+
+  await check('a review too short to be useful is refused', async () => {
+    const { status, json } = await request('POST', reviewsPath(), {
+      token: authorToken,
+      body: { rating: 4, body: 'Good.' },
+    });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'VALIDATION_ERROR', 'error code');
+  });
+
+  await check('a rating outside one to five is refused', async () => {
+    const { status } = await request('POST', reviewsPath(), {
+      token: authorToken,
+      body: { rating: 6, body: 'A rating that no star row can represent.' },
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('an unapproved review does not move the course rating', async () => {
+    const rating = await courseRating();
+    assertEqual(rating.count, 0, 'rating count');
+  });
+
+  await check('a student cannot read the moderation queue', async () => {
+    const { status } = await request('GET', '/api/v1/admin/reviews', { token: otherToken });
+    assertEqual(status, 403, 'status');
+  });
+
+  await check('the administrator sees the review waiting for moderation', async () => {
+    const { status, json } = await request('GET', '/api/v1/admin/reviews?status=pending', {
+      token: adminToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    const mine = json.data.items.find((item) => item.courseId === course.id);
+    assert(mine, 'the pending review should be in the queue');
+    assertEqual(mine.author.name, 'Review Author', 'author name');
+    assertEqual(mine.status, 'pending', 'status');
+    assertEqual(json.data.counts.pending >= 1, true, 'the pending count should include it');
+  });
+
+  let approvedId = null;
+
+  await check('approving a review publishes it and sets the course rating', async () => {
+    const queued = await request('GET', '/api/v1/admin/reviews?status=pending', { token: adminToken });
+    approvedId = queued.json.data.items.find((item) => item.courseId === course.id).id;
+
+    const { status, json } = await request('POST', `/api/v1/admin/reviews/${approvedId}/approve`, {
+      token: adminToken,
+    });
+    assertEqual(status, 200, 'approval status');
+    assertEqual(json.data.review.status, 'approved', 'status after approval');
+
+    const list = await publicList();
+    assertEqual(list.pagination.total, 1, 'published reviews');
+    assertEqual(list.items[0].rating, 5, 'published rating');
+    assertEqual(list.summary.average, 5, 'summary average');
+
+    const rating = await courseRating();
+    assertEqual(rating.count, 1, 'rating count');
+    assertEqual(rating.rating, 5, 'rating');
+  });
+
+  await check('the reviewer is told their review is live', async () => {
+    const notification = await Notification.findOne({
+      user: author._id,
+      title: 'Your review is live',
+    });
+
+    assert(notification, 'the reviewer should be notified');
+  });
+
+  await check('posting a second review replaces the first instead of duplicating it', async () => {
+    const { status } = await request('POST', reviewsPath(), {
+      token: authorToken,
+      body: {
+        rating: 4,
+        title: 'Still worth the time',
+        body: 'A second draft of the same review, which should replace the first.',
+      },
+    });
+
+    assertEqual(status, 200, 'status');
+    const count = await Review.countDocuments({ course: course._id, student: author._id });
+    assertEqual(count, 1, 'reviews by this student');
+  });
+
+  await check('an edited review returns to moderation and leaves the rating', async () => {
+    const list = await publicList();
+    assertEqual(list.pagination.total, 0, 'the edited review is no longer public');
+
+    const rating = await courseRating();
+    assertEqual(rating.count, 0, 'the course rating is withdrawn with it');
+  });
+
+  await check('a rejected review stays hidden and carries its reason', async () => {
+    await request('POST', `/api/v1/courses/${course.id}/enroll`, { token: otherToken });
+
+    const submitted = await request('POST', reviewsPath(), {
+      token: otherToken,
+      body: { rating: 2, body: 'A review the moderator will refuse for this test.' },
+    });
+    assertEqual(submitted.status, 201, 'submit status');
+
+    const rejectedId = submitted.json.data.review.id;
+    const { status } = await request('POST', `/api/v1/admin/reviews/${rejectedId}/reject`, {
+      token: adminToken,
+      body: { reason: 'This review describes a different course.' },
+    });
+    assertEqual(status, 200, 'rejection status');
+
+    const own = await request('GET', reviewsPath(), { token: otherToken });
+    assertEqual(own.json.data.myReview.status, 'rejected', 'the author sees the refusal');
+    assertEqual(
+      own.json.data.myReview.moderationNote,
+      'This review describes a different course.',
+      'the reason is shown to its author'
+    );
+
+    const list = await publicList();
+    assertEqual(list.pagination.total, 0, 'a rejected review is never public');
+  });
+
+  await check('a student can withdraw their review', async () => {
+    const { status } = await request('DELETE', `${reviewsPath()}/mine`, { token: authorToken });
+    assertEqual(status, 200, 'status');
+
+    const count = await Review.countDocuments({ course: course._id, student: author._id });
+    assertEqual(count, 0, 'reviews left by this student');
+
+    const rating = await courseRating();
+    assertEqual(rating.count, 0, 'rating count');
+  });
+
+  await check('moderating a review that does not exist is a 404', async () => {
+    const { status, json } = await request('POST', '/api/v1/admin/reviews/6ad32bc65ceb158991984fff/approve', {
+      token: adminToken,
+    });
+
+    assertEqual(status, 404, 'status');
+    assertEqual(json.code, 'REVIEW_NOT_FOUND', 'error code');
+  });
+}
+
 async function main() {
   process.stdout.write('\nWuteve Global Academy — smoke test\n');
   process.stdout.write('==================================\n\n');
@@ -6778,6 +7056,9 @@ async function main() {
 
     process.stdout.write('\nCertificate fees\n');
     await testCertificateFees();
+
+    process.stdout.write('\nCourse reviews\n');
+    await testReviews();
 
     process.stdout.write('\nMoney formatting\n');
     await testMoneyFormatting();

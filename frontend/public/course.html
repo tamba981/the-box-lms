@@ -437,6 +437,39 @@
     }
     body.dark-mode .covers-more { color: var(--dark-link); }
 
+    /* ---------- Reviews ---------- */
+    .review-summary {
+      display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+      padding: 18px 20px; margin-bottom: 8px;
+      border: 1px solid var(--border); border-radius: 14px; background: var(--surface);
+    }
+    body.dark-mode .review-summary { background: var(--dark-surface); border-color: var(--dark-border); }
+    .review-score { font-size: 38px; font-weight: 900; letter-spacing: -1.5px; line-height: 1; }
+    .review-stars { color: var(--gold); font-size: 13px; letter-spacing: 2px; white-space: nowrap; }
+    .review-item { padding: 16px 0; border-bottom: 1px solid var(--border); }
+    body.dark-mode .review-item { border-color: var(--dark-border); }
+    .review-item:last-of-type { border-bottom: 0; }
+    .review-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+    .review-name { font-weight: 700; font-size: 14.5px; }
+    .review-date { font-size: 12.5px; color: var(--text-light); }
+    body.dark-mode .review-date { color: var(--dark-muted); }
+    .review-title { font-weight: 700; margin: 0 0 4px; }
+    .review-body { margin: 0; font-size: 14.5px; line-height: 1.65; }
+
+    .review-form {
+      margin-top: 22px; padding: 20px;
+      border: 1px solid var(--border); border-radius: 14px; background: var(--surface);
+    }
+    body.dark-mode .review-form { background: var(--dark-surface); border-color: var(--dark-border); }
+    .review-form .field + .field { margin-top: 14px; }
+    .review-form label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+    .review-form textarea { min-height: 120px; resize: vertical; }
+    .review-notice { font-size: 13.5px; padding: 10px 12px; border-radius: 10px; margin: 0 0 14px; }
+    .review-notice.pending { background: rgba(245, 158, 11, .12); color: #92400e; }
+    .review-notice.rejected { background: rgba(239, 68, 68, .12); color: #b91c1c; }
+    body.dark-mode .review-notice.pending { color: #fbbf24; }
+    body.dark-mode .review-notice.rejected { color: #f87171; }
+
     /* ---------- Course layout: content column + sticky buy card ----------
        The card was already `position: sticky`, but it sat inside a short hero,
        so it had nothing to stick to. The tabs and panels now share the left
@@ -710,6 +743,7 @@
 
       var currentCourse = null;
       var currentSyllabus = [];
+      var currentAccess = null;
       var openLessonId = null;
       var quizState = { quiz: null, result: null, submitting: false };
 
@@ -1301,6 +1335,7 @@
 
         currentCourse = course;
         currentSyllabus = syllabus;
+        currentAccess = access;
 
         document.title = course.title + ' · Wuteve Global Academy';
 
@@ -1379,6 +1414,7 @@
 
         var tabList = [{ id: 'overview', label: 'Overview' }, { id: 'syllabus', label: 'Syllabus' }];
         if (instructorHtml) tabList.push({ id: 'instructor', label: 'Instructor' });
+        tabList.push({ id: 'reviews', label: 'Reviews' });
 
         var tabBar =
           '<nav class="course-tabs" role="tablist" aria-label="Course sections">' +
@@ -1476,6 +1512,12 @@
                   instructorHtml +
                   '</div>'
                 : '') +
+              '<div class="course-panel" id="panel-reviews" role="tabpanel" aria-labelledby="tab-reviews" tabindex="0" hidden>' +
+                '<h2 class="section-title">Student reviews</h2>' +
+                '<div id="reviews-body">' +
+                  '<div class="wga-skeleton" style="height:86px;border-radius:14px;"></div>' +
+                '</div>' +
+              '</div>' +
             '</div>' +
 
             '<aside class="buy-card">' +
@@ -1500,6 +1542,7 @@
         bindTabs();
         selectTab(initialTab());
         bindMobileBuyBar(course, access);
+        loadReviews(course);
 
         var coversMore = document.getElementById('covers-more');
         if (coversMore) {
@@ -1528,6 +1571,220 @@
 
           var openRow = document.querySelector('[data-lesson-row="' + wanted + '"]');
           if (openRow) openRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+
+      /* ------------------------------------------------------------- *
+       * Reviews
+       *
+       * Reviews are moderated, so this panel has three states to show: what the
+       * public sees, what the author sees while their review waits, and the form
+       * itself. The rating on the course card comes from the server; this panel
+       * never computes it, so the two cannot disagree.
+       * ------------------------------------------------------------- */
+
+      function reviewStars(rating) {
+        var out = '';
+        for (var i = 1; i <= 5; i += 1) {
+          out += '<i class="' + (i <= Math.round(Number(rating) || 0) ? 'fas' : 'far') + ' fa-star" aria-hidden="true"></i>';
+        }
+        return out;
+      }
+
+      function reviewItemHtml(review) {
+        return (
+          '<article class="review-item">' +
+            '<div class="review-head">' +
+              '<span class="review-stars" aria-label="' + review.rating + ' out of 5">' + reviewStars(review.rating) + '</span>' +
+              '<span class="review-name">' + WGAUI.escapeHtml(review.author.name) + '</span>' +
+              '<span class="review-date">' + WGAUI.escapeHtml(WGAUI.formatDate(review.createdAt)) + '</span>' +
+            '</div>' +
+            (review.title ? '<p class="review-title">' + WGAUI.escapeHtml(review.title) + '</p>' : '') +
+            '<p class="review-body">' + WGAUI.escapeHtml(review.body) + '</p>' +
+          '</article>'
+        );
+      }
+
+      function reviewFormHtml(access, mine) {
+        if (access && access.manages) return '';
+
+        if (!WGA.isSignedIn()) {
+          return (
+            '<div class="review-form">' +
+              '<p class="wga-muted" style="margin:0;">' +
+                '<a href="/login.html?next=' + encodeURIComponent(window.location.pathname + window.location.search) + '">Sign in</a>' +
+                ' to review this course. Reviews come from students who have taken it.' +
+              '</p>' +
+            '</div>'
+          );
+        }
+
+        if (!access || !access.isEnrolled) {
+          return (
+            '<div class="review-form">' +
+              '<p class="wga-muted" style="margin:0;">Enrol in this course to leave a review.</p>' +
+            '</div>'
+          );
+        }
+
+        var notice = '';
+        if (mine && mine.status === 'pending') {
+          notice = '<p class="review-notice pending">Your review is waiting to be checked. It will appear here once it has been approved.</p>';
+        } else if (mine && mine.status === 'rejected') {
+          notice =
+            '<p class="review-notice rejected">Your review was not published.' +
+            (mine.moderationNote ? ' ' + WGAUI.escapeHtml(mine.moderationNote) : '') +
+            ' You can edit it and submit it again.</p>';
+        }
+
+        var options = [
+          [5, '5 — Excellent'],
+          [4, '4 — Good'],
+          [3, '3 — Average'],
+          [2, '2 — Poor'],
+          [1, '1 — Bad']
+        ].map(function (pair) {
+          var selected = mine && Number(mine.rating) === pair[0] ? ' selected' : '';
+          return '<option value="' + pair[0] + '"' + selected + '>' + pair[1] + '</option>';
+        }).join('');
+
+        return (
+          '<form class="review-form" id="review-form" novalidate>' +
+            notice +
+            '<div class="field">' +
+              '<label for="review-rating">Your rating</label>' +
+              '<select class="wga-input" id="review-rating" name="rating">' + options + '</select>' +
+            '</div>' +
+            '<div class="field">' +
+              '<label for="review-title">Headline <span class="wga-hint" style="font-weight:400;">(optional)</span></label>' +
+              '<input class="wga-input" id="review-title" name="title" maxlength="120" value="' +
+                WGAUI.escapeHtml(mine ? mine.title : '') + '" placeholder="Sum up your experience" />' +
+            '</div>' +
+            '<div class="field">' +
+              '<label for="review-body">Your review</label>' +
+              '<textarea class="wga-input" id="review-body" name="body" minlength="20" maxlength="4000" ' +
+                'placeholder="What did you learn? Was the material useful? What would you tell someone starting it?">' +
+                WGAUI.escapeHtml(mine ? mine.body : '') +
+              '</textarea>' +
+            '</div>' +
+            '<div class="field" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">' +
+              '<button class="wga-btn wga-btn-primary" type="submit" id="review-submit">' +
+                (mine ? 'Update review' : 'Post review') +
+              '</button>' +
+              (mine ? '<button class="wga-btn wga-btn-ghost" type="button" id="review-delete">Withdraw</button>' : '') +
+            '</div>' +
+          '</form>'
+        );
+      }
+
+      function renderReviews(course, data) {
+        var body = document.getElementById('reviews-body');
+        if (!body) return;
+
+        var summary = data.summary || { average: 0, count: 0 };
+        var reviews = data.items || [];
+        var mine = data.myReview || null;
+
+        var summaryHtml =
+          '<div class="review-summary">' +
+            '<div>' +
+              '<div class="review-score">' + (summary.count ? Number(summary.average).toFixed(1) : '\u2014') + '</div>' +
+              '<span class="review-stars" aria-hidden="true">' + reviewStars(summary.average) + '</span>' +
+            '</div>' +
+            '<div>' +
+              '<p style="margin:0;font-weight:700;">' +
+                (summary.count
+                  ? summary.count + (summary.count === 1 ? ' review' : ' reviews')
+                  : 'No reviews yet') +
+              '</p>' +
+              '<p class="wga-hint" style="margin:2px 0 0;">' +
+                (summary.count
+                  ? 'From students who have taken this course.'
+                  : 'Be the first to review this course.') +
+              '</p>' +
+            '</div>' +
+          '</div>';
+
+        body.innerHTML =
+          summaryHtml +
+          reviews.map(reviewItemHtml).join('') +
+          reviewFormHtml(currentAccess, mine);
+
+        bindReviewForm(course);
+
+        var tab = document.getElementById('tab-reviews');
+        if (tab) tab.textContent = summary.count ? 'Reviews (' + summary.count + ')' : 'Reviews';
+      }
+
+      function loadReviews(course) {
+        var body = document.getElementById('reviews-body');
+        if (!body) return;
+
+        WGA.get('/courses/' + encodeURIComponent(course.id) + '/reviews?limit=50')
+          .then(function (data) {
+            renderReviews(course, data);
+          })
+          .catch(function () {
+            body.innerHTML = '<p class="wga-muted">Reviews could not be loaded right now.</p>';
+          });
+      }
+
+      function bindReviewForm(course) {
+        var form = document.getElementById('review-form');
+        if (!form) return;
+
+        var submit = document.getElementById('review-submit');
+
+        form.addEventListener('submit', function (event) {
+          event.preventDefault();
+
+          var ratingField = form.querySelector('#review-rating');
+          var titleField = form.querySelector('#review-title');
+          var bodyField = form.querySelector('#review-body');
+          var text = bodyField.value.trim();
+
+          if (text.length < 20) {
+            WGAUI.toast('Write at least 20 characters so the review is useful.', 'error');
+            bodyField.focus();
+            return;
+          }
+
+          submit.disabled = true;
+
+          WGA.post('/courses/' + encodeURIComponent(course.id) + '/reviews', {
+            rating: Number(ratingField.value),
+            title: titleField.value.trim(),
+            body: text
+          })
+            .then(function (data) {
+              WGAUI.toast(data.message || 'Thank you. Your review will be checked before it appears.', 'success');
+              loadReviews(course);
+            })
+            .catch(function (error) {
+              WGAUI.toast((error && error.message) || 'Your review could not be saved.', 'error');
+            })
+            .finally(function () {
+              submit.disabled = false;
+            });
+        });
+
+        var remove = document.getElementById('review-delete');
+        if (remove) {
+          remove.addEventListener('click', function () {
+            if (!window.confirm('Withdraw your review? This cannot be undone.')) return;
+
+            remove.disabled = true;
+
+            WGA.del('/courses/' + encodeURIComponent(course.id) + '/reviews/mine')
+              .then(function () {
+                WGAUI.toast('Your review was withdrawn.', 'success');
+                loadReviews(course);
+              })
+              .catch(function (error) {
+                remove.disabled = false;
+                WGAUI.toast((error && error.message) || 'Your review could not be withdrawn.', 'error');
+              });
+          });
         }
       }
 
