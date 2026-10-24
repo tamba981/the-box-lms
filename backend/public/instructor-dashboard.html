@@ -1281,6 +1281,11 @@
          * returns a page of the full list. The two carry the live enrolment count
          * under different names — `enrollmentCount` on the paginated one — so this
          * is the single place that difference is handled.
+         *
+         * `certificateFeeCents` must survive this mapping: the Edit dialog reads
+         * it to preselect the fee, and saving sends back whatever is selected. It
+         * was missing here, so every edit silently reset the fee to "None" —
+         * twenty live courses had a fee at the time.
          */
         function toInstructorCourse(course) {
             const students = course.enrollmentCount !== undefined && course.enrollmentCount !== null
@@ -1298,10 +1303,36 @@
                 price: (course.priceCents || 0) / 100,
                 priceLabel: course.priceLabel,
                 isFree: course.isFree,
+                certificateFeeCents: course.certificateFeeCents || 0,
                 rating: course.rating || 0,
                 lessonCount: course.lessonCount || 0,
                 createdAt: course.publishedAt || null
             };
+        }
+
+        /**
+         * Every course the instructor can manage, by id.
+         *
+         * The overview payload only carries twelve courses, and My Courses loads
+         * the full list separately. Edit used to search only the overview's twelve
+         * and return silently for anything else, so 35 of 47 courses could not be
+         * edited at all. This holds whichever list was loaded last, and edits fall
+         * back to fetching a course the page has never seen.
+         */
+        const courseCache = new Map();
+
+        function rememberCourses(courses) {
+            courses.forEach((course) => courseCache.set(String(course.id), course));
+        }
+
+        async function resolveCourse(id) {
+            const key = String(id);
+            if (courseCache.has(key)) return courseCache.get(key);
+
+            const data = await WGA.get('/courses/' + encodeURIComponent(key));
+            const course = toInstructorCourse(data.course || data);
+            courseCache.set(key, course);
+            return course;
         }
 
         /**
@@ -1311,7 +1342,7 @@
          * a full list rather than a summary.
          */
         async function loadInstructorData() {
-            const [dashboard, students, sessions, past, threads, notifications, taxonomy] = await Promise.all([
+            const [dashboard, students, sessions, past, threads, notifications, taxonomy, mine] = await Promise.all([
                 WGA.get('/dashboard/instructor'),
                 WGA.get('/dashboard/instructor/students', { query: { limit: 100 } }),
                 WGA.get('/live-sessions', { query: { scope: 'all', limit: 50 } }),
@@ -1321,7 +1352,11 @@
                 // The categories and credentials the API will accept. Read rather
                 // than hard-coded: the form used to offer three options and could
                 // not name the two categories four courses were already using.
-                WGA.get('/courses/taxonomy')
+                WGA.get('/courses/taxonomy'),
+                // The dashboard payload carries only the twelve most recent
+                // courses. Every picker and dialog needs the whole list, so it is
+                // fetched once here rather than per control.
+                WGA.get('/courses/mine', { query: { limit: 100 } })
             ]);
 
             instructorData.taxonomy = taxonomy || { categories: [], credentials: [] };
@@ -1354,6 +1389,13 @@
             instructorData.revenue = revenue;
 
             instructorData.courses = (dashboard.courses || []).map(toInstructorCourse);
+            rememberCourses(instructorData.courses);
+
+            // Every non-archived course this instructor owns, for the pickers and
+            // for Edit. Falls back to the preview if the list could not be read.
+            instructorData.allCourses = (mine && mine.items ? mine.items : []).map(toInstructorCourse);
+            if (instructorData.allCourses.length) rememberCourses(instructorData.allCourses);
+            else instructorData.allCourses = instructorData.courses;
 
             instructorData.students = (students.items || []).map((student) => ({
                 id: student.id,
@@ -1700,6 +1742,7 @@
                 });
 
                 const courses = (data.items || []).map(toInstructorCourse);
+                rememberCourses(courses);
                 const paging = data.pagination || { page: 1, limit: 100, total: courses.length, totalPages: 1, hasNextPage: false, hasPrevPage: false };
 
                 const title = document.getElementById('myCoursesTitle');
@@ -2012,9 +2055,10 @@
         // error message when it cannot.
 
         function courseOptions(selectedId) {
-            if (instructorData.courses.length === 0) return '<option value="">No courses yet</option>';
+            const all = instructorData.allCourses || instructorData.courses;
+            if (!all.length) return '<option value="">No courses yet</option>';
 
-            return instructorData.courses
+            return all
                 .map((c) => `<option value="${c.id}"${String(c.id) === String(selectedId) ? ' selected' : ''}>${WGAUI.escapeHtml(c.title)}</option>`)
                 .join('');
         }
@@ -2406,7 +2450,8 @@ return `<div class="lesson-admin">${list}${form}</div>`;
         }
 
         window.manageLessons = async function manageLessons(courseId) {
-            const course = instructorData.courses.find((c) => String(c.id) === String(courseId));
+            const course = courseCache.get(String(courseId))
+                || instructorData.courses.find((c) => String(c.id) === String(courseId));
             lessonState.courseId = courseId;
             lessonState.title = 'Lessons' + (course ? ' · ' + WGAUI.escapeHtml(course.title) : '');
             lessonState.editing = null;
@@ -3124,9 +3169,20 @@ return `<div class="lesson-admin">${list}${form}</div>`;
             await loadInstructorData();
         }
 
-        window.editCourse = function editCourse(id) {
-            const c = instructorData.courses.find((course) => String(course.id) === String(id));
-            if (!c) return;
+        window.editCourse = async function editCourse(id) {
+            let c;
+
+            try {
+                c = await resolveCourse(id);
+            } catch (error) {
+                showToast(error.message || 'We could not open that course.', 'error');
+                return;
+            }
+
+            if (!c) {
+                showToast('That course could not be found.', 'error');
+                return;
+            }
 
             openModal('Edit Course', `
                 <div class="form-group"><label>Title</label><input type="text" id="editTitle" value="${WGAUI.escapeHtml(c.title)}" /></div>
@@ -3182,6 +3238,10 @@ return `<div class="lesson-admin">${list}${form}</div>`;
 
                 closeModal();
                 showToast('Course saved.', 'success');
+
+                // Drop the cached copy so the next edit reads the saved values,
+                // including a course that is not on the first page of the list.
+                courseCache.delete(String(id));
 
                 await loadInstructorData();
                 loadPage('courses');
@@ -3406,7 +3466,7 @@ return `<div class="lesson-admin">${list}${form}</div>`;
         };
 
         window.scheduleLiveClass = function scheduleLiveClass() {
-            if (instructorData.courses.length === 0) {
+            if (!(instructorData.allCourses || instructorData.courses).length) {
                 openModal('Schedule a Class', `<p>Create a course first — a live class belongs to one.</p>
                     <button class="btn-primary" onclick="closeModal();loadPage('create-course')">Create a Course</button>`);
                 return;
