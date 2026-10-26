@@ -846,6 +846,10 @@
         }
     </style>
 
+  <!-- The signed-in design system. Loaded after the page's own styles so it can
+       re-skin the existing components without the markup being rewritten. -->
+  <link rel="stylesheet" href="/assets/css/wga-dash.css?v=20261033" />
+
     <!--
       The role guard confirms the session against the server before the page is
       revealed. This replaces the previous check, which treated the presence of

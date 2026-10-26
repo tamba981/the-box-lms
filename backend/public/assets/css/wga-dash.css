@@ -1,0 +1,765 @@
+/* ==========================================================================
+   wga-dash.css — the shared design system for the signed-in dashboards.
+
+   Loaded after each dashboard's own <style> block, so equal-specificity rules
+   here win. The dashboards are large, hand-written pages and their markup is
+   left alone: this file re-skins the components those pages already use, which
+   is why it can be adopted page by page without touching the JavaScript.
+
+   It exists because the dashboards and the public site had drifted into two
+   different products: the marketing pages are navy-and-white with crisp 1px
+   borders, while the dashboards were glassmorphism on a purple gradient with
+   light-theme text tokens that were never updated for a dark surface. Half of
+   the text in "light mode" sat at 1.4:1 against its own card.
+
+   Tokens are prefixed --d- so they cannot collide with the --primary/--gold
+   names each page already defines. The pages' own tokens are also repointed
+   below, because a lot of inline `style="color: var(--text-light)"` markup
+   reads them directly.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- *
+   1. Light theme (the default — a real light theme now)
+ * ---------------------------------------------------------------- */
+
+:root,
+body.dash-theme {
+  --d-bg: #f7f9fc;
+  --d-surface: #ffffff;
+  --d-surface-2: #f4f7fc;
+  --d-surface-3: #eef5ff;
+  --d-line: #e3e8f0;
+  --d-line-strong: #cbd5e1;
+
+  --d-ink: #172b4d;
+  --d-ink-2: #44546a;
+  --d-muted: #5b6b82;
+  --d-heading: #073778;
+
+  --d-brand: #1479e8;
+  --d-brand-strong: #0e63c4;
+  --d-brand-ink: #ffffff;
+  --d-brand-soft: #eaf2fe;
+  --d-brand-line: #bcd8fb;
+
+  --d-gold: #d9ad42;
+  --d-gold-text: #8a6413;
+
+  --d-success: #0f7b52;
+  --d-success-soft: #e7f6ee;
+  --d-success-line: #b3e2cb;
+
+  --d-warning: #8a5a00;
+  --d-warning-soft: #fdf3e3;
+  --d-warning-line: #f0d9a8;
+
+  --d-danger: #b42318;
+  --d-danger-soft: #fdeceb;
+  --d-danger-line: #f3c3bf;
+
+  --d-shadow: 0 1px 2px rgba(16, 24, 40, 0.05), 0 1px 3px rgba(16, 24, 40, 0.06);
+  --d-shadow-lg: 0 18px 40px -20px rgba(16, 24, 40, 0.22), 0 2px 6px rgba(16, 24, 40, 0.05);
+  --d-radius: 18px;
+  --d-radius-sm: 12px;
+
+  /* The pages' own tokens, repointed so inline var() styles follow this theme. */
+  --text: #172b4d;
+  --text-light: #5b6b82;
+  --border: #e3e8f0;
+  --bg-light: #f7f9fc;
+  --surface: #ffffff;
+  --primary: #1479e8;
+  --primary-dark: #073778;
+  --primary-light: #1479e8;
+  --gold: #d9ad42;
+  --gold-light: #e8c877;
+  --success: #0f7b52;
+  --warning: #8a5a00;
+  --danger: #b42318;
+  --info: #1479e8;
+}
+
+/* ---------------------------------------------------------------- *
+   2. Dark theme — the same shapes, inverted surfaces
+ * ---------------------------------------------------------------- */
+
+body.dark-mode {
+  --d-bg: #0b1220;
+  --d-surface: #111b2b;
+  --d-surface-2: #0d1522;
+  --d-surface-3: #162234;
+  --d-line: #1f2c40;
+  --d-line-strong: #2f4059;
+
+  --d-ink: #e7eefb;
+  --d-ink-2: #c8d5e6;
+  --d-muted: #9fb0c9;
+  --d-heading: #f2f7ff;
+
+  --d-brand: #60a5fa;
+  --d-brand-strong: #93c5fd;
+  --d-brand-ink: #08132a;
+  --d-brand-soft: #14243a;
+  --d-brand-line: #24405f;
+
+  --d-gold: #e6c065;
+  --d-gold-text: #e6c065;
+
+  --d-success: #74d9a8;
+  --d-success-soft: #0d2a20;
+  --d-success-line: #1d5540;
+
+  --d-warning: #f0c46b;
+  --d-warning-soft: #2b2110;
+  --d-warning-line: #55411d;
+
+  --d-danger: #f7a7a0;
+  --d-danger-soft: #2d1614;
+  --d-danger-line: #5a2a24;
+
+  --d-shadow: none;
+  --d-shadow-lg: 0 20px 44px -22px rgba(0, 0, 0, 0.8);
+
+  --text: #e7eefb;
+  --text-light: #9fb0c9;
+  --border: #1f2c40;
+  --bg-light: #0b1220;
+  --surface: #111b2b;
+  --primary: #60a5fa;
+  --primary-dark: #93c5fd;
+  --primary-light: #60a5fa;
+  --gold: #e6c065;
+  --gold-light: #f0d79a;
+  --success: #74d9a8;
+  --warning: #f0c46b;
+  --danger: #f7a7a0;
+  --info: #60a5fa;
+
+  --dark-text: #e7eefb;
+  --dark-muted: #9fb0c9;
+  --dark-border: #2f4059;
+  --dark-card: #111b2b;
+}
+
+/* ---------------------------------------------------------------- *
+   3. Page shell
+ * ---------------------------------------------------------------- */
+
+body,
+body.dark-mode {
+  background: var(--d-bg);
+  background-attachment: scroll;
+  color: var(--d-ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body.dash,
+body.dash.dark-mode {
+  background: var(--d-bg);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--d-heading);
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--d-brand);
+}
+
+/* Focus ring consistent with the public site. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--d-brand);
+  outline-offset: 2px;
+  border-radius: var(--d-radius-sm);
+}
+
+/* ---------------------------------------------------------------- *
+   4. Surfaces — every card the dashboards use
+ * ---------------------------------------------------------------- */
+
+.glass-premium,
+.glass-gradient,
+.stat-card,
+.table-container,
+.chart-card,
+.cv-card,
+.quick-stat,
+.course-card,
+.panel,
+.modal-content,
+.notifications-panel,
+.empty-state {
+  background: var(--d-surface);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid var(--d-line);
+  border-radius: var(--d-radius);
+  box-shadow: var(--d-shadow);
+}
+
+.glass-premium:hover,
+.glass-gradient:hover,
+.chart-card:hover,
+.cv-card:hover {
+  border-color: var(--d-line-strong);
+  box-shadow: var(--d-shadow-lg);
+  transform: none;
+}
+
+/* Course cards keep a small lift: they are clickable objects. */
+.course-card {
+  overflow: hidden;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--d-brand-line);
+  box-shadow: var(--d-shadow-lg);
+}
+
+/* ---------------------------------------------------------------- *
+   5. Sidebar
+ * ---------------------------------------------------------------- */
+
+.sidebar,
+.sidebar.open {
+  background: var(--d-surface);
+  border-right: 1px solid var(--d-line);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.sidebar-menu {
+  background: transparent;
+}
+
+.sidebar-link {
+  color: var(--d-ink-2);
+  border-radius: var(--d-radius-sm);
+  font-weight: 600;
+}
+
+.sidebar-link i {
+  color: var(--d-muted);
+}
+
+.sidebar-link:hover {
+  background: var(--d-surface-2);
+  color: var(--d-heading);
+}
+
+.sidebar-link:hover i {
+  color: var(--d-brand);
+}
+
+/* The active item is a filled brand pill, not a gold gradient. */
+.sidebar-link.active,
+.sidebar-link.active:hover {
+  background: var(--d-brand-soft);
+  color: var(--d-heading);
+  box-shadow: inset 3px 0 0 var(--d-brand);
+}
+
+.sidebar-link.active i {
+  color: var(--d-brand);
+}
+
+/* ---------------------------------------------------------------- *
+   6. Top bar
+ * ---------------------------------------------------------------- */
+
+.header,
+.header-content {
+  background: var(--d-surface);
+  border-bottom: 1px solid var(--d-line);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+.header-left .brand-mark {
+  background: var(--d-heading);
+  color: #ffffff;
+}
+
+/* The wordmark was gradient-filled text; a solid navy reads at every size. */
+.logo,
+.header-left .logo {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--d-heading);
+}
+
+.header-right .user-name {
+  color: var(--d-ink);
+}
+
+.header-search,
+.header-search input {
+  background: var(--d-surface-2);
+  border: 1px solid var(--d-line);
+  color: var(--d-ink);
+}
+
+.header-search input::placeholder {
+  color: var(--d-muted);
+}
+
+.header-search i {
+  color: var(--d-muted);
+}
+
+.header-search input:focus {
+  border-color: var(--d-brand);
+  background: var(--d-surface);
+}
+
+.logout-btn,
+.mobile-menu-btn,
+.btn-icon {
+  background: var(--d-surface-2);
+  border: 1px solid var(--d-line);
+  color: var(--d-ink);
+}
+
+.logout-btn:hover,
+.mobile-menu-btn:hover,
+.btn-icon:hover {
+  border-color: var(--d-brand);
+  color: var(--d-brand);
+}
+
+/* ---------------------------------------------------------------- *
+   7. Stat cards
+ * ---------------------------------------------------------------- */
+
+.stat-title {
+  color: var(--d-muted);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* These were gradient-filled numbers with a transparent colour, which no
+   contrast check can see and which faded to ~2:1 against the card. */
+.stat-value,
+.quick-stat .value {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--d-heading);
+}
+
+.stat-change {
+  color: var(--d-muted);
+}
+
+/* ---------------------------------------------------------------- *
+   8. Headings and section furniture
+ * ---------------------------------------------------------------- */
+
+.section-title,
+.table-header h3,
+.chart-title,
+.modal-header h3,
+.modal-body h3,
+.profile-subhead {
+  color: var(--d-heading);
+}
+
+.section-title i {
+  color: var(--d-brand);
+}
+
+/* ---------------------------------------------------------------- *
+   9. Buttons
+ * ---------------------------------------------------------------- */
+
+.btn-primary {
+  background: var(--d-brand);
+  background-image: none;
+  color: var(--d-brand-ink);
+  border: 1px solid transparent;
+  border-radius: var(--d-radius-sm);
+  font-weight: 650;
+  box-shadow: none;
+}
+
+.btn-primary:hover {
+  background: var(--d-brand-strong);
+  color: var(--d-brand-ink);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--d-ink);
+  border: 1px solid var(--d-line-strong);
+  border-radius: var(--d-radius-sm);
+  font-weight: 650;
+}
+
+.btn-outline:hover {
+  border-color: var(--d-brand);
+  color: var(--d-brand);
+  background: var(--d-brand-soft);
+}
+
+/* Small square icon buttons in tables. */
+.action-btn {
+  background: var(--d-surface-2);
+  border: 1px solid var(--d-line);
+  color: var(--d-ink-2);
+  border-radius: 10px;
+}
+
+.action-btn:hover {
+  border-color: var(--d-brand);
+  color: var(--d-brand);
+}
+
+.action-btn.view:hover {
+  color: var(--d-brand);
+}
+
+.action-btn.edit:hover {
+  color: var(--d-warning);
+  border-color: var(--d-warning-line);
+}
+
+.action-btn.delete,
+.action-btn.delete:hover {
+  color: var(--d-danger);
+  border-color: var(--d-danger-line);
+}
+
+.action-btn.message:hover {
+  color: var(--d-brand);
+}
+
+/* ---------------------------------------------------------------- *
+   10. Tables
+ * ---------------------------------------------------------------- */
+
+.data-table th {
+  color: var(--d-muted);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: var(--d-surface-2);
+  border-bottom: 1px solid var(--d-line);
+}
+
+.data-table td {
+  color: var(--d-ink);
+  border-bottom: 1px solid var(--d-line);
+}
+
+.data-table tbody tr:hover td {
+  background: var(--d-surface-2);
+}
+
+.data-table a {
+  color: var(--d-brand);
+}
+
+.table-header,
+.table-toolbar {
+  border-bottom: 1px solid var(--d-line);
+}
+
+.table-toolbar input,
+.table-toolbar select {
+  background: var(--d-surface);
+  border: 1px solid var(--d-line);
+  color: var(--d-ink);
+  border-radius: 10px;
+}
+
+/* ---------------------------------------------------------------- *
+   11. Status pills
+ * ---------------------------------------------------------------- */
+
+.badge,
+.course-badge,
+.cv-badge,
+.admin-badge,
+.instructor-badge {
+  border: 1px solid var(--d-line);
+  background: var(--d-surface-2);
+  color: var(--d-ink-2);
+  font-weight: 700;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.badge.active,
+.badge.approved,
+.badge.completed,
+.course-badge.published,
+.cv-approved,
+.published {
+  background: var(--d-success-soft);
+  border-color: var(--d-success-line);
+  color: var(--d-success);
+}
+
+.badge.pending,
+.badge.draft,
+.course-badge.draft,
+.course-badge.pending,
+.cv-pending,
+.pending {
+  background: var(--d-warning-soft);
+  border-color: var(--d-warning-line);
+  color: var(--d-warning);
+}
+
+.badge.inactive,
+.course-badge.rejected,
+.cv-rejected {
+  background: var(--d-danger-soft);
+  border-color: var(--d-danger-line);
+  color: var(--d-danger);
+}
+
+.badge.in-progress,
+.course-badge.in-progress {
+  background: var(--d-brand-soft);
+  border-color: var(--d-brand-line);
+  color: var(--d-brand);
+}
+
+body.dark-mode .badge.in-progress,
+body.dark-mode .course-badge.in-progress {
+  color: var(--d-brand);
+}
+
+/* The count on the bell: a solid brand dot with white text, at a size that
+   still reads. */
+.notification-badge {
+  background: var(--d-danger);
+  color: #ffffff;
+  font-weight: 700;
+  border: 0;
+}
+
+body.dark-mode .notification-badge {
+  color: #1a0b09;
+}
+
+/* ---------------------------------------------------------------- *
+   12. Avatars
+ * ---------------------------------------------------------------- */
+
+/* Initials are painted on a gradient; the gradient is fixed so the letter
+   colour can be chosen against it once. */
+.user-avatar,
+.profile-avatar {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+body.dark-mode .user-avatar,
+body.dark-mode .profile-avatar {
+  color: #08132a;
+}
+
+/* ---------------------------------------------------------------- *
+   13. Forms and modals
+ * ---------------------------------------------------------------- */
+
+.modal {
+  background: rgba(7, 19, 40, 0.55);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.modal-content {
+  box-shadow: var(--d-shadow-lg);
+}
+
+.modal-header {
+  border-bottom: 1px solid var(--d-line);
+  background: var(--d-surface);
+}
+
+.modal-body {
+  background: var(--d-surface);
+  color: var(--d-ink);
+}
+
+.form-group label {
+  color: var(--d-ink);
+  font-weight: 650;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: var(--d-surface-2);
+  border: 1px solid var(--d-line);
+  color: var(--d-ink);
+  border-radius: var(--d-radius-sm);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: var(--d-muted);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--d-brand);
+  background: var(--d-surface);
+  box-shadow: 0 0 0 3px rgba(20, 121, 232, 0.18);
+}
+
+/* ---------------------------------------------------------------- *
+   14. Notifications panel
+ * ---------------------------------------------------------------- */
+
+.notifications-panel {
+  background: var(--d-surface);
+  border: 1px solid var(--d-line);
+}
+
+.notification-item {
+  border-bottom: 1px solid var(--d-line);
+  color: var(--d-ink);
+}
+
+.notification-item:hover {
+  background: var(--d-surface-2);
+}
+
+.notification-item.unread {
+  background: var(--d-brand-soft);
+}
+
+/* ---------------------------------------------------------------- *
+   15. Empty states and spinners
+ * ---------------------------------------------------------------- */
+
+.empty-state {
+  color: var(--d-muted);
+}
+
+.empty-state h3 {
+  color: var(--d-heading);
+}
+
+.empty-state i {
+  color: var(--d-brand-line);
+}
+
+.loading-spinner {
+  border-color: var(--d-line);
+  border-top-color: var(--d-brand);
+}
+
+/* ---------------------------------------------------------------- *
+   16. Course cards
+ * ---------------------------------------------------------------- */
+
+.course-title {
+  color: var(--d-heading);
+}
+
+.course-meta {
+  color: var(--d-muted);
+}
+
+.course-content {
+  background: var(--d-surface);
+}
+
+/* ---------------------------------------------------------------- *
+   17. Charts
+ * ---------------------------------------------------------------- */
+
+.chart-title {
+  color: var(--d-heading);
+}
+
+/* ---------------------------------------------------------------- *
+   18. Admin activity feed
+ * ---------------------------------------------------------------- */
+
+.activity-item,
+.activity-text {
+  color: var(--d-ink);
+  border-color: var(--d-line);
+}
+
+.activity-icon {
+  background: var(--d-brand-soft);
+  color: var(--d-brand);
+}
+
+.time,
+.label {
+  color: var(--d-muted);
+}
+
+/* ---------------------------------------------------------------- *
+   19. Student chat bubbles
+ * ---------------------------------------------------------------- */
+
+.bubble.received,
+.bubble.sent,
+.bubble {
+  color: var(--d-ink);
+  border: 1px solid var(--d-line);
+}
+
+.bubble.received {
+  background: var(--d-surface-2);
+}
+
+.bubble.sent {
+  background: var(--d-brand-soft);
+  border-color: var(--d-brand-line);
+}
+
+.ai-response {
+  background: var(--d-surface-2);
+  color: var(--d-ink);
+  border: 1px solid var(--d-line);
+}
+
+.center-text {
+  color: var(--d-heading);
+}
+
+/* ---------------------------------------------------------------- *
+   20. Reduced motion
+ * ---------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-premium,
+  .course-card,
+  .sidebar-link,
+  .action-btn,
+  .btn-primary,
+  .btn-outline {
+    transition: none;
+  }
+
+  .course-card:hover,
+  .glass-premium:hover {
+    transform: none;
+  }
+}
