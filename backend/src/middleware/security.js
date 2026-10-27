@@ -74,6 +74,11 @@ const CSP_DIRECTIVES = {
     // chart.js in /assets/js would remove this line entirely and is the better
     // long-term arrangement.
     'https://cdn.jsdelivr.net',
+    // Google Translate. The element is only requested when a visitor picks a
+    // language, but the policy has to allow it before a click can succeed —
+    // CSP is not consultable at runtime.
+    'https://translate.google.com',
+    'https://translate.googleapis.com',
   ],
   // Inline event handlers (`onclick=`, `onchange=`) are governed by
   // script-src-attr, which otherwise inherits script-src. There are around a
@@ -81,7 +86,14 @@ const CSP_DIRECTIVES = {
   // than left to the fallback.
   'script-src-attr': ["'unsafe-inline'"],
 
-  'style-src': ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com', 'https://cdnjs.cloudflare.com'],
+  'style-src': [
+    "'self'",
+    "'unsafe-inline'",
+    'https://fonts.googleapis.com',
+    'https://cdnjs.cloudflare.com',
+    // The Translate element injects its own stylesheet from here.
+    'https://translate.googleapis.com',
+  ],
   'font-src': ["'self'", 'https://fonts.gstatic.com', 'https://cdnjs.cloudflare.com', 'data:'],
   'img-src': ["'self'", 'data:', 'https:'],
   // Lesson video is served from a signed object-storage URL, so https: stays.
@@ -104,10 +116,17 @@ const CSP_DIRECTIVES = {
     'https://www.youtube.com',
     'https://www.youtube-nocookie.com',
     'https://player.vimeo.com',
+    // The Translate element keeps its own toolbar frame on this origin. It is
+    // hidden by CSS, but a hidden frame is still a frame and is still blocked.
+    'https://translate.google.com',
   ],
   'connect-src': [
     "'self'",
     ...config.allowedOrigins,
+    // Google Translate fetches its static assets and the translation itself over
+    // XHR from these two hosts once a visitor asks for a language.
+    'https://translate.googleapis.com',
+    'https://translate.google.com',
     // An instructor's browser PUTs the video file straight to object storage at a
     // signed URL, and an applicant's browser does the same with a photograph. That
     // origin has to be reachable from the page, or the upload fails as an opaque

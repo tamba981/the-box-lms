@@ -7414,6 +7414,43 @@ async function testOAuth() {
     assertEqual(status, 401, 'status');
   });
 
+  await check('the cookie notice and language control reach every page', async () => {
+    // Both live in wga-consent.js and are requested by wga-ui.js, so the rule
+    // that matters is: every page loads wga-ui.js. Checked against the staged
+    // copy the server actually serves.
+    const fs = require('fs');
+    const path = require('path');
+    const root = path.join(__dirname, '..', 'public');
+
+    const pages = fs.readdirSync(root).filter((name) => name.endsWith('.html'));
+    const missing = pages.filter((name) => {
+      const html = fs.readFileSync(path.join(root, name), 'utf8');
+      return !html.includes('/assets/js/wga-ui.js');
+    });
+
+    assert(pages.length >= 20, 'the public directory still holds the pages');
+    assertEqual(missing.join(', '), '', 'pages that would have no notice or language control');
+  });
+
+  await check('the shared bundle is served and asks once, not on every visit', async () => {
+    const response = await fetch(baseUrl + '/assets/js/wga-consent.js');
+    assertEqual(response.status, 200, 'status');
+
+    const source = await response.text();
+    assert(source.includes('wga.consent'), 'stores the choice');
+    assert(source.includes('CONSENT_DAYS'), 'and remembers it rather than asking every page');
+    assert(source.includes('translate.google.com'), 'loads the translator');
+  });
+
+  await check('the policy allows the translate origins but nothing wider', async () => {
+    const response = await fetch(baseUrl + '/login.html');
+    const csp = response.headers.get('content-security-policy') || '';
+
+    assert(csp.includes('https://translate.google.com'), 'script or frame origin named');
+    assert(csp.includes('https://translate.googleapis.com'), 'asset origin named');
+    assert(!/script-src[^;]*https:\/\/\*/.test(csp), 'no wildcard script origin');
+  });
+
   await check('the exchange needs a code before it will look at anything', async () => {
     const { status, json } = await request('POST', '/api/v1/auth/oauth/exchange', { body: {} });
 

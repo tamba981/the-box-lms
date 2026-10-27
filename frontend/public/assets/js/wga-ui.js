@@ -654,4 +654,20 @@
   } else {
     injectBaseStyles();
   }
+
+  /**
+   * The cookie notice and the language control live in their own file and are
+   * requested from here, because every page already loads this one. That is 24
+   * HTML documents that would otherwise each need two more script tags, and a
+   * page added later gets both without anyone remembering.
+   */
+  (function loadExtras() {
+    if (window.__wgaExtrasRequested) return;
+    window.__wgaExtrasRequested = true;
+
+    var script = document.createElement('script');
+    script.src = '/assets/js/wga-consent.js?v=20261028';
+    script.defer = true;
+    document.head.appendChild(script);
+  })();
 })(window);
