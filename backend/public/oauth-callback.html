@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/Images/Brand/wuteve-emblem.png" />
+  <title>Signing you in · Wuteve Global Academy</title>
+  <meta name="robots" content="noindex" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/assets/css/wga-shell.css?v=20261031" />
+</head>
+<body>
+  <header class="wga-header">
+    <a class="wga-brand" href="/">
+      <img class="brand-mark" src="/Images/Brand/wuteve-emblem.png" alt="" width="34" height="34" />
+      Wuteve <span class="accent">Global Academy</span>
+    </a>
+    <button class="wga-theme-toggle" data-theme-toggle type="button" aria-label="Toggle colour theme">🌙</button>
+  </header>
+
+  <main class="wga-main wga-narrow">
+    <div class="wga-card" id="card">
+      <div style="text-align:center;padding:14px 0 22px;">
+        <div id="icon" style="font-size:44px;line-height:1;margin-bottom:16px;color:var(--primary);">
+          <i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i>
+        </div>
+        <h1 id="title" style="margin-bottom:8px;">Finishing your sign-in…</h1>
+        <p id="message" class="wga-muted" style="margin:0;">One moment please.</p>
+      </div>
+
+      <div id="actions" style="display:none;"></div>
+    </div>
+  </main>
+
+  <script src="/assets/js/wga-api.js?v=20261021"></script>
+  <script src="/assets/js/wga-ui.js?v=20261021"></script>
+  <script>
+    /* ------------------------------------------------------------------ *
+     * The landing point of a social sign-in.
+     *
+     * The API callback does not hand out a session: it redirects here with a
+     * single-use code in the fragment. A fragment is never sent to the server
+     * or to any proxy, the code is valid for two minutes and works once, and it
+     * is exchanged over POST — so a copied address, a browser history entry or a
+     * server log is worth nothing to anybody who finds it.
+     *
+     * The fragment is cleared from the address bar before the exchange, so a
+     * refresh cannot replay it.
+     * ------------------------------------------------------------------ */
+    (function () {
+      'use strict';
+
+      WGAUI.initTheme();
+
+      var icon = document.getElementById('icon');
+      var title = document.getElementById('title');
+      var message = document.getElementById('message');
+      var actions = document.getElementById('actions');
+
+      var params = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+      var code = params.get('code');
+      var isNew = params.get('new') === '1';
+      var next = params.get('next');
+
+      history.replaceState(null, '', window.location.pathname);
+
+      function fail(text) {
+        icon.style.color = 'var(--danger, #dc2626)';
+        icon.innerHTML = '<i class="fas fa-circle-exclamation" aria-hidden="true"></i>';
+        title.textContent = 'Sign-in did not finish';
+        message.textContent = text;
+        actions.style.display = 'block';
+        actions.innerHTML =
+          '<a class="btn btn-primary" href="/login.html" style="display:block;text-align:center;">Back to sign in</a>';
+      }
+
+      if (!code) {
+        fail('That link is missing its sign-in code. Please start again from the sign-in page.');
+        return;
+      }
+
+      WGA.post('/auth/oauth/exchange', { code: code })
+        .then(function (session) {
+          WGA.setSession(session);
+
+          icon.style.color = 'var(--success, #16a34a)';
+          icon.innerHTML = '<i class="fas fa-circle-check" aria-hidden="true"></i>';
+          title.textContent = isNew ? 'Your account is ready' : 'You are signed in';
+          message.textContent = isNew
+            ? 'Welcome to Wuteve Global Academy. Taking you to your dashboard…'
+            : 'Taking you to your dashboard…';
+
+          var destination =
+            next && next.charAt(0) === '/' && next.charAt(1) !== '/'
+              ? next
+              : WGA.homeForRole(session.user.role);
+
+          window.setTimeout(function () {
+            window.location.replace(destination);
+          }, 700);
+        })
+        .catch(function (error) {
+          var reason = (error && error.message) || 'The sign-in could not be completed.';
+          fail(reason + ' Please start again from the sign-in page.');
+        });
+    })();
+  </script>
+</body>
+</html>

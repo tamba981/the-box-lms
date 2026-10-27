@@ -580,18 +580,18 @@
                     <div class="social-divider">Choose your preferred login method</div>
 
                     <div class="social-buttons">
-                        <button class="social-btn google-btn" id="google-login-btn">
+                        <button type="button" class="social-btn google-btn" id="google-login-btn" data-provider="google">
                             <i class="fab fa-google"></i> Continue with Google
                         </button>
-                        <button class="social-btn linkedin-btn" id="linkedin-login-btn">
+                        <button type="button" class="social-btn linkedin-btn" id="linkedin-login-btn" data-provider="linkedin">
                             <i class="fab fa-linkedin-in"></i> Continue with LinkedIn
                         </button>
                     </div>
 
                     <div class="social-help-text" id="social-help">
                         <i class="fas fa-circle-info" style="color:var(--gold);"></i>
-                        <span>Signing in with email takes less than a minute</span>
-                        <p>
+                        <span id="social-help-title">Signing in with email takes less than a minute</span>
+                        <p id="social-help-body">
                             Use the email form below and you are straight in. You can add a Google or
                             LinkedIn sign-in to the same account later.
                         </p>
@@ -712,10 +712,10 @@
                 <div class="social-login-section">
                     <div class="social-divider">Choose your preferred sign‑up method</div>
                     <div class="social-buttons">
-                        <button class="social-btn google-btn" id="google-signup-btn">
+                        <button type="button" class="social-btn google-btn" id="google-signup-btn" data-provider="google">
                             <i class="fab fa-google"></i> Sign up with Google
                         </button>
-                        <button class="social-btn linkedin-btn" id="linkedin-signup-btn">
+                        <button type="button" class="social-btn linkedin-btn" id="linkedin-signup-btn" data-provider="linkedin">
                             <i class="fab fa-linkedin-in"></i> Sign up with LinkedIn
                         </button>
                     </div>
@@ -852,14 +852,32 @@
         //  SOCIAL LOGIN HANDLERS
         // ============================================================
         /**
-         * Social sign-in fallback.
+         * Google and LinkedIn run a real OAuth flow when the deployment has
+         * credentials for them; when it does not, a click must still take the
+         * visitor somewhere useful instead of dying.
          *
-         * Google and LinkedIn are not wired to a provider yet, so a click must
-         * still take the visitor somewhere useful instead of doing nothing. It
-         * moves them to the email form and explains what to do — a dead button
-         * that says "coming soon" is a worse answer than a working one.
+         * The pages cannot know which providers are live at build time — a
+         * Railway variable can be added without touching this file — so
+         * `/auth/oauth/providers` is asked on load and the buttons are wired
+         * from the answer.
          */
-        function socialFallback(provider) {
+        var OAUTH = { google: false, linkedin: false };
+
+        var OAUTH_REASONS = {
+            cancelled: 'Sign-in was cancelled. You can try again, or use your email address below.',
+            state_mismatch: 'That sign-in could not be verified. Please start again from this page.',
+            INVALID_STATE: 'That sign-in link has expired. Please start again.',
+            STATE_EXPIRED: 'That sign-in attempt took too long. Please start again.',
+            TOKEN_EXCHANGE_FAILED: 'The provider refused that sign-in. Please try again.',
+            EMAIL_NOT_VERIFIED: 'That account\'s email address is not verified with the provider, so we cannot use it to sign you in.',
+            NO_EMAIL: 'That account did not share an email address. Allow email access at the provider, or sign in with your email address below.',
+            ACCOUNT_NOT_ACTIVE: 'That account cannot sign in right now. Please contact the academy.',
+            PROVIDER_NOT_CONFIGURED: 'That sign-in method is not available yet. Use your email address below.',
+            unavailable: 'That sign-in method is not available yet. Use your email address below.',
+        };
+
+        /** Move the visitor to the email form, with a sentence that explains why. */
+        function socialFallback(provider, message) {
             const field = document.getElementById('login-email') || document.getElementById('signup-email');
             const form = document.getElementById('login-form-container');
 
@@ -872,22 +890,75 @@
                 field.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
 
-            showToast(`${provider} sign-in is on its way. Use your email address below to continue now.`, 'info');
+            showToast(message || (`${provider} sign-in is on its way. Use your email address below to continue now.`), 'info');
         }
 
-        async function handleSocialLogin(provider) {
-            socialFallback(provider);
+        /** Hand the browser to the API, which redirects on to the provider. */
+        function startProvider(name) {
+            const next = new URLSearchParams(window.location.search).get('next') || '/';
+            window.location.href =
+                WGA.API_BASE + '/auth/oauth/' + encodeURIComponent(name) +
+                '/start?next=' + encodeURIComponent(next);
         }
 
-        async function handleSocialSignup(provider) {
-            document.querySelector('.auth-tab[data-tab="signup"]')?.click();
-            socialFallback(provider);
+        function handleSocial(provider) {
+            if (OAUTH[provider]) {
+                startProvider(provider);
+                return;
+            }
+            socialFallback(provider.charAt(0).toUpperCase() + provider.slice(1));
         }
 
-        document.getElementById('google-login-btn')?.addEventListener('click', () => handleSocialLogin('Google'));
-        document.getElementById('linkedin-login-btn')?.addEventListener('click', () => handleSocialLogin('LinkedIn'));
-        document.getElementById('google-signup-btn')?.addEventListener('click', () => handleSocialSignup('Google'));
-        document.getElementById('linkedin-signup-btn')?.addEventListener('click', () => handleSocialSignup('LinkedIn'));
+        document.querySelectorAll('[data-provider]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                handleSocial(button.getAttribute('data-provider'));
+            });
+        });
+
+        /**
+         * Ask which providers are live. A failure is not worth a message: the
+         * buttons stay on their fallback behaviour, which is the same thing an
+         * unconfigured provider does.
+         */
+        WGA.get('/auth/oauth/providers')
+            .then(function (data) {
+                var live = (data && data.providers) || [];
+                var enabled = live.filter(function (item) { return item.enabled; });
+
+                enabled.forEach(function (item) {
+                    if (item.name === 'google' || item.name === 'linkedin') OAUTH[item.name] = true;
+                });
+
+                if (!enabled.length) return;
+
+                var labels = enabled.map(function (item) { return item.label; });
+                var title = document.getElementById('social-help-title');
+                var body = document.getElementById('social-help-body');
+
+                if (title) title.textContent = 'What we receive when you use ' + labels.join(' or ');
+                if (body) {
+                    body.textContent =
+                        'Your name and verified email address, and nothing else. If you already have an ' +
+                        'account with that email, the sign-in is added to it.';
+                }
+            })
+            .catch(function () {});
+
+        /** A provider can send the visitor back with a reason code. */
+        (function reportOAuthResult() {
+            var params = new URLSearchParams(window.location.search);
+            if (params.get('oauth') !== 'error') return;
+
+            var reason = params.get('reason') || 'unavailable';
+            socialFallback('That', OAUTH_REASONS[reason] || OAUTH_REASONS.unavailable);
+
+            // Drop the code from the address bar so a refresh does not repeat it.
+            params.delete('oauth');
+            params.delete('reason');
+            params.delete('detail');
+            var query = params.toString();
+            history.replaceState(null, '', window.location.pathname + (query ? '?' + query : ''));
+        })();
 
         // ============================================================
         //  LOGIN HANDLER

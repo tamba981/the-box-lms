@@ -14,6 +14,7 @@ const { securityHeaders, canonicalHost, corsPolicy, sameOriginGuard, compression
 const { apiLimiter } = require('./middleware/rateLimit');
 
 const authRoutes = require('./routes/auth');
+const oauthRoutes = require('./routes/oauth');
 const avatarRoutes = require('./routes/avatars');
 const coursesRoutes = require('./routes/courses');
 const reviewsRoutes = require('./routes/reviews');
@@ -177,6 +178,10 @@ app.use('/api/v1/payments/callback', express.raw({ type: 'application/json', lim
   // endpoint cannot be added without them.
   app.use('/api/v1', sameOriginGuard(), apiLimiter);
 
+  // Social sign-in is mounted before the password routes so that `/oauth/...`
+  // is matched by its own router rather than by anything pattern-based in the
+  // auth router.
+  app.use('/api/v1/auth/oauth', oauthRoutes);
   app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/avatars', avatarRoutes);
   // Mounted before the course router so `:courseId/reviews` is never mistaken

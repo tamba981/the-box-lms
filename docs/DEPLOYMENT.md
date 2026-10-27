@@ -155,6 +155,8 @@ useful for confirming a deploy before DNS has propagated.
 | `ORANGE_MONEY_*`        | Orange Money is shown as switched off, naming the absent values, and a charge is refused |
 | `LONESTAR_MOMO_*`       | The same, for Lonestar Cell MTN MoMo                             |
 | `OFFLINE_CLASSES`       | The admissions form offers the four study levels built into the code: Foundation, Vocational, Professional and Advanced. Set a comma-separated list here to change them without a deploy |
+| `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google sign-in stays switched off, and the button falls back to the email form. Both values are needed — see [OAUTH.md](./OAUTH.md) |
+| `LINKEDIN_CLIENT_ID` / `LINKEDIN_CLIENT_SECRET` | The same, for LinkedIn |
 | `LOG_LEVEL`             | Defaults to `info` in production                                 |
 
 #### `CORS_ORIGINS` and the origin guard

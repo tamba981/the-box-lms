@@ -223,7 +223,17 @@ const PAYMENT_STATUSES = Object.freeze([
   'refunded',
 ]);
 
-const TOKEN_TYPES = Object.freeze(['refresh', 'reset', 'verify']);
+const TOKEN_TYPES = Object.freeze(['refresh', 'reset', 'verify', 'oauth']);
+
+/**
+ * The social sign-in providers this platform knows about.
+ *
+ * Kept here rather than read from configuration because the schema enum has to
+ * be a literal list: a value that is valid today but not in a future config must
+ * still be storable, and an unknown provider in a document is a bug worth
+ * catching at write time.
+ */
+const OAUTH_PROVIDERS = Object.freeze(['google', 'linkedin']);
 
 /**
  * What a certificate is waiting for.
@@ -298,6 +308,7 @@ module.exports = {
   CERTIFICATE_STATUSES,
   CERTIFICATE_FEE_OPTIONS,
   TOKEN_TYPES,
+  OAUTH_PROVIDERS,
   THREAD_TYPES,
   COMPLETION_THRESHOLD,
 };

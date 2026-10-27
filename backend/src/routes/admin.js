@@ -1715,4 +1715,55 @@ router.patch(
   })
 );
 
+/**
+ * DELETE /api/v1/admin/admissions/:id
+ *
+ * Erase one application, and the photograph and documents it pointed at.
+ *
+ * This exists because the queue is permanent otherwise: a test submission, a
+ * duplicate, or an applicant asking for their details to be removed all end in
+ * the same place. The stored objects are removed first — a dangling key after a
+ * deletion would leave somebody's ID document in the bucket with nothing left to
+ * say whose it was — but a storage failure does not stop the database delete:
+ * the record going is the point, and the failure is logged with the key so the
+ * object can be found by hand.
+ */
+router.delete(
+  '/admissions/:id',
+  writeLimiter,
+  validate({ params: admissionSchemas.idParam }),
+  asyncHandler(async (req, res) => {
+    const application = await AdmissionApplication.findById(req.valid.params.id);
+    if (!application) throw notFound('That application could not be found.', { code: 'APPLICATION_NOT_FOUND' });
+
+    const keys = [application.photoKey, ...(application.documents || []).map((doc) => doc.key)].filter(Boolean);
+
+    for (const key of keys) {
+      try {
+        await storageService.deleteObject(key);
+      } catch (error) {
+        logger.error('could not remove an admission file from storage', {
+          key,
+          trackingNumber: application.trackingNumber,
+          error: error && error.message,
+        });
+      }
+    }
+
+    await AdmissionApplication.deleteOne({ _id: application._id });
+
+    logger.info('admission application deleted', {
+      trackingNumber: application.trackingNumber,
+      files: keys.length,
+      by: String(req.user._id),
+    });
+
+    return ok(
+      res,
+      { trackingNumber: application.trackingNumber, filesRemoved: keys.length },
+      'Application deleted.'
+    );
+  })
+);
+
 module.exports = router;

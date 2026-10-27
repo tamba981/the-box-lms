@@ -7267,6 +7267,38 @@ async function testAdmissionsAndStats() {
     assertEqual(publicView.json.data.application.status, 'approved', 'the applicant sees the decision');
   });
 
+  await check('only an administrator can delete an application', async () => {
+    const { status } = await request('DELETE', `/api/v1/admin/admissions/${applicationId}`, {
+      token: applicantToken,
+    });
+
+    assertEqual(status, 403, 'status');
+  });
+
+  await check('deleting an application removes it and its stored files', async () => {
+    const { status, json } = await request('DELETE', `/api/v1/admin/admissions/${applicationId}`, {
+      token: adminToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.trackingNumber, tracking, 'the deleted record is named');
+
+    const gone = await AdmissionApplication.findById(applicationId);
+    assertEqual(gone, null, 'the record is gone');
+
+    const publicView = await request('GET', `/api/v1/admissions/status/${tracking}`);
+    assertEqual(publicView.status, 404, 'the tracking number no longer resolves');
+  });
+
+  await check('deleting an application twice reports it as missing', async () => {
+    const { status, json } = await request('DELETE', `/api/v1/admin/admissions/${applicationId}`, {
+      token: adminToken,
+    });
+
+    assertEqual(status, 404, 'status');
+    assertEqual(json.code, 'APPLICATION_NOT_FOUND', 'error code');
+  });
+
   await check('a material upload is refused while storage is unconfigured', async () => {
     // The suite runs without R2 credentials, which is a real deployment state:
     // the route must name the missing settings rather than fail obscurely.
@@ -7278,6 +7310,87 @@ async function testAdmissionsAndStats() {
     if (status === 503) {
       assertEqual(json.code, 'STORAGE_NOT_CONFIGURED', 'names the missing settings');
     }
+  });
+}
+
+/**
+ * Social sign-in.
+ *
+ * The suite runs without OAuth credentials, which is the state a fresh deploy is
+ * in, so what is asserted here is the set of things that must be true *before*
+ * anybody adds credentials: the provider list carries no secrets, and a start or
+ * callback can never send a visitor to a provider that is not configured, never
+ * accept a state it did not issue, and never mint a session from a made-up code.
+ */
+async function testOAuth() {
+  const manual = (path) => fetch(baseUrl + path, { redirect: 'manual' });
+  const locationOf = (response) => response.headers.get('location') || '';
+
+  await check('the provider list names both providers and leaks neither credential', async () => {
+    const { status, json } = await request('GET', '/api/v1/auth/oauth/providers');
+
+    assertEqual(status, 200, 'status');
+
+    const names = json.data.providers.map((item) => item.name).sort().join(',');
+    assertEqual(names, 'google,linkedin', 'providers');
+
+    for (const item of json.data.providers) {
+      assertEqual(typeof item.enabled, 'boolean', 'enabled is a boolean');
+      assert(!('clientId' in item) && !('clientSecret' in item), 'no credential in the payload');
+    }
+  });
+
+  await check('a provider without credentials sends the visitor back to sign-in', async () => {
+    const response = await manual('/api/v1/auth/oauth/google/start');
+
+    assertEqual(response.status, 302, 'status');
+    const location = locationOf(response);
+    assert(location.includes('/login.html?'), 'back to the sign-in page');
+    assert(location.includes('reason=PROVIDER_NOT_CONFIGURED'), 'and says why');
+    assert(!location.includes('accounts.google.com'), 'never forwards to the provider');
+  });
+
+  await check('an unknown provider is refused by name', async () => {
+    const response = await manual('/api/v1/auth/oauth/myspace/start');
+
+    assertEqual(response.status, 302, 'status');
+    assert(locationOf(response).includes('reason=UNKNOWN_PROVIDER'), 'reason');
+  });
+
+  await check('a callback with no state value is refused', async () => {
+    const response = await manual('/api/v1/auth/oauth/google/callback?code=abc');
+
+    assertEqual(response.status, 302, 'status');
+    assert(locationOf(response).includes('reason=MISSING_STATE'), 'reason');
+  });
+
+  await check('a callback carrying a forged state value is refused', async () => {
+    const response = await manual('/api/v1/auth/oauth/google/callback?code=abc&state=forged.signature');
+
+    assertEqual(response.status, 302, 'status');
+    assert(locationOf(response).includes('reason=INVALID_STATE'), 'reason');
+  });
+
+  await check('a cancelled sign-in reports itself as cancelled', async () => {
+    const response = await manual('/api/v1/auth/oauth/google/callback?error=access_denied');
+
+    assertEqual(response.status, 302, 'status');
+    assert(locationOf(response).includes('reason=cancelled'), 'reason');
+  });
+
+  await check('a made-up sign-in code issues no session', async () => {
+    const { status } = await request('POST', '/api/v1/auth/oauth/exchange', {
+      body: { code: 'not-a-real-sign-in-code' },
+    });
+
+    assertEqual(status, 401, 'status');
+  });
+
+  await check('the exchange needs a code before it will look at anything', async () => {
+    const { status, json } = await request('POST', '/api/v1/auth/oauth/exchange', { body: {} });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'VALIDATION_ERROR', 'error code');
   });
 }
 
@@ -7401,6 +7514,9 @@ async function main() {
 
     process.stdout.write('\nOffline admissions\n');
     await testAdmissionsAndStats();
+
+  process.stdout.write('\nSocial sign-in\n');
+  await testOAuth();
 
     process.stdout.write('\nMoney formatting\n');
     await testMoneyFormatting();

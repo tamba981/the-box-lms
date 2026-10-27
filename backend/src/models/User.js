@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 
 const config = require('../config/env');
-const { ROLES, USER_STATUSES } = require('../lib/constants');
+const { ROLES, USER_STATUSES, OAUTH_PROVIDERS } = require('../lib/constants');
 const { formatDateOfBirth } = require('../lib/age');
 const { baseOptions, lowercaseTrim } = require('./common');
 
@@ -53,6 +53,29 @@ const userSchema = new mongoose.Schema(
 
     emailVerified: { type: Boolean, default: false },
     emailVerifiedAt: { type: Date, default: null },
+
+    /**
+     * Social sign-in identities linked to this account.
+     *
+     * `subject` is the provider's stable user id (`sub`), never the email: people
+     * change address at the provider, and the account has to survive that. An
+     * account can be linked to more than one provider, and a person who signed up
+     * with a password can link one later by signing in with the same verified
+     * address.
+     */
+    oauth: {
+      type: [
+        new mongoose.Schema(
+          {
+            provider: { type: String, enum: OAUTH_PROVIDERS, required: true },
+            subject: { type: String, required: true, maxlength: 200 },
+            linkedAt: { type: Date, default: Date.now },
+          },
+          { _id: false }
+        ),
+      ],
+      default: [],
+    },
 
     avatarUrl: { type: String, trim: true, default: null },
 

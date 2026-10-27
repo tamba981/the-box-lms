@@ -2214,6 +2214,7 @@
                                     <td style="white-space:nowrap;">
                                         ${item.status === 'approved' ? '' : `<button class="btn-primary btn-sm" onclick="approveAdmission('${item.id}', this)">Approve</button>`}
                                         ${item.status === 'rejected' ? '' : `<button class="btn-primary btn-outline btn-sm" onclick="rejectAdmission('${item.id}', this)">Reject</button>`}
+                                        <button class="btn-primary btn-outline btn-sm" style="margin-top:6px;" onclick="deleteAdmission('${item.id}', '${WGAUI.escapeHtml(item.trackingNumber)}', this)">Delete</button>
                                     </td>
                                 </tr>`;
                             })
@@ -2288,6 +2289,42 @@
             } catch (error) {
                 if (button) button.disabled = false;
                 WGAUI.toast(error.message || 'That application could not be declined.', 'error');
+            }
+        };
+
+        /**
+         * Delete an application outright.
+         *
+         * Approve and reject keep the record; this removes it, along with the
+         * photograph and documents it pointed at. It exists for the three cases
+         * that never fit a decision: a test submission, a duplicate, and an
+         * applicant asking for their details to be erased. Two prompts, because
+         * there is no undo and the file uploads cannot be recovered either.
+         */
+        window.deleteAdmission = async function deleteAdmission(id, trackingNumber, button) {
+            const confirmed = window.confirm(
+                'Delete application ' + trackingNumber + '?\n\n' +
+                'This removes the record, the photograph and any documents permanently. ' +
+                'It cannot be undone, and the applicant is not emailed.'
+            );
+            if (!confirmed) return;
+
+            const typed = window.prompt('Type the tracking number to confirm deletion:');
+            if (typed === null) return;
+            if (String(typed).trim().toUpperCase() !== String(trackingNumber).toUpperCase()) {
+                WGAUI.toast('That did not match the tracking number, so nothing was deleted.', 'error');
+                return;
+            }
+
+            if (button) button.disabled = true;
+
+            try {
+                const data = await WGA.del('/admin/admissions/' + encodeURIComponent(id));
+                WGAUI.toast(data.message || 'Application deleted.', 'success');
+                await loadAdmissionQueue(state.admissionStatus);
+            } catch (error) {
+                if (button) button.disabled = false;
+                WGAUI.toast(error.message || 'That application could not be deleted.', 'error');
             }
         };
 

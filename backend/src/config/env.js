@@ -340,6 +340,64 @@ const MANUAL_PAYMENT_EXPIRY_DAYS =
     ? Number.parseInt(process.env.PAYMENT_EXPIRY_DAYS, 10)
     : 7;
 
+/* ------------------------------------------------------------------ *
+ * Social sign-in (Google, LinkedIn)
+ * ------------------------------------------------------------------ */
+
+/**
+ * Both providers are optional and independent. A provider is usable only when
+ * both halves of its credential pair are present: an id with no secret gets as
+ * far as the provider's consent screen and then fails at the token exchange,
+ * which looks like a broken button rather than a configuration gap.
+ */
+const OAUTH_PROVIDERS = Object.freeze({
+  google: {
+    label: 'Google',
+    clientId: String(process.env.GOOGLE_CLIENT_ID || '').trim(),
+    clientSecret: String(process.env.GOOGLE_CLIENT_SECRET || '').trim(),
+    authorizeUrl: 'https://accounts.google.com/o/oauth2/v2/auth',
+    tokenUrl: 'https://oauth2.googleapis.com/token',
+    userInfoUrl: 'https://openidconnect.googleapis.com/v1/userinfo',
+    scope: 'openid email profile',
+    // Google supports PKCE on the authorisation-code flow; LinkedIn's v2
+    // endpoints do not, so the verifier is only generated where it is honoured.
+    pkce: true,
+  },
+  linkedin: {
+    label: 'LinkedIn',
+    clientId: String(process.env.LINKEDIN_CLIENT_ID || '').trim(),
+    clientSecret: String(process.env.LINKEDIN_CLIENT_SECRET || '').trim(),
+    authorizeUrl: 'https://www.linkedin.com/oauth/v2/authorization',
+    tokenUrl: 'https://www.linkedin.com/oauth/v2/accessToken',
+    // OpenID Connect, not the legacy /v2/me + r_liteprofile scopes: v2/userinfo
+    // returns the verified email address, which is what an account is keyed on.
+    userInfoUrl: 'https://api.linkedin.com/v2/userinfo',
+    scope: 'openid profile email',
+    pkce: false,
+  },
+});
+
+const OAUTH = {};
+for (const [name, provider] of Object.entries(OAUTH_PROVIDERS)) {
+  OAUTH[name] = Object.freeze({
+    ...provider,
+    name,
+    enabled: Boolean(provider.clientId && provider.clientSecret),
+  });
+}
+
+const OAUTH_STATE_TTL_SECONDS = 10 * 60;
+
+if (
+  IS_PRODUCTION &&
+  Object.values(OAUTH).some((provider) => provider.clientId && !provider.clientSecret)
+) {
+  warnings.push(
+    'A social sign-in client id is set without its secret, so that provider stays switched off. ' +
+      'Set GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET (or the LINKEDIN_ pair) together.'
+  );
+}
+
 const config = {
   env: NODE_ENV,
   isProduction: IS_PRODUCTION,
@@ -359,6 +417,11 @@ const config = {
 
   publicBaseUrl: PUBLIC_BASE_URL,
   allowedOrigins: ALLOWED_ORIGINS,
+
+  oauth: {
+    providers: OAUTH,
+    stateTtlSeconds: OAUTH_STATE_TTL_SECONDS,
+  },
 
   storage: {
     enabled: STORAGE_ENABLED,
