@@ -154,6 +154,7 @@ useful for confirming a deploy before DNS has propagated.
 | `STRIPE_WEBHOOK_SECRET` | **Webhooks rejected, so no payment would ever be fulfilled**     |
 | `ORANGE_MONEY_*`        | Orange Money is shown as switched off, naming the absent values, and a charge is refused |
 | `LONESTAR_MOMO_*`       | The same, for Lonestar Cell MTN MoMo                             |
+| `OFFLINE_CLASSES`       | The admissions form offers the four study levels built into the code: Foundation, Vocational, Professional and Advanced. Set a comma-separated list here to change them without a deploy |
 | `LOG_LEVEL`             | Defaults to `info` in production                                 |
 
 #### `CORS_ORIGINS` and the origin guard
