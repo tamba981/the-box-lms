@@ -76,9 +76,11 @@ const CSP_DIRECTIVES = {
     'https://cdn.jsdelivr.net',
     // Google Translate. The element is only requested when a visitor picks a
     // language, but the policy has to allow it before a click can succeed —
-    // CSP is not consultable at runtime.
+    // CSP is not consultable at runtime. `translate-pa` serves the language list
+    // as a JSONP script, which is a script load and not a fetch.
     'https://translate.google.com',
     'https://translate.googleapis.com',
+    'https://translate-pa.googleapis.com',
   ],
   // Inline event handlers (`onclick=`, `onchange=`) are governed by
   // script-src-attr, which otherwise inherits script-src. There are around a
@@ -91,8 +93,10 @@ const CSP_DIRECTIVES = {
     "'unsafe-inline'",
     'https://fonts.googleapis.com',
     'https://cdnjs.cloudflare.com',
-    // The Translate element injects its own stylesheet from here.
+    // The Translate element injects its own stylesheet, served from gstatic
+    // rather than from the translate hosts.
     'https://translate.googleapis.com',
+    'https://www.gstatic.com',
   ],
   'font-src': ["'self'", 'https://fonts.gstatic.com', 'https://cdnjs.cloudflare.com', 'data:'],
   'img-src': ["'self'", 'data:', 'https:'],
@@ -124,9 +128,10 @@ const CSP_DIRECTIVES = {
     "'self'",
     ...config.allowedOrigins,
     // Google Translate fetches its static assets and the translation itself over
-    // XHR from these two hosts once a visitor asks for a language.
+    // XHR from these hosts once a visitor asks for a language.
     'https://translate.googleapis.com',
     'https://translate.google.com',
+    'https://translate-pa.googleapis.com',
     // An instructor's browser PUTs the video file straight to object storage at a
     // signed URL, and an applicant's browser does the same with a photograph. That
     // origin has to be reachable from the page, or the upload fails as an opaque
