@@ -114,11 +114,6 @@
       '.wga-lang-select{width:100%;padding:9px 10px;border-radius:9px;border:1px solid var(--wga-c-line);',
       'background:var(--wga-c-panel);color:var(--wga-c-text);font:500 13.5px Inter,system-ui,sans-serif;}',
       '.wga-lang-note{margin:8px 0 0;font-size:11.5px;line-height:1.5;color:var(--wga-c-soft);}',
-      '.wga-lang-panel .goog-te-gadget{font-size:0;}',
-      '.wga-lang-panel .goog-te-combo{margin:0;width:100%;padding:9px 10px;border-radius:9px;',
-      'border:1px solid var(--wga-c-line);background:var(--wga-c-panel);color:var(--wga-c-text);',
-      'font:500 13.5px Inter,system-ui,sans-serif;}',
-      '.wga-lang-panel .goog-logo-link,.wga-lang-panel .goog-te-gadget span{display:none !important;}',
 
       // Google's own toolbar and the gap it opens at the top of the document.
       '.goog-te-banner-frame,.skiptranslate iframe{display:none !important;}',
@@ -243,50 +238,79 @@
 
   var translateLoaded = false;
   var currentLanguage = 'en';
+  var LANG_KEY = 'wga.lang';
 
-  function loadTranslate(onReady) {
-    if (translateLoaded) {
-      onReady();
-      return;
-    }
+  /**
+   * Google Translate, driven by its own cookie.
+   *
+   * The current widget renders a "Select Language" dropdown, not the
+   * `select.goog-te-combo` that older documentation and older versions of this
+   * control assumed — driving that select is no longer possible, and the
+   * alternative layouts render nothing at all in the container. What does still
+   * work is the cookie: with `googtrans=/en/<code>` set before the element
+   * loads, Google translates the page on its own.
+   *
+   * So the flow is: the visitor picks from our select, we set the cookie, and
+   * the page reloads once. That keeps our own interface, keeps the language
+   * list ours, and still loads nothing from Google until somebody asks.
+   */
+  function translateCookie(code) {
+    document.cookie = 'googtrans=/en/' + code + '; path=/; max-age=31536000';
+  }
+
+  function clearTranslateCookie() {
+    var host = window.location.hostname;
+    document.cookie = 'googtrans=; path=/; max-age=0';
+    document.cookie = 'googtrans=; path=/; domain=' + host + '; max-age=0';
+    document.cookie = 'googtrans=; path=/; domain=.' + host + '; max-age=0';
+  }
+
+  function loadTranslate() {
+    if (translateLoaded) return;
     translateLoaded = true;
+
+    var slot = document.createElement('div');
+    slot.id = 'wga_translate_slot';
+    slot.setAttribute('aria-hidden', 'true');
+    slot.style.cssText = 'position:absolute;left:-9999px;top:0;height:0;overflow:hidden';
+    document.body.appendChild(slot);
 
     window.googleTranslateElementInit = function () {
       try {
         new window.google.translate.TranslateElement(
           {
             pageLanguage: 'en',
-            // Keep the widget's own chrome out of the page; our panel is the
-            // interface and the select inside it is the part that matters.
-            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false,
             includedLanguages: LANGUAGES.map(function (item) {
               return item.code;
-            }).join(',')
+            }).join(','),
+            autoDisplay: false
           },
           'wga_translate_slot'
         );
       } catch (error) {
-        /* A blocked script leaves the note below the select to explain it. */
+        /* A blocked script leaves the page in English, which is not a failure. */
       }
-      onReady();
     };
 
     var script = document.createElement('script');
     script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
     script.async = true;
-    script.onerror = onReady;
     document.body.appendChild(script);
   }
 
-  /** Drive Google's own select, which lives in this document, not an iframe. */
-  function chooseLanguage(code) {
-    var combo = document.querySelector('select.goog-te-combo');
-    if (!combo) return false;
+  function labelFor(code) {
+    var match = LANGUAGES.filter(function (item) {
+      return item.code === code;
+    })[0];
+    return match ? match.label : 'English';
+  }
 
-    combo.value = code;
-    combo.dispatchEvent(new Event('change', { bubbles: true }));
-    return true;
+  function savedLanguage() {
+    try {
+      return localStorage.getItem(LANG_KEY) || 'en';
+    } catch (error) {
+      return 'en';
+    }
   }
 
   function buildLanguageControl() {
@@ -302,47 +326,40 @@
         return '<option value="' + item.code + '">' + item.label + '</option>';
       }).join(''),
       '</select>',
-      '<div id="wga_translate_slot" aria-hidden="true" style="height:0;overflow:hidden"></div>',
-      '<p class="wga-lang-note">Translation is provided by Google Translate. Choosing a language ',
-      'loads Google\u2019s script, which sets its own cookie.</p>'
+      '<p class="wga-lang-note">Translation is machine-produced by Google Translate. ',
+      'Choosing a language reloads the page and lets Google set its own cookie.</p>'
     ].join('');
 
     var button = document.createElement('button');
     button.type = 'button';
     button.className = 'wga-lang-btn';
     button.setAttribute('aria-expanded', 'false');
-    button.innerHTML = '<span aria-hidden="true">🌐</span> <span class="wga-lang-label">English</span>';
+    button.innerHTML =
+      '<span aria-hidden="true">🌐</span> <span class="wga-lang-label">' +
+      labelFor(currentLanguage) +
+      '</span>';
 
-    var label = button.querySelector('.wga-lang-label');
     var select = panel.querySelector('#wga-lang-select');
+    select.value = currentLanguage;
 
     button.addEventListener('click', function () {
       var open = host.classList.toggle('is-open');
       button.setAttribute('aria-expanded', open ? 'true' : 'false');
-      if (open) {
-        loadTranslate(function () {
-          // Google's select replaces ours once it is alive; keep them in step.
-          if (currentLanguage !== 'en') chooseLanguage(currentLanguage);
-        });
-        select.focus({ preventScroll: true });
-      }
+      if (open) select.focus({ preventScroll: true });
     });
 
     select.addEventListener('change', function () {
       var code = select.value;
-      var chosen = LANGUAGES.filter(function (item) {
-        return item.code === code;
-      })[0];
+      try {
+        localStorage.setItem(LANG_KEY, code);
+      } catch (error) {
+        /* Storage disabled: the reload still applies the language once. */
+      }
 
-      currentLanguage = code;
-      if (chosen) label.textContent = chosen.label;
+      if (code === 'en') clearTranslateCookie();
+      else translateCookie(code);
 
-      loadTranslate(function () {
-        if (!chooseLanguage(code) && code === 'en') {
-          // "English" with no widget yet just means leave the page alone.
-          return;
-        }
-      });
+      window.location.reload();
     });
 
     host.appendChild(panel);
@@ -357,9 +374,16 @@
   function start() {
     if (document.body.dataset.wgaNoConsent === 'true') return;
 
+    currentLanguage = savedLanguage();
+
     injectStyles();
     applyPalette();
     buildLanguageControl();
+
+    // A saved language means the visitor already asked for a translation, so the
+    // element is loaded on arrival and the page comes up translated. Otherwise
+    // nothing from Google is requested at all.
+    if (currentLanguage && currentLanguage !== 'en') loadTranslate();
 
     if (!storedChoice()) showNotice();
   }
