@@ -250,7 +250,12 @@
 
 <main id="main">
 
-  <section class="page-header">
+  <section class="page-header page-header--media">
+    <div class="hero-bg" aria-hidden="true">
+      <img class="hero-poster" data-src="/Images/hero/hero-poster.jpg?v=20261026" alt="" width="1264" height="848" />
+      <video class="hero-video" muted loop playsinline preload="none" data-src="/Images/hero/hero.mp4"></video>
+      <div class="hero-scrim"></div>
+    </div>
     <div class="wrap">
       <span class="eyebrow">Offline admission</span>
       <h1>Apply for an offline course</h1>
@@ -496,7 +501,7 @@
         <h4>Contact</h4>
         <ul>
           <li>Monrovia, Liberia &middot; P.O. Box 1000</li>
-          <li><a href="tel:+231888025082">0888025082 (Darlington Tamba)</a></li>
+          <li><a href="tel:+231888025082">0888025082</a></li>
           <li><a href="tel:+231772876644">+231 772 876 644</a></li>
           <li><a href="mailto:info@wuteveglobalacademy.com">info@wuteveglobalacademy.com</a></li>
           <li><a href="mailto:office.wuteveglobalacademy@gmail.com">office.wuteveglobalacademy@gmail.com</a></li>
@@ -800,6 +805,77 @@
     if (preset) {
       document.getElementById('trackingInput').value = String(preset).toUpperCase();
     }
+  })();
+</script>
+<script>
+  /* ------------------------------------------------------------------ *
+   * Hero background video.
+   *
+   * The same film as the home page, behind the heading on an application
+   * form. It is loaded on the same terms: not when the visitor has asked for
+   * reduced motion, and not when the browser says data costs them money. In
+   * either case the photograph is fetched instead and nothing is downloaded
+   * from the video.
+   *
+   * One difference from the home page: this page exists to be filled in, so
+   * the video waits for the browser to be idle rather than competing with the
+   * form for the first seconds of the connection. The gradient behind it is
+   * already legible, so nothing is blocked while it waits.
+   * ------------------------------------------------------------------ */
+  (function () {
+    'use strict';
+
+    var video = document.querySelector('.page-header--media .hero-video[data-src]');
+    var poster = document.querySelector('.page-header--media .hero-poster');
+    var bg = document.querySelector('.page-header--media .hero-bg');
+    if (!video || !bg) return;
+
+    var prefersLessMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var savingData = Boolean(navigator.connection && navigator.connection.saveData);
+
+    function showPoster() {
+      bg.classList.add('is-fallback');
+      if (poster && poster.dataset.src) {
+        poster.src = poster.dataset.src;
+        poster.removeAttribute('data-src');
+      }
+    }
+
+    function load() {
+      if (prefersLessMotion.matches || savingData) {
+        showPoster();
+        return;
+      }
+      if (video.dataset.loaded === 'true') return;
+
+      video.src = video.dataset.src;
+      video.removeAttribute('data-src');
+      video.dataset.loaded = 'true';
+
+      video.addEventListener(
+        'playing',
+        function () {
+          video.classList.add('is-playing');
+          bg.classList.remove('is-fallback');
+        },
+        { once: true }
+      );
+
+      video.addEventListener('error', showPoster, { once: true });
+
+      video.load();
+
+      var started = video.play();
+      if (started && started.catch) {
+        started.catch(function () {
+          video.classList.remove('is-playing');
+          showPoster();
+        });
+      }
+    }
+
+    if (window.requestIdleCallback) window.requestIdleCallback(load, { timeout: 2000 });
+    else window.setTimeout(load, 400);
   })();
 </script>
 </body>

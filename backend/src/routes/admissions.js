@@ -213,10 +213,11 @@ router.get(
   '/classes',
   asyncHandler(async (req, res) => {
     /**
-     * Read from configuration so the offline programme can add or remove a class
-     * without a code change. Falls back to a small, honest default: the academy
-     * runs beginner-level practical programmes, and inventing a list of named
-     * classes here would be a claim nobody has verified.
+     * The academy sorts its in-person teaching by study level rather than by
+     * subject: an applicant says which level they are applying for, and the
+     * subject is settled when we contact them. Read from configuration so a new
+     * level can be added without a deploy; the default is the four the offline
+     * programme runs.
      */
     const configured = String(process.env.OFFLINE_CLASSES || '')
       .split(',')
@@ -225,13 +226,7 @@ router.get(
 
     const classes = configured.length
       ? configured
-      : [
-          'Computer Literacy',
-          'Microsoft Office',
-          'Bookkeeping and Accounting',
-          'Business Management',
-          'Digital Marketing',
-        ];
+      : ['Foundation Study', 'Vocational Study', 'Professional Study', 'Advanced Study'];
 
     return ok(res, { classes: classes.map((name) => ({ value: name, label: name })) });
   })

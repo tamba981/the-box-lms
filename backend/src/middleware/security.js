@@ -34,6 +34,31 @@ const { forbidden } = require('../lib/errors');
  * refactor, not a header change, and is deliberately left as follow-up work
  * rather than shipped half-done.
  */
+
+/**
+ * The origins a browser upload may reach, given the configured storage endpoint.
+ *
+ * Empty when storage is not configured, so this cannot open anything in a
+ * deployment that does not upload. Both the endpoint as written and its wildcard
+ * subdomain form are returned: virtual-hosted bucket URLs live at
+ * `<bucket>.<endpoint host>`, and CSP does not infer that from the parent.
+ */
+function storageOrigins() {
+  const endpoint = config.storage && config.storage.endpoint;
+  if (!endpoint) return [];
+
+  let parsed;
+  try {
+    parsed = new URL(endpoint);
+  } catch (error) {
+    // A malformed endpoint is reported by the storage service when it is used.
+    // Standing the CSP up on a guess is worse than leaving it closed.
+    return [];
+  }
+
+  return [`${parsed.protocol}//${parsed.host}`, `${parsed.protocol}//*.${parsed.host}`];
+}
+
 const CSP_DIRECTIVES = {
   'default-src': ["'self'"],
   'base-uri': ["'self'"],
@@ -84,9 +109,18 @@ const CSP_DIRECTIVES = {
     "'self'",
     ...config.allowedOrigins,
     // An instructor's browser PUTs the video file straight to object storage at a
-    // signed URL. That origin has to be reachable from the page, or the upload
-    // fails as an opaque network error.
-    ...(config.storage.endpoint ? [config.storage.endpoint] : []),
+    // signed URL, and an applicant's browser does the same with a photograph. That
+    // origin has to be reachable from the page, or the upload fails as an opaque
+    // network error.
+    //
+    // The signed URL is the *bucket* host, not the endpoint in the configuration:
+    // R2 and S3 both address a bucket as a subdomain, so an endpoint of
+    // `https://<account>.r2.cloudflarestorage.com` produces
+    // `https://<bucket>.<account>.r2.cloudflarestorage.com`. CSP matches hosts
+    // exactly and does not treat a parent domain as covering its subdomains, so
+    // naming the endpoint alone blocked every upload with nothing in the UI beyond
+    // "could not reach storage". Both forms are named here.
+    ...storageOrigins(),
   ],
 
   'form-action': ["'self'"],

@@ -1,0 +1,67 @@
+name: Smoke
+
+# The end-to-end suite in backend/scripts/smoke.js boots the real Express app
+# against a real MongoDB and asserts on behaviour, not on mocks. It cannot run
+# against the production database, so this workflow gives it a disposable one:
+# a MongoDB service container, thrown away with the runner.
+#
+# NODE_ENV is deliberately `test`. In development the suite falls back to a
+# derived dev-only JWT secret, and in production scripts/smoke.js refuses to run
+# at all, so it must be neither.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: End-to-end suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    services:
+      mongo:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --quiet --eval 'quit(db.runCommand({ ping: 1 }).ok ? 0 : 1)'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 12
+
+    env:
+      NODE_ENV: test
+      # A database of the suite's own: it publishes courses to test publishing
+      # and enrolment, so it must never point at anything that matters.
+      TEST_MONGODB_URI: mongodb://127.0.0.1:27017/wuteve_test
+      LOG_LEVEL: error
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Static checks
+        working-directory: backend
+        run: node scripts/check.js
+
+      - name: End-to-end suite
+        working-directory: backend
+        # The suite holds several fixtures and many tokens in memory at once;
+        # the default heap is not enough on a shared runner.
+        run: node --max-old-space-size=8192 scripts/smoke.js

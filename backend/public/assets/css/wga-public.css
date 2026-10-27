@@ -1127,6 +1127,39 @@ body.dark-mode .mini-verify-result::before {
   object-fit: cover;
 }
 
+/* The application form's header carries the same film as the home page, behind
+   the heading. The band's own gradient stays as the floor: the heading is
+   legible before a frame has arrived, and on a connection that never gets one.
+
+   The band's ::after scrim is switched off here and replaced below, because it
+   is drawn at z-index 1 - above static content - and this section puts its text
+   in a plain .wrap rather than .page-header-inner. Two scrims would also
+   darken the film twice over. */
+.page-header--media {
+  min-height: 360px;
+  padding: var(--s-20) 0;
+}
+
+.page-header--media::after {
+  content: none;
+}
+
+.page-header--media .wrap {
+  position: relative;
+  z-index: 2;
+}
+
+.page-header--media .hero-scrim {
+  background:
+    linear-gradient(
+      100deg,
+      rgba(4, 10, 20, 0.86) 0%,
+      rgba(4, 10, 20, 0.66) 45%,
+      rgba(4, 10, 20, 0.34) 100%
+    ),
+    linear-gradient(180deg, rgba(4, 10, 20, 0.35) 0%, rgba(4, 10, 20, 0.55) 100%);
+}
+
 .page-header::after {
   content: '';
   position: absolute;

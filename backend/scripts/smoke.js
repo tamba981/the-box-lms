@@ -7114,7 +7114,7 @@ async function testAdmissionsAndStats() {
   };
 
   const applicationBody = (overrides = {}) => ({
-    classLevel: 'Computer Literacy',
+    classLevel: 'Vocational Study',
     firstName: 'Admissions',
     lastName: 'Applicant',
     gender: 'female',
@@ -7241,7 +7241,7 @@ async function testAdmissionsAndStats() {
     assertEqual(status, 200, 'status');
     const mine = json.data.items.find((item) => item.trackingNumber === tracking);
     assert(mine, 'the application should be in the queue');
-    assertEqual(mine.classLevel, 'Computer Literacy', 'class');
+    assertEqual(mine.classLevel, 'Vocational Study', 'class');
     assert(json.data.counts && json.data.counts.pending >= 1, 'pending count');
   });
 
