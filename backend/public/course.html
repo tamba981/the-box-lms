@@ -2312,15 +2312,25 @@
           var steps = instructions.steps || [];
           var reference = order.orderId || '';
 
+          /**
+           * Liberian numbers are shown and copied in the local form people dial
+           * and paste into mobile money, not the +231 form the API stores.
+           */
+          function localNumber(number) {
+            var digits = String(number).replace(/[^\d]/g, '');
+            return digits.indexOf('231') === 0 && digits.length === 12 ? '0' + digits.slice(3) : String(number);
+          }
+
           var numberRows = numbers.map(function (number) {
             var payTo = instructions.payTo || '';
+            var shown = localNumber(number);
             return (
               '<li>' +
-                '<span>' + WGAUI.escapeHtml(number) +
+                '<span>' + WGAUI.escapeHtml(shown) +
                   (payTo ? ' <span class="wga-hint" style="font-family:inherit;">(' + WGAUI.escapeHtml(payTo) + ')</span>' : '') +
                 '</span>' +
                 '<button type="button" class="pay-copy" data-copy="' +
-                  WGAUI.escapeHtml(number) + '">Copy</button>' +
+                  WGAUI.escapeHtml(shown) + '">Copy</button>' +
               '</li>'
             );
           }).join('');
