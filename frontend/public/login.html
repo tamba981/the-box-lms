@@ -588,13 +588,12 @@
                         </button>
                     </div>
 
-                    <div class="social-help-text">
-                        <i class="fas fa-info-circle" style="color:var(--gold);"></i>
-                        <span>Google and LinkedIn sign-in are not available yet</span>
+                    <div class="social-help-text" id="social-help">
+                        <i class="fas fa-circle-info" style="color:var(--gold);"></i>
+                        <span>Signing in with email takes less than a minute</span>
                         <p>
-                            These buttons are here for a planned release. Use your email address and password
-                            below to sign in or create an account — every account created that way is a student
-                            account.
+                            Use the email form below and you are straight in. You can add a Google or
+                            LinkedIn sign-in to the same account later.
                         </p>
                     </div>
                 </div>
@@ -852,26 +851,37 @@
         // ============================================================
         //  SOCIAL LOGIN HANDLERS
         // ============================================================
-        async function handleSocialLogin(provider) {
-            try {
-                showToast(`Redirecting to ${provider}...`, 'info');
-                setTimeout(() => {
-                    showToast(`${provider} login integration coming soon!`, 'info');
-                }, 600);
-            } catch (error) {
-                showAlert('login-alert', error.message, 'error');
+        /**
+         * Social sign-in fallback.
+         *
+         * Google and LinkedIn are not wired to a provider yet, so a click must
+         * still take the visitor somewhere useful instead of doing nothing. It
+         * moves them to the email form and explains what to do — a dead button
+         * that says "coming soon" is a worse answer than a working one.
+         */
+        function socialFallback(provider) {
+            const field = document.getElementById('login-email') || document.getElementById('signup-email');
+            const form = document.getElementById('login-form-container');
+
+            if (form && form.classList.contains('active') === false) {
+                document.querySelector('.auth-tab[data-tab="login"]')?.click();
             }
+
+            if (field) {
+                field.focus({ preventScroll: true });
+                field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            showToast(`${provider} sign-in is on its way. Use your email address below to continue now.`, 'info');
+        }
+
+        async function handleSocialLogin(provider) {
+            socialFallback(provider);
         }
 
         async function handleSocialSignup(provider) {
-            try {
-                showToast(`Redirecting to ${provider} for sign-up...`, 'info');
-                setTimeout(() => {
-                    showToast(`${provider} sign-up integration coming soon!`, 'info');
-                }, 600);
-            } catch (error) {
-                showAlert('signup-alert', error.message, 'error');
-            }
+            document.querySelector('.auth-tab[data-tab="signup"]')?.click();
+            socialFallback(provider);
         }
 
         document.getElementById('google-login-btn')?.addEventListener('click', () => handleSocialLogin('Google'));

@@ -17,6 +17,8 @@ const authRoutes = require('./routes/auth');
 const avatarRoutes = require('./routes/avatars');
 const coursesRoutes = require('./routes/courses');
 const reviewsRoutes = require('./routes/reviews');
+const admissionsRoutes = require('./routes/admissions');
+const statsRoutes = require('./routes/stats');
 const enrollmentsRoutes = require('./routes/enrollments');
 const certificatesRoutes = require('./routes/certificates');
 const notificationsRoutes = require('./routes/notifications');
@@ -181,6 +183,10 @@ app.use('/api/v1/avatars', avatarRoutes);
   // for a course slug.
   app.use('/api/v1/courses/:courseId/reviews', reviewsRoutes);
   app.use('/api/v1/courses', coursesRoutes);
+  // Catalogue size for the homepage slidebar. Public, cheap, counted server-side.
+  app.use('/api/v1/stats', statsRoutes);
+  // Offline admissions. Public to submit; a tracking number is the only handle.
+  app.use('/api/v1/admissions', admissionsRoutes);
   app.use('/api/v1/enrollments', enrollmentsRoutes);
   app.use('/api/v1/certificates', certificatesRoutes);
   app.use('/api/v1/notifications', notificationsRoutes);

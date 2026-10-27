@@ -90,11 +90,47 @@
     }
 
     if (menuButton && drawer) {
+      /**
+       * Say that the drawer scrolls.
+       *
+       * On a phone the drawer is taller than the screen, and the links below the
+       * fold were invisible: people saw "All courses" and concluded that was the
+       * whole menu. The chip appears only when there is something further down,
+       * and disappears at the end, so it never lies about what is below.
+       */
+      var moreHint = document.createElement('p');
+      moreHint.className = 'mobile-nav-more';
+      moreHint.setAttribute('aria-hidden', 'true');
+      moreHint.textContent = 'Scroll for more';
+      moreHint.hidden = true;
+      drawer.appendChild(moreHint);
+
+      function updateMoreHint() {
+        if (!drawer.classList.contains('open')) {
+          moreHint.hidden = true;
+          return;
+        }
+
+        var remaining = drawer.scrollHeight - drawer.scrollTop - drawer.clientHeight;
+        moreHint.hidden = remaining < 24;
+      }
+
+      drawer.addEventListener('scroll', updateMoreHint, { passive: true });
+      window.addEventListener('resize', updateMoreHint);
+
       function setDrawer(open) {
         drawer.classList.toggle('open', open);
         menuButton.setAttribute('aria-expanded', String(open));
         menuButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
         document.body.style.overflow = open ? 'hidden' : '';
+
+        if (open) {
+          drawer.scrollTop = 0;
+          // Wait for display:block to be painted, or the measurements are zero.
+          window.requestAnimationFrame(updateMoreHint);
+        } else {
+          moreHint.hidden = true;
+        }
       }
 
       menuButton.addEventListener('click', function () {

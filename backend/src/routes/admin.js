@@ -10,6 +10,7 @@ const Enrollment = require('../models/Enrollment');
 const NewsletterSubscriber = require('../models/NewsletterSubscriber');
 const Payment = require('../models/Payment');
 const Review = require('../models/Review');
+const AdmissionApplication = require('../models/AdmissionApplication');
 const User = require('../models/User');
 
 const enrollmentService = require('../services/enrollmentService');
@@ -36,6 +37,8 @@ const { validate } = require('../middleware/validate');
 const { writeLimiter } = require('../middleware/rateLimit');
 const schemas = require('../validators/auth');
 const reviewSchemas = require('../validators/reviews');
+const admissionSchemas = require('../validators/admissions');
+const storageService = require('../services/storageService');
 const { recomputeCourseRating } = require('../services/reviewService');
 
 const router = express.Router();
@@ -45,6 +48,22 @@ const router = express.Router();
 router.use(authenticate, requireAdmin);
 
 const objectId = z.string().trim().regex(/^[a-f\d]{24}$/i, 'Invalid identifier');
+
+/**
+ * An admission decision.
+ *
+ * A rejection must carry a reason: the applicant is told it, and "no" with no
+ * explanation is not a decision an academy should be able to send.
+ */
+const admissionDecisionBody = z
+  .object({
+    decision: z.enum(['approved', 'rejected']),
+    note: z.string().trim().max(500, 'That note is too long').optional().default(''),
+  })
+  .refine((value) => value.decision !== 'rejected' || value.note.length >= 10, {
+    message: 'Give a reason of at least 10 characters so the applicant knows why.',
+    path: ['note'],
+  });
 
 /** A manual order's reference, matched case-insensitively. */
 const orderRef = z
@@ -1588,6 +1607,111 @@ router.delete(
     await recomputeCourseRating(review.course);
 
     return ok(res, null, 'Review removed.');
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * Offline admissions
+ *
+ * The public form submits; decisions are made here. Approving or rejecting
+ * sends the applicant the matching email, so the two are separate routes rather
+ * than one status field an administrator could set by accident.
+ * ------------------------------------------------------------------ */
+
+router.get(
+  '/admissions',
+  validate({ query: admissionSchemas.listQuery }),
+  asyncHandler(async (req, res) => {
+    const query = req.valid.query;
+    const { page, limit, skip } = parsePagination(query);
+
+    const filter = {};
+    if (query.status !== 'all') filter.status = query.status;
+
+    if (query.q) {
+      const pattern = new RegExp(escapeRegex(query.q), 'i');
+      filter.$or = [{ firstName: pattern }, { lastName: pattern }, { email: pattern }, { trackingNumber: pattern }, { classLevel: pattern }];
+    }
+
+    const [applications, total, pending, approved, rejected] = await Promise.all([
+      AdmissionApplication.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      AdmissionApplication.countDocuments(filter),
+      AdmissionApplication.countDocuments({ status: 'pending' }),
+      AdmissionApplication.countDocuments({ status: 'approved' }),
+      AdmissionApplication.countDocuments({ status: 'rejected' }),
+    ]);
+
+    // Signed links, so an administrator can look at the photograph and the
+    // documents without the bucket ever being public.
+    const items = await Promise.all(
+      applications.map(async (application) => {
+        const photoUrl = application.photoKey
+          ? await storageService.createDownloadUrl(application.photoKey, { disposition: 'inline' }).catch(() => null)
+          : null;
+
+        const documents = await Promise.all(
+          (application.documents || []).map(async (doc) => ({
+            id: String(doc._id),
+            name: doc.name,
+            size: doc.size,
+            mime: doc.mime,
+            url: await storageService.createDownloadUrl(doc.key, { disposition: 'attachment' }).catch(() => null),
+          }))
+        );
+
+        return application.toAdminJSON({ photoUrl, documents });
+      })
+    );
+
+    return ok(res, {
+      ...paginated(items, total, { page, limit }),
+      counts: { pending, approved, rejected },
+    });
+  })
+);
+
+router.patch(
+  '/admissions/:id',
+  writeLimiter,
+  validate({ params: admissionSchemas.idParam, body: admissionDecisionBody }),
+  asyncHandler(async (req, res) => {
+    const application = await AdmissionApplication.findById(req.valid.params.id);
+    if (!application) throw notFound('That application could not be found.', { code: 'APPLICATION_NOT_FOUND' });
+
+    const { decision, note } = req.valid.body;
+
+    if (application.status === decision) {
+      return ok(res, { application: application.toAdminJSON() }, 'That application is already in that state.');
+    }
+
+    application.status = decision;
+    application.decisionNote = note || null;
+    application.reviewedBy = req.user._id;
+    application.reviewedAt = new Date();
+    application.notifiedAt = new Date();
+
+    await application.save();
+
+    setImmediate(async () => {
+      try {
+        await email.deliver(
+          decision === 'approved'
+            ? email.admissionApprovedEmail({ application })
+            : email.admissionRejectedEmail({ application })
+        );
+      } catch (error) {
+        logger.error('admission decision email failed', {
+          error: error && error.message,
+          trackingNumber: application.trackingNumber,
+        });
+      }
+    });
+
+    return ok(
+      res,
+      { application: application.toAdminJSON() },
+      decision === 'approved' ? 'Application approved and the applicant has been told.' : 'Application declined and the applicant has been told.'
+    );
   })
 );
 

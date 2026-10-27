@@ -4,6 +4,11 @@ const { z } = require('zod');
 
 const { COURSE_LEVELS, COURSE_STATUSES, LESSON_TYPES } = require('./auth').enums;
 const { objectId, paginationQuery, optionalUrl } = require('./auth');
+const {
+  ALLOWED_MATERIAL_MIME,
+  MAX_MATERIAL_BYTES,
+  RESOURCE_KINDS,
+} = require('../lib/constants');
 
 /**
  * `z.string().url()` only checks syntax, and `javascript:alert(1)` is
@@ -144,6 +149,60 @@ const myCoursesQuery = z.object({
   limit: paginationQuery.shape.limit,
 });
 
+/**
+ * A lesson material upload.
+ *
+ * Same contract as a video upload: the browser asks for a signed PUT, sends the
+ * file straight to storage, and the lesson is told about it afterwards.
+ */
+const presignMaterialBody = z.object({
+  filename: z.string().trim().min(1, 'A filename is required').max(260, 'That filename is too long'),
+  contentType: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .refine((value) => ALLOWED_MATERIAL_MIME.includes(value), {
+      message: 'Upload a PDF, Word, PowerPoint, Excel, text, CSV or ZIP file.',
+    }),
+  sizeBytes: z.coerce
+    .number({ invalid_type_error: 'A file size is required' })
+    .int()
+    .min(1, 'That file appears to be empty')
+    .max(MAX_MATERIAL_BYTES, 'A material file must be 25 MB or smaller'),
+});
+
+/**
+ * One material on a lesson.
+ *
+ * `kind` decides which half matters: a `link` needs an http(s) address, a `file`
+ * needs a storage key this API issued. Both shapes are validated here so an
+ * instructor cannot attach an arbitrary key to a lesson — the route additionally
+ * checks the key names this very course and lesson.
+ */
+const materialSchema = z
+  .object({
+    title: z.string().trim().min(1, 'Give the material a title').max(200, 'That title is too long'),
+    kind: z.enum(RESOURCE_KINDS).optional().default('link'),
+    url: z.string().trim().max(2000).optional().or(z.literal('')),
+    fileKey: z.string().trim().max(500).optional().or(z.literal('')),
+    size: z.coerce.number().int().min(0).max(MAX_MATERIAL_BYTES).optional().default(0),
+    mime: z.string().trim().max(120).optional().or(z.literal('')),
+  })
+  .refine((value) => (value.kind === 'file' ? Boolean(value.fileKey) : Boolean(value.url)), {
+    message: 'Add a web address, or upload a file.',
+    path: ['url'],
+  });
+
+const materialsBody = z.object({
+  materials: z.array(materialSchema).max(20, 'A lesson can hold at most 20 materials'),
+});
+
+/** Step two of a material upload: name the key and give it a title. */
+const completeMaterialBody = z.object({
+  key: z.string().trim().min(1, 'An upload key is required').max(500),
+  title: z.string().trim().min(1, 'Give the material a title').max(200, 'That title is too long'),
+});
+
 const lessonFields = {
   title: z.string().trim().min(2, 'Lesson title is required').max(200, 'Lesson title is too long'),
   summary: z.string().trim().max(400, 'Summary is too long').optional(),
@@ -167,10 +226,14 @@ const lessonFields = {
   durationMinutes: z.coerce.number().min(0).max(100000).optional(),
   isPreview: z.coerce.boolean().optional(),
   published: z.coerce.boolean().optional(),
-  resources: z
-    .array(z.object({ title: z.string().trim().min(1).max(200), url: httpUrl('Resource URL') }))
-    .max(30, 'Too many resources')
-    .optional(),
+  /**
+   * Materials, either a link or an uploaded file.
+   *
+   * This used to accept only `{ title, url }`, which silently stripped the
+   * `kind`/`fileKey` an uploaded PDF is identified by — the file would upload
+   * and then vanish when the lesson was saved.
+   */
+  resources: z.array(materialSchema).max(30, 'Too many resources').optional(),
 };
 
 const createLessonBody = z.object({
@@ -215,6 +278,7 @@ const reorderLessonsBody = z.object({
  * refused before it starts rather than after 400 MB has crossed someone's mobile
  * data allowance.
  */
+
 const presignVideoBody = z.object({
   filename: z.string().trim().min(1, 'A filename is required').max(260, 'That filename is too long'),
   contentType: z
@@ -317,5 +381,8 @@ module.exports = {
   presignVideoBody,
   completeVideoBody,
   videoLinkBody,
+  presignMaterialBody,
+  materialsBody,
+  completeMaterialBody,
   thumbnailUploadBody,
 };

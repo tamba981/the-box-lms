@@ -124,6 +124,53 @@ const MAX_VIDEO_BYTES = 500 * 1024 * 1024;
 const RESOURCE_KINDS = Object.freeze(['link', 'file']);
 
 /**
+ * What a lesson material may be.
+ *
+ * Every one of these renders or downloads safely from a signed URL. HTML and SVG
+ * are deliberately absent: both can carry script, and a bucket that serves them
+ * inline turns a worksheet into stored XSS on this origin.
+ */
+const ALLOWED_MATERIAL_MIME = Object.freeze([
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-powerpoint',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'text/plain',
+  'text/csv',
+  'application/zip',
+]);
+
+/** Extensions matching ALLOWED_MATERIAL_MIME, used when building object keys. */
+const ALLOWED_MATERIAL_EXTENSIONS = Object.freeze([
+  'pdf',
+  'doc',
+  'docx',
+  'ppt',
+  'pptx',
+  'xls',
+  'xlsx',
+  'txt',
+  'csv',
+  'zip',
+]);
+
+/** 25 MB. A worksheet is not a video; anything larger is the wrong file. */
+const MAX_MATERIAL_BYTES = 25 * 1024 * 1024;
+
+/**
+ * Images accepted for an admission photo or a scanned document.
+ *
+ * SVG is excluded for the same reason it is excluded from materials.
+ */
+const ALLOWED_IMAGE_MIME = Object.freeze(['image/jpeg', 'image/png', 'image/webp']);
+
+/** 5 MB per admission upload. */
+const MAX_ADMISSION_UPLOAD_BYTES = 5 * 1024 * 1024;
+
+/**
  * Hosts a lesson video may be embedded from.
  *
  * This is a security boundary, not a convenience. The address is rendered into an
@@ -238,6 +285,11 @@ module.exports = {
   ALLOWED_VIDEO_EXTENSIONS,
   MAX_VIDEO_BYTES,
   RESOURCE_KINDS,
+  ALLOWED_MATERIAL_MIME,
+  ALLOWED_MATERIAL_EXTENSIONS,
+  MAX_MATERIAL_BYTES,
+  ALLOWED_IMAGE_MIME,
+  MAX_ADMISSION_UPLOAD_BYTES,
   EMBEDDABLE_VIDEO_HOSTS,
   NOTIFICATION_TYPES,
   LIVE_SESSION_STATUSES,

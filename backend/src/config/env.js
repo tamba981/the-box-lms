@@ -328,7 +328,7 @@ if (!STORAGE_ENABLED && IS_PRODUCTION) {
  * is the pair the academy supplied.
  */
 const MANUAL_PAYMENT_NUMBERS = String(
-  process.env.PAYMENT_MOBILE_MONEY_NUMBERS || '+231886590302,+231770562292'
+  process.env.PAYMENT_MOBILE_MONEY_NUMBERS || '+231888025082,+231770562292'
 )
   .split(',')
   .map((number) => number.trim())
@@ -396,6 +396,7 @@ const config = {
   manualPayment: {
     numbers: MANUAL_PAYMENT_NUMBERS,
     expiryDays: MANUAL_PAYMENT_EXPIRY_DAYS,
+    payTo: process.env.PAYMENT_MOBILE_MONEY_NAME || 'Darlington Tamba',
   },
 
   bcryptRounds: IS_TEST ? 4 : 12,

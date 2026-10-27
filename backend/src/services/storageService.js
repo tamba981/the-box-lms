@@ -42,6 +42,9 @@ const logger = require('../lib/logger');
 const { unavailable } = require('../lib/errors');
 const { ALLOWED_VIDEO_EXTENSIONS } = require('../lib/constants');
 
+/** Extensions an admission upload may carry, matching the validator's types. */
+const ADMISSION_EXTENSIONS = ['pdf', 'jpg', 'jpeg', 'png', 'webp', 'doc', 'docx', 'txt', 'csv', 'zip'];
+
 /** Upload URLs are short-lived on purpose: they are minted per file, per attempt. */
 const UPLOAD_URL_TTL_SECONDS = 15 * 60;
 
@@ -138,6 +141,19 @@ function buildMaterialKey({ courseId, lessonId, filename }) {
     filename,
     allowedExtensions: ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'txt', 'csv', 'zip'],
   });
+}
+
+/**
+ * An admission photograph or document.
+ *
+ * Scoped to the applicant by a fresh random id rather than by their name, and
+ * prefixed `admissions/` so these keys can never be confused with (or reach) a
+ * course's private files.
+ */
+function buildAdmissionKey({ filename, purpose }) {
+  const extension = safeExtension(filename, ADMISSION_EXTENSIONS);
+  const scope = purpose === 'photo' ? 'photo' : 'documents';
+  return `admissions/${crypto.randomUUID()}/${scope}/${crypto.randomUUID()}.${extension}`;
 }
 
 /**
@@ -243,6 +259,7 @@ module.exports = {
   describeStatus,
   buildVideoKey,
   buildMaterialKey,
+  buildAdmissionKey,
   createUploadUrl,
   createDownloadUrl,
   statObject,

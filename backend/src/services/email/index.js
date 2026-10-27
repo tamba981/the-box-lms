@@ -761,8 +761,7 @@ function businessEnquiryEmail({ lead, inbox }) {
  * not. A single template with a status field ends up saying the wrong one.
  * ------------------------------------------------------------------ */
 
-function instructorApplicationReceivedEmail({ user }) {
-  const text = [
+function instructorApplicationReceivedEmail({ user }) {  const text = [
     `Hello ${user.firstName || 'there'},`,
     '',
     'We received your application to teach on Wuteve Global Academy.',
@@ -847,8 +846,121 @@ function instructorRejectedEmail({ user, reason }) {
   };
 }
 
+/**
+ * Offline admissions.
+ *
+ * Three messages: one when the application arrives, one when it is approved
+ * (carrying what to bring), and one when it is not. All three repeat the
+ * tracking number, because that is the only handle the applicant has.
+ */
+
+function admissionReceivedEmail({ application }) {
+  const statusUrl = `${config.publicBaseUrl}/apply.html?tracking=${encodeURIComponent(application.trackingNumber)}`;
+
+  const text = [
+    `Hello ${application.firstName},`,
+    '',
+    `We received your application to join ${application.classLevel} at Wuteve Global Academy.`,
+    '',
+    `Your tracking number is ${application.trackingNumber}.`,
+    '',
+    'Keep this number. You can use it at any time to check the status of your',
+    'application:',
+    statusUrl,
+    '',
+    'Our admissions team reviews every application by hand and will contact you',
+    'using the details you gave us.',
+  ].join('\n');
+
+  return {
+    to: application.email,
+    subject: `We received your application — ${application.trackingNumber}`,
+    text,
+    html: layout({
+      heading: 'Application received',
+      bodyHtml: `<p style="margin:0 0 12px;">Hello ${escapeHtml(application.firstName)},</p>
+        <p style="margin:0 0 16px;">We received your application to join <strong>${escapeHtml(application.classLevel)}</strong> at Wuteve Global Academy.</p>
+        <p style="margin:0 0 6px;color:#475569;">Your tracking number</p>
+        <p style="margin:0 0 16px;font-size:22px;font-weight:700;letter-spacing:1px;">${escapeHtml(application.trackingNumber)}</p>
+        <p style="margin:0 0 16px;">Keep this number. You can use it at any time to check the status of your application.</p>
+        <p style="margin:0 0 16px;"><a href="${statusUrl}" style="display:inline-block;padding:12px 20px;background:#1479E8;color:#ffffff;text-decoration:none;border-radius:10px;font-weight:600;">Check my application</a></p>
+        <p style="margin:0;color:#475569;">Our admissions team reviews every application by hand and will contact you using the details you gave us.</p>`,
+    }),
+  };
+}
+
+function admissionApprovedEmail({ application }) {
+  const statusUrl = `${config.publicBaseUrl}/apply.html?tracking=${encodeURIComponent(application.trackingNumber)}`;
+  const note = application.decisionNote ? `\n\nNote from the admissions team:\n${application.decisionNote}` : '';
+
+  const text = [
+    `Hello ${application.firstName},`,
+    '',
+    `Your application to join ${application.classLevel} at Wuteve Global Academy has been approved.`,
+    '',
+    `Tracking number: ${application.trackingNumber}`,
+    '',
+    'Our admissions office will contact you on the phone number you provided to',
+    'arrange your admission formalities and the start date for your class.',
+    note,
+    '',
+    `You can view this outcome at any time: ${statusUrl}`,
+  ].join('\n');
+
+  return {
+    to: application.email,
+    subject: `Your application is approved — ${application.trackingNumber}`,
+    text,
+    html: layout({
+      heading: 'Your application is approved',
+      bodyHtml: `<p style="margin:0 0 12px;">Hello ${escapeHtml(application.firstName)},</p>
+        <p style="margin:0 0 16px;">Your application to join <strong>${escapeHtml(application.classLevel)}</strong> at Wuteve Global Academy has been <strong>approved</strong>.</p>
+        <p style="margin:0 0 6px;color:#475569;">Your tracking number</p>
+        <p style="margin:0 0 16px;font-size:22px;font-weight:700;letter-spacing:1px;">${escapeHtml(application.trackingNumber)}</p>
+        <p style="margin:0 0 16px;">Our admissions office will contact you on the phone number you provided to arrange your admission formalities and the start date for your class.</p>
+        ${application.decisionNote ? `<p style="margin:0 0 16px;padding:12px 14px;background:#f1f5f9;border-radius:10px;"><strong>Note from the admissions team:</strong><br />${escapeHtml(application.decisionNote)}</p>` : ''}
+        <p style="margin:0;"><a href="${statusUrl}" style="display:inline-block;padding:12px 20px;background:#1479E8;color:#ffffff;text-decoration:none;border-radius:10px;font-weight:600;">View my application</a></p>`,
+    }),
+  };
+}
+
+function admissionRejectedEmail({ application }) {
+  const text = [
+    `Hello ${application.firstName},`,
+    '',
+    `Thank you for applying to join ${application.classLevel} at Wuteve Global Academy.`,
+    '',
+    'We are not able to offer you a place on this occasion.',
+    '',
+    `Reason given: ${application.decisionNote || 'Not stated.'}`,
+    '',
+    `Tracking number: ${application.trackingNumber}`,
+    '',
+    'You are welcome to apply again for a future intake. If you would like to',
+    'discuss this decision, reply to this email and our admissions team will',
+    'respond.',
+  ].join('\n');
+
+  return {
+    to: application.email,
+    subject: `About your application — ${application.trackingNumber}`,
+    text,
+    html: layout({
+      heading: 'About your application',
+      bodyHtml: `<p style="margin:0 0 12px;">Hello ${escapeHtml(application.firstName)},</p>
+        <p style="margin:0 0 16px;">Thank you for applying to join <strong>${escapeHtml(application.classLevel)}</strong> at Wuteve Global Academy. We are not able to offer you a place on this occasion.</p>
+        <p style="margin:0 0 16px;padding:12px 14px;background:#f1f5f9;border-radius:10px;"><strong>Reason given:</strong><br />${escapeHtml(application.decisionNote || 'Not stated.')}</p>
+        <p style="margin:0 0 16px;">You are welcome to apply again for a future intake. If you would like to discuss this decision, reply to this email and our admissions team will respond.</p>
+        <p style="margin:0;color:#475569;">Tracking number: ${escapeHtml(application.trackingNumber)}</p>`,
+    }),
+  };
+}
+
 module.exports = {
   deliver,
+  admissionReceivedEmail,
+  admissionApprovedEmail,
+  admissionRejectedEmail,
   businessEnquiryEmail,
   verificationEmail,
   passwordResetEmail,

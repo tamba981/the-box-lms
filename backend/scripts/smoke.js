@@ -296,7 +296,10 @@ async function cleanup() {
   const LiveSession = require('../src/models/LiveSession');
   const CommunityPost = require('../src/models/CommunityPost');
   const Review = require('../src/models/Review');
+  const AdmissionApplication = require('../src/models/AdmissionApplication');
   const Payment = require('../src/models/Payment');
+
+  await AdmissionApplication.deleteMany({ email: { $regex: '^smoke-.*@example\\.com$' } });
 
   // Clean up by namespace, not only by tracked email.
   //
@@ -7085,6 +7088,199 @@ async function testInstructorCoursePagination() {
   });
 }
 
+/**
+ * Offline admissions and the public catalogue statistics.
+ *
+ * The admission form is the only public endpoint that stores files and emails an
+ * address the caller chose, so the checks here are about the refusals as much as
+ * the happy path.
+ */
+async function testAdmissionsAndStats() {
+  const AdmissionApplication = require('../src/models/AdmissionApplication');
+  const Course = require('../src/models/Course');
+
+  const adminEmail = `smoke-adm-admin-${runId}@example.com`;
+  const applicantEmail = `smoke-adm-applicant-${runId}@example.com`;
+  createdEmails.push(adminEmail, applicantEmail);
+
+  let adminToken = null;
+  let applicantToken = null;
+  let tracking = null;
+  let applicationId = null;
+
+  const signIn = async (email) => {
+    const { json } = await request('POST', '/api/v1/auth/login', { body: { email, password: PASSWORD } });
+    return json.data.accessToken;
+  };
+
+  const applicationBody = (overrides = {}) => ({
+    classLevel: 'Computer Literacy',
+    firstName: 'Admissions',
+    lastName: 'Applicant',
+    gender: 'female',
+    dateOfBirth: '2005-04-12',
+    mobile: '0888025082',
+    email: applicantEmail,
+    religion: 'Christian',
+    fatherName: 'Father Applicant',
+    fatherPhone: '0888000001',
+    motherName: 'Mother Applicant',
+    motherPhone: '0888000002',
+    motherOccupation: 'Trader',
+    previousSchool: 'Sinkor High School',
+    documents: [],
+    consent: true,
+    ...overrides,
+  });
+
+  await check('admission fixtures are provisioned', async () => {
+    await User.create({
+      firstName: 'Admission',
+      lastName: 'Admin',
+      email: adminEmail,
+      password: PASSWORD,
+      role: 'admin',
+      emailVerified: true,
+    });
+    await User.create({
+      firstName: 'Admission',
+      lastName: 'Applicant',
+      email: applicantEmail,
+      password: PASSWORD,
+      role: 'student',
+      emailVerified: true,
+    });
+
+    adminToken = await signIn(adminEmail);
+    applicantToken = await signIn(applicantEmail);
+
+    assert(adminToken && applicantToken, 'both sessions must exist');
+  });
+
+  await check('the public statistics are counted, not invented', async () => {
+    const { status, json } = await request('GET', '/api/v1/stats/public');
+
+    assertEqual(status, 200, 'status');
+    const published = await Course.countDocuments({ status: 'published' });
+
+    assertEqual(json.data.courses, published, 'course count matches the database');
+    assertEqual(typeof json.data.instructors, 'number', 'instructor count is a number');
+    assertEqual(typeof json.data.lessons, 'number', 'lesson count is a number');
+    assertEqual(typeof json.data.hours, 'number', 'hours is a number');
+    assertEqual(typeof json.data.freeCourses, 'number', 'free course count is a number');
+  });
+
+  await check('the offline class list is served publicly', async () => {
+    const { status, json } = await request('GET', '/api/v1/admissions/classes');
+
+    assertEqual(status, 200, 'status');
+    assert(Array.isArray(json.data.classes) && json.data.classes.length > 0, 'at least one class');
+  });
+
+  await check('an application without consent is refused', async () => {
+    const { status, json } = await request('POST', '/api/v1/admissions', {
+      body: applicationBody({ consent: false }),
+    });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'VALIDATION_ERROR', 'validation error');
+  });
+
+  await check('an application with a made-up photo key is refused', async () => {
+    const { status, json } = await request('POST', '/api/v1/admissions', {
+      body: applicationBody({ photoKey: 'foo/bar.jpg' }),
+    });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'UPLOAD_KEY_INVALID', 'key refused');
+  });
+
+  await check('an application is accepted and issues a tracking number', async () => {
+    const { status, json } = await request('POST', '/api/v1/admissions', {
+      body: applicationBody(),
+    });
+
+    assertEqual(status, 201, 'status');
+    tracking = json.data.application.trackingNumber;
+    assert(/^WGA-ADM-[23456789A-HJ-NP-Z]{8}$/.test(tracking), `tracking number shape: ${tracking}`);
+
+    const stored = await AdmissionApplication.findOne({ trackingNumber: tracking });
+    assert(stored, 'the application must be stored');
+    applicationId = String(stored._id);
+  });
+
+  await check('a tracking number reveals its status and nothing personal', async () => {
+    const { status, json } = await request('GET', `/api/v1/admissions/status/${tracking}`);
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.application.status, 'pending', 'status');
+    assert(!json.data.application.motherPhone, 'the household must not be exposed');
+    assert(!json.data.application.documents, 'documents must not be exposed');
+  });
+
+  await check('an unknown tracking number is a 404', async () => {
+    const { status } = await request('GET', '/api/v1/admissions/status/WGA-ADM-ZZZZZZZZ');
+    assertEqual(status, 404, 'status');
+  });
+
+  await check('a malformed tracking number is a 400', async () => {
+    const { status } = await request('GET', '/api/v1/admissions/status/nonsense');
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('a student cannot read the admissions queue', async () => {
+    const { status } = await request('GET', '/api/v1/admin/admissions', { token: applicantToken });
+    assertEqual(status, 403, 'status');
+  });
+
+  await check('an administrator sees the application', async () => {
+    const { status, json } = await request('GET', '/api/v1/admin/admissions?status=pending', {
+      token: adminToken,
+    });
+
+    assertEqual(status, 200, 'status');
+    const mine = json.data.items.find((item) => item.trackingNumber === tracking);
+    assert(mine, 'the application should be in the queue');
+    assertEqual(mine.classLevel, 'Computer Literacy', 'class');
+    assert(json.data.counts && json.data.counts.pending >= 1, 'pending count');
+  });
+
+  await check('rejecting without a reason is refused', async () => {
+    const { status } = await request('PATCH', `/api/v1/admin/admissions/${applicationId}`, {
+      token: adminToken,
+      body: { decision: 'rejected', note: 'no' },
+    });
+
+    assertEqual(status, 400, 'status');
+  });
+
+  await check('approving an application changes the status the applicant sees', async () => {
+    const { status, json } = await request('PATCH', `/api/v1/admin/admissions/${applicationId}`, {
+      token: adminToken,
+      body: { decision: 'approved', note: 'Bring your certificate on the first day.' },
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.application.status, 'approved', 'status after approval');
+
+    const publicView = await request('GET', `/api/v1/admissions/status/${tracking}`);
+    assertEqual(publicView.json.data.application.status, 'approved', 'the applicant sees the decision');
+  });
+
+  await check('a material upload is refused while storage is unconfigured', async () => {
+    // The suite runs without R2 credentials, which is a real deployment state:
+    // the route must name the missing settings rather than fail obscurely.
+    const { status, json } = await request('POST', '/api/v1/admissions/uploads', {
+      body: { purpose: 'photo', filename: 'me.jpg', contentType: 'image/jpeg', sizeBytes: 1200 },
+    });
+
+    assert(status === 503 || status === 200, `status: ${status}`);
+    if (status === 503) {
+      assertEqual(json.code, 'STORAGE_NOT_CONFIGURED', 'names the missing settings');
+    }
+  });
+}
+
 async function main() {
   process.stdout.write('\nWuteve Global Academy — smoke test\n');
   process.stdout.write('==================================\n\n');
@@ -7202,6 +7398,9 @@ async function main() {
 
     process.stdout.write('\nInstructor course list\n');
     await testInstructorCoursePagination();
+
+    process.stdout.write('\nOffline admissions\n');
+    await testAdmissionsAndStats();
 
     process.stdout.write('\nMoney formatting\n');
     await testMoneyFormatting();

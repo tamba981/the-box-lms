@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Apply for Offline Courses | Wuteve Global Academy</title>
+<meta
+  name="description"
+  content="Apply for an in-person course at Wuteve Global Academy. Submit your details, upload your photograph and documents, and track your application with the number we send you."
+/>
+<link rel="canonical" href="https://wuteveglobalacademy.com/apply.html" />
+<meta name="theme-color" content="#073778" />
+<link rel="icon" type="image/png" href="/Images/Brand/wuteve-emblem.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/assets/css/wga-public.css?v=20261034" />
+
+<style>
+  .apply-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 26px;
+    margin: 0 0 var(--s-8);
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+  }
+  .apply-steps li {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: var(--t-sm);
+    color: var(--ink-2);
+  }
+  .apply-steps li::before {
+    counter-increment: step;
+    content: counter(step);
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--brand-soft);
+    border: 1px solid var(--brand-line);
+    color: var(--brand-strong);
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .apply-section {
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--surface-2);
+    padding: var(--s-6);
+    margin-bottom: var(--s-5);
+  }
+  .apply-section > h2 {
+    font-size: var(--t-lg);
+    margin: 0 0 var(--s-5);
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--line);
+  }
+  .apply-section > h2 span {
+    color: var(--muted);
+    font-weight: 700;
+    margin-right: 8px;
+  }
+  .apply-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-4);
+  }
+  .apply-grid .field-full { grid-column: 1 / -1; }
+  @media (max-width: 640px) {
+    .apply-grid { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  .upload-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .upload-line input[type="file"] {
+    flex: 1 1 220px;
+    min-width: 0;
+    font-size: 13.5px;
+    padding: 8px 10px;
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--r-sm);
+    background: var(--surface);
+  }
+  .upload-progress {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--surface-3);
+    overflow: hidden;
+    margin-top: 8px;
+    display: none;
+  }
+  .upload-progress > span {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: var(--brand);
+    transition: width 0.15s linear;
+  }
+  .upload-done {
+    font-size: 13px;
+    color: #047857;
+    font-weight: 600;
+  }
+  .doc-list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+  .doc-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    font-size: 13.5px;
+  }
+  .doc-list .doc-remove {
+    margin-left: auto;
+    border: 0;
+    background: transparent;
+    color: #b42318;
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  .tracking-box {
+    border: 1px solid var(--brand-line);
+    border-radius: var(--r-lg);
+    background: var(--brand-soft);
+    padding: var(--s-6);
+    text-align: center;
+  }
+  .tracking-code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    margin: 8px 0 14px;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+  .status-pill {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    border: 1px solid var(--line-strong);
+    background: var(--surface-2);
+  }
+  .status-pill.approved { background: #e7f6ee; border-color: #b3e2cb; color: #0f7b52; }
+  .status-pill.rejected { background: #fdeceb; border-color: #f3c3bf; color: #b42318; }
+  .status-pill.pending { background: #fdf3e3; border-color: #f0d9a8; color: #8a5a00; }
+  body.dark-mode .status-pill.approved { background: #0d2a20; border-color: #1d5540; color: #74d9a8; }
+  body.dark-mode .status-pill.rejected { background: #2d1614; border-color: #5a2a24; color: #f7a7a0; }
+  body.dark-mode .status-pill.pending { background: #2b2110; border-color: #55411d; color: #f0c46b; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="pub-header">
+  <div class="wrap pub-header-inner">
+    <a class="pub-brand" href="/index.html" aria-label="Wuteve Global Academy home">
+      <img src="/Images/Brand/wuteve-emblem.png" alt="" width="34" height="34" />
+      <span>Wuteve</span>
+    </a>
+
+    <nav class="pub-nav" aria-label="Primary">
+      <button class="navlink" type="button" data-mega aria-expanded="false" aria-controls="mega-menu">
+        Courses <span aria-hidden="true">&#9662;</span>
+      </button>
+      <a href="/for-individuals.html">For individuals</a>
+      <a href="/business.html">For business</a>
+      <a href="/apply.html" aria-current="page">Apply offline</a>
+      <a href="/certificate.html">Verify a certificate</a>
+    </nav>
+
+    <div class="pub-header-tools">
+      <button class="icon-btn" type="button" id="themeToggle" data-theme-toggle aria-label="Switch theme">&#127769;</button>
+      <a class="btn btn-ghost" href="/login.html" data-when-signed-out>Sign in</a>
+      <a class="btn btn-primary" href="/login.html?tab=signup" data-when-signed-out>Create account</a>
+      <a class="btn btn-primary" href="/student-dashboard.html" data-when-signed-in data-dashboard-link hidden data-account-name>Dashboard</a>
+      <button class="btn btn-ghost" type="button" data-when-signed-in data-logout hidden>Sign out</button>
+      <button class="icon-btn menu-btn" type="button" data-menu-btn aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">
+        <span aria-hidden="true">&#9776;</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mega" id="mega-menu" data-mega-menu>
+    <div class="wrap mega-grid">
+      <div>
+        <h4>Browse</h4>
+        <ul>
+          <li><a href="/courses.html">All courses</a></li>
+          <li><a href="/courses.html?price=free">Free courses</a></li>
+          <li><a href="/courses.html?credential=diploma">Diploma courses</a></li>
+          <li><a href="/apply.html">Apply for offline courses</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Your account</h4>
+        <ul>
+          <li><a href="/login.html">Sign in</a></li>
+          <li><a href="/login.html?tab=signup">Create an account</a></li>
+          <li><a href="/forgot-password.html">Forgot password</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Certificates</h4>
+        <ul>
+          <li><a href="/certificate.html">Verify a certificate</a></li>
+          <li><a href="/privacy.html">Privacy policy</a></li>
+          <li><a href="/terms.html">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-nav" id="mobile-nav" data-mobile-nav>
+    <a href="/courses.html">All courses</a>
+    <a href="/for-individuals.html">For individuals</a>
+    <a href="/business.html">For business</a>
+    <a href="/universities.html">Universities</a>
+    <a href="/government.html">Government</a>
+    <a href="/apply.html">Apply offline</a>
+    <a href="/certificate.html">Verify a certificate</a>
+    <p class="mobile-group">Your account</p>
+    <a href="/login.html" data-when-signed-out>Sign in</a>
+    <a href="/login.html?tab=signup" data-when-signed-out>Create an account</a>
+    <a href="/student-dashboard.html" data-when-signed-in data-dashboard-link hidden>My dashboard</a>
+    <a href="#" data-when-signed-in data-logout hidden>Sign out</a>
+    <p class="mobile-group">Contact</p>
+    <a href="mailto:info@wuteveglobalacademy.com">info@wuteveglobalacademy.com</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-header">
+    <div class="wrap">
+      <span class="eyebrow">Offline admission</span>
+      <h1>Apply for an offline course</h1>
+      <p>
+        Classes are taught in person. Send us your details and we will review your application by hand,
+        then contact you on the number you give us. You do not need an account to apply.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="wrap">
+
+      <ol class="apply-steps">
+        <li>Fill in the form</li>
+        <li>Upload a photo and documents</li>
+        <li>Get your tracking number</li>
+        <li>We contact you with the decision</li>
+      </ol>
+
+      <!-- ---------------- The form ---------------- -->
+      <form id="apply-form" novalidate hidden>
+
+        <section class="apply-section">
+          <h2><span>1</span> About you</h2>
+          <div class="apply-grid">
+            <div class="field">
+              <span>Class you are applying for</span>
+              <select id="classLevel" name="classLevel" required>
+                <option value="">Loading classes&hellip;</option>
+              </select>
+            </div>
+            <div class="field">
+              <span>Gender</span>
+              <select id="gender" name="gender" required>
+                <option value="">Choose</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="other">Other</option>
+                <option value="prefer_not_to_say">Prefer not to say</option>
+              </select>
+            </div>
+            <div class="field">
+              <span>First name</span>
+              <input type="text" id="firstName" name="firstName" autocomplete="given-name" maxlength="80" required />
+            </div>
+            <div class="field">
+              <span>Last name</span>
+              <input type="text" id="lastName" name="lastName" autocomplete="family-name" maxlength="80" required />
+            </div>
+            <div class="field">
+              <span>Date of birth</span>
+              <input type="date" id="dateOfBirth" name="dateOfBirth" required />
+            </div>
+            <div class="field">
+              <span>Mobile number</span>
+              <input type="tel" id="mobile" name="mobile" autocomplete="tel" placeholder="0888025082" maxlength="40" required />
+            </div>
+            <div class="field">
+              <span>Email address</span>
+              <input type="email" id="email" name="email" autocomplete="email" maxlength="160" required />
+            </div>
+            <div class="field">
+              <span>Religion <span class="hint" style="font-weight:400;">(optional)</span></span>
+              <input type="text" id="religion" name="religion" maxlength="80" />
+            </div>
+
+            <div class="field field-full">
+              <span>Your photograph</span>
+              <div class="upload-line">
+                <input type="file" id="photoFile" accept="image/jpeg,image/png,image/webp" />
+                <span class="upload-done" id="photoDone" hidden>Uploaded</span>
+              </div>
+              <div class="upload-progress" id="photoProgress"><span></span></div>
+              <p class="hint">JPG, PNG or WebP, up to 5 MB. A clear passport-style photograph.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="apply-section">
+          <h2><span>2</span> Parent or guardian</h2>
+          <div class="apply-grid">
+            <div class="field">
+              <span>Father's name</span>
+              <input type="text" id="fatherName" name="fatherName" maxlength="120" />
+            </div>
+            <div class="field">
+              <span>Father's phone</span>
+              <input type="tel" id="fatherPhone" name="fatherPhone" maxlength="40" />
+            </div>
+            <div class="field">
+              <span>Mother's name</span>
+              <input type="text" id="motherName" name="motherName" maxlength="120" />
+            </div>
+            <div class="field">
+              <span>Mother's phone</span>
+              <input type="tel" id="motherPhone" name="motherPhone" maxlength="40" />
+            </div>
+            <div class="field field-full">
+              <span>Mother's occupation</span>
+              <input type="text" id="motherOccupation" name="motherOccupation" maxlength="120" />
+            </div>
+          </div>
+        </section>
+
+        <section class="apply-section">
+          <h2><span>3</span> Previous school</h2>
+          <div class="apply-grid">
+            <div class="field field-full">
+              <span>Last school attended</span>
+              <input type="text" id="previousSchool" name="previousSchool" maxlength="300" placeholder="Name of school, and the level you reached" />
+            </div>
+          </div>
+        </section>
+
+        <section class="apply-section">
+          <h2><span>4</span> Supporting documents</h2>
+          <p class="hint" style="margin-top:-8px;">Optional. Certificates, results slips or an ID — up to 6 files, 5 MB each.</p>
+          <div class="upload-line">
+            <input type="file" id="docFile" accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx" />
+            <button class="btn btn-ghost" type="button" id="addDoc">Add document</button>
+          </div>
+          <div class="upload-progress" id="docProgress"><span></span></div>
+          <ul class="doc-list" id="docList"></ul>
+        </section>
+
+        <div class="checks" style="margin-bottom:var(--s-5)">
+          <label class="check">
+            <input type="checkbox" id="consent" required />
+            <span>I confirm the details above are correct, and I agree to Wuteve Global Academy storing them and my photograph for the purpose of this application.</span>
+          </label>
+        </div>
+
+        <div class="form-status" id="apply-status" role="status" aria-live="polite"></div>
+
+        <button class="btn btn-primary btn-lg" type="submit" id="apply-submit">Submit application</button>
+        <p class="hint" style="margin-top:12px;">
+          We use these details only to process your application. See our
+          <a href="/privacy.html">privacy policy</a>.
+        </p>
+      </form>
+
+      <div class="panel" id="apply-loading">
+        <p class="muted" style="margin:0;">Loading the form&hellip;</p>
+      </div>
+
+      <!-- ---------------- Success ---------------- -->
+      <div id="apply-success" hidden>
+        <div class="tracking-box">
+          <h2 style="margin:0 0 4px;font-size:var(--t-lg)">Application received</h2>
+          <p style="margin:0;color:var(--ink-2)">Keep this number — it is how you and we refer to your application.</p>
+          <p class="tracking-code" id="my-tracking">&nbsp;</p>
+          <p style="margin:0;color:var(--ink-2)">We have emailed it to you as well.</p>
+        </div>
+        <p style="margin-top:var(--s-6)">
+          <a class="btn btn-primary" href="#check-status">Check the status</a>
+          <a class="btn btn-ghost" href="/courses.html">Browse online courses</a>
+        </p>
+      </div>
+
+      <!-- ---------------- Check status ---------------- -->
+      <section class="apply-section" id="check-status" style="margin-top:var(--s-12)">
+        <h2>Check your application</h2>
+        <p class="hint" style="margin-top:-8px;">Enter the tracking number from your confirmation email.</p>
+        <form id="status-form" novalidate>
+          <div class="field-row">
+            <div class="field">
+              <span>Tracking number</span>
+              <input type="text" id="trackingInput" placeholder="WGA-ADM-XXXXXXXX" maxlength="20" autocomplete="off" />
+            </div>
+            <button class="btn btn-primary" type="submit" id="status-submit">Check status</button>
+          </div>
+        </form>
+        <div class="form-status" id="status-result" role="status" aria-live="polite"></div>
+        <div id="status-detail" hidden></div>
+      </section>
+
+    </div>
+  </section>
+</main>
+
+<footer class="pub-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <a class="pub-brand" href="/index.html" style="margin-bottom: var(--s-4)">
+          <img src="/Images/Brand/wuteve-emblem.png" alt="" width="30" height="30" />
+          <span>Wuteve</span>
+        </a>
+        <p>
+          Wuteve Global Academy runs online and in-person courses and issues a certificate at the end of
+          each one - a certificate anyone can verify.
+        </p>
+        <p class="muted" style="font-size: var(--t-xs)">
+          Sponsored by Motiva Corporation Group of Companies.
+        </p>
+        <div class="footer-social">
+          <a href="https://www.youtube.com/channel/UC8tswX1nfvl8ZL0G11jrznQ" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M21.58 7.19a2.5 2.5 0 0 0-1.76-1.77C18.25 5 12 5 12 5s-6.25 0-7.82.42A2.5 2.5 0 0 0 2.42 7.2 26 26 0 0 0 2 12c0 1.61.14 3.22.42 4.81a2.5 2.5 0 0 0 1.76 1.77C5.75 19 12 19 12 19s6.25 0 7.82-.42a2.5 2.5 0 0 0 1.76-1.77c.28-1.59.42-3.2.42-4.81 0-1.61-.14-3.22-.42-4.81ZM10 15.2V8.8l5.2 3.2-5.2 3.2Z" />
+            </svg>
+            YouTube
+          </a>
+          <a href="https://www.facebook.com/share/14rheZ34h3T/" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false">
+              <path d="M13.5 21v-7.8h2.62l.39-3.04H13.5V8.22c0-.88.24-1.48 1.5-1.48h1.61V4.02c-.28-.04-1.23-.12-2.34-.12-2.32 0-3.9 1.42-3.9 4.02v2.24H7.74v3.04h2.63V21h3.13Z" />
+            </svg>
+            Facebook
+          </a>
+          <a href="https://www.instagram.com/wuteve_global_academy.official" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9a5.5 5.5 0 0 1-5.5 5.5h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9Z" /><path fill-rule="evenodd" d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6Z" /><circle cx="17.4" cy="6.6" r="1.2" /></svg>
+            Instagram
+          </a>
+          <a href="https://www.linkedin.com/company/theboxeduorg/" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M6.94 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM3.2 8.7h3.5V21H3.2V8.7Zm5.6 0h3.35v1.68h.05a3.67 3.67 0 0 1 3.3-1.82c3.53 0 4.18 2.32 4.18 5.34V21h-3.5v-5.44c0-1.3-.02-2.97-1.81-2.97-1.81 0-2.09 1.42-2.09 2.88V21H8.8V8.7Z" /></svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="/courses.html">All courses</a></li>
+          <li><a href="/courses.html?price=free">Free courses</a></li>
+          <li><a href="/for-individuals.html">For individuals</a></li>
+          <li><a href="/apply.html">Apply for offline courses</a></li>
+          <li><a href="/certificate.html">Verify a certificate</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Organisations</h4>
+        <ul>
+          <li><a href="/business.html">For business</a></li>
+          <li><a href="/universities.html">Universities</a></li>
+          <li><a href="/government.html">Government</a></li>
+          <li><a href="/become-instructor.html">Teach on Wuteve</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li>Monrovia, Liberia &middot; P.O. Box 1000</li>
+          <li><a href="tel:+231888025082">0888025082 (Darlington Tamba)</a></li>
+          <li><a href="tel:+231772876644">+231 772 876 644</a></li>
+          <li><a href="mailto:info@wuteveglobalacademy.com">info@wuteveglobalacademy.com</a></li>
+          <li><a href="mailto:office.wuteveglobalacademy@gmail.com">office.wuteveglobalacademy@gmail.com</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p style="margin: 0">
+        &copy; <span data-year>2026</span> Wuteve Global Academy. Sponsored by Motiva
+        Corporation Group of Companies.
+      </p>
+      <p style="margin: 0">
+        <a href="/terms.html">Terms of Service</a>
+        <span aria-hidden="true"> &middot; </span>
+        <a href="/privacy.html">Privacy Policy</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/wga-api.js?v=20261021"></script>
+<script src="/assets/js/wga-ui.js?v=20261021"></script>
+<script src="/assets/js/wga-public.js?v=20261021"></script>
+<script>
+  (function () {
+    'use strict';
+
+    var form = document.getElementById('apply-form');
+    var loading = document.getElementById('apply-loading');
+    var success = document.getElementById('apply-success');
+    var statusBox = document.getElementById('apply-status');
+    var submitBtn = document.getElementById('apply-submit');
+    var docList = document.getElementById('docList');
+
+    /** Uploaded files, keyed by what the API issued. */
+    var state = { photo: null, documents: [] };
+
+    function showStatus(message, kind) {
+      if (!statusBox) return;
+      statusBox.textContent = message;
+      statusBox.classList.add('show');
+      statusBox.classList.toggle('is-ok', kind === 'ok');
+      statusBox.classList.toggle('is-error', kind === 'error');
+    }
+
+    function clearStatus() {
+      if (!statusBox) return;
+      statusBox.classList.remove('show', 'is-ok', 'is-error');
+      statusBox.textContent = '';
+    }
+
+    function formatBytes(bytes) {
+      var size = Number(bytes) || 0;
+      if (!size) return '';
+      if (size < 1024) return size + ' B';
+      if (size < 1024 * 1024) return Math.round(size / 1024) + ' KB';
+      return (size / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    /**
+     * Send one file straight to storage.
+     *
+     * The file never passes through the academy's API: we ask for a signed URL,
+     * PUT the bytes to the bucket, and keep the key. That keeps a 5 MB photograph
+     * off the request that submits the form.
+     */
+    function uploadOne(file, purpose, barId) {
+      var bar = document.getElementById(barId);
+
+      return WGA.post('/admissions/uploads', {
+        purpose: purpose,
+        filename: file.name,
+        contentType: file.type || (purpose === 'photo' ? 'image/jpeg' : 'application/pdf'),
+        sizeBytes: file.size,
+      }).then(function (signed) {
+        if (bar) { bar.style.display = 'block'; bar.firstElementChild.style.width = '0%'; }
+
+        return WGA
+          .uploadToSignedUrl(signed.uploadUrl, file, {
+            contentType: signed.contentType,
+            onProgress: function (percent) {
+              if (bar) bar.firstElementChild.style.width = percent + '%';
+            },
+          })
+          .then(function () {
+            if (bar) { bar.style.display = 'none'; bar.firstElementChild.style.width = '0%'; }
+            return { key: signed.key, name: file.name, size: file.size, mime: file.type };
+          });
+      });
+    }
+
+    /* ---- Classes ---- */
+    WGA.get('/admissions/classes')
+      .then(function (data) {
+        var select = document.getElementById('classLevel');
+        var classes = (data && data.classes) || [];
+
+        select.innerHTML =
+          '<option value="">Choose a class</option>' +
+          classes
+            .map(function (item) {
+              return '<option value="' + WGAUI.escapeHtml(item.value) + '">' + WGAUI.escapeHtml(item.label) + '</option>';
+            })
+            .join('');
+
+        loading.hidden = true;
+        form.hidden = false;
+      })
+      .catch(function () {
+        loading.innerHTML =
+          '<p style="margin:0">We could not load the application form. Please refresh, or email ' +
+          '<a href="mailto:info@wuteveglobalacademy.com">info@wuteveglobalacademy.com</a>.</p>';
+      });
+
+    /* ---- Photograph ---- */
+    document.getElementById('photoFile').addEventListener('change', function (event) {
+      var file = event.target.files && event.target.files[0];
+      var done = document.getElementById('photoDone');
+      if (!file) return;
+
+      if (file.size > 5 * 1024 * 1024) {
+        showStatus('Your photograph must be 5 MB or smaller.', 'error');
+        event.target.value = '';
+        return;
+      }
+
+      done.hidden = true;
+      clearStatus();
+
+      uploadOne(file, 'photo', 'photoProgress')
+        .then(function (uploaded) {
+          state.photo = uploaded;
+          done.hidden = false;
+          done.textContent = 'Uploaded · ' + formatBytes(uploaded.size);
+          clearStatus();
+        })
+        .catch(function (error) {
+          event.target.value = '';
+          showStatus((error && error.message) || 'That photograph could not be uploaded.', 'error');
+        });
+    });
+
+    /* ---- Documents ---- */
+    function renderDocs() {
+      docList.innerHTML = state.documents
+        .map(function (doc, index) {
+          return (
+            '<li><i class="fas fa-paperclip" aria-hidden="true"></i>' +
+            WGAUI.escapeHtml(doc.name) +
+            ' <span class="muted" style="margin-left:6px">' + formatBytes(doc.size) + '</span>' +
+            '<button class="doc-remove" type="button" data-remove="' + index + '">Remove</button></li>'
+          );
+        })
+        .join('');
+    }
+
+    docList.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-remove]');
+      if (!button) return;
+      state.documents.splice(Number(button.getAttribute('data-remove')), 1);
+      renderDocs();
+    });
+
+    document.getElementById('addDoc').addEventListener('click', function () {
+      var input = document.getElementById('docFile');
+      var file = input.files && input.files[0];
+
+      if (!file) {
+        showStatus('Choose a file first.', 'error');
+        return;
+      }
+      if (state.documents.length >= 6) {
+        showStatus('You can attach up to 6 documents.', 'error');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        showStatus('Each document must be 5 MB or smaller.', 'error');
+        return;
+      }
+
+      var button = this;
+      button.disabled = true;
+
+      uploadOne(file, 'document', 'docProgress')
+        .then(function (uploaded) {
+          state.documents.push(uploaded);
+          renderDocs();
+          input.value = '';
+          clearStatus();
+        })
+        .catch(function (error) {
+          showStatus((error && error.message) || 'That document could not be uploaded.', 'error');
+        })
+        .finally(function () {
+          button.disabled = false;
+        });
+    });
+
+    /* ---- Submit ---- */
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+      clearStatus();
+
+      if (!state.photo) {
+        showStatus('Upload your photograph first.', 'error');
+        return;
+      }
+      if (!document.getElementById('consent').checked) {
+        showStatus('Please confirm you agree to the academy storing these details.', 'error');
+        return;
+      }
+
+      var value = function (id) { return (document.getElementById(id).value || '').trim(); };
+
+      var payload = {
+        classLevel: value('classLevel'),
+        firstName: value('firstName'),
+        lastName: value('lastName'),
+        gender: value('gender'),
+        dateOfBirth: value('dateOfBirth'),
+        mobile: value('mobile'),
+        email: value('email'),
+        religion: value('religion'),
+        photoKey: state.photo.key,
+        photoMime: state.photo.mime,
+        fatherName: value('fatherName'),
+        fatherPhone: value('fatherPhone'),
+        motherName: value('motherName'),
+        motherPhone: value('motherPhone'),
+        motherOccupation: value('motherOccupation'),
+        previousSchool: value('previousSchool'),
+        documents: state.documents.map(function (doc) {
+          return { key: doc.key, name: doc.name, size: doc.size, mime: doc.mime };
+        }),
+        consent: true,
+      };
+
+      WGAUI.setBusy(submitBtn, true, 'Submitting…');
+
+      WGA.post('/admissions', payload)
+        .then(function (data) {
+          var application = data.application || {};
+          document.getElementById('my-tracking').textContent = application.trackingNumber || '';
+          form.hidden = true;
+          success.hidden = false;
+          success.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        })
+        .catch(function (error) {
+          WGAUI.setBusy(submitBtn, false);
+          showStatus((error && error.message) || 'Your application could not be submitted. Please try again.', 'error');
+        });
+    });
+
+    /* ---- Check status ---- */
+    var statusForm = document.getElementById('status-form');
+    var statusResult = document.getElementById('status-result');
+    var statusDetail = document.getElementById('status-detail');
+
+    statusForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      var tracking = (document.getElementById('trackingInput').value || '').trim().toUpperCase();
+      statusResult.classList.remove('show', 'is-ok', 'is-error');
+
+      if (!/^WGA-ADM-[A-Z0-9]{8}$/.test(tracking)) {
+        statusResult.textContent = 'That does not look like a tracking number. It starts with WGA-ADM-.';
+        statusResult.classList.add('show', 'is-error');
+        return;
+      }
+
+      WGA.get('/admissions/status/' + encodeURIComponent(tracking))
+        .then(function (data) {
+          var application = data.application || {};
+          var label = application.status;
+
+          statusResult.textContent = '';
+          statusResult.classList.remove('show', 'is-ok', 'is-error');
+
+          statusDetail.hidden = false;
+          statusDetail.innerHTML =
+            '<div style="margin-top:16px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2)">' +
+            '<p style="margin:0 0 6px;font-weight:700;">' + WGAUI.escapeHtml(application.firstName + ' ' + application.lastName) + '</p>' +
+            '<p style="margin:0 0 10px;color:var(--ink-2)">' + WGAUI.escapeHtml(application.classLevel) + ' · submitted ' + WGAUI.formatDate(application.submittedAt) + '</p>' +
+            '<span class="status-pill ' + WGAUI.escapeHtml(label) + '">' + WGAUI.escapeHtml(label) + '</span>' +
+            (application.note ? '<p style="margin:12px 0 0;color:var(--ink-2)">' + WGAUI.escapeHtml(application.note) + '</p>' : '') +
+            '</div>';
+        })
+        .catch(function (error) {
+          statusDetail.hidden = true;
+          statusResult.textContent =
+            error && error.status === 404
+              ? 'No application matches that tracking number.'
+              : (error && error.message) || 'We could not check that number right now.';
+          statusResult.classList.add('show', 'is-error');
+        });
+    });
+
+    /* A link the confirmation email can carry. */
+    var preset = WGAUI.param('tracking');
+    if (preset) {
+      document.getElementById('trackingInput').value = String(preset).toUpperCase();
+    }
+  })();
+</script>
+</body>
+</html>

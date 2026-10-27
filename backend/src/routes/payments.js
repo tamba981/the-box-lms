@@ -102,6 +102,9 @@ router.get(
           // Shown on the payment screen. Public like the footer numbers already
           // are — these are where money is sent, not a secret.
           numbers: config.manualPayment.numbers,
+          // Who receives the transfer. A learner sending money to a number needs
+          // to know whose name to expect on the confirmation prompt.
+          payTo: config.manualPayment.payTo || 'Darlington Tamba',
         },
         ...mobileMoneyService.listProviders(),
       ],

@@ -912,6 +912,7 @@
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="certificates"><i class="fas fa-certificate"></i> Certificates</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="payments"><i class="fas fa-credit-card"></i> Payments</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="reviews"><i class="fas fa-star"></i> Reviews</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="admissions"><i class="fas fa-user-graduate"></i> Admissions <span class="badge pending" id="pendingAdmissionCount" style="display:none;margin-left:6px;"></span></a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="enquiries"><i class="fas fa-inbox"></i> Enquiries</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="reports"><i class="fas fa-chart-line"></i> Reports</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="announcements"><i class="fas fa-bullhorn"></i> Announcements</a></li>
@@ -992,7 +993,8 @@
             charts: {},
             notifOpen: false,
             cvStatus: 'pending',
-            reviewStatus: 'pending'
+            reviewStatus: 'pending',
+            admissionStatus: 'pending'
         };
 
         /** Load everything the dashboard summarises, in parallel. */
@@ -2144,6 +2146,151 @@
             }
         };
 
+        // ============================================================
+        //  ADMISSIONS (offline courses)
+        //
+        // Applications submitted from /apply.html. Approving or rejecting one
+        // emails the applicant, so the two are separate buttons rather than a
+        // dropdown — a decision here is final from the applicant's point of view.
+        // ============================================================
+
+        function renderAdmissionsPage() {
+            const tabs = ['pending', 'approved', 'rejected', 'all'];
+
+            return `
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                    <span style="font-size:24px;font-weight:700;">🎓 Offline admissions</span>
+                    <input id="admissionSearch" type="search" placeholder="Name, email or tracking number"
+                        style="padding:9px 12px;border-radius:10px;border:1px solid var(--d-line, #e3e8f0);min-width:240px;"
+                        oninput="clearTimeout(window.__admissionSearchTimer);window.__admissionSearchTimer=setTimeout(()=>loadAdmissionQueue(state.admissionStatus, this.value), 350)" />
+                </div>
+                <p style="font-size:13px;color:var(--text-light);margin:0 0 16px;">
+                    Applications for in-person classes. Approving one emails the applicant with the outcome and what happens next.
+                </p>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;">
+                    ${tabs
+                        .map(
+                            (tab) =>
+                                `<button class="admission-tab" data-status="${tab}" style="${cvTabStyle(state.admissionStatus === tab)}" onclick="loadAdmissionQueue('${tab}')">${tab.charAt(0).toUpperCase() + tab.slice(1)}</button>`
+                        )
+                        .join('')}
+                </div>
+                <div id="admissionBody"><div style="text-align:center;padding:40px;"><div class="loading-spinner"></div></div></div>
+            `;
+        }
+
+        function admissionRows(items) {
+            if (!items.length) {
+                return `<div class="stat-card glass-premium"><div class="stat-title">Nothing ${WGAUI.escapeHtml(state.admissionStatus)}</div><div style="font-size:14px;color:var(--text-light);margin-top:6px;">Applications submitted from the offline admission form appear here.</div></div>`;
+            }
+
+            return `
+                <table class="data-table">
+                    <thead><tr><th>Applicant</th><th>Class</th><th>Contact</th><th>Tracking</th><th>Files</th><th>Submitted</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        ${items
+                            .map((item) => {
+                                const files = [
+                                    item.photoUrl ? `<a href="${item.photoUrl}" target="_blank" rel="noopener">Photo</a>` : '',
+                                    ...(item.documents || []).map(
+                                        (doc) => `<a href="${doc.url || '#'}" target="_blank" rel="noopener">${WGAUI.escapeHtml(doc.name || 'Document')}</a>`
+                                    )
+                                ].filter(Boolean);
+
+                                return `
+                                <tr>
+                                    <td>
+                                        <strong>${WGAUI.escapeHtml(item.fullName)}</strong>
+                                        <div style="font-size:12px;color:var(--text-light);">${WGAUI.escapeHtml(item.gender || '')} · born ${item.dateOfBirth ? WGAUI.formatDate(item.dateOfBirth) : '—'}</div>
+                                    </td>
+                                    <td>${WGAUI.escapeHtml(item.classLevel)}</td>
+                                    <td style="font-size:13px;">
+                                        <div>${WGAUI.escapeHtml(item.email)}</div>
+                                        <div style="color:var(--text-light);">${WGAUI.escapeHtml(item.mobile)}</div>
+                                    </td>
+                                    <td style="font-family:monospace;font-size:12px;">${WGAUI.escapeHtml(item.trackingNumber)}</td>
+                                    <td style="font-size:12.5px;">${files.length ? files.join('<br />') : '—'}</td>
+                                    <td style="white-space:nowrap;">${item.createdAt ? WGAUI.formatDate(item.createdAt) : '—'}</td>
+                                    <td style="white-space:nowrap;">
+                                        ${item.status === 'approved' ? '' : `<button class="btn-primary btn-sm" onclick="approveAdmission('${item.id}', this)">Approve</button>`}
+                                        ${item.status === 'rejected' ? '' : `<button class="btn-primary btn-outline btn-sm" onclick="rejectAdmission('${item.id}', this)">Reject</button>`}
+                                    </td>
+                                </tr>`;
+                            })
+                            .join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        window.loadAdmissionQueue = async function loadAdmissionQueue(status, search) {
+            state.admissionStatus = status || 'pending';
+
+            document.querySelectorAll('.admission-tab').forEach((tab) => {
+                tab.style.cssText = cvTabStyle(tab.dataset.status === state.admissionStatus);
+            });
+
+            const body = document.getElementById('admissionBody');
+            if (!body) return;
+
+            body.innerHTML = '<div style="text-align:center;padding:40px;"><div class="loading-spinner"></div></div>';
+
+            try {
+                const term = (search !== undefined ? search : document.getElementById('admissionSearch')?.value || '').trim();
+                const query = '?status=' + encodeURIComponent(state.admissionStatus) + '&limit=100' + (term ? '&q=' + encodeURIComponent(term) : '');
+                const data = await WGA.get('/admin/admissions' + query);
+
+                body.innerHTML = admissionRows(data.items || []);
+
+                const badge = document.getElementById('pendingAdmissionCount');
+                if (badge) {
+                    const pending = (data.counts && data.counts.pending) || 0;
+                    badge.textContent = pending ? String(pending) : '';
+                    badge.style.display = pending ? 'inline-block' : 'none';
+                }
+            } catch (error) {
+                body.innerHTML = `<div class="stat-card glass-premium"><div class="stat-title">Could not load applications</div><div style="font-size:14px;color:var(--text-light);margin-top:6px;">${WGAUI.escapeHtml(error.message || 'Please try again.')}</div></div>`;
+            }
+        };
+
+        window.approveAdmission = async function approveAdmission(id, button) {
+            const note = window.prompt('Optional note for the applicant (what to bring, when to come). Leave blank to send none.');
+
+            if (note === null) return;
+            if (button) button.disabled = true;
+
+            try {
+                const data = await WGA.patch('/admin/admissions/' + encodeURIComponent(id), { decision: 'approved', note: note.trim() });
+                WGAUI.toast(data.message || 'Application approved.', 'success');
+                await loadAdmissionQueue(state.admissionStatus);
+            } catch (error) {
+                if (button) button.disabled = false;
+                WGAUI.toast(error.message || 'That application could not be approved.', 'error');
+            }
+        };
+
+        window.rejectAdmission = async function rejectAdmission(id, button) {
+            const reason = window.prompt('Why is this application not being accepted? The applicant will see this.');
+
+            if (reason === null) return;
+
+            if (reason.trim().length < 10) {
+                WGAUI.toast('Give a reason of at least 10 characters.', 'error');
+                return;
+            }
+
+            if (button) button.disabled = true;
+
+            try {
+                const data = await WGA.patch('/admin/admissions/' + encodeURIComponent(id), { decision: 'rejected', note: reason.trim() });
+                WGAUI.toast(data.message || 'Application declined.', 'success');
+                await loadAdmissionQueue(state.admissionStatus);
+            } catch (error) {
+                if (button) button.disabled = false;
+                WGAUI.toast(error.message || 'That application could not be declined.', 'error');
+            }
+        };
+
         function renderReports() {
             const enrollments = adminData.enrollments || [];
             const completed = enrollments.filter((e) => e.status === 'completed').length;
@@ -2271,6 +2418,9 @@
                 case 'reviews':
                     html = renderReviewsPage();
                     break;
+                case 'admissions':
+                    html = renderAdmissionsPage();
+                    break;
                 case 'enquiries':
                     html = renderEnquiries();
                     break;
@@ -2294,6 +2444,10 @@
             // Reviews arrive without warning, so the queue is fetched when it is
             // opened rather than counted into the summary at sign-in.
             if (page === 'reviews') await loadReviewQueue(state.reviewStatus || 'pending');
+
+            // Admissions arrive without warning, so the queue is fetched when it is
+            // opened rather than counted into the summary at sign-in.
+            if (page === 'admissions') await loadAdmissionQueue(state.admissionStatus || 'pending');
 
             // Enquiries are fetched on demand too. They arrive without warning, so a
             // count baked into the summary payload at sign-in would be stale by the

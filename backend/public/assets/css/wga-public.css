@@ -487,8 +487,10 @@ body.dark-mode .pill-new {
   inset: var(--header-h) 0 0 0;
   z-index: 55;
   background: var(--bg);
-  padding: var(--s-5) var(--s-5) var(--s-12);
+  padding: var(--s-4) var(--s-5) var(--s-10);
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mobile-nav.open {
@@ -497,7 +499,7 @@ body.dark-mode .pill-new {
 
 .mobile-nav a {
   display: block;
-  padding: 14px 0;
+  padding: 11px 0;
   border-bottom: 1px solid var(--line);
   font-size: var(--t-md);
   font-weight: 700;
@@ -505,12 +507,38 @@ body.dark-mode .pill-new {
 }
 
 .mobile-nav .mobile-group {
-  margin-top: var(--s-6);
+  margin-top: var(--s-4);
   font-size: var(--t-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--muted);
   font-weight: 750;
+}
+
+/**
+ * The drawer scrolls; saying so is cheaper than hoping people discover it.
+ *
+ * The chip is added by wga-public.js and is shown only while there is more
+ * below, so it can never sit over the last item pretending there is something
+ * after it. It is pinned to the bottom of the drawer rather than the page.
+ */
+.mobile-nav-more {
+  position: sticky;
+  bottom: calc(-1 * var(--s-10));
+  margin: var(--s-4) calc(-1 * var(--s-5)) calc(-1 * var(--s-10));
+  padding: 10px var(--s-5) 22px;
+  text-align: center;
+  font-size: var(--t-xs);
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: linear-gradient(to bottom, transparent, var(--bg) 42%);
+  pointer-events: none;
+}
+
+.mobile-nav-more[hidden] {
+  display: none;
 }
 
 /* ---------------------------------------------------------------- *
@@ -1697,7 +1725,69 @@ body.dark-mode .wga-course-price.is-free {
 }
 
 /* ---------------------------------------------------------------- *
-   9b. Why choose Wuteve
+   9b. About: what we offer, what we stand for, partnerships
+ * ---------------------------------------------------------------- */
+
+.about-detail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s-8);
+  margin-top: var(--s-10);
+}
+
+.about-detail h3 {
+  font-size: var(--t-lg);
+  margin: 0 0 var(--s-3);
+}
+
+.about-detail ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--s-2);
+}
+
+.about-detail li {
+  position: relative;
+  padding-left: var(--s-5);
+  color: var(--ink-2);
+  font-size: var(--t-sm);
+  line-height: 1.6;
+}
+
+.about-detail li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand);
+}
+
+.about-detail p {
+  color: var(--ink-2);
+  font-size: var(--t-sm);
+  line-height: 1.65;
+}
+
+@media (max-width: 960px) {
+  .about-detail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-6);
+  }
+}
+
+@media (max-width: 640px) {
+  .about-detail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------------------------------------------------------------- *
+   9c. Why choose Wuteve
 
    Scoped to `.why` so the brand palette asked for here (navy 073778,
    royal 1479E8, gold D9AD42, ink 172B4D, pale EEF5FF) cannot leak into

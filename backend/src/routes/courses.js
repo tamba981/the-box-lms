@@ -28,6 +28,7 @@ const {
   LEGACY_CATEGORY_ALIASES,
   SELECTABLE_CREDENTIALS,
   CREDENTIAL_LABELS,
+  MAX_MATERIAL_BYTES,
 } = require('../lib/constants');
 
 const { authenticate, optionalAuth, requireInstructor } = require('../middleware/auth');
@@ -65,9 +66,32 @@ function resolveCategory(value) {
   return LEGACY_CATEGORY_ALIASES[slug] || slug;
 }
 
+/**
+ * Check that every uploaded material names this course and lesson.
+ *
+ * The validator guarantees a `file` material has *a* key; only the route can
+ * check that the key is one this API issued here. Without this an instructor
+ * could attach another course's private file to their own lesson and serve it to
+ * their students.
+ */
+function assertMaterialsBelong(courseId, lessonId, resources) {
+  if (!Array.isArray(resources)) return;
+
+  const prefix = `courses/${courseId}/lessons/${lessonId}/materials/`;
+
+  for (const resource of resources) {
+    if (resource.kind !== 'file') continue;
+
+    if (!String(resource.fileKey || '').startsWith(prefix)) {
+      throw forbidden('That uploaded material does not belong to this lesson.', {
+        code: 'UPLOAD_KEY_MISMATCH',
+      });
+    }
+  }
+}
+
 /** Load a course by :courseId and assert the caller may author it. */
-async function loadManagedCourse(req) {
-  const course = await Course.findById(req.valid.params.courseId);
+async function loadManagedCourse(req) {  const course = await Course.findById(req.valid.params.courseId);
   if (!course) throw notFound('That course could not be found.', { code: 'COURSE_NOT_FOUND' });
 
   permissions.assertCanManageCourse(req.user, course);
@@ -826,12 +850,41 @@ router.get(
       ).toISOString();
     }
 
+    /**
+     * An uploaded material is served the same way as a video: a short-lived
+     * signed URL minted per request, with `attachment` so the browser saves it
+     * rather than rendering a PDF inside the lesson page. A key that cannot be
+     * signed (storage switched off, or a stale key) yields null rather than
+     * failing the whole lesson.
+     */
+    const materials = await Promise.all(
+      (lesson.resources || []).map(async (resource) => {
+        const plain = typeof resource.toObject === 'function' ? resource.toObject() : { ...resource };
+
+        if (plain.kind !== 'file' || !plain.fileKey) {
+          return { ...plain, id: String(plain._id || plain.id || ''), downloadUrl: plain.url || null };
+        }
+
+        let downloadUrl = null;
+        try {
+          downloadUrl = await storageService.createDownloadUrl(plain.fileKey, {
+            disposition: 'attachment',
+          });
+        } catch (error) {
+          downloadUrl = null;
+        }
+
+        return { ...plain, id: String(plain._id || plain.id || ''), downloadUrl };
+      })
+    );
+
     return ok(res, {
       lesson: lesson.toFullJSON({
         completed,
         locked: false,
         videoPlaybackUrl,
         videoPlaybackUrlExpiresAt,
+        materials,
       }),
       course: course.toCardJSON(),
       access: { isEnrolled: access.isEnrolled, manages: access.manages },
@@ -867,6 +920,8 @@ router.post(
       videoUrl: body.videoUrl || null,
       resources: body.resources || [],
     });
+
+    assertMaterialsBelong(course._id, lesson._id, lesson.resources);
 
     await refreshCourseCounters(course);
 
@@ -916,6 +971,10 @@ router.patch(
 
     if (body.videoUrl !== undefined) lesson.videoUrl = body.videoUrl || null;
     if (body.resources !== undefined) lesson.resources = body.resources;
+
+    if (body.resources !== undefined) {
+      assertMaterialsBelong(course._id, lesson._id, lesson.resources);
+    }
 
     await lesson.save();
     await refreshCourseCounters(course);
@@ -1010,6 +1069,128 @@ router.put(
  * a signed URL, PUTs the file straight to the bucket, then says it finished. This
  * API then asks the bucket what it actually received.
  * ------------------------------------------------------------------ */
+
+/**
+ * Step one for a material: issue a signed PUT for one file.
+ *
+ * Mirrors the video flow exactly, with a much smaller ceiling and a document
+ * allowlist. Nothing is attached to the lesson here; the file becomes a material
+ * only when the lesson is saved with the key it returns.
+ */
+router.post(
+  '/:courseId/lessons/:lessonId/materials/presign',
+  authenticate,
+  requireInstructor,
+  writeLimiter,
+  validate({ params: schemas.lessonIdParam, body: schemas.presignMaterialBody }),
+  asyncHandler(async (req, res) => {
+    const course = await loadManagedCourse(req);
+
+    const lesson = await Lesson.findOne({ _id: req.valid.params.lessonId, course: course._id });
+    if (!lesson) throw notFound('That lesson could not be found.', { code: 'LESSON_NOT_FOUND' });
+
+    const { filename, contentType, sizeBytes } = req.valid.body;
+
+    if (sizeBytes > MAX_MATERIAL_BYTES) {
+      throw badRequest(
+        `A material file must be ${Math.floor(MAX_MATERIAL_BYTES / (1024 * 1024))} MB or smaller.`,
+        { code: 'MATERIAL_TOO_LARGE', details: [{ field: 'sizeBytes', message: 'Too large' }] }
+      );
+    }
+
+    const key = storageService.buildMaterialKey({
+      courseId: course._id,
+      lessonId: lesson._id,
+      filename,
+    });
+
+    const signed = await storageService.createUploadUrl({ key, contentType });
+
+    return ok(
+      res,
+      {
+        uploadUrl: signed.url,
+        key: signed.key,
+        expiresIn: signed.expiresIn,
+        contentType: signed.contentType,
+        maxBytes: MAX_MATERIAL_BYTES,
+      },
+      'Upload URL issued.'
+    );
+  })
+);
+
+/**
+ * Step two: confirm the upload and attach it to the lesson.
+ *
+ * The client is not believed about anything it could get wrong. The key has to
+ * name this course and this lesson, and the size comes from the bucket rather than
+ * from the request. This is the same reasoning as the video confirmation, applied
+ * to a file an instructor might claim is a worksheet.
+ */
+router.post(
+  '/:courseId/lessons/:lessonId/materials/confirm',
+  authenticate,
+  requireInstructor,
+  writeLimiter,
+  validate({ params: schemas.lessonIdParam, body: schemas.completeMaterialBody }),
+  asyncHandler(async (req, res) => {
+    const course = await loadManagedCourse(req);
+
+    const lesson = await Lesson.findOne({ _id: req.valid.params.lessonId, course: course._id });
+    if (!lesson) throw notFound('That lesson could not be found.', { code: 'LESSON_NOT_FOUND' });
+
+    const { key, title } = req.valid.body;
+
+    // The key must be one this API issued for this course and this lesson.
+    const expectedPrefix = `courses/${course._id}/lessons/${lesson._id}/materials/`;
+    if (!String(key).startsWith(expectedPrefix)) {
+      throw forbidden('That upload does not belong to this lesson.', { code: 'UPLOAD_KEY_MISMATCH' });
+    }
+
+    const stat = await storageService.statObject(key);
+    if (!stat) {
+      throw badRequest('That upload was not found in storage. Please upload the file again.', {
+        code: 'UPLOAD_MISSING',
+      });
+    }
+
+    if (stat.size > MAX_MATERIAL_BYTES) {
+      await storageService.deleteObject(key);
+      throw badRequest(
+        `A material file must be ${Math.floor(MAX_MATERIAL_BYTES / (1024 * 1024))} MB or smaller.`,
+        { code: 'MATERIAL_TOO_LARGE' }
+      );
+    }
+
+    const material = {
+      title: title || 'Material',
+      kind: 'file',
+      url: '',
+      fileKey: key,
+      size: stat.size || 0,
+      mime: stat.contentType || '',
+    };
+
+    lesson.resources = [...(lesson.resources || []), material];
+    await lesson.save();
+
+    return created(
+      res,
+      {
+        material: {
+          ...material,
+          id: String(lesson.resources[lesson.resources.length - 1]._id || ''),
+          downloadUrl: await storageService
+            .createDownloadUrl(key, { disposition: 'attachment' })
+            .catch(() => null),
+        },
+        resources: lesson.resources,
+      },
+      'File attached to the lesson.'
+    );
+  })
+);
 
 /**
  * Step one: issue a signed PUT for one file.

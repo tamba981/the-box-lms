@@ -2429,7 +2429,16 @@
                             <h5 class="lesson-section-title"><span>4</span> Materials</h5>
                             <p class="lesson-hint" style="margin-top:-4px;">Worksheets, slides or further reading. Links open in a new tab.</p>
                             <div id="lessonMaterials">${materialRowsHTML(editing)}</div>
-                            <button type="button" class="btn-primary btn-outline btn-sm" onclick="addMaterial()">+ Add material</button>
+                            <button type="button" class="btn-primary btn-outline btn-sm" onclick="addMaterial()">+ Add link</button>
+
+                            <div class="material-upload">
+                                <input type="file" id="materialFileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.csv,.zip" ${storage.enabled ? '' : 'disabled'} />
+                                <button class="btn-primary btn-sm" id="materialUploadBtn" onclick="uploadMaterial()" ${storage.enabled ? '' : 'disabled'}>Upload file</button>
+                            </div>
+                            <div class="upload-bar" id="materialUploadBar" style="display:none;"><span></span></div>
+                            <p class="lesson-hint" id="materialUploadNote">${storage.enabled
+                                ? 'PDF, Word, PowerPoint, Excel, text, CSV or ZIP — up to 25 MB. Or add a link above.'
+                                : 'File uploads are switched off until storage is configured, so links only for now.'}</p>
                         </section>
 
                         <section class="lesson-section">
@@ -2585,12 +2594,7 @@ return `<div class="lesson-admin">${list}${form}</div>`;
 
             // Materials are a list of rows now, so they are read as a list.
             const rows = [...document.querySelectorAll('#lessonMaterials .material-row')];
-            if (rows.length) {
-                editing.materials = rows.map((row) => ({
-                    title: row.querySelector('.material-title')?.value.trim() || '',
-                    url: row.querySelector('.material-url')?.value.trim() || ''
-                }));
-            }
+            if (rows.length) editing.materials = readMaterialRows();
 
             const mode = document.querySelector('input[name="lessonVideoMode"]:checked');
             if (mode) editing.videoMode = mode.value;
@@ -2870,25 +2874,146 @@ return `<div class="lesson-admin">${list}${form}</div>`;
          */
         function materialRowsHTML(editing) {
             const materials = (editing && editing.materials) || [];
+            const storage = lessonState.storage || { enabled: false };
 
             if (!materials.length) {
                 return `<p class="lesson-hint" style="margin:0 0 10px;">No materials yet.</p>`;
             }
 
             return materials
-                .map(
-                    (material, index) => `
-                    <div class="material-row">
+                .map((material, index) => {
+                    const isFile = material.kind === 'file';
+
+                    const fileBadge = isFile
+                        ? `<span class="material-file" title="Stored in the academy's file storage">
+                               <i class="fas fa-paperclip"></i> ${WGAUI.escapeHtml(formatBytes(material.size))}
+                           </span>
+                           <input type="hidden" class="material-url" value="" />`
+                        : `<input type="url" class="material-url" maxlength="2000" placeholder="https://example.com/worksheet.pdf" value="${WGAUI.escapeHtml(material.url || '')}" aria-label="Material address" />`;
+
+                    return `
+                    <div class="material-row" data-kind="${isFile ? 'file' : 'link'}" data-file-key="${WGAUI.escapeHtml(material.fileKey || '')}" data-size="${Number(material.size) || 0}" data-mime="${WGAUI.escapeHtml(material.mime || '')}">
                         <input type="text" class="material-title" maxlength="200" placeholder="Title, e.g. Worksheet" value="${WGAUI.escapeHtml(material.title || '')}" aria-label="Material title" />
-                        <input type="url" class="material-url" maxlength="2000" placeholder="https://example.com/worksheet.pdf" value="${WGAUI.escapeHtml(material.url || '')}" aria-label="Material address" />
+                        ${fileBadge}
                         <button type="button" class="btn-primary btn-outline btn-sm material-remove" onclick="removeMaterial(${index})" title="Remove">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
-                `
-                )
+                `;
+                })
                 .join('');
         }
+
+        /** Bytes as something a person can read. */
+        function formatBytes(bytes) {
+            const size = Number(bytes) || 0;
+            if (!size) return 'Uploaded file';
+            if (size < 1024) return size + ' B';
+            if (size < 1024 * 1024) return Math.round(size / 1024) + ' KB';
+            return (size / (1024 * 1024)).toFixed(1) + ' MB';
+        }
+
+        /** Read the material rows back, keeping how each one is stored. */
+        function readMaterialRows() {
+            return [...document.querySelectorAll('#lessonMaterials .material-row')].map((row) => {
+                const isFile = row.getAttribute('data-kind') === 'file';
+
+                return {
+                    title: row.querySelector('.material-title')?.value.trim() || '',
+                    kind: isFile ? 'file' : 'link',
+                    url: isFile ? '' : (row.querySelector('.material-url')?.value.trim() || ''),
+                    fileKey: isFile ? row.getAttribute('data-file-key') : '',
+                    size: isFile ? Number(row.getAttribute('data-size')) || 0 : 0,
+                    mime: isFile ? row.getAttribute('data-mime') : ''
+                };
+            });
+        }
+
+        /**
+         * Upload a worksheet, slide deck or reading to the lesson.
+         *
+         * Three steps, same as a video: ask for a signed URL, PUT the file
+         * straight to storage, then tell the API which key to attach. The file
+         * never passes through this server, so a large PDF does not occupy the
+         * request that is meant to be saving a lesson.
+         */
+        window.uploadMaterial = async function uploadMaterial() {
+            const editing = lessonState.editing;
+            const input = document.getElementById('materialFileInput');
+            const file = input?.files?.[0];
+
+            const storage = lessonState.storage || { enabled: false };
+            if (!storage.enabled) {
+                showToast('File storage is not configured, so uploads are off. Paste a link instead.', 'error');
+                return;
+            }
+
+            if (!editing || editing.isNew || !editing.id) {
+                showToast('Save the lesson first, then upload its materials.', 'error');
+                return;
+            }
+            if (!file) {
+                showToast('Choose a file first.', 'error');
+                return;
+            }
+
+            const button = document.getElementById('materialUploadBtn');
+            const bar = document.getElementById('materialUploadBar');
+            const note = document.getElementById('materialUploadNote');
+
+            WGAUI.setBusy(button, true, 'Preparing…');
+
+            try {
+                const signed = await WGA.post(
+                    '/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(editing.id) + '/materials/presign',
+                    { filename: file.name, contentType: file.type || 'application/pdf', sizeBytes: file.size }
+                );
+
+                if (bar) { bar.style.display = 'block'; bar.firstElementChild.style.width = '0%'; }
+                WGAUI.setBusy(button, true, 'Uploading…');
+
+                await WGA.uploadToSignedUrl(signed.uploadUrl, file, {
+                    contentType: signed.contentType,
+                    onProgress: (percent) => {
+                        if (bar) bar.firstElementChild.style.width = percent + '%';
+                        WGAUI.setBusy(button, true, percent + '%');
+                    }
+                });
+
+                if (note) note.textContent = 'Uploaded. Attaching to the lesson…';
+
+                const saved = await WGA.post(
+                    '/courses/' + encodeURIComponent(lessonState.courseId) + '/lessons/' + encodeURIComponent(editing.id) + '/materials/confirm',
+                    { key: signed.key, title: (file.name || 'Material').replace(/\.[^.]+$/, '') }
+                );
+
+                const added = saved.material || {};
+
+                // Keep the row in local state so a later "Save lesson" sends the
+                // same key back rather than dropping the file it never saw.
+                captureLessonForm();
+                editing.materials = (editing.materials || []).concat({
+                    title: added.title || file.name,
+                    kind: 'file',
+                    url: '',
+                    fileKey: added.fileKey || signed.key,
+                    size: added.size || file.size,
+                    mime: added.mime || file.type
+                });
+
+                if (input) input.value = '';
+                if (bar) { bar.style.display = 'none'; bar.firstElementChild.style.width = '0%'; }
+                if (note) note.textContent = 'PDF, Word, PowerPoint, Excel, text, CSV or ZIP — up to 25 MB.';
+
+                redrawLessonModal();
+                showToast('File attached to the lesson.', 'success');
+            } catch (error) {
+                WGAUI.setBusy(button, false);
+                if (bar) bar.style.display = 'none';
+                if (note) note.textContent = 'PDF, Word, PowerPoint, Excel, text, CSV or ZIP — up to 25 MB.';
+                showToast(error.message || 'The upload did not finish.', 'error');
+            }
+        };
 
         window.addMaterial = function addMaterial() {
             captureLessonForm();
@@ -2981,16 +3106,13 @@ return `<div class="lesson-admin">${list}${form}</div>`;
 
             if (videoMode === 'link' && !videoUrl) { showToast('Paste a YouTube or Vimeo address, or choose No video.', 'error'); return; }
 
-            const materials = [...document.querySelectorAll('#lessonMaterials .material-row')]
-                .map((row) => ({
-                    title: row.querySelector('.material-title')?.value.trim() || '',
-                    url: row.querySelector('.material-url')?.value.trim() || ''
-                }))
-                .filter((item) => item.title || item.url);
+            const materials = readMaterialRows().filter((item) => item.title || item.url || item.fileKey);
 
-            const incomplete = materials.find((item) => !item.title || !/^https?:\/\//i.test(item.url));
+            const incomplete = materials.find((item) =>
+                item.kind === 'file' ? !item.title || !item.fileKey : !item.title || !/^https?:\/\//i.test(item.url)
+            );
             if (incomplete) {
-                showToast('Each material needs a title and an address starting with http:// or https://.', 'error');
+                showToast('Each material needs a title, and either an address starting with http:// or https://, or an uploaded file.', 'error');
                 return;
             }
 
