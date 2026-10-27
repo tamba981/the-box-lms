@@ -188,10 +188,16 @@ const materialSchema = z
     size: z.coerce.number().int().min(0).max(MAX_MATERIAL_BYTES).optional().default(0),
     mime: z.string().trim().max(120).optional().or(z.literal('')),
   })
-  .refine((value) => (value.kind === 'file' ? Boolean(value.fileKey) : Boolean(value.url)), {
-    message: 'Add a web address, or upload a file.',
-    path: ['url'],
-  });
+  .refine(
+    (value) =>
+      value.kind === 'file'
+        ? Boolean(value.fileKey)
+        : Boolean(value.url) && /^https?:\/\//i.test(String(value.url)),
+    {
+      message: 'Add a web address starting with http:// or https://, or upload a file.',
+      path: ['url'],
+    }
+  );
 
 const materialsBody = z.object({
   materials: z.array(materialSchema).max(20, 'A lesson can hold at most 20 materials'),

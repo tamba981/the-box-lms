@@ -1140,6 +1140,21 @@ body.dark-mode .mini-verify-result::before {
   padding: var(--s-20) 0;
 }
 
+/* Named with two classes so it survives the ≤720px `.page-header` override
+   further down this file: that rule comes later and would otherwise win on a
+   phone. A shorter band there is deliberate - the film is atmosphere, not the
+   content of the page - but 240px is too thin to read as a hero. */
+.page-header.page-header--media {
+  min-height: 380px;
+}
+
+@media (max-width: 720px) {
+  .page-header.page-header--media {
+    min-height: 280px;
+    padding: var(--s-12) 0;
+  }
+}
+
 .page-header--media::after {
   content: none;
 }
