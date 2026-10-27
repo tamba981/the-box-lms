@@ -1725,165 +1725,7 @@ body.dark-mode .wga-course-price.is-free {
 }
 
 /* ---------------------------------------------------------------- *
-   9b. About: what we offer, what we stand for, partnerships
- * ---------------------------------------------------------------- */
-
-.about-detail {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--s-8);
-  margin-top: var(--s-10);
-}
-
-.about-detail h3 {
-  font-size: var(--t-lg);
-  margin: 0 0 var(--s-3);
-}
-
-.about-detail ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  gap: var(--s-2);
-}
-
-.about-detail li {
-  position: relative;
-  padding-left: var(--s-5);
-  color: var(--ink-2);
-  font-size: var(--t-sm);
-  line-height: 1.6;
-}
-
-.about-detail li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.6em;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--brand);
-}
-
-.about-detail li strong {
-  color: var(--ink);
-  font-weight: 600;
-}
-
-.about-detail p {
-  color: var(--ink-2);
-  font-size: var(--t-sm);
-  line-height: 1.65;
-}
-
-@media (max-width: 960px) {
-  .about-detail {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--s-6);
-  }
-}
-
-@media (max-width: 640px) {
-  .about-detail {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* Core values + credentials note. Kept as their own blocks rather than a
-   fourth `.about-detail` column: eight short value pairs read better as a
-   grid of tiles than as a long bullet list. */
-
-.about-values {
-  margin-top: var(--s-10);
-}
-
-.about-values h3 {
-  font-size: var(--t-lg);
-  margin: 0 0 var(--s-4);
-}
-
-.about-values-grid {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--s-4);
-}
-
-.about-values-grid li {
-  border: 1px solid var(--line);
-  border-left: 3px solid var(--brand);
-  border-radius: var(--r-md);
-  background: var(--surface-2);
-  padding: var(--s-4) var(--s-4) var(--s-4) 14px;
-  display: grid;
-  gap: 6px;
-  align-content: start;
-}
-
-.about-values-grid strong {
-  font-size: var(--t-sm);
-  color: var(--ink);
-  font-weight: 700;
-}
-
-.about-values-grid span {
-  font-size: var(--t-sm);
-  line-height: 1.55;
-  color: var(--ink-2);
-}
-
-.about-foot {
-  margin-top: var(--s-10);
-  padding: var(--s-6);
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  background: var(--surface);
-  display: grid;
-  gap: var(--s-3);
-}
-
-.about-foot p {
-  margin: 0;
-  font-size: var(--t-sm);
-  line-height: 1.65;
-  color: var(--ink-2);
-}
-
-.about-foot strong {
-  color: var(--ink);
-}
-
-.about-foot .about-promise {
-  font-size: var(--t-lg);
-  line-height: 1.45;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.about-sponsor {
-  padding-top: var(--s-3);
-  border-top: 1px solid var(--line);
-  color: var(--muted);
-}
-
-@media (max-width: 960px) {
-  .about-values-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 640px) {
-  .about-values-grid {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* ---------------------------------------------------------------- *
-   9c. Why choose Wuteve
+   9b. Why choose Wuteve
 
    Scoped to `.why` so the brand palette asked for here (navy 073778,
    royal 1479E8, gold D9AD42, ink 172B4D, pale EEF5FF) cannot leak into
@@ -2868,6 +2710,20 @@ body.dark-mode .form-status.is-error {
 
   .mega-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1200px) {
+  /* Above 980px the full navigation and the account controls together need
+     about 1200px of header. Between those two widths the tools could not
+     shrink and the page scrolled sideways, so the drawer takes over earlier.
+     Every item in the drawer is the same item the nav shows. */
+  .pub-nav {
+    display: none;
+  }
+
+  .menu-btn {
+    display: inline-flex;
   }
 }
 

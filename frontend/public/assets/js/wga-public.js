@@ -149,9 +149,10 @@
       });
 
       // Rotating a phone back to landscape leaves a full-height drawer over a
-      // page that now has room for the real navigation.
+      // page that now has room for the real navigation. The threshold matches
+      // the width at which the stylesheet swaps the drawer for the nav bar.
       window.addEventListener('resize', function () {
-        if (window.innerWidth > 980 && drawer.classList.contains('open')) setDrawer(false);
+        if (window.innerWidth > 1200 && drawer.classList.contains('open')) setDrawer(false);
       });
     }
 
