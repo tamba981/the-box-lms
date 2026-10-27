@@ -80,7 +80,7 @@
         return;
       }
 
-      WGA.post('/auth/oauth/exchange', { code: code })
+      WGA.post('/auth/oauth/exchange', { code: code }, { noRetry: true, token: false })
         .then(function (session) {
           WGA.setSession(session);
 
@@ -101,8 +101,19 @@
           }, 700);
         })
         .catch(function (error) {
-          var reason = (error && error.message) || 'The sign-in could not be completed.';
-          fail(reason + ' Please start again from the sign-in page.');
+          /**
+           * A 401 here means the single-use code is spent or older than two
+           * minutes — never that a session expired, because there is no session
+           * yet. Saying so plainly is better than passing on the generic
+           * "your session has ended", which reads as though something was lost.
+           */
+          var spent = error && (error.status === 401 || /expired|invalid/i.test(error.message || ''));
+
+          fail(
+            spent
+              ? 'That sign-in link has expired or was already used. Please start again from the sign-in page.'
+              : ((error && error.message) || 'The sign-in could not be completed.') + ' Please try again.'
+          );
         });
     })();
   </script>
