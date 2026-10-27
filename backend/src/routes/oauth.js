@@ -41,6 +41,19 @@ function failureRedirect(reason, detail) {
 }
 
 /**
+ * Clear the state cookie, then redirect.
+ *
+ * One helper because both halves have to happen in this order and only once:
+ * clearing the cookie after `res.redirect` throws `ERR_HTTP_HEADERS_SENT` and
+ * the redirect is lost, which is exactly how the first version of this route
+ * failed — the response went out without its `Location` header.
+ */
+function finish(res, location) {
+  res.clearCookie(oauth.STATE_COOKIE, oauth.clearStateCookieOptions());
+  return res.redirect(302, location);
+}
+
+/**
  * GET /api/v1/auth/oauth/providers
  *
  * The sign-in page asks this before painting the buttons: a provider with no
@@ -96,7 +109,7 @@ router.get(
         provider: providerName,
         error: String(req.query.error).slice(0, 80),
       });
-      return res.redirect(302, failureRedirect('cancelled'));
+      return finish(res, failureRedirect('cancelled'));
     }
 
     let next = '/';
@@ -111,7 +124,7 @@ router.get(
       if (!cookie.state || cookie.state !== callback.state) {
         // The cookie is the CSRF half: without it the callback cannot be shown
         // to belong to a flow this browser started.
-        return res.redirect(302, failureRedirect('state_mismatch'));
+        return finish(res, failureRedirect('state_mismatch'));
       }
 
       const accessToken = await oauth.exchangeCode(callback.provider, {
@@ -130,9 +143,7 @@ router.get(
         code: error.code || 'unknown',
         message: error.message,
       });
-      return res.redirect(302, failureRedirect(error.code || 'failed'));
-    } finally {
-      res.clearCookie(oauth.STATE_COOKIE, oauth.clearStateCookieOptions());
+      return finish(res, failureRedirect(error.code || 'failed'));
     }
 
     // A single-use code, not a session: whichever page receives it has to come
@@ -142,7 +153,7 @@ router.get(
     if (created) params.set('new', '1');
     if (next && next !== '/') params.set('next', next);
 
-    return res.redirect(302, `${config.publicBaseUrl}/oauth-callback.html#${params.toString()}`);
+    return finish(res, `${config.publicBaseUrl}/oauth-callback.html#${params.toString()}`);
   })
 );
 

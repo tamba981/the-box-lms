@@ -141,15 +141,15 @@ function stateCookieOptions() {
 }
 
 /**
- * The same cookie, expired.
+ * The same cookie, ready to be expired.
  *
- * `res.clearCookie` with the options it was set with is the only reliable way
- * to remove it: a path mismatch leaves the original in place, and Express will
- * not set `expires` for us when `maxAge` is present in the passed options.
+ * `res.clearCookie` sets the expiry itself in Express 5 and warns if `expires`
+ * is passed, so the options here are just the ones the cookie was set with —
+ * a path mismatch would otherwise leave the original in place.
  */
 function clearStateCookieOptions() {
   const { maxAge, ...options } = stateCookieOptions();
-  return { ...options, expires: new Date(0) };
+  return options;
 }
 
 /* ------------------------------------------------------------------ *
