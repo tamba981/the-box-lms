@@ -7420,6 +7420,89 @@ async function testOAuth() {
     assertEqual(status, 400, 'status');
     assertEqual(json.code, 'VALIDATION_ERROR', 'error code');
   });
+
+  /**
+   * The successful path, start to session.
+   *
+   * This is the half the failure tests above cannot reach, and it is where a
+   * real bug lived: the callback handed out its single-use code through a helper
+   * that was never exported, so every completed sign-in answered 500 while every
+   * refused one looked perfect. The provider calls are stubbed on the service
+   * the route calls through, so no request leaves the runner and no credentials
+   * are needed.
+   */
+  await check('a completed sign-in issues a session, and repeating it reuses the account', async () => {
+    const oauth = require('../src/services/oauthService');
+    const realExchange = oauth.exchangeCode;
+    const realProfile = oauth.fetchProfile;
+
+    const subject = 'smoke-subject-' + runId;
+    const address = 'smoke-oauth-' + runId + '@example.com';
+    createdEmails.push(address);
+
+    oauth.exchangeCode = async () => 'stub-access-token';
+    oauth.fetchProfile = async () => ({
+      subject,
+      email: address,
+      firstName: 'Oauth',
+      lastName: 'Smoke',
+    });
+
+    // Walk the two browser navigations the real flow uses, keeping the cookie.
+    async function signIn() {
+      const start = await fetch(baseUrl + '/api/v1/auth/oauth/google/start', { redirect: 'manual' });
+      const state = new URL(start.headers.get('location')).searchParams.get('state');
+      const cookie = String(start.headers.get('set-cookie') || '').split(';')[0];
+
+      assert(cookie.startsWith('wga_oauth='), 'the start step sets the state cookie');
+
+      const callback = await fetch(
+        baseUrl + '/api/v1/auth/oauth/google/callback?code=stub&state=' + encodeURIComponent(state),
+        { redirect: 'manual', headers: { cookie } }
+      );
+
+      assertEqual(callback.status, 302, 'callback status');
+
+      const location = callback.headers.get('location') || '';
+      assert(location.includes('/oauth-callback.html#code='), 'lands on the page with a single-use code');
+
+      const oneTime = new URLSearchParams(new URL(location).hash.replace(/^#/, '')).get('code');
+      assert(Boolean(oneTime), 'the code is in the fragment, not the query');
+
+      return request('POST', '/api/v1/auth/oauth/exchange', { body: { code: oneTime } });
+    }
+
+    try {
+      const first = await signIn();
+
+      assertEqual(first.status, 200, 'exchange status');
+      assert(Boolean(first.json.data.accessToken), 'an access token is issued');
+      assert(Boolean(first.json.data.refreshToken), 'a refresh token is issued');
+      assertEqual(first.json.data.user.email, address, 'the session belongs to the account the provider named');
+
+      const replay = await request('POST', '/api/v1/auth/oauth/exchange', {
+        body: { code: 'already-consumed-code' },
+      });
+      assertEqual(replay.status, 401, 'a code cannot be replayed');
+
+      const user = await User.findOne({ email: address }).lean();
+      assert(Array.isArray(user.oauth) && user.oauth.length === 1, 'one provider identity is linked');
+      assertEqual(user.oauth[0].provider, 'google', 'provider recorded');
+      assertEqual(user.oauth[0].subject, subject, 'the provider subject is stored, not the email');
+      assertEqual(user.emailVerified, true, 'the provider proved the address');
+      assertEqual(user.role, 'student', 'role is still set by the server');
+
+      const second = await signIn();
+      assertEqual(second.status, 200, 'second sign-in');
+      assertEqual(second.json.data.user.id, first.json.data.user.id, 'the same account');
+
+      const count = await User.countDocuments({ email: address });
+      assertEqual(count, 1, 'no duplicate account is created');
+    } finally {
+      oauth.exchangeCode = realExchange;
+      oauth.fetchProfile = realProfile;
+    }
+  });
 }
 
 async function main() {

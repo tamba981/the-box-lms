@@ -113,13 +113,23 @@ router.get(
     }
 
     let next = '/';
-    let user;
     let created = false;
+    let code = null;
+    let stage = 'state';
 
+    /**
+     * Every step of the callback is inside this try, including issuing the
+     * single-use code and building the redirect. An earlier version left the
+     * last two outside it, so one mistake there — a helper that was not
+     * exported — reached the browser as `INTERNAL_ERROR` with nothing to act
+     * on. A stage name is cheap, and it turns the next failure of this kind
+     * into a sentence.
+     */
     try {
       const callback = oauth.readCallback(providerName, req.query);
       next = callback.next;
 
+      stage = 'cookie';
       const cookie = oauth.splitStateCookie(oauth.readCookie(req, oauth.STATE_COOKIE));
       if (!cookie.state || cookie.state !== callback.state) {
         // The cookie is the CSRF half: without it the callback cannot be shown
@@ -127,28 +137,35 @@ router.get(
         return finish(res, failureRedirect('state_mismatch'));
       }
 
+      stage = 'exchange';
       const accessToken = await oauth.exchangeCode(callback.provider, {
         code: String(req.query.code || ''),
         verifier: cookie.verifier,
       });
 
+      stage = 'profile';
       const profile = await oauth.fetchProfile(callback.provider, accessToken);
-      const outcome = await oauth.findOrCreateUser(callback.provider, profile);
 
-      user = outcome.user;
+      stage = 'account';
+      const outcome = await oauth.findOrCreateUser(callback.provider, profile);
       created = outcome.created;
+
+      stage = 'session';
+      code = await tokens.createOneTimeToken(outcome.user, 'oauth', 2 * 60 * 1000);
     } catch (error) {
-      logger.warn('oauth callback failed', {
+      logger.error('oauth callback failed', {
         provider: providerName,
-        code: error.code || 'unknown',
+        stage,
+        code: error.code || null,
         message: error.message,
+        stack: error.stack,
       });
-      return finish(res, failureRedirect(error.code || 'failed'));
+
+      return finish(res, failureRedirect(error.code || `${stage}_failed`));
     }
 
     // A single-use code, not a session: whichever page receives it has to come
     // back to the API to turn it into tokens, and only once.
-    const code = await tokens.createOneTimeToken(user, 'oauth', 2 * 60 * 1000);
     const params = new URLSearchParams({ code });
     if (created) params.set('new', '1');
     if (next && next !== '/') params.set('next', next);

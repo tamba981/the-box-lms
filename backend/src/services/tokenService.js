@@ -233,6 +233,10 @@ module.exports = {
   rotateRefreshToken,
   revokeRefreshToken,
   revokeAllSessions,
+  // The named wrappers below it cover reset and verification; the OAuth callback
+  // needs a token with its own short lifetime, so the underlying helper is part
+  // of the contract too.
+  createOneTimeToken,
   createPasswordResetToken,
   createEmailVerificationToken,
   consumeOneTimeToken,

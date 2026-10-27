@@ -874,6 +874,14 @@
             ACCOUNT_NOT_ACTIVE: 'That account cannot sign in right now. Please contact the academy.',
             PROVIDER_NOT_CONFIGURED: 'That sign-in method is not available yet. Use your email address below.',
             unavailable: 'That sign-in method is not available yet. Use your email address below.',
+            // The callback names the step that failed, so a report of "it did
+            // not work" can be traced without the server logs.
+            state_failed: 'That sign-in could not be started. Please try again from this page.',
+            cookie_failed: 'That sign-in could not be verified. Please try again from this page.',
+            exchange_failed: 'The provider did not accept that sign-in attempt. Please try again.',
+            profile_failed: 'The provider did not share your profile. Please try again, or use your email address below.',
+            account_failed: 'We could not open your account from that sign-in. Please use your email address below, and contact us if it continues.',
+            session_failed: 'We could not start your session. Please try again, or use your email address below.',
         };
 
         /** Move the visitor to the email form, with a sentence that explains why. */
