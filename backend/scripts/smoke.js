@@ -7443,12 +7443,24 @@ async function testOAuth() {
   });
 
   await check('the policy allows the translate origins but nothing wider', async () => {
-    const response = await fetch(baseUrl + '/login.html');
-    const csp = response.headers.get('content-security-policy') || '';
+    // Read from the module rather than the response: the suite runs with CSP
+    // switched off (a test server serves no policy header), so asserting on the
+    // header here would assert nothing at all.
+    const { CSP_DIRECTIVES } = require('../src/middleware/security');
 
-    assert(csp.includes('https://translate.google.com'), 'script or frame origin named');
-    assert(csp.includes('https://translate.googleapis.com'), 'asset origin named');
-    assert(!/script-src[^;]*https:\/\/\*/.test(csp), 'no wildcard script origin');
+    const script = CSP_DIRECTIVES['script-src'].join(' ');
+    const frame = CSP_DIRECTIVES['frame-src'].join(' ');
+    const connect = CSP_DIRECTIVES['connect-src'].join(' ');
+    const style = CSP_DIRECTIVES['style-src'].join(' ');
+
+    assert(script.includes('https://translate.google.com'), 'the element script is allowed');
+    assert(connect.includes('https://translate.googleapis.com'), 'its assets are reachable');
+    assert(style.includes('https://translate.googleapis.com'), 'its stylesheet is allowed');
+    assert(frame.includes('https://translate.google.com'), 'its toolbar frame is allowed');
+
+    // A wildcard script origin would hand any subdomain of that host the page.
+    assert(!/(^|\s)https:\/\/\*/.test(script), 'no wildcard script origin');
+    assert(!script.includes("'unsafe-eval'"), 'no eval');
   });
 
   await check('the exchange needs a code before it will look at anything', async () => {
