@@ -37,6 +37,13 @@ process.env.STRIPE_WEBHOOK_SECRET =
 // It is the state this deployment is genuinely in: a callback can be verified and
 // settled, while starting a charge still reports which settings are missing.
 // Configuring all four would test a happy path that cannot exist yet.
+// Social sign-in is only exercised as far as the redirect: a fake credential
+// pair makes Google "configured" so the start endpoint builds a real authorize
+// URL and the callback validates state, without any request leaving the runner.
+// Nothing downstream of the state check is reached, so no network is needed.
+process.env.GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || 'test-client-id.apps.googleusercontent.com';
+process.env.GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || 'test-client-secret-value';
+
 process.env.LONESTAR_MOMO_CALLBACK_SECRET =
   process.env.LONESTAR_MOMO_CALLBACK_SECRET ||
   `test_callback_${crypto.randomBytes(12).toString('hex')}`;
@@ -7340,14 +7347,35 @@ async function testOAuth() {
     }
   });
 
+  await check('a configured provider is sent the state, the PKCE challenge and the exact callback', async () => {
+    const response = await manual('/api/v1/auth/oauth/google/start?next=/courses.html');
+
+    assertEqual(response.status, 302, 'status');
+
+    const target = new URL(locationOf(response));
+    assertEqual(target.host, 'accounts.google.com', 'goes to the provider');
+    assert(Boolean(target.searchParams.get('state')), 'carries state');
+    assertEqual(target.searchParams.get('code_challenge_method'), 'S256', 'PKCE method');
+    assert(Boolean(target.searchParams.get('code_challenge')), 'carries a challenge');
+    assert(
+      String(target.searchParams.get('redirect_uri')).endsWith('/api/v1/auth/oauth/google/callback'),
+      'redirect_uri matches the route that answers it'
+    );
+
+    const cookie = response.headers.get('set-cookie') || '';
+    assert(cookie.includes('wga_oauth='), 'sets the state cookie');
+    assert(/HttpOnly/i.test(cookie), 'the state cookie is HttpOnly');
+    assert(/SameSite=Lax/i.test(cookie), 'and SameSite=Lax, so the return navigation carries it');
+  });
+
   await check('a provider without credentials sends the visitor back to sign-in', async () => {
-    const response = await manual('/api/v1/auth/oauth/google/start');
+    const response = await manual('/api/v1/auth/oauth/linkedin/start');
 
     assertEqual(response.status, 302, 'status');
     const location = locationOf(response);
     assert(location.includes('/login.html?'), 'back to the sign-in page');
     assert(location.includes('reason=PROVIDER_NOT_CONFIGURED'), 'and says why');
-    assert(!location.includes('accounts.google.com'), 'never forwards to the provider');
+    assert(!location.includes('linkedin.com'), 'never forwards to the provider');
   });
 
   await check('an unknown provider is refused by name', async () => {
