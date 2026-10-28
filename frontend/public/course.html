@@ -587,6 +587,9 @@
 
   <script src="/assets/js/wga-api.js?v=20261021"></script>
   <script src="/assets/js/wga-ui.js?v=20261021"></script>
+  <!-- The AI panel is only needed once a lesson is open, so the module is loaded
+       from that moment rather than on every course page view. -->
+  <script src="/assets/js/wga-ai.js?v=20261028"></script>
   <script>
     (function () {
       'use strict';
@@ -1187,6 +1190,9 @@
         });
         openLessonId = null;
         rememberLesson(null);
+        // The launcher asks about one lesson; with no lesson open it would be
+        // asking about nothing.
+        if (window.WGAAI) WGAAI.unmountTutor();
       }
 
       function openLesson(lessonId) {
@@ -1260,8 +1266,24 @@
 
             bindViewer();
             loadLessonQuiz(lesson);
+
+            /**
+             * The tutor only appears where it can actually read something: a
+             * lesson the student is allowed to see, with written text in it. On
+             * a video-only lesson it would answer "this lesson does not cover
+             * that" to every question, which is worse than not being offered.
+             */
+            if (window.WGAAI) {
+              var hasText = lesson.content && String(lesson.content).replace(/<[^>]+>/g, '').trim().length > 120;
+              if (hasText) {
+                WGAAI.mountTutor({ lessonId: lesson.id, lessonTitle: lesson.title });
+              } else {
+                WGAAI.unmountTutor();
+              }
+            }
           })
           .catch(function (error) {
+            if (window.WGAAI) WGAAI.unmountTutor();
             viewer.innerHTML =
               '<div class="wga-card"><p style="margin:0 0 12px;">' +
               WGAUI.escapeHtml(

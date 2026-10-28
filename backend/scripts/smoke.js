@@ -7456,6 +7456,26 @@ async function testOAuth() {
     assert(source.includes('translate.google.com'), 'loads the translator');
   });
 
+  await check('every page that offers an AI tool loads the module, and none leak the key', async () => {
+    const fs = require('fs');
+    const path = require('path');
+    const root = path.join(__dirname, '..', 'public');
+
+    const wanted = ['course.html', 'student-dashboard.html', 'instructor-dashboard.html'];
+    const missing = wanted.filter((name) => {
+      const html = fs.readFileSync(path.join(root, name), 'utf8');
+      return !html.includes('/assets/js/wga-ai.js');
+    });
+
+    assertEqual(missing.join(', '), '', 'pages that offer AI but do not load it');
+
+    // The module itself must contain no secret and no model prompt: it asks the
+    // API, it does not decide anything.
+    const source = fs.readFileSync(path.join(root, 'assets/js/wga-ai.js'), 'utf8');
+    assert(!/sk-or-v1|OPENROUTER|Bearer\s+[A-Za-z0-9]/.test(source), 'no key or auth header in the browser code');
+    assert(!source.includes('openai/gpt-4o-mini'), 'the model name is not chosen by the browser');
+  });
+
   await check('the policy allows the translate origins but nothing wider', async () => {
     // Read from the module rather than the response: the suite runs with CSP
     // switched off (a test server serves no policy header), so asserting on the

@@ -1134,6 +1134,7 @@
     -->
     <script src="/assets/js/wga-api.js?v=20261021"></script>
     <script src="/assets/js/wga-ui.js?v=20261021"></script>
+    <script src="/assets/js/wga-ai.js?v=20261028"></script>
     <script src="/assets/js/wga-guard.js?v=20261021" data-roles="instructor,admin"></script>
     <script src="/assets/vendor/quill/quill.js"></script>
   <!-- Not a page to be found by accident: signed-in areas and pages that
@@ -1182,6 +1183,7 @@
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="live-classes"><i class="fas fa-video"></i> Live Classes</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="earnings"><i class="fas fa-chart-line"></i> Earnings</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="messages"><i class="fas fa-envelope"></i> Messages</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="ai-tools"><i class="fas fa-wand-magic-sparkles"></i> AI Tools</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="profile"><i class="fas fa-user"></i> Profile</a></li>
             </ul>
             <div class="sidebar-footer">
@@ -1990,6 +1992,165 @@
                     ${status ? '' : '<p class="lesson-hint">A CV is recommended before your course goes live. You can still publish without one.</p>'}
                 </div>
             `;
+        }
+
+        /**
+         * AI Tools: course insights and a feedback drafting bench.
+         *
+         * There is no grading view in this dashboard, and no assignment model in
+         * the API, so there is nowhere a "draft feedback" button belongs next to
+         * a submission. Rather than invent a grading screen and leave it empty,
+         * the drafting tool stands on its own: paste a submission, get a draft,
+         * copy it where you actually send feedback. It is the same call the
+         * grading screen will make when one exists.
+         */
+        function renderAiTools() {
+            if (!window.WGAAI) {
+                return `<div class="stat-card glass-premium">
+                    <div class="stat-title">AI Tools</div>
+                    <div style="font-size:14px;color:var(--text-light);margin-top:6px;">
+                        The AI tools could not load. Refresh the page and try again.
+                    </div>
+                </div>`;
+            }
+
+            WGAAI.injectStyles();
+
+            const courses = (instructorData.courses || []).filter(c => c.id);
+
+            const picker = courses.length
+                ? `<select id="aiInsightsCourse" class="course-picker" style="width:100%;max-width:420px;padding:11px 13px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:500 14px Inter,system-ui,sans-serif;">
+                       ${courses.map(c => `<option value="${WGAUI.escapeHtml(c.id)}">${WGAUI.escapeHtml(c.title)}</option>`).join('')}
+                   </select>
+                   <button class="btn-primary" style="margin-top:12px;" onclick="showInsightsForSelected()">
+                       <i class="fas fa-wand-magic-sparkles"></i> Summarise this course
+                   </button>`
+                : `<p style="margin:0;font-size:13.5px;color:var(--text-light);">
+                       You have no courses yet, so there is nothing to summarise.
+                   </p>`;
+
+            return `
+                <div class="section-title"><span>✨ AI Tools</span></div>
+
+                <div class="stat-card glass-premium" style="margin-bottom:22px;">
+                    <h3 style="margin:0 0 6px;font-size:18px;color:var(--text);">Course insights</h3>
+                    <p style="margin:0 0 16px;font-size:13.5px;color:var(--text-light);">
+                        A short summary of where students are stuck, built from their progress and the
+                        questions they asked the AI tutor. It uses only figures the platform records.
+                    </p>
+                    ${picker}
+                </div>
+
+                <div id="aiInsightsSlot"></div>
+
+                <div class="stat-card glass-premium">
+                    <h3 style="margin:0 0 6px;font-size:18px;color:var(--text);">Draft feedback</h3>
+                    <p style="margin:0 0 16px;font-size:13.5px;color:var(--text-light);">
+                        Paste a submission and get a starting paragraph you can edit before sending.
+                        It drafts; it never grades.
+                    </p>
+
+                    <label style="display:block;margin-bottom:12px;">
+                        <span style="display:block;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--text-light);margin-bottom:6px;">Submission</span>
+                        <textarea id="aiFeedbackSubmission" rows="6" maxlength="6000"
+                            placeholder="Paste the student's work here"
+                            style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:14px/1.55 Inter,system-ui,sans-serif;"></textarea>
+                    </label>
+
+                    <label style="display:block;margin-bottom:14px;">
+                        <span style="display:block;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--text-light);margin-bottom:6px;">Rubric (optional)</span>
+                        <input type="text" id="aiFeedbackRubric" maxlength="2000"
+                            placeholder="Accuracy, clarity, completeness"
+                            style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:14px/1.55 Inter,system-ui,sans-serif;" />
+                    </label>
+
+                    <button class="btn-primary" id="aiFeedbackDraftBtn">
+                        <i class="fas fa-pen-fancy"></i> Draft feedback
+                    </button>
+
+                    <div id="aiFeedbackResult" style="margin-top:18px;"></div>
+                </div>
+            `;
+        }
+
+        /** Which course the insights card should summarise. */
+        window.showInsightsForSelected = function showInsightsForSelected() {
+            const select = document.getElementById('aiInsightsCourse');
+            const slot = document.getElementById('aiInsightsSlot');
+            if (!select || !slot || !window.WGAAI) return;
+
+            slot.innerHTML = WGAAI.insightsHTML(select.value);
+            WGAAI.bindInsights(slot);
+
+            const card = slot.querySelector('[data-ai-insights]');
+            if (card) WGAAI.loadInsights(card);
+            slot.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        };
+
+        function bindAiTools(content) {
+            const button = content.querySelector('#aiFeedbackDraftBtn');
+            if (!button || !window.WGAAI) return;
+
+            button.addEventListener('click', function () {
+                const submission = content.querySelector('#aiFeedbackSubmission');
+                const rubric = content.querySelector('#aiFeedbackRubric');
+                const result = content.querySelector('#aiFeedbackResult');
+                const select = content.querySelector('#aiInsightsCourse');
+
+                const text = submission.value.trim();
+                if (text.length < 20) {
+                    result.innerHTML = '<p style="margin:0;font-size:13px;color:var(--danger,#b42318);">Paste at least a paragraph of the submission.</p>';
+                    submission.focus();
+                    return;
+                }
+
+                const courseId = select ? select.value : null;
+                if (!courseId) {
+                    result.innerHTML = '<p style="margin:0;font-size:13px;color:var(--danger,#b42318);">Create a course first — the draft is attached to one.</p>';
+                    return;
+                }
+
+                const previous = button.innerHTML;
+                button.disabled = true;
+                button.innerHTML = '<span class="loading-spinner" style="width:15px;height:15px;"></span> Drafting…';
+                result.innerHTML = '';
+
+                WGA.post('/ai/feedback-draft', {
+                    courseId: courseId,
+                    submission: text,
+                    rubric: rubric.value.trim(),
+                })
+                    .then(function (data) {
+                        result.innerHTML = `
+                            <label style="display:block;">
+                                <span style="display:block;font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Draft — edit before sending</span>
+                                <textarea id="aiFeedbackDraftOut" rows="8"
+                                    style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:14px/1.6 Inter,system-ui,sans-serif;">${WGAUI.escapeHtml(data.draft)}</textarea>
+                            </label>
+                            <button class="btn-primary btn-outline btn-sm" style="margin-top:10px;" id="aiFeedbackCopy">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>`;
+
+                        content.querySelector('#aiFeedbackCopy').addEventListener('click', function () {
+                            const out = content.querySelector('#aiFeedbackDraftOut');
+                            out.select();
+                            navigator.clipboard
+                                .writeText(out.value)
+                                .then(function () { WGAUI.toast('Copied.', 'success'); })
+                                .catch(function () { WGAUI.toast('Select the text and copy it.', 'info'); });
+                        });
+                    })
+                    .catch(function (error) {
+                        const message = error && error.code === 'AI_NOT_CONFIGURED'
+                            ? 'AI drafting is not available on this deployment yet.'
+                            : (error && error.message) || 'Could not draft feedback. Please try again.';
+                        result.innerHTML = `<p style="margin:0;font-size:13px;color:var(--danger,#b42318);">${WGAUI.escapeHtml(message)}</p>`;
+                    })
+                    .then(function () {
+                        button.disabled = false;
+                        button.innerHTML = previous;
+                    });
+            });
         }
 
         function renderProfile() {
@@ -4032,6 +4193,9 @@ return `<div class="lesson-admin">${list}${form}</div>`;
                     case 'messages':
                         html = renderMessages();
                         break;
+                    case 'ai-tools':
+                        html = renderAiTools();
+                        break;
                     case 'profile':
                         html = renderProfile();
                         break;
@@ -4040,6 +4204,8 @@ return `<div class="lesson-admin">${list}${form}</div>`;
                 }
                 content.innerHTML = html;
                 observeCounters();
+
+                if (page === 'ai-tools') bindAiTools(content);
 
                 // The course list is fetched on demand: the summary payload only
                 // carries the twelve most recent courses, which is not the list

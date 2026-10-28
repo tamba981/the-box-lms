@@ -883,6 +883,7 @@
     -->
     <script src="/assets/js/wga-api.js?v=20261021"></script>
     <script src="/assets/js/wga-ui.js?v=20261021"></script>
+    <script src="/assets/js/wga-ai.js?v=20261028"></script>
     <script src="/assets/js/wga-guard.js?v=20261021" data-roles="student"></script>
   <!-- Not a page to be found by accident: signed-in areas and pages that
        only exist to carry a one-time token. -->
@@ -928,17 +929,21 @@
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="community"><i class="fas fa-users"></i> Community</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="messages"><i class="fas fa-envelope"></i> Messages</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="certificates"><i class="fas fa-certificate"></i> Certificates</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="mentor"><i class="fas fa-compass"></i> AI Mentor</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="profile"><i class="fas fa-user"></i> Profile</a></li>
             </ul>
             <div class="sidebar-footer">
                 <!--
                   Bookmarks and Settings were removed: neither had a page, a
                   route or a render function, so both navigated to the overview
-                  while the sidebar said otherwise. AI Tutor was removed for a
-                  stronger reason — it presented a text box and a Send button for
-                  an assistant that does not exist; askAI() returned a canned
-                  reply. A control that lies about what it does is worse than no
-                  control.
+                  while the sidebar said otherwise.
+
+                  AI Tutor was removed for a stronger reason — it presented a
+                  text box and a Send button for an assistant that did not exist;
+                  askAI() returned a canned reply. A control that lies about what
+                  it does is worse than no control. It is back now as AI Mentor,
+                  against a real endpoint, and it only offers what the API
+                  actually answers.
                 -->
                 <div class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> My Learning</a></div>
             </div>
@@ -1815,6 +1820,27 @@
             `;
         }
 
+        /**
+         * The AI Mentor page.
+         *
+         * The markup and the handlers both live in wga-ai.js, because the tutor
+         * panel on a lesson and this share the same credit display and the same
+         * failure handling. This function is the seam: the dashboard decides
+         * *when* it appears, the module decides what it does.
+         */
+        function renderMentor() {
+            if (!window.WGAAI) {
+                return `<div class="stat-card glass-premium">
+                    <div class="stat-title">AI Mentor</div>
+                    <div style="font-size:14px;color:var(--text-light);margin-top:6px;">
+                        The mentor could not load. Refresh the page and try again.
+                    </div>
+                </div>`;
+            }
+
+            return WGAAI.mentorPanelHTML();
+        }
+
         function renderProfile() {
             const u = state.user;
 
@@ -2047,6 +2073,9 @@
                     case 'certificates':
                         html = renderCertificates();
                         break;
+                    case 'mentor':
+                        html = renderMentor();
+                        break;
                     case 'profile':
                         html = renderProfile();
                         break;
@@ -2055,6 +2084,12 @@
                 }
                 content.innerHTML = html;
                 observeCounters();
+
+                // The mentor page is markup plus handlers, so it is bound after
+                // it is in the document rather than returned ready-made.
+                if (page === 'mentor' && window.WGAAI) {
+                    WGAAI.bindMentor(content);
+                }
             }, 300);
 
             document.querySelectorAll('.sidebar-link').forEach(link => {
