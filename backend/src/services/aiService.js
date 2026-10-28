@@ -468,8 +468,15 @@ async function mentor({ user, history, context }) {
   }
 }
 
-/** Course titles, so the assessor can only recommend courses that exist. */
-async function courseTitles(limit = 60) {
+/**
+ * Course titles, so the assessor can only recommend courses that exist.
+ *
+ * The cap is deliberately above the size of the catalogue rather than "the
+ * popular ones": a course that happens to have no enrolments yet is still a
+ * course a student can take, and leaving it out is how an assessment comes back
+ * recommending only the top sellers.
+ */
+async function courseTitles(limit = 200) {
   const courses = await Course.find({ status: 'published' })
     .sort({ enrollmentCount: -1 })
     .select('title')
