@@ -917,6 +917,7 @@
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="enquiries"><i class="fas fa-inbox"></i> Enquiries</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="reports"><i class="fas fa-chart-line"></i> Reports</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="announcements"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="my-account"><i class="fas fa-user-shield"></i> My Account</a></li>
             </ul>
             <div class="sidebar-footer">
                 <div class="sidebar-item"><a href="/" ><i class="fas fa-globe"></i> View site</a></div>
@@ -1301,6 +1302,7 @@
                                         <td>
                                             <button class="action-btn view" title="View account" onclick="viewUser('${user.id}')"><i class="fas fa-eye"></i></button>
                                             <button class="action-btn edit" title="Edit account" onclick="editUser('${user.id}')"><i class="fas fa-edit"></i></button>
+                                            ${user.role === 'admin' ? '' : `<button class="action-btn" title="Open this account as the user" onclick="impersonateUser('${user.id}', '${WGAUI.escapeHtml((user.fullName || user.email || '').replace(/'/g, ''))}')"><i class="fas fa-right-to-bracket"></i></button>`}
                                         </td>
                                     </tr>
                                 `).join('')
@@ -1310,6 +1312,163 @@
                 </div>
             `;
         }
+
+        /**
+         * Open another account as that user.
+         *
+         * The administrator's own session is kept in local storage under a
+         * separate key before it is replaced, so returning is one click and does
+         * not depend on remembering a password. The reason is required by the API
+         * and written to the audit log — every action taken afterwards is recorded
+         * against the user, not against the administrator, so the log is the only
+         * thing that can explain it later.
+         */
+        window.impersonateUser = async function impersonateUser(id, name) {
+            const reason = window.prompt(
+                'Open ' + (name || 'this account') + ' as that user?\n\n' +
+                'Their password is not used or changed. Everything you do is recorded against their ' +
+                'account, so say why (this goes in the audit log):'
+            );
+
+            if (reason === null) return;
+            if (reason.trim().length < 5) {
+                WGAUI.toast('Give a reason of at least 5 characters.', 'error');
+                return;
+            }
+
+            try {
+                const data = await WGA.post('/admin/users/' + encodeURIComponent(id) + '/impersonate', {
+                    reason: reason.trim(),
+                });
+
+                // Keep the way back before overwriting anything.
+                localStorage.setItem(
+                    'wga.adminSession',
+                    JSON.stringify({
+                        accessToken: localStorage.getItem('wga.access'),
+                        refreshToken: localStorage.getItem('wga.refresh'),
+                        user: localStorage.getItem('wga.user'),
+                    })
+                );
+
+                WGA.setSession(data);
+
+                WGAUI.toast('Opening the account. Use "Return to admin" to come back.', 'info');
+                window.location.href = WGA.homeForRole(data.user.role);
+            } catch (error) {
+                WGAUI.toast((error && error.message) || 'That account could not be opened.', 'error');
+            }
+        };
+
+        /** Back to the administrator's own session. */
+        window.returnToAdmin = function returnToAdmin() {
+            let saved = null;
+            try {
+                saved = JSON.parse(localStorage.getItem('wga.adminSession') || 'null');
+            } catch (error) {
+                saved = null;
+            }
+
+            if (!saved || !saved.accessToken) {
+                localStorage.removeItem('wga.adminSession');
+                window.location.href = '/login.html';
+                return;
+            }
+
+            localStorage.setItem('wga.access', saved.accessToken);
+            if (saved.refreshToken) localStorage.setItem('wga.refresh', saved.refreshToken);
+            if (saved.user) localStorage.setItem('wga.user', saved.user);
+            localStorage.removeItem('wga.adminSession');
+
+            window.location.href = '/admin-dashboard.html';
+        };
+
+        /**
+         * The banner that makes an impersonated session impossible to mistake for
+         * your own. Shown on the impersonated account's own dashboards.
+         */
+        window.renderImpersonationBanner = function renderImpersonationBanner() {
+            if (!localStorage.getItem('wga.adminSession')) return;
+            if (document.getElementById('impersonationBanner')) return;
+
+            const bar = document.createElement('div');
+            bar.id = 'impersonationBanner';
+            bar.style.cssText =
+                'position:fixed;left:0;right:0;top:0;z-index:2147483000;display:flex;gap:12px;' +
+                'align-items:center;justify-content:center;flex-wrap:wrap;padding:10px 16px;' +
+                'background:#b45309;color:#fff;font:600 13px Inter,system-ui,sans-serif;';
+            bar.innerHTML =
+                '<span><i class="fas fa-user-shield"></i> You are viewing this account as an administrator. ' +
+                'Actions taken here are recorded against the user.</span>' +
+                '<button type="button" style="background:#fff;color:#b45309;border:0;border-radius:8px;' +
+                'padding:6px 14px;font:700 12.5px Inter,system-ui,sans-serif;cursor:pointer;">Return to admin</button>';
+
+            bar.querySelector('button').addEventListener('click', window.returnToAdmin);
+            document.body.appendChild(bar);
+            document.body.style.paddingTop = '44px';
+        };
+
+        /**
+         * The administrator's own account.
+         *
+         * "All users" includes the people running the platform: without this an
+         * administrator who changed their email address had no way to update it
+         * and would have had to ask a colleague to edit the record.
+         */
+        function renderMyAccount() {
+            const u = adminData.user || {};
+
+            return `
+                <div class="section-title"><span>🛡️ My Account</span></div>
+                <div class="stat-card glass-premium" style="max-width:640px;">
+                    <div class="form-group"><label>First Name</label>
+                        <input type="text" id="maFirstName" value="${WGAUI.escapeHtml(u.firstName || '')}" /></div>
+                    <div class="form-group"><label>Last Name</label>
+                        <input type="text" id="maLastName" value="${WGAUI.escapeHtml(u.lastName || '')}" /></div>
+                    <div class="form-group"><label>Email</label>
+                        <input type="email" id="maEmail" maxlength="160" value="${WGAUI.escapeHtml(u.email || '')}" /></div>
+                    <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">
+                        Changing this sends a confirmation link to the new inbox and a notice to the old
+                        one. Your password is not affected.
+                    </p>
+                    <button class="btn-primary" onclick="saveMyAccount()">Save changes</button>
+                    <p style="font-size:12.5px;color:var(--text-light);margin-top:14px;">
+                        To change your password, sign out and use
+                        <a href="/forgot-password.html">Forgot password</a>.
+                    </p>
+                </div>
+            `;
+        }
+
+        window.saveMyAccount = async function saveMyAccount() {
+            const firstName = document.getElementById('maFirstName')?.value.trim();
+            const lastName = document.getElementById('maLastName')?.value.trim();
+            const email = document.getElementById('maEmail')?.value.trim();
+
+            if (!firstName || !lastName) {
+                WGAUI.toast('A first and last name are required.', 'error');
+                return;
+            }
+
+            try {
+                const data = await WGA.patch('/auth/me', { firstName, lastName, email });
+
+                adminData.user = { ...adminData.user, ...data.user };
+                WGA.setSession({ user: data.user });
+
+                WGAUI.toast(
+                    data.emailChanged
+                        ? 'Saved. Check the new inbox for a link to confirm that address.'
+                        : 'Your account has been updated.',
+                    'success'
+                );
+            } catch (error) {
+                const message = (error.details && error.details.length)
+                    ? error.details[0].message
+                    : (error && error.message) || 'We could not save that.';
+                WGAUI.toast(message, 'error');
+            }
+        };
 
         function renderCourses() {
             const statusBadge = (status) => {
@@ -2613,6 +2772,9 @@
                     break;
                 case 'announcements':
                     html = renderAnnouncements();
+                    break;
+                case 'my-account':
+                    html = renderMyAccount();
                     break;
                 default:
                     html = renderOverview();

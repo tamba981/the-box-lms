@@ -1861,11 +1861,15 @@
                     <h3 style="margin-bottom:20px; color:var(--gold);">👤 Profile Information</h3>
                     <div class="form-group"><label>First Name</label><input type="text" id="pFirstName" value="${WGAUI.escapeHtml(u.firstName || '')}" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.15);"></div>
                     <div class="form-group"><label>Last Name</label><input type="text" id="pLastName" value="${WGAUI.escapeHtml(u.lastName || '')}" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.15);"></div>
-                    <div class="form-group"><label>Email</label><input type="email" value="${WGAUI.escapeHtml(u.email || '')}" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.15);" disabled></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="pEmail" value="${WGAUI.escapeHtml(u.email || '')}" maxlength="160" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.15);"></div>
                     <div class="form-group"><label>Phone</label><input type="tel" id="pPhone" value="${WGAUI.escapeHtml(u.phone || '')}" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.15);"></div>
                     <div class="form-group"><label>Date of Birth</label><input type="date" id="pDateOfBirth" max="${dobMax}" min="1900-01-01" value="${WGAUI.escapeHtml(u.dateOfBirth || '')}" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.15);"></div>
                     <div class="form-group"><label>City and Country</label><input type="text" id="pLocation" maxlength="100" value="${WGAUI.escapeHtml(u.location || '')}" placeholder="Monrovia, Liberia" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.15);"></div>
-                    <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">Your email address is used to sign in and cannot be changed here. You must be at least 16 years old.</p>
+                    <p style="font-size:12.5px;color:var(--text-light);margin-bottom:14px;">
+                        Changing your email address sends a confirmation link to the new inbox, and a
+                        notice to the old one. Until you confirm, the new address will not receive
+                        password resets. You must be at least 16 years old.
+                    </p>
                     <button class="btn-primary" onclick="updateProfile()">Update Profile</button>
                     <button class="btn-primary btn-outline" style="margin-left:12px;" onclick="openChangePassword()">Change Password</button>
                 </div>
@@ -1938,12 +1942,13 @@
         window.updateProfile = async function updateProfile() {
             const firstName = document.getElementById('pFirstName')?.value.trim();
             const lastName = document.getElementById('pLastName')?.value.trim();
+            const email = document.getElementById('pEmail')?.value.trim();
             const phone = document.getElementById('pPhone')?.value.trim();
             const dateOfBirth = document.getElementById('pDateOfBirth')?.value;
             const location = document.getElementById('pLocation')?.value.trim();
 
             try {
-                const data = await WGA.patch('/auth/me', { firstName, lastName, phone, dateOfBirth, location });
+                const data = await WGA.patch('/auth/me', { firstName, lastName, email, phone, dateOfBirth, location });
 
                 state.user = { ...state.user, ...data.user };
                 WGA.setSession({ user: data.user });
@@ -1951,7 +1956,12 @@
                 document.getElementById('user-name').textContent = data.user.firstName || 'Student';
                 document.getElementById('userAvatar').innerHTML = WGAUI.avatar(data.user, 40);
 
-                showToast('Your profile has been saved.', 'success');
+                showToast(
+                    data.emailChanged
+                        ? 'Saved. Check the new inbox for a link to confirm that address.'
+                        : 'Your profile has been saved.',
+                    'success'
+                );
             } catch (error) {
                 // Field-level messages from the API, so the student knows which
                 // input to fix.

@@ -330,6 +330,22 @@ const updateProfileBody = z
           .max(20, 'List at most 20 languages')
           .optional()
       ),
+
+    /**
+     * Changing the address you sign in with.
+     *
+     * Allowed here, and treated as a change of identity rather than an edit: the
+     * route clears `emailVerified` and sends a fresh link to the new address, so
+     * an account cannot quietly move to an address nobody has proved they own.
+     */
+    email: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .min(5, 'Enter your email address')
+      .max(160, 'That email address is too long')
+      .email('Enter a valid email address')
+      .optional(),
   })
   .refine((value) => Object.keys(value).length > 0, { message: 'Nothing to update' });
 

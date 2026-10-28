@@ -1942,6 +1942,28 @@ body.dark-mode .why-card--formats {
   background: var(--why-gold);
 }
 
+/* The AI card is the seventh, so it takes the whole row rather than sitting
+   alone in a third column with two gaps beside it. A gold top rule marks it out
+   from the six foundations without shouting. */
+.why-card--ai {
+  grid-column: 1 / -1;
+  border-top: 3px solid var(--why-gold);
+  background: linear-gradient(180deg, rgba(217, 173, 66, 0.06) 0%, transparent 60%), var(--surface-2);
+}
+
+.why-card--ai h3 {
+  max-width: 34ch;
+}
+
+.why-card--ai p {
+  max-width: 78ch;
+}
+
+.why-formats--ai li {
+  background: rgba(217, 173, 66, 0.12);
+  border: 1px solid rgba(217, 173, 66, 0.34);
+}
+
 .why-closing {
   margin-top: var(--s-12);
 }

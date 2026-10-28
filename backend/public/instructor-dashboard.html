@@ -2217,7 +2217,8 @@
 
                     <div class="form-group"><label>First Name</label><input type="text" id="pFirstName" value="${WGAUI.escapeHtml(u.firstName || '')}" /></div>
                     <div class="form-group"><label>Last Name</label><input type="text" id="pLastName" value="${WGAUI.escapeHtml(u.lastName || '')}" /></div>
-                    <div class="form-group"><label>Email</label><input type="email" value="${WGAUI.escapeHtml(u.email || '')}" disabled /></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="pEmail" value="${WGAUI.escapeHtml(u.email || '')}" maxlength="160" /></div>
+                    <p class="lesson-hint" style="margin-top:-8px;">Changing this sends a confirmation link to the new inbox, and a notice to the old one.</p>
                     <div class="form-group"><label>Headline</label><input type="text" id="pHeadline" value="${WGAUI.escapeHtml(u.headline || '')}" placeholder="e.g. Data analyst and lecturer" /></div>
                     <div class="form-group"><label>Bio</label><textarea id="pBio" rows="4">${WGAUI.escapeHtml(u.bio || '')}</textarea></div>
                     <div class="form-group"><label>Expertise</label><input type="text" id="pExpertise" value="${WGAUI.escapeHtml(expertise)}" placeholder="Comma separated, e.g. Statistics, Spreadsheets" /></div>
@@ -3892,6 +3893,7 @@ return `<div class="lesson-admin">${list}${form}</div>`;
         window.updateProfile = async function updateProfile() {
             const firstName = document.getElementById('pFirstName')?.value.trim();
             const lastName = document.getElementById('pLastName')?.value.trim();
+            const email = document.getElementById('pEmail')?.value.trim();
             const headline = document.getElementById('pHeadline')?.value.trim();
             const bio = document.getElementById('pBio')?.value.trim();
             const expertiseRaw = document.getElementById('pExpertise')?.value || '';
@@ -3909,6 +3911,7 @@ return `<div class="lesson-admin">${list}${form}</div>`;
                 const data = await WGA.patch('/auth/me', {
                     firstName,
                     lastName,
+                    email,
                     headline,
                     bio,
                     expertise,

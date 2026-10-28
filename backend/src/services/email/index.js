@@ -956,6 +956,47 @@ function admissionRejectedEmail({ application }) {
   };
 }
 
+/**
+ * Tell the address an account was moved away from.
+ *
+ * The security half of an email change: if somebody with a borrowed session moves
+ * the account, the real owner finds out, and they still have a working address to
+ * recover it from.
+ */
+function emailAddressChangedEmail({ user, previousEmail }) {
+  const text = [
+    `Hello ${user.firstName},`,
+    '',
+    'The email address on your Wuteve Global Academy account was just changed.',
+    '',
+    `From: ${previousEmail}`,
+    `To:   ${user.email}`,
+    '',
+    'If this was you, nothing more is needed — but confirm the new address from the',
+    'link we sent to it, or you will not be able to receive password resets there.',
+    '',
+    'If this was not you, reply to this message immediately and change your password.',
+    'This address will no longer sign in once the change is confirmed.',
+  ].join('\n');
+
+  return {
+    to: previousEmail,
+    subject: 'Your Wuteve account email address was changed',
+    text,
+    html: layout({
+      heading: 'Your email address was changed',
+      intro: 'The email address on your Wuteve Global Academy account was just changed.',
+      body: `
+        <p style="margin:0 0 8px;"><strong>From:</strong> ${escapeHtml(previousEmail)}</p>
+        <p style="margin:0 0 16px;"><strong>To:</strong> ${escapeHtml(user.email)}</p>
+        <p style="margin:0 0 16px;">If this was you, confirm the new address from the link we sent to it,
+        or you will not receive password resets there.</p>
+        <p style="margin:0;color:#b42318;"><strong>If this was not you</strong>, reply to this message
+        immediately and change your password.</p>`,
+    }),
+  };
+}
+
 /* ------------------------------------------------------------------ *
  * AI credits
  * ------------------------------------------------------------------ */
@@ -1016,6 +1057,7 @@ module.exports = {
   manualPaymentSubmittedEmail,
   manualPaymentRejectedEmail,
   aiCreditsAddedEmail,
+  emailAddressChangedEmail,
   cvSubmittedEmail,
   cvApprovedEmail,
   cvRejectedEmail,

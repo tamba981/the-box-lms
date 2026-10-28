@@ -656,6 +656,68 @@
   }
 
   /**
+   * An impersonated session has to be impossible to mistake for your own.
+   *
+   * The administrator's own tokens are parked in `wga.adminSession` when they
+   * open somebody else's account, so the presence of that key is the signal. The
+   * bar appears on every page, not only the dashboards, because a lesson page is
+   * exactly where an administrator would be checking something.
+   */
+  (function impersonationBanner() {
+    function paint() {
+      var saved = null;
+      try {
+        saved = JSON.parse(localStorage.getItem('wga.adminSession') || 'null');
+      } catch (error) {
+        saved = null;
+      }
+
+      if (!saved || !saved.accessToken || document.getElementById('wga-imper-banner')) return;
+
+      var bar = document.createElement('div');
+      bar.id = 'wga-imper-banner';
+      bar.setAttribute('role', 'status');
+      bar.style.cssText =
+        'position:fixed;left:0;right:0;top:0;z-index:2147483000;display:flex;gap:12px;' +
+        'align-items:center;justify-content:center;flex-wrap:wrap;padding:10px 16px;' +
+        'background:#b45309;color:#fff;font:600 13px Inter,system-ui,sans-serif;';
+      bar.innerHTML =
+        '<span><i class="fas fa-user-shield" aria-hidden="true"></i> Viewing this account as an administrator. ' +
+        'Actions here are recorded against the user.</span>' +
+        '<button type="button" style="background:#fff;color:#b45309;border:0;border-radius:8px;' +
+        'padding:6px 14px;font:700 12.5px Inter,system-ui,sans-serif;cursor:pointer;">Return to admin</button>';
+
+      bar.querySelector('button').addEventListener('click', function () {
+        try {
+          var own = JSON.parse(localStorage.getItem('wga.adminSession') || 'null');
+          if (!own || !own.accessToken) throw new Error('gone');
+
+          localStorage.setItem('wga.access', own.accessToken);
+          if (own.refreshToken) localStorage.setItem('wga.refresh', own.refreshToken);
+          if (own.user) localStorage.setItem('wga.user', own.user);
+          localStorage.removeItem('wga.adminSession');
+
+          window.location.href = '/admin-dashboard.html';
+        } catch (error) {
+          localStorage.removeItem('wga.adminSession');
+          window.location.href = '/login.html';
+        }
+      });
+
+      document.body.appendChild(bar);
+      document.body.style.paddingTop = '44px';
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function () {
+        window.setTimeout(paint, 0);
+      });
+    } else {
+      window.setTimeout(paint, 0);
+    }
+  })();
+
+  /**
    * The cookie notice and the language control live in their own file and are
    * requested from here, because every page already loads this one. That is 24
    * HTML documents that would otherwise each need two more script tags, and a

@@ -372,9 +372,70 @@ router.patch(
     if (yearsExperience !== undefined) req.user.yearsExperience = yearsExperience;
     if (languages !== undefined) req.user.languages = languages;
 
+    /**
+     * Changing the address you sign in with.
+     *
+     * Three things happen, and all three are necessary:
+     *
+     *   1. the address is unique — signing in and password reset both key on it,
+     *      so two accounts sharing one would be unusable and a takeover waiting
+     *      to happen;
+     *   2. `emailVerified` goes back to false, because nothing has proved the
+     *      person controls the new mailbox yet;
+     *   3. a verification link goes to the **new** address and a notice to the
+     *      **old** one. The second is the security half: if somebody with a
+     *      borrowed session changes the address, the real owner is told, and they
+     *      still have a working address to recover from.
+     */
+    const newEmail = req.valid.body.email;
+    let emailChanged = false;
+
+    if (newEmail !== undefined && newEmail !== String(req.user.email).toLowerCase()) {
+      const taken = await User.findOne({ email: newEmail, _id: { $ne: req.user._id } }).select('_id');
+      if (taken) {
+        throw conflict('Another account already uses that email address.', {
+          code: 'EMAIL_IN_USE',
+          details: [{ field: 'email', message: 'Already registered' }],
+        });
+      }
+
+      const previousEmail = req.user.email;
+
+      req.user.email = newEmail;
+      req.user.emailVerified = false;
+      req.user.emailVerifiedAt = null;
+      emailChanged = true;
+
+      await req.user.save();
+
+      sendLater('address changed notice', () =>
+        email.emailAddressChangedEmail({ user: req.user, previousEmail })
+      );
+
+      const verifyToken = await tokens.createEmailVerificationToken(req.user);
+      const verifyUrl = `${config.publicBaseUrl}/verify-email.html?token=${encodeURIComponent(verifyToken)}`;
+      sendLater('re-verification', () => email.verificationEmail({ user: req.user, url: verifyUrl }));
+
+      logger.info('account email address changed', {
+        userId: String(req.user._id),
+        from: previousEmail,
+        to: newEmail,
+      });
+
+      return ok(
+        res,
+        { user: req.user.toPublicJSON({ includePrivate: true }), emailChanged: true },
+        'Your email address is updated. Check the new inbox for a link to confirm it.'
+      );
+    }
+
     await req.user.save();
 
-    return ok(res, { user: req.user.toPublicJSON({ includePrivate: true }) }, 'Profile updated.');
+    return ok(
+      res,
+      { user: req.user.toPublicJSON({ includePrivate: true }), emailChanged },
+      'Profile updated.'
+    );
   })
 );
 

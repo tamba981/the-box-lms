@@ -158,6 +158,7 @@ const Lesson = require('../src/models/Lesson');
 const Enrollment = require('../src/models/Enrollment');
 const AIUsageLog = require('../src/models/AIUsageLog');
 const AICreditOrder = require('../src/models/AICreditOrder');
+const Impersonation = require('../src/models/Impersonation');
 const { createApp } = require('../src/app');
 
 const results = [];
@@ -7348,6 +7349,63 @@ async function testOAuth() {
   const manual = (path) => fetch(baseUrl + path, { redirect: 'manual' });
   const locationOf = (response) => response.headers.get('location') || '';
 
+  await check('the public instructor count is the number of active instructor accounts', async () => {
+    /**
+     * The old figure was distinct instructor names across *published courses*, so
+     * an academy with two instructors reported one whenever the second had not
+     * published anything. Counted from the accounts, suspending an instructor
+     * drops them immediately and deleting one does the same.
+     */
+    const email = 'smoke-count-instructor-' + runId + '@example.com';
+    const created = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({ email, firstName: 'Counted' }),
+    });
+
+    createdEmails.push(email);
+    await User.updateOne({ _id: created.json.data.user.id }, { $set: { role: 'instructor' } });
+
+    const before = await request('GET', '/api/v1/stats/public');
+    assert(before.status >= 200, 'stats readable');
+
+    const withInstructor = before.json.data.instructors;
+    assert(withInstructor >= 1, 'the new instructor is counted: ' + withInstructor);
+
+    await User.updateOne({ _id: created.json.data.user.id }, { $set: { status: 'suspended' } });
+
+    const afterSuspend = await request('GET', '/api/v1/stats/public');
+    assertEqual(afterSuspend.json.data.instructors, withInstructor - 1, 'suspending drops the count');
+
+    await User.updateOne({ _id: created.json.data.user.id }, { $set: { status: 'active' } });
+    const restored = await request('GET', '/api/v1/stats/public');
+    assertEqual(restored.json.data.instructors, withInstructor, 'reactivating restores it');
+  });
+
+  await check('the course count follows publication, not creation', async () => {
+    const before = await request('GET', '/api/v1/stats/public');
+    const start = before.json.data.courses;
+
+    const draft = await Course.create({
+      title: 'Stats draft ' + runId,
+      slug: 'stats-draft-' + runId,
+      instructor: (await User.findOne({ role: 'instructor', status: 'active' }).select('_id'))._id,
+      priceCents: 0,
+      status: 'draft',
+    });
+
+    const asDraft = await request('GET', '/api/v1/stats/public');
+    assertEqual(asDraft.json.data.courses, start, 'a draft is not in the catalog');
+
+    await Course.updateOne({ _id: draft._id }, { $set: { status: 'published' } });
+
+    const published = await request('GET', '/api/v1/stats/public');
+    assertEqual(published.json.data.courses, start + 1, 'publishing adds it');
+
+    await Course.deleteOne({ _id: draft._id });
+
+    const deleted = await request('GET', '/api/v1/stats/public');
+    assertEqual(deleted.json.data.courses, start, 'deleting removes it');
+  });
+
   await check('the provider list names both providers and leaks neither credential', async () => {
     const { status, json } = await request('GET', '/api/v1/auth/oauth/providers');
 
@@ -7496,6 +7554,138 @@ async function testOAuth() {
     // A wildcard script origin would hand any subdomain of that host the page.
     assert(!/(^|\s)https:\/\/\*/.test(script), 'no wildcard script origin');
     assert(!script.includes("'unsafe-eval'"), 'no eval');
+  });
+
+  await check('any account can change its own email, and it has to be confirmed again', async () => {
+    const email = 'smoke-email-change-' + runId + '@example.com';
+    const created = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({ email, firstName: 'Emailchange' }),
+    });
+
+    createdEmails.push(email);
+    const token = created.json.data.accessToken;
+    const nextEmail = 'smoke-email-moved-' + runId + '@example.com';
+    createdEmails.push(nextEmail);
+
+    const changed = await request('PATCH', '/api/v1/auth/me', {
+      token,
+      body: { email: nextEmail },
+    });
+
+    assertEqual(changed.status, 200, 'status');
+    assertEqual(changed.json.data.emailChanged, true, 'the response says the address moved');
+    assertEqual(changed.json.data.user.email, nextEmail, 'the new address is stored');
+    assertEqual(changed.json.data.user.emailVerified, false, 'and is unverified until confirmed');
+
+    // The new address is the one that now signs in.
+    const signedIn = await request('POST', '/api/v1/auth/login', {
+      body: { email: nextEmail, password: PASSWORD },
+    });
+    assertEqual(signedIn.status, 200, 'the new address signs in');
+
+    const oldAddress = await request('POST', '/api/v1/auth/login', {
+      body: { email, password: PASSWORD },
+    });
+    assertEqual(oldAddress.status, 401, 'the old address does not');
+
+    // Claiming an address that belongs to somebody else is refused.
+    const taken = await request('PATCH', '/api/v1/auth/me', {
+      token,
+      body: { email: 'smoke-taken-' + runId + '@example.com' },
+    });
+    assertEqual(taken.status, 200, 'a free address is accepted');
+
+    const other = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({ email: 'smoke-holder-' + runId + '@example.com', firstName: 'Holder' }),
+    });
+    createdEmails.push('smoke-holder-' + runId + '@example.com');
+
+    const conflict = await request('PATCH', '/api/v1/auth/me', {
+      token: other.json.data.accessToken,
+      body: { email: 'smoke-taken-' + runId + '@example.com' },
+    });
+
+    assertEqual(conflict.status, 409, 'an address already in use is refused');
+    assertEqual(conflict.json.code, 'EMAIL_IN_USE', 'error code');
+  });
+
+  await check('an administrator can open another account, and the password is untouched', async () => {
+    const targetEmail = 'smoke-impersonated-' + runId + '@example.com';
+    const target = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({ email: targetEmail, firstName: 'Impersonated' }),
+    });
+
+    createdEmails.push(targetEmail);
+    const targetId = target.json.data.user.id;
+
+    const adminEmail = 'smoke-imp-admin-' + runId + '@example.com';
+    const admin = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({ email: adminEmail, firstName: 'Impadmin' }),
+    });
+
+    createdEmails.push(adminEmail);
+    await User.updateOne({ _id: admin.json.data.user.id }, { $set: { role: 'admin' } });
+
+    const adminToken = (
+      await request('POST', '/api/v1/auth/login', { body: { email: adminEmail, password: PASSWORD } })
+    ).json.data.accessToken;
+
+    const before = await User.findById(targetId).select('+password').lean();
+
+    const opened = await request('POST', '/api/v1/admin/users/' + targetId + '/impersonate', {
+      token: adminToken,
+      body: { reason: 'Testing the impersonation route' },
+    });
+
+    assertEqual(opened.status, 200, 'status');
+    assert(opened.json.data.accessToken, 'a session is issued');
+    assertEqual(opened.json.data.user.email, targetEmail, 'as the target account');
+
+    const after = await User.findById(targetId).select('+password').lean();
+    assertEqual(after.password, before.password, 'the password was never touched');
+
+    // The issued session is the user's, not the administrator's.
+    const me = await request('GET', '/api/v1/auth/me', { token: opened.json.data.accessToken });
+    assertEqual(me.status, 200, 'the session works');
+    assertEqual(me.json.data.user.role, 'student', 'it is a student session');
+
+    const asStudent = await request('GET', '/api/v1/admin/stats', {
+      token: opened.json.data.accessToken,
+    });
+    assertEqual(asStudent.status, 403, 'and it has no administrator powers');
+
+    const logged = await Impersonation.findOne({ user: targetId }).lean();
+    assert(Boolean(logged), 'the session is in the audit log');
+    assertEqual(logged.reason, 'Testing the impersonation route', 'with the reason given');
+
+    // A reason is required, and an administrator cannot open themselves.
+    const noReason = await request('POST', '/api/v1/admin/users/' + targetId + '/impersonate', {
+      token: adminToken,
+      body: {},
+    });
+    assertEqual(noReason.status, 400, 'a reason is required');
+
+    const selfTarget = await request('POST', '/api/v1/admin/users/' + admin.json.data.user.id + '/impersonate', {
+      token: adminToken,
+      body: { reason: 'Opening myself' },
+    });
+    assertEqual(selfTarget.status, 400, 'cannot open yourself');
+    assertEqual(selfTarget.json.code, 'SELF_IMPERSONATION', 'error code');
+
+    // Nor can an administrator be opened by another administrator.
+    const secondAdminEmail = 'smoke-imp-admin2-' + runId + '@example.com';
+    const second = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({ email: secondAdminEmail, firstName: 'Impadmin2' }),
+    });
+    createdEmails.push(secondAdminEmail);
+    await User.updateOne({ _id: second.json.data.user.id }, { $set: { role: 'admin' } });
+
+    const crossAdmin = await request('POST', '/api/v1/admin/users/' + second.json.data.user.id + '/impersonate', {
+      token: adminToken,
+      body: { reason: 'Testing a refusal' },
+    });
+    assertEqual(crossAdmin.status, 403, 'an administrator cannot be opened this way');
+    assertEqual(crossAdmin.json.code, 'CANNOT_IMPERSONATE_ADMIN', 'error code');
   });
 
   await check('the exchange needs a code before it will look at anything', async () => {

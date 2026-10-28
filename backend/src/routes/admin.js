@@ -24,7 +24,7 @@ const config = require('../config/env');
 const logger = require('../lib/logger');
 const { asyncHandler } = require('../lib/asyncHandler');
 const { ok, created } = require('../lib/respond');
-const { notFound, badRequest, conflict } = require('../lib/errors');
+const { notFound, badRequest, conflict, forbidden } = require('../lib/errors');
 const { parsePagination, paginated } = require('../lib/pagination');
 const { contains } = require('../lib/text');
 const { formatCents } = require('../lib/money');
@@ -1828,6 +1828,107 @@ router.patch(
     const rejected = await aiBilling.rejectOrder({ order, adminUser: req.user, reason: note });
 
     return ok(res, { order: rejected.toAdminJSON() }, 'Order declined.');
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * Impersonation
+ *
+ * An administrator signing in as a learner to see what they see. The password is
+ * never touched — the point is to leave the account exactly as it was — and every
+ * session is written to the audit log before it is issued.
+ * ------------------------------------------------------------------ */
+
+const Impersonation = require('../models/Impersonation');
+const tokensForImpersonation = require('../services/tokenService');
+
+const impersonateBody = z
+  .object({
+    reason: z
+      .string({ required_error: 'Say why you are opening this account' })
+      .trim()
+      .min(5, 'Say why you are opening this account — it goes in the audit log')
+      .max(300, 'That reason is too long'),
+  })
+  .strict();
+
+router.post(
+  '/users/:id/impersonate',
+  writeLimiter,
+  validate({ params: z.object({ id: objectId }), body: impersonateBody }),
+  asyncHandler(async (req, res) => {
+    const target = await User.findById(req.valid.params.id);
+    if (!target) throw notFound('That account could not be found.', { code: 'USER_NOT_FOUND' });
+
+    /**
+     * Another administrator is refused.
+     *
+     * Not because it is technically harder, but because an impersonated admin
+     * session can do everything an admin can while every record says a different
+     * name. Support conversations are about students and instructors; if an
+     * administrator needs another's account there is a password reset for that.
+     */
+    if (target.role === 'admin') {
+      throw forbidden('Administrator accounts cannot be opened this way.', {
+        code: 'CANNOT_IMPERSONATE_ADMIN',
+      });
+    }
+
+    if (String(target._id) === String(req.user._id)) {
+      throw badRequest('You are already signed in as yourself.', { code: 'SELF_IMPERSONATION' });
+    }
+
+    if (target.status !== 'active') {
+      throw badRequest('That account is not active, so there is nothing to see.', {
+        code: 'ACCOUNT_NOT_ACTIVE',
+      });
+    }
+
+    const record = await Impersonation.create({
+      admin: req.user._id,
+      user: target._id,
+      reason: req.valid.body.reason,
+      ip: req.ip || null,
+      userAgent: String(req.headers['user-agent'] || '').slice(0, 400) || null,
+    });
+
+    const accessToken = tokensForImpersonation.signAccessToken(target);
+    const refreshToken = await tokensForImpersonation.issueRefreshToken(target, req);
+
+    logger.warn('administrator opened a user account', {
+      admin: String(req.user._id),
+      user: String(target._id),
+      impersonation: String(record._id),
+      reason: req.valid.body.reason,
+    });
+
+    return ok(
+      res,
+      {
+        user: target.toPublicJSON({ includePrivate: true }),
+        accessToken,
+        refreshToken,
+        tokenType: 'Bearer',
+        expiresIn: config.jwt.accessTtl,
+        impersonation: { id: String(record._id), reason: record.reason },
+      },
+      `You are now viewing the academy as ${target.firstName} ${target.lastName}.`
+    );
+  })
+);
+
+/** The audit trail, newest first. */
+router.get(
+  '/impersonations',
+  validate({ query: z.object({ limit: z.coerce.number().int().min(1).max(100).optional().default(50) }) }),
+  asyncHandler(async (req, res) => {
+    const records = await Impersonation.find()
+      .sort({ createdAt: -1 })
+      .limit(req.valid.query.limit)
+      .populate({ path: 'admin', select: 'firstName lastName email' })
+      .populate({ path: 'user', select: 'firstName lastName email role' });
+
+    return ok(res, { items: records.map((record) => record.toAdminJSON()) });
   })
 );
 
