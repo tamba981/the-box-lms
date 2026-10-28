@@ -937,11 +937,14 @@
 
     /**
      * The second slide states the size of the catalog: courses, instructors,
-     * lessons, hours and free courses. Every figure comes from the same response
-     * the grid is built from, so the slide cannot disagree with the page, and
-     * the instructor count is the number of people with at least one published
-     * course - not everyone with an instructor account, which was three while
-     * only two of them taught anything a visitor could enrol in.
+     * lessons, hours and free courses. Every figure starts from the response the
+     * grid is built from, so the slide cannot disagree with the page, and is then
+     * replaced by the server's count, which keeps counting past the page size.
+     *
+     * Instructors are counted from the accounts by `/stats/public` - every active
+     * instructor, not the distinct names on published courses. Counting names
+     * reported one for an academy that has two, because an instructor who has not
+     * published a course yet never appeared in the catalogue.
      */
     function renderSlideStats() {
       var courses = all.length;
@@ -1009,8 +1012,7 @@
 
           // The slidebar's second slide states the size of the catalog. It is
           // read from the same response the grid uses, so the two cannot
-          // disagree, and it counts only instructors who have a published
-          // course rather than everyone with the role.
+          // disagree, and the server's totals replace these counts below.
           renderSlideStats();
 
           // `pagination.total` can exceed what one request returns. If it does,
