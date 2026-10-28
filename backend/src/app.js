@@ -20,6 +20,7 @@ const coursesRoutes = require('./routes/courses');
 const reviewsRoutes = require('./routes/reviews');
 const admissionsRoutes = require('./routes/admissions');
 const statsRoutes = require('./routes/stats');
+const aiRoutes = require('./routes/ai');
 const enrollmentsRoutes = require('./routes/enrollments');
 const certificatesRoutes = require('./routes/certificates');
 const notificationsRoutes = require('./routes/notifications');
@@ -190,6 +191,10 @@ app.use('/api/v1/avatars', avatarRoutes);
   app.use('/api/v1/courses', coursesRoutes);
   // Catalogue size for the homepage slidebar. Public, cheap, counted server-side.
   app.use('/api/v1/stats', statsRoutes);
+  // The AI tutor, mentor, assessments and instructor tools. Mounted with the
+  // rest of the authenticated surfaces so the origin guard and the API ceiling
+  // apply without doing anything special.
+  app.use('/api/v1/ai', aiRoutes);
   // Offline admissions. Public to submit; a tracking number is the only handle.
   app.use('/api/v1/admissions', admissionsRoutes);
   app.use('/api/v1/enrollments', enrollmentsRoutes);

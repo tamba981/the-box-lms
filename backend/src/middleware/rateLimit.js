@@ -77,4 +77,19 @@ const writeLimiter = makeLimiter({
   message: 'You are posting very quickly. Please wait a moment and try again.',
 });
 
-module.exports = { apiLimiter, authLimiter, sensitiveLimiter, writeLimiter };
+/**
+ * AI calls, keyed by the signed-in user rather than by address.
+ *
+ * Per-user is the point: a school behind one NAT address would otherwise share
+ * a single allowance, and one student's heavy use would lock out a classroom.
+ * The ceiling is deliberately above the daily credit limit — a student spending
+ * all ten credits in a minute is legitimate; twenty a minute is not.
+ */
+const aiLimiter = makeLimiter({
+  windowMs: MINUTE,
+  limit: 20,
+  keyGenerator: (req) => (req.user ? `user:${req.user._id}` : `ip:${req.ip}`),
+  message: 'You are asking the assistant very quickly. Please wait a moment and try again.',
+});
+
+module.exports = { apiLimiter, authLimiter, sensitiveLimiter, writeLimiter, aiLimiter };

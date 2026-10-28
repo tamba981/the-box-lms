@@ -77,6 +77,23 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
 
+    /**
+     * Daily AI credits.
+     *
+     * `period` is the UTC date the `used` count belongs to, so a read can tell
+     * whether the count is today's without a scheduled job — the counter simply
+     * resets the first time it is touched on a new day.
+     *
+     * `bonus` is credits that outlive the day: an admin grant, or a bundle bought
+     * through the payment flow. It adds to the daily allowance rather than
+     * replacing it, which is what "you bought 500 credits" should mean.
+     */
+    aiCredits: {
+      period: { type: String, default: null, maxlength: 10 },
+      used: { type: Number, default: 0, min: 0 },
+      bonus: { type: Number, default: 0, min: 0 },
+    },
+
     avatarUrl: { type: String, trim: true, default: null },
 
     /**

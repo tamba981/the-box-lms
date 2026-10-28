@@ -41,6 +41,10 @@ process.env.STRIPE_WEBHOOK_SECRET =
 // pair makes Google "configured" so the start endpoint builds a real authorize
 // URL and the callback validates state, without any request leaving the runner.
 // Nothing downstream of the state check is reached, so no network is needed.
+// The AI surfaces are exercised without leaving the runner: a fake key makes
+// them "configured", and the provider call itself is stubbed below in testAi().
+process.env.OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || 'test-openrouter-key';
+
 process.env.GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || 'test-client-id.apps.googleusercontent.com';
 process.env.GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || 'test-client-secret-value';
 
@@ -149,6 +153,10 @@ function withTestDatabase(uri) {
 const db = require('../src/db');
 const User = require('../src/models/User');
 const Token = require('../src/models/Token');
+const Course = require('../src/models/Course');
+const Lesson = require('../src/models/Lesson');
+const Enrollment = require('../src/models/Enrollment');
+const AIUsageLog = require('../src/models/AIUsageLog');
 const { createApp } = require('../src/app');
 
 const results = [];
@@ -354,6 +362,12 @@ async function cleanup() {
     $or: [{ student: { $in: userIds } }, { course: { $in: courseIds } }],
   });
   await Enrollment.deleteMany({ _id: { $in: enrollments.map((enrollment) => enrollment._id) } });
+
+  // AI usage rows point at a user and often a course; left behind they would be
+  // orphans that also quietly inflate any cost report.
+  await AIUsageLog.deleteMany({
+    $or: [{ user: { $in: userIds } }, { course: { $in: courseIds } }],
+  });
 
   // Attempts go before quizzes: an attempt is a record of what a real student did,
   // and one left pointing at a deleted quiz would be an orphan nothing can explain.
@@ -7554,6 +7568,345 @@ async function testOAuth() {
   });
 }
 
+/**
+ * AI: credits, the tutor, the mentor, assessments and the instructor tools.
+ *
+ * OpenRouter is never called. The provider is stubbed at the one place every
+ * feature goes through — global fetch — so the real request body is built, the
+ * real response is parsed and the real credits are spent; only the answer is
+ * canned. That is the part worth testing: the ledger and the prompts, not
+ * somebody else's model.
+ */
+async function testAi() {
+  const realFetch = global.fetch;
+  const captured = [];
+  let stubText = 'A short, grounded answer.';
+
+  global.fetch = async (url, options) => {
+    if (!String(url).includes('/chat/completions')) return realFetch(url, options);
+
+    const body = JSON.parse(options.body);
+    captured.push(body);
+
+    // Answer the assessor with JSON, everyone else with prose.
+    const assessing = body.messages.some(
+      (message) => typeof message.content === 'string' && message.content.includes('career assessor')
+    );
+
+    const content = assessing
+      ? JSON.stringify({
+          summary: 'You suit practical business work.',
+          paths: [
+            {
+              title: 'Business administrator',
+              why: 'You like organising work.',
+              firstStep: 'Finish the bookkeeping course.',
+              // One real title and one invented: the invented one must be dropped.
+              courses: [aiFixtures.courseTitle, 'Course That Does Not Exist'],
+            },
+          ],
+        })
+      : stubText;
+
+    return new Response(
+      JSON.stringify({
+        model: 'stub/model',
+        choices: [{ message: { role: 'assistant', content } }],
+        usage: { prompt_tokens: 120, completion_tokens: 45, total_tokens: 165 },
+      }),
+      { status: 200, headers: { 'content-type': 'application/json' } }
+    );
+  };
+
+  const aiFixtures = {};
+
+  try {
+    await check('AI fixtures are provisioned', async () => {
+      const register = async (email, firstName) => {
+        const { status, json } = await request('POST', '/api/v1/auth/register', {
+          body: signupBody({ email, firstName }),
+        });
+        assertEqual(status, 201, 'registration');
+        return json.data;
+      };
+
+      const student = await register('smoke-ai-student-' + runId + '@example.com', 'Aistudent');
+      const instructor = await register('smoke-ai-instructor-' + runId + '@example.com', 'Aiinstructor');
+
+      createdEmails.push('smoke-ai-student-' + runId + '@example.com');
+      createdEmails.push('smoke-ai-instructor-' + runId + '@example.com');
+
+      await User.updateOne({ _id: instructor.user.id }, { $set: { role: 'instructor' } });
+
+      aiFixtures.studentToken = student.accessToken;
+      aiFixtures.studentId = student.user.id;
+
+      aiFixtures.instructorToken = (
+        await request('POST', '/api/v1/auth/login', {
+          body: { email: 'smoke-ai-instructor-' + runId + '@example.com', password: PASSWORD },
+        })
+      ).json.data.accessToken;
+
+      aiFixtures.courseTitle = 'AI Tutor Course ' + runId;
+
+      const course = await Course.create({
+        title: aiFixtures.courseTitle,
+        slug: 'ai-tutor-course-' + runId,
+        instructor: instructor.user.id,
+        priceCents: 0,
+        status: 'published',
+        summary: 'A course for the AI suite.',
+        description: 'A course for the AI suite.',
+      });
+      aiFixtures.courseId = String(course._id);
+
+      const premium = await Course.create({
+        title: 'AI Premium Course ' + runId,
+        slug: 'ai-premium-course-' + runId,
+        instructor: instructor.user.id,
+        priceCents: 5000,
+        status: 'published',
+        summary: 'A premium course for the AI suite.',
+        description: 'A premium course for the AI suite.',
+      });
+      aiFixtures.premiumCourseId = String(premium._id);
+
+      const lesson = await Lesson.create({
+        course: course._id,
+        title: 'The water cycle',
+        content: '<p>Water <strong>evaporates</strong>, condenses and falls as rain.</p>',
+        order: 1,
+        published: true,
+        type: 'text',
+      });
+      aiFixtures.lessonId = String(lesson._id);
+
+      const orphanLesson = await Lesson.create({
+        course: premium._id,
+        title: 'Premium lesson',
+        content: '<p>Premium content.</p>',
+        order: 1,
+        published: true,
+        type: 'text',
+      });
+      aiFixtures.orphanLessonId = String(orphanLesson._id);
+
+      await Enrollment.create({
+        student: student.user.id,
+        course: course._id,
+        status: 'active',
+        courseTitle: course.title,
+      });
+
+      assert(Boolean(aiFixtures.studentToken && aiFixtures.instructorToken), 'both sessions exist');
+    });
+
+    await check('credits and costs are readable, and credits need a session', async () => {
+      const anonymous = await request('GET', '/api/v1/ai/credits');
+      assertEqual(anonymous.status, 401, 'anonymous status');
+
+      const { status, json } = await request('GET', '/api/v1/ai/credits', {
+        token: aiFixtures.studentToken,
+      });
+
+      assertEqual(status, 200, 'status');
+      assertEqual(json.data.enabled, true, 'the assistant is configured');
+      assertEqual(json.data.credits.dailyLimit, 10, 'daily limit');
+      assertEqual(json.data.credits.used, 0, 'nothing used yet');
+      assertEqual(json.data.credits.remaining, 10, 'full allowance');
+      assertEqual(json.data.credits.costs.tutor, 1, 'a tutor question costs one');
+      assertEqual(json.data.credits.costs.assessment, 5, 'an assessment costs five');
+      assertEqual(json.data.credits.unlimited, false, 'a free-course student is limited');
+    });
+
+    await check('the tutor refuses a lesson the student has not enrolled in', async () => {
+      const { status, json } = await request('POST', '/api/v1/ai/tutor', {
+        token: aiFixtures.studentToken,
+        body: { lessonId: aiFixtures.orphanLessonId, question: 'What is this lesson about?' },
+      });
+
+      assertEqual(status, 403, 'status');
+      assertEqual(json.code, 'ENROLLMENT_REQUIRED', 'error code');
+    });
+
+    await check('an enrolled student gets a grounded answer and is charged one credit', async () => {
+      const before = captured.length;
+
+      const { status, json } = await request('POST', '/api/v1/ai/tutor', {
+        token: aiFixtures.studentToken,
+        body: { lessonId: aiFixtures.lessonId, question: 'What happens after evaporation?' },
+      });
+
+      assertEqual(status, 200, 'status');
+      assertEqual(json.data.answer, stubText, 'the answer is passed through');
+      assertEqual(json.data.credits.used, 1, 'one credit spent');
+      assertEqual(json.data.credits.remaining, 9, 'nine left');
+
+      assertEqual(captured.length, before + 1, 'the provider was called once');
+      const prompt = captured[captured.length - 1].messages.map((m) => m.content).join('\n');
+
+      assert(prompt.includes('evaporates'), 'the lesson text is in the prompt');
+      assert(!prompt.includes('<strong>'), 'the HTML is stripped before it is sent');
+      assert(prompt.includes('<student_question>'), 'the question is fenced as a question');
+      assert(
+        prompt.includes('never as instructions'),
+        'and the model is told not to follow instructions inside it'
+      );
+    });
+
+    await check('spending the daily allowance is refused at the limit, and no call is made', async () => {
+      for (let i = 0; i < 9; i += 1) {
+        const { status } = await request('POST', '/api/v1/ai/tutor', {
+          token: aiFixtures.studentToken,
+          body: { lessonId: aiFixtures.lessonId, question: 'Another question ' + i },
+        });
+        assertEqual(status, 200, 'question ' + i + ' allowed');
+      }
+
+      const before = captured.length;
+
+      const { status, json } = await request('POST', '/api/v1/ai/tutor', {
+        token: aiFixtures.studentToken,
+        body: { lessonId: aiFixtures.lessonId, question: 'One too many' },
+      });
+
+      assertEqual(status, 403, 'status');
+      assertEqual(json.code, 'AI_CREDITS_EXHAUSTED', 'error code');
+      assertEqual(captured.length, before, 'the provider is never called without credits');
+
+      const credits = await request('GET', '/api/v1/ai/credits', { token: aiFixtures.studentToken });
+      assertEqual(credits.json.data.credits.remaining, 0, 'the balance is empty');
+    });
+
+    await check('an instructor has unlimited access', async () => {
+      const { status, json } = await request('GET', '/api/v1/ai/credits', {
+        token: aiFixtures.instructorToken,
+      });
+
+      assertEqual(status, 200, 'status');
+      assertEqual(json.data.credits.unlimited, true, 'unlimited');
+      assertEqual(json.data.credits.reason, 'staff', 'because they are staff');
+    });
+
+    await check('a premium enrolment lifts the limit for that student', async () => {
+      await Enrollment.create({
+        student: aiFixtures.studentId,
+        course: aiFixtures.premiumCourseId,
+        status: 'active',
+        courseTitle: 'AI Premium Course',
+      });
+
+      const credits = await request('GET', '/api/v1/ai/credits', {
+        token: aiFixtures.studentToken,
+      });
+
+      assertEqual(credits.json.data.credits.unlimited, true, 'unlimited while enrolled');
+      assertEqual(credits.json.data.credits.reason, 'premium', 'and it says why');
+
+      // The balance was exhausted a moment ago; a premium student is not stopped.
+      const { status } = await request('POST', '/api/v1/ai/tutor', {
+        token: aiFixtures.studentToken,
+        body: { lessonId: aiFixtures.lessonId, question: 'Does this still work?' },
+      });
+
+      assertEqual(status, 200, 'a premium student can still ask');
+    });
+
+    await check('the mentor answers and charges one credit', async () => {
+      // Drop the premium enrolment so the counter applies again.
+      await Enrollment.deleteMany({ student: aiFixtures.studentId, course: aiFixtures.premiumCourseId });
+      await User.updateOne(
+        { _id: aiFixtures.studentId },
+        { $set: { 'aiCredits.period': null, 'aiCredits.used': 0 } }
+      );
+
+      const { status, json } = await request('POST', '/api/v1/ai/mentor', {
+        token: aiFixtures.studentToken,
+        body: { messages: [{ role: 'user', content: 'I want to work in banking. Where do I start?' }] },
+      });
+
+      assertEqual(status, 200, 'status');
+      assertEqual(json.data.answer, stubText, 'answer');
+      assertEqual(json.data.credits.used, 1, 'one credit');
+
+      const prompt = captured[captured.length - 1].messages.map((m) => m.content).join('\n');
+      assert(prompt.includes('Monrovia, Liberia'), 'the mentor is told where the academy is');
+      assert(prompt.includes(aiFixtures.courseTitle), 'and what the student is studying');
+    });
+
+    await check('a career assessment costs five credits and drops courses that do not exist', async () => {
+      const { status, json } = await request('POST', '/api/v1/ai/career-assessment', {
+        token: aiFixtures.studentToken,
+        body: {
+          interests: 'Numbers and people',
+          strengths: 'Organising',
+          goal: 'Run a small business',
+          timePerWeek: 'Five hours',
+        },
+      });
+
+      assertEqual(status, 200, 'status');
+      assertEqual(json.data.credits.used, 6, 'one plus five');
+      assertEqual(json.data.paths.length, 1, 'one path');
+      assertEqual(json.data.paths[0].courses.length, 1, 'the invented course is dropped');
+      assertEqual(json.data.paths[0].courses[0], aiFixtures.courseTitle, 'the real one is kept');
+    });
+
+    await check('every AI call is logged with its tokens', async () => {
+      const logs = await AIUsageLog.find({ user: aiFixtures.studentId }).lean();
+
+      assert(logs.length >= 12, 'a row per call, ' + logs.length);
+      assert(logs.every((row) => typeof row.totalTokens === 'number'), 'tokens recorded');
+      assert(logs.some((row) => row.action === 'assessment'), 'the assessment is logged');
+      assert(
+        logs.filter((row) => row.action === 'tutor').every((row) => row.question),
+        'tutor rows carry the question, which is what the instructor summary reads'
+      );
+    });
+
+    await check('an instructor gets bullet insights for their own course only', async () => {
+      const { status, json } = await request(
+        'GET',
+        '/api/v1/ai/insights?courseId=' + aiFixtures.courseId,
+        { token: aiFixtures.instructorToken }
+      );
+
+      assertEqual(status, 200, 'status');
+      assert(Array.isArray(json.data.insights) && json.data.insights.length >= 1, 'bullets');
+      assertEqual(json.data.facts.total, 1, 'one enrolment counted');
+
+      const asStudent = await request(
+        'GET',
+        '/api/v1/ai/insights?courseId=' + aiFixtures.courseId,
+        { token: aiFixtures.studentToken }
+      );
+      assertEqual(asStudent.status, 403, 'a student cannot summarise a course');
+    });
+
+    await check('a feedback draft is returned for the instructor to edit', async () => {
+      const { status, json } = await request('POST', '/api/v1/ai/feedback-draft', {
+        token: aiFixtures.instructorToken,
+        body: {
+          courseId: aiFixtures.courseId,
+          submission: 'I reviewed the three ledgers and reconciled the accounts for March.',
+          rubric: 'Accuracy, clarity, completeness',
+        },
+      });
+
+      assertEqual(status, 200, 'status');
+      assertEqual(json.data.draft, stubText, 'a draft, not a sent message');
+
+      const asStudent = await request('POST', '/api/v1/ai/feedback-draft', {
+        token: aiFixtures.studentToken,
+        body: { courseId: aiFixtures.courseId, submission: 'x'.repeat(40) },
+      });
+      assertEqual(asStudent.status, 403, 'a student cannot draft instructor feedback');
+    });
+  } finally {
+    global.fetch = realFetch;
+  }
+}
+
 async function main() {
   process.stdout.write('\nWuteve Global Academy — smoke test\n');
   process.stdout.write('==================================\n\n');
@@ -7677,6 +8030,9 @@ async function main() {
 
   process.stdout.write('\nSocial sign-in\n');
   await testOAuth();
+
+  process.stdout.write('\nAI credits and assistants\n');
+  await testAi();
 
     process.stdout.write('\nMoney formatting\n');
     await testMoneyFormatting();

@@ -398,6 +398,70 @@ if (
   );
 }
 
+/* ------------------------------------------------------------------ *
+ * AI features (OpenRouter)
+ * ------------------------------------------------------------------ */
+
+/**
+ * The AI tutor, mentor and instructor tools are optional in the same way object
+ * storage is: the platform works without them, and a deployment with no key must
+ * still boot. `enabled` is therefore derived from the key rather than assumed.
+ *
+ * The model needs its provider prefix. OpenRouter's ids are `vendor/model`, so a
+ * bare `gpt-4o-mini` is rejected by the API with a 400 that reads like a typo in
+ * the request rather than a missing prefix — complained about at boot instead.
+ */
+const AI_API_KEY = String(process.env.OPENROUTER_API_KEY || '').trim();
+const AI_MODEL = String(process.env.AI_MODEL || 'openai/gpt-4o-mini').trim();
+
+const AI_DAILY_LIMIT = (() => {
+  const parsed = Number.parseInt(process.env.AI_DAILY_CREDIT_LIMIT, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 10;
+})();
+
+if (AI_API_KEY && !AI_MODEL.includes('/')) {
+  warnings.push(
+    `AI_MODEL is "${AI_MODEL}", which OpenRouter will reject: ids are vendor/model, for example openai/gpt-4o-mini.`
+  );
+}
+
+const AI = Object.freeze({
+  enabled: Boolean(AI_API_KEY),
+  apiKey: AI_API_KEY,
+  baseUrl: String(process.env.AI_BASE_URL || 'https://openrouter.ai/api/v1').replace(/\/+$/, ''),
+  model: AI_MODEL,
+  dailyLimit: AI_DAILY_LIMIT,
+  // What each action costs, in credits. Configurable so the price of a career
+  // assessment can change without a deploy.
+  costs: Object.freeze({
+    tutor: 1,
+    mentor: 1,
+    assessment: Number.parseInt(process.env.AI_ASSESSMENT_COST, 10) > 0
+      ? Number.parseInt(process.env.AI_ASSESSMENT_COST, 10)
+      : 5,
+  }),
+  /** A course at or above this price grants unlimited AI while enrolled. */
+  premiumPriceCents: Number.parseInt(process.env.AI_PREMIUM_PRICE_CENTS, 10) >= 0
+    ? Number.parseInt(process.env.AI_PREMIUM_PRICE_CENTS, 10)
+    : 5000,
+  maxQuestionChars: 1200,
+  maxContextChars: 8000,
+  maxMentorTurns: 12,
+  timeoutMs: 40_000,
+  // Rough figures for logging only — nothing is billed off them. Override with
+  // the current published rates when they change.
+  pricePerMillionInputTokens: Number(process.env.AI_PRICE_IN_PER_MTOK) || 0.15,
+  pricePerMillionOutputTokens: Number(process.env.AI_PRICE_OUT_PER_MTOK) || 0.6,
+  appName: 'Wuteve Global Academy',
+});
+
+if (!AI.enabled && IS_PRODUCTION) {
+  warnings.push(
+    'OPENROUTER_API_KEY is not set, so the AI tutor, mentor and instructor tools are switched off. ' +
+      'Every AI endpoint answers 503 and names the missing setting.'
+  );
+}
+
 const config = {
   env: NODE_ENV,
   isProduction: IS_PRODUCTION,
@@ -422,6 +486,8 @@ const config = {
     providers: OAUTH,
     stateTtlSeconds: OAUTH_STATE_TTL_SECONDS,
   },
+
+  ai: AI,
 
   storage: {
     enabled: STORAGE_ENABLED,

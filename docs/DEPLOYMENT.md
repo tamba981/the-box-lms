@@ -157,6 +157,9 @@ useful for confirming a deploy before DNS has propagated.
 | `OFFLINE_CLASSES`       | The admissions form offers the four study levels built into the code: Foundation, Vocational, Professional and Advanced. Set a comma-separated list here to change them without a deploy |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | Google sign-in stays switched off, and the button falls back to the email form. Both values are needed — see [OAUTH.md](./OAUTH.md) |
 | `LINKEDIN_CLIENT_ID` / `LINKEDIN_CLIENT_SECRET` | The same, for LinkedIn |
+| `OPENROUTER_API_KEY`    | The AI tutor, mentor, assessments and instructor tools are switched off and answer `503 AI_NOT_CONFIGURED`. See [AI.md](./AI.md) |
+| `AI_MODEL`              | Defaults to `openai/gpt-4o-mini`. Must keep its `vendor/` prefix |
+| `AI_DAILY_CREDIT_LIMIT` | Defaults to 10 credits per student per UTC day |
 | `LOG_LEVEL`             | Defaults to `info` in production                                 |
 
 #### `CORS_ORIGINS` and the origin guard
