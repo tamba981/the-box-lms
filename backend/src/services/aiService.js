@@ -56,36 +56,82 @@ function assertEnabled() {
  * which is the arrangement the pricing was designed around: pay for a serious
  * course, keep unlimited AI while you are in it.
  */
+/**
+ * What a student is entitled to, from the courses they are actually in.
+ *
+ * Four tiers, best first:
+ *
+ *   premium      an enrolment at or above AI_PREMIUM_PRICE_CENTS — unlimited
+ *   paid_course  a paid course, or one with a certificate fee — the daily
+ *                allowance, because they have paid for something
+ *   free_course  enrolled, but every course is completely free (no price and no
+ *                certificate fee) — no allowance at all
+ *   no_course    not enrolled in anything — the free allowance, because there is
+ *                no course to tutor on and the mentor is how somebody finds out
+ *                what to take
+ *
+ * `free_course` is the reason a "completely free" course does not also come with
+ * AI: ten questions a day on a course that charges nothing is a cost with no
+ * revenue against it, and the tutor is the most expensive thing the platform
+ * offers.
+ *
+ * Unlimited is computed, never stored, so it cannot go stale when an enrolment
+ * ends. The price lives on the course, and a populated field cannot be filtered
+ * in the query, so the comparison happens here over the few rows a student has.
+ */
 async function accessFor(userId) {
   const user = await User.findById(userId).select('role status email').lean();
   if (!user) throw forbidden('That account could not be found.', { code: 'ACCOUNT_NOT_FOUND' });
 
-  const staff = user.role === 'instructor' || user.role === 'admin';
-
-  /**
-   * The price lives on the course, so the comparison cannot be pushed into the
-   * enrollment query — a populated field is not filterable. One query, resolved
-   * here, is cheaper than a lookup pipeline for a handful of rows.
-   */
-  let premium = null;
-  if (!staff) {
-    const rows = await Enrollment.find({
-      student: user._id,
-      status: { $in: ['active', 'completed'] },
-    })
-      .populate({ path: 'course', select: 'priceCents' })
-      .select('course')
-      .lean();
-
-    premium =
-      rows.find((row) => row.course && row.course.priceCents >= config.ai.premiumPriceCents) || null;
+  if (user.role === 'instructor' || user.role === 'admin') {
+    return { user, unlimited: true, reason: 'staff', dailyLimit: config.ai.dailyLimit, tier: null };
   }
 
-  return {
-    user,
-    unlimited: staff || Boolean(premium),
-    reason: staff ? 'staff' : premium ? 'premium' : null,
-  };
+  const rows = await Enrollment.find({
+    student: user._id,
+    status: { $in: ['active', 'completed'] },
+  })
+    .populate({ path: 'course', select: 'priceCents certificateFeeCents' })
+    .select('course')
+    .lean();
+
+  const priced = rows
+    .map((row) => row.course)
+    .filter(Boolean)
+    .map((course) => ({
+      priceCents: Number(course.priceCents) || 0,
+      certificateFeeCents: Number(course.certificateFeeCents) || 0,
+    }));
+
+  const premium = priced.find((course) => course.priceCents >= config.ai.premiumPriceCents);
+  if (premium) {
+    return { user, unlimited: true, reason: 'premium', dailyLimit: config.ai.dailyLimit, tier: premium };
+  }
+
+  const paid = priced.find(
+    (course) => course.priceCents > 0 || course.certificateFeeCents > 0
+  );
+  if (paid) {
+    return {
+      user,
+      unlimited: false,
+      reason: 'paid_course',
+      dailyLimit: config.ai.dailyLimit,
+      tier: paid,
+    };
+  }
+
+  if (priced.length) {
+    return {
+      user,
+      unlimited: false,
+      reason: 'free_course',
+      dailyLimit: 0,
+      tier: priced[0],
+    };
+  }
+
+  return { user, unlimited: false, reason: 'no_course', dailyLimit: config.ai.dailyLimit, tier: null };
 }
 
 /** The balance a UI can show, without consuming anything. */
@@ -97,12 +143,16 @@ async function creditStatus(userId) {
   const period = stored.period === today() ? stored.period : today();
   const used = stored.period === today() ? stored.used || 0 : 0;
   const bonus = stored.bonus || 0;
-  const limit = config.ai.dailyLimit + bonus;
+
+  // Bonus credits are the only thing that can lift the free-course tier: they
+  // were given or bought deliberately, so the course's price stops deciding.
+  const dailyLimit = access.dailyLimit || 0;
+  const limit = dailyLimit + bonus;
 
   return {
     unlimited: access.unlimited,
     reason: access.reason,
-    dailyLimit: config.ai.dailyLimit,
+    dailyLimit,
     bonus,
     limit,
     used,
@@ -129,6 +179,20 @@ async function consume(userId, action) {
     return { charged: false, credits: 0, unlimited: access.unlimited, action };
   }
 
+  const status = await creditStatus(userId);
+
+  /**
+   * A completely free course has no allowance, and that is a different sentence
+   * from "you have used them all": one is about the plan, the other about today.
+   */
+  if (status.limit === 0) {
+    throw forbidden(
+      'AI tools are not included with a completely free course. Enrolling in a paid course unlocks ' +
+        `${config.ai.dailyLimit} questions a day, and a premium course gives you unlimited access.`,
+      { code: 'AI_PURCHASE_REQUIRED', details: [{ field: 'credits', message: 'No allowance on this plan' }] }
+    );
+  }
+
   const period = today();
 
   await User.updateOne(
@@ -143,7 +207,7 @@ async function consume(userId, action) {
       $expr: {
         $lte: [
           { $add: [{ $ifNull: ['$aiCredits.used', 0] }, cost] },
-          { $add: [config.ai.dailyLimit, { $ifNull: ['$aiCredits.bonus', 0] }] },
+          { $add: [status.dailyLimit, { $ifNull: ['$aiCredits.bonus', 0] }] },
         ],
       },
     },
@@ -152,7 +216,6 @@ async function consume(userId, action) {
   ).lean();
 
   if (!updated) {
-    const status = await creditStatus(userId);
     throw forbidden(
       `You have used all ${status.limit} AI credits for today. They reset at midnight UTC.`,
       {
@@ -167,10 +230,7 @@ async function consume(userId, action) {
     credits: cost,
     unlimited: false,
     action,
-    remaining: Math.max(
-      0,
-      config.ai.dailyLimit + (updated.aiCredits.bonus || 0) - (updated.aiCredits.used || 0)
-    ),
+    remaining: Math.max(0, status.limit - (updated.aiCredits.used || 0)),
   };
 }
 

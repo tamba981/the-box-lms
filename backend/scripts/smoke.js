@@ -7669,16 +7669,60 @@ async function testAi() {
 
       aiFixtures.courseTitle = 'AI Tutor Course ' + runId;
 
+      /**
+       * A paid course, not a free one.
+       *
+       * The tier rule is that a completely free course carries no AI allowance,
+       * so a free fixture would give the test student zero credits and every
+       * tutor assertion below would be testing the refusal instead of the
+       * answer. The free-tier case gets its own student further down.
+       */
       const course = await Course.create({
         title: aiFixtures.courseTitle,
         slug: 'ai-tutor-course-' + runId,
         instructor: instructor.user.id,
-        priceCents: 0,
+        priceCents: 2000,
         status: 'published',
         summary: 'A course for the AI suite.',
         description: 'A course for the AI suite.',
       });
       aiFixtures.courseId = String(course._id);
+
+      // A completely free course: no price and no certificate fee.
+      const freeCourse = await Course.create({
+        title: 'AI Free Course ' + runId,
+        slug: 'ai-free-course-' + runId,
+        instructor: instructor.user.id,
+        priceCents: 0,
+        certificateFeeCents: 0,
+        status: 'published',
+        summary: 'A completely free course for the AI suite.',
+        description: 'A completely free course for the AI suite.',
+      });
+      aiFixtures.freeCourseId = String(freeCourse._id);
+
+      const freeLesson = await Lesson.create({
+        course: freeCourse._id,
+        title: 'A free lesson',
+        content: '<p>Some free lesson text that is long enough to be grounded in.</p>',
+        order: 1,
+        published: true,
+        type: 'text',
+      });
+      aiFixtures.freeLessonId = String(freeLesson._id);
+
+      // A certificate-fee course: free to enrol, but not completely free.
+      const feeCourse = await Course.create({
+        title: 'AI Certificate Fee Course ' + runId,
+        slug: 'ai-fee-course-' + runId,
+        instructor: instructor.user.id,
+        priceCents: 0,
+        certificateFeeCents: 1000,
+        status: 'published',
+        summary: 'A certificate-fee course for the AI suite.',
+        description: 'A certificate-fee course for the AI suite.',
+      });
+      aiFixtures.feeCourseId = String(feeCourse._id);
 
       const premium = await Course.create({
         title: 'AI Premium Course ' + runId,
@@ -7832,7 +7876,91 @@ async function testAi() {
       assertEqual(status, 200, 'a premium student can still ask');
     });
 
-    await check('the mentor answers and charges one credit', async () => {
+    await check('a completely free course carries no AI allowance at all', async () => {
+    // A second student, enrolled only in the free course: no price, no
+    // certificate fee, so no allowance and a distinct refusal.
+    const freeEmail = 'smoke-ai-free-' + runId + '@example.com';
+    const free = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({ email: freeEmail, firstName: 'Aifree' }),
+    });
+
+    createdEmails.push(freeEmail);
+    const freeToken = free.json.data.accessToken;
+
+    await Enrollment.create({
+      student: free.json.data.user.id,
+      course: aiFixtures.freeCourseId,
+      status: 'active',
+      courseTitle: 'AI Free Course',
+    });
+
+    const credits = await request('GET', '/api/v1/ai/credits', { token: freeToken });
+
+    assertEqual(credits.status, 200, 'status');
+    assertEqual(credits.json.data.credits.dailyLimit, 0, 'no daily allowance');
+    assertEqual(credits.json.data.credits.limit, 0, 'no limit either');
+    assertEqual(credits.json.data.credits.unlimited, false, 'and not unlimited');
+    assertEqual(credits.json.data.credits.reason, 'free_course', 'because the course is completely free');
+
+    const before = captured.length;
+
+    const tutor = await request('POST', '/api/v1/ai/tutor', {
+      token: freeToken,
+      body: { lessonId: aiFixtures.freeLessonId, question: 'What is this lesson about?' },
+    });
+
+    assertEqual(tutor.status, 403, 'the tutor is refused');
+    assertEqual(tutor.json.code, 'AI_PURCHASE_REQUIRED', 'with a plan code, not exhaustion');
+    assertEqual(captured.length, before, 'and the provider is never called');
+
+    const mentor = await request('POST', '/api/v1/ai/mentor', {
+      token: freeToken,
+      body: { messages: [{ role: 'user', content: 'Where do I start?' }] },
+    });
+
+    assertEqual(mentor.status, 403, 'the mentor too');
+    assertEqual(mentor.json.code, 'AI_PURCHASE_REQUIRED', 'same code');
+  });
+
+  await check('a course with a certificate fee keeps the daily allowance', async () => {
+    const feeEmail = 'smoke-ai-fee-' + runId + '@example.com';
+    const fee = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({ email: feeEmail, firstName: 'Aifee' }),
+    });
+
+    createdEmails.push(feeEmail);
+
+    await Enrollment.create({
+      student: fee.json.data.user.id,
+      course: aiFixtures.feeCourseId,
+      status: 'active',
+      courseTitle: 'AI Certificate Fee Course',
+    });
+
+    const credits = await request('GET', '/api/v1/ai/credits', {
+      token: fee.json.data.accessToken,
+    });
+
+    assertEqual(credits.json.data.credits.dailyLimit, 10, 'a certificate fee is not nothing');
+    assertEqual(credits.json.data.credits.reason, 'paid_course', 'counts as a paid course');
+  });
+
+  await check('the tutor rejects a two-letter question with a reason the page can show', async () => {
+    // The failure the student actually reported: a short question came back as
+    // "The submitted data is invalid" with nothing to act on. The field message
+    // is what the panel now prints.
+    const { status, json } = await request('POST', '/api/v1/ai/tutor', {
+      token: aiFixtures.studentToken,
+      body: { lessonId: aiFixtures.lessonId, question: 'hi' },
+    });
+
+    assertEqual(status, 400, 'status');
+    assertEqual(json.code, 'VALIDATION_ERROR', 'code');
+    assert(Array.isArray(json.details) && json.details.length > 0, 'the reason is in details');
+    assertEqual(json.details[0].field, 'question', 'and it names the field');
+  });
+
+  await check('the mentor answers and charges one credit', async () => {
       // Drop the premium enrolment so the counter applies again.
       await Enrollment.deleteMany({ student: aiFixtures.studentId, course: aiFixtures.premiumCourseId });
       await User.updateOne(

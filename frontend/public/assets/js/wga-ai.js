@@ -199,15 +199,53 @@
     state.status.credits = credits;
   }
 
+  /**
+   * A sentence for a failed request.
+   *
+   * The API sends the field-level reasons in `details`, and the generic message
+   * on its own — "The submitted data is invalid" — tells the reader nothing
+   * about what to change. This is what turns a 400 into "Type a question first".
+   */
+  function describeError(error) {
+    if (!error) return 'Something went wrong. Please try again.';
+
+    var base = error.message || 'Something went wrong. Please try again.';
+
+    if (Array.isArray(error.details) && error.details.length) {
+      var reasons = error.details
+        .map(function (item) {
+          return item && item.message ? String(item.message) : null;
+        })
+        .filter(Boolean);
+
+      if (reasons.length) {
+        // The action's own message is usually clearer than the envelope's, and
+        // repeating "The submitted data is invalid" above it only adds noise.
+        return error.code === 'VALIDATION_ERROR' ? reasons.join(' ') : base + ' ' + reasons.join(' ');
+      }
+    }
+
+    return base;
+  }
+
   function creditLine(data) {
     if (!data || data.enabled === false) return { text: 'AI is currently unavailable', cls: 'is-empty' };
+
     var credits = data.credits || {};
+
     if (credits.unlimited) {
       return {
         text: 'Unlimited AI access' + (credits.reason === 'premium' ? ' — your course includes it' : ''),
         cls: 'is-unlimited',
       };
     }
+
+    // A completely free course carries no allowance at all, which is not the
+    // same statement as "you have used them all".
+    if (credits.dailyLimit === 0 && !credits.bonus) {
+      return { text: 'AI tools are not included with a free course', cls: 'is-empty', plan: true };
+    }
+
     var left = credits.remaining === null ? '—' : credits.remaining;
     return {
       text: left + ' of ' + credits.limit + ' credits left today',
@@ -292,10 +330,34 @@
 
     var input = host.querySelector('#wga-ai-input');
     var send = host.querySelector('#wga-ai-send');
-    var allowed = data && data.enabled !== false && (data.credits.unlimited || (data.credits.remaining || 0) > 0);
+    var credits = (data && data.credits) || {};
+    var allowed =
+      data &&
+      data.enabled !== false &&
+      (credits.unlimited || (credits.remaining || 0) > 0);
 
     if (input) input.disabled = !allowed;
     if (send) send.disabled = !allowed;
+  }
+
+  /**
+   * The message shown when the plan carries no allowance.
+   *
+   * A completely free course is a different situation from a spent balance: one
+   * is about what was bought, the other about today. The wording offers what
+   * actually exists — a paid or premium course — rather than a "buy credits"
+   * button for a checkout that has not been built.
+   */
+  function planMessage(host) {
+    appendMessage(
+      host,
+      'error',
+      'This course is completely free, and AI tools are not included with it.<br><br>' +
+        'Enrolling in a paid course gives you <strong>10 AI questions a day</strong>; a premium course ' +
+        'gives you <strong>unlimited</strong> access while you are taking it — ' +
+        '<a href="/courses.html">see the catalogue</a>. If you would like to buy credits on their own, ' +
+        '<a href="/contact.html">talk to the academy</a>.'
+    );
   }
 
   /**
@@ -355,7 +417,14 @@
         appendMessage(panel, 'note', config.intro);
       }
 
-      if (!data.credits.unlimited && (data.credits.remaining || 0) <= 0) {
+      var credits = data.credits || {};
+
+      if (!credits.unlimited && credits.dailyLimit === 0 && !credits.bonus) {
+        planMessage(panel);
+        return;
+      }
+
+      if (!credits.unlimited && (credits.remaining || 0) <= 0) {
         exhaustedMessage(panel, config.cost);
       }
     });
@@ -394,6 +463,19 @@
       var question = input.value.trim();
       if (!question) return;
 
+      /**
+       * The same three-character rule the API enforces, checked here first. Not
+       * to replace the server's check — it is the one that counts — but so a
+       * two-letter question is answered with "Type a question first" immediately
+       * instead of arriving back as "The submitted data is invalid", which is
+       * what the reader saw and could do nothing with.
+       */
+      if (question.length < 3) {
+        appendMessage(host, 'error', 'Please write a little more than that — a few words at least.');
+        input.focus();
+        return;
+      }
+
       var send = host.querySelector('#wga-ai-send');
       var cfg = panelConfig || config;
 
@@ -416,6 +498,12 @@
         .catch(function (error) {
           hideTyping(host);
 
+          if (error && error.code === 'AI_PURCHASE_REQUIRED') {
+            planMessage(host);
+            status(true).then(function (data) { paintCredits(host, data); });
+            return;
+          }
+
           if (error && error.code === 'AI_CREDITS_EXHAUSTED') {
             exhaustedMessage(host, cfg.cost);
             status(true).then(function (data) { paintCredits(host, data); });
@@ -427,9 +515,11 @@
             return;
           }
 
-          appendMessage(host, 'error', WGAUI.escapeHtml(error && error.message ? error.message : 'Something went wrong. Please try again.'));
+          appendMessage(host, 'error', WGAUI.escapeHtml(describeError(error)));
         })
         .then(function () {
+          // Re-read the balance rather than assume it: the run-time answer is
+          // what the badge should show, whatever happened.
           input.disabled = false;
           send.disabled = false;
           input.focus();
@@ -444,6 +534,20 @@
   function mountTutor(options) {
     injectStyles();
     if (document.querySelector('.wga-ai-launch')) return;
+
+    /**
+     * The lesson id is the one thing the API cannot guess, and it is the field a
+     * request is most likely to be missing — a syllabus row without an id, or a
+     * page that opened a lesson before it had one, produces a 400 that reads as
+     * "the submitted data is invalid" with nothing to act on. Refusing to mount
+     * is quieter and more honest than offering a button that cannot work.
+     */
+    if (!options || !/^[a-f\d]{24}$/i.test(String(options.lessonId || ''))) {
+      if (window.console && console.warn) {
+        console.warn('[wga-ai] no lesson id, so the tutor was not offered:', options);
+      }
+      return;
+    }
 
     status().then(function (data) {
       if (!data || data.enabled === false) return;
@@ -588,6 +692,29 @@
               'Everything else on your dashboard works as normal.</div>'
           );
         }
+        return;
+      }
+
+      // No allowance at all: hide the inputs rather than let somebody type a
+      // message that the server is going to refuse.
+      var credits = data.credits || {};
+      if (!credits.unlimited && credits.dailyLimit === 0 && !credits.bonus) {
+        var chatForm = scope.querySelector('#wga-ai-dash-form');
+        if (chatForm) chatForm.style.display = 'none';
+        var assess = scope.querySelector('#wga-ai-assess-form');
+        if (assess) assess.style.display = 'none';
+
+        var notice = scope.querySelector('#wga-ai-dash-log');
+        if (notice) {
+          notice.insertAdjacentHTML(
+            'beforeend',
+            '<div class="wga-ai-msg is-error">Your courses are completely free, and AI tools are not ' +
+              'included with them.<br><br>Enrolling in a paid course gives you <strong>10 AI questions a day</strong>; ' +
+              'a premium course gives you <strong>unlimited</strong> access — ' +
+              '<a href="/courses.html">see the catalogue</a>. To buy credits on their own, ' +
+              '<a href="/contact.html">talk to the academy</a>.</div>'
+          );
+        }
       }
     });
 
@@ -651,7 +778,14 @@
           })
           .catch(function (error) {
             typing.remove();
-            if (error && error.code === 'AI_CREDITS_EXHAUSTED') {
+            if (error && error.code === 'AI_PURCHASE_REQUIRED') {
+              addMessage(
+                'error',
+                'AI tools are not included with a completely free course. Enrolling in a paid course ' +
+                  'gives you 10 questions a day, and a premium course gives you unlimited access — ' +
+                  '<a href="/courses.html">see the catalogue</a>.'
+              );
+            } else if (error && error.code === 'AI_CREDITS_EXHAUSTED') {
               addMessage(
                 'error',
                 'You have used all your AI credits for today. They reset at midnight UTC. ' +
@@ -662,7 +796,7 @@
             } else if (error && (error.code === 'AI_NOT_CONFIGURED' || error.status === 503)) {
               addMessage('error', 'The AI mentor is not available right now.');
             } else {
-              addMessage('error', WGAUI.escapeHtml((error && error.message) || 'Something went wrong. Please try again.'));
+              addMessage('error', WGAUI.escapeHtml(describeError(error)));
             }
           })
           .then(function () {
@@ -726,7 +860,11 @@
             }
           })
           .catch(function (error) {
-            if (error && error.code === 'AI_CREDITS_EXHAUSTED') {
+            if (error && error.code === 'AI_PURCHASE_REQUIRED') {
+              result.innerHTML = '<div class="wga-ai-msg is-error" style="max-width:100%;">' +
+                'AI tools are not included with a completely free course. Enrolling in a paid course ' +
+                'unlocks them — <a href="/courses.html">see the catalogue</a>.</div>';
+            } else if (error && error.code === 'AI_CREDITS_EXHAUSTED') {
               result.innerHTML = '<div class="wga-ai-msg is-error" style="max-width:100%;">' +
                 'You need five credits for an assessment and do not have them today. ' +
                 'They reset at midnight UTC, or a premium course gives you unlimited AI.</div>';
@@ -736,7 +874,7 @@
                 'The assessment is not available right now.</div>';
             } else {
               result.innerHTML = '<div class="wga-ai-msg is-error" style="max-width:100%;">' +
-                WGAUI.escapeHtml((error && error.message) || 'Something went wrong. Please try again.') +
+                WGAUI.escapeHtml(describeError(error)) +
                 '</div>';
             }
           })
@@ -862,7 +1000,7 @@
           WGAUI.toast(
             (error && error.code === 'AI_NOT_CONFIGURED')
               ? 'AI drafting is not available on this deployment yet.'
-              : (error && error.message) || 'Could not draft feedback. Please try again.',
+              : describeError(error),
             'error'
           );
         }

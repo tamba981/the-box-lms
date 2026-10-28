@@ -2016,19 +2016,6 @@
 
             WGAAI.injectStyles();
 
-            const courses = (instructorData.courses || []).filter(c => c.id);
-
-            const picker = courses.length
-                ? `<select id="aiInsightsCourse" class="course-picker" style="width:100%;max-width:420px;padding:11px 13px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:500 14px Inter,system-ui,sans-serif;">
-                       ${courses.map(c => `<option value="${WGAUI.escapeHtml(c.id)}">${WGAUI.escapeHtml(c.title)}</option>`).join('')}
-                   </select>
-                   <button class="btn-primary" style="margin-top:12px;" onclick="showInsightsForSelected()">
-                       <i class="fas fa-wand-magic-sparkles"></i> Summarise this course
-                   </button>`
-                : `<p style="margin:0;font-size:13.5px;color:var(--text-light);">
-                       You have no courses yet, so there is nothing to summarise.
-                   </p>`;
-
             return `
                 <div class="section-title"><span>✨ AI Tools</span></div>
 
@@ -2038,7 +2025,9 @@
                         A short summary of where students are stuck, built from their progress and the
                         questions they asked the AI tutor. It uses only figures the platform records.
                     </p>
-                    ${picker}
+                    <div id="aiCoursePickerWrap">
+                        <div style="padding:12px 0;"><div class="loading-spinner"></div></div>
+                    </div>
                 </div>
 
                 <div id="aiInsightsSlot"></div>
@@ -2073,6 +2062,60 @@
             `;
         }
 
+        /**
+         * The course picker, from `/courses/mine`.
+         *
+         * Not from `instructorData.courses`: that payload is the twelve most
+         * recently updated courses, which is right for the overview and wrong
+         * here — an instructor with 47 courses was offered the top of the list
+         * and given no clue the rest existed. `/courses/mine` returns every
+         * course the instructor owns, in any status, so drafts are selectable
+         * too. A summary of a draft with no enrolments is still useful: it says
+         * so rather than refusing.
+         */
+        async function renderAiCoursePicker() {
+            const wrap = document.getElementById('aiCoursePickerWrap');
+            if (!wrap) return;
+
+            let courses = [];
+            try {
+                const data = await WGA.get('/courses/mine?limit=100&page=1');
+                courses = data.items || data.courses || [];
+            } catch (error) {
+                wrap.innerHTML = `<p style="margin:0;font-size:13.5px;color:var(--danger,#b42318);">
+                    ${WGAUI.escapeHtml((error && error.message) || 'Could not load your courses.')}
+                </p>`;
+                return;
+            }
+
+            if (!courses.length) {
+                wrap.innerHTML = `<p style="margin:0;font-size:13.5px;color:var(--text-light);">
+                    You have no courses yet, so there is nothing to summarise.
+                </p>`;
+                return;
+            }
+
+            const label = (c) => {
+                const status = String(c.status || 'draft');
+                const name = c.title || 'Untitled course';
+                return status === 'published'
+                    ? name
+                    : status.charAt(0).toUpperCase() + status.slice(1) + ' — ' + name;
+            };
+
+            wrap.innerHTML = `
+                <select id="aiInsightsCourse" style="width:100%;max-width:460px;padding:11px 13px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);font:500 14px Inter,system-ui,sans-serif;">
+                    ${courses.map(c => `<option value="${WGAUI.escapeHtml(c.id)}">${WGAUI.escapeHtml(label(c))}</option>`).join('')}
+                </select>
+                <p style="margin:8px 0 0;font-size:12px;color:var(--text-light);">
+                    ${courses.length} course${courses.length === 1 ? '' : 's'}, including drafts.
+                </p>
+                <button class="btn-primary" style="margin-top:12px;" onclick="showInsightsForSelected()">
+                    <i class="fas fa-wand-magic-sparkles"></i> Summarise this course
+                </button>
+            `;
+        }
+
         /** Which course the insights card should summarise. */
         window.showInsightsForSelected = function showInsightsForSelected() {
             const select = document.getElementById('aiInsightsCourse');
@@ -2088,6 +2131,8 @@
         };
 
         function bindAiTools(content) {
+            renderAiCoursePicker();
+
             const button = content.querySelector('#aiFeedbackDraftBtn');
             if (!button || !window.WGAAI) return;
 

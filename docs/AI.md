@@ -19,12 +19,36 @@ much any one of them enjoys asking questions.
 
 - **Daily allowance** — `AI_DAILY_CREDIT_LIMIT`, default **10**. Resets at
   midnight **UTC**.
-- **Unlimited** — instructors and administrators always; students while they hold
-  a live enrolment in a course priced at or above `AI_PREMIUM_PRICE_CENTS`
-  (default `5000`, i.e. $50).
 - **Bonus credits** — `aiCredits.bonus` on the user. These do not reset daily, and
   they add to the allowance rather than replacing it. Nothing grants them
-  automatically yet; an administrator or a future payment flow can.
+  automatically yet; an administrator or a future purchase flow can.
+
+### Who gets what
+
+The tier is decided by the courses a student is **actually enrolled in**, best
+first:
+
+| Tier | Condition | Allowance |
+| --- | --- | --- |
+| `staff` | Instructor or administrator | Unlimited |
+| `premium` | Any live enrolment at or above `AI_PREMIUM_PRICE_CENTS` (default 5000) | Unlimited |
+| `paid_course` | Any enrolment with `priceCents > 0` **or** `certificateFeeCents > 0` | 10 a day |
+| `free_course` | Enrolled, but every course is completely free (no price **and** no certificate fee) | **None** |
+| `no_course` | Not enrolled in anything | 10 a day |
+
+`free_course` is the reason a completely free course does not also come with AI:
+ten questions a day on a course that charges nothing is a cost with no revenue
+against it, and the tutor is the most expensive thing the platform offers.
+
+`no_course` keeps the allowance because there is no course to tutor on — the
+mentor is how a new account finds out what to take.
+
+Bonus credits lift a `free_course` account: they were given or bought
+deliberately, so the course price stops deciding. That is the hook a purchased
+bundle would use.
+
+Unlimited is **computed, never stored**, so it cannot go stale when an enrolment
+ends.
 
 Spending is a **single conditional update**: `used` only increases if
 `used + cost <= limit + bonus`, so two tabs cannot spend the same last credit. If
@@ -91,6 +115,7 @@ missing variable; the rest of the platform is unaffected.
 | Code | Status | Meaning |
 | --- | --- | --- |
 | `AI_NOT_CONFIGURED` | 503 | No `OPENROUTER_API_KEY` on this deployment |
+| `AI_PURCHASE_REQUIRED` | 403 | The student's courses are all completely free, so there is no allowance. Credits are not deducted and the provider is not called |
 | `AI_CREDITS_EXHAUSTED` | 403 | Today's allowance is spent; credits are not deducted |
 | `AI_UNREACHABLE` | 503 | The provider could not be contacted; credits are refunded |
 | `AI_PROVIDER_ERROR` | 503 | The provider refused the request; credits are refunded |
