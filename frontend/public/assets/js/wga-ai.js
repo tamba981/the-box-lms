@@ -341,43 +341,222 @@
   }
 
   /**
+   * Buying credits.
+   *
+   * The whole point of this modal is that it can be completed without leaving the
+   * page: read the amount, send it to a number, press one button, and see the
+   * order waiting for an administrator. Nothing here claims the credits are
+   * instant — they arrive when a person has seen the money.
+   */
+  function openBundleModal(onDone) {
+    injectStyles();
+
+    var existing = document.getElementById('wga-ai-bundle');
+    if (existing) existing.remove();
+
+    var host = document.createElement('div');
+    host.id = 'wga-ai-bundle';
+    host.className = 'wga-ai-panel is-open';
+    host.style.zIndex = '2147481700';
+    host.setAttribute('role', 'dialog');
+    host.setAttribute('aria-labelledby', 'wga-ai-bundle-title');
+    host.innerHTML = [
+      '<div class="wga-ai-head">',
+      '<div><h3 id="wga-ai-bundle-title">Buy AI credits</h3>',
+      '<p>Paid by mobile money, added by our team</p></div>',
+      '<button type="button" class="wga-ai-close" aria-label="Close">&times;</button>',
+      '</div>',
+      '<div class="wga-ai-log" id="wga-ai-bundle-body" style="min-height:160px;">',
+      '<div class="wga-ai-typing"><i></i><i></i><i></i></div>',
+      '</div>'
+    ].join('');
+
+    document.body.appendChild(host);
+
+    var body = host.querySelector('#wga-ai-bundle-body');
+
+    function close() {
+      host.remove();
+      if (typeof onDone === 'function') onDone();
+    }
+
+    host.querySelector('.wga-ai-close').addEventListener('click', close);
+    host.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') close();
+    });
+
+    function money(cents, currency) {
+      var symbol = String(currency || 'usd').toLowerCase() === 'usd' ? '$' : '';
+      return symbol + (cents / 100).toFixed(2);
+    }
+
+    function renderOrder(order, offer) {
+      var numbers = (offer.numbers || [])
+        .map(function (number) {
+          return '<li style="margin-bottom:4px;"><strong>' + WGAUI.escapeHtml(number) + '</strong>' +
+            (offer.payTo ? ' — ' + WGAUI.escapeHtml(offer.payTo) : '') + '</li>';
+        })
+        .join('');
+
+      var sent = order.status === 'awaiting_verification';
+
+      body.innerHTML = [
+        '<div class="wga-ai-msg is-ai" style="max-width:100%;">',
+        '<strong style="font-size:20px;">' + money(order.amountCents, order.currency) + '</strong>',
+        ' for <strong>' + order.credits + ' credits</strong>',
+        '<div style="margin-top:10px;">Reference: <strong style="font-family:monospace;font-size:15px;letter-spacing:.06em;">',
+        WGAUI.escapeHtml(order.reference),
+        '</strong></div>',
+        '</div>',
+
+        sent
+          ? '<div class="wga-ai-msg is-note" style="max-width:100%;">Thank you — your order is with our team. ' +
+              'The credits appear on your account once the payment has been checked, usually the same day.</div>'
+          : [
+              '<div class="wga-ai-msg is-ai" style="max-width:100%;">',
+              '<strong>Send ' + money(order.amountCents, order.currency) + ' to:</strong>',
+              '<ul style="margin:8px 0 0;padding-left:18px;">' + numbers + '</ul>',
+              '<p style="margin:10px 0 0;">Use <strong>' + WGAUI.escapeHtml(order.reference) +
+                '</strong> as the payment reference, then press the button below.</p>',
+              '</div>',
+              '<button type="button" class="wga-ai-btn" id="wga-ai-bundle-sent" style="align-self:flex-start;">',
+              '<i class="fas fa-check" aria-hidden="true"></i> I have sent the payment</button>'
+            ].join('')
+      ].join('');
+
+      var sentButton = body.querySelector('#wga-ai-bundle-sent');
+      if (sentButton) {
+        sentButton.addEventListener('click', function () {
+          sentButton.disabled = true;
+          sentButton.innerHTML = '<span class="loading-spinner" style="width:15px;height:15px;"></span> Sending…';
+
+          WGA.post('/ai/bundle/' + encodeURIComponent(order.id) + '/sent', {})
+            .then(function () {
+              if (WGAUI.toast) WGAUI.toast('Thank you — our team will check the payment.', 'success');
+              renderOrder(Object.assign({}, order, { status: 'awaiting_verification' }), offer);
+            })
+            .catch(function (error) {
+              sentButton.disabled = false;
+              sentButton.innerHTML = 'I have sent the payment';
+              if (WGAUI.toast) WGAUI.toast(describeError(error), 'error');
+            });
+        });
+      }
+    }
+
+    function renderOffer(offer) {
+      var numbers = (offer.numbers || [])
+        .map(function (number) { return WGAUI.escapeHtml(number); })
+        .join(' · ');
+
+      body.innerHTML = [
+        '<div class="wga-ai-msg is-ai" style="max-width:100%;">',
+        '<strong style="font-size:20px;">' + offer.credits + ' credits for ' +
+          money(offer.amountCents, offer.currency) + '</strong>',
+        '<p style="margin:8px 0 0;">They sit on top of your daily allowance and do not expire. ' +
+          'One question costs one credit; a career assessment costs five.</p>',
+        '<p style="margin:10px 0 0;font-size:12.5px;opacity:.85;">Payable by mobile money to ' +
+          numbers + '. An administrator adds them once the payment is checked.</p>',
+        '</div>',
+        '<button type="button" class="wga-ai-btn" id="wga-ai-bundle-create" style="align-self:flex-start;">',
+        '<i class="fas fa-arrow-right" aria-hidden="true"></i> Continue</button>'
+      ].join('');
+
+      body.querySelector('#wga-ai-bundle-create').addEventListener('click', function () {
+        var button = this;
+        button.disabled = true;
+        button.innerHTML = '<span class="loading-spinner" style="width:15px;height:15px;"></span> Opening…';
+
+        WGA.post('/ai/bundle', {})
+          .then(function (data) {
+            renderOrder(data.order, data.offer || offer);
+          })
+          .catch(function (error) {
+            button.disabled = false;
+            button.innerHTML = 'Continue';
+            if (WGAUI.toast) WGAUI.toast(describeError(error), 'error');
+          });
+      });
+    }
+
+    WGA.get('/ai/bundle')
+      .then(function (data) {
+        var offer = data.offer || {};
+
+        if (!offer.available) {
+          body.innerHTML =
+            '<div class="wga-ai-msg is-error" style="max-width:100%;">Buying credits is not available ' +
+            'right now. Please <a href="/contact.html">contact the academy</a> and we will sort it out.</div>';
+          return;
+        }
+
+        if (data.open) renderOrder(data.open, offer);
+        else renderOffer(offer);
+      })
+      .catch(function (error) {
+        body.innerHTML =
+          '<div class="wga-ai-msg is-error" style="max-width:100%;">' +
+          WGAUI.escapeHtml(describeError(error)) + '</div>';
+      });
+  }
+
+  /**
    * The message shown when the plan carries no allowance.
    *
    * A completely free course is a different situation from a spent balance: one
-   * is about what was bought, the other about today. The wording offers what
-   * actually exists — a paid or premium course — rather than a "buy credits"
-   * button for a checkout that has not been built.
+   * is about what was bought, the other about today.
    */
   function planMessage(host) {
-    appendMessage(
+    var node = appendMessage(
       host,
       'error',
       'This course is completely free, and AI tools are not included with it.<br><br>' +
         'Enrolling in a paid course gives you <strong>10 AI questions a day</strong>; a premium course ' +
-        'gives you <strong>unlimited</strong> access while you are taking it — ' +
-        '<a href="/courses.html">see the catalogue</a>. If you would like to buy credits on their own, ' +
-        '<a href="/contact.html">talk to the academy</a>.'
+        'gives you <strong>unlimited</strong> access while you are taking it. Or buy a bundle of ' +
+        '<strong>500 credits for $5</strong> that never expires.'
     );
+
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'wga-ai-btn';
+    button.style.cssText = 'align-self:flex-start;margin-top:2px;';
+    button.innerHTML = '<i class="fas fa-bolt" aria-hidden="true"></i> Buy AI credits';
+    button.addEventListener('click', function () {
+      openBundleModal(function () {
+        status(true).then(function (data) { paintCredits(host, data); });
+      });
+    });
+    node.appendChild(button);
   }
 
   /**
    * The message shown when the balance is spent.
    *
-   * It names the two things that actually help — a premium course, which grants
-   * unlimited access, or the academy — rather than offering a "buy credits"
-   * button that would go nowhere yet.
+   * Same offer as the plan message: a bundle, or a premium course. Both are real
+   * destinations, which is the only kind of button worth drawing.
    */
   function exhaustedMessage(host, cost) {
     var credits = (state.status && state.status.credits) || {};
-    appendMessage(
+    var node = appendMessage(
       host,
       'error',
       'You have used all <strong>' + WGAUI.escapeHtml(credits.limit || 10) +
         ' AI credits</strong> for today. They reset at midnight UTC.<br><br>' +
-        'Enrolling in a premium course gives you unlimited AI while you are taking it — ' +
-        '<a href="/courses.html">see the catalogue</a>. For anything else, ' +
-        '<a href="/contact.html">contact the academy</a>.'
+        'You can buy <strong>500 credits for $5</strong> that never expire, or enrol in a premium ' +
+        'course for unlimited AI — <a href="/courses.html">see the catalogue</a>.'
     );
+
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'wga-ai-btn';
+    button.style.cssText = 'align-self:flex-start;margin-top:2px;';
+    button.innerHTML = '<i class="fas fa-bolt" aria-hidden="true"></i> Buy AI credits';
+    button.addEventListener('click', function () {
+      openBundleModal(function () {
+        status(true).then(function (data) { paintCredits(host, data); });
+      });
+    });
+    node.appendChild(button);
   }
 
   function unavailableMessage(host) {
@@ -696,7 +875,7 @@
       }
 
       // No allowance at all: hide the inputs rather than let somebody type a
-      // message that the server is going to refuse.
+      // message that the server is going to refuse, and offer the bundle.
       var credits = data.credits || {};
       if (!credits.unlimited && credits.dailyLimit === 0 && !credits.bonus) {
         var chatForm = scope.querySelector('#wga-ai-dash-form');
@@ -710,10 +889,28 @@
             'beforeend',
             '<div class="wga-ai-msg is-error">Your courses are completely free, and AI tools are not ' +
               'included with them.<br><br>Enrolling in a paid course gives you <strong>10 AI questions a day</strong>; ' +
-              'a premium course gives you <strong>unlimited</strong> access — ' +
-              '<a href="/courses.html">see the catalogue</a>. To buy credits on their own, ' +
-              '<a href="/contact.html">talk to the academy</a>.</div>'
+              'a premium course gives you <strong>unlimited</strong> access. Or buy <strong>500 credits for $5</strong> ' +
+              'that never expire.</div>' +
+              '<button type="button" class="wga-ai-btn" id="wga-ai-dash-buy" style="align-self:flex-start;">' +
+              '<i class="fas fa-bolt" aria-hidden="true"></i> Buy AI credits</button>'
           );
+
+          var buy = scope.querySelector('#wga-ai-dash-buy');
+          if (buy) {
+            buy.addEventListener('click', function () {
+              openBundleModal(function () {
+                /**
+                 * Re-render through the dashboard's own navigation rather than
+                 * reloading the page: clicking the sidebar link it already
+                 * listens on does exactly that, and needs no access to a
+                 * function in another file's scope.
+                 */
+                var link = document.querySelector('.sidebar-link[data-page="mentor"]');
+                if (link) link.click();
+                else window.location.reload();
+              });
+            });
+          }
         }
       }
     });
@@ -1019,6 +1216,7 @@
     mountTutor: mountTutor,
     unmountTutor: unmountTutor,
     openTutor: openPanel,
+    openBundle: openBundleModal,
     mentorPanelHTML: mentorPanelHTML,
     bindMentor: bindMentor,
     insightsHTML: insightsHTML,

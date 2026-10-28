@@ -16,13 +16,14 @@ const express = require('express');
 
 const config = require('../config/env');
 const aiService = require('../services/aiService');
+const aiBilling = require('../services/aiBillingService');
 const Course = require('../models/Course');
 const Enrollment = require('../models/Enrollment');
 const Lesson = require('../models/Lesson');
 const permissions = require('../lib/permissions');
 const logger = require('../lib/logger');
 const { asyncHandler } = require('../lib/asyncHandler');
-const { ok } = require('../lib/respond');
+const { ok, created } = require('../lib/respond');
 const { forbidden, notFound } = require('../lib/errors');
 const { validate } = require('../middleware/validate');
 const { authenticate, requireInstructor } = require('../middleware/auth');
@@ -215,6 +216,75 @@ router.post(
     });
 
     return ok(res, { draft: result.draft });
+  })
+);
+
+/* ------------------------------------------------------------------ *
+ * Buying credits
+ *
+ * A student whose courses are all completely free has no allowance, so the
+ * panel offers the bundle instead. These three routes are the student's half of
+ * the manual flow the academy already runs by hand.
+ * ------------------------------------------------------------------ */
+
+const aiBillingService = require('../services/aiBillingService');
+
+/** GET /api/v1/ai/bundle — the price, the numbers, and any order already open. */
+router.get(
+  '/bundle',
+  authenticate,
+  asyncHandler(async (req, res) => {
+    const offer = aiBillingService.bundleOffer();
+    const orders = await aiBillingService.listMine({ user: req.user });
+
+    const open = orders.find(
+      (order) => order.status === 'pending' || order.status === 'awaiting_verification'
+    );
+
+    return ok(res, { offer, open: open || null, orders });
+  })
+);
+
+/** POST /api/v1/ai/bundle — open an order, or hand back the open one. */
+router.post(
+  '/bundle',
+  authenticate,
+  aiLimiter,
+  validate({ body: schemas.bundleBody }),
+  asyncHandler(async (req, res) => {
+    const result = await aiBillingService.createOrder({
+      user: req.user,
+      payerPhone: req.valid.body.payerPhone || null,
+    });
+
+    return created(
+      res,
+      { order: result.order.toStudentJSON(), offer: aiBillingService.bundleOffer(), reused: result.reused },
+      result.reused ? 'You already have an order open — here it is again.' : 'Order opened.'
+    );
+  })
+);
+
+/** POST /api/v1/ai/bundle/:id/sent — "I have sent the payment". */
+router.post(
+  '/bundle/:id/sent',
+  authenticate,
+  aiLimiter,
+  validate({ params: schemas.orderIdParam, body: schemas.bundleSentBody }),
+  asyncHandler(async (req, res) => {
+    const result = await aiBillingService.markSent({
+      user: req.user,
+      orderId: req.valid.params.id,
+      payerPhone: req.valid.body.payerPhone || null,
+    });
+
+    return ok(
+      res,
+      { order: result.order.toStudentJSON() },
+      result.alreadyPaid
+        ? 'That order has already been confirmed.'
+        : 'Thank you — an administrator will check the payment and add the credits.'
+    );
   })
 );
 

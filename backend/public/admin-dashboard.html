@@ -911,6 +911,7 @@
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="instructor-cvs"><i class="fas fa-file-pdf"></i> Instructor CVs</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="certificates"><i class="fas fa-certificate"></i> Certificates</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="payments"><i class="fas fa-credit-card"></i> Payments</a></li>
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="ai-orders"><i class="fas fa-bolt"></i> AI Credits <span class="badge pending" id="pendingAiOrderCount" style="display:none;margin-left:6px;"></span></a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="reviews"><i class="fas fa-star"></i> Reviews</a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="admissions"><i class="fas fa-user-graduate"></i> Admissions <span class="badge pending" id="pendingAdmissionCount" style="display:none;margin-left:6px;"></span></a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="enquiries"><i class="fas fa-inbox"></i> Enquiries</a></li>
@@ -2293,6 +2294,149 @@
         };
 
         /**
+         * AI credit orders.
+         *
+         * The same shape as the manual course payments queue, deliberately: an
+         * administrator already knows how to read one of these. What is different
+         * is what confirming does — it adds credits to an account rather than
+         * opening a course — so the row says the amount and the credit count
+         * plainly, and the button says "Add credits".
+         */
+        function renderAiOrders() {
+            const tabStyle = (on) => `padding:8px 16px;border-radius:999px;border:1px solid var(--border);cursor:pointer;background:${on ? 'var(--primary)' : 'var(--surface)'};color:${on ? '#fff' : 'var(--text-light)'};font:600 13px Inter,system-ui,sans-serif;`;
+
+            const tabs = ['awaiting_verification', 'pending', 'paid', 'rejected', 'all']
+                .map(status => `<button class="ai-order-tab" data-status="${status}" style="${tabStyle(status === 'awaiting_verification')}" onclick="loadAiOrders('${status}')">${status === 'all' ? 'All' : status === 'awaiting_verification' ? 'To check' : status.charAt(0).toUpperCase() + status.slice(1)}</button>`)
+                .join('');
+
+            return `
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                    <span style="font-size:24px;font-weight:700;">⚡ AI credit orders</span>
+                </div>
+                <p style="margin:0 0 16px;font-size:13.5px;color:var(--text-light);">
+                    Credits are only added when you confirm an order. Check the mobile money account for the
+                    reference before pressing the button.
+                </p>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">${tabs}</div>
+                <div id="aiOrderBody"><div style="text-align:center;padding:40px;"><div class="loading-spinner"></div></div></div>
+            `;
+        }
+
+        function aiOrderRows(items) {
+            if (!items.length) {
+                return `<div class="stat-card glass-premium">
+                    <div class="stat-title">Nothing here</div>
+                    <div style="font-size:14px;color:var(--text-light);margin-top:6px;">
+                        Orders appear here when a student buys AI credits.
+                    </div>
+                </div>`;
+            }
+
+            return `
+                <div class="table-container glass-premium">
+                    <table class="data-table">
+                        <thead><tr><th>Student</th><th>Credits</th><th>Amount</th><th>Reference</th><th>Paid from</th><th>Opened</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            ${items.map(item => {
+                                const student = item.student || {};
+                                const name = [student.firstName, student.lastName].filter(Boolean).join(' ') || 'Unknown';
+                                return `<tr>
+                                    <td>
+                                        <div style="font-weight:600;">${WGAUI.escapeHtml(name)}</div>
+                                        <div style="font-size:12.5px;color:var(--text-light);">${WGAUI.escapeHtml(student.email || '')}</div>
+                                    </td>
+                                    <td>${item.credits}</td>
+                                    <td>${WGAUI.escapeHtml(item.amountLabel || '')}</td>
+                                    <td style="font-family:monospace;font-size:12.5px;">${WGAUI.escapeHtml(item.reference)}</td>
+                                    <td style="font-size:12.5px;">${WGAUI.escapeHtml(item.payerPhone || '—')}</td>
+                                    <td style="font-size:12.5px;">${item.createdAt ? WGAUI.formatDate(item.createdAt) : '—'}</td>
+                                    <td style="white-space:nowrap;">
+                                        ${item.status === 'paid'
+                                            ? '<span style="color:var(--success,#0f7b52);font-weight:600;">Credits added</span>'
+                                            : item.status === 'rejected'
+                                                ? '<span style="color:var(--danger,#b42318);">Declined</span>'
+                                                : `<button class="btn-primary btn-sm" onclick="confirmAiOrder('${item.id}', this)">Add credits</button>
+                                                   <button class="btn-primary btn-outline btn-sm" onclick="rejectAiOrder('${item.id}', this)">Decline</button>`}
+                                    </td>
+                                </tr>`;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        window.loadAiOrders = async function loadAiOrders(status) {
+            document.querySelectorAll('.ai-order-tab').forEach(tab => {
+                const on = tab.dataset.status === status;
+                tab.style.background = on ? 'var(--primary)' : 'var(--surface)';
+                tab.style.color = on ? '#fff' : 'var(--text-light)';
+            });
+
+            const body = document.getElementById('aiOrderBody');
+            if (!body) return;
+
+            body.innerHTML = '<div style="text-align:center;padding:40px;"><div class="loading-spinner"></div></div>';
+
+            try {
+                const data = await WGA.get('/admin/ai-orders?status=' + encodeURIComponent(status || 'awaiting_verification'));
+                body.innerHTML = aiOrderRows(data.items || []);
+
+                const badge = document.getElementById('pendingAiOrderCount');
+                if (badge) {
+                    const awaiting = (data.counts && data.counts.awaiting) || 0;
+                    badge.textContent = awaiting ? String(awaiting) : '';
+                    badge.style.display = awaiting ? 'inline-block' : 'none';
+                }
+            } catch (error) {
+                body.innerHTML = `<div class="stat-card glass-premium"><div class="stat-title">Could not load orders</div><div style="font-size:14px;color:var(--text-light);margin-top:6px;">${WGAUI.escapeHtml(error.message || 'Please try again.')}</div></div>`;
+            }
+        };
+
+        window.confirmAiOrder = async function confirmAiOrder(id, button) {
+            const note = window.prompt('Optional note kept on the order. Leave blank for none.');
+            if (note === null) return;
+
+            if (button) button.disabled = true;
+
+            try {
+                const data = await WGA.patch('/admin/ai-orders/' + encodeURIComponent(id), {
+                    decision: 'approved',
+                    note: note.trim(),
+                });
+                WGAUI.toast(data.message || 'Credits added.', 'success');
+                await loadAiOrders('awaiting_verification');
+            } catch (error) {
+                if (button) button.disabled = false;
+                WGAUI.toast(error.message || 'That order could not be confirmed.', 'error');
+            }
+        };
+
+        window.rejectAiOrder = async function rejectAiOrder(id, button) {
+            const reason = window.prompt('Why is this order not being accepted? The student will see this.');
+            if (reason === null) return;
+
+            if (reason.trim().length < 10) {
+                WGAUI.toast('Give a reason of at least 10 characters.', 'error');
+                return;
+            }
+
+            if (button) button.disabled = true;
+
+            try {
+                const data = await WGA.patch('/admin/ai-orders/' + encodeURIComponent(id), {
+                    decision: 'rejected',
+                    note: reason.trim(),
+                });
+                WGAUI.toast(data.message || 'Order declined.', 'success');
+                await loadAiOrders('awaiting_verification');
+            } catch (error) {
+                if (button) button.disabled = false;
+                WGAUI.toast(error.message || 'That order could not be declined.', 'error');
+            }
+        };
+
+        /**
          * Delete an application outright.
          *
          * Approve and reject keep the record; this removes it, along with the
@@ -2452,6 +2596,9 @@
                 case 'payments':
                     html = renderPayments();
                     break;
+                case 'ai-orders':
+                    html = renderAiOrders();
+                    break;
                 case 'reviews':
                     html = renderReviewsPage();
                     break;
@@ -2485,6 +2632,9 @@
             // Admissions arrive without warning, so the queue is fetched when it is
             // opened rather than counted into the summary at sign-in.
             if (page === 'admissions') await loadAdmissionQueue(state.admissionStatus || 'pending');
+
+            // AI credit orders, same reason: a student can open one at any moment.
+            if (page === 'ai-orders') await loadAiOrders('awaiting_verification');
 
             // Enquiries are fetched on demand too. They arrive without warning, so a
             // count baked into the summary payload at sign-in would be stale by the

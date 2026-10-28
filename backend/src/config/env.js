@@ -448,6 +448,28 @@ const AI = Object.freeze({
   maxContextChars: 8000,
   maxMentorTurns: 12,
   timeoutMs: 40_000,
+
+  /**
+   * The credit bundle a student can buy.
+   *
+   * Credits, not "unlimited for a month": a bundle that never expires is honest
+   * about what was bought and needs no scheduled job to take it away again, and
+   * an expiry job that fails silently would take away access somebody paid for.
+   * 500 credits is roughly fifty tutor questions a day for a month of
+   * heavy use, at about $0.10 of provider cost — priced to be worth it for a
+   * student and still profitable at this scale.
+   */
+  bundle: Object.freeze({
+    credits: Number.parseInt(process.env.AI_BUNDLE_CREDITS, 10) > 0
+      ? Number.parseInt(process.env.AI_BUNDLE_CREDITS, 10)
+      : 500,
+    priceCents: Number.parseInt(process.env.AI_BUNDLE_PRICE_CENTS, 10) > 0
+      ? Number.parseInt(process.env.AI_BUNDLE_PRICE_CENTS, 10)
+      : 500,
+    currency: String(process.env.AI_BUNDLE_CURRENCY || 'usd').toLowerCase(),
+    expiryDays: 7,
+  }),
+
   // Rough figures for logging only — nothing is billed off them. Override with
   // the current published rates when they change.
   pricePerMillionInputTokens: Number(process.env.AI_PRICE_IN_PER_MTOK) || 0.15,

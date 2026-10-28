@@ -1766,4 +1766,69 @@ router.delete(
   })
 );
 
+/* ------------------------------------------------------------------ *
+ * AI credit orders
+ *
+ * The same queue shape as the manual course orders: an administrator reads what
+ * the student claims to have paid, checks the mobile-money account, and confirms.
+ * Credits are added at that moment and nowhere else.
+ * ------------------------------------------------------------------ */
+
+const AICreditOrder = require('../models/AICreditOrder');
+const aiBilling = require('../services/aiBillingService');
+const aiSchemas = require('../validators/ai');
+
+router.get(
+  '/ai-orders',
+  validate({ query: aiSchemas.aiOrderListQuery }),
+  asyncHandler(async (req, res) => {
+    const status = req.valid.query.status;
+
+    const filter = status === 'all' ? {} : { status };
+
+    const [orders, awaiting, paid, rejected] = await Promise.all([
+      AICreditOrder.find(filter)
+        .sort({ createdAt: -1 })
+        .limit(100)
+        .populate({ path: 'student', select: 'firstName lastName email' }),
+      AICreditOrder.countDocuments({ status: 'awaiting_verification' }),
+      AICreditOrder.countDocuments({ status: 'paid' }),
+      AICreditOrder.countDocuments({ status: 'rejected' }),
+    ]);
+
+    return ok(res, {
+      items: orders.map((order) => order.toAdminJSON()),
+      counts: { awaiting, paid, rejected },
+    });
+  })
+);
+
+router.patch(
+  '/ai-orders/:id',
+  writeLimiter,
+  validate({ params: aiSchemas.orderIdParam, body: aiSchemas.aiOrderDecisionBody }),
+  asyncHandler(async (req, res) => {
+    const order = await AICreditOrder.findById(req.valid.params.id);
+    if (!order) throw notFound('That order could not be found.', { code: 'AI_ORDER_NOT_FOUND' });
+
+    const { decision, note } = req.valid.body;
+
+    if (decision === 'approved') {
+      const result = await aiBilling.confirmOrder({ order, adminUser: req.user, notes: note || null });
+
+      return ok(
+        res,
+        { order: result.order.toAdminJSON(), granted: result.granted },
+        result.alreadyDone
+          ? 'That order was already confirmed.'
+          : `${result.granted} credits added to the student's account.`
+      );
+    }
+
+    const rejected = await aiBilling.rejectOrder({ order, adminUser: req.user, reason: note });
+
+    return ok(res, { order: rejected.toAdminJSON() }, 'Order declined.');
+  })
+);
+
 module.exports = router;

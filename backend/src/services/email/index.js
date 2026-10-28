@@ -956,6 +956,47 @@ function admissionRejectedEmail({ application }) {
   };
 }
 
+/* ------------------------------------------------------------------ *
+ * AI credits
+ * ------------------------------------------------------------------ */
+
+/** Confirmation that a purchased bundle has been added to the account. */
+function aiCreditsAddedEmail({ user, order }) {
+  const text = [
+    `Hello ${user.firstName},`,
+    '',
+    `We have received your payment of ${order.amountLabel()} for ${order.credits} AI credits.`,
+    '',
+    `Reference: ${order.reference}`,
+    '',
+    'The credits are on your account now. They sit on top of your daily allowance',
+    'and do not expire, so they are there whenever you need them.',
+    '',
+    'Open any lesson and ask the tutor a question, or talk to the career mentor from',
+    'your dashboard.',
+    '',
+    'Thank you for learning with Wuteve Global Academy.',
+  ].join('\n');
+
+  return {
+    to: user.email,
+    subject: `${order.credits} AI credits added to your account`,
+    text,
+    html: layout({
+      heading: 'Your AI credits are ready',
+      intro: `We have received your payment of ${order.amountLabel()} for ${order.credits} AI credits.`,
+      body: `
+        <p style="margin:0 0 16px;">Reference: <strong>${escapeHtml(order.reference)}</strong></p>
+        <p style="margin:0 0 16px;">The credits are on your account now. They sit on top of your daily
+        allowance and do not expire.</p>
+        <p style="margin:0;">Open any lesson and ask the tutor a question, or talk to the career mentor
+        from your dashboard.</p>`,
+      ctaLabel: 'Open your dashboard',
+      ctaUrl: `${config.publicBaseUrl}/student-dashboard.html`,
+    }),
+  };
+}
+
 module.exports = {
   deliver,
   admissionReceivedEmail,
@@ -974,6 +1015,7 @@ module.exports = {
   courseCompletedEmail,
   manualPaymentSubmittedEmail,
   manualPaymentRejectedEmail,
+  aiCreditsAddedEmail,
   cvSubmittedEmail,
   cvApprovedEmail,
   cvRejectedEmail,

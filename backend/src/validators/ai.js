@@ -50,6 +50,35 @@ const insightsQuery = z.object({
   courseId: objectId('course'),
 });
 
+/* ---- Buying credits ---- */
+
+const orderIdParam = z.object({ id: objectId('order') });
+
+const bundleBody = z.object({
+  payerPhone: z.string().trim().max(40).optional().default(''),
+});
+
+const bundleSentBody = z.object({
+  payerPhone: z.string().trim().max(40).optional().default(''),
+});
+
+/** The admin queue: approve or decline one order. */
+const aiOrderDecisionBody = z
+  .object({
+    decision: z.enum(['approved', 'rejected']),
+    note: z.string().trim().max(500).optional().default(''),
+  })
+  .refine((value) => value.decision !== 'rejected' || value.note.length >= 10, {
+    message: 'Give a reason of at least 10 characters so the student knows why.',
+    path: ['note'],
+  });
+
+const aiOrderListQuery = z.object({
+  status: z.enum(['all', 'pending', 'awaiting_verification', 'paid', 'rejected', 'expired'])
+    .optional()
+    .default('awaiting_verification'),
+});
+
 const feedbackBody = z.object({
   courseId: objectId('course'),
   submission: z
@@ -67,4 +96,9 @@ module.exports = {
   assessmentBody,
   insightsQuery,
   feedbackBody,
+  orderIdParam,
+  bundleBody,
+  bundleSentBody,
+  aiOrderDecisionBody,
+  aiOrderListQuery,
 };

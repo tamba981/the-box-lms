@@ -160,6 +160,7 @@ useful for confirming a deploy before DNS has propagated.
 | `OPENROUTER_API_KEY`    | The AI tutor, mentor, assessments and instructor tools are switched off and answer `503 AI_NOT_CONFIGURED`. See [AI.md](./AI.md) |
 | `AI_MODEL`              | Defaults to `openai/gpt-4o-mini`. Must keep its `vendor/` prefix |
 | `AI_DAILY_CREDIT_LIMIT` | Defaults to 10 credits per student per UTC day |
+| `AI_BUNDLE_CREDITS` / `AI_BUNDLE_PRICE_CENTS` | The bundle a student can buy: defaults 500 credits for $5 |
 | `LOG_LEVEL`             | Defaults to `info` in production                                 |
 
 #### `CORS_ORIGINS` and the origin guard

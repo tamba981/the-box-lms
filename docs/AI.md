@@ -93,6 +93,44 @@ At `openai/gpt-4o-mini` rates, one tutor question (≈500 in, ≈200 out) is abo
 Instructors are unlimited, so their usage is the figure to watch. `AIUsageLog`
 answers that per course and per day.
 
+## Buying credits
+
+A student whose courses are all completely free has no allowance, so the panel
+offers a bundle: **500 credits for $5**, paid by mobile money.
+
+It is deliberately **not a `Payment`**. A payment record requires a course, and
+every reader of it — settlement, enrolment, revenue reporting, the admin queue —
+assumes one. Bending that model would put a conditional in every place that
+trusts it. Credits are bought for an account, so they get their own collection,
+`AICreditOrder`, and the same manual lifecycle the academy already runs by hand.
+
+```
+GET  /api/v1/ai/bundle              the price, the numbers, any open order
+POST /api/v1/ai/bundle              open an order (reuses the open one)
+POST /api/v1/ai/bundle/:id/sent     "I have sent the payment" — a claim
+GET  /api/v1/admin/ai-orders        the queue, for administrators
+PATCH /api/v1/admin/ai-orders/:id   { decision: approved | rejected, note }
+```
+
+Rules that matter:
+
+- **Nothing is granted on the student's word.** `sent` only moves the order into
+  the queue. Credits are added when an administrator confirms, which is the only
+  moment the money and the entitlement are known to agree.
+- **The amount and the credit count are copied onto the order** when it opens.
+  Changing the price later must not change what somebody already owes.
+- **Confirming is idempotent.** A double click cannot buy two bundles: the status
+  and `creditsGranted` move in one conditional update, and only then are the
+  credits added.
+- **One open order at a time**, because two references for one intended payment
+  is two things to reconcile and one likely double charge.
+- Credits land in `aiCredits.bonus`, which does not expire and sits on top of the
+  daily allowance. That is also what lifts a completely free account out of the
+  no-allowance tier.
+
+There is no card checkout for a bundle. The manual flow is the one the academy
+actually runs, and a card path would need a Stripe account Liberia cannot get.
+
 ## Setting it up
 
 Railway → Variables:

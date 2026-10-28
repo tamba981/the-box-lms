@@ -157,6 +157,7 @@ const Course = require('../src/models/Course');
 const Lesson = require('../src/models/Lesson');
 const Enrollment = require('../src/models/Enrollment');
 const AIUsageLog = require('../src/models/AIUsageLog');
+const AICreditOrder = require('../src/models/AICreditOrder');
 const { createApp } = require('../src/app');
 
 const results = [];
@@ -7667,6 +7668,19 @@ async function testAi() {
         })
       ).json.data.accessToken;
 
+      // An administrator, because confirming an order needs one and the AI suite
+      // does not otherwise have a session with that role.
+      const adminEmail = 'smoke-ai-admin-' + runId + '@example.com';
+      const adminUser = await register(adminEmail, 'Aiadmin');
+      createdEmails.push(adminEmail);
+      await User.updateOne({ _id: adminUser.user.id }, { $set: { role: 'admin' } });
+
+      aiFixtures.adminToken = (
+        await request('POST', '/api/v1/auth/login', {
+          body: { email: adminEmail, password: PASSWORD },
+        })
+      ).json.data.accessToken;
+
       aiFixtures.courseTitle = 'AI Tutor Course ' + runId;
 
       /**
@@ -7920,6 +7934,121 @@ async function testAi() {
 
     assertEqual(mentor.status, 403, 'the mentor too');
     assertEqual(mentor.json.code, 'AI_PURCHASE_REQUIRED', 'same code');
+  });
+
+  await check('a student with no allowance can open an order for credits', async () => {
+    const email = 'smoke-ai-buyer-' + runId + '@example.com';
+    const buyer = await request('POST', '/api/v1/auth/register', {
+      body: signupBody({ email, firstName: 'Aibuyer' }),
+    });
+
+    createdEmails.push(email);
+    aiFixtures.buyerToken = buyer.json.data.accessToken;
+    aiFixtures.buyerId = buyer.json.data.user.id;
+
+    // Enrolled in the completely free course, so this student genuinely has no
+    // allowance and the purchase is the only way in.
+    await Enrollment.create({
+      student: buyer.json.data.user.id,
+      course: aiFixtures.freeCourseId,
+      status: 'active',
+      courseTitle: 'AI Free Course',
+    });
+
+    const offer = await request('GET', '/api/v1/ai/bundle', { token: aiFixtures.buyerToken });
+
+    assertEqual(offer.status, 200, 'offer status');
+    assertEqual(offer.json.data.offer.available, true, 'the bundle is on sale');
+    assert(offer.json.data.offer.credits > 0, 'it names a credit count');
+    assert(offer.json.data.offer.amountCents > 0, 'and a price');
+    assertEqual(offer.json.data.open, null, 'nothing open yet');
+
+    const created = await request('POST', '/api/v1/ai/bundle', {
+      token: aiFixtures.buyerToken,
+      body: { payerPhone: '0888025082' },
+    });
+
+    assertEqual(created.status, 201, 'status');
+    assert(/^AI-[A-Z0-9]{6}$/.test(created.json.data.order.reference), 'a readable reference');
+    assertEqual(created.json.data.order.status, 'pending', 'pending until paid');
+    assertEqual(created.json.data.order.credits, offer.json.data.offer.credits, 'credits copied onto the order');
+
+    aiFixtures.orderId = created.json.data.order.id;
+    aiFixtures.orderReference = created.json.data.order.reference;
+
+    const again = await request('POST', '/api/v1/ai/bundle', { token: aiFixtures.buyerToken, body: {} });
+    assertEqual(again.json.data.reused, true, 'a second order reuses the open one');
+    assertEqual(again.json.data.order.id, aiFixtures.orderId, 'the same order');
+  });
+
+  await check('an order grants nothing until an administrator confirms it', async () => {
+    const sent = await request('POST', '/api/v1/ai/bundle/' + aiFixtures.orderId + '/sent', {
+      token: aiFixtures.buyerToken,
+      body: {},
+    });
+
+    assertEqual(sent.status, 200, 'status');
+    assertEqual(sent.json.data.order.status, 'awaiting_verification', 'moved to the queue');
+
+    const credits = await request('GET', '/api/v1/ai/credits', { token: aiFixtures.buyerToken });
+    assertEqual(credits.json.data.credits.bonus, 0, 'no credits from a claim alone');
+
+    const tutor = await request('POST', '/api/v1/ai/tutor', {
+      token: aiFixtures.buyerToken,
+      body: { lessonId: aiFixtures.freeLessonId, question: 'Can I ask now?' },
+    });
+    assertEqual(tutor.status, 403, 'still refused');
+    assertEqual(tutor.json.code, 'AI_PURCHASE_REQUIRED', 'for the same reason');
+  });
+
+  await check('only an administrator can confirm, and confirming adds the credits once', async () => {
+    const asStudent = await request('PATCH', '/api/v1/admin/ai-orders/' + aiFixtures.orderId, {
+      token: aiFixtures.buyerToken,
+      body: { decision: 'approved' },
+    });
+
+    assertEqual(asStudent.status, 403, 'a student cannot approve their own order');
+
+    const confirmed = await request('PATCH', '/api/v1/admin/ai-orders/' + aiFixtures.orderId, {
+      token: aiFixtures.instructorToken,
+      body: { decision: 'approved', note: 'Seen in the MoMo statement.' },
+    });
+
+    assertEqual(confirmed.status, 403, 'nor an instructor');
+
+    const admin = await request('PATCH', '/api/v1/admin/ai-orders/' + aiFixtures.orderId, {
+      token: aiFixtures.adminToken,
+      body: { decision: 'approved', note: 'Seen in the MoMo statement.' },
+    });
+
+    assertEqual(admin.status, 200, 'status');
+    assertEqual(admin.json.data.order.status, 'paid', 'marked paid');
+
+    const credits = await request('GET', '/api/v1/ai/credits', { token: aiFixtures.buyerToken });
+    assertEqual(credits.json.data.credits.bonus, admin.json.data.order.credits, 'the credits landed');
+
+    // A second click must not buy another bundle.
+    const twice = await request('PATCH', '/api/v1/admin/ai-orders/' + aiFixtures.orderId, {
+      token: aiFixtures.adminToken,
+      body: { decision: 'approved' },
+    });
+    assertEqual(twice.status, 200, 'idempotent');
+    assertEqual(twice.json.data.granted, 0, 'nothing granted the second time');
+
+    const after = await request('GET', '/api/v1/ai/credits', { token: aiFixtures.buyerToken });
+    assertEqual(after.json.data.credits.bonus, credits.json.data.credits.bonus, 'the balance is unchanged');
+  });
+
+  await check('with credits bought, the tutor answers', async () => {
+    const { status, json } = await request('POST', '/api/v1/ai/tutor', {
+      token: aiFixtures.buyerToken,
+      body: { lessonId: aiFixtures.freeLessonId, question: 'Can I ask now that I have bought credits?' },
+    });
+
+    assertEqual(status, 200, 'status');
+    assertEqual(json.data.answer, stubText, 'an answer');
+    assertEqual(json.data.credits.used, 1, 'one credit spent');
+    assert(json.data.credits.bonus > 0, 'drawn from the purchased balance');
   });
 
   await check('a course with a certificate fee keeps the daily allowance', async () => {
