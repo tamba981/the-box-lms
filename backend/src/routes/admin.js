@@ -1861,21 +1861,27 @@ router.post(
     if (!target) throw notFound('That account could not be found.', { code: 'USER_NOT_FOUND' });
 
     /**
+     * Yourself first, so the answer is precise.
+     *
+     * An administrator is also an administrator, so with the role check first
+     * this case was reported as "administrator accounts cannot be opened this
+     * way" — true, but about the wrong thing.
+     */
+    if (String(target._id) === String(req.user._id)) {
+      throw badRequest('You are already signed in as yourself.', { code: 'SELF_IMPERSONATION' });
+    }
+
+    /**
      * Another administrator is refused.
      *
      * Not because it is technically harder, but because an impersonated admin
      * session can do everything an admin can while every record says a different
-     * name. Support conversations are about students and instructors; if an
-     * administrator needs another's account there is a password reset for that.
+     * name. Support conversations are about students and instructors.
      */
     if (target.role === 'admin') {
       throw forbidden('Administrator accounts cannot be opened this way.', {
         code: 'CANNOT_IMPERSONATE_ADMIN',
       });
-    }
-
-    if (String(target._id) === String(req.user._id)) {
-      throw badRequest('You are already signed in as yourself.', { code: 'SELF_IMPERSONATION' });
     }
 
     if (target.status !== 'active') {
