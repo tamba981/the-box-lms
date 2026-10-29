@@ -337,20 +337,14 @@ function prepare(course) {
   });
 
   /**
-   * The first lesson is readable without enrolling.
+   * No lesson is marked as a preview here, deliberately.
    *
-   * `isPreview` existed in the model, the API and the course page, and nothing
-   * ever set it, so the branch that releases a lesson to a visitor was
-   * unreachable: every syllabus row was locked and "read a lesson before you
-   * enrol" could not happen. The flag is set here rather than left to whoever
-   * writes the next course, because a catalogue with no previews was the
-   * default outcome of leaving it out.
+   * Making a lesson readable without enrolling is a decision about access, and
+   * access belongs to the instructor who wrote the course: they tick "Free
+   * preview — anyone can open this lesson without paying" on the lesson they want
+   * to give away, or they give away nothing. Marking lesson one on their behalf
+   * would hand out content they had not chosen to publish freely.
    */
-  if (lessons.length === 0) {
-    throw new Error(`${course.slug}: a course needs at least one lesson to preview`);
-  }
-  lessons[0].isPreview = true;
-
   const words = lessons.reduce((total, lesson) => total + lesson.words, 0);
 
   return {
@@ -542,10 +536,6 @@ function report(prepared, { manifest, filtered }) {
   out.push(`  words per course   ${Math.round(words / prepared.length).toLocaleString('en-US')} average · ${shortest.words.toLocaleString('en-US')} shortest (${shortest.title}) · ${longest.words.toLocaleString('en-US')} longest (${longest.title})`);
   out.push(`  quizzes            ${prepared.length}`);
   out.push(`  quiz questions     ${questions}`);
-  const previews = prepared.filter((course) => course.lessons.some((lesson) => lesson.isPreview));
-  out.push(
-    `  preview lessons    ${previews.length} of ${prepared.length} courses — the first lesson, readable without enrolling`
-  );
   out.push('');
 
   out.push('Handwritten');
@@ -650,7 +640,6 @@ async function commit(prepared, { publish, force }) {
           order: index + 1,
           durationMinutes: lesson.minutes,
           published: true,
-          isPreview: Boolean(lesson.isPreview),
         })
       );
     }
@@ -682,7 +671,6 @@ async function commit(prepared, { publish, force }) {
       slug: course.slug,
       created,
       lessons: created_lessons.length,
-      preview: created_lessons[0] ? created_lessons[0].title : null,
       removedLessons: removedLessons.deletedCount,
       removedQuizzes: removedQuizzes.deletedCount,
       status: document.status,
@@ -758,8 +746,7 @@ async function main() {
         (item) =>
           `  ${item.created ? 'created' : 'updated'}  ${pad(item.slug, 50)} ${item.lessons} lessons · ` +
           `${item.words.toLocaleString('en-US')} words · ${item.status}` +
-          (item.removedLessons ? ` (replaced ${item.removedLessons} lessons, ${item.removedQuizzes} quizzes)` : '') +
-          (item.preview ? `\n      preview: ${item.preview}` : '')
+          (item.removedLessons ? ` (replaced ${item.removedLessons} lessons, ${item.removedQuizzes} quizzes)` : '')
       ),
       '',
     ].join('\n')
