@@ -108,15 +108,32 @@ async function main() {
   const width = rows.reduce((max, row) => Math.max(max, row.slug.length), 0);
   const changed = rows.filter((row) => row.action === 'marked' || row.action === 'would mark');
 
+  /**
+   * Read the flag back out of the database rather than trusting the writes.
+   *
+   * The failure this guards against is not a rejected update — it is a run that
+   * looked like it worked and did not. The first time this was run, the output
+   * that came back was a deploy log from somewhere else, and nothing said
+   * whether the flag had been written. A count taken from the database after the
+   * fact is the only answer that settles it, and it costs one query.
+   */
+  let verified = null;
+
+  if (shouldCommit && changed.length > 0) {
+    verified = await Lesson.countDocuments({ isPreview: true });
+  }
+
   process.stdout.write(
     [
       '',
-      shouldCommit ? 'Marking a preview lesson per course.' : 'Dry run — nothing was written.',
+      shouldCommit ? 'Marked a preview lesson per course.' : 'Dry run — nothing was written.',
       '',
       ...rows.map((row) => `  ${pad(row.slug, width)}  ${pad(row.action, 11)} ${row.detail}`),
       '',
       `${changed.length} course(s) ${shouldCommit ? 'changed' : 'would change'} of ${courses.length}.`,
-      shouldCommit ? '' : 'Re-run with --commit to write.',
+      shouldCommit
+        ? `Read back from the database: ${verified} lesson(s) are now marked as preview.`
+        : 'Re-run with --commit to write.',
       '',
     ].join('\n')
   );
