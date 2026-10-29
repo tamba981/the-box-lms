@@ -562,6 +562,15 @@
   <meta name="twitter:title" content="Course · Wuteve Global Academy" />
   <meta name="twitter:description" content="Course details, syllabus and enrolment." />
   <meta name="twitter:image" content="https://wuteveglobalacademy.com/Images/hero/hero-poster.jpg" />
+
+<!-- Installable app: the manifest supplies the name and icons, the meta tags
+     below are what iOS reads, because Safari ignores most of the manifest. -->
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Wuteve" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="application-name" content="Wuteve Global Academy" />
 </head>
 <body>
   <header class="wga-header">
@@ -586,7 +595,7 @@
   </main>
 
   <script src="/assets/js/wga-api.js?v=20261021"></script>
-  <script src="/assets/js/wga-ui.js?v=20261034"></script>
+  <script src="/assets/js/wga-ui.js?v=20261036"></script>
   <!-- The AI panel is only needed once a lesson is open, so the module is loaded
        from that moment rather than on every course page view. -->
   <script src="/assets/js/wga-ai.js?v=20261034"></script>

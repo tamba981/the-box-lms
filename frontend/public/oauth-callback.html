@@ -9,6 +9,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="/assets/css/wga-shell.css?v=20261031" />
+
+<!-- Installable app: the manifest supplies the name and icons, the meta tags
+     below are what iOS reads, because Safari ignores most of the manifest. -->
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Wuteve" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="application-name" content="Wuteve Global Academy" />
 </head>
 <body>
   <header class="wga-header">
@@ -34,7 +43,7 @@
   </main>
 
   <script src="/assets/js/wga-api.js?v=20261021"></script>
-  <script src="/assets/js/wga-ui.js?v=20261034"></script>
+  <script src="/assets/js/wga-ui.js?v=20261036"></script>
   <script>
     /* ------------------------------------------------------------------ *
      * The landing point of a social sign-in.

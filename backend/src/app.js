@@ -246,6 +246,12 @@ app.use('/api/v1/avatars', avatarRoutes);
            * dashboard's setup, before its error handler existed, and left the
            * loading state on screen forever.
            *
+           * The manifest joins them: it names these very icon files, so a
+           * week-long copy of it would keep pointing at an old icon after a
+           * rebrand. `sw.js` is already covered by the `.js` rule, and that
+           * matters more than the rest — a service worker served from cache
+           * never updates itself.
+           *
            * A revalidation is a conditional request answered 304, a couple of
            * hundred bytes. The whole of these assets is under 40 KB; correctness
            * is worth more than the round trip.
@@ -254,7 +260,7 @@ app.use('/api/v1/avatars', avatarRoutes);
            * hard. If a versioned URL is ever introduced, scripts can move back
            * to `immutable`.
            */
-          if (/\.(html|js|css)$/i.test(filePath)) {
+          if (/\.(html|js|css|webmanifest)$/i.test(filePath)) {
             res.setHeader('Cache-Control', 'no-cache, must-revalidate');
           } else {
             res.setHeader('Cache-Control', 'public, max-age=604800, immutable');

@@ -7532,6 +7532,85 @@ async function testOAuth() {
     assert(source.includes('translate.google.com'), 'loads the translator');
   });
 
+  /**
+   * The installable-app files.
+   *
+   * These are not decoration: without a manifest the site cannot be installed,
+   * and without a service worker with a fetch handler Chrome will not offer it
+   * at all. The content types matter more than they look — iOS ignores a
+   * manifest served as `text/plain`, and a `sw.js` served from cache never
+   * updates itself, which is how a service worker silently pins an old version
+   * of a site forever.
+   */
+  await check('the site is installable: a manifest every page points at', async () => {
+    const response = await fetch(baseUrl + '/manifest.webmanifest');
+    assertEqual(response.status, 200, 'manifest status');
+    assert(
+      String(response.headers.get('content-type')).includes('manifest+json'),
+      'served as application/manifest+json, not text/plain'
+    );
+
+    const manifest = await response.json();
+    assertEqual(manifest.short_name, 'Wuteve', 'short name');
+    assertEqual(manifest.display, 'standalone', 'opens without browser chrome');
+    assert(manifest.start_url, 'has a start_url');
+    assert(
+      manifest.icons.some((icon) => icon.sizes === '192x192' && icon.purpose === 'any'),
+      'has the 192px icon Chrome requires'
+    );
+    assert(
+      manifest.icons.some((icon) => icon.sizes === '512x512' && icon.purpose === 'maskable'),
+      'has a maskable icon so Android does not crop the emblem'
+    );
+
+    for (const icon of manifest.icons) {
+      const head = await request('GET', icon.src);
+      assertEqual(head.status, 200, `icon ${icon.src}`);
+    }
+  });
+
+  await check('every page offers the install button and the iOS tags', async () => {
+    const fs = require('fs');
+    const path = require('path');
+    const root = path.join(__dirname, '..', 'public');
+
+    const pages = fs.readdirSync(root).filter((name) => name.endsWith('.html') && name !== 'offline.html');
+    assert(pages.length >= 20, 'the public directory still holds the pages');
+
+    const missingManifest = pages.filter(
+      (name) => !fs.readFileSync(path.join(root, name), 'utf8').includes('rel="manifest"')
+    );
+    assertEqual(missingManifest.join(', '), '', 'pages with no manifest link');
+
+    // Safari ignores most of the manifest, so the icon has to be declared here.
+    const missingApple = pages.filter(
+      (name) => !fs.readFileSync(path.join(root, name), 'utf8').includes('apple-touch-icon')
+    );
+    assertEqual(missingApple.join(', '), '', 'pages with no iOS home-screen icon');
+
+    const missingLoader = pages.filter(
+      (name) => !fs.readFileSync(path.join(root, name), 'utf8').includes('/assets/js/wga-ui.js')
+    );
+    assertEqual(missingLoader.join(', '), '', 'pages that would have no install button');
+  });
+
+  await check('the service worker is served fresh, never from cache', async () => {
+    const response = await fetch(baseUrl + '/sw.js');
+    assertEqual(response.status, 200, 'status');
+    assert(
+      String(response.headers.get('cache-control')).includes('no-cache'),
+      'a cached service worker could never update itself'
+    );
+
+    const source = await response.text();
+    assert(source.includes("addEventListener('fetch'"), 'Chrome requires a fetch handler to offer install');
+    assert(source.includes('/api/'), 'knows to leave the API alone');
+    // The one rule that must never regress: cached API responses would show a
+    // student someone else's balance, or a lesson they have not paid for.
+    assert(/isUntouchable/.test(source), 'has an explicit never-cache list');
+    assert(source.includes('offline.html'), 'falls back to a real page, not a blank error');
+  });
+
   await check('every page that offers an AI tool loads the module, and none leak the key', async () => {
     const fs = require('fs');
     const path = require('path');

@@ -851,18 +851,22 @@
   })();
 
   /**
-   * The cookie notice and the language control live in their own file and are
-   * requested from here, because every page already loads this one. That is 24
-   * HTML documents that would otherwise each need two more script tags, and a
-   * page added later gets both without anyone remembering.
+   * The cookie notice, the language control and the install button live in their
+   * own files and are requested from here, because every page already loads this
+   * one. That is 24 HTML documents that would otherwise each need more script
+   * tags, and a page added later gets all of them without anyone remembering.
    */
   (function loadExtras() {
     if (window.__wgaExtrasRequested) return;
     window.__wgaExtrasRequested = true;
 
-    var script = document.createElement('script');
-    script.src = '/assets/js/wga-consent.js?v=20261028';
-    script.defer = true;
-    document.head.appendChild(script);
+    ['/assets/js/wga-consent.js?v=20261029', '/assets/js/wga-install.js?v=20261029'].forEach(
+      function (src) {
+        var script = document.createElement('script');
+        script.src = src;
+        script.defer = true;
+        document.head.appendChild(script);
+      }
+    );
   })();
 })(window);

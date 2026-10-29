@@ -33,6 +33,15 @@
     textarea.wga-input { min-height: 92px; resize: vertical; font-family: inherit; line-height: 1.55; }
     .bi-file { display: block; width: 100%; padding: 12px; border: 1px dashed var(--border); border-radius: 10px; background: transparent; color: inherit; }
   </style>
+
+<!-- Installable app: the manifest supplies the name and icons, the meta tags
+     below are what iOS reads, because Safari ignores most of the manifest. -->
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Wuteve" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="application-name" content="Wuteve Global Academy" />
 </head>
 <body>
   <header class="wga-header">
@@ -190,7 +199,7 @@
   </footer>
 
   <script src="/assets/js/wga-api.js?v=20261021"></script>
-  <script src="/assets/js/wga-ui.js?v=20261034"></script>
+  <script src="/assets/js/wga-ui.js?v=20261036"></script>
   <script>
     (function () {
       'use strict';

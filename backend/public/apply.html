@@ -166,6 +166,15 @@
   body.dark-mode .status-pill.rejected { background: #2d1614; border-color: #5a2a24; color: #f7a7a0; }
   body.dark-mode .status-pill.pending { background: #2b2110; border-color: #55411d; color: #f0c46b; }
 </style>
+
+<!-- Installable app: the manifest supplies the name and icons, the meta tags
+     below are what iOS reads, because Safari ignores most of the manifest. -->
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Wuteve" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="application-name" content="Wuteve Global Academy" />
 </head>
 <body>
 
@@ -524,7 +533,7 @@
 </footer>
 
 <script src="/assets/js/wga-api.js?v=20261021"></script>
-<script src="/assets/js/wga-ui.js?v=20261034"></script>
+<script src="/assets/js/wga-ui.js?v=20261036"></script>
 <script src="/assets/js/wga-public.js?v=20261021"></script>
 <script>
   (function () {

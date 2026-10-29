@@ -1,0 +1,59 @@
+{
+  "id": "/?source=pwa",
+  "name": "Wuteve Global Academy",
+  "short_name": "Wuteve",
+  "description": "Practical, career-focused courses from Wuteve Global Academy. Learn online at your own pace and earn a verifiable certificate.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#0a1628",
+  "theme_color": "#0a1628",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Browse courses",
+      "short_name": "Courses",
+      "description": "See the full catalogue",
+      "url": "/courses.html?source=pwa",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "My learning",
+      "short_name": "Dashboard",
+      "description": "Continue where you left off",
+      "url": "/student-dashboard.html?source=pwa",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Visit the academy",
+      "short_name": "About",
+      "description": "What Wuteve Global Academy offers",
+      "url": "/index.html?source=pwa",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

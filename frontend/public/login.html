@@ -525,6 +525,15 @@
   <!-- Not a page to be found by accident: signed-in areas and pages that
        only exist to carry a one-time token. -->
   <meta name="robots" content="noindex, follow" />
+
+<!-- Installable app: the manifest supplies the name and icons, the meta tags
+     below are what iOS reads, because Safari ignores most of the manifest. -->
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="Wuteve" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="application-name" content="Wuteve Global Academy" />
 </head>
 <body>
 
@@ -737,7 +746,7 @@
     </div>
 
     <script src="/assets/js/wga-api.js?v=20261021"></script>
-    <script src="/assets/js/wga-ui.js?v=20261034"></script>
+    <script src="/assets/js/wga-ui.js?v=20261036"></script>
     <script>
         // ============================================================
         //  API CONFIG & HELPERS

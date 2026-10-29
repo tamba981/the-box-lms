@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>You are offline · Wuteve Global Academy</title>
+  <meta name="robots" content="noindex" />
+  <meta name="theme-color" content="#0a1628" />
+  <link rel="icon" href="/icons/icon-192.png" />
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 28px;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: radial-gradient(circle at 30% 20%, #14305c 0%, #0a1628 55%, #060d18 100%);
+      color: #e7eefb;
+    }
+    main { max-width: 460px; text-align: center; }
+    img { width: 84px; height: 84px; border-radius: 20px; margin-bottom: 22px; }
+    h1 { font-size: 1.5rem; margin: 0 0 10px; letter-spacing: -0.01em; }
+    p { margin: 0 0 10px; color: #9fb0c9; line-height: 1.65; font-size: 0.95rem; }
+    ul { text-align: left; margin: 18px 0 0; padding-left: 20px; color: #9fb0c9; font-size: 0.9rem; line-height: 1.7; }
+    .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
+    button, a.btn {
+      appearance: none; border: 0; border-radius: 10px; padding: 12px 22px; cursor: pointer;
+      font: 600 14px 'Inter', system-ui, sans-serif; text-decoration: none; display: inline-block;
+    }
+    .primary { background: #d4a547; color: #0a1628; }
+    .quiet { background: transparent; color: #e7eefb; border: 1px solid #334155; }
+    .tips { margin-top: 26px; padding-top: 20px; border-top: 1px solid #1f2c40; }
+  </style>
+</head>
+<body>
+  <main>
+    <img src="/icons/icon-192.png" alt="" width="84" height="84" />
+    <h1>No connection</h1>
+    <p>
+      This page has not been saved on your device, so it cannot be opened while you
+      are offline. Everything you had already opened will still be there.
+    </p>
+    <ul>
+      <li>Check your mobile data or Wi-Fi.</li>
+      <li>Try again once you have a signal.</li>
+      <li>Pages you have visited recently open from the saved copy.</li>
+    </ul>
+
+    <div class="row">
+      <button class="primary" type="button" onclick="location.reload()">Try again</button>
+      <a class="btn quiet" href="/index.html">Go to the homepage</a>
+    </div>
+
+    <div class="tips">
+      <p style="font-size:0.85rem;margin:0;">
+        Installed the app? Opening it from your home screen keeps the last pages you
+        read available even without a signal.
+      </p>
+    </div>
+  </main>
+</body>
+</html>
