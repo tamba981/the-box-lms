@@ -59,6 +59,46 @@
     body.dark-mode .lesson-row .tag.tag-preview { color: var(--dark-link); }
     .lesson-row.done .num { background: rgba(16,185,129,.16); color: #047857; }
 
+    /* ---- The free-lesson invitation ----------------------------------- *
+     * Sits above the syllabus and names the lesson that opens without
+     * enrolling. Tokens only, so it follows both themes.
+     * -------------------------------------------------------------------- */
+    .preview-invite {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 16px 18px;
+      margin-bottom: 22px;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--gold);
+      border-radius: 14px;
+      /* Not var(--bg-light): that token exists on the dashboards and the public
+         pages but not in wga-shell.css, which is what this page loads, so the
+         card would have had a transparent background. */
+      background: rgba(26, 86, 219, 0.06);
+      color: var(--text);
+    }
+    body.dark-mode .preview-invite {
+      border-color: var(--dark-border);
+      border-left-color: var(--gold);
+      background: rgba(212, 165, 71, .08);
+      color: var(--dark-text);
+    }
+    .preview-invite > i {
+      color: var(--gold);
+      font-size: 18px;
+      flex: none;
+    }
+    .preview-invite-text { flex: 1; min-width: 220px; font-size: 14px; line-height: 1.55; }
+    .preview-invite-text strong { display: block; font-size: 15px; margin-bottom: 2px; }
+    .preview-invite .wga-btn { flex: none; white-space: nowrap; padding: 10px 18px; }
+    /* wga-shell.css ends up with a ghost-button border of rgba(255,255,255,.7),
+       which is invisible on a light card. The invitation is the one thing on the
+       page that should look pressable, so it gets the brand colour. */
+    .preview-invite .wga-btn { border-color: var(--primary); color: var(--primary); }
+    body.dark-mode .preview-invite .wga-btn { border-color: var(--dark-link); color: var(--dark-link); }
+
     /* ---- Lesson viewer ------------------------------------------------ *
      * One lesson at a time, opened in place above the syllabus. Opening in
      * place rather than navigating keeps the syllabus where the reader left
@@ -620,6 +660,41 @@
        * they may not open stays a plain div rather than a button that silently
        * does nothing.
        */
+      /**
+       * Says out loud which lesson can be read for free.
+       *
+       * The Preview chip is only visible to somebody who has already scrolled
+       * the syllabus looking for it, and it does not explain itself. This is the
+       * invitation: it names the lesson, sits above the list, and is a button
+       * that opens the lesson in place — no enrolment, no sign-in.
+       *
+       * Shown only when it can be honoured: a preview lesson exists, and the
+       * reader cannot already read everything (an enrolled student would find
+       * it noise).
+       */
+      function previewBanner(syllabus, access) {
+        if (!access || access.canReadContent) return '';
+
+        var preview = syllabus.filter(function (lesson) {
+          return lesson.isPreview;
+        })[0];
+
+        if (!preview) return '';
+
+        return (
+          '<div class="preview-invite" role="note">' +
+            '<i class="fas fa-unlock" aria-hidden="true"></i>' +
+            '<div class="preview-invite-text">' +
+              '<strong>Read the first lesson free.</strong> ' +
+              WGAUI.escapeHtml(preview.title) +
+              ' opens without enrolling — it is the same lesson an enrolled student reads.' +
+            '</div>' +
+            '<button type="button" class="wga-btn wga-btn-ghost" data-open-preview="' +
+              WGAUI.escapeHtml(String(preview.id)) + '">Open the lesson</button>' +
+          '</div>'
+        );
+      }
+
       function lessonRow(lesson, index) {
         var id = String(lesson.id);
 
@@ -1524,6 +1599,7 @@
               '</div>' +
               '<div class="course-panel" id="panel-syllabus" role="tabpanel" aria-labelledby="tab-syllabus" tabindex="0" hidden>' +
                 '<section class="viewer" id="viewer" hidden></section>' +
+                previewBanner(syllabus, access) +
                 '<h2 class="section-title">Syllabus</h2>' +
                 (syllabus.length
                   ? syllabus.map(function (lesson, index) { return lessonRow(lesson, index + 1); }).join('')
@@ -1978,6 +2054,13 @@
           if (toggle) {
             event.preventDefault();
             toggleLesson(toggle.getAttribute('data-lesson-id'));
+            return;
+          }
+
+          var preview = event.target.closest ? event.target.closest('[data-open-preview]') : null;
+          if (preview) {
+            event.preventDefault();
+            openLesson(preview.getAttribute('data-open-preview'));
           }
         });
 

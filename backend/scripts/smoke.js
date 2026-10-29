@@ -159,6 +159,7 @@ const Enrollment = require('../src/models/Enrollment');
 const AIUsageLog = require('../src/models/AIUsageLog');
 const AICreditOrder = require('../src/models/AICreditOrder');
 const Impersonation = require('../src/models/Impersonation');
+const { choosePreview } = require('./set-preview-lessons');
 const { createApp } = require('../src/app');
 
 const results = [];
@@ -2294,6 +2295,47 @@ async function testLearningLoop() {  const Course = require('../src/models/Cours
 
     assertEqual(preview.locked, false, 'a preview lesson must not be locked');
     assertEqual(lockedLesson.locked, true, 'a non-preview lesson must be locked for a visitor');
+  });
+
+  /**
+   * The repair path, tested on its decision rather than on a database.
+   *
+   * `isPreview` was in the model, the validator, the syllabus and the lesson
+   * route from the start and nothing ever set it, so no catalogue course had a
+   * readable lesson. The generator now sets it; this covers the backfill that
+   * fixes the courses written before it did.
+   */
+  await check('the preview backfill picks the first published lesson', async () => {
+    const choice = choosePreview([
+      { title: 'One', order: 1, published: true, isPreview: false },
+      { title: 'Two', order: 2, published: true, isPreview: false },
+    ]);
+
+    assertEqual(choice.action, 'mark', 'action');
+    assertEqual(choice.lesson.title, 'One', 'the first lesson is the one marked');
+
+    // An unpublished lesson 1 is unreachable for a visitor: the syllabus hides
+    // it, so marking it would set a flag nobody could use.
+    const skipsDraft = choosePreview([
+      { title: 'Draft', order: 1, published: false, isPreview: false },
+      { title: 'Live', order: 2, published: true, isPreview: false },
+    ]);
+    assertEqual(skipsDraft.lesson.title, 'Live', 'an unpublished lesson is skipped');
+  });
+
+  await check('the preview backfill leaves an existing preview alone', async () => {
+    const choice = choosePreview([
+      { title: 'One', order: 1, published: true, isPreview: false },
+      { title: 'Two', order: 2, published: true, isPreview: true },
+    ]);
+
+    assertEqual(choice.action, 'left alone', 'action');
+    assertEqual(choice.lesson.title, 'Two', 'the existing choice is kept');
+    assertEqual(choice.existing, 1, 'existing count');
+
+    const nothing = choosePreview([{ title: 'Draft', order: 1, published: false, isPreview: false }]);
+    assertEqual(nothing.action, 'skipped', 'a course with nothing published is skipped');
+    assertEqual(nothing.lesson, null, 'and no lesson is returned');
   });
 
   await check('a student can enrol in a free course', async () => {

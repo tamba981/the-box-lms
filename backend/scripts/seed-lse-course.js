@@ -543,6 +543,10 @@ async function main() {
       order: index + 1,
       durationMinutes: MINUTES_PER_LESSON(lesson),
       published: true,
+      // The first lesson is readable without paying, so a prospective student
+      // can judge the teaching before buying. This course charges $50, which
+      // makes a free look more valuable here, not less.
+      isPreview: index === 0,
     });
 
     created.push(document);
