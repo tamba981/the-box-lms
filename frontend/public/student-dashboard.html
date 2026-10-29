@@ -874,7 +874,7 @@
 
   <!-- The signed-in design system. Loaded after the page's own styles so it can
        re-skin the existing components without the markup being rewritten. -->
-  <link rel="stylesheet" href="/assets/css/wga-dash.css?v=20261033" />
+  <link rel="stylesheet" href="/assets/css/wga-dash.css?v=20261034" />
 
     <!--
       The role guard confirms the session against the server before the page is
@@ -882,8 +882,8 @@
       any string in localStorage as proof of sign-in.
     -->
     <script src="/assets/js/wga-api.js?v=20261021"></script>
-    <script src="/assets/js/wga-ui.js?v=20261021"></script>
-    <script src="/assets/js/wga-ai.js?v=20261028"></script>
+    <script src="/assets/js/wga-ui.js?v=20261034"></script>
+    <script src="/assets/js/wga-ai.js?v=20261034"></script>
     <script src="/assets/js/wga-guard.js?v=20261021" data-roles="student"></script>
   <!-- Not a page to be found by accident: signed-in areas and pages that
        only exist to carry a one-time token. -->
@@ -922,31 +922,49 @@
     <div class="dashboard" style="display:flex;">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
+            <!--
+              Bookmarks and Settings were removed: neither had a page, a
+              route or a render function, so both navigated to the overview
+              while the sidebar said otherwise.
+
+              AI Tutor was removed for a stronger reason — it presented a
+              text box and a Send button for an assistant that did not exist;
+              askAI() returned a canned reply. A control that lies about what
+              it does is worse than no control. It is back now as AI Mentor,
+              against a real endpoint, and it only offers what the API
+              actually answers.
+
+              The duplicate "My Learning" link that used to sit below the rule
+              is gone: it went to the same page as My Courses, which now has a
+              section of its own.
+            -->
             <ul class="sidebar-menu">
                 <li class="sidebar-item"><a href="#" class="sidebar-link active" data-page="overview"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> My Courses</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="live-sessions"><i class="fas fa-video"></i> Live Sessions</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="community"><i class="fas fa-users"></i> Community</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="messages"><i class="fas fa-envelope"></i> Messages</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="certificates"><i class="fas fa-certificate"></i> Certificates</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="mentor"><i class="fas fa-compass"></i> AI Mentor</a></li>
+
+                <li class="sidebar-group" data-group="learning">
+                    <button type="button" class="sidebar-group-head" aria-expanded="true" aria-controls="sidebar-group-learning">
+                        <i class="fas fa-graduation-cap" aria-hidden="true"></i> Learning
+                    </button>
+                    <ul class="sidebar-submenu" id="sidebar-group-learning">
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> My Courses</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="live-sessions"><i class="fas fa-video"></i> Live Sessions</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="certificates"><i class="fas fa-certificate"></i> Certificates</a></li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-group" data-group="connect">
+                    <button type="button" class="sidebar-group-head" aria-expanded="true" aria-controls="sidebar-group-connect">
+                        <i class="fas fa-comments" aria-hidden="true"></i> Connect
+                    </button>
+                    <ul class="sidebar-submenu" id="sidebar-group-connect">
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="community"><i class="fas fa-users"></i> Community</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="messages"><i class="fas fa-envelope"></i> Messages</a></li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="mentor"><i class="fas fa-compass"></i> AI Mentor <span class="sidebar-pill">AI</span></a></li>
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="profile"><i class="fas fa-user"></i> Profile</a></li>
             </ul>
-            <div class="sidebar-footer">
-                <!--
-                  Bookmarks and Settings were removed: neither had a page, a
-                  route or a render function, so both navigated to the overview
-                  while the sidebar said otherwise.
-
-                  AI Tutor was removed for a stronger reason — it presented a
-                  text box and a Send button for an assistant that did not exist;
-                  askAI() returned a canned reply. A control that lies about what
-                  it does is worse than no control. It is back now as AI Mentor,
-                  against a real endpoint, and it only offers what the API
-                  actually answers.
-                -->
-                <div class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> My Learning</a></div>
-            </div>
         </aside>
 
         <!-- Main Content -->

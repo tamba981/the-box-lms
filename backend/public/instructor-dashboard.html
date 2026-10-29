@@ -1125,7 +1125,7 @@
 
   <!-- The signed-in design system. Loaded after the page's own styles so it can
        re-skin the existing components without the markup being rewritten. -->
-  <link rel="stylesheet" href="/assets/css/wga-dash.css?v=20261033" />
+  <link rel="stylesheet" href="/assets/css/wga-dash.css?v=20261034" />
 
     <!--
       The role guard confirms the session against the server before the page is
@@ -1133,8 +1133,8 @@
       any string in localStorage as proof of sign-in.
     -->
     <script src="/assets/js/wga-api.js?v=20261021"></script>
-    <script src="/assets/js/wga-ui.js?v=20261021"></script>
-    <script src="/assets/js/wga-ai.js?v=20261028"></script>
+    <script src="/assets/js/wga-ui.js?v=20261034"></script>
+    <script src="/assets/js/wga-ai.js?v=20261034"></script>
     <script src="/assets/js/wga-guard.js?v=20261021" data-roles="instructor,admin"></script>
     <script src="/assets/vendor/quill/quill.js"></script>
   <!-- Not a page to be found by accident: signed-in areas and pages that
@@ -1175,30 +1175,48 @@
     <div class="dashboard" style="display:flex;">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
+            <!--
+              Assignments, Quizzes, Analytics and Settings were removed.
+
+              Assignments and Quizzes were showing fabricated submission
+              counts, average scores and attempt numbers for work that cannot
+              be set: the API has no assignment model, no submission, no
+              grading and no quiz engine. Analytics and Settings had no page
+              at all — they silently rendered the overview while the sidebar
+              implied otherwise.
+
+              The duplicate "My Courses" link that used to sit below the rule is
+              gone: it went to the same page as My Courses in the Teaching
+              section.
+            -->
             <ul class="sidebar-menu">
                 <li class="sidebar-item"><a href="#" class="sidebar-link active" data-page="overview"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> My Courses</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="create-course"><i class="fas fa-plus-circle"></i> Create Course</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="students"><i class="fas fa-users"></i> My Students</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="live-classes"><i class="fas fa-video"></i> Live Classes</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="earnings"><i class="fas fa-chart-line"></i> Earnings</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="messages"><i class="fas fa-envelope"></i> Messages</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="ai-tools"><i class="fas fa-wand-magic-sparkles"></i> AI Tools</a></li>
+
+                <li class="sidebar-group" data-group="teaching">
+                    <button type="button" class="sidebar-group-head" aria-expanded="true" aria-controls="sidebar-group-teaching">
+                        <i class="fas fa-chalkboard-user" aria-hidden="true"></i> Teaching
+                    </button>
+                    <ul class="sidebar-submenu" id="sidebar-group-teaching">
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> My Courses</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="create-course"><i class="fas fa-plus-circle"></i> Create Course</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="live-classes"><i class="fas fa-video"></i> Live Classes</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="students"><i class="fas fa-users"></i> My Students</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="messages"><i class="fas fa-envelope"></i> Messages</a></li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-group" data-group="growth">
+                    <button type="button" class="sidebar-group-head" aria-expanded="true" aria-controls="sidebar-group-growth">
+                        <i class="fas fa-chart-line" aria-hidden="true"></i> Growth
+                    </button>
+                    <ul class="sidebar-submenu" id="sidebar-group-growth">
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="earnings"><i class="fas fa-sack-dollar"></i> Earnings</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="ai-tools"><i class="fas fa-wand-magic-sparkles"></i> AI Tools <span class="sidebar-pill">AI</span></a></li>
+                    </ul>
+                </li>
+
                 <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="profile"><i class="fas fa-user"></i> Profile</a></li>
             </ul>
-            <div class="sidebar-footer">
-                <!--
-                  Assignments, Quizzes, Analytics and Settings were removed.
-
-                  Assignments and Quizzes were showing fabricated submission
-                  counts, average scores and attempt numbers for work that cannot
-                  be set: the API has no assignment model, no submission, no
-                  grading and no quiz engine. Analytics and Settings had no page
-                  at all — they silently rendered the overview while the sidebar
-                  implied otherwise.
-                -->
-                <div class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> My Courses</a></div>
-            </div>
         </aside>
 
         <!-- Main Content -->

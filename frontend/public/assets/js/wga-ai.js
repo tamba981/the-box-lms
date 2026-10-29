@@ -33,15 +33,42 @@
     if (document.getElementById('wga-ai-styles')) return;
 
     var css = [
-      ':root{--wga-ai-primary:var(--primary,#1a56db);--wga-ai-gold:var(--gold,#d4a547);',
-      '--wga-ai-surface:var(--surface,#fff);--wga-ai-text:var(--text,#1f2937);',
-      '--wga-ai-muted:var(--text-light,#656e7c);--wga-ai-border:var(--border,#e5e7eb);',
-      '--wga-ai-success:var(--success,#10b981);--wga-ai-danger:var(--danger,#b42318);}',
+      /**
+       * Declared on `body`, not `:root`, and that is the whole fix for the dark
+       * mentor chat.
+       *
+       * A custom property is substituted where it is *declared*, not where it is
+       * used. On `:root` (the html element) `var(--text)` resolved once, against
+       * the light palette, because the dashboards put their dark values on
+       * `body.dark-mode`. The message bubble asked for `--bg-light` directly, so
+       * it did turn dark — while its text kept the dark-theme-exempt #1f2937 from
+       * the light palette. Dark text on a dark bubble.
+       *
+       * Declaring on `body` means the substitution happens against the element
+       * that carries the theme, so one set of tokens follows both palettes.
+       *
+       * Each token also names the public pages' equivalent (--ink, --muted,
+       * --line, --brand), which is a different vocabulary for the same idea:
+       * wga-dash.css names the ink `--text`, wga-public.css names it `--ink`.
+       */
+      'body{--wga-ai-primary:var(--primary,var(--brand,#1a56db));--wga-ai-gold:var(--gold,#d4a547);',
+      '--wga-ai-surface:var(--surface,#fff);--wga-ai-text:var(--text,var(--ink,#1f2937));',
+      '--wga-ai-muted:var(--text-light,var(--muted,#656e7c));',
+      '--wga-ai-border:var(--border,var(--line,#e5e7eb));',
+      '--wga-ai-bubble:var(--bg-light,var(--surface-3,#f2f5fa));',
+      '--wga-ai-success:var(--success,#10b981);--wga-ai-danger:var(--danger,#b42318);',
+      '--wga-ai-on-primary:#fff;}',
+      /**
+       * Both palettes lighten the brand to #60a5fa in dark mode, and white on
+       * #60a5fa is 2.5:1 — under the 4.5:1 the rest of the panel keeps. Ink on the
+       * same blue is 7.4:1.
+       */
+      'body.dark-mode{--wga-ai-on-primary:#08132a;}',
 
       // Floating launcher
       '.wga-ai-launch{position:fixed;right:20px;bottom:20px;z-index:2147481500;display:inline-flex;',
       'align-items:center;gap:9px;padding:13px 20px;border-radius:999px;border:0;cursor:pointer;',
-      'font:600 14px/1 Inter,system-ui,sans-serif;color:#fff;background:var(--wga-ai-primary);',
+      'font:600 14px/1 Inter,system-ui,sans-serif;color:var(--wga-ai-on-primary);background:var(--wga-ai-primary);',
       'box-shadow:0 10px 26px rgba(10,30,70,.32);transition:transform .15s ease,box-shadow .15s ease;}',
       '.wga-ai-launch:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(10,30,70,.38);}',
       '.wga-ai-launch:focus-visible{outline:3px solid var(--wga-ai-gold);outline-offset:3px;}',
@@ -56,15 +83,15 @@
       '.wga-ai-panel.is-open{display:flex;}',
 
       '.wga-ai-head{display:flex;align-items:flex-start;gap:10px;padding:14px 16px;',
-      'border-bottom:1px solid var(--wga-ai-border);background:var(--wga-ai-primary);color:#fff;}',
+      'border-bottom:1px solid var(--wga-ai-border);background:var(--wga-ai-primary);color:var(--wga-ai-on-primary);}',
       '.wga-ai-head h3{margin:0;font-size:15px;font-weight:700;line-height:1.3;}',
       '.wga-ai-head p{margin:2px 0 0;font-size:11.5px;opacity:.9;line-height:1.4;}',
-      '.wga-ai-head .wga-ai-close{margin-left:auto;background:rgba(255,255,255,.16);border:0;color:#fff;',
+      '.wga-ai-head .wga-ai-close{margin-left:auto;background:rgba(255,255,255,.16);border:0;color:var(--wga-ai-on-primary);',
       'width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:15px;line-height:1;flex:none;}',
       '.wga-ai-head .wga-ai-close:hover{background:rgba(255,255,255,.3);}',
 
       '.wga-ai-credit{padding:7px 16px;font-size:12px;font-weight:600;border-bottom:1px solid var(--wga-ai-border);',
-      'background:var(--bg-light,rgba(14,99,196,.06));color:var(--wga-ai-muted);display:flex;',
+      'background:var(--wga-ai-bubble);color:var(--wga-ai-muted);display:flex;',
       'align-items:center;gap:6px;flex-wrap:wrap;}',
       '.wga-ai-credit strong{color:var(--wga-ai-text);}',
       '.wga-ai-credit.is-unlimited strong{color:var(--wga-ai-success);}',
@@ -76,8 +103,8 @@
       'flex-direction:column;gap:10px;min-height:180px;}',
       '.wga-ai-msg{max-width:88%;padding:10px 13px;border-radius:12px;font-size:13.5px;line-height:1.6;',
       'white-space:pre-wrap;word-break:break-word;}',
-      '.wga-ai-msg.is-user{align-self:flex-end;background:var(--wga-ai-primary);color:#fff;border-bottom-right-radius:4px;}',
-      '.wga-ai-msg.is-ai{align-self:flex-start;background:var(--bg-light,#f2f5fa);color:var(--wga-ai-text);',
+      '.wga-ai-msg.is-user{align-self:flex-end;background:var(--wga-ai-primary);color:var(--wga-ai-on-primary);border-bottom-right-radius:4px;}',
+      '.wga-ai-msg.is-ai{align-self:flex-start;background:var(--wga-ai-bubble);color:var(--wga-ai-text);',
       'border:1px solid var(--wga-ai-border);border-bottom-left-radius:4px;}',
       '.wga-ai-msg.is-error{align-self:stretch;max-width:100%;background:rgba(180,35,24,.08);',
       'border:1px solid rgba(180,35,24,.3);color:var(--wga-ai-danger);font-size:13px;}',
@@ -99,7 +126,7 @@
       'font:14px/1.5 Inter,system-ui,sans-serif;}',
       '.wga-ai-input:focus{outline:none;border-color:var(--wga-ai-primary);box-shadow:0 0 0 3px rgba(26,86,219,.14);}',
       '.wga-ai-send{flex:none;width:40px;height:40px;border-radius:10px;border:0;cursor:pointer;',
-      'background:var(--wga-ai-primary);color:#fff;font-size:15px;display:grid;place-items:center;}',
+      'background:var(--wga-ai-primary);color:var(--wga-ai-on-primary);font-size:15px;display:grid;place-items:center;}',
       '.wga-ai-send:disabled{opacity:.5;cursor:not-allowed;}',
       '.wga-ai-foot{padding:0 14px 10px;font-size:11px;color:var(--wga-ai-muted);text-align:center;}',
 
@@ -107,7 +134,7 @@
       '.wga-ai-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}',
       '.wga-ai-tab{padding:9px 16px;border-radius:999px;border:1px solid var(--wga-ai-border);cursor:pointer;',
       'background:var(--wga-ai-surface);color:var(--wga-ai-muted);font:600 13px Inter,system-ui,sans-serif;}',
-      '.wga-ai-tab.is-on{background:var(--wga-ai-primary);color:#fff;border-color:var(--wga-ai-primary);}',
+      '.wga-ai-tab.is-on{background:var(--wga-ai-primary);color:var(--wga-ai-on-primary);border-color:var(--wga-ai-primary);}',
       '.wga-ai-card{border:1px solid var(--wga-ai-border);border-radius:16px;background:var(--wga-ai-surface);',
       'padding:20px;margin-bottom:18px;}',
       '.wga-ai-card h3{margin:0 0 6px;font-size:17px;font-weight:700;color:var(--wga-ai-text);}',
@@ -123,7 +150,7 @@
       'box-shadow:0 0 0 3px rgba(26,86,219,.14);}',
       '.wga-ai-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 16px;}',
       '.wga-ai-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;',
-      'border:0;cursor:pointer;font:600 13.5px Inter,system-ui,sans-serif;background:var(--wga-ai-primary);color:#fff;}',
+      'border:0;cursor:pointer;font:600 13.5px Inter,system-ui,sans-serif;background:var(--wga-ai-primary);color:var(--wga-ai-on-primary);}',
       '.wga-ai-btn:disabled{opacity:.55;cursor:not-allowed;}',
       '.wga-ai-btn.is-ghost{background:transparent;color:var(--wga-ai-primary);border:1px solid var(--wga-ai-primary);}',
       '.wga-ai-path{border:1px solid var(--wga-ai-border);border-radius:12px;padding:14px 16px;margin-bottom:12px;',

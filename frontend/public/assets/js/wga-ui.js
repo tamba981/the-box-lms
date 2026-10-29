@@ -718,6 +718,139 @@
   })();
 
   /**
+   * Collapsible sections in the dashboard sidebar.
+   *
+   * The markup ships as nested lists, so with no JavaScript every link is
+   * visible and reachable. This adds the two things that need a script: the
+   * chevron, which is the only signal that a heading can be opened, and the
+   * collapse itself. A chevron drawn in the HTML would sit there doing nothing
+   * when the script fails.
+   *
+   * Which groups are closed is remembered per browser. A closed group that
+   * contains the current page is opened, because the dashboards paint the active
+   * link asynchronously — after their own data has loaded — so the check is
+   * repeated whenever the menu changes rather than run once on load.
+   */
+  (function sidebarGroups() {
+    var STORE = 'wga.sidebar.collapsed';
+
+    function readCollapsed() {
+      try {
+        var raw = JSON.parse(localStorage.getItem(STORE) || '[]');
+        return Array.isArray(raw) ? raw : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function writeCollapsed(list) {
+      try {
+        localStorage.setItem(STORE, JSON.stringify(list));
+      } catch (error) {
+        /* private mode: the menu still works, it just forgets */
+      }
+    }
+
+    function forget(key) {
+      writeCollapsed(
+        readCollapsed().filter(function (name) {
+          return name !== key;
+        })
+      );
+    }
+
+    function remember(key) {
+      var list = readCollapsed();
+      if (list.indexOf(key) === -1) list.push(key);
+      writeCollapsed(list);
+    }
+
+    function setup() {
+      var groups = Array.prototype.slice.call(document.querySelectorAll('.sidebar-group'));
+      if (!groups.length) return;
+
+      groups.forEach(function (group) {
+        var head = group.querySelector('.sidebar-group-head');
+        var submenu = group.querySelector('.sidebar-submenu');
+        if (!head || !submenu) return;
+
+        if (submenu.id) head.setAttribute('aria-controls', submenu.id);
+
+        var chevron = document.createElement('i');
+        chevron.className = 'fas fa-chevron-down sidebar-chevron';
+        chevron.setAttribute('aria-hidden', 'true');
+        head.appendChild(chevron);
+
+        var key = group.getAttribute('data-group');
+        var closed = readCollapsed().indexOf(key) !== -1;
+        group.classList.toggle('is-collapsed', closed);
+        head.setAttribute('aria-expanded', closed ? 'false' : 'true');
+
+        head.addEventListener('click', function () {
+          var open = head.getAttribute('aria-expanded') === 'true';
+          group.classList.toggle('is-collapsed', open);
+          head.setAttribute('aria-expanded', open ? 'false' : 'true');
+
+          if (open) remember(key);
+          else forget(key);
+        });
+      });
+
+      /**
+       * Reveal the section the current page is in — but only when the current
+       * page changes.
+       *
+       * The check runs on every class change in the menu because the dashboards
+       * paint the active link asynchronously, after their own data loads, and
+       * there is no event to listen for. Without the `lastActive` comparison a
+       * heading could never be closed: collapsing the section you are reading
+       * would fire the observer, which would immediately reopen it.
+       */
+      var lastActive = null;
+
+      function syncActive() {
+        var active = document.querySelector('.sidebar-menu .sidebar-link.active');
+        if (!active) return;
+
+        if (active === lastActive) return;
+        lastActive = active;
+
+        if (active.getAttribute('aria-current') !== 'page') {
+          document.querySelectorAll('.sidebar-menu .sidebar-link[aria-current]').forEach(function (link) {
+            link.removeAttribute('aria-current');
+          });
+          active.setAttribute('aria-current', 'page');
+        }
+
+        var group = active.closest ? active.closest('.sidebar-group') : null;
+        if (!group || !group.classList.contains('is-collapsed')) return;
+
+        group.classList.remove('is-collapsed');
+        var head = group.querySelector('.sidebar-group-head');
+        if (head) head.setAttribute('aria-expanded', 'true');
+        forget(group.getAttribute('data-group'));
+      }
+
+      syncActive();
+
+      var menu = document.querySelector('.sidebar-menu');
+      if (menu && window.MutationObserver) {
+        new MutationObserver(syncActive).observe(menu, {
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['class']
+        });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setup);
+    } else {
+      setup();
+    }
+  })();
+
+  /**
    * The cookie notice and the language control live in their own file and are
    * requested from here, because every page already loads this one. That is 24
    * HTML documents that would otherwise each need two more script tags, and a

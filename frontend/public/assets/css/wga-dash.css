@@ -276,6 +276,111 @@ textarea:focus-visible,
 }
 
 /* ---------------------------------------------------------------- *
+   5a. Sidebar groups
+ *
+ * The rail was fourteen links in a column on the admin page and eight on the
+ * student page, with nothing to say which belonged together. They are now
+ * nested under headings.
+ *
+ * Everything stays visible without JavaScript: the collapse behaviour and the
+ * chevron are both added by wga-ui.js, so a script that fails to load leaves a
+ * longer but working menu rather than a menu with dead controls.
+ * ---------------------------------------------------------------- */
+
+.sidebar-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar-group {
+  margin: 4px 0;
+}
+
+.sidebar-group-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: var(--d-radius-sm);
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font: 700 11.5px/1 'Inter', system-ui, sans-serif;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--d-muted);
+}
+
+.sidebar-group-head:hover {
+  background: var(--d-surface-2);
+  color: var(--d-heading);
+}
+
+.sidebar-group-head:focus-visible {
+  outline: 2px solid var(--d-brand);
+  outline-offset: 2px;
+}
+
+.sidebar-group-head > i:first-child {
+  width: 20px;
+  text-align: center;
+  font-size: 13px;
+}
+
+/* The chevron is the affordance: it says this row opens something. */
+.sidebar-chevron {
+  margin-left: auto;
+  font-size: 11px;
+  transition: transform 0.2s ease;
+}
+
+.sidebar-group.is-collapsed .sidebar-chevron {
+  transform: rotate(-90deg);
+}
+
+.sidebar-submenu {
+  list-style: none;
+  margin: 2px 0 6px 22px;
+  padding: 0 0 0 8px;
+  border-left: 1px solid var(--d-line);
+}
+
+.sidebar-group.is-collapsed .sidebar-submenu {
+  display: none;
+}
+
+.sidebar-submenu .sidebar-link {
+  padding: 9px 12px;
+  font-size: 13.5px;
+}
+
+.sidebar-submenu .sidebar-link i {
+  font-size: 13px;
+}
+
+/* Marks a link that opens an AI feature, so it reads as one of a set. */
+.sidebar-pill {
+  margin-left: auto;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--d-brand-line);
+  background: var(--d-brand-soft);
+  color: var(--d-brand);
+  font: 700 9.5px/1 'Inter', system-ui, sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-chevron {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------- *
    6. Top bar
  * ---------------------------------------------------------------- */
 

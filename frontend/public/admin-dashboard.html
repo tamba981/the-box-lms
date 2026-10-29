@@ -848,7 +848,7 @@
 
   <!-- The signed-in design system. Loaded after the page's own styles so it can
        re-skin the existing components without the markup being rewritten. -->
-  <link rel="stylesheet" href="/assets/css/wga-dash.css?v=20261033" />
+  <link rel="stylesheet" href="/assets/css/wga-dash.css?v=20261034" />
 
     <!--
       The role guard confirms the session against the server before the page is
@@ -858,7 +858,7 @@
     -->
     <script src="/assets/js/wga-api.js?v=20261021"></script>
     <script src="/assets/js/wga-guard.js?v=20261021" data-roles="admin"></script>
-    <script src="/assets/js/wga-ui.js?v=20261021"></script>
+    <script src="/assets/js/wga-ui.js?v=20261034"></script>
   <!-- Not a page to be found by accident: signed-in areas and pages that
        only exist to carry a one-time token. -->
   <meta name="robots" content="noindex, follow" />
@@ -905,19 +905,59 @@
         <aside class="sidebar" id="sidebar">
             <ul class="sidebar-menu">
                 <li class="sidebar-item"><a href="#" class="sidebar-link active" data-page="overview"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="users"><i class="fas fa-users"></i> Users</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> Courses</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="instructors"><i class="fas fa-chalkboard-user"></i> Instructors <span class="badge pending" id="pendingInstructorCount" style="display:none;margin-left:6px;"></span></a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="instructor-cvs"><i class="fas fa-file-pdf"></i> Instructor CVs</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="certificates"><i class="fas fa-certificate"></i> Certificates</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="payments"><i class="fas fa-credit-card"></i> Payments</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="ai-orders"><i class="fas fa-bolt"></i> AI Credits <span class="badge pending" id="pendingAiOrderCount" style="display:none;margin-left:6px;"></span></a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="reviews"><i class="fas fa-star"></i> Reviews</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="admissions"><i class="fas fa-user-graduate"></i> Admissions <span class="badge pending" id="pendingAdmissionCount" style="display:none;margin-left:6px;"></span></a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="enquiries"><i class="fas fa-inbox"></i> Enquiries</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="reports"><i class="fas fa-chart-line"></i> Reports</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="announcements"><i class="fas fa-bullhorn"></i> Announcements</a></li>
-                <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="my-account"><i class="fas fa-user-shield"></i> My Account</a></li>
+
+                <li class="sidebar-group" data-group="people">
+                    <button type="button" class="sidebar-group-head" aria-expanded="true" aria-controls="sidebar-group-people">
+                        <i class="fas fa-user-group" aria-hidden="true"></i> People
+                    </button>
+                    <ul class="sidebar-submenu" id="sidebar-group-people">
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="users"><i class="fas fa-users"></i> Users</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="instructors"><i class="fas fa-chalkboard-user"></i> Instructors <span class="badge pending" id="pendingInstructorCount" style="display:none;margin-left:6px;"></span></a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="instructor-cvs"><i class="fas fa-file-pdf"></i> Instructor CVs</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="admissions"><i class="fas fa-user-graduate"></i> Admissions <span class="badge pending" id="pendingAdmissionCount" style="display:none;margin-left:6px;"></span></a></li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-group" data-group="catalogue">
+                    <button type="button" class="sidebar-group-head" aria-expanded="true" aria-controls="sidebar-group-catalogue">
+                        <i class="fas fa-layer-group" aria-hidden="true"></i> Catalogue
+                    </button>
+                    <ul class="sidebar-submenu" id="sidebar-group-catalogue">
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="courses"><i class="fas fa-book"></i> Courses</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="certificates"><i class="fas fa-certificate"></i> Certificates</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="reviews"><i class="fas fa-star"></i> Reviews</a></li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-group" data-group="money">
+                    <button type="button" class="sidebar-group-head" aria-expanded="true" aria-controls="sidebar-group-money">
+                        <i class="fas fa-coins" aria-hidden="true"></i> Money
+                    </button>
+                    <ul class="sidebar-submenu" id="sidebar-group-money">
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="payments"><i class="fas fa-credit-card"></i> Payments</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="ai-orders"><i class="fas fa-bolt"></i> AI Credits <span class="badge pending" id="pendingAiOrderCount" style="display:none;margin-left:6px;"></span></a></li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-group" data-group="outreach">
+                    <button type="button" class="sidebar-group-head" aria-expanded="true" aria-controls="sidebar-group-outreach">
+                        <i class="fas fa-bullhorn" aria-hidden="true"></i> Outreach
+                    </button>
+                    <ul class="sidebar-submenu" id="sidebar-group-outreach">
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="enquiries"><i class="fas fa-inbox"></i> Enquiries</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="announcements"><i class="fas fa-bullhorn"></i> Announcements</a></li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-group" data-group="system">
+                    <button type="button" class="sidebar-group-head" aria-expanded="true" aria-controls="sidebar-group-system">
+                        <i class="fas fa-sliders" aria-hidden="true"></i> System
+                    </button>
+                    <ul class="sidebar-submenu" id="sidebar-group-system">
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="reports"><i class="fas fa-chart-line"></i> Reports</a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link" data-page="my-account"><i class="fas fa-user-shield"></i> My Account</a></li>
+                    </ul>
+                </li>
             </ul>
             <div class="sidebar-footer">
                 <div class="sidebar-item"><a href="/" ><i class="fas fa-globe"></i> View site</a></div>
