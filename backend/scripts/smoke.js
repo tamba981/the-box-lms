@@ -7512,7 +7512,13 @@ async function testOAuth() {
     const path = require('path');
     const root = path.join(__dirname, '..', 'public');
 
-    const pages = fs.readdirSync(root).filter((name) => name.endsWith('.html'));
+    // `offline.html` is exempt and must stay exempt: it is the page shown when
+    // the network is gone, so it carries its own styles inline and no script at
+    // all. A consent banner and a translator are not worth a dependency there.
+    const pages = fs
+      .readdirSync(root)
+      .filter((name) => name.endsWith('.html') && name !== 'offline.html');
+
     const missing = pages.filter((name) => {
       const html = fs.readFileSync(path.join(root, name), 'utf8');
       return !html.includes('/assets/js/wga-ui.js');
