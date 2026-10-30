@@ -139,8 +139,36 @@
         moreHint.hidden = remaining < 24;
       }
 
+      /**
+       * Two frames, not one.
+       *
+       * `display: block` has to be applied before the drawer can be measured, and
+       * one frame is not always enough — the first pass can still see a zero
+       * height on a slow phone. The second costs nothing and means the hint
+       * appears with the menu rather than after the first scroll.
+       */
+      function settle() {
+        window.requestAnimationFrame(function () {
+          updateMoreHint();
+          window.requestAnimationFrame(updateMoreHint);
+        });
+      }
+
       drawer.addEventListener('scroll', updateMoreHint, { passive: true });
       window.addEventListener('resize', updateMoreHint);
+
+      /**
+       * Measure again whenever the drawer's own size or content changes.
+       *
+       * One measurement on open was not enough: it ran while the drawer was still
+       * being laid out against a font that had not arrived, found no overflow, and
+       * left the hint hidden on a menu that did overflow. A ResizeObserver fires
+       * on exactly that — content grows, the box changes — and it also covers the
+       * case of a link being added by script later.
+       */
+      if (typeof ResizeObserver === 'function') {
+        new ResizeObserver(updateMoreHint).observe(drawer);
+      }
 
       function setDrawer(open) {
         drawer.classList.toggle('open', open);
@@ -151,7 +179,7 @@
         if (open) {
           drawer.scrollTop = 0;
           // Wait for display:block to be painted, or the measurements are zero.
-          window.requestAnimationFrame(updateMoreHint);
+          settle();
         } else {
           moreHint.hidden = true;
         }
