@@ -140,18 +140,27 @@
       }
 
       /**
-       * Two frames, not one.
+       * Measure the hint, synchronously and then again after paint.
        *
-       * `display: block` has to be applied before the drawer can be measured, and
-       * one frame is not always enough — the first pass can still see a zero
-       * height on a slow phone. The second costs nothing and means the hint
-       * appears with the menu rather than after the first scroll.
+       * The synchronous call is the one that matters. `requestAnimationFrame`
+       * does not run while a page is in a background tab — the browser suspends
+       * it — so a menu opened in one was left with the hint hidden until the
+       * visitor happened to scroll, which is the single thing the hint exists to
+       * prevent. Reading `scrollHeight` straight after the class is applied
+       * forces layout and gives the right answer immediately; the frames after it
+       * catch the case of a web font arriving and changing the height.
        */
       function settle() {
+        updateMoreHint();
+
         window.requestAnimationFrame(function () {
           updateMoreHint();
           window.requestAnimationFrame(updateMoreHint);
         });
+
+        // Timers are throttled in a background tab but not suspended, so this
+        // one lands even where rAF never fires.
+        window.setTimeout(updateMoreHint, 120);
       }
 
       drawer.addEventListener('scroll', updateMoreHint, { passive: true });
@@ -178,7 +187,6 @@
 
         if (open) {
           drawer.scrollTop = 0;
-          // Wait for display:block to be painted, or the measurements are zero.
           settle();
         } else {
           moreHint.hidden = true;
