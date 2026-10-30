@@ -25,7 +25,7 @@
   href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
   rel="stylesheet"
 />
-<link rel="stylesheet" href="/assets/css/wga-public.css?v=20261032" />
+<link rel="stylesheet" href="/assets/css/wga-public.css?v=20261040" />
 
 <!-- The moment the page started, so the loading screen can be shown for a
      minimum time without overstaying when the page was already cached. -->
@@ -167,14 +167,21 @@
     </div>
   </div>
 
-  <!-- Mobile drawer -->
+</header>
+
+  <!-- Mobile drawer: outside the header element on purpose. The header has a
+       backdrop-filter, which would otherwise become this drawer's containing
+       block and collapse it to a strip. See wga-public.js. -->
   <div class="mobile-nav" id="mobile-nav" data-mobile-nav>
+    <p class="mobile-group">Browse</p>
     <a href="/courses.html">All courses</a>
     <a href="/apply.html">Apply for offline courses</a>
+    <p class="mobile-group">Who it is for</p>
     <a href="/for-individuals.html">For individuals</a>
     <a href="/business.html">For business</a>
     <a href="/universities.html">Universities</a>
     <a href="/government.html">Government</a>
+    <p class="mobile-group">Certificates</p>
     <a href="/certificate.html">Verify a certificate</a>
     <p class="mobile-group">Your account</p>
     <a href="/login.html" data-when-signed-out>Sign in</a>
@@ -184,7 +191,7 @@
     <p class="mobile-group">Contact</p>
     <a href="mailto:info@wuteveglobalacademy.com">info@wuteveglobalacademy.com</a>
   </div>
-</header>
+
 
 <main id="main">
   <!-- ============================ HERO ============================ -->
@@ -830,7 +837,7 @@
 
 <script src="/assets/js/wga-api.js?v=20261021"></script>
 <script src="/assets/js/wga-ui.js?v=20261036"></script>
-<script src="/assets/js/wga-public.js?v=20261021"></script>
+<script src="/assets/js/wga-public.js?v=20261040"></script>
 <script>
   /* ------------------------------------------------------------------ *
    * Homepage only: the catalog preview, the live counts, and the subject

@@ -20,7 +20,7 @@
   href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
   rel="stylesheet"
 />
-  <link rel="stylesheet" href="/assets/css/wga-public.css?v=20261032" />
+  <link rel="stylesheet" href="/assets/css/wga-public.css?v=20261040" />
   <!-- Sharing and search metadata. One card image serves every page; the
        title and description are the page own, so a shared link describes
        the page rather than repeating the site name. -->
@@ -113,12 +113,20 @@
     </div>
   </div>
 
+  </header>
+
+  <!-- Mobile drawer: outside the header element on purpose. The header has a
+       backdrop-filter, which would otherwise become this drawer's containing
+       block and collapse it to a strip. See wga-public.js. -->
   <div class="mobile-nav" id="mobile-nav" data-mobile-nav>
+    <p class="mobile-group">Browse</p>
     <a href="/courses.html">All courses</a>
+    <p class="mobile-group">Who it is for</p>
     <a href="/for-individuals.html">For individuals</a>
     <a href="/business.html">For business</a>
     <a href="/universities.html">Universities</a>
     <a href="/government.html">Government</a>
+    <p class="mobile-group">Certificates</p>
     <a href="/certificate.html">Verify a certificate</a>
     <p class="mobile-group">Your account</p>
     <a href="/login.html" data-when-signed-out>Sign in</a>
@@ -126,7 +134,7 @@
     <a href="/student-dashboard.html" data-when-signed-in data-dashboard-link hidden>My dashboard</a>
     <a href="#" data-when-signed-in data-logout hidden>Sign out</a>
   </div>
-</header>
+
 
 <main id="main">
   <header class="page-header">
@@ -588,6 +596,6 @@
 
 <script src="/assets/js/wga-api.js?v=20261021"></script>
 <script src="/assets/js/wga-ui.js?v=20261036"></script>
-<script src="/assets/js/wga-public.js?v=20261021"></script>
+<script src="/assets/js/wga-public.js?v=20261040"></script>
 </body>
 </html>

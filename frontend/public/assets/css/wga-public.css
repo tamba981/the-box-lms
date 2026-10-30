@@ -480,7 +480,18 @@ body.dark-mode .pill-new {
   text-decoration: none;
 }
 
-/* Mobile drawer */
+/**
+ * The drawer, and the invitation to keep scrolling.
+ *
+ * The drawer is 12 links tall on a phone, which is more than fits under the
+ * header, so most of it was invisible: a visitor opened the menu, saw "All
+ * courses", and concluded that was the whole thing.
+ *
+ * Two things are done about that. The links are grouped under headings, so what
+ * is below can be guessed from what is visible. And a chip is pinned to the
+ * bottom of the drawer while there is more below it, which is the only reliable
+ * way to say "there is more down here" without making the visitor discover it.
+ */
 .mobile-nav {
   display: none;
   position: fixed;
@@ -491,6 +502,15 @@ body.dark-mode .pill-new {
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+}
+
+/**
+ * A drawer can be 12 links tall, and the cookie notice sits over its lower edge
+ * until it is answered. Without this the last link could not be scrolled clear of
+ * that card. The notice publishes its own height as `--wga-c-h`.
+ */
+body.has-cookie-notice .mobile-nav {
+  padding-bottom: calc(var(--s-10) + var(--wga-c-h, 96px));
 }
 
 .mobile-nav.open {
@@ -507,7 +527,7 @@ body.dark-mode .pill-new {
 }
 
 .mobile-nav .mobile-group {
-  margin-top: var(--s-4);
+  margin: var(--s-5) 0 var(--s-1);
   font-size: var(--t-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -515,16 +535,26 @@ body.dark-mode .pill-new {
   font-weight: 750;
 }
 
+.mobile-nav .mobile-group:first-child {
+  margin-top: 0;
+}
+
 /**
  * The drawer scrolls; saying so is cheaper than hoping people discover it.
  *
  * The chip is added by wga-public.js and is shown only while there is more
  * below, so it can never sit over the last item pretending there is something
- * after it. It is pinned to the bottom of the drawer rather than the page.
+ * after it. It is pinned to the bottom of the drawer rather than the page, and
+ * the gradient above it lets the half-cut row underneath read as "continues"
+ * rather than as "broken".
  */
 .mobile-nav-more {
   position: sticky;
   bottom: calc(-1 * var(--s-10));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   margin: var(--s-4) calc(-1 * var(--s-5)) calc(-1 * var(--s-10));
   padding: 10px var(--s-5) 22px;
   text-align: center;
@@ -539,6 +569,31 @@ body.dark-mode .pill-new {
 
 .mobile-nav-more[hidden] {
   display: none;
+}
+
+/* The arrow does the work the words cannot: it points at what is below. */
+.mobile-nav-more svg {
+  width: 14px;
+  height: 14px;
+  animation: wga-nav-hint 1.5s ease-in-out infinite;
+}
+
+@keyframes wga-nav-hint {
+  0%,
+  100% {
+    transform: translateY(-1px);
+    opacity: 0.65;
+  }
+  50% {
+    transform: translateY(3px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav-more svg {
+    animation: none;
+  }
 }
 
 /* ---------------------------------------------------------------- *

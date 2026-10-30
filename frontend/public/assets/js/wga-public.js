@@ -91,6 +91,25 @@
 
     if (menuButton && drawer) {
       /**
+       * The drawer must not be a child of the header.
+       *
+       * `.pub-header` is `position: sticky` **and** has a `backdrop-filter`. A
+       * backdrop-filter makes an element the containing block for its
+       * `position: fixed` descendants, so the drawer's `inset: 68px 0 0 0`
+       * resolved against the header — 68px tall — instead of the viewport. It
+       * rendered as a strip under the header with 600px of links scrolled out of
+       * sight beneath it, which is exactly what a visitor described as "the menu
+       * only shows All courses".
+       *
+       * Every page now puts the drawer after `</header>`. This moves it anyway
+       * if a page ever copies the old markup, because the failure is invisible
+       * in the source and only shows up on a phone.
+       */
+      if (drawer.parentElement && drawer.parentElement.tagName === 'HEADER') {
+        document.body.appendChild(drawer);
+      }
+
+      /**
        * Say that the drawer scrolls.
        *
        * On a phone the drawer is taller than the screen, and the links below the
@@ -101,7 +120,12 @@
       var moreHint = document.createElement('p');
       moreHint.className = 'mobile-nav-more';
       moreHint.setAttribute('aria-hidden', 'true');
-      moreHint.textContent = 'Scroll for more';
+      // A chevron, because the words alone were what people scrolled past. It
+      // points at the content rather than describing it, and it moves.
+      moreHint.innerHTML =
+        '<span>Scroll for more</span>' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" ' +
+        'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
       moreHint.hidden = true;
       drawer.appendChild(moreHint);
 
